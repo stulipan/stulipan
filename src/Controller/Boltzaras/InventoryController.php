@@ -3,10 +3,8 @@
 
 namespace App\Controller\Boltzaras;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -103,6 +101,7 @@ class InventoryController extends Controller
             foreach ($supply->getItems() as $i => $item) {
                 $item->setSupply($supply);
             }
+            //something
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($supply);
@@ -278,7 +277,6 @@ class InventoryController extends Controller
 			);
 		}
 
-        $items->getDatum()->format('Y-m-d H:i:s');
         $items->getUpdatedAt()->format('Y-m-d H:i:s');
 		return $this->render('admin/inventory/product_list.html.twig', ['item' => $items]);
 	}

@@ -1,0 +1,7 @@
+parameters:
+ 
+   database_host: localhost
+   database_port: null
+   database_name: Tulipan
+   database_user: liviu
+   database_password: Sssl9000

@@ -1,0 +1,67 @@
+{# boltzaras/boltzaras_form.html.twig #}
+
+		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
+		{{ form_start(form, { 'attr': {'class': 'form-boltzaras' }}) }}
+			<div class="mb-3">
+				{{ form_label(form.munkatars) }}
+				<div class="input-group">
+				{{ form_widget(form.munkatars) }}
+				</div>
+				<small class="form-text text-muted">
+				  Kattints a legördülőre és válaszd ki a nevedet.
+				</small>
+
+
+			</div>
+			<div class="mb-3">
+				{{ form_label(form.idopont) }} 
+				<div id="datum">
+				<div class="input-group date">
+				{{ form_widget(form.idopont) }}
+					<span class="input-group-append input-group-addon">
+						<span class="input-group-text"><i class="fas fa-th"></i></span>
+					</span>
+				</div>
+				</div>
+
+			</div>
+			<div class="mb-3">
+				{{ form_label(form.kassza) }} <br />
+				<div class="input-group">
+				{{ form_widget(form.kassza) }}
+					<div class="input-group-append">
+						<span class="input-group-text">Ft</span>
+					</div>
+				</div>				
+			</div>
+			<div class="mb-3">
+				{{ form_label(form.bankkartya) }} <br />
+				<div class="input-group">
+				  <!--div class="input-group-prepend">
+					<span class="input-group-text">{{ form.bankkartya.vars.label }}</span>
+				  </div-->
+				{{ form_widget(form.bankkartya) }}
+					<div class="input-group-append">
+						<span class="input-group-text">Ft</span>
+					</div>
+				</div>				
+			</div>
+			<div class="mb-3">
+				{{ form_label(form.keszpenz) }} <br />
+				<div class="input-group">
+				{{ form_widget(form.keszpenz) }}
+					<div class="input-group-append">
+						<span class="input-group-text">Ft</span>
+					</div>
+				</div>
+			</div>
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+			<input type="submit" value="Jelentés elküldése" class="btn btn-primary mt-3 btn-lg" formnovalidate>
+		  	<a href="{{ path('boltzaras_list') }}" class="btn btn-secondary mt-3">Mégse</a>
+
+		{{ form_end(form) }}

@@ -1,0 +1,162 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+		<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{{ path('homepage') }}" target="_blank">Stulipán</a>
+		<form class="form-inline my-2 my-lg-0 justify-content-end">
+			<input class="form-control-sm mr-sm-2 form-control-dark" type="text" placeholder="Search" aria-label="Search">
+			<button class="btn btn-sm btn-secondary my-2 my-sm-0" type="submit">Search</button>
+		</form>
+		<ul class="navbar-nav px-3">
+			<li class="nav-item text-nowrap">
+				<a class="nav-link" href="/logout">Logout</a>
+			</li>
+		</ul>
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+				<div class="sidebar-sticky">
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<a class="nav-link active" href="{{ path('dashboard') }}">
+								<span data-feather="home"></span>
+								Dashboard <span class="sr-only">(current)</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('product_list') }}">
+								<span data-feather="file"></span>
+								Termékek
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link disabled" href="#">
+								<span data-feather="shopping-cart"></span>
+								Products
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link disabled" href="#">
+								<span data-feather="users"></span>
+								Customers
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link disabled" href="#">
+								<span data-feather="bar-chart-2"></span>
+								Reports
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link disabled" href="#">
+								<span data-feather="layers"></span>
+								Integrations
+							</a>
+						</li>
+					</ul>
+
+					<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+						<span>Saved reports</span>
+						<a class="d-flex align-items-center text-muted" href="#">
+							<span data-feather="plus-circle"></span>
+						</a>
+					</h6>
+					<ul class="nav flex-column mb-2">
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('boltzaras_list') }}">
+								<span data-feather="file-text"></span>
+								Boltzárás
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('szamla') }}">
+								<span data-feather="file-text"></span>
+								Számlák és költségek
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('inventory-product-list-all') }}">
+								<span data-feather="file-text"></span>
+								Készlet
+							</a>
+							<a class="nav-link" href="{{ path('inventory-supply-list-all') }}">
+								Áruszállítmányok
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">
+								<span data-feather="file-text"></span>
+								Year-end sale
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+
+	<!--div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+		<div class="container">
+			<a class="navbar-brand" href="#">Stulipán</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarColor01">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('product_list') }}">Termékek</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('boltzaras_list') }}">Boltzárás</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">About</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/logout">Logout</a>
+					</li>
+				</ul>
+
+			</div>
+		</div>
+	</div-->
+
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+
+                {% block page_content %}{% endblock %}
+
+			</main>
+		</div>
+	</div>
+
+	<!--div class="container">
+		<div>
+			<div class="row">
+
+
+
+			</div>
+		</div>
+	</div-->
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+	<script>
+        jQuery(document).ready(function() {
+            $('.input-group.date').datepicker({
+                format: 'yyyy-mm-dd',
+                endDate: '+0d'
+            });
+        });
+	</script>
+{% endblock %}

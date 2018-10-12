@@ -1,0 +1,58 @@
+		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
+		{{ form_start(form, { 'attr': {'class': 'form-boltzaras' }}) }}
+
+        <div class="mb-3">
+            <div class="form-group row">
+                <div class="col-sm-4 text-sm-righttt">
+                    {{ form_label(form.datum) }}
+                </div>
+                <div class="col-sm-8" id="datum">
+                    <div >
+                        <div class="input-group date">
+                            {{ form_widget(form.datum) }}
+                            <span class="input-group-append input-group-addon">
+						            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+					            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <div class="form-group row">
+                <div class="col-sm-4 text-sm-righttt">
+                    {{ form_label(form.product) }}
+                </div>
+                <div class="col-sm-8">
+                    {{ form_widget(form.product) }}
+                    {{ form_errors(form.product) }}
+                    <small class="form-text text-muted">
+                        Add meg a termék megnevezését.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+
+
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+            <div class="mb-3">
+                <div class="form-group row">
+                    <div class="col-sm-4 text-sm-righttt">
+                    </div>
+                    <div class="col-sm-8 ml-sm-auto">
+                        <input type="submit" value="Mentés" class="btn btn-lgg btn-success" formnovalidate>
+                        <a href="{{ path('inventory_product_list_all') }}" class="btn btn-outline-secondary">Mégse</a>
+                    </div>
+                </div>
+            </div>
+
+
+
+		{{ form_end(form) }}

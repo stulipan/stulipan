@@ -1,0 +1,89 @@
+		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
+		{{ form_start(form, { 'attr': {'class': 'form-boltzaras' }}) }}
+            <div class="mb-3">
+                <div class="form-group row">
+                    <div class="col-sm-4 text-sm-righttt">
+                        {{ form_label(form.beszallito) }}
+                    </div>
+                    <div class="col-sm-8">
+                        {{ form_widget(form.beszallito) }}
+                        {{ form_errors(form.beszallito) }}
+                        <small class="form-text text-muted">
+                            Add meg a beszállító céget.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-group row">
+                    <div class="col-sm-4 text-sm-righttt">
+                        {{ form_label(form.datum) }}
+                    </div>
+                    <div class="col-sm-8" id="datum">
+                        <div >
+                            <div class="input-group date">
+                                {{ form_widget(form.datum) }}
+                                <span class="input-group-append input-group-addon">
+						            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+					            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+			<!--div class="mb-3">
+				{# form_label(form.datum) #}
+				<div id="datum">
+				<div class="input-group date">
+				#% form_widget(form.datum) #}
+					<span class="input-group-append input-group-addon">
+						<span class="input-group-text"><i class="fas fa-th"></i></span>
+					</span>
+				</div>
+				</div>
+
+			</div-->
+
+            <div class="mb-3">
+                <div class="form-group row">
+                    <div class="col-sm-4 text-sm-righttt">
+                        {{ form_label(form.osszeg) }}
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            {{ form_widget(form.osszeg) }}
+                            <div class="input-group-append">
+                                <span class="input-group-text">Ft</span>
+                            </div>
+                        </div>
+                        {{ form_errors(form.osszeg) }}
+                        <small class="form-text text-muted">
+                            Írd be a számlán szereplő végösszeget.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+            <div class="mb-3">
+                <div class="form-group row">
+                    <div class="col-sm-4 text-sm-righttt">
+                    </div>
+                    <div class="col-sm-8 ml-sm-auto">
+                        <input type="submit" value="Mentés" class="btn btn-lgg btn-success" formnovalidate>
+                        <a href="{{ path('szamla_list') }}" class="btn btn-outline-secondary">Mégse</a>
+                    </div>
+                </div>
+            </div>
+
+
+
+		{{ form_end(form) }}

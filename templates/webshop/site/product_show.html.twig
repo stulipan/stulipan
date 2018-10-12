@@ -1,0 +1,189 @@
+{% extends 'webshop/site/base_site.html.twig' %}
+
+{% block title %}
+    {{ termek.productName }} | 	{{ parent() }}
+{% endblock %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block page_content %}
+
+
+
+	<!-- Product detail -->
+	<section class="product-details">
+		<div class="container mb-4">
+			<div class="row">
+				<div class="col-lg-7 pt-4 order-2 order-lg-1">
+					<div class="row">
+						<div class="col-2 pr-0">
+							<div data-slider-id="1" class="owl-thumbs">
+								<button class="owl-thumb-item detail-thumb-item mb-3 active"><img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 0" class="img-fluid"></button>
+								<button class="owl-thumb-item detail-thumb-item mb-3"><img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 1" class="img-fluid"></button>
+								<button class="owl-thumb-item detail-thumb-item mb-3"><img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 2" class="img-fluid"></button>
+								<button class="owl-thumb-item detail-thumb-item mb-3"><img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 3" class="img-fluid"></button>
+								<button class="owl-thumb-item detail-thumb-item mb-3"><img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 4" class="img-fluid"></button>
+							</div>
+						</div>
+						<div class="col-10 detail-carousel">
+							<div class="ribbon ribbon-info">Új termék</div>
+							<div class="ribbon ribbon-primary">Sale</div>
+							<div data-slider-id="1" class="owl-carousel detail-slider owl-loaded owl-drag">
+
+
+
+
+
+								<div class="owl-stage-outer">
+									<div class="owl-stage" style="transform: translate3d(-3668px, 0px, 0px); transition: all 0s ease 0s; width: 5764px;">
+										<div class="owl-item cloned active" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="{{ termek.productName }} | {{ termek.category }}" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 3" class="img-fluid"></a>
+											</div>
+										</div>
+										<div class="owl-item cloned" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 4 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 4" class="img-fluid"></a>
+											</div>
+										</div>
+										<div class="owl-item cloned" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 5 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 5" class="img-fluid"></a>
+											</div>
+										</div>
+										<div class="owl-item" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 1 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 1" class="img-fluid"></a>
+											</div>
+										</div>
+										<div class="owl-item" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 2 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 2" class="img-fluid"></a>
+											</div>
+										</div>
+										<div class="owl-item" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 3 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 3" class="img-fluid"></a>
+											</div>
+										</div>
+										<div class="owl-item" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 4 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 4" class="img-fluid"></a>
+											</div>
+										</div>
+										<div class="owl-item" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 5 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}"></a>
+											</div>
+										</div>
+										<div class="owl-item cloned" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 1 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 1" class="img-fluid"></a>
+											</div>
+										</div>
+										<div class="owl-item cloned" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 2 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 2" class="img-fluid"></a>
+											</div>
+										</div>
+										<div class="owl-item cloned" style="width: 524px;">
+											<div class="item"><a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" data-footer="Modern Jacket 3 - Caption text" data-toggle="lightbox" data-gallery="product-gallery">
+													<img src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" alt="Modern Jacket 3" class="img-fluid"></a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="owl-nav disabled">
+									<button type="button" role="presentation" class="owl-prev"><span aria-label="Previous">‹</span></button>
+									<button type="button" role="presentation" class="owl-next"><span aria-label="Next">›</span></button>
+								</div>
+								<div class="owl-dots disabled"></div>
+							</div>
+
+
+
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-5 pl-lg-4 order-1 order-lg-2">
+					<ul class="breadcrumb undefined">
+						<li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
+						<li class="breadcrumb-item"><a href="{{ path('site_product_list', { 'slug': termek.category.slug }) }}">{{ termek.category }}</a></li>
+						<li class="breadcrumb-item active">{{ termek.productName }}    </li>
+					</ul>
+					<h1 class="mb-4">{{ termek.productName }}</h1>
+					<div class="d-flex align-items-center justify-content-between mb-4">
+						<ul class="list-inline mb-0">
+							<li class="list-inline-item h4 font-weight-light mb-0">{{ termek.grossPrice|number_format(0, ',', ' ')  }} Ft</li>
+							<li class="list-inline-item text-muted font-weight-light">
+								<del>54 990 Ft</del>
+							</li>
+						</ul>
+						<!-- REVIEWS -->
+						<!--div class="d-flex align-items-center">
+							<ul class="list-inline mr-2 mb-0">
+								<li class="list-inline-item mr-0"><i class="fa fa-star text-primary"></i></li>
+								<li class="list-inline-item mr-0"><i class="fa fa-star text-primary"></i></li>
+								<li class="list-inline-item mr-0"><i class="fa fa-star text-primary"></i></li>
+								<li class="list-inline-item mr-0"><i class="fa fa-star text-primary"></i></li>
+								<li class="list-inline-item mr-0"><i class="fa fa-star text-gray-300"></i></li>
+							</ul><span class="text-muted text-uppercase text-sm">25 reviews</span>
+						</div-->
+					</div>
+					<p class="mb-4 text-muted">{{ termek.description }}
+					</p>
+
+
+                    <!-- Add to cart form -->
+                    {{ render(controller('App\\Controller\\Shop\\CartController::addItemForm', {'id' : termek.id})) }}
+                    <!-- /Add to cart form -->
+
+                    <section class="miert-dobozok">
+                        <div class="row mt-5">
+                            <div class="col-md-12 mb-3">
+                                <h6 class="text-uppercase"><i class="fa fa-truck mr-2"></i> INGYENES szállítás Budapesten!</h6>
+
+                                <p class="text-muted">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="/szallitasi-dijak" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+                                </p>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <h6 class="text-uppercase"><i class="fa fa-gift mr-2"></i> Egyedi terméket szeretnél?</h6>
+
+                                <p class="text-muted">Személyre szabott rendelésre is lehetőség van. Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
+                                </p>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <h6 class="text-uppercase"><i class="fa fa-credit-card mr-2"></i> Vásárolj kockázat nélkül!</h6>
+
+                                <p class="text-muted">Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetés a CIB Bank biztonságos szerverén keresztül történik. <br>
+                                    <img alt="" class="img-fluid w-50 left-block" data-pin-nopin="true" src="https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/cache/w0h0q80np1/icons/CIB_logo.png?v=1531502818">
+                                </p>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <h6 class="text-uppercase"><i class="fa fa-thumbs-up mr-2"></i> Magas vásárlói elégedettség</h6>
+
+                                <p class="text-muted">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

@@ -1,0 +1,110 @@
+{# boltzaras/boltzaras_list.html.twig #}
+
+{% extends 'webshop/admin/base_admin.html.twig' %}
+
+
+{% block title %}
+	Előző boltzárások
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block page_content %}
+		
+	{% block LISTA %}
+	<div class="col-lg-12">
+		<p> </p>
+		<h1 class="h3 font-weight-normal">Boltzárás jelentések
+		  	<a href="{{ path('boltzaras_new') }}" class="btn btn-primary btn-sm">Új jelentés</a>
+	  	</h1>
+
+		{% block AZUZENET %}
+		{% for msg in app.session.flashBag.get('livSuccess') %}
+			<div class="alert alert-success" role="alert">	{{ msg }} </div>
+		{% endfor %}
+		{% endblock %}
+		
+		<div class="table-responsive__">
+			<table class="table table-sm table-striped table-hover text-center">
+			  <caption>Eddigi boltzárás jelentések | <a href="{{ path('boltzaras_list') }}" class="">Mutasd mindet</a></caption>
+			  <thead>
+				<tr>
+				  <th scope="col">Dátum</th>
+				  <th scope="col">Kassza</th>
+				  <th scope="col">Bankkártya</th>
+				  <th scope="col">Készpénz</th>				  
+				  <th scope="col">Munkatárs</th>
+				  <th scope="col">Összbevétel</th>
+				  <th scope="col">Módosítás időpontja</th>
+				  <th scope="col">ID</th>
+				  <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+				  </tr>
+			  </thead>
+			  <tbody>
+				{% if jelentesek is defined %}
+				{% for jelentes in jelentesek %}
+				<tr>
+				  <td class="align-middle small">{{ jelentes.idopont|date('Y. M d. ')}}</th>
+				  <td class="align-middle text-right">{{ jelentes.kassza|number_format(0, ',', ' ') }}</td>
+				  <td class="align-middle text-right">{{ jelentes.bankkartya|number_format(0, ',', ' ') }}</td>
+				  <td class="align-middle text-right">{{ jelentes.keszpenz|number_format(0, ',', ' ') }}</td>
+				  <td>{{ jelentes.munkatars }}</td>
+				  <td class="align-middle text-right "><em>{{ (jelentes.bankkartya + jelentes.keszpenz)|number_format(0, ',', ' ') }}</em></td>
+  				  <td class="align-middle small">{{ jelentes.modositasIdopontja|date('Y. M d. \\| H:i')}}</td>
+  				  <td class="align-middle small">{{ jelentes.id }}</td>
+				  <td>
+				  	<a href="{{ path('boltzaras_show', {'id': jelentes.id}) }}" class="btn-sm">
+				  		<i class="fas fa-eye"></i></a>
+				  	<a href="{{ path('boltzaras_edit', {'id': jelentes.id}) }}" class="btn-sm">
+				  		<i class="fas fa-edit"></i></a>
+				  	</td>
+				</tr>
+				{% endfor %}
+				{% elseif jelentes is defined %}
+				<tr>
+				  <td class="align-middle small">{{ jelentes.idopont|date('Y. M d. \\| H:i')}}</th>
+				  <td class="align-middle text-right">{{ jelentes.kassza|number_format(0, ',', ' ') }}</td>
+				  <td class="align-middle text-right">{{ jelentes.bankkartya|number_format(0, ',', ' ') }}</td>
+				  <td class="align-middle text-right">{{ jelentes.keszpenz|number_format(0, ',', ' ') }}</td>
+				  <td>{{ jelentes.munkatars }}</td>
+				  <td class="align-middle text-right "><em>{{ (jelentes.bankkartya + jelentes.keszpenz)|number_format(0, ',', ' ') }}</em></td>
+  				  <td class="align-middle small">{{ jelentes.modositasIdopontja|date('Y. M d. \\| H:i')}}</td>
+  				  <td class="align-middle small">{{ jelentes.id }}</td>
+				  <td>
+				  	<a href="{{ path('boltzaras_show', {'id': jelentes.id}) }}" class="btn-sm">
+				  		<i class="fas fa-eye"></i></a>
+				  	<a href="{{ path('boltzaras_edit', {'id': jelentes.id}) }}" class="btn-sm">
+				  		<i class="fas fa-edit"></i></a>
+				  	</td>
+				</tr>
+				{% else %}
+				<tr>
+			        <li><em>nincs user found</em></li>
+			    </tr>
+				{% endif %}
+			  </tbody>
+			</table>
+		</div>
+		<div class="pagerfanta">
+                {% if paginator is defined %}
+					{{ pagerfanta(paginator, 'twitter_bootstrap4') }}
+                {% endif %}
+		</div>
+
+	</div>
+	{% endblock %}
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+        
+

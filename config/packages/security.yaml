@@ -1,0 +1,72 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+    #    in_memory: { memory: ~ }
+        sajat_db_provider:
+            entity:
+                class: App\Entity\User
+                # a property = username alapján próbálja megtalálni a db-ben a megfelelő bejegyzést (felhasználót)
+                # azaz a username mezőbe beírt felhasználót próbálja megtalálni. Lehetne property: email
+                property: username
+                # if you're using multiple entity managers
+                # manager_name: customer
+
+        # Ez volt az eredeti login beallítás, amivel az itt eltárolt usert keresi meg
+        #in_memory:
+        #   memory:
+        #       users:
+                    # az eredeti jelszó, ami lent kódólva látható (ezt kell beütni): 'demo'
+        #           admin:
+        #               password: $2y$12$06PUUbqccjnagJdAviE1.u.rHbUraSnigoAdEacdU2Cp9MYJLsnnq
+        #               roles: 'ROLE_ADMIN'
+        #           liviu:
+        #               password: $2y$12$06PUUbqccjnagJdAviE1.u.rHbUraSnigoAdEacdU2Cp9MYJLsnnq
+        #               roles: 'ROLE_USER'
+
+    encoders:
+
+        # Ez volt az eredeti loginnál használt encoder beállítás, plaintext értékkel
+        # Symfony\Component\Security\Core\User\User: plaintext
+        # ezt váltja ki a loading users from database, ami ez esetben a User entitásban található
+        App\Entity\User:
+            algorithm: bcrypt
+            #cost: 12
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            provider: sajat_db_provider
+            anonymous: true
+
+            # Ez volt az eredeti login beállítás, amivel böngésző ablak login jön fel
+            # http_basic: true
+            # ezt váltja ki a form_login típusú un. 'authentication listener'
+            # a logout részt is ugyanaz az authentication listener alá kell berakni, azaz a form_login alá
+            form_login:
+                login_path: admin_login
+                check_path: admin_login
+                default_target_path: product_list
+            logout:
+                path:   /logout
+                target: boltzaras_list
+
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }

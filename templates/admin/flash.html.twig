@@ -1,0 +1,21 @@
+{% extends 'admin/base.html.twig' %}
+
+
+{% block page_content %}
+{# you can read and display just one flash message type... #}
+{% for message in app.flashes('notice') %}
+    <div class="flash-notice">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{# ...or you can read and display every flash message available #}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="flash-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% endblock %}

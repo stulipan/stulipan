@@ -1,0 +1,150 @@
+		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
+		{{ form_start(form, { 'attr': {'class': 'form-boltzaras' }}) }}
+
+        <div class="mb-3">
+            <div class="form-group row">
+                <div class="col-sm-2 text-sm-righttt">
+                    {{ form_label(form.datum) }}
+                </div>
+                <div class="col-sm-4" id="datum">
+                    <div >
+                        <div class="input-group date">
+                            {{ form_widget(form.datum) }}
+                            <span class="input-group-append input-group-addon">
+						            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                            </span>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted">
+                        A szállítmány érkezésének dátuma.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h5 class="mb-0">Termékek a szállítmányban:</h5>
+            <small class="form-text text-muted">
+                Csak azoknál a termékeknél töltsd ki, amik új áruként érkeztek a szállítmánnyal.
+            </small>
+        </div>
+        <ul class="nav nav-fill nav-tabs mt-3 mb-2 px-3" id="myTab" role="tablist">
+            {% for category in categories %}
+            <li class="nav-item">
+                <a class="nav-link {% if loop.first == 1 %} active {% endif %}" id="{{ category }}-tab" data-toggle="tab" href="#{{ category }}" role="tab" aria-controls="{{ category }}" aria-selected="true">
+                    <h6>{{ category }}</h6>
+                </a>
+            </li>
+            {% endfor %}
+            {#<li class="nav-item">#}
+                {#<a class="nav-link" id="Cserepes-tab" data-toggle="tab" href="#Cserepes" role="tab" aria-controls="Cserepes" aria-selected="false">Cserepes</a>#}
+            {#</li>#}
+            {#<li class="nav-item">#}
+                {#<a class="nav-link" id="Orhideák-tab" data-toggle="tab" href="#Orhideák" role="tab" aria-controls="Orhideák" aria-selected="false">Orhideák</a>#}
+            {#</li>#}
+            {#<li class="nav-item">#}
+                {#<a class="nav-link" id="Zöldek-tab" data-toggle="tab" href="#Zöldek" role="tab" aria-controls="Zöldek" aria-selected="false">Zöldek</a>#}
+            {#</li>#}
+            {#<li class="nav-item">#}
+                {#<a class="nav-link" id="Egyéb-tab" data-toggle="tab" href="#Egyéb" role="tab" aria-controls="Egyéb" aria-selected="false">Egyéb</a>#}
+            {#</li>#}
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+
+            {% for category in categories %}
+
+            <div class="tab-pane fade {% if loop.first == 1 %} show active {% endif %}" id="{{ category }}" role="tabpanel" aria-labelledby="{{ category }}-tab">
+                <div class="table-responsive">
+                    <table class="table table-borderless table-striped table-smX table-hover">
+                        <thead class="table-successX">
+                        <tr class="text-center">
+                            <th scope="col">Termék</th>
+                            <th scope="col">Mennyiség</th>
+                            <th scope="col">Beszerzési ár</th>
+                            <th scope="col">Szorzó</th>
+                            <th scope="col">Eladási ár</th>
+                        </tr>
+                        </thead>
+
+                        {% if form.items is defined %}
+                            {% for item in form.items %}
+                                {#{{ item.product.category.vars.value }} {{ category.getID }}#}
+                            {% if item.product.category.vars.value == category.getId %}
+                                <tr>
+                            <td class="px-0">
+                                <div class="col">
+                                    {#{{ loop.index }}. {{ form_widget(item.product.productName) }}#}
+                                    {{ loop.index }}. {{  item.product.productName.vars.value }}
+                                </div>
+                            </td>
+                            <td class="px-0">
+                                <div class="col">
+                                    {{ form_widget(item.quantity) }}
+                                    {{ form_errors(item.quantity) }}
+                                    <small class="form-text text-muted">
+                                        {{ form_label(item.quantity) }}
+                                    </small>
+                                </div>
+                            </td>
+                            <td class="px-0">
+                                <div class="col">
+                                    {{ form_widget(item.cog) }}
+                                    {{ form_errors(item.cog) }}
+                                    <small class="form-text text-muted">
+                                        {{ form_label(item.cog) }}
+                                    </small>
+                                </div>
+                            </td>
+                            <td class="px-0">
+                                <div class="col">
+                                    {{ form_widget(item.markup) }}
+                                    {{ form_errors(item.markup) }}
+                                    <small class="form-text text-muted">
+                                        {{ form_label(item.markup) }}
+                                    </small>
+                                </div>
+                            </td>
+                            <td class="px-0">
+                                <div class="col">
+                                    {{ form_widget(item.retailPrice) }}
+                                    {{ form_errors(item.retailPrice) }}
+                                    <small class="form-text text-muted">
+                                        {{ form_label(item.retailPrice) }}
+                                    </small>
+                                </div>
+                            </td>
+                        </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+
+            </div>
+            {% endfor %}
+
+            {#<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="cserepes-tab">...</div>#}
+            {#<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="orhideák-tab">...</div>#}
+            {#<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="zöldek-tab">...</div>#}
+            {#<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="egyéb-tab">...</div>#}
+
+        </div>
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+            <div class="mb-3">
+                <div class="form-group row">
+                    <div class="col-sm-12 ml-sm-auto text-right">
+                        <input type="submit" value="Mentés" class="btn btn-lgg btn-success" formnovalidate>
+                        <a href="{{ path('inventory-supply-list-all') }}" class="btn btn-outline-secondary">Mégse</a>
+                    </div>
+                </div>
+            </div>
+
+
+
+		{{ form_end(form) }}

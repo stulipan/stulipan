@@ -1,0 +1,41 @@
+
+
+
+                <div class="form-group col-lg-6">
+                    <label for="fullname_shipping" class="form-label">Címzett neve</label>
+                    <input type="text" name="fullname_shipping" placeholder="Szabó Lajos" id="fullname_shipping" class="form-control">
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="street_shipping" class="form-label">Címe</label>
+                    <!--input type="text" name="street_shipping" placeholder="123 Main St." id="street_shipping" class="form-control"-->
+                    {{ form_widget(form.deliveryAddress.street, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="city_shipping" class="form-label">Város</label>
+                    <!--input type="text" name="city_shipping" placeholder="City" id="city_shipping" class="form-control"-->
+                    {{ form_widget(form.deliveryAddress.city, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="zip_shipping" class="form-label">Irányítószám</label>
+                    <!--input type="text" name="zip_shipping" placeholder="Postal code" id="zip_shipping" class="form-control"-->
+                    {{ form_widget(form.deliveryAddress.zip, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="state_shipping" class="form-label">Megye</label>
+                    <!--input type="text" name="state_shipping" placeholder="State" id="state_shipping" class="form-control"-->
+                    {{ form_widget(form.deliveryAddress.province, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="state_shipping" class="form-label">Ország</label>
+                    <!--input type="text" name="state_shipping" placeholder="State" id="state_shipping" class="form-control"-->
+                    {{ form_widget(form.deliveryAddress.country, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="phonenumber_shipping" class="form-label">Telefonszám</label>
+                    <input type="text" name="phonenumber_shipping" placeholder="Phone Number" id="phonenumber_shipping" class="form-control">
+                </div>
+
+                <!--button type="submit" class="btn btn-success btn-lg mb-1"> <i class="fa fa-shopping-cart mr-2"></i>Kosárba rakom</button-->
+
+
+

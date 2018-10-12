@@ -1,0 +1,81 @@
+{% extends 'webshop/site/base_site.html.twig' %}
+
+{% block title %}
+    Virágküldés Budapesten és környékén | {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block page_content %}
+
+	<!-- Banner area -->
+	<section>
+		<div class="container py-3 pb-5">
+			<div class="row">
+				<div class="col-lg-4 d-flex d-noneX d-md-blockX align-items-lg-stretch order-2 order-lg-1">
+
+						<div class="row">
+							<div class="col-lg-12 col-sm-6">
+								<div style="background: center center url(https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/photo/rahul-anil-214671-unsplash.jpg) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-5 text-center mb-30px mb-lg-0"><a href="category.html" class="tile-link"> </a>
+									<div class="w-100">
+										<h1 class="text-uppercase">Men</h1>
+										<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-12 col-sm-6 d-flex align-items-lg-end">
+								<div style="background: center center url(https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/photo/brooke-cagle-195856-unsplash.jpg) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-4 text-center mb-30px mb-lg-0"><a href="category.html" class="tile-link"> </a>
+									<div class="w-100">
+										<h1 class="text-uppercase">SALES</h1>
+										<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+				</div>
+				<div class="col-lg-8 order-1 order-lg-2 mb-lg-0 mb-30px">
+                    <!-- {{ asset('uploads/images/banner/IMG_1608.jpg') }}  -->
+					<div class="card light-overlay text-dark border-0"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/photo/pete-bellis-189599-unsplash.jpg" alt="Card image" class="card-img"><a href="category.html" class="tile-link"> </a>
+						<div class="card-img-overlay d-flex align-items-center">
+							<div class="text-center w-100 overlay-content">
+								<h1 class="text-uppercase">Virágküldés</h1>
+								<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- /Banner area -->
+
+    <main>
+        <div class="container pb-5">
+            <div class="row">
+                <!-- Grid -->
+                <div class="products-grid col-12 sidebar-none">
+                    <div class="hero-content pb-1 text-centerX">
+                        <h2 class="hero-heading">Virágdobozok</h2>
+                    </div>
+
+                    {{ include('/webshop/site/product_list_widget.html.twig') }}
+
+
+                </div>
+                <!-- / Grid End-->
+            </div>
+        </div>
+    </main>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

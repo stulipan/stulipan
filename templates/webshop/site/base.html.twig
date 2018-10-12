@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+
+    <title>{% block title %}Stulipan{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700">
+        <!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"-->
+        <link href="{{ asset('webshop/site/bootstrap.css') }}" rel="stylesheet" />
+        <link href="{{ asset('webshop/site/style.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}">
+
+
+        <!-- owl carousel-->
+        <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css">
+
+        <!-- Font Awesome CSS-->
+        <!--link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/solid.css" integrity="sha384-TbilV5Lbhlwdyc4RuIV/JhD8NR+BfMrvz4BL5QFa2we1hQu6wvREr3v6XSRfCTRp" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/regular.css" integrity="sha384-avJt9MoJH2rB4PKRsJRHZv7yiFZn8LrnXuzvmZoD3fh1aL6aM6s0BBcnCvBe6XSD" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/brands.css" integrity="sha384-7xAnn7Zm3QC1jFjVc1A6v/toepoG3JXboQYzbM0jrPzou9OFXm/fY6Z/XiIebl/k" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/fontawesome.css" integrity="sha384-ozJwkrqb90Oa3ZNb+yKFW2lToAWYdTiF1vt8JiH5ptTGHTGcN7qdoR1F95e0kYyG" crossorigin="anonymous"-->
+
+        <!-- Favicon-->
+        <link rel="shortcut icon" href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/favicon.png">
+    {% endblock %}
+</head>
+<body>
+
+
+    {% block body %}{% endblock %}
+
+
+
+<!-- JAVASCRIPT -->
+{% block javascripts %}
+    <script>
+        // ------------------------------------------------------- //
+        //   Inject SVG Sprite -
+        //   see more here
+        //   https://css-tricks.com/ajaxing-svg-sprite/
+        // ------------------------------------------------------ //
+        function injectSvgSprite(path) {
+
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", path, true);
+            ajax.send();
+            ajax.onload = function(e) {
+                var div = document.createElement("div");
+                div.className = 'd-none';
+                div.innerHTML = ajax.responseText;
+                document.body.insertBefore(div, document.body.childNodes[0]);
+            }
+        }
+        injectSvgSprite('{{ asset('webshop/site/orion-svg-sprite.svg') }}');
+
+    </script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/owl.carousel.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/smooth-scroll/smooth-scroll.polyfills.min.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>
+
+    <script src="https://demo.bootstrapious.com/sell/1-2-0/js/theme.js"></script>
+
+{% endblock %}
+</body>
+</html>

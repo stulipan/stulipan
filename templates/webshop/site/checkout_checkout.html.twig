@@ -1,0 +1,258 @@
+{% extends 'webshop/site/base_site.html.twig' %}
+
+{% block title %}
+    Pénztár | {{ parent() }}
+{% endblock %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('webshop/site/checkout.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block page_content %}
+
+    <section name="progress_bar">
+        <div class="container mt-4 mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                        <div class="row text-center">
+                            <div class="col-4 text-muted">
+                                <p class="text-primary font-weight-bold">1. Kosár</p>
+                            </div>
+                            <div class="col-4 text-muted">
+                                <p class="text-primary font-weight-bold">2. Pénztár</p>
+                            </div>
+                            <div class="col-4 text-muted">
+                                <p>3. Rendelés véglegesítése</p>
+                            </div>
+
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="col-4 text-muted">
+                            </div>
+                            <div class="col-4 text-muted" style="margin-bottom: -22px">
+                                <i class="fas fa-2x fa-sort-up text-primary"></i>
+                            </div>
+                            <div class="col-4 text-muted">
+                            </div>
+                        </div>
+
+                        <div class="progress rounded">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section name="szamlazasi_cim">
+        <div class="container mb-4 pt-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="cartX ">
+                                            <span class="text-smX text-muted">Jártál már nálunk? Ha már van fiókod, <a href="" class="">itt tudsz bejelentkezni.</a></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+	<section name="szamlazasi_cim">
+		<div class="container mb-4">
+			<div class="row">
+				<div class="col-lg-12">
+                    <div class="cartX bg-white">
+                        <div class="cart-wrapper">
+
+                            <!-- header -->
+                            <div class="checkout-block-header">
+                                <div class="row">
+                                    <div class="col-xl-8 mx-autoX">
+                                        <h4 class="text-uppercase">Személyes adatok</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block-body">
+
+                                <!-- Recipient -->
+                                {{ render(controller('App\\Controller\\Shop\\CartController::createSenderForm', {'id' : order.id})) }}
+                                <!-- /Recipient -->
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+    <section name="szallitasi_mod">
+        <div class="container mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="cartX bg-white">
+                        <div class="cart-wrapper">
+
+                            <!-- header -->
+                            <div class="checkout-block-header">
+                                <div class="row">
+                                    <div class="col-xl-8 mx-autoX">
+                                        <h4 class="text-uppercase">Szállítási mód</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- body-->
+                            <form>
+                                <div class="block-body col-md-6">
+                                    <div class="row">
+                                        <div class="form-group col-md-12 d-flex align-items-top">
+                                            <input type="radio" name="shippping" id="option0">
+                                            <label for="option0" class="ml-3">
+                                                <strong class="d-block text-uppercase mb-2">Szállítás Budapestre</strong>
+                                                <span class="text-muted text-sm">A megrendelt virágot a DIFIORI munkatársai fogják kiszállítani.</span>
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-md-12 d-flex align-items-top">
+                                            <input type="radio" name="shippping" id="option1">
+                                            <label for="option1" class="ml-3">
+                                                <strong class="d-block text-uppercase mb-2">Személyes átvétel boltunkban</strong>
+                                                <span class="text-muted text-sm">A megrendelt termékeket átveheted személyesen boltunkban.<br>
+                                                        Címünk:&nbsp;1114 Budapest, Bartók Béla út 9.&nbsp;<br>
+                                                        Nyitvatartás: Hétfő-Szombat 09.00 - 19.00, Vasárnap 09.00 - 15.00
+                                                </span>
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+
+    <section name="fizetesi_mod">
+        <div class="container mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="cartX bg-white">
+                        <div class="cart-wrapper">
+
+                            <!-- header -->
+                            <div class="checkout-block-header">
+                                <div class="row">
+                                    <div class="col-xl-8 mx-autoX">
+                                        <h4 class="text-uppercase">Fizetési mód</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- body-->
+                            <form>
+                                <div class="block-body">
+
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+
+    <section name="fizetesi_mod">
+        <div class="container mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="cartX bg-white">
+                        <div class="cart-wrapper">
+
+                            <!-- header -->
+                            <div class="checkout-block-header">
+                                <div class="row">
+                                    <div class="col-xl-8 mx-autoX">
+                                        <h4 class="text-uppercase">Fiók létrehozása</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- body-->
+                            <form>
+                                <div class="block-body col-lg-6">
+                                    <div class="row">
+
+                                        <!--div class="col-lg-8">
+                                            <p class="text-sm text-muted">Megadhatsz egy egyéni üzenetet, amelyet egy üdvözlölapra írunk.</p>
+                                        </div-->
+
+                                        <div class="form-group col-lg-12">
+                                            <label for="username" class="form-label">Felhasználónév</label>
+                                            <input type="text" name="username" id="username" placeholder="Felhasználónév" class="form-control"></input>
+                                        </div>
+                                        <div class="form-group col-lg-12">
+                                            <label for="password" class="form-label">Jelszó</label>
+                                            <input type="password" name="password" placeholder="Jelszó" id="password" class="form-control">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+
+
+    <section name="tovabb_lepes">
+        <div class="container mb-5">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="d-flex justify-content-between flex-column flex-lg-row">
+                        <a href="category.html" class="btn btn-lg btn-link text-muted order-2 order-lg-1"><i class="fa fa-chevron-left"></i> Vissza a kosárhoz</a>
+                        <a href="{{ path('site_thankyou') }}" class="btn btn-lg btn-success order-1 order-lg-2">Rendelés ellenörzése <i class="fa fa-chevron-right"></i></a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

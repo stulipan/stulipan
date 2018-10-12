@@ -1,0 +1,105 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}
+	Termékek
+{% endblock %}
+
+{% block page_content %}
+		
+	{% block LISTA %}
+		<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+			<div class="col-sm-4 text-left">
+				<h2>Termékek</h2>
+			</div>
+			<div class="col-sm-8 text-right">
+				<a href="{{ path('product_new') }}" class="btn btn-success">Új hozzáadása</a>
+			</div>
+		</div>
+
+
+		{% block AZUZENET %}
+		{% for msg in app.session.flashBag.get('livSuccess') %}
+			<div class="alert alert-success" role="alert">	{{ msg }} </div>
+		{% endfor %}
+		{% endblock %}
+
+		<div class="table-responsive">
+			<table class="table table-striped table-sm table-hover">
+				<caption>A webshop kinálata | <a href="{{ path('product_list') }}" class="">Terméklista</a></caption>
+				<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Kép</th>
+					<th scope="col">Terméknév</th>
+					<th scope="col">Ár</th>
+					<th scope="col">Mennyiség</th>
+					<th scope="col">Állapot</th>
+					<th scope="col">Kategória</th>
+					<th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+					<th scope="col">SKU</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% if termekek is defined %}
+				{% for termek in termekek %}
+				<tr>
+					<td class="align-middle">{{ termek.id }}</td>
+                    <td class="align-middle">
+                        <a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" target="_blank">
+                            <img class="img-thumbnail" src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" width="40px;" height="50px;"/>
+                        </a>
+                    </td>
+					<td class="align-middle text-left"><a href="{{ path('product_edit', {'id': termek.id}) }}" class="">
+                            {{ termek.productName }}</a></td>
+					<td class="align-middle text-righttt">{{ termek.grossPrice|number_format(0, ',', ' ')  }}</td>
+					<td class="align-middle text-righttt">{{ termek.stock }}</td>
+					<td class="align-middle">{{ termek.status }}</td>
+					<td class="align-middle">{{ termek.category }}</td>
+					<td class="align-middle">
+						<a href="{{ path('product_edit', {'id': termek.id}) }}" class="btn-sm">
+							<i class="fas fa-edit"></i></a>
+						<a href="{{ path('site_product_show', {'id': termek.id}) }}" class="btn-sm" target="_blank">
+							<i class="fas fa-external-link-alt"></i></a>
+				  	</td>
+					<td class="align-middle">{{ termek.sku }}</td>
+				</tr>
+				{% endfor %}
+				{% elseif termek is defined %}
+				<tr>
+					<td class="align-middle">{{ termek.id }}</td>
+					<td class="align-middle">
+                        <a href="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" target="_blank">
+                        <img class="img-thumbnail" src="{{ asset('/uploads/images/termekek/' ~ termek.image) }}" width="50px;"/>
+                        </a>
+                    </td>
+					<td class="align-middle text-left"><a href="{{ path('product_edit', {'id': termek.id}) }}" class="">
+                            {{ termek.productName }}</a></td>
+					<td class="align-middle text-righttt">{{ termek.grossPrice|number_format(0, ',', ' ')  }}</td>
+					<td class="align-middle text-righttt">{{ termek.stock }}</td>
+					<td class="align-middle">{{ termek.status }}</td>
+					<td class="align-middle">{{ termek.category }}</td>
+					<td class="align-middle">
+						<a href="{{ path('product_edit', {'id': termek.id}) }}" class="btn-sm">
+							<i class="fas fa-edit"></i></a>
+						<a href="{{ path('site_product_show', {'id': termek.id}) }}" class="btn-sm" target="_blank">
+							<i class="fas fa-external-link-alt"></i></a>
+					</td>
+					<td class="align-middle">{{ termek.sku }}</td>
+				</tr>
+				{% else %}
+				<tr>
+			        <li><em>Nem talált termékeket!</em></li>
+			    </tr>
+				{% endif %}
+				</tbody>
+			</table>
+		</div>
+
+
+		<div class="pagerfanta">
+			{# { pagerfanta(paginator) } #}
+		</div>
+
+	{% endblock %}
+{% endblock %}

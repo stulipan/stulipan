@@ -1,0 +1,79 @@
+    {{ form_start(form) }}
+        <div class="row">
+            <!-- Termékváltozók -->
+            <!--div class="col-sm-6 col-lg-12 detail-option mb-3">
+                <h6 class="detail-option-heading">Size <span>(required)</span></h6>
+                <label for="size_0" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+
+                    Small
+                    <input type="radio" name="size" value="value_0" id="size_0" class="input-invisible">
+                </label>
+                <label for="size_1" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+
+                    Medium
+                    <input type="radio" name="size" value="value_1" id="size_1" class="input-invisible">
+                </label>
+                <label for="size_2" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+
+                    Large
+                    <input type="radio" name="size" value="value_2" id="size_2" class="input-invisible">
+                </label>
+            </div>
+            <div class="col-sm-6 col-lg-12 detail-option mb-3">
+                <h6 class="detail-option-heading">Type <span>(required)</span></h6>
+                <label for="material_0" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+
+                    Hoodie
+                    <input type="radio" name="material" value="value_0" id="material_0" class="input-invisible">
+                </label>
+                <label for="material_1" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+
+                    College
+                    <input type="radio" name="material" value="value_1" id="material_1" class="input-invisible">
+                </label>
+            </div>
+            <div class="col-12 detail-option mb-3">
+                <h6 class="detail-option-heading">Colour <span>(required)</span></h6>
+                <ul class="list-inline mb-0 colours-wrapper">
+                    <li class="list-inline-item">
+                        <label for="colour_Blue" style="background-color: #668cb9" class="btn-colour"> </label>
+                        <input type="radio" name="colour" value="value_Blue" id="colour_Blue" class="input-invisible">
+                    </li>
+                    <li class="list-inline-item">
+                        <label for="colour_White" style="background-color: #fff" class="btn-colour"> </label>
+                        <input type="radio" name="colour" value="value_White" id="colour_White" class="input-invisible">
+                    </li>
+                    <li class="list-inline-item">
+                        <label for="colour_Violet" style="background-color: #8b6ea4" class="btn-colour"> </label>
+                        <input type="radio" name="colour" value="value_Violet" id="colour_Violet" class="input-invisible">
+                    </li>
+                    <li class="list-inline-item">
+                        <label for="colour_Red" style="background-color: #dd6265" class="btn-colour"> </label>
+                        <input type="radio" name="colour" value="value_Red" id="colour_Red" class="input-invisible">
+                    </li>
+                </ul>
+            </div-->
+
+
+            <div class="col-12 detail-option mb-4">
+                <label class="detail-option-heading font-weight-bold">Items <span>(required)</span></label>
+                {# form_label(form.quantity, form.quantity, { 'label_attr': {'class': 'detail-option-heading font-weight-bold' }}) #}
+
+                <!--input type="number" value="{{ form.quantity.vars.attr.value }}" id="{{ form.quantity.vars.id }}" name="{{ form.quantity.vars.full_name }}" required="{{ form.quantity.vars.required }}" class="form-control detail-quantity"-->
+                {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
+
+            </div>
+        </div>
+
+        <ul class="list-inline">
+            <li class="list-inline-item">
+                <button type="submit" class="btn btn-success btn-lg mb-1"> <i class="fa fa-shopping-cart mr-2"></i>Kosárba rakom</button>
+                {% if form.submit is defined %}
+                <!--button type="submit" id="{{ form.submit.vars.id }}" name="{{ form.submit.vars.full_name }}" class="btn btn-dark btn-lg mb-1"> <i class="fa fa-shopping-cart mr-2"></i>Kosárba rakom</button-->
+                {% endif %}
+                {# form_widget(form.submit, {'attr': {'class': 'btn btn-dark btn-lg mb-1'}}) #}
+            </li>
+            <li class="list-inline-item"><a href="#" class="btn btn-outline-secondary mb-1"> <i class="far fa-heart mr-2"></i>Add to wishlist</a></li>
+        </ul>
+
+    {{ form_end(form) }}

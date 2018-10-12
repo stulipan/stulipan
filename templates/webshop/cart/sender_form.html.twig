@@ -1,0 +1,50 @@
+{{ form_start(senderForm) }}
+        <div class="row">
+            <div class="col-lg-8">
+                <p class="text-sm text-muted">Ide írd be annak a személynek a nevét, címét, telefonszámát aki kapni fogja a virágot/ajándékot.</p>
+            </div>
+            <!-- sender fields -->
+            <div class="form-group col-md-6">
+                <label for="{{ senderForm.name.vars.full_name }}" class="form-label">Neve</label>
+                {{ form_widget(senderForm.name, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group col-md-6">
+                <label for="{{ senderForm.company.vars.full_name }}" class="form-label">Cégnév</label>
+                {{ form_widget(senderForm.company, {'attr': {'class': 'form-control', 'placeholder': 'Válalkozás Kft.' }}) }}
+            </div>
+            <div class="form-group col-md-6">
+                <label for="{{ senderForm.address.street.vars.full_name }}" class="form-label">Utca</label>
+                {{ form_widget(senderForm.address.street, {'attr': {'class': 'form-control' }}) }}
+            </div>
+            <div class="form-group col-md-6">
+                <label for="{{ senderForm.address.city.vars.full_name }}" class="form-label">Település</label>
+                {{ form_widget(senderForm.address.city, {'attr': {'class': 'form-control' }}) }}
+            </div>
+            <div class="form-group col-md-6">
+                <label for="{{ senderForm.address.zip.vars.full_name }}" class="form-label">Irányítószám</label>
+                {{ form_widget(senderForm.address.zip, {'attr': {'class': 'form-control' }}) }}
+            </div>
+            <div class="form-group col-md-6">
+                <label for="{{ senderForm.address.province.vars.full_name }}" class="form-label">Megye</label>
+                {{ form_widget(senderForm.address.province, {'attr': {'class': 'form-control' }}) }}
+            </div>
+            <div class="form-group col-md-6">
+                <label for="{{ senderForm.address.country.vars.full_name }}" class="form-label">Ország</label>
+                {{ form_widget(senderForm.address.country, {'attr': {'class': 'form-control' }}) }}
+            </div>
+            <div class="form-group col-md-6">
+                {#<label for="{{ senderForm.phone.vars.full_name }}" class="form-label">Telefonszám</label>#}
+                {#{{ form_widget(senderForm.phone, {'attr': {'class': 'form-control', 'placeholder': 'Válalkozás Kft.' }}) }}#}
+            </div>
+            <!-- /sender fields -->
+
+            <div class="form-group col-lg-12">
+                <button type="submit" class="btn btn-primary">Tovább <i class="fa fa-chevron-right"></i></button>
+            </div>
+
+        </div>
+
+
+
+
+{{ form_end(senderForm) }}

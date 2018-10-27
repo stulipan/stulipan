@@ -1,0 +1,92 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block page_content %}
+		
+	{% block LISTA %}
+
+		<!-- page title -->
+        {{ include('/admin/_title_widget.html.twig') }}
+
+		<!-- header of default page content widget -->
+        {{ include('/admin/_header_of_default_page_content.html.twig') }}
+
+		<div class="row mb-2">
+			<div class="col-lg-8">
+                {#valami content#}
+			</div>
+			<div class="col-lg-4">
+				<div class="text-lg-right">
+					<a href="{{ path('invoice-edit') }}" class="btn btn-success mb-2 mr-2"><i class="fas fa-file-invoice-dollar mr-1"></i> Új számla rögzítése</a>
+				</div>
+			</div><!-- end col-->
+		</div>
+
+        <div class="table-responsive mb-3">
+            <table class="table table-centered table-stripedX table-hover mb-0">
+                <thead class="thead-light">
+				<tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Dátum</th>
+				    <th scope="col">Beszállító</th>
+				    <th scope="col">Összeg</th>
+				    <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+                    <th scope="col">Módosítás időpontja</th>
+                </tr>
+			  </thead>
+			  <tbody>
+				{% if szamlak is defined %}
+				{% for szamla in szamlak %}
+				<tr>
+                    <td class="align-middle">{{ szamla.id }}</td>
+				    <td class="align-middle font-weight-bold">{{ szamla.datum|date('Y. M d. ')}}</td>
+				    <td>{{ szamla.company }}
+						<a href="{{ path('invoice-company-edit', {'id': szamla.company.id }) }}" class="btn-link text-muted text-secondary ml-1"><i class="fas fa-edit"></i></a>
+					</td>
+                    <td class="align-middle text-right text-nowrap">{{ szamla.osszeg|number_format(0, ',', ' ') }},-</td>
+				    <td>
+				  	    <a href="{{ path('invoice-edit', {'id': szamla.id}) }}" class="btn-smX">
+				  		    <i class="fas fa-edit"></i></a>
+				    </td>
+                    <td class="align-middle text-muted"><small>{{ szamla.updatedAt|date('Y. M d. \\| H:i')}}</small></td>
+				</tr>
+				{% endfor %}
+				{% else %}
+				<tr>
+			        <li><em>nincs user found</em></li>
+			    </tr>
+				{% endif %}
+			  </tbody>
+			</table>
+		</div>
+		<div class="pagerfanta">
+            {% if paginator is defined %}
+                {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
+            {% endif %}
+		</div>
+        <!-- footer of default page content widget -->
+        {{ include('/admin/_footer_of_default_page_content.html.twig') }}
+
+	</div>
+	{% endblock %}
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+        
+

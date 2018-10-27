@@ -27,8 +27,7 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="text-lg-right">
-                                    <a href="{{ path('inventory-supply-edit') }}" class="btn btn-success mb-2 mr-2"><i class="fas fa-sign-in-alt mr-1"></i> Új bejövő áru rögzítése</a>
-                                    <a href="{{ path('inventory-product-edit') }}" class="btn btn-info mb-2"><i class="fas fa-plus-circle mr-1"></i>  Új termék</a>
+                                    <a href="{{ path('inventory-waste-edit') }}" class="btn btn-danger mb-2 mr-2"><i class="fas fa-plus-circle mr-1"></i> Selejtek rögzítése</a>
                                 </div>
                             </div><!-- end col-->
                         </div>
@@ -54,14 +53,14 @@
                                     </td>
                                     <td>
                                         {% for category in item.productCategories %}
-                                        <a href="{{ path('inventory-supply-edit', {'id': item.id}) }}" class="">
-                                            <span class="badge badge-primary">{{ category }}</span>
-                                            {{ render(controller('App\\Controller\\Boltzaras\\InventoryController::itemsPerCategory', {'isWaste': 0, 'supply' : item.id, 'category' : category.id})) }}
+                                        <a href="{{ path('inventory-waste-edit', {'id': item.id}) }}" class="">
+                                            <span class="badge badge-danger">{{ category }}</span>
+                                            {{ render(controller('App\\Controller\\Boltzaras\\InventoryController::itemsPerCategory', {'isWaste' : 1, 'waste' : item.id, 'category' : category.id})) }}
                                         </a>
                                         {% endfor %}
                                     </td>
                                     <td>
-                                        <a href="{{ path('inventory-supply-edit', {'id': item.id}) }}" class=""> <i class="fas fa-edit"></i></a></a>
+                                        <a href="{{ path('inventory-waste-edit', {'id': item.id}) }}" class=""> <i class="fas fa-edit"></i></a></a>
                                     </td>
                                     <td class="text-muted"><small>{{ item.updatedAt|date('Y. M d. \| H:i')}}</small>
                                     </td>
@@ -87,8 +86,12 @@
         <!-- footer of default page content widget -->
         {{ include('/admin/_footer_of_default_page_content.html.twig') }}
 
+
 	{% endblock %}
 {% endblock %}
+
+
+
 
 
 {% block javascripts %}

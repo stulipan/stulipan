@@ -2,8 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\InventorySupply;
-//use App\Form\InventorySupplyItemFormType;
+use App\Entity\InventoryWaste;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -12,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 
-class InventorySupplyFormType extends AbstractType
+class InventoryWasteFormType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -28,7 +27,7 @@ class InventorySupplyFormType extends AbstractType
             )
 
             ->add('items', CollectionType::class, [
-							'entry_type' => InventorySupplyItemFormType::class,
+							'entry_type' => InventoryWasteItemFormType::class,
                            'entry_options' => array('label' => false),
 							]
 
@@ -40,7 +39,7 @@ class InventorySupplyFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-						'data_class' => InventorySupply::class
+						'data_class' => InventoryWaste::class
         ]);
     
     }

@@ -2,7 +2,7 @@
 
 
 {% block title %}
-	Előző boltzárások
+	{{ title }}
 {% endblock %}
 
 
@@ -14,74 +14,93 @@
 {% block page_content %}
 		
 	{% block LISTA %}
-		<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-			<div class="col-sm-4 text-left">
-				<h2>Boltzárás jelentések</h2>
-			</div>
-			<div class="col-sm-8 text-right">
-				<a href="{{ path('boltzaras_new') }}" class="btn btn-success">Új jelentés</a>
-			</div>
-		</div>
 
-		{% block AZUZENET %}
-		{% for msg in app.session.flashBag.get('livSuccess') %}
-			<div class="alert alert-success" role="alert">	{{ msg }} </div>
-		{% endfor %}
-		{% endblock %}
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- insert plain title -->
+                        {{ include('/admin/_title_insert.html.twig') }}
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ render(controller('App\\Controller\\Boltzaras\\BoltzarasController::addBoltzarasForm')) }}
+                    </div>
+                    {#<div class="modal-footer">#}
+                        {#<button type="button" class="btn btn-secondary" data-dismiss="modal">Mégse</button>#}
+                        {#<button type="button" class="btn btn-primary">M</button>#}
+                    {#</div>#}
+                </div>
+            </div>
+        </div>
 
-		<div class="table-responsive">
-			<table class="table table-striped table-sm table-hover">
-			  <caption>Eddigi boltzárás jelentések | <a href="{{ path('boltzaras_list_all') }}" class="">Mutasd mindet</a> (El fog tartani egy ideig!)</caption>
-			  <thead>
+        <!-- page title -->
+        {{ include('/admin/_title_widget.html.twig') }}
+
+        <!-- header of default page content widget -->
+        {{ include('/admin/_header_of_default_page_content.html.twig') }}
+
+        <div class="row mb-2">
+            <div class="col-lg-8">
+                <div class="d-inline-block">
+
+                    <!-- dateRange Widget -->
+                    {{ include('/admin/dateRange-picker-widget.html.twig') }}
+                </div>
+                <div class="d-inline-block">
+                    <a href="{{  path('boltzaras_list') }}" class="btn-link ml-1">Teljes lista</a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="text-lg-right">
+                    <a href="{{ path('boltzaras_new') }}" class="btn btn-success mb-2 mr-2"><i class="fas fa-plus-circle mr-1"></i> Új jelentés</a>
+                    <button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fas fa-plus mr-1"></i> Új ablak</button>
+                </div>
+            </div><!-- end col-->
+        </div>
+
+
+
+
+        <div class="table-responsive mb-3">
+            <table class="table table-sm table-centered table-stripedX table-hover mb-0">
+                <thead class="thead-light">
 				<tr>
                     <th scope="col">Dátum</th>
                     <th scope="col">Kassza</th>
 				    <th scope="col">Bankkártya</th>
 				    <th scope="col">Készpénz</th>
-				    <th scope="col">Munkatárs</th>
 				    <th scope="col">Összbevétel</th>
-				    <th scope="col">ID</th>
-				    <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
-                    <th scope="col">Módosítás időpontja</th>
+				    {#<th scope="col">ID</th>#}
+                    <th scope="col" class="text-center">Módosítás időpontja</th>
+                    <th scope="col">Munkatárs</th>
+                    <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
 				  </tr>
 			  </thead>
 			  <tbody>
 				{% if jelentesek is defined %}
 				{% for jelentes in jelentesek %}
 				<tr>
-                    <td class="align-middle">{{ jelentes.idopont|date('Y. M d. ')}}</th>
-				    <td class="align-middle text-right">{{ jelentes.kassza|number_format(0, ',', ' ') }}</td>
-				    <td class="align-middle text-right">{{ jelentes.bankkartya|number_format(0, ',', ' ') }}</td>
-				    <td class="align-middle text-right">{{ jelentes.keszpenz|number_format(0, ',', ' ') }}</td>
-				    <td>{{ jelentes.munkatars }}</td>
-				    <td class="align-middle text-right "><em>{{ (jelentes.bankkartya + jelentes.keszpenz)|number_format(0, ',', ' ') }}</em></td>
-  				    <td class="align-middle">{{ jelentes.id }}</td>
-				    <td>
-				  	    <a href="{{ path('boltzaras_show', {'id': jelentes.id}) }}" class="btn-sm">
-				  		    <i class="fas fa-eye"></i></a>
-				  	    <a href="{{ path('boltzaras_edit', {'id': jelentes.id}) }}" class="btn-sm">
-				  		    <i class="fas fa-edit"></i></a>
+                    <td class="align-middle font-weight-bold">{{ jelentes.idopont|date('Y. M d. ')}}</th>
+				    <td class="align-middle text-right text-nowrap">{{ jelentes.kassza|number_format(0, ',', ' ') }},-</td>
+				    <td class="align-middle text-right text-nowrap">{{ jelentes.bankkartya|number_format(0, ',', ' ') }},-</td>
+				    <td class="align-middle text-right text-nowrap">{{ jelentes.keszpenz|number_format(0, ',', ' ') }},-</td>
+				    <td class="align-middle text-right font-weight-bold text-nowrap">{{ (jelentes.bankkartya + jelentes.keszpenz)|number_format(0, ',', ' ') }},-</td>
+  				    {#<td class="align-middle text-muted"><small>{{ jelentes.id }}</small></td>#}
+                    <td class="align-middle text-center text-muted"><small>{{ jelentes.modositasIdopontja|date('Y. M d. \\| H:i')}}</small></td>
+                    <td class="text-muted"><small><img class="img-thumbnail rounded-circle mr-2" src="{{ asset('/uploads/images/termekek/' ~ jelentes.munkatars.avatar) }}" width="40px;" />{{ jelentes.munkatars }} </small></td>
+                    <td>
+                        {% if is_granted('ROLE_POWER_ADMIN') %}
+                            <a href="{{ path('boltzaras_edit', {'id': jelentes.id}) }}" class="btn-smX">
+                                <i class="fas fa-edit"></i></a>
+                        {% endif %}
 				  	</td>
-                    <td class="align-middle">{{ jelentes.modositasIdopontja|date('Y. M d. \\| H:i')}}</td>
 				</tr>
 				{% endfor %}
-				{% elseif jelentes is defined %}
-                    <tr>
-                        <td class="align-middle">{{ jelentes.idopont|date('Y. M d. ')}}</th>
-                        <td class="align-middle text-right">{{ jelentes.kassza|number_format(0, ',', ' ') }}</td>
-                        <td class="align-middle text-right">{{ jelentes.bankkartya|number_format(0, ',', ' ') }}</td>
-                        <td class="align-middle text-right">{{ jelentes.keszpenz|number_format(0, ',', ' ') }}</td>
-                        <td>{{ jelentes.munkatars }}</td>
-                        <td class="align-middle text-right "><em>{{ (jelentes.bankkartya + jelentes.keszpenz)|number_format(0, ',', ' ') }}</em></td>
-                        <td class="align-middle">{{ jelentes.id }}</td>
-                        <td>
-                            <a href="{{ path('boltzaras_show', {'id': jelentes.id}) }}" class="btn-sm">
-                                <i class="fas fa-eye"></i></a>
-                            <a href="{{ path('boltzaras_edit', {'id': jelentes.id}) }}" class="btn-sm">
-                                <i class="fas fa-edit"></i></a>
-                        </td>
-                        <td class="align-middle">{{ jelentes.modositasIdopontja|date('Y. M d. \\| H:i')}}</td>
-                    </tr>
 				{% else %}
 				<tr>
 			        <li><em>nincs user found</em></li>
@@ -95,6 +114,9 @@
 					{{ pagerfanta(paginator, 'twitter_bootstrap4') }}
                 {% endif %}
 		</div>
+
+        <!-- footer of default page content widget -->
+        {{ include('/admin/_footer_of_default_page_content.html.twig') }}
 
 	</div>
 	{% endblock %}

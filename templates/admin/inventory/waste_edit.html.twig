@@ -20,11 +20,15 @@
             <!-- Kereso mezo + Filterek + Csoportos action opcio -->
         </div>
         <div class="col-lg-4">
-
-        </div>
+            <!-- Gombok -->
+            {#<div class="text-lg-right">#}
+                {#<a href="{{ path('inventory-supply-edit') }}" class="btn btn-success mb-2 mr-2"><i class="mdi mdi-basket mr-1"></i> Új bejövő áru rögzítése</a>#}
+                {#<a href="{{ path('inventory-product-edit') }}" class="btn btn-success mb-2"><i class="mdi mdi-package mr-1"></i> Új termék</a>#}
+            {#</div>#}
+        </div><!-- end col-->
     </div>
 
-    {{ include('/admin/inventory/_supply_form.html.twig') }}
+    {{ include('/admin/inventory/_waste_form.html.twig') }}
 
     <!-- footer of default page content widget -->
     {{ include('/admin/_footer_of_default_page_content.html.twig') }}

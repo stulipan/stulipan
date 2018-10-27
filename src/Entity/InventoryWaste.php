@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\TimestampableTrait;
-use App\Entity\InventorySupplyItem;
+use App\Entity\InventoryWasteItem;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,10 +14,10 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="inv_supply")
- * @ORM\Entity(repositoryClass="App\Repository\InventorySupplyRepository")
+ * @ORM\Table(name="inv_waste")
+ * @ORM\Entity(repositoryClass="App\Repository\InventoryWasteRepository")
  */
-class InventorySupply
+class InventoryWaste
 {
     use TimestampableTrait;
 
@@ -36,21 +36,14 @@ class InventorySupply
      */
     private $datum;
 
-//    /**
-//     * @var bool
-//     *
-//     * @ORM\Column(name="is_waste", type="boolean", nullable=false, options={"default"="0"})
-//     */
-//    private $isWaste = '0';
-
     /**
      * @var Collection
      *
-     * ==== One Supply has Items ====
-     * ==== mappedBy="supply" => az SupplyItem entitásban definiált 'supply' attribútumról van szó ====
+     * ==== One Waste has Items ====
+     * ==== mappedBy="waste" => az WasteItem entitásban definiált 'waste' attribútumról van szó ====
      *
-     * @ORM\OneToMany(targetEntity="InventorySupplyItem", mappedBy="supply", orphanRemoval=true, cascade={"persist"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="supply_id", nullable=true)
+     * @ORM\OneToMany(targetEntity="InventoryWasteItem", mappedBy="waste", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="waste_id", nullable=true)
      * @Assert\NotBlank(message="Egy áruszállítmányban több tétel lehet.")
      */
     private $items;
@@ -89,24 +82,8 @@ class InventorySupply
         $this->datum = $datum;
     }
 
-//    /**
-//     * @return bool
-//     */
-//    public function isWaste(): bool
-//    {
-//        return $this->isWaste;
-//    }
-//
-//    /**
-//     * @param bool $isWaste
-//     */
-//    public function setIsWaiste(bool $isWaste)
-//    {
-//        $this->isWaste = $isWaste;
-//    }
-
     /**
-     * @return InventorySupplyItem $item
+     * @return InventoryWasteItem $item
      */
     public function getItem(InventoryProduct $product)
     {
@@ -118,17 +95,17 @@ class InventorySupply
     }
 
     /**
-     * @param InventorySupplyItem $item
+     * @param InventoryWasteItem $item
      */
-    public function addItem(InventorySupplyItem $item): void
+    public function addItem(InventoryWasteItem $item): void
     {
         $this->items->add($item);
     }
 
     /**
-     * @param InventorySupplyItem $item
+     * @param InventoryWasteItem $item
      */
-    public function removeItem(InventorySupplyItem $item): void
+    public function removeItem(InventoryWasteItem $item): void
     {
         $this->items->removeElement($item);
     }
@@ -142,7 +119,7 @@ class InventorySupply
     }
 
     /**
-     * Returns all the Products within a Supply
+     * Returns all the Products within a Waste
      *
      * @return Collection
      */
@@ -156,7 +133,7 @@ class InventorySupply
     }
 
     /**
-     * Returns all the Categories of products within a Supply
+     * Returns all the Categories of products within a Waste
      *
      * @return Collection
      */
@@ -168,11 +145,6 @@ class InventorySupply
                 $categories->add($item->getProduct()->getCategory());
             }
         }
-//        foreach ($this->items as $i => $item) {
-//            if ( !$categories->contains($item->getProduct()->getCategory()->getCategoryName()) ) {
-//                $categories->add($item->getProduct()->getCategory()->getCategoryName());
-//            }
-//        }
         return $categories;
     }
 
@@ -209,7 +181,7 @@ class InventorySupply
     /**
      * @return int
      */
-    public function countItemsInSupply(): int
+    public function countItemsInWaste(): int
     {
         return $this->items->count();
     }

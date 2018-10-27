@@ -45,8 +45,8 @@ security:
             # ezt váltja ki a form_login típusú un. 'authentication listener'
             # a logout részt is ugyanaz az authentication listener alá kell berakni, azaz a form_login alá
             form_login:
-                login_path: admin_login
-                check_path: admin_login
+                login_path: admin-login
+                check_path: admin-login
                 default_target_path: product_list
             logout:
                 path:   /logout
@@ -61,12 +61,14 @@ security:
             # https://symfony.com/doc/current/security/form_login_setup.html
 
     role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_ADMIN: ROLE_USER  # sima admin, bárki lehet admin pl: Attila
+        ROLE_POWER_ADMIN: ROLE_ADMIN # pl: Mariann
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH] # csak én
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+#        - { path: ^/admin/boltzaras, roles: ROLE_POWER_ADMIN }
         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

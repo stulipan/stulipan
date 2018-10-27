@@ -9,26 +9,29 @@
 
 {% block page_content %}
 
-	<div class="col-lg-3"></div>
+	<!-- page title -->
+    {{ include('/admin/_title_widget.html.twig') }}
 
-	<div class="col-lg-6">
-		<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-			<h2>{{ title }}</h2>
-			<!--small class="form-text text-muted">
-                Itt tudsz felvinni új számlát vagy egy költséget.
-            </small-->
+	<!-- header of default page content widget -->
+    {{ include('/admin/_header_of_default_page_content.html.twig') }}
+
+	<div class="row mb-2">
+		<div class="col-lg-8">
+			<!-- Kereso mezo + Filterek + Csoportos action opcio -->
 		</div>
-
-        {% block AZUZENET %}
-            {% for msg in app.session.flashBag.get('success') %}
-				<div class="alert alert-success" role="alert">	{{ msg }} </div>
-            {% endfor %}
-        {% endblock %}
-		<p> </p>
-
-        {{ include('/admin/inventory/_product_form.html.twig') }}
+		<div class="col-lg-4">
+			<!-- Gombok -->
+            {#<div class="text-lg-right">#}
+            {#<a href="{{ path('inventory-supply-edit') }}" class="btn btn-success mb-2 mr-2"><i class="mdi mdi-basket mr-1"></i> Új bejövő áru rögzítése</a>#}
+            {#<a href="{{ path('inventory-product-edit') }}" class="btn btn-success mb-2"><i class="mdi mdi-package mr-1"></i> Új termék</a>#}
+            {#</div>#}
+		</div><!-- end col-->
 	</div>
-	<div class="col-lg-3"></div>
+
+    {{ include('/admin/inventory/_product_form_withVisualPicker.html.twig') }}
+
+	<!-- footer of default page content widget -->
+    {{ include('/admin/_footer_of_default_page_content.html.twig') }}
 
 {% endblock %}
 

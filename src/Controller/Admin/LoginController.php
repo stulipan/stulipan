@@ -9,7 +9,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class LoginController extends AbstractController
 {
     /**
-     * @Route("/login", name="admin_login")
+     * @Route("/login", name="admin-login")
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {

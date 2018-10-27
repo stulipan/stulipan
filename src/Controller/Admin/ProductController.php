@@ -15,7 +15,7 @@ class ProductController extends Controller
 {
 
     /**
-     * @Route("/admin/termek/", name="product_list")
+     * @Route("/admin/termek/", name="product-list")
      */
     public function listActionOld()
     {
@@ -26,8 +26,8 @@ class ProductController extends Controller
         if (!$termek) {
             //throw $this->createNotFoundException('Nem talált egy terméket sem!');
 
-            $this->addFlash('livSuccess', 'Nem talált egy terméket sem! ');
-            return $this->redirectToRoute('product_list');
+            $this->addFlash('success', 'Nem talált egy terméket sem! ');
+            return $this->redirectToRoute('product-list');
         }
 
         // render a template, then in the template, print things with {{ termek.munkatars }}
@@ -37,12 +37,15 @@ class ProductController extends Controller
             $termek[$i]->getUpdatedAt()->format('Y-m-d H:i:s');
         }
 
-        return $this->render('admin/product/product_list.html.twig', ['termekek' => $termek]);
+        return $this->render('admin/product/product_list.html.twig', [
+            'termekek' => $termek,
+            'title' => 'Termékek',
+            ]);
     }
 
 
     /**
-     * @Route("/admin/termek/new", name="product_new")
+     * @Route("/admin/termek/new", name="product-new")
      */
     public function newAction(Request $request)
     {
@@ -93,21 +96,22 @@ class ProductController extends Controller
             // actually executes the queries (i.e. the INSERT query)
             $entityManager->flush();
 
-            $this->addFlash('livSuccess', 'Sikeresen elmentetted az új terméket!');
+            $this->addFlash('success', 'Sikeresen elmentetted az új terméket!');
 
             //return $this->redirectToRoute('product_new');
-            return $this->redirectToRoute('product_list');
+            return $this->redirectToRoute('product-list');
         }
 
-        return $this->render('admin/product/product_new.html.twig', array(
-                'form' => $form->createView(),
-            )
-        );
+        return $this->render('admin/product/product_edit.html.twig', [
+            'form' => $form->createView(),
+            'title' => 'Új termék hozzáadása',
+            
+        ]);
     }
 
 
     /**
-     * @Route("/admin/termek/edit/{id}", name="product_edit")
+     * @Route("/admin/termek/edit/{id}", name="product-edit")
      */
     public function editAction(Request $request, Product $formAdatok)
     {
@@ -126,36 +130,34 @@ class ProductController extends Controller
             $entityManager->persist($formAdatok);
             $entityManager->flush();
 
-            $this->addFlash('livSuccess', 'Sikeresen módosítottad a terméket!');
+            $this->addFlash('success', 'Sikeresen módosítottad a terméket!');
 
-            return $this->redirectToRoute('product_list');
+            return $this->redirectToRoute('product-list');
 
         }
 
-        return $this->render('admin/product/product_edit.html.twig', array(
-                'form' => $form->createView(),
-            )
-        );
+        return $this->render('admin/product/product_edit.html.twig', [
+            'form' => $form->createView(),
+            'title' => 'Termék módosítása', 
+        ]);
     }
 
-
-
-    /**
-     * @Route("/admin/termek/show/{id}", name="product_show")
-     */
-    public function showAction(Product $termek)
-    {
-        if (!$termek) {
-            throw $this->createNotFoundException(
-                'Nem talált egy terméket sem, ezzel az ID-vel: '.$id
-            );
-        }
-
-        // render a template and print things with {{ termek.productName }}
-        $termek->getCreatedAt()->format('Y-m-d H:i:s');
-        $termek->getUpdatedAt()->format('Y-m-d H:i:s');
-        return $this->render('admin/product/product_list.html.twig', ['termek' => $termek]);
-    }
+//    /**
+//     * @Route("/admin/termek/show/{id}", name="product_show")
+//     */
+//    public function showAction(Product $termek)
+//    {
+//        if (!$termek) {
+//            throw $this->createNotFoundException(
+//                'Nem talált egy terméket sem, ezzel az ID-vel: '.$id
+//            );
+//        }
+//
+//        // render a template and print things with {{ termek.productName }}
+//        $termek->getCreatedAt()->format('Y-m-d H:i:s');
+//        $termek->getUpdatedAt()->format('Y-m-d H:i:s');
+//        return $this->render('admin/product/product_list.html.twig', ['termek' => $termek]);
+//    }
 
     /**
      * @return string

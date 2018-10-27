@@ -1,43 +1,109 @@
-{% extends 'admin/base_admin.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
 {% block title %}
     Belépés
 {% endblock %}
 
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link href="{{ asset('webshop/admin/signin.css') }}" rel="stylesheet" />
-{% endblock %}
-
-
 {% block body %}
+<div class="my-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card">
 
-<form class="form-signin text-center" action="{{ path('admin_login') }}" method="post">
-    <img class="mb-4" src="" alt="" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">Bejelentkezés</h1>
-    {% if error %}
-        <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-    <label for="username" class="sr-only">Felhasználónév</label>
-    <input type="text" id="username" name="_username" class="form-control" placeholder="Felhasználónév" required autofocus value="{{ last_username }}" />
+                    <!-- LOGO -->
+                    <div class="card-header py-2 text-center bg-primary">
+                        <a href="{{ path('homepage') }}" class="logo text-center my-3" target="_blank">
+                        <span class="logo-lg">
+                                <h3 class="font-weight-bold text-uppercase text-white">tulipan<span class="text-danger">.</span>futar  </h3>
+                            {#<img src="assets/images/logo-dark.png" alt="" height="16">#}
+                        </span>
+                        </a>
+                    </div>
 
-    <label for="inputPassword" class="sr-only">Jelszó</label>
-    <input type="password" id="inputPassword" name="_password"  class="form-control" placeholder="Jelszó" required />
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" value="remember-me"> Remember me
-        </label>
+                    <div class="card-body p-4">
+
+                        <form class="form-signin text-center" action="{{ path('admin-login') }}" method="post">
+
+                            <div class="text-center w-75 m-auto">
+                                <h4 class="text-dark-50 text-center mt-0 font-weight-bold">Bejelentkezés</h4>
+                                <p class="text-muted mb-4">Csak jogosultak részére :P</p>
+                            </div>
+                            {% if error %}
+                                <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            {% endif %}
+
+
+                            <div class="form-group">
+                                <label for="username" class="sr-only">Felhasználónév</label>
+                                <input type="text" id="username" name="_username" class="form-control" placeholder="Felhasználónév" required autofocus value="{{ last_username }}" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputPassword" class="sr-only">Jelszó</label>
+                                <input type="password" id="inputPassword" name="_password"  class="form-control" placeholder="Jelszó" required />
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="checkbox-signin" checkedX="">
+                                    <label class="custom-control-label font-weight-normal" for="checkbox-signin">Remember me</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0 text-center">
+                                <button class="btn btn-primary btn-lg btn-block" type="submit"> Belépés </button>
+                            </div>
+
+                        </form>
+                    </div> <!-- end card-body -->
+                </div>
+                <!-- end card -->
+
+                <div class="row mt-3">
+                    <div class="col-12 text-center">
+                        {#<p class="text-muted">&copy; 2018 Tulipanfutar.hu#}
+                            {#Don't have an account? <a href="pages-register.html" class="text-dark ml-1"><b>Sign Up</b></a>#}
+                        {#</p>#}
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
+
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
     </div>
+</div>
+    <footer class="footer footer-alt">
+        2018 © Tulipanfutar.hu
+    </footer>
 
-    {#
-        If you want to control the URL the user
-        is redirected to on success (more details below)
-        <input type="hidden" name="_target_path" value="/account" />
-    #}
+{#<form class="form-signin text-center" action="{{ path('admin-login') }}" method="post">#}
+    {#<img class="mb-4" src="" alt="" width="72" height="72">#}
+    {#<h1 class="h3 mb-3 font-weight-normal">Bejelentkezés</h1>#}
+    {#{% if error %}#}
+        {#<div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+    {#{% endif %}#}
+    {#<label for="username" class="sr-only">Felhasználónév</label>#}
+    {#<input type="text" id="username" name="_username" class="form-control" placeholder="Felhasználónév" required autofocus value="{{ last_username }}" />#}
 
-    <button type="submit" class="btn btn-lg btn-primary btn-block">Belépés</button>
-    <p class="mt-5 mb-3 text-muted">&copy; 2018 Stulipan.dfr</p>
-</form>
+    {#<label for="inputPassword" class="sr-only">Jelszó</label>#}
+    {#<input type="password" id="inputPassword" name="_password"  class="form-control" placeholder="Jelszó" required />#}
+    {#<div class="checkbox mb-3">#}
+        {#<label>#}
+            {#<input type="checkbox" value="remember-me"> Remember me#}
+        {#</label>#}
+    {#</div>#}
+
+    {##}
+        {#If you want to control the URL the user#}
+        {#is redirected to on success (more details below)#}
+        {#<input type="hidden" name="_target_path" value="/account" />#}
+    {##}
+
+    {#<button type="submit" class="btn btn-lg btn-primary btn-block">Belépés</button>#}
+    {#<p class="mt-5 mb-3 text-muted">&copy; 2018 Stulipan.dfr</p>#}
+{#</form>#}
 
 {% endblock %}

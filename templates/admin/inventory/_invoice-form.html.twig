@@ -1,13 +1,21 @@
-		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
-		{{ form_start(form, { 'attr': {'class': 'form-boltzaras' }}) }}
+    {# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
+    {{ form_start(form, { 'attr': {'class': '' }}) }}
+    <div class="row">
+        <div class="col-lg-6">
+
             <div class="mb-3">
                 <div class="form-group row">
-                    <div class="col-sm-4 text-sm-righttt">
-                        {{ form_label(form.beszallito) }}
+                    <div class="col-sm-4 text-sm-right">
+                        {{ form_label(form.company) }}
                     </div>
                     <div class="col-sm-8">
-                        {{ form_widget(form.beszallito) }}
-                        {{ form_errors(form.beszallito) }}
+                        {{ form_widget(form.company, {'attr': {
+                            'class': 'form-control custom-selectX select2 select2-multiple select2-hidden-accessible',
+                            'data-toggle' : 'select2',
+                            'data-placeholder' : 'Válassz...',
+                            'aria-hidden' : 'true',
+                        }}) }}
+                        {{ form_errors(form.company) }}
                         <small class="form-text text-muted">
                             Add meg a beszállító céget.
                         </small>
@@ -17,15 +25,15 @@
 
             <div class="mb-3">
                 <div class="form-group row">
-                    <div class="col-sm-4 text-sm-righttt">
+                    <div class="col-sm-4 text-sm-right">
                         {{ form_label(form.datum) }}
                     </div>
-                    <div class="col-sm-8" id="datum">
+                    <div class="col-sm-8">
                         <div >
-                            <div class="input-group date">
+                            <div class="input-group" id="tulipan-datepicker">
                                 {{ form_widget(form.datum) }}
                                 <span class="input-group-append input-group-addon">
-						            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+						            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 					            </span>
                             </div>
                         </div>
@@ -49,7 +57,7 @@
 
             <div class="mb-3">
                 <div class="form-group row">
-                    <div class="col-sm-4 text-sm-righttt">
+                    <div class="col-sm-4 text-sm-right">
                         {{ form_label(form.osszeg) }}
                     </div>
                     <div class="col-sm-8">
@@ -75,15 +83,16 @@
 
             <div class="mb-3">
                 <div class="form-group row">
-                    <div class="col-sm-4 text-sm-righttt">
+                    <div class="col-sm-4 text-sm-right">
                     </div>
                     <div class="col-sm-8 ml-sm-auto">
                         <input type="submit" value="Mentés" class="btn btn-lgg btn-success" formnovalidate>
-                        <a href="{{ path('szamla_list') }}" class="btn btn-outline-secondary">Mégse</a>
+                        <a href="{{ path('invoice-list') }}" class="btn btn-outline-secondary">Mégse</a>
                     </div>
                 </div>
             </div>
 
+        </div>
+    </div>
 
-
-		{{ form_end(form) }}
+    {{ form_end(form) }}

@@ -32,22 +32,24 @@ class BoltzarasFormType extends AbstractType
             ->add('munkatars', null, [
 							'label' => 'Munkatárs neve', 
 							'placeholder' => 'Válassz...',
-		            		'attr' => ['class' => 'custom-select'],
-							//'constraints' => [ new NotNull(array('message' => "Válaszd ki magad!")), ]
+//		            		'attr' => ['class' => 'custom-select'],
 							]
 				
             	)            
             ->add('idopont', DateType::class, [ 
 					'label' => 'Időpont', 
             		'widget' => 'single_text',
-            		'attr' => ['placeholder' => 'éééé-hh-nn', 'class' => 'asdf', 'autocomplete' => 'off'],
+            		'attr' => ['placeholder' => 'ÉÉÉÉ-HH-NN', 'autocomplete' => 'off'],
             		'html5' => false,
             		]
 			)            	
             ->add('kassza', IntegerType::class, 
             	array(
             		'label' => 'Kasszába beütve', 
-            		'attr' => array('placeholder' => 'Kassza'), 
+            		'attr' => [
+                        'placeholder' => 'Kassza',
+                        'class' => 'form-control',
+                    ],
 	                //'constraints' => array( new NotNull(array('message' => "Please provide Kassza")), )
             		)
             	)            

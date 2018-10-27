@@ -7,11 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="szamla")
- * @ORM\Entity(repositoryClass="App\Repository\SzamlaRepository")
+ * @ORM\Table(name="inv_invoice")
+ * @ORM\Entity(repositoryClass="App\Repository\InventoryInvoiceRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Szamla
+class InventoryInvoice
 {
 
     use TimestampableTrait;
@@ -38,15 +38,15 @@ class Szamla
 
     /**
      *
-     * @var string
+     * @var InventoryCompany
      *
-     * @Assert\NotBlank(message="Válassz beszállítót.")
-     * @ORM\Column(name="beszallito", type="string", length=100, nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\InventoryInvoiceCompany", inversedBy="invoices")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * @ ORM\OrderBy({"company_name"="ASC"})
      *
-     * // @  ORM\ManyToOne(targetEntity="App\Entity\Beszallito")
-     * // @  ORM\JoinColumn(name="munkatars_id", referencedColumnName="munkatars_id")
+     * @Assert\NotBlank(message="Válassz egy beszállítócéget.")
      */
-    private $beszallito;
+    private $company;
 
 
     // getter methods
@@ -66,9 +66,9 @@ class Szamla
         return $this->osszeg;
     }
 
-    public function getBeszallito()
+    public function getCompany()
     {
-        return $this->beszallito;
+        return $this->company;
     }
 
     // setter methods
@@ -83,9 +83,9 @@ class Szamla
         $this->osszeg = $osszeg;
     }
 
-    public function setBeszallito($ceg)
+    public function setCompany($ceg)
     {
-        $this->beszallito = $ceg;
+        $this->company = $ceg;
     }
 
 

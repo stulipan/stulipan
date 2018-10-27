@@ -6,18 +6,21 @@ namespace App\Controller\Boltzaras;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
 //az alabbibol fogja tudni hogy a InventoryProduct entity-hez kapcsolodik es azzal dolgozik
 use App\Entity\InventoryProduct;
-use App\Repository\InventoryProductRepository;
 use App\Entity\InventoryCategory;
 use App\Entity\InventorySupply;
 use App\Entity\InventorySupplyItem;
 use App\Form\InventoryProductFormType;
 use App\Form\InventorySupplyFormType;
+use App\Entity\InventoryWaste;
+use App\Entity\InventoryWasteItem;
+use App\Form\InventoryWasteFormType;
 
 use App\Pagination\PaginatedCollection;
 
@@ -27,71 +30,403 @@ use App\Pagination\PaginatedCollection;
 class InventoryController extends Controller
 {
 
-    /**
-     * @Route("/inventory/supply/all", name="inventory-supply-list-all")
-     */
-    public function listAllSuply()
-    {
-        $items = $this->getDoctrine()
-            ->getRepository(InventorySupply::class)
-            ->findAll();
+//    /**
+//     * @Route("/inventory/supply/all", name="inventory-supply-list-all")
+//     */
+//    public function listAllSuply()
+//    {
+//        $supplies = $this->getDoctrine()
+//            ->getRepository(InventorySupply::class)
+//            ->findAll();
+//
+//        /**
+//         * Megmondom neki milyen kategoriák vannak a Supply-ban
+//         */
+//        foreach ($supplies as $i => $supply) {
+//            $supply->setProductCategories($supply->getProductCategories());
+//            $itemsPerCategory[$supply->getId()] = $supply->getItemCountInCategories();
+//        }
+////        dump($itemsPerCategory);die;
+//
+//        if (!$supplies) {
+//            throw $this->createNotFoundException(
+//                'Nem talált egy Supply-t sem! '
+//            );
+//        }
+//
+//        return $this->render('admin/inventory/supply_list.html.twig', [
+//            'items' => $supplies,
+//            'title' => 'Bejövő áruszállítmányok listája',
+//            'itemsPerCategory' => $itemsPerCategory,
+//            ]);
+//    }
 
-        if (!$items) {
+    /**
+     * @Route("/inventory/supply/{page}", name="inventory-supply-list", requirements={"page"="\d+"})
+     */
+    public function listSupplyWithPagination($page = 1)
+    {
+        $queryBuilder = $this->getDoctrine()
+            ->getRepository(InventorySupply::class)
+            ->findAllQueryBuilder();
+
+        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
+        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(20);
+        //$pagerfanta->setCurrentPage($page);
+
+        try {
+            $pagerfanta->setCurrentPage($page);
+        } catch(NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        $supplies = [];
+        foreach ($pagerfanta->getCurrentPageResults() as $result) {
+            $supplies[] = $result;
+        }
+
+        if (!$supplies) {
             throw $this->createNotFoundException(
-                'Nem talált egy Supply-t sem! '
+                'Nem talált egy számlát sem!'
             );
         }
 
-        return $this->render('admin/inventory/supply_list.html.twig', ['items' => $items]);
+        /**
+         * Megmondom neki milyen kategoriák vannak a Supply-ban
+         */
+        foreach ($supplies as $i => $supply) {
+            $supply->setProductCategories($supply->getProductCategories());
+            $itemsPerCategory[$supply->getId()] = $supply->getItemCountInCategories();
+        }
+
+//        $paginatedCollection = new PaginatedCollection($items, $pagerfanta->getNbResults());
+
+        return $this->render('admin/inventory/supply_list.html.twig', [
+            'items' => $supplies,
+            'title' => 'Bejövő áruszállítmányok listája',
+            'itemsPerCategory' => $itemsPerCategory,
+            'paginator' => $pagerfanta,
+            'total' => $pagerfanta->getNbResults(),
+            'count' => count($supplies),
+        ]);
+
     }
+
+    /**
+     *@ Route("/akarmi/{supply_id}/{category_id}")
+     *@ ParamConverter("supply", options={"id" = "supply_id"})
+     *@ ParamConverter("category", options={"id" = "category_id"})
+     *
+     */
+    public function itemsPerCategory(bool $isWaste, ?InventorySupply $supply, ?InventoryWaste $waste, InventoryCategory $category)
+    {
+        $c = 0;
+        if ($isWaste) {
+            if (!$waste) {
+                $c = null;
+            } else {
+                if ($waste->getProductCategories()->contains($category)) {
+                    foreach ($waste->getItems() as $i => $item) {
+                        if ( $category == $item->getProduct()->getCategory() ) {
+                            $c += 1;
+                        }
+                    }
+                }
+            }
+        } else {
+            if (!$supply) {
+                $c = null;
+            } else {
+                if ($supply->getProductCategories()->contains($category)) {
+                    foreach ($supply->getItems() as $i => $item) {
+                        if ( $category == $item->getProduct()->getCategory() ) {
+                            $c += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this->render('admin/inventory/itemsPerCategory.html.twig', [
+            'itemsPerCategory' => $c,
+            ]);
+    }
+
+    /**
+     * The controller for creating/editing a Waste
+     * Selejt kreaálás/szerkesztés
+     *
+     * @Route("/inventory/waste/edit/{id}", name="inventory-waste-edit")
+     */
+    public function editWaste(Request $request, ?InventoryWaste $waste, $id = null)
+    {
+        if ($waste) {
+            $countItemsInWaste = $waste->countItemsInWaste();
+            $itemsPerCategory = $waste->getItemCountInCategories();
+            $wasteId = $waste->getId();
+        } else {
+            $countItemsInWaste = 0;
+            $itemsPerCategory = null;
+            $wasteId = null;
+        }
+
+        $categories = $this->getDoctrine()
+            ->getRepository(InventoryCategory::class)
+            ->findAll();
+        $products = $this->getDoctrine()
+            ->getRepository(InventoryProduct::class)
+            ->findAllProductsAndOrderByCategory();
+
+        if (!$waste) {
+            $waste = new InventoryWaste();
+        }
+
+        foreach ($products as $p => $product) {
+            if (!$waste) {
+                /**
+                 * new Waste
+                 */
+                $wasteItem = new InventoryWasteItem();
+                $wasteItem->setProduct($product);
+                //
+                $waste->addItem($wasteItem);
+                $title = 'Új adag selejt rögzítése';
+            } else {
+                /**
+                 * edit existing Waste
+                 */
+                $wasteItem = new InventoryWasteItem();
+                $wasteItem->setProduct($product);
+
+                if ( !$waste->getProducts()->contains($product) ) {
+                    $waste->addItem($wasteItem);
+                } else {
+                    /**
+                     * A Waste első Item-jei mindig azok, amiket kiolvas az adatbázisból.
+                     * Az addItem metódussal, mindig a végére pakol új Itemet.
+                     * Ezért, amikor megtalálok egy terméket, ami már benne van a Waste-ban fogom és kiveszem majd visszarakom.
+                     * Így, az adott Item mindig lista végére kerül, majd jöhet a következő termék.
+                     */
+                    $wasteItem = $waste->getItem($product);
+                    $waste->removeItem($waste->getItem($product));
+                    $waste->addItem($wasteItem);
+                }
+
+                $title = 'Selejtadatok módosítása';
+            }
+        }
+
+        $form = $this->createForm(InventoryWasteFormType::class, $waste);
+        $form->handleRequest($request);
+//        dump($form);die;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $waste = $form->getData();
+
+            /**
+             * Megnézem melyik Item nem lett kitöltve és azt törlöm a Wasteból
+             */
+            foreach ($waste->getItems() as $i => $item) {
+                if ( !$item->getQuantity() ) {
+                    $waste->removeItem($item);
+                }
+            }
+            $waste->setUpdatedAt(new \DateTime('NOW'));
+            $waste->setCreatedAt(new \DateTime('NOW'));
+
+            /**
+             * Végig megyek az Itemeken és hozzájuk rendelem az aktuális Waste-t
+             */
+            foreach ($waste->getItems() as $i => $item) {
+                $item->setWaste($waste);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($waste);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Selejtadatok sikeresen elmentve!');
+
+            return $this->redirectToRoute('inventory-waste-edit',['id' => $waste->getId(),]);
+        }
+
+        return $this->render('admin/inventory/waste_edit.html.twig', [
+                'form' => $form->createView(),
+                'title' => $title,
+                'wasteId' => $wasteId,
+                'categories' => $categories,
+                'countItemsInWaste' => $countItemsInWaste,
+                'itemsPerCategory' => $itemsPerCategory,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/inventory/waste/all", name="inventory-waste-list-all")
+     */
+    public function listAllWaste()
+    {
+        $wastes = $this->getDoctrine()
+            ->getRepository(InventoryWaste::class)
+            ->findAll();
+
+        /**
+         * Megmondom neki milyen kategoriák vannak a Waste-ban
+         */
+        foreach ($wastes as $i => $waste) {
+            $waste->setProductCategories($waste->getProductCategories());
+            $itemsPerCategory[$waste->getId()] = $waste->getItemCountInCategories();
+        }
+//        dump($itemsPerCategory);die;
+
+        if (!$wastes) {
+            throw $this->createNotFoundException(
+                'Nem talált egy Waste-t sem! '
+            );
+        }
+
+        return $this->render('admin/inventory/waste_list.html.twig', [
+            'items' => $wastes,
+            'title' => 'Selejtek',
+            'itemsPerCategory' => $itemsPerCategory,
+        ]);
+    }
+
+    /**
+     * @Route("/inventory/waste/{page}", name="inventory-waste-list", requirements={"page"="\d+"})
+     */
+    public function listWasteWithPagination($page = 1)
+    {
+        $queryBuilder = $this->getDoctrine()
+            ->getRepository(InventoryWaste::class)
+            ->findAllQueryBuilder();
+
+        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
+        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(20);
+        //$pagerfanta->setCurrentPage($page);
+
+        try {
+            $pagerfanta->setCurrentPage($page);
+        } catch(NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        $wastes = [];
+        foreach ($pagerfanta->getCurrentPageResults() as $result) {
+            $wastes[] = $result;
+        }
+
+        if (!$wastes) {
+            throw $this->createNotFoundException(
+                'Nem talált egy számlát sem!'
+            );
+        }
+
+        /**
+         * Megmondom neki milyen kategoriák vannak a Waste-ban
+         */
+        foreach ($wastes as $i => $waste) {
+            $waste->setProductCategories($waste->getProductCategories());
+            $itemsPerCategory[$waste->getId()] = $waste->getItemCountInCategories();
+        }
+
+//        $paginatedCollection = new PaginatedCollection($items, $pagerfanta->getNbResults());
+
+        return $this->render('admin/inventory/waste_list.html.twig', [
+            'items' => $wastes,
+            'title' => 'Bejövő áruszállítmányok listája',
+            'itemsPerCategory' => $itemsPerCategory,
+            'paginator' => $pagerfanta,
+            'total' => $pagerfanta->getNbResults(),
+            'count' => count($wastes),
+        ]);
+
+    }
+
+
 
     /**
      * @Route("/inventory/supply/edit/{id}", name="inventory-supply-edit")
      */
     public function editSupply(Request $request, ?InventorySupply $supply, $id = null)
     {
+        if ($supply) {
+            $countItemsInSupply = $supply->countItemsInSupply();
+            $itemsPerCategory = $supply->getItemCountInCategories();
+            $supplyId = $supply->getId();
+        } else {
+            $countItemsInSupply = 0;
+            $itemsPerCategory = null;
+            $supplyId = null;
+        }
+
         $categories = $this->getDoctrine()
             ->getRepository(InventoryCategory::class)
             ->findAll();
+        $products = $this->getDoctrine()
+            ->getRepository(InventoryProduct::class)
+            ->findAllProductsAndOrderByCategory();
 
         if (!$supply) {
-            /**
-             * new Supply
-             */
-            $products = $this->getDoctrine()
-                ->getRepository(InventoryProduct::class)
-                ->findAllProductsAndOrderByCategory();
-
             $supply = new InventorySupply();
+        }
 
-            foreach ($products as $p => $product) {
+        foreach ($products as $p => $product) {
+            if (!$supply) {
+                /**
+                 * new Supply
+                 */
                 $supplyItem = new InventorySupplyItem();
                 $supplyItem->setProduct($product);
+                //
                 $supply->addItem($supplyItem);
+                $title = 'Új szállítmány rögzítése';
+            } else {
+                /**
+                 * edit existing Supply
+                 */
+                $supplyItem = new InventorySupplyItem();
+                $supplyItem->setProduct($product);
+
+                if ( !$supply->getProducts()->contains($product) ) {
+                    $supply->addItem($supplyItem);
+                } else {
+                    /**
+                     * A Supply első Item-jei mindig azok, amiket kiolvas az adatbázisból.
+                     * Az addItem metódussal, mindig a végére pakol új Itemet.
+                     * Ezért, amikor megtalálok egy terméket, ami már benne van a Supply-ban fogom és kiveszem majd visszarakom.
+                     * Így, az adott Item mindig lista végére kerül, majd jöhet a következő termék.
+                     */
+                    $supplyItem = $supply->getItem($product);
+                    $supply->removeItem($supply->getItem($product));
+                    $supply->addItem($supplyItem);
+                }
+
+                $title = 'Szállítmány módosítása';
             }
-            $title = 'Új szállítmány rögzítése';
-        } else {
-            /**
-             * edit existing Supply
-             */
-            $title = 'Szállítmány módosítása';
         }
 
         $form = $this->createForm(InventorySupplyFormType::class, $supply);
         $form->handleRequest($request);
+//        dump($form);die;
 
         if ($form->isSubmitted() && $form->isValid()) {
             $supply = $form->getData();
 
             /**
-             * Megnésem melyik Item nem lett kitöltve és azt törlöm a Supplyból
+             * Megnézem melyik Item nem lett kitöltve és azt törlöm a Supplyból
              */
             foreach ($supply->getItems() as $i => $item) {
                 if ( !$item->getQuantity() and !$item->getCog() and !$item->getMarkup() and !$item->getRetailPrice() ) {
                     $supply->removeItem($item);
                 }
             }
-
             $supply->setUpdatedAt(new \DateTime('NOW'));
             $supply->setCreatedAt(new \DateTime('NOW'));
 
@@ -101,7 +436,6 @@ class InventoryController extends Controller
             foreach ($supply->getItems() as $i => $item) {
                 $item->setSupply($supply);
             }
-            //something
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($supply);
@@ -109,16 +443,36 @@ class InventoryController extends Controller
 
             $this->addFlash('success', 'Szállítmány sikeresen elmentve!');
 
-            return $this->redirectToRoute('inventory-supply-list-all');
+            return $this->redirectToRoute('inventory-supply-edit',['id' => $supply->getId(),]);
         }
 
         return $this->render('admin/inventory/supply_edit.html.twig', [
                 'form' => $form->createView(),
                 'title' => $title,
+                'supplyId' => $supplyId,
                 'categories' => $categories,
+                'countItemsInSupply' => $countItemsInSupply,
+                'itemsPerCategory' => $itemsPerCategory,
             ]
         );
     }
+
+//    public function countItemsInCategory(InventorySupply $supply): int
+//    {
+//        $categories = $this->getDoctrine()
+//            ->getRepository(InventoryCategory::class)
+//            ->findAll();
+//        foreach ($categories as $c => $category) {
+//            $count = 0;
+//            foreach ($supply->getProducts() as $p => $item) {
+//                if ( $item->getProduct()->getCategory() == $category ) {
+//                    $count += $count;
+//                }
+//            }
+//        }
+//
+//        return $this->items->count();
+//    }
 
 //    /**
 //     * @Route("/inventory/supply/new", name="inventory_supply_new")
@@ -193,7 +547,9 @@ class InventoryController extends Controller
 //			$items[$i]->getDatum()->format('Y-m-d H:i:s');
 		}
 
-		return $this->render('admin/inventory/product_list.html.twig', ['items' => $items]);
+		return $this->render('admin/inventory/product_list.html.twig', [
+		    'items' => $items,
+            'title' => 'Terméklista']);
 	}
 
 
@@ -237,6 +593,8 @@ class InventoryController extends Controller
             $title = 'Új termék rögzítése';
         } else {
             // edit existing Product
+//            $formFactory = $this->get('form.factory');
+//            $form = $formFactory->createNamed('valami', InventoryProductFormType::class, $items);
             $form = $this->createForm(InventoryProductFormType::class, $items);
             $title = 'Termék módosítása';
         }
@@ -264,77 +622,19 @@ class InventoryController extends Controller
         ]);
     }
 
-	
+//	/**
+//	 * @Route("/inventory/product/show/{id}", name="inventory-product-show")
+//	 */
+//	public function showAction(InventoryProduct $items)
+//	{
+//		if (!$items) {
+//			throw $this->createNotFoundException(
+//				'Nem talált egy boltzárásjelentést, ezzel az ID-vel: '.$id
+//			);
+//		}
+//
+//        $items->getUpdatedAt()->format('Y-m-d H:i:s');
+//		return $this->render('admin/inventory/product_list.html.twig', ['item' => $items]);
+//	}
 
-	/**
-	 * @Route("/inventory/product/show/{id}", name="inventory-product-show")
-	 */
-	public function showAction(InventoryProduct $items)
-	{
-		if (!$items) {
-			throw $this->createNotFoundException(
-				'Nem talált egy boltzárásjelentést, ezzel az ID-vel: '.$id
-			);
-		}
-
-        $items->getUpdatedAt()->format('Y-m-d H:i:s');
-		return $this->render('admin/inventory/product_list.html.twig', ['item' => $items]);
-	}
-
-
-    /**
-     * @Route("/inventory/product/{page}", name="inventory-product-list", requirements={"page"="\d+"})
-     */
-    public function listActionWithPagination($page = 1)
-    {
-        $queryBuilder = $this->getDoctrine()
-            ->getRepository(InventoryProduct::class)
-            ->findAll();
-//            ->findAllQueryBuilder();
-
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        //On the Pagerfanta object, call setMaxPerPage() to set displayed items to 10, the set current page
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(10);
-        //$pagerfanta->setCurrentPage($page);
-
-        try {
-            $pagerfanta->setCurrentPage($page);
-        } catch(NotValidCurrentPageException $e) {
-            throw new NotFoundHttpException();
-        }
-
-
-        $items = [];
-        foreach ($pagerfanta->getCurrentPageResults() as $result) {
-            $items[] = $result;
-        }
-
-        if (!$items) {
-            throw $this->createNotFoundException(
-                'Nem talált egy számlát sem!'
-            );
-        }
-
-        foreach($items as $i => $item) {
-            // $items[$i] is the same as $item
-            $items[$i]->getDatum()->format('Y-m-d H:i:s');
-            //$items[$i]->getModositasIdopontja()->format('Y-m-d H:i:s');
-        }
-
-        $paginatedCollection = new PaginatedCollection($items, $pagerfanta->getNbResults());
-
-        // render a template, then in the template, print things with {{ szamla.munkatars }}
-        return $this->render('admin/inventory/product_list.html.twig', [
-            'items' => $items,
-            'paginator' => $pagerfanta,
-            'total' => $pagerfanta->getNbResults(),
-            'count' => count($items),
-        ]);
-
-
-    }
-    
 }

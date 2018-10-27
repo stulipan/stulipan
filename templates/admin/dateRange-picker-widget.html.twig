@@ -1,0 +1,54 @@
+
+		<div class="row pb-2X">
+			<div class="col-lg-12">
+                {{ form_start(dateRangeForm, { 'attr': {'class': 'needs-validation' }}) }}
+                <div class="form-inline form-tulipan align-middle">
+                    <span class="">Szűrés időre</span>
+
+                    <div class="col-auto">
+                        <div class="input-group align-middle tulipan-daterange" id="tulipan-daterange">
+                            <span class="input-group-prepend input-group-addon">
+                                <span class="input-group-text">
+                                    <i class="far fa-calendar-alt"></i>
+                                </span>
+                            </span>
+                            {{ form_widget(dateRangeForm.dateRange, { 'attr': {
+                                'class' : 'form-control form-control-sm date',
+                                'id' : 'singledaterangeX',
+                                'data-toggle' : 'date-pickerX',
+                            }}) }}
+                        </div>
+                    </div>
+
+                    {#<div class="col-auto">#}
+                        {#<div class="input-group input-daterange align-middle" id="datepicker">#}
+                            {#<span class="input-group-prepend input-group-addon">#}
+                                {#<span class="input-group-text">#}
+                                    {#<i class="far fa-calendar-alt"></i>#}
+                                    {#<i class="fa fa-caret-down"></i>#}
+                                {#</span>#}
+                            {#</span>#}
+                            {#<input type="text" class="form-control" name="start" />#}
+                            {##}
+                            {#{{ form_widget(dateRangeForm.start, { 'attr': {'class': 'form-control form-control-sm' }}) }}#}
+                            {#<span class="mx-2"> / </span>#}
+                            {#<span class="input-group-prepend input-group-addon">#}
+                                {#<span class="input-group-text">#}
+                                    {#<i class="far fa-calendar-alt"></i>#}
+                                    {#<i class="fa fa-caret-down"></i>#}
+                                {#</span>#}
+                            {#</span>#}
+                            {#<input type="text" class="form-control" name="end" />#}
+                            {#{{ form_widget(dateRangeForm.end, { 'attr': {'class': 'form-control form-control-sm' }}) }}#}
+                        {#</div>#}
+                    {#</div>#}
+                    {# Render CSRF token etc .#}
+                    <div style="display:none">
+                        {{ form_rest(dateRangeForm) }}
+                    </div>
+                    <input type="submit" value="OK" class="btn btn-sm btn-light" formnovalidate>
+                </div>
+                {{ form_end(dateRangeForm) }}
+			</div>
+		</div>
+

@@ -21,7 +21,7 @@
 		<!-- header of default page content widget -->
         {{ include('/admin/_header_of_default_page_content.html.twig') }}
 
-		<div class="row mb-2">
+		<div class="row mb-2X">
 			<div class="col-lg-8">
                 {#valami content#}
 			</div>
@@ -33,7 +33,7 @@
 		</div>
 
         <div class="table-responsive mb-3">
-            <table class="table table-centered table-stripedX table-hover mb-0">
+            <table class="table table-sm table-centered table-stripedX table-hover mb-0">
                 <thead class="thead-light">
 				<tr>
                     <th scope="col">#</th>
@@ -49,16 +49,16 @@
 				{% for szamla in szamlak %}
 				<tr>
                     <td class="align-middle">{{ szamla.id }}</td>
-				    <td class="align-middle font-weight-bold">{{ szamla.datum|date('Y. M d. ')}}</td>
+				    <td class="align-middle font-weight-bold text-sm">{{ szamla.datum|date('M d, Y')}}</td>
 				    <td>{{ szamla.company }}
 						<a href="{{ path('invoice-company-edit', {'id': szamla.company.id }) }}" class="btn-link text-muted text-secondary ml-1"><i class="fas fa-edit"></i></a>
 					</td>
-                    <td class="align-middle text-right text-nowrap">{{ szamla.osszeg|number_format(0, ',', ' ') }},-</td>
+                    <td class="align-middle text-right font-weight-bold text-nowrap">{{ szamla.osszeg|number_format(0, ',', ' ') }}</td>
 				    <td>
 				  	    <a href="{{ path('invoice-edit', {'id': szamla.id}) }}" class="btn-smX">
 				  		    <i class="fas fa-edit"></i></a>
 				    </td>
-                    <td class="align-middle text-muted"><small>{{ szamla.updatedAt|date('Y. M d. \\| H:i')}}</small></td>
+                    <td class="align-middle text-muted"><small>{{ szamla.updatedAt|date('Y-m-d, H:i')}}</small></td>
 				</tr>
 				{% endfor %}
 				{% else %}

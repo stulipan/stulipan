@@ -21,7 +21,7 @@
         <!-- header of default page content widget -->
         {{ include('/admin/_header_of_default_page_content.html.twig') }}
 
-        <div class="row mb-2">
+        <div class="row mb-2X">
             <div class="col-lg-8">
                 {#<form class="form-inline">#}
                 {#<div class="form-group mb-2">#}
@@ -50,7 +50,7 @@
         </div>
 
         <div class="table-responsive mb-3">
-            <table class="table table-centered table-stripedX table-hover mb-0">
+            <table class="table table-sm table-centered table-striped table-hover mb-0">
                 <thead class="thead-light">
 				<tr>
                     <th scope="col">#</th>
@@ -71,7 +71,7 @@
 				  	    <a href="{{ path('inventory-product-edit', {'id': item.id}) }}" class="btn-smX">
 				  		    <i class="fas fa-edit"></i></a>
 				    </td>
-                    <td class="align-middle text-muted"><small>{{ item.updatedAt|date('Y. M d. \\| H:i')}}</small></td>
+                    <td class="align-middle text-muted"><small>{{ item.updatedAt|date('Y-m-d, H:i')}}</small></td>
 				</tr>
 				{% endfor %}
 				{% else %}

@@ -1,12 +1,11 @@
 		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
 		{{ form_start(form, { 'attr': {'class': '' }}) }}
 
-        <div class="mb-4">
-            <div class="form-row">
-                <div class="mr-4">
+        <div class="row mb-4">
+                <div class="col-auto mr-2X">
                     <h4>{{ form_label(form.datum) }}</h4>
                 </div>
-                <div class="col-8 col-sm-4">
+                <div class="col-auto">
                     <div >
                         <div class="input-group" id="tulipan-datepicker">
                             {{ form_widget(form.datum) }}
@@ -19,7 +18,6 @@
                         A selejt rögzítésének dátuma. Így írd be: ÉÉÉÉ-HH-NN
                     </small>
                 </div>
-            </div>
         </div>
 
         <div class="">
@@ -28,16 +26,16 @@
                 Az alábbi listában, csak írd be a selejt mennyiséget az adott terméknél.
             </small>
         </div>
-        <ul class="nav nav-tabs nav-justified mt-3 px-3" id="myTab" role="tablist">
+        <ul class="nav nav-tabs nav-justified mt-3 px-lg-3 px-0" id="myTab" role="tablist">
             {% for category in categories %}
                 <li class="nav-item">
-                    <a class="nav-link py-2 {% if loop.first == 1 %} active {% endif %}" id="{{ category }}-tab" data-toggle="tab" href="#{{ category }}" role="tab" aria-controls="{{ category }}" aria-selected="true">
+                    <a class="nav-link py-2 text-nowrap {% if loop.first == 1 %} active {% endif %}" id="{{ category }}-tab" data-toggle="tab" href="#{{ category }}" role="tab" aria-controls="{{ category }}" aria-selected="true">
                         <span class="text-uppercase">{{ category }}
                             {#{% if wasteId is defined %}#}
                                 {#{{ render(controller('App\\Controller\\Boltzaras\\InventoryController::itemsPerCategory', {'waste' : wasteId, 'category' : category.id})) }}#}
                             {#{% endif %}#}
                             {% if itemsPerCategory[category.id] is defined %}
-                                <span class="badge badge-warning ml-1">{{ itemsPerCategory[category.id] }}</span>
+                                <span class="badge badge-warning ml-lg-1">{{ itemsPerCategory[category.id] }}</span>
                             {% endif %}
                         </span>
                     </a>
@@ -51,14 +49,14 @@
 
             <div class="tab-pane fade {% if loop.first == 1 %} show active {% endif %}" id="{{ category }}" role="tabpanel" aria-labelledby="{{ category }}-tab">
                 <div class="table-responsive mb-3">
-                    <table class="table table-centered table-sm table-stripedX table-hover table-inventory-edit mb-0">
-                        <thead class="thead text-sm">
-                        <tr class="text-center text-uppercase text-muted">
+                    <table class="table table-centered table-sm table-striped table-hover table-inventorXy-edit mb-0">
+                        <thead class="thead-light">
+                        <tr class="text-center">
                             <th scope="col" class="">Termék</th>
                             <th scope="col" class="">Mennyiség</th>
-                            <th scope="col" class="">Beszerzési ár</th>
-                            <th scope="col" class="">Szorzó</th>
-                            <th scope="col" class="">Eladási ár</th>
+                            <th scope="col" class="">...</th>
+                            {#<th scope="col" class="">Szorzó</th>#}
+                            {#<th scope="col" class="">Eladási ár</th>#}
                         </tr>
                         </thead>
 
@@ -85,7 +83,7 @@
                                                 </small>
                                             </div>
                                         </td>
-                                        {#<td></td>#}
+                                        <td></td>
                                         {#<td></td>#}
                                         {#<td></td>#}
                                     </tr>

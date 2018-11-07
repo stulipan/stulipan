@@ -7,9 +7,6 @@ use App\Entity\Category;
 //use App\Services\HomepageTools;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-
 
 class ShopController extends AbstractController
 {
@@ -80,7 +77,7 @@ class ShopController extends AbstractController
     {
         $kategoria = $this->getDoctrine()
             ->getRepository(Category::class)
-            ->find(2);
+            ->find(1);
 
         $termek = $kategoria->getProducts();
 
@@ -154,7 +151,7 @@ class ShopController extends AbstractController
     {
 
         if (!$termek) {
-            throw $this->createNotFoundException('Nem talált egy terméket sem, ezzel az ID-vel: '.$id);
+            throw $this->createNotFoundException('Nem talált egy terméket sem, ezzel az ID-vel');
             //return $this->redirectToRoute('404');
         }
 

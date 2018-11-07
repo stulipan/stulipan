@@ -5,10 +5,8 @@ namespace App\Controller\Boltzaras;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
 //az alabbibol fogja tudni hogy a Boltzaras entity-hez kapcsolodik es azzal dolgozik
@@ -19,7 +17,6 @@ use App\Form\DateRangeType;
 use App\Entity\DateRange;
 
 use App\Pagination\PaginatedCollection;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @Route("/admin")
@@ -199,12 +196,30 @@ class BoltzarasController extends Controller
                 ->getRepository(Boltzaras::class)
 //                ->findAllBetweenDates($dateRange->getStart(), $dateRange->getEnd());
                 ->findAllBetweenDates($start, $end);
+            $totalKeszpenzEsBankkartya = $this->getDoctrine()
+                ->getRepository(Boltzaras::class)
+                ->sumAllBetweenDates($start, $end)
+                ->getSingleResult();
         } else {
             $queryBuilder = $this->getDoctrine()
                 ->getRepository(Boltzaras::class)
                 ->findAllQueryBuilder();
             //->findAllGreaterThanKassza(10);
+            $totalKeszpenzEsBankkartya = $this->getDoctrine()
+                ->getRepository(Boltzaras::class)
+                ->sumAllQueryBuilder()
+                ->getSingleResult();
         }
+//        dump($totalKeszpenzEsBankkartya);die;
+//        $jelentesek = $queryBuilder->getQuery()->getResult();
+//        $qb = $queryBuilder;
+//        $keszpenz = $qb->select('SUM(p.keszpenz) as keszpenz')->getQuery()->getSingleScalarResult();
+//        $keszpenz = 0;
+//        $bankkartya = 0;
+//        foreach($jelentesek as $i => $item) {
+////            $keszpenz += $item->getKeszpenz();
+//            $bankkartya += $jelentesek[$i]->getBankkartya();
+//        }
 
         //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
         //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
@@ -253,6 +268,8 @@ class BoltzarasController extends Controller
             'count' => count($jelentes),
             'title' => 'Boltzárások listája',
             'dateRangeForm' => $dateRangeForm->createView(),
+            'keszpenz' => $totalKeszpenzEsBankkartya['keszpenz'],
+            'bankkartya' => $totalKeszpenzEsBankkartya['bankkartya'],
         ]);
 
 

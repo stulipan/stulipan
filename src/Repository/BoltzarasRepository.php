@@ -48,8 +48,27 @@ class BoltzarasRepository extends ServiceEntityRepository
             ->setParameter('start', $start)
             ->setParameter('end', $end)
             ->orderBy('p.idopont', 'DESC')
-            ->getQuery();
+            ->getQuery()
+        ;
+        return $qb;
+    }
 
+    /**
+     * @param $start
+     * @param $end
+     * @return \Doctrine\ORM\Query
+     */
+    public function sumAllBetweenDates($start, $end)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.idopont >= :start')
+            ->andWhere('p.idopont <= :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->orderBy('p.idopont', 'DESC')
+            ->select('SUM(p.keszpenz) as keszpenz, SUM(p.bankkartya) as bankkartya')
+            ->getQuery()
+        ;
         return $qb;
     }
 	
@@ -59,12 +78,21 @@ class BoltzarasRepository extends ServiceEntityRepository
     public function findAllQueryBuilder()
     {
         return $this->createQueryBuilder('p')
-            ->orderBy('p.idopont', 'DESC');
-//		return $this->createQueryBuilder('b')
-//            ->addSelect('b.*')
-//            ->setParameter('user', $userId)
-//            ->getQuery();
+            ->orderBy('p.idopont', 'DESC')
+            ->getQuery()
+        ;
 	}
+
+    /**
+     * @return \Doctrine\ORM\Query
+     */
+    public function sumAllQueryBuilder()
+    {
+        return $this->createQueryBuilder('p')
+            ->select('SUM(p.keszpenz) as keszpenz, SUM(p.bankkartya) as bankkartya')
+            ->getQuery()
+            ;
+    }
 
 
 }

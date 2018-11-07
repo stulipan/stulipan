@@ -21,7 +21,7 @@
         <!-- header of default page content widget -->
         {{ include('/admin/_header_of_default_page_content.html.twig') }}
 
-                        <div class="row mb-2">
+                        <div class="row mb-2X">
                             <div class="col-lg-8">
                                 <!-- content -->
                             </div>
@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="table-responsive mb-3">
-                            <table class="table table-centered table-stripedX table-hover mb-0">
+                            <table class="table table-sm table-centered table-stripedX table-hover mb-0">
                                 <thead class="thead-light">
                                 <tr>
                                     <th>#</th>
@@ -49,8 +49,8 @@
                                 {% for item in items %}
                                 <tr>
                                     <td>{{ item.id }}</td>
-                                    <td class="font-weight-bold">
-                                        {{ item.datum|date('Y. M d. ')}}
+                                    <td class="font-weight-bold text-sm">
+                                        {{ item.datum|date('M d, Y')}}
                                     </td>
                                     <td>
                                         {% for category in item.productCategories %}
@@ -63,7 +63,7 @@
                                     <td>
                                         <a href="{{ path('inventory-supply-edit', {'id': item.id}) }}" class=""> <i class="fas fa-edit"></i></a></a>
                                     </td>
-                                    <td class="text-muted"><small>{{ item.updatedAt|date('Y. M d. \| H:i')}}</small>
+                                    <td class="text-muted"><small>{{ item.updatedAt|date('Y-m-d, H:i')}}</small>
                                     </td>
                                 </tr>
                                 {% endfor %}

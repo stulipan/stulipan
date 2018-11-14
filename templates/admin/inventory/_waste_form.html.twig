@@ -1,5 +1,5 @@
 		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
-		{{ form_start(form, { 'attr': {'class': '' }}) }}
+		{{ form_start(form) }}
 
         <div class="row mb-4">
                 <div class="col-auto mr-2X">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="">
-            <h4 class="mb-0">Jelöld be a selejt termékeket: <span class="badge badge-warning ml-1">{{- countItemsInWaste -}}</span></h4>
+            <h4 class="mb-0">Jelöld be a selejt termékeket: <span class="badge badge-warning ml-1">{{ countItemsInWaste }} tétel</span></h4>
             <small class="form-text text-muted">
                 Az alábbi listában, csak írd be a selejt mennyiséget az adott terméknél.
             </small>
@@ -48,8 +48,8 @@
             {% for category in categories %}
 
             <div class="tab-pane fade {% if loop.first == 1 %} show active {% endif %}" id="{{ category }}" role="tabpanel" aria-labelledby="{{ category }}-tab">
-                <div class="table-responsive mb-3">
-                    <table class="table table-centered table-sm table-striped table-hover table-inventorXy-edit mb-0">
+                <div class="table-responsive bg-tulipan-gray mb-3 px-0">
+                    <table class="table table-centered table-sm table-hover table-bordered table-inventory-edit mb-0" id="inventory-waste-list-{{ category }}" data-page-length="100">
                         <thead class="thead-light">
                         <tr class="text-center">
                             <th scope="col" class="">Termék</th>
@@ -60,7 +60,7 @@
                         </tr>
                         </thead>
 
-                        <tbody class="table-bordered ">
+                        <tbody>
                         {% if form.items is defined %}
                             {% for item in form.items %}
                                 {% if item.product.category.vars.value == category.getId %}
@@ -70,8 +70,9 @@
                                     <tr class="">
                                     {% endif %}
                                         <td class="px-0">
-                                            <div class="col font-weight-boldX text-sm">
-                                                {{ loop.index }}. {{  item.product.productName.vars.value }}
+                                            <div class="col font-weight-boldX text-smX">
+                                                {#{{ loop.index }}. #}
+                                                {{  item.product.productName.vars.value }}
                                             </div>
                                         </td>
                                         <td class="px-0">

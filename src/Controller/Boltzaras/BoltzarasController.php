@@ -32,6 +32,10 @@ class BoltzarasController extends Controller
 		$jelentes = $this->getDoctrine()
 			->getRepository(Boltzaras::class)
 			->findAll();
+        $totalKeszpenzEsBankkartya = $this->getDoctrine()
+            ->getRepository(Boltzaras::class)
+            ->sumAllQueryBuilder()
+            ->getSingleResult();
 
 		if (!$jelentes) {
 			throw $this->createNotFoundException(
@@ -49,6 +53,8 @@ class BoltzarasController extends Controller
 		return $this->render('admin/boltzaras/boltzaras_list.html.twig', [
 		    'jelentesek' => $jelentes,
             'title' => 'Boltzárások listája',
+            'keszpenz' => $totalKeszpenzEsBankkartya['keszpenz'],
+            'bankkartya' => $totalKeszpenzEsBankkartya['bankkartya'],
             ]);
 	}
 
@@ -210,16 +216,6 @@ class BoltzarasController extends Controller
                 ->sumAllQueryBuilder()
                 ->getSingleResult();
         }
-//        dump($totalKeszpenzEsBankkartya);die;
-//        $jelentesek = $queryBuilder->getQuery()->getResult();
-//        $qb = $queryBuilder;
-//        $keszpenz = $qb->select('SUM(p.keszpenz) as keszpenz')->getQuery()->getSingleScalarResult();
-//        $keszpenz = 0;
-//        $bankkartya = 0;
-//        foreach($jelentesek as $i => $item) {
-////            $keszpenz += $item->getKeszpenz();
-//            $bankkartya += $jelentesek[$i]->getBankkartya();
-//        }
 
         //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
         //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.

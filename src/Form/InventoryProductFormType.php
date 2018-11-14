@@ -23,15 +23,41 @@ class InventoryProductFormType extends AbstractType
 							'label' => 'Megnevezés',
 							'attr' => ['placeholder' => 'Pl: Rózsa, vörös'],
             ])
+            /**
+             * elvileg ez radiobutton kéne legyen, de nem jön össze valamiért...
+             */
+//            ->add('category', EntityType::class, [
+//                'class' => InventoryCategory::class,
+////                'choice_label' => 'categoryName',
+//                'choice_label' => function ($category) {
+//                    return $category->getCategoryName();
+//                },
+//                'multiple' => false,
+//                'expanded' => true,
+//                'label' => 'Termék típusa',
+//            ])
+            /**
+             * ez egy dropdown
+             */
             ->add('category', EntityType::class, [
                 'class' => InventoryCategory::class,
-                'expanded' => true,
                 'multiple' => false,
-//                'choice_label' => 'categoryName',
                 'label' => 'Termék típusa',
-//                'placeholder' => 'Válassz valamit...',
-//                'attr' => ['class' => 'custom-select'],
+                'placeholder' => 'Válassz valamit...',
+                'attr' => ['class' => 'custom-select'],
             ])
+            /**
+             * ez egy VisualPicker
+             * a product_edit.html.twig -ben a _product_form_withVisualPicker.html.twig -et kell használni
+             */
+//            ->add('category', EntityType::class, [
+//                'class' => InventoryCategory::class,
+//                'expanded' => true,
+//                'multiple' => false,
+//                'label' => 'Termék típusa',
+//            ])
+
+
 //            ->add('category', EntityType::class, [
 //                    'class' => InventoryCategory::class,
 //                    'choice_label' => 'categoryName',

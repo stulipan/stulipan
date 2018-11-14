@@ -23,7 +23,7 @@
     border-bottom-width: 1px;
 }
 .border-success  {
-    /*border-left: 12px solid #cefde5 !important;*/
+    background-color: #c6f3e9;
     border-left: 12px solid;
 }
 .border-danger {
@@ -43,6 +43,10 @@
 
 .text-xl {
     font-size: 1.8rem
+}
+
+.text-gray {
+    color: #666c75;
 }
 
 .visual-picker {

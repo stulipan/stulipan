@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <meta name="format-detection" content="telephone=no">
 {% endblock %}
 
 {% block body %}
@@ -19,8 +20,8 @@
                             <h3 class="font-weight-bold text-uppercase text-light">tulipan<span class="text-danger">.</span>futar  </h3>
                             {#<img src="assets/images/logo-dark.png" alt="" height="16">#}
                     </span>
-                    <span class="logo-sm">
-                        <span class="font-weight-bold text-uppercase">tulipan<span class="text-danger">.</span>futar  </span>
+                    <span class="logo-sm text">
+                        <span class="font-weight-bold text-uppercase text-light">t<span class="text-danger">.</span>f  </span>
                             {#<img src="assets/images/logo_sm.png" alt="" height="16">#}
                     </span>
                 </a>
@@ -85,24 +86,45 @@
                         </a>
                     </li>
 
-                    <li class="side-nav-item mm-active">
-                        <a href="javascript: void(0);" class="side-nav-link" aria-expanded="true">
+                    <li class="side-nav-title side-nav-item">Leltár</li>
+                    <li class="side-nav-item">
+                        <a href="{{ path('inventory-supply-list') }}" class="side-nav-link">
                             <i class="far fa-file-alt"></i>
-                            <span> Leltár </span>
-                            <span class="menu-arrow"></span>
+                            <span> Szállítmányok</span>
                         </a>
-                        <ul class="side-nav-second-level collapse" aria-expanded="true">
-                            <li>
-                                <a href="{{ path('inventory-supply-list') }}">Szállítmányok</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('inventory-product-list-all') }}">Terméklista</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('inventory-waste-list') }}">Selejt</a>
-                            </li>
-                        </ul>
                     </li>
+                    <li class="side-nav-item mb-0">
+                        <a href="{{ path('inventory-waste-list') }}" class="side-nav-link">
+                            <i class="far fa-file-alt"></i>
+                            <span> Selejt</span>
+                        </a>
+                    </li>
+                    <li class="side-nav-item">
+                        <a href="{{ path('inventory-product-list-all') }}" class="side-nav-link">
+                            <i class="far fa-file-alt"></i>
+                            <span> Terméklista</span>
+                        </a>
+                    </li>
+
+                    {#<!-- Lenyíló menü -->#}
+                    {#<li class="side-nav-item mm-active">#}
+                        {#<a href="javascript: void(0);" class="side-nav-link" aria-expanded="true">#}
+                            {#<i class="far fa-file-alt"></i>#}
+                            {#<span> Leltár </span>#}
+                            {#<span class="menu-arrow"></span>#}
+                        {#</a>#}
+                        {#<ul class="side-nav-second-level collapse" aria-expanded="true">#}
+                            {#<li>#}
+                                {#<a href="{{ path('inventory-supply-list') }}">Szállítmányok</a>#}
+                            {#</li>#}
+                            {#<li>#}
+                                {#<a href="{{ path('inventory-product-list-all') }}">Terméklista</a>#}
+                            {#</li>#}
+                            {#<li>#}
+                                {#<a href="{{ path('inventory-waste-list') }}">Selejt</a>#}
+                            {#</li>#}
+                        {#</ul>#}
+                    {#</li>#}
 
 
                 </ul>

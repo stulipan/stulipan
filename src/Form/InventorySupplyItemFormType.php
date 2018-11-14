@@ -18,7 +18,7 @@ class InventorySupplyItemFormType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
+        $loop = 0;
         $builder
             ->add('product', InventoryProductFormType::class, [
                 'label' => false,
@@ -52,7 +52,7 @@ class InventorySupplyItemFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-						'data_class' => InventorySupplyItem::class
+            'data_class' => InventorySupplyItem::class,
         ]);
     
     }

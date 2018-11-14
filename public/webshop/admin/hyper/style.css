@@ -9871,7 +9871,7 @@ body {
 .side-nav .side-nav-link {
     color: #cedce4;
     display: block;
-    padding: 15px 30px;
+    padding: 10px 30px 5px 30px;
     font-size: .9375rem;
     position: relative;
     -webkit-transition: all .4s;
@@ -13854,7 +13854,7 @@ table.dataTable thead .sorting_asc_disabled:before,
 table.dataTable thead .sorting_desc:before,
 table.dataTable thead .sorting_desc_disabled:before {
     right: .5rem;
-    content: "\F35D";
+    content: "\f0de";
     font-family: "Font Awesome 5 Free";
     font-size: 1rem;
     top: 18px
@@ -13866,7 +13866,7 @@ table.dataTable thead .sorting_asc_disabled:after,
 table.dataTable thead .sorting_desc:after,
 table.dataTable thead .sorting_desc_disabled:after {
     right: .5em;
-    content: "\F360";
+    content: "\f0dd";
     font-family: "Font Awesome 5 Free";
     top: 12px;
     font-size: 1rem

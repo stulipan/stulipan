@@ -66,6 +66,8 @@ class InventoryController extends Controller
      */
     public function listSupplyWithPagination($page = 1)
     {
+        $itemsPerCategory = 0;
+
         $queryBuilder = $this->getDoctrine()
             ->getRepository(InventorySupply::class)
             ->findAllQueryBuilder();
@@ -89,18 +91,22 @@ class InventoryController extends Controller
         }
 
         if (!$supplies) {
-            throw $this->createNotFoundException(
-                'Nem talált egy számlát sem!'
-            );
+//            throw $this->createNotFoundException(
+//                'Nem talált egy szállítmányt sem!'
+//            );
+            $this->addFlash('danger', 'Nem talált egy szállítmányt sem!');
+        } else {
+            /**
+             * Megmondom neki milyen kategoriák vannak a Supply-ban
+             */
+            $itemsPerCategory = [];
+            foreach ($supplies as $i => $supply) {
+                $supply->setProductCategories($supply->getProductCategories());
+                $itemsPerCategory[$supply->getId()] = $supply->getItemCountInCategories();
+            }
+
         }
 
-        /**
-         * Megmondom neki milyen kategoriák vannak a Supply-ban
-         */
-        foreach ($supplies as $i => $supply) {
-            $supply->setProductCategories($supply->getProductCategories());
-            $itemsPerCategory[$supply->getId()] = $supply->getItemCountInCategories();
-        }
 
 //        $paginatedCollection = new PaginatedCollection($items, $pagerfanta->getNbResults());
 
@@ -264,42 +270,43 @@ class InventoryController extends Controller
         );
     }
 
-    /**
-     * @Route("/inventory/waste/all", name="inventory-waste-list-all")
-     */
-    public function listAllWaste()
-    {
-        $wastes = $this->getDoctrine()
-            ->getRepository(InventoryWaste::class)
-            ->findAll();
-
-        /**
-         * Megmondom neki milyen kategoriák vannak a Waste-ban
-         */
-        foreach ($wastes as $i => $waste) {
-            $waste->setProductCategories($waste->getProductCategories());
-            $itemsPerCategory[$waste->getId()] = $waste->getItemCountInCategories();
-        }
-//        dump($itemsPerCategory);die;
-
-        if (!$wastes) {
-            throw $this->createNotFoundException(
-                'Nem talált egy Waste-t sem! '
-            );
-        }
-
-        return $this->render('admin/inventory/waste_list.html.twig', [
-            'items' => $wastes,
-            'title' => 'Selejtek',
-            'itemsPerCategory' => $itemsPerCategory,
-        ]);
-    }
+//    /**
+//     * @Route("/inventory/waste/all", name="inventory-waste-list-all")
+//     */
+//    public function listAllWaste()
+//    {
+//        $wastes = $this->getDoctrine()
+//            ->getRepository(InventoryWaste::class)
+//            ->findAll();
+//
+//        /**
+//         * Megmondom neki milyen kategoriák vannak a Waste-ban
+//         */
+//        foreach ($wastes as $i => $waste) {
+//            $waste->setProductCategories($waste->getProductCategories());
+//            $itemsPerCategory[$waste->getId()] = $waste->getItemCountInCategories();
+//        }
+////        dump($itemsPerCategory);die;
+//
+//        if (!$wastes) {
+//            throw $this->createNotFoundException(
+//                'Nem talált egy Waste-t sem! '
+//            );
+//        }
+//
+//        return $this->render('admin/inventory/waste_list.html.twig', [
+//            'items' => $wastes,
+//            'title' => 'Selejtek',
+//            'itemsPerCategory' => $itemsPerCategory,
+//        ]);
+//    }
 
     /**
      * @Route("/inventory/waste/{page}", name="inventory-waste-list", requirements={"page"="\d+"})
      */
     public function listWasteWithPagination($page = 1)
     {
+        $itemsPerCategory = 0;
         $queryBuilder = $this->getDoctrine()
             ->getRepository(InventoryWaste::class)
             ->findAllQueryBuilder();
@@ -323,17 +330,19 @@ class InventoryController extends Controller
         }
 
         if (!$wastes) {
-            throw $this->createNotFoundException(
-                'Nem talált egy számlát sem!'
-            );
-        }
-
-        /**
-         * Megmondom neki milyen kategoriák vannak a Waste-ban
-         */
-        foreach ($wastes as $i => $waste) {
-            $waste->setProductCategories($waste->getProductCategories());
-            $itemsPerCategory[$waste->getId()] = $waste->getItemCountInCategories();
+//            throw $this->createNotFoundException(
+//                'Nem talált egy számlát sem!'
+//            );
+            $this->addFlash('danger', 'Nem talált egy selejtet sem!');
+        } else {
+            /**
+             * Megmondom neki milyen kategoriák vannak a Waste-ban
+             */
+            $itemsPerCategory = [];
+            foreach ($wastes as $i => $waste) {
+                $waste->setProductCategories($waste->getProductCategories());
+                $itemsPerCategory[$waste->getId()] = $waste->getItemCountInCategories();
+            }
         }
 
 //        $paginatedCollection = new PaginatedCollection($items, $pagerfanta->getNbResults());
@@ -588,11 +597,15 @@ class InventoryController extends Controller
     public function editProduct(Request $request, ?InventoryProduct $items, $id = null)
     {
         if (!$items) {
-            // new Product
+            /**
+             * new Product
+             */
             $form = $this->createForm(InventoryProductFormType::class);
             $title = 'Új termék rögzítése';
         } else {
-            // edit existing Product
+            /**
+             * edit existing Product
+             */
 //            $formFactory = $this->get('form.factory');
 //            $form = $formFactory->createNamed('valami', InventoryProductFormType::class, $items);
             $form = $this->createForm(InventoryProductFormType::class, $items);

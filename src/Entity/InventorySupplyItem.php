@@ -63,6 +63,7 @@ class InventorySupplyItem
     private $quantity;
 
     /**
+     * @var float|null
      * @Assert\NotBlank()
      * @Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
      * @ORM\Column(name="cog", type="decimal", precision=10, scale=2, nullable=false)

@@ -45,10 +45,10 @@
                 <div class="card widget-flat mb-2 mb-lg-3">
                     <div class="card-body">
                         <div class="float-right">
-                            <i class="fas fa-shopping-basket text-muted"></i>
+                            <i class="fas fa-shopping-basket text-muted fa-lg"></i>
                         </div>
                         <h5 class="text-muted font-weight-normal mt-0">Készpénz</h5>
-                        <h3 class="my-1">{{ keszpenz|number_format(0, ',', ' ') }}<span class="h5"> Ft</span></h3>
+                        <h3 class="text-gray font-weight-normal my-1">{{ keszpenz|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
                     </div>
                 </div>
             </div> <!-- end col-->
@@ -57,34 +57,46 @@
                 <div class="card widget-flat mb-2 mb-lg-3">
                     <div class="card-body">
                         <div class="float-right">
-                            <i class="far fa-credit-card text-muted"></i>
+                            <i class="far fa-credit-card text-muted fa-lg"></i>
                         </div>
                         <h5 class="text-muted font-weight-normal mt-0">Bankkártya</h5>
-                        <h3 class="my-1">{{ bankkartya|number_format(0, ',', ' ') }}<span class="h5"> Ft</span></h3>
+                        <h3 class="text-gray font-weight-normal my-1">{{ bankkartya|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
                     </div>
                 </div>
             </div> <!-- end col-->
 
-            <div class="col-xl-3 col-lg-6 col-6">
-                <div class="card widget-flat bg-info-lighten mb-2 mb-lg-3">
-                    <div class="card-body">
-                        <div class="float-right">
-                            <i class="fas fa-shopping-cart text-white"></i>
-                        </div>
-                        <h5 class="text-white font-weight-normal mt-0">Webshop</h5>
-                        <h3 class="my-1 text-white">{{ 0|number_format(0, ',', ' ') }}<span class="h5"> Ft</span></h3>
-                    </div>
-                </div>
-            </div> <!-- end col-->
+            {#<div class="col-xl-3 col-lg-6 col-6">#}
+                {#<div class="card widget-flat bg-info-lighten mb-2 mb-lg-3">#}
+                    {#<div class="card-body">#}
+                        {#<div class="float-right">#}
+                            {#<i class="fas fa-shopping-cart text-white"></i>#}
+                        {#</div>#}
+                        {#<h5 class="text-white font-weight-normal mt-0">Webshop</h5>#}
+                        {#<h3 class="my-1 text-white">{{ 0|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>#}
+                    {#</div>#}
+                {#</div>#}
+            {#</div> <!-- end col-->#}
+
+            {#<div class="col-xl-3 col-lg-6 col-6">#}
+                {#<div class="card widget-flat mb-2 mb-lg-3">#}
+                    {#<div class="card-body">#}
+                        {#<div class="float-right">#}
+                            {#<i class="fas fa-dollar-sign text-muted fa-lg"></i>#}
+                        {#</div>#}
+                        {#<h5 class="text-muted font-weight-normal mt-0">Összbevétel</h5>#}
+                        {#<h3 class="text-gray font-weight-normal my-1">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>#}
+                    {#</div>#}
+                {#</div>#}
+            {#</div> <!-- end col-->#}
 
             <div class="col-xl-3 col-lg-6 col-6">
                 <div class="card widget-flat bg-success text-white mb-2 mb-lg-3">
                     <div class="card-body">
                         <div class="float-right">
-                            <i class="fas fa-dollar-sign text-white"></i><i class="fas fa-dollar-sign text-white"></i>
+                            <i class="fas fa-dollar-sign text-white fa-lg"></i>
                         </div>
                         <h5 class="font-weight-normal mt-0">Összbevétel</h5>
-                        <h3 class="my-1">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h5"> Ft</span></h3>
+                        <h3 class="font-weight-normal my-1">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
                     </div>
                 </div>
             </div> <!-- end col-->
@@ -108,8 +120,8 @@
             <div class="col-lg-4">
                 <div class="text-lg-right my-1 my-lg-0">
                     <a href="{{ path('boltzaras_new') }}" class="btn btn-success mb-2 mr-2"><i class="fas fa-plus-circle mr-1"></i> Új jelentés</a>
-                    <button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fas fa-plus mr-1"></i> Új ablak</button>
+                    {#<button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">#}
+                        {#<i class="fas fa-plus mr-1"></i> Új ablak</button>#}
                 </div>
             </div><!-- end col-->
         </div>
@@ -118,7 +130,7 @@
 
 
         <div class="table-responsive mb-3">
-            <table class="table table-sm table-centered table-striped table-hover mb-0">
+            <table class="table table-sm table-centered table-striped table-hover mb-0" id="boltzaras-list">
                 <thead class="thead-light">
 				<tr>
                     <th scope="col">Dátum</th>

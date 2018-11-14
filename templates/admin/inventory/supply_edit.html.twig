@@ -31,3 +31,60 @@
 
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready( function () {
+            $.extend( $.fn.dataTable.defaults, {
+                order: [],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Hungarian.json"
+                },
+            } );
+
+            $('#inventory-supply-list-Vágott').DataTable({
+                paging: false,
+                columnDefs: [{
+                    orderable : false,
+                    targets : [1,2,3,4]
+                }],
+                dom: "<'row p-2'<'col-sm-12 col-md-12'l><'col-sm-12 col-md-12'f>>",
+
+            });
+            $('#inventory-supply-list-Cserepes').DataTable({
+                paging: false,
+                columnDefs: [{
+                    orderable : false,
+                    targets : [1,2,3,4]
+                }],
+                dom: "<'row p-2'<'col-sm-12 col-md-12'l><'col-sm-12 col-md-12'f>>",
+            });
+            $('#inventory-supply-list-Zöldek').DataTable({
+                paging: false,
+                columnDefs: [{
+                    orderable : false,
+                    targets : [1,2,3,4]
+                }],
+                dom: "<'row p-2'<'col-sm-12 col-md-12'l><'col-sm-12 col-md-12'f>>",
+            });
+            $('#inventory-supply-list-Orhideák').DataTable({
+                paging: false,
+                columnDefs: [{
+                    orderable : false,
+                    targets : [1,2,3,4]
+                }],
+                dom: "<'row p-2'<'col-sm-12 col-md-12'l><'col-sm-12 col-md-12'f>>",
+            });
+            $('#inventory-supply-list-Egyéb').DataTable({
+                paging: false,
+                columnDefs: [{
+                    orderable : false,
+                    targets : [1,2,3,4]
+                }],
+                dom: "<'row p-2'<'col-sm-12 col-md-12'l><'col-sm-12 col-md-12'f>>",
+            });
+
+        } );
+    </script>
+{% endblock %}
+

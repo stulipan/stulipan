@@ -1,5 +1,5 @@
 		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
-		{{ form_start(form, { 'attr': {'class': '' }}) }}
+		{{ form_start(form) }}
 
         <div class="row mb-4">
                 <div class="col-auto mr-2X">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="">
-            <h4 class="mb-0">Termékek a szállítmányban: <span class="badge badge-warning ml-1">{{- countItemsInSupply -}}</span></h4>
+            <h4 class="mb-0">Termékek a szállítmányban: <span class="badge badge-warning ml-1">{{ countItemsInSupply }} tétel</span></h4>
             <small class="form-text text-muted">
                 Csak azoknál a termékeknél töltsd ki, amik új áruként érkeztek a szállítmánnyal.
             </small>
@@ -48,8 +48,8 @@
             {% for category in categories %}
 
             <div class="tab-pane fade {% if loop.first == 1 %} show active {% endif %}" id="{{ category }}" role="tabpanel" aria-labelledby="{{ category }}-tab">
-                <div class="table-responsive mb-3">
-                    <table class="table table-centered table-sm table-stripedX table-hover table-inventory-edit mb-0">
+                <div class="table-responsive bg-tulipan-gray mb-3 px-0">
+                    <table class="table table-centered table-sm table-hover table-bordered table-inventory-edit mb-0" id="inventory-supply-list-{{ category }}" data-page-length="100">
                         <thead class="thead-light">
                         <tr class="text-center">
                             <th scope="col" class="">Termék</th>
@@ -60,7 +60,7 @@
                         </tr>
                         </thead>
 
-                        <tbody class="table-bordered ">
+                        <tbody>
                         {% if form.items is defined %}
                             {% for item in form.items %}
                                 {#{{ item.product.category.vars.value }} {{ category.getID }}#}
@@ -71,13 +71,15 @@
                                     <tr class="">
                                 {% endif %}
                             <td class="px-0">
-                                <div class="col font-weight-boldX text-sm">
+                                <div class="col font-weight-boldX text-smX">
                                     {#{% if item.quantity is defined and item.quantity.vars.value != 0  %}#}
                                         {#<i class="fas fa-check-square text-success text-lg mr-1"></i>#}
                                     {#{% else %}#}
                                         {#<i class="fas fa-times text-danger text-lg mr-1"></i>#}
                                     {#{% endif %}#}
-                                    {{ loop.index }}. {{  item.product.productName.vars.value }}
+
+                                    {#{{ loop.index }}. #}
+                                    {{  item.product.productName.vars.value }}
                                 </div>
                             </td>
                             <td class="px-0">
@@ -91,7 +93,9 @@
                             </td>
                             <td class="px-0">
                                 <div class="col">
-                                    {{ form_widget(item.cog) }}
+                                    {{ form_widget(item.cog, { 'attr': {
+                                        'data-input-field' : 'cog' ~ loop.index,
+                                    }}) }}
                                     {{ form_errors(item.cog) }}
                                     <small class="form-text text-muted">
                                         {{ form_label(item.cog) }}
@@ -100,7 +104,11 @@
                             </td>
                             <td class="px-0">
                                 <div class="col">
-                                    {{ form_widget(item.markup) }}
+                                    {#{{ form_widget(item.markup) }}#}
+                                    {{ form_widget(item.markup, { 'attr': {
+                                        'data-input-field' : 'markup' ~ loop.index
+                                    }}) }}
+
                                     {{ form_errors(item.markup) }}
                                     <small class="form-text text-muted">
                                         {{ form_label(item.markup) }}
@@ -109,17 +117,19 @@
                             </td>
                             <td class="px-0">
                                 <div class="col">
-                                    {{ form_widget(item.retailPrice) }}
+                                    {{ form_widget(item.retailPrice, { 'attr': {
+                                        'data-formula' : '#cog'  ~ loop.index ~'# * #markup'  ~ loop.index ~ '#',
+                                    }}) }}
                                     {{ form_errors(item.retailPrice) }}
                                     <small class="form-text text-muted">
                                         {{ form_label(item.retailPrice) }}
-                                        <script>
-                                            $(document).ready(function(){
-                                                $("#{{ item.retailPrice.vars.id }}").click(function(){
-                                                    alert("Value: " + $("#{{ item.cog.vars.id }}").val());
-                                                });
-                                            });
-                                        </script>
+                                        {#<script>#}
+                                            {#$(document).ready(function(){#}
+                                                {#$("#{{ item.retailPrice.vars.id }}").click(function(){#}
+                                                    {#alert("Value: " + $("#{{ item.cog.vars.id }}").val());#}
+                                                {#});#}
+                                            {#});#}
+                                        {#</script>#}
                                     </small>
                                 </div>
                             </td>

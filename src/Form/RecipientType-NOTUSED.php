@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 
-class RecipientType extends AbstractType
+class NOTUSED extends AbstractType
 {
     private $urlGenerator;
 
@@ -29,12 +29,7 @@ class RecipientType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (!$builder->getEmptyData()) {
-            $builder->setAction($this->urlGenerator->generate('cart-editRecipient', ['id' => $builder->getData()->getId()]));
-        } else {
-//            $builder->setAction($this->urlGenerator->generate('cart-new-recipient'));
-            $builder->setAction($this->urlGenerator->generate('cart-editRecipient', ['id' => $builder->getData()->getId()]));
-        }
+        $builder->setAction($this->urlGenerator->generate('cart_set_recipient'));
         $builder
             ->add('id', HiddenType::class,[
                 // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
@@ -50,13 +45,11 @@ class RecipientType extends AbstractType
             ])
             ->add('address',AddressType::class,[
                 'label' => false,
+                'required' => true,
             ])
             ->add('phone',IntegerType::class,[
                 'label' => 'Telefonszám',
-                'required' => false,
-            ])
-            ->add('customer',HiddenType::class,[
-                'mapped' => false
+                'required' => true,
             ])
             ->getForm();
     }
@@ -67,10 +60,6 @@ class RecipientType extends AbstractType
             'data_class' => Recipient::class,
             'attr' => ['novalidate' => 'novalidate'],
         ]);
-    }
-    public function getBlockPrefix()
-    {
-        return '';
     }
 
 

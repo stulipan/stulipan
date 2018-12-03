@@ -12,12 +12,12 @@ use App\Entity\Recipient;
 use App\Entity\Shipping;
 use App\Entity\Payment;
 
-use App\Form\AjaxRecipientType;
+use App\Form\RecipientType;
 use App\Form\CartAddItemType;
 use App\Form\CheckoutFormType;
 use App\Form\ClearCartType;
 use App\Form\PaymentType;
-use App\Form\RecipientType;
+use App\Form\NOTUSED;
 use App\Form\SenderType;
 use App\Form\MessageType;
 use App\Form\RemoveItemType;
@@ -58,7 +58,7 @@ class CartController extends Controller
         if ($recipients->isEmpty()) {
             $recipient = new Recipient();
             $recipient->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
-            $recipientForm = $this->createForm(AjaxRecipientType::class, $recipient);
+            $recipientForm = $this->createForm(RecipientType::class, $recipient);
 
             return $this->render('webshop/site/checkout_cart.html.twig', [
                 'order' => $orderBuilder,
@@ -291,9 +291,9 @@ class CartController extends Controller
         if (!$recipient) {
             $recipientt = new Recipient();
             $recipientt->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
-            $form = $this->createForm(AjaxRecipientType::class, $recipientt);
+            $form = $this->createForm(RecipientType::class, $recipientt);
         } else {
-            $form = $this->createForm(AjaxRecipientType::class, $recipient);
+            $form = $this->createForm(RecipientType::class, $recipient);
         }
 
         $form->handleRequest($request);

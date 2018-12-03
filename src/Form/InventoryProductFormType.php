@@ -26,26 +26,26 @@ class InventoryProductFormType extends AbstractType
             /**
              * elvileg ez radiobutton kéne legyen, de nem jön össze valamiért...
              */
-//            ->add('category', EntityType::class, [
-//                'class' => InventoryCategory::class,
-////                'choice_label' => 'categoryName',
-//                'choice_label' => function ($category) {
-//                    return $category->getCategoryName();
-//                },
-//                'multiple' => false,
-//                'expanded' => true,
-//                'label' => 'Termék típusa',
-//            ])
+            ->add('category', EntityType::class, [
+                'class' => InventoryCategory::class,
+//                'choice_label' => 'categoryName',
+                'choice_label' => function ($category) {
+                    return $category->getCategoryName();
+                },
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Termék típusa',
+            ])
             /**
              * ez egy dropdown
              */
-            ->add('category', EntityType::class, [
-                'class' => InventoryCategory::class,
-                'multiple' => false,
-                'label' => 'Termék típusa',
-                'placeholder' => 'Válassz valamit...',
-                'attr' => ['class' => 'custom-select'],
-            ])
+//            ->add('category', EntityType::class, [
+//                'class' => InventoryCategory::class,
+//                'multiple' => false,
+//                'label' => 'Termék típusa',
+//                'placeholder' => 'Válassz valamit...',
+//                'attr' => ['class' => 'custom-select'],
+//            ])
             /**
              * ez egy VisualPicker
              * a product_edit.html.twig -ben a _product_form_withVisualPicker.html.twig -et kell használni
@@ -79,19 +79,23 @@ class InventoryProductFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-						'data_class' => InventoryProduct::class,
+            'data_class' => InventoryProduct::class,
         ]);
     
     }
 
-    /**
-     * Ez lesz a form neve
-     *
-     */
+//    /**
+//     * Ez lesz a form neve
+//     *
+//     */
+//    public function getBlockPrefix()
+//    {
+//        return 'valami';
+//    }
+
     public function getBlockPrefix()
     {
-        return 'valami';
+        return '';
     }
-    
 }
 

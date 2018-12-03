@@ -30,56 +30,35 @@ class RecipientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->setAction($this->urlGenerator->generate('cart_set_recipient'));
-        $builder->add(
-            'id',
-            HiddenType::class,
-            // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-            ['mapped' => false]
-        );
-        $builder->add(
-            'name',
-            TextType::class,
-            [
+        $builder
+            ->add('id', HiddenType::class,[
+                // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
+                'mapped' => false,
+            ])
+            ->add('name', TextType::class,[
                 'label' => 'Címzett',
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Szabó János',
                     'autocomplete' => 'name'
                 ]
-            ]
-        );
-        $builder->add(
-            'address',
-            AddressType::class,
-            [
+            ])
+            ->add('address',AddressType::class,[
                 'label' => false,
-            ]
-        );
-        $builder->add(
-            'phone',
-            IntegerType::class,
-            [
+                'required' => true,
+            ])
+            ->add('phone',IntegerType::class,[
                 'label' => 'Telefonszám',
-                'required' => false,
-            ]
-        );
-//        $builder->add(
-//            'submit',
-//            SubmitType::class,
-//            [
-//                'label' => 'Mentés',
-//                'attr' => [
-//                    'icon' => 'fa fa-minus-circle'
-//                ]
-//            ]
-//        );
-
+                'required' => true,
+            ])
+            ->getForm();
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Recipient::class
+            'data_class' => Recipient::class,
+            'attr' => ['novalidate' => 'novalidate'],
         ]);
     }
 

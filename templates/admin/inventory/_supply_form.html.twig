@@ -56,6 +56,7 @@
                             <th scope="col" class="">Mennyiség</th>
                             <th scope="col" class="">Beszerzési ár</th>
                             <th scope="col" class="">Szorzó</th>
+                            {#<th scope="col" class="">Szorzó után</th>#}
                             <th scope="col" class="">Eladási ár</th>
                         </tr>
                         </thead>
@@ -115,21 +116,30 @@
                                     </small>
                                 </div>
                             </td>
+                            {#<td class="px-0">#}
+                                {#<div class="col">#}
+                                    {#{{ form_widget(item.afterMarkup) }}#}
+                                    {#{{ form_widget(item.afterMarkup, { 'attr': {#}
+                                        {#'data-input-field' : 'afterMarkup' ~ loop.index,#}
+                                        {#'data-formula' : '#cog'  ~ loop.index ~'# * #markup'  ~ loop.index ~ '#'#}
+                                    {#}}) }}#}
+
+                                    {#{{ form_errors(item.afterMarkup) }}#}
+                                    {#<small class="form-text text-muted">#}
+                                        {#{{ form_label(item.afterMarkup) }}#}
+                                    {#</small>#}
+                                {#</div>#}
+                            {#</td>#}
                             <td class="px-0">
                                 <div class="col">
+                                    {#'data-formula' : '#afterMarkup'  ~ loop.index ~'#',#}
+
                                     {{ form_widget(item.retailPrice, { 'attr': {
-                                        'data-formula' : '#cog'  ~ loop.index ~'# * #markup'  ~ loop.index ~ '#',
+                                        'data-formula' : '#cog'  ~ loop.index ~'# * #markup'  ~ loop.index ~ '#'
                                     }}) }}
                                     {{ form_errors(item.retailPrice) }}
                                     <small class="form-text text-muted">
                                         {{ form_label(item.retailPrice) }}
-                                        {#<script>#}
-                                            {#$(document).ready(function(){#}
-                                                {#$("#{{ item.retailPrice.vars.id }}").click(function(){#}
-                                                    {#alert("Value: " + $("#{{ item.cog.vars.id }}").val());#}
-                                                {#});#}
-                                            {#});#}
-                                        {#</script>#}
                                     </small>
                                 </div>
                             </td>

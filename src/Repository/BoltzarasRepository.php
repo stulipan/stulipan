@@ -66,7 +66,7 @@ class BoltzarasRepository extends ServiceEntityRepository
             ->setParameter('start', $start)
             ->setParameter('end', $end)
             ->orderBy('p.idopont', 'DESC')
-            ->select('SUM(p.keszpenz) as keszpenz, SUM(p.bankkartya) as bankkartya')
+            ->select('SUM(p.keszpenz) as keszpenz, SUM(p.bankkartya) as bankkartya', 'SUM(p.kassza) as kassza')
             ->getQuery()
         ;
         return $qb;
@@ -89,7 +89,7 @@ class BoltzarasRepository extends ServiceEntityRepository
     public function sumAllQueryBuilder()
     {
         return $this->createQueryBuilder('p')
-            ->select('SUM(p.keszpenz) as keszpenz, SUM(p.bankkartya) as bankkartya')
+            ->select('SUM(p.keszpenz) as keszpenz, SUM(p.bankkartya) as bankkartya', 'SUM(p.kassza) as kassza')
             ->getQuery()
             ;
     }

@@ -69,7 +69,6 @@ class InventoryProduct
     public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
-
     }
 
     /**
@@ -97,10 +96,10 @@ class InventoryProduct
     /**
      * Set product name
      *
-     * @var string $productName
-     *
+     * @param string $productName
+     * @return string
      */
-    public function setProductName($productName)
+    public function setProductName($productName): string
     {
         $this->productName = $productName;
 

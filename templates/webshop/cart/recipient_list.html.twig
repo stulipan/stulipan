@@ -1,0 +1,23 @@
+<div class="row">
+{% if recipients is defined %}
+    {% for recipient in recipients %}
+        {{ include('webshop/cart/recipient_widget.html.twig') }}
+    {% endfor %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card rounded visual-picker border-dashed  d-flex align-items-center pt-4 pb-5">
+
+            <a href="" class="JS--editButton-recipient tile-link text-secondary" data-url="{{ path('cart-editRecipient') }}"></a>
+            <div class="card-body w-100 pt-4 pb-4 mt-1">
+                {#<h5 class="card-title">{{ recipient.name }} {{ recipient.id }}</h5>#}
+                <span class="visual-picker-content card-text text-center text-secondary">
+                                {#<span class="tile tile-lg">#}
+
+                    <i class="fas fa-plus fa-4x mb-2"></i>
+                        <h4>Új címzett</h4>
+                    {#</span>#}
+                </span>
+            </div>
+        </div>
+    </div>
+{% endif %}
+</div>

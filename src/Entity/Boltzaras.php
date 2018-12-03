@@ -54,14 +54,19 @@ class Boltzaras
      */
     private $keszpenz;
 
-//     * @ORM\JoinColumn(nullable=false)
-
     /**
      * @Assert\NotBlank(message="Válassz munkatársat.")
      * @ORM\ManyToOne(targetEntity="App\Entity\Munkatars")
      * @ORM\JoinColumn(name="munkatars_id", referencedColumnName="munkatars_id")
      */
     private $munkatars;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text", nullable=true)
+     */
+    private $note;
 
 
     // getter methods
@@ -135,5 +140,19 @@ class Boltzaras
         $this->munkatars = $ember;
     }
 
+    /**
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
 
+    /**
+     * @param string|null $note
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+    }
 }

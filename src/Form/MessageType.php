@@ -26,45 +26,20 @@ class MessageType extends AbstractType
         $this->urlGenerator = $urlGenerator;
     }
 
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         //dump($builder->getData()->getId()); die;
-        $builder->setAction($this->urlGenerator->generate('cart_set_message'));
-//        $builder->add(
-//            'id',
-//            HiddenType::class,
-//            // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-//            ['mapped' => false]
-//        );
-        $builder->add(
-            'message',
-            TextareaType::class,
-            [
+        $builder->setAction($this->urlGenerator->generate('cart-setMessage'));
+        $builder
+            ->add('message',TextareaType::class,[
                 'label' => 'Ide írd az üzenetet (max 200 karakter) ***',
                 'required' => false,
                 'attr' => ['rows' => '5'],
-            ]
-        );
-        $builder->add(
-            'messageAuthor',
-            TextType::class,
-            [
+            ])
+            ->add('messageAuthor',TextType::class,[
                 'label' => 'Aláírásnév (ezt írjuk az üdvözlőlapra)))',
                 'required' => false,
-            ]
-        );
-//        $builder->add(
-//            'submit',
-//            SubmitType::class,
-//            [
-//                'label' => 'Mentés',
-//                'attr' => [
-//                    'icon' => 'fa fa-minus-circle'
-//                ]
-//            ]
-//        );
-
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

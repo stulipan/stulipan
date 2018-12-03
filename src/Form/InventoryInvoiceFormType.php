@@ -62,9 +62,13 @@ class InventoryInvoiceFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-						'data_class' => InventoryInvoice::class
+            'data_class' => InventoryInvoice::class
         ]);
-    
+    }
+
+    public function getBlockPrefix()
+    {
+        return '';
     }
     
 }

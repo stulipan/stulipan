@@ -1,6 +1,6 @@
 		{{ form_start(form, { 'attr': {'class': '' }}) }}
 		<div class="row pb-2">
-			<div class="col-lg-12">
+			<div class="col-md-12 col-lg-8 col-xl-6">
 
 				<div class="mb-3">
                     {{ form_label(form.munkatars) }}
@@ -31,7 +31,7 @@
 				<div class="mb-3">
                     {{ form_label(form.idopont) }}
 					<div>
-						<div class="input-group" id="tulipan-datepicker">
+						<div class="input-group" id="JS--datum">
                             {{ form_widget(form.idopont, {'attr': {
                                 'class': 'form-control date',
                             }}) }}
@@ -45,7 +45,7 @@
 				</div>
 				<div class="mb-3">
                     {{ form_label(form.kassza) }} <br />
-					<div class="input-group">
+					<div class="input-group no-spinners">
                         {{ form_widget(form.kassza, {'attr': {'class': ''}}) }}
 						<div class="input-group-append">
 							<span class="input-group-text">Ft</span>
@@ -54,7 +54,7 @@
 				</div>
 				<div class="mb-3">
                     {{ form_label(form.bankkartya) }} <br />
-					<div class="input-group">
+					<div class="input-group no-spinners">
 						<!--div class="input-group-prepend">
 					<span class="input-group-text">{{ form.bankkartya.vars.label }}</span>
 				  </div-->
@@ -66,12 +66,23 @@
 				</div>
 				<div class="mb-3">
                     {{ form_label(form.keszpenz) }} <br />
-					<div class="input-group">
+					<div class="input-group no-spinners">
                         {{ form_widget(form.keszpenz, {'attr': {'class': ''}}) }}
 						<div class="input-group-append">
 							<span class="input-group-text">Ft</span>
 						</div>
 					</div>
+				</div>
+
+				<div class="mb-3">
+                    {{ form_label(form.note) }} <br />
+					<div class="input-group">
+                        {{ form_widget(form.note, {'attr': {'class': ''}}) }}
+					</div>
+                    <small class="form-text text-muted">
+                        Ide írj be bármilyen megjegyzést. Pl: miért vagy mit módosítottál utólag ezen a boltzáráson.
+                    </small>
+
 				</div>
 
                 {# Render CSRF token etc .#}

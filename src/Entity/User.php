@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -47,9 +51,22 @@ class User implements UserInterface, \Serializable
      */
     private $lastname;
 
+    /**
+     * var Collection
+     *
+     * ==== One User/Customer has Recipients ====
+     * ==== mappedBy="customer" => az Recipients entitásban definiált 'customer' attribútumról van szó ====
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Recipient", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
+     * @Assert\NotBlank(message="Egy felhasználónak több címzetje lehet.")
+     */
+    private $recipients;
+
     public function __construct()
     {
         $this->isActive = true;
+        $this->recipients = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
     }
@@ -204,6 +221,42 @@ class User implements UserInterface, \Serializable
     public function getIsActive(): ?bool
     {
         return $this->isActive;
+    }
+
+//    /**
+//     * @return InventorySupplyItem $item
+//     */
+//    public function getRecipient(Recipient $recipient)
+//    {
+//        foreach ($this->recipients as $i => $recipient) {
+//            if ($recipient->getProduct() == $product) {
+//                return $item;
+//            }
+//        }
+//    }
+
+    /**
+     * @param Recipient $recipient
+     */
+    public function addRecipient(Recipient $recipient): void
+    {
+        $this->recipients->add($recipient);
+    }
+
+    /**
+     * @param Recipient $recipient
+     */
+    public function removeRecipient(Recipient $recipient): void
+    {
+        $this->recipients->removeElement($recipient);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getRecipients(): Collection
+    {
+        return $this->recipients;
     }
 
 

@@ -5,19 +5,15 @@ namespace App\Form;
 use App\Entity\Boltzaras;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Type;
 
 class BoltzarasFormType extends AbstractType
 {
@@ -30,43 +26,45 @@ class BoltzarasFormType extends AbstractType
 
         $builder
             ->add('munkatars', null, [
-							'label' => 'Munkatárs neve', 
-							'placeholder' => 'Válassz...',
-//		            		'attr' => ['class' => 'custom-select'],
-							]
-				
-            	)            
+                'label' => 'Munkatárs neve',
+                'placeholder' => 'Válassz...',
+//		         'attr' => ['class' => 'custom-select'],
+            ])
             ->add('idopont', DateType::class, [ 
-					'label' => 'Időpont', 
-            		'widget' => 'single_text',
-            		'attr' => ['placeholder' => 'ÉÉÉÉ-HH-NN', 'autocomplete' => 'off'],
-            		'html5' => false,
-            		]
-			)            	
-            ->add('kassza', IntegerType::class, 
-            	array(
-            		'label' => 'Kasszába beütve', 
-            		'attr' => [
-                        'placeholder' => 'Kassza',
-                        'class' => 'form-control',
-                    ],
-	                //'constraints' => array( new NotNull(array('message' => "Please provide Kassza")), )
-            		)
-            	)            
-            ->add('bankkartya', IntegerType::class, 
-            	array(
-            		'label' => "Bankkártya", 
-            		'attr' => array('placeholder' => 'Bankkártya'),
-            		//'constraints' => array( new NotNull(array('message' => "Please provide Name")), )
-            		)
-            	)            
-            ->add('keszpenz', IntegerType::class, 
-            	array(
-					'label' => 'Készpénz', 
-					'attr' => array('placeholder' => 'Készpénz'),
-					//'constraints' => array( new NotNull(array('message' => "Please provide keszpenz")), )
-            		)
-            	)            
+                'label' => 'Időpont',
+                'widget' => 'single_text',
+                'attr' => ['placeholder' => 'ÉÉÉÉ-HH-NN', 'autocomplete' => 'off'],
+                'html5' => false,
+            ])
+            ->add('kassza', NumberType::class, [
+                'label' => 'Kasszába beütve',
+                'attr' => [
+                    'placeholder' => 'Kassza',
+                    'class' => 'form-control',
+                    'min' => 0,
+                ],
+            ])
+            ->add('bankkartya', NumberType::class, [
+                'label' => "Bankkártya",
+                'attr' => [
+                    'placeholder' => 'Bankkártya',
+                    'min' => 0,
+                ],
+            ])
+            ->add('keszpenz', NumberType::class, [
+                'label' => 'Készpénz',
+                'attr' => [
+                    'placeholder' => 'Készpénz',
+                    'min' => 0,
+                ],
+            ])
+            ->add('note', TextareaType::class, [
+                'label' => 'Megjegyzés',
+                'attr' => [
+                    'placeholder' => 'Megjegyzés ide...',
+                    'rows' => '3'
+                ],
+            ])
             ->getForm();
 		
     }
@@ -79,6 +77,11 @@ class BoltzarasFormType extends AbstractType
         ]);
     
     }
+
+//    public function getBlockPrefix()
+//    {
+//        return '';
+//    }
     
 }
 

@@ -90,23 +90,55 @@
                     <div class="col-lg-5"></div>
 				</div>
 			</div>
-			<div class="mb-3">
-				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
-						<div class="col-form-label">Termékkép</div>
-					</div>
-					<div class="col-sm-8 col-lg-5 input-group">
-						<div class="custom-file">
-                            {{ form_widget(form.image) }}
-							{{ form_label(form.image, form.image, { 'label_attr': {'class': 'custom-file-label' }}) }}
-						</div>
-						<div class="input-group-append">
-							<span class="input-group-text" id="inputGroupFileAddon02">Feltöltés</span>
-						</div>
-					</div>
+            <div class="mb-3">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        <strong>{{ form_label(form.kind) }}</strong>
+                    </div>
+                    <div class="col-sm-8 col-lg-5">
+                        {% for choice in form.kind %}
+                            {{ include('admin/choiceItem.html.twig') }}
+                        {% endfor %}
+                        {% do form.kind.setRendered() %}
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        <strong>{{ form_label(form.subproducts) }}</strong>
+                    </div>
+                    <div class="col-sm-8 col-lg-5">
+                        {#{% for choice in form.subproducts %}#}
+                            {#{{ include('admin/choiceItem.html.twig') }}#}
+                        {#{% endfor %}#}
+                        {% for item in form.subproducts %}
+                            {#{{ item.id }}#}
+                            {{ form_row(item.price) }}
+
+                        {% endfor %}
+                        {#{{ form_widget(form.subproducts) }}#}
+                        {#{% do form.subproducts.setRendered() %}#}
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2 text-sm-righttt">
+                        <div class="col-form-label">Termékkép</div>
+                    </div>
+                    <div class="col-sm-8 col-lg-5 input-group">
+                        <div class="custom-file">
+                            {#{{ form_widget(form.image) }}#}
+                            {#{{ form_label(form.image, form.image, { 'label_attr': {'class': 'custom-file-label' }}) }}#}
+                        </div>
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="inputGroupFileAddon02">Feltöltés</span>
+                        </div>
+                    </div>
                     <div class="col-lg-5"></div>
-				</div>
-			</div>
+                </div>
+            </div>
 
 			{# Render CSRF token etc .#}
 			<div style="display:none">

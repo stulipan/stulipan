@@ -4,18 +4,21 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Form\ProductFormType;
+use App\Form\ProductQuantityFormType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-
+/**
+ * @Route("/admin")
+ */
 class ProductController extends Controller
 {
 
     /**
-     * @Route("/admin/termek/", name="product-list")
+     * @Route("/termek/", name="product-list")
      */
     public function listActionOld()
     {
@@ -45,7 +48,7 @@ class ProductController extends Controller
 
 
     /**
-     * @Route("/admin/termek/new", name="product-new")
+     * @Route("/termek/new", name="product-new")
      */
     public function newAction(Request $request)
     {
@@ -111,13 +114,14 @@ class ProductController extends Controller
 
 
     /**
-     * @Route("/admin/termek/edit/{id}", name="product-edit")
+     * @Route("/termek/edit/{id}", name="product-edit")
      */
     public function editAction(Request $request, Product $formAdatok)
     {
         //itt instanszolja a termek formot, amit a $formAdatokkal populálja
         //lásd a második paramétert, ami megmondja a formnak milyen adatokat szórjon bele
-        $form = $this->createForm(ProductFormType::class, $formAdatok);
+//        dump($formAdatok->getKind()->getAttributes()->getValues());die;
+        $form = $this->createForm(ProductFormType::class, $formAdatok); //, ['id' => $formAdatok->getKind()->getId()]
 
         // handleRequest only handles data on POST
         $form->handleRequest($request);
@@ -142,8 +146,53 @@ class ProductController extends Controller
         ]);
     }
 
+    /**
+     * @Route("/product/editStock/{id}", name="product-edit-stock")
+     */
+    public function editStock(Request $request, Product $product)
+    {
+        $form = $this->createForm(ProductQuantityFormType::class, $product);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $product = $form->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($product);
+            $entityManager->flush();
+
+            /**
+             * If AJAX request, renders and returns an HTML with the value
+             */
+            if ($request->isXmlHttpRequest()) {
+                return $this->render('admin/item.html.twig', [
+                    'item' => $product->getStock(),
+                ]);
+            }
+//            $this->addFlash('success', 'A mennyiség sikeresen frissítve.');
+            return $this->redirectToRoute('product-list');
+        }
+
+        /**
+         * If AJAX request and the form was submitted, renders the form, fills it with data
+         * Also renders errors!
+         * (!?, there is a validation error)
+         */
+        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('admin/product/_stock_inline_form.html.twig', [
+                'form' => $form->createView()
+            ]);
+            return new Response($html,400);
+
+        }
+        /**
+         * Renders form initially with data
+         */
+        return $this->render('admin/product/_stock_inline_form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 //    /**
-//     * @Route("/admin/termek/show/{id}", name="product_show")
+//     * @Route("/termek/show/{id}", name="product_show")
 //     */
 //    public function showAction(Product $termek)
 //    {

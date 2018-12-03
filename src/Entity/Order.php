@@ -41,7 +41,7 @@ class Order
     /**
      * @var User
      *
-     * ==== One Order has one Customer ====
+     * ==== Many Orders belong to one Customer ====
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false)
@@ -75,6 +75,7 @@ class Order
      * @var string
      *
      * @ORM\Column(name="message", type="string", length=255, nullable=true)
+     * @ Assert\NotBlank(message="Nincs uzenet!")
      */
     private $message = '';
 
@@ -82,6 +83,7 @@ class Order
      * @var string
      *
      * @ORM\Column(name="message_author", type="string", length=255, nullable=true)
+     * @ Assert\NotBlank(message="Nincs uzenet alairas!")
      */
     private $messageAuthor = '';
 
@@ -97,6 +99,27 @@ class Order
      */
     private $items;
 
+    /**
+     * @var Shipping
+     *
+     * ==== Many Orders have one Shipping => Egy rendeléshez egy Szállítás tartozik ====
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Shipping")
+     * @ORM\JoinColumn(name="shipping_id", referencedColumnName="id", nullable=true)
+     * @Assert\NotBlank(message="Válassz szállítási módot!")
+     */
+    private $shipping;
+
+    /**
+     * @var Payment
+     *
+     * ==== Many Orders have one Payment => Egy rendeléshez egy Fizetés tartozik ====
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Payment")
+     * @ORM\JoinColumn(name="payment_id", referencedColumnName="id", nullable=true)
+     * @Assert\NotBlank(message="Válassz fizetési módot!")
+     */
+    private $payment;
 
 
     /**
@@ -159,7 +182,7 @@ class Order
     /**
      * @param User $customer
      */
-    public function setCustomer(?User $customer): void
+    public function setCustomer(User $customer): void
     {
         $this->customer = $customer;
     }
@@ -240,7 +263,7 @@ class Order
     /**
      * @ param Payment $payment
      */
-    public function setPayment(int $payment): void
+    public function setPayment(Payment $payment): void
     {
         $this->payment = $payment;
     }
@@ -254,9 +277,9 @@ class Order
     }
 
     /**
-     * @ param Shipping $shipping
+     * @param Shipping $shipping
      */
-    public function setShipping(int $shipping): void
+    public function setShipping(Shipping $shipping): void
     {
         $this->shipping = $shipping;
     }

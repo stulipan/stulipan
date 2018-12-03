@@ -1,3 +1,5 @@
+{# this tag only applies to the forms defined in this template #}
+{% form_theme senderForm 'bootstrap_4_layout.html.twig' %}
 {{ form_start(senderForm) }}
         <div class="row">
             <div class="col-lg-8">
@@ -42,6 +44,11 @@
                 <button type="submit" class="btn btn-primary">Tovább <i class="fa fa-chevron-right"></i></button>
             </div>
 
+        </div>
+
+        {# Render CSRF token etc .#}
+        <div style="display:none">
+            {{ form_rest(senderForm) }}
         </div>
 
 

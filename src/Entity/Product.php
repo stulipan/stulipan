@@ -103,7 +103,7 @@ class Product
     /**
      * @var int|null
      * @Assert\NotBlank()
-     * @Assert\Range(min=0, minMessage="A készlet nem lehet negatív.")
+     * @Assert\Range(min=0, max="1000000", minMessage="Nem lehet negatív.")
      * @ORM\Column(name="stock", type="smallint", nullable=true)
      */
     private $stock = '0';
@@ -176,54 +176,32 @@ class Product
      */
     private $category;
 
-//    /**
-//     * @var int
-//     *
-//     * @ORM\Column(name="customer_id", type="integer")
-//     */
-//    private $customerId;
-//
-//    /**
-//     * @var User
-//     *
-//     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="products")
-//     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
-//     */
-//    private $customer;
-//
-//    /**
-//     * One Product is in Many OrderItem.
-//     *
-//     * @var orderItems[]|Collection
-//     * @OneToMany(targetEntity="App\Entity\OrderItem", mappedBy="product")
-//     * // @ ORM\JoinColumn(name="item_id", referencedColumnName="product_id")
-//     *
-//     */
-//    private $orderItems;
+    /**
+     *
+     * @var ProductKind
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\ProductKind", inversedBy="products")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     * @Assert\NotBlank(message="Válassz egy terméktípust.")
+     */
+    private $kind;
 
+    /**
+     * @var Collection
+     *
+     * ==== One Product has Subproducts ====
+     * ==== mappedBy="product" => a Subproduct entitásban definiált 'product'-ról van szó ====
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Subproduct", mappedBy="product", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="product_id", nullable=true)
+     * @Assert\NotBlank(message="Egy terméknek több alterméke lehet.")
+     */
+    private $subproducts;
 
-//    public function __construct()
-//    {
-//        $this->orderItems = new ArrayCollection();
-//        $this->stock = 1;
-//    }
-//
-//    /**
-//     * @param Collection|OrderItem[] $orderItems
-//     */
-//    public function setOrderItems($orderItems)
-//    {
-//        $this->orderItems = $orderItems;
-//    }
-//
-//    /**
-//     * @return Collection|OrderItem[]
-//     */
-//    public function getOrderItems(): Collection
-//    {
-//        return $this->orderItems;
-//    }
-
+    public function __construct()
+    {
+        $this->subproducts = new ArrayCollection();
+    }
 
 
     /**
@@ -362,7 +340,7 @@ class Product
      * @param int $categoryId
      *
      */
-    public function setCategoryId(int $categoryId):Product
+    public function setCategoryId(int $categoryId)
     {
         $this->categoryId = $categoryId;
         
@@ -381,58 +359,31 @@ class Product
      * @param Category $category
      *
      */
-    public function setCategory(?Category $category): self
+    public function setCategory(?Category $category): void
     {
         $this->category = $category;
     }
 
-//    /**
-//     * @return int
-//     */
-//    public function getCustomerId()
-//    {
-//        return $this->customerId;
-//    }
-//
-//    /**
-//     * @param int $customerId
-//     *
-//     */
-//    public function setCustomerId(int $customerId)
-//    {
-//        $this->customerId = $customerId;
-//        //return $this;
-//    }
-//
-//    /**
-//     * @return User
-//     */
-//    public function getCustomer()
-//    {
-//        return $this->customer->getFullName();
-//    }
-//
-//    //* @return Product
-//    /**
-//     * @param User $customer
-//     *
-//     */
-//    public function setCustomer(User $customer = null)
-//    {
-//        $this->customer = $customer;
-//        //return $this;
-//    }
-//
-//    /**
-//     * @param Collection|OrderItem[] $orderItems
-//     */
-//    public function setOrderProducts($orderItems)
-//    {
-//        $this->orderItems = $orderItems;
-//    }
+    /**
+     * @return ProductKind
+     */
+    public function getKind(): ?ProductKind
+    {
+        return $this->kind;
+    }
 
     /**
-     * @param \DateTime|null $createdAt
+     * @param ProductKind $type
+     *
+     */
+    public function setKind(?ProductKind $type): void
+    {
+        $this->kind = $type;
+    }
+
+
+    /**
+     * @ param \DateTime|null $createdAt
      */
     public function setCreatedAt()
     {
@@ -442,7 +393,7 @@ class Product
     }
 
     /**
-     * @param \DateTime|null $updatedAt
+     * @ param \DateTime|null $updatedAt
      */
     public function setUpdatedAt()
     {
@@ -585,5 +536,28 @@ class Product
         $this->status = $allapot;
     }
 
+    /**
+     * @param Subproduct $item
+     */
+    public function addSubproduct(Subproduct $item): void
+    {
+        $this->subproducts->add($item);
+    }
+
+    /**
+     * @param Subproduct $item
+     */
+    public function removeItem(Subproduct $item): void
+    {
+        $this->subproducts->removeElement($item);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getSubproducts(): Collection
+    {
+        return $this->subproducts;
+    }
 
 }

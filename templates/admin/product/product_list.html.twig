@@ -1,6 +1,5 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-
 {% block title %}
 	Termékek
 {% endblock %}
@@ -45,7 +44,7 @@
 
 
         <div class="table-responsive mb-3">
-            <table class="table table-sm table-centered table-stripedX table-hover mb-0" id="product-list" data-page-length="25">
+            <table class="table table-sm table-centered table-stripedX table-hover mb-0 JS--wrapper" id="product-list" data-page-length="25">
                 <thead class="thead-light">
 				<tr>
 					{#<th scope="col">#</th>#}
@@ -72,11 +71,17 @@
 					<td class="align-middle text-left"><a href="{{ path('product-edit', {'id': termek.id}) }}" class="text-dark">
                             {{ termek.productName }}</a></td>
 					<td class="align-middle text-right text-nowrap">{{ termek.grossPrice|number_format(0, ',', ' ')  }},-</td>
-					<td class="align-middle text-right"><span class="badge badge-primary">{{ termek.stock }}</span></td>
+					<td class="align-middle text-right">
+						<span class="badge badge-primary">
+							<span class="JS--result">{{ termek.stock }}</span>
+                            <a href="" class="JS--editButton text-white ml-1" data-url="{{ path('product-edit-stock', {id: termek.id}) }}"><i class="fas fa-pen"></i></a>
+                        </span>
+                        <span class="d-none"></span>
+                    </td>
 					<td class="align-middle">{{ termek.category }}</td>
 					<td class="align-middle">
 						<a href="{{ path('product-edit', {'id': termek.id}) }}" class="btn-sm">
-							<i class="fas fa-edit"></i></a>
+							<i class="fas fa-pen"></i></a>
 						<a href="{{ path('site_product_show', {'id': termek.id}) }}" class="btn-sm" target="_blank">
 							<i class="fas fa-external-link-alt"></i></a>
 				  	</td>
@@ -88,7 +93,7 @@
 				{% endfor %}
 				{% else %}
 				<tr>
-			        <li><em>Nem talált termékeket!</em></li>
+			        <td><li><em>Nem talált termékeket!</em></li></td>
 			    </tr>
 				{% endif %}
 				</tbody>
@@ -101,6 +106,15 @@
         <!-- footer of default page content widget -->
         {{ include('/admin/_footer_of_default_page_content.html.twig') }}
 
-    </div>
 	{% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            var $wrapper = $('.JS--wrapper');
+            var inlineEdit = new InlineEdit($wrapper);
+        });
+    </script>
 {% endblock %}

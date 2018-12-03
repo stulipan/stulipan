@@ -32,7 +32,7 @@ class OrderItem
     private $id;
 
     /**
-     * @var int
+     * @var Order
      *
      * ==== Many OrderItems in one Order ====
      * ==== inversed By="items" => az Order entitásban definiált 'items' attibútumról van szó; A Tételt így kötjük vissza a Rendeléshez
@@ -44,7 +44,7 @@ class OrderItem
     private $order;
 
     /**
-     * @var int
+     * @var Product
      *
      * ==== One OrderItem is one Product => Egy tétel mindig egy termék ====
      *

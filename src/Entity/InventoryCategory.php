@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="inv_category")
+ * @ORM\Table(name="inv_product_category")
  */
 class InventoryCategory
 {
@@ -32,9 +32,9 @@ class InventoryCategory
     /**
      * @ Assert\NotBlank()
      * @ Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
-     * @ORM\Column(name="szorzo", type="decimal", precision=10, scale=2, nullable=false)
+     * @ORM\Column(name="markup", type="decimal", precision=10, scale=2, nullable=false)
      */
-    private $szorzo;
+    private $markup;
 
     /**
      * @var ArrayCollection
@@ -64,8 +64,7 @@ class InventoryCategory
      * Set category name
      *
      * @param string $nev
-     *
-     * @return Category
+     * @return InventoryCategory
      */
     public function setCategoryName($nev)
     {
@@ -89,17 +88,17 @@ class InventoryCategory
         return $this->getCategoryName();
     }
 
-    public function getSzorzo()
+    public function getMarkup()
     {
-        return $this->szorzo;
+        return $this->markup;
     }
 
     /**
      * @param float|null $szorzo
      */
-    public function setSzorzo($szorzo)
+    public function setMarkup($szorzo)
     {
-        $this->szorzo = $szorzo;
+        $this->markup = $szorzo;
     }
 
 

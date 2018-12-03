@@ -28,79 +28,50 @@ class AddressType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         //$builder->setAction($this->urlGenerator->generate('cart_set_delivery_address', ['id' => '0']));
-        $builder->add(
-            'id',
-            HiddenType::class,
-             // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-            ['mapped' => false]
-        );
-        $builder->add(
-            'street',
-            TextType::class,
-            [
+        $builder
+            ->add('id',HiddenType::class,[
+                 // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
+                'mapped' => false,
+            ])
+            ->add('street',TextType::class,[
                 'required' => true,
                 'label' => 'Cím',
-            ]
-        );
-        $builder->add(
-            'city',
-            TextType::class,
-            [
-                'required' => true,
+            ])
+            ->add('city',TextType::class,[
                 'label' => 'Város',
-            ]
-        );
-        $builder->add(
-            'zip',
-            IntegerType::class,
-            [
+                'required' => true,
+            ])
+            ->add('zip',IntegerType::class,[
                 'required' => true,
                 'label' => 'Iranyítószám',
-            ]
-        );
-        $builder->add(
-            'province',
-            TextType::class,
-            [
+            ])
+            ->add('province',TextType::class,[
                 'required' => true,
                 'label' => 'Megye',
-            ]
-        );
-        $builder->add(
-            'country',
-            TextType::class,
-            [
+            ])
+            ->add('country',TextType::class,[
                 'required' => true,
                 'label' => 'Ország',
-            ]
-        );
-        $builder->add(
-            'street',
-            TextType::class,
-            [
+            ])
+            ->add('street',TextType::class,[
                 'required' => true,
                 'label' => 'Street',
-            ]
-        );
-        $builder->add(
-            'addressType',
-            HiddenType::class,
-            [
+            ])
+            ->add('addressType',HiddenType::class,[
                 'attr' => ['value' => '2'],
-            ]
-        );
-
+            ])
+            ->getForm();
     }
-
-
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Address::class
+            'data_class' => Address::class,
+            'attr' => ['novalidate' => 'novalidate'],
+            'error_bubbling' => true,
+//            'by_reference' => false,  // https://symfony.com/doc/current/reference/forms/types/form.html#by-reference
         ]);
     }
-
 
 
 }

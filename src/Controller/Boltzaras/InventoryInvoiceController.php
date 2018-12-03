@@ -26,6 +26,20 @@ class InventoryInvoiceController extends Controller
 {
 
     /**
+     * @Route("/invoice/delete/{id}", name="invoice-delete", methods={"DELETE"})
+     */
+    public function deleteInvoiceAction(InventoryInvoice $invoice)
+
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($invoice);
+        $em->flush();
+
+        return new Response(null, 204);
+    }
+
+    /**
      * @Route("/invoice/company/edit/{id}", name="invoice-company-edit")
      */
     public function editInvoiceCompany(Request $request, ?InventoryInvoiceCompany $company, $id = null)

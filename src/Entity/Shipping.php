@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  *
  * @ORM\Table(name="cart_shipping")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ShippingRepository")
  */
 
 class Shipping
@@ -22,7 +22,7 @@ class Shipping
     /**
      * @var int
      *
-     * @ORM\Column(name="shipping_id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -31,18 +31,34 @@ class Shipping
     /**
      * @var string
      *
-     * @Assert\NotBlank(message="Adj nevet a fizetésnek.")
+     * @Assert\NotBlank(message="A szállítási mód megnevezése hiányzik!")
      * @ORM\Column(name="shipping_name", type="string", length=100, nullable=false)
      */
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     * @ Assert\NotBlank(message="A szállítási mód rövid leírása hiányzik!")
+     */
+    private $description;
+
+    /**
      * @var float
      *
-     * @Assert\NotBlank()
+     * @Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
      * @ORM\Column(name="cost", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
      */
-    private $price;
+    private $cost;
+
+    /**
+     * @var int
+     *
+     * @Assert\NotBlank()
+     * @ORM\Column(name="order", nullable=false, options={"default"="100"})
+     */
+    private $order;
 
     /**
      * @return int
@@ -69,18 +85,50 @@ class Shipping
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getPrice(): float
+    public function getDescription(): ?string
     {
-        return $this->price;
+        return $this->description;
     }
 
     /**
-     * @param float $price
+     * @param string $description
      */
-    public function setPrice(float $price): void
+    public function setDescription(string $description): void
     {
-        $this->price = $price;
+        $this->description = $description;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCost(): float
+    {
+        return (float) $this->cost;
+    }
+
+    /**
+     * @param float $cost
+     */
+    public function setCost(float $cost): void
+    {
+        $this->cost = $cost;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrder(): int
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param int $order
+     */
+    public function setPrice(int $order): void
+    {
+        $this->order = $order;
     }
 }

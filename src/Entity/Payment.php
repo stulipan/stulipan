@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
  *
  * @ORM\Table(name="cart_payment")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\PaymentRepository")
  */
 
 class Payment
@@ -23,7 +23,7 @@ class Payment
     /**
      * @var int
      *
-     * @ORM\Column(name="payment_id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -32,23 +32,57 @@ class Payment
     /**
      * @var string
      *
-     * @Assert\NotBlank(message="Adj nevet a fizetésnek.")
+     * @Assert\NotBlank(message="A fizetési mód megnevezése hiányzik!")
      * @ORM\Column(name="payment_name", type="string", length=100, nullable=false)
      */
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="short", type="string", length=255, nullable=false)
+     * @ Assert\NotBlank(message="A fizetési mód rövid rövid leírása hiányzik!")
+     */
+    private $short;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     * @ Assert\NotBlank(message="A fizetési mód rövid leírása hiányzik!")
+     */
+    private $description;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="image", type="string", length=1000, nullable=true)
+     * @Assert\File(mimeTypes={ "image/png", "image/jpeg" }, groups = {"create"})
+     */
+    private $image = '';
+
+    /**
      * @var float
      *
-     * @Assert\NotBlank()
+     * @ Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
      */
-    private $price;
+    private $cost;
+
+    /**
+     * @var int
+     *
+     * @Assert\NotBlank()
+     * @ORM\Column(name="order", nullable=false, options={"default"="100"})
+     */
+    private $order;
+
+
 
     /**
      * @return string
      */
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -70,18 +104,82 @@ class Payment
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getPrice(): float
+    public function getShort(): ?string
     {
-        return $this->price;
+        return $this->short;
     }
 
     /**
-     * @param float $price
+     * @param string $description
      */
-    public function setPrice(float $price): void
+    public function setShort(string $description): void
     {
-        $this->price = $price;
+        $this->short = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param null|string $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCost(): float
+    {
+        return (float) $this->cost;
+    }
+
+    /**
+     * @param float $cost
+     */
+    public function setCost(float $cost): void
+    {
+        $this->cost = $cost;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrder(): int
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param int $order
+     */
+    public function setOrder(int $order): void
+    {
+        $this->order = $order;
     }
 }

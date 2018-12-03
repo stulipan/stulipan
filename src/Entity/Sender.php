@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\TimestampableTrait;
 use App\Entity\User;
 use App\Entity\Address;
 
@@ -21,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Sender
 {
+    use TimestampableTrait;
 
     /**
      * @var int

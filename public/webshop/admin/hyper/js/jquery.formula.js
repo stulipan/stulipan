@@ -35,9 +35,14 @@
 
 $(function () {
 
+    function roundTen(number) {
+        return Math.round(number/10)*10;
+    }
+
     // looking for inputs with data-formula attribute
     $("input:text[data-formula]").each(function () {
-        var formula = $(this).attr('data-formula');
+        var formula = $(this).attr('data-formula');  //extracts the formula from 'data-formula' attribute
+        // alert(formula);throw new Error('error');
         var inputFieldsInvolved = formula.match(/#([_a-zA-Z0-9]){1,15}#/g); // search for all fields that match #sample#
         var currentField = $(this);
         var initialFormula = formula;
@@ -47,17 +52,20 @@ $(function () {
             if (!inputField)
                 return;
 
-            $(inputField).bind('input', function () {//binds one or more related functions
+            $(inputField).on('input', function () {//Attach an event handler function (Prev: binds one or more related functions)
                 var finalFormula = initialFormula;
                 $.each(inputFieldsInvolved, function (keycampo, fieldName) {
+                    // removes #-s from formula and gets the value for each part
                     finalFormula = finalFormula.replace(fieldName, $("[data-input-field ='" + fieldName.replace('#', '').replace('#', '') + "'").val().replace(",", "."));
                 });
+                // alert(inputFieldsInvolved.length);throw new Error('error');
                 try {
                     if (inputFieldsInvolved.length > 1)
                         currentField.val(eval(finalFormula).toFixed(0));//Corrige erro da subtrao de 0.3 - 0.1 = 0,1999999...
                     else
                         currentField.val(finalFormula);
 
+                    // alert(currentField);throw new Error('error');
                     var mascara = currentField.attr("data-mask");
 
                     if (mascara != undefined && mascara != "" && currentField.mask != undefined) {//verifica se utiliza componente mascara

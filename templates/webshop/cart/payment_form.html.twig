@@ -1,0 +1,40 @@
+
+        <div class="row">
+            {% if not form.payment.payment.vars.valid %}
+            <div class="col-lg-12 mb-3">
+                <div class="alert alert-danger" role="alert">	{{ form.payment.payment.vars.errors }} </div>
+            </div>
+            {% endif %}
+            <div class="col-lg-12">
+                <div class="row">
+                    {% for choice in form.payment.payment %}
+                        <div class="col-lg-12 mb-3">
+                            <div class="border p-3 rounded JS--choiceContainer {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="custom-control custom-radio JS--Button-pickChoice">
+                                            {#{% if choice.vars.checked is defined and choice.vars.checked == 1 %}visual-valami{% endif %}#}
+                                            <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {% if choice.vars.checked is defined and choice.vars.checked %}checked{% endif %}/>
+                                            <label class="custom-control-label h5 text-lg text-gray font-weight-bold" for="{{ choice.vars.id }}">
+                                                {{ choice.vars.label }}
+                                            </label>
+                                        </div>
+                                        <div class="text-muted mb-0 pl-4 pt-1" id="heading{{ loop.index }}">
+                                            {{ paymentMethods[loop.index0].short }}
+                                            <a tabindex="0" class="font-weight-normal outline-none link-muted" role="button" data-toggle="popover" data-trigger="focus" data-content="{{ paymentMethods[loop.index0].description }}">Bővebben&nbsp;</a>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 text-sm-right mt-3 mt-sm-0">
+                                        {% if paymentMethods[loop.index0].image is defined and paymentMethods[loop.index0].image != '' %}
+                                            <img class="img-fluid h-20px pl-4" src="{{ asset('/uploads/images/termekek/' ~ paymentMethods[loop.index0].image) }}" alt="{{ paymentMethods[loop.index0].name }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% do form.payment.payment.setRendered() %}
+                </div>
+            </div>
+        </div>

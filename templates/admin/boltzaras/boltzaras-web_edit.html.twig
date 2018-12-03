@@ -1,0 +1,92 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{# this tag only applies to the forms defined in this template #}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block page_content %}
+
+	<!-- page title -->
+	{{ include('/admin/_title_widget.html.twig') }}
+
+	<!-- header of default page content widget -->
+	{{ include('/admin/_header_of_default_page_content.html.twig') }}
+
+	<div class="row mb-2">
+		<div class="col-lg-8">
+			<!-- Kereso mezo + Filterek + Csoportos action opcio -->
+		</div>
+		<div class="col-lg-4">
+			<!-- Gombok -->
+			{#<div class="text-lg-right">#}
+			{#<a href="{{ path('inventory-supply-edit') }}" class="btn btn-success mb-2 mr-2"><i class="mdi mdi-basket mr-1"></i> Új bejövő áru rögzítése</a>#}
+			{#<a href="{{ path('inventory-product-edit') }}" class="btn btn-success mb-2"><i class="mdi mdi-package mr-1"></i> Új termék</a>#}
+			{#</div>#}
+		</div><!-- end col-->
+	</div>
+
+	{{ include('/admin/boltzaras/_boltzaras-web-form.html.twig') }}
+
+	<!-- footer of default page content widget -->
+	{{ include('/admin/_footer_of_default_page_content.html.twig') }}
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+    <script>
+        $(function() {
+            $('#JS--datum input').daterangepicker({
+                opens: 'right',
+                autoApply: true,
+                autoUpdateInput: false,
+                singleDatePicker: true,
+                maxDate: moment(),
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    separator: ' / ',
+                    applyLabel: 'Alkalmaz',
+                    cancelLabel: 'Mégse',
+                    daysOfWeek: [
+                        'V',
+                        'H',
+                        'K',
+                        'Sz',
+                        'Cs',
+                        'P',
+                        'Sz'
+                    ],
+                    monthNames: [
+                        'Január',
+                        'Február',
+                        'Március',
+                        'Április',
+                        'Május',
+                        'Június',
+                        'Július',
+                        'Augusztus',
+                        'Szeptember',
+                        'Október',
+                        'November',
+                        'December'
+                    ],
+                    firstDay: 1,
+                }
+            });
+
+//            $('.tulipan-datepicker input').val('');
+
+            $('#JS--datum input').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            });
+
+            $('#JS--datum input').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+        });
+    </script>
+{% endblock %}
+

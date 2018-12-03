@@ -3,18 +3,18 @@
 
 namespace App\Controller\Boltzaras;
 
+use App\Entity\Boltzaras;
+use App\Entity\BoltzarasWeb;
+use App\Form\BoltzarasFormType;
+use App\Form\BoltzarasWebFormType;
+use App\Form\DateRangeType;
+use App\Entity\DateRange;
+
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
-
-//az alabbibol fogja tudni hogy a Boltzaras entity-hez kapcsolodik es azzal dolgozik
-use App\Entity\Boltzaras;
-use App\Form\BoltzarasFormType;
-//use App\Controller\Boltzaras\DateRangeController;
-use App\Form\DateRangeType;
-use App\Entity\DateRange;
 
 use App\Pagination\PaginatedCollection;
 
@@ -143,7 +143,42 @@ class BoltzarasController extends Controller
         ]);
     }
 
-	
+    /**
+     * @Route("/boltzaras/webshop/edit/{id}", name="boltzaras-webshop-edit")
+     */
+    public function editBoltzarasWebshop(Request $request, ?BoltzarasWeb $boltzarasWeb, $id = null)
+    {
+        if (!$boltzarasWeb) {
+            // new BoltzarasWeb
+            $form = $this->createForm(BoltzarasWebFormType::class);
+            $title = 'Új webes boltzárás';
+        } else {
+            // edit BoltzarasWeb
+            $form = $this->createForm(BoltzarasWebFormType::class, $boltzarasWeb);
+            $title = 'Webes boltzárás módosítása';
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $boltzarasWeb = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($boltzarasWeb);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Webes boltzárás sikeresen elmentve!');
+
+            return $this->redirectToRoute('boltzaras_list');
+
+        }
+
+        return $this->render('admin/boltzaras/boltzaras-web_edit.html.twig', [
+            'form' => $form->createView(),
+            'title' => $title,
+        ]);
+    }
+
 
 //	/**
 //	 * @Route("/boltzaras/show/{id}", name="boltzaras_show")
@@ -206,6 +241,10 @@ class BoltzarasController extends Controller
                 ->getRepository(Boltzaras::class)
                 ->sumAllBetweenDates($start, $end)
                 ->getSingleResult();
+            $totalWebshopForgalom = $this->getDoctrine()
+                ->getRepository(BoltzarasWeb::class)
+                ->sumAllBetweenDates($start, $end)
+                ->getSingleResult();
         } else {
             $queryBuilder = $this->getDoctrine()
                 ->getRepository(Boltzaras::class)
@@ -213,6 +252,10 @@ class BoltzarasController extends Controller
             //->findAllGreaterThanKassza(10);
             $totalKeszpenzEsBankkartya = $this->getDoctrine()
                 ->getRepository(Boltzaras::class)
+                ->sumAllQueryBuilder()
+                ->getSingleResult();
+            $totalWebshopForgalom = $this->getDoctrine()
+                ->getRepository(BoltzarasWeb::class)
                 ->sumAllQueryBuilder()
                 ->getSingleResult();
         }
@@ -237,8 +280,6 @@ class BoltzarasController extends Controller
             $jelentes[] = $result;
         }
 
-        //dump($jelentes);die;
-
         if (!$jelentes) {
 //            throw $this->createNotFoundException(
 //                'Nem talált egy boltzárást sem! ' );
@@ -255,7 +296,6 @@ class BoltzarasController extends Controller
 
         $paginatedCollection = new PaginatedCollection($jelentes, $pagerfanta->getNbResults());
 
-
         // render a template, then in the template, print things with {{ jelentes.munkatars }}
         return $this->render('admin/boltzaras/boltzaras_list.html.twig', [
             'jelentesek' => $jelentes,
@@ -266,6 +306,8 @@ class BoltzarasController extends Controller
             'dateRangeForm' => $dateRangeForm->createView(),
             'keszpenz' => $totalKeszpenzEsBankkartya['keszpenz'],
             'bankkartya' => $totalKeszpenzEsBankkartya['bankkartya'],
+            'kassza' => $totalKeszpenzEsBankkartya['kassza'],
+            'webshop' => $totalWebshopForgalom['webshopforgalom'],
         ]);
 
 

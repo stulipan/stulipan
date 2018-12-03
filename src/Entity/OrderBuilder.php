@@ -51,15 +51,11 @@ class OrderBuilder
     
     public function __construct(OrderSessionStorage $storage, EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher, Security $user)
     {
-
         $this->storage = $storage;
         $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->customer = $user->getUser();
         $this->order = $this->getCurrentOrder();
-//        dump($this->getCurrentOrder());
-//        $this->order->set($this->getCurrentOrder());
-
     }
 
     public function getId(): int
@@ -73,18 +69,26 @@ class OrderBuilder
      */
     public function getCustomer()
     {
-        return $this->customer->getId();
+        return $this->customer;
+//        return $this->customer->getId();
     }
-        /**
+
+    /**
      * @return Order
      */
     public function getCurrentOrder(): Order
     {
+        /**
+         * Returns the Order which is in the session, if any
+         */
         $order = $this->storage->getOrderById();
         if ($order !== null) {
             return $order;
         }
 
+        /**
+         * Creates a new Order (with id!) if there's none in the session
+         */
         $newOrder = new Order;
         $newOrder->setCustomer($this->customer);
 //        $newOrder->setPayment(1);
@@ -132,6 +136,19 @@ class OrderBuilder
             $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
         }
 
+    }
+
+    /**
+     * @param Recipient $recipient
+     */
+    public function setRecipient(Recipient $recipient): void
+    {
+        $this->order->setRecipient($recipient);
+        // Run events
+        $event = new GenericEvent($this->order);
+        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+        $this->entityManager->persist($this->order);
+        $this->entityManager->flush();
     }
 
     /**
@@ -240,7 +257,7 @@ class OrderBuilder
      * @param string $message
      * @param string $messageAuthor
      */
-    public function setMessageAndAuthor(string $message, string $messageAuthor): void
+    public function setMessageAndAuthor(?string $message, ?string $messageAuthor): void
     {
         if ($this->order) {
             $this->order->setMessage($message);

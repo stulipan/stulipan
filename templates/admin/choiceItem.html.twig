@@ -1,0 +1,12 @@
+<div class="visual-picker visual-picker-sm has-peekX mr-2">
+    <input type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
+    <label class="visual-picker-figure required" for="{{ choice.vars.id }}">
+                                    <span class="visual-picker-content">
+                                        <span class="tile tile-lg">
+                                        {#<i class="text-lg fas fa-file-contract"></i>#}
+                                            <h6>{{ choice.vars.label }}</h6>
+                                        </span>
+                                    </span>
+    </label>
+    {#<span class="visual-picker-peek">{{ choice.vars.label }}</span>#}
+</div>

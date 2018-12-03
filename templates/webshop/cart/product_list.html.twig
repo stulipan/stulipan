@@ -1,0 +1,50 @@
+
+{% for item in order.items %}
+    <!-- Item in cart -->
+    <div class="cart-item">
+        <div class="row d-flex align-items-center text-center">
+
+            <div class="col-lg-12">
+                {#{{ include('/webshop/site/flash_message_widget.html.twig') }}#}
+            </div>
+
+            <div class="col-9 pr-0">
+                <div class="d-flex align-items-center">
+                    <a href="{{ path('site_product_show', {'id': item.product.id}) }}" class="">
+                        <img src="{{ asset('/uploads/images/termekek/' ~ item.product.image) }}" alt="..." class="cart-item-img">
+                    </a>
+                    <div class="cart-title text-left">
+                        <p class="text-muted mb-0">
+                            Ár: {{ item.price |number_format(0, ',', ' ') }} Ft <br>
+                            Összesen: {{ (item.price * item.quantity) |number_format(0, ',', ' ') }} Ft <br>
+                        </p>
+                        {#<span class="text-muted">Ár: {{ item.price |number_format(0, ',', ' ') }} Ft</span> <br>#}
+                        {#<span class="text-muted">Összesen: {{ (item.price * item.quantity) |number_format(0, ',', ' ') }} Ft</span> <br>#}
+                        <a href="{{ path('site_product_show', {'id': item.product.id}) }}" class="text-uppercase text-dark"><strong>{{ item.product.productName }}</strong></a><br>
+                        <span class="text-muted text-sm">Size: Large</span><br>
+                        <span class="text-muted text-sm">Colour: Green</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2 px-0">
+                <div class="d-flex align-items-center">
+                    <div class="quantity d-flex align-items-center JS--formWrapper">
+                        {{ render(controller('App\\Controller\\Shop\\CartController::setItemQuantityForm', {'id' : item.id})) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-1 pl-0">
+                <!-- Remove item button -->
+                {{ item.id }} <br>
+                <a href="" class="JS--Button-removeItem cart-remove btn-link" data-url="{{ path('cart-removeItem', {'id': item.id}) }}"><i class="delete fa fa-times"></i></a>
+
+                {#{{ render(controller('App\\Controller\\Shop\\CartController::removeItemForm', {'id' : item.id})) }}#}
+                <!-- /Remove item button -->
+            </div>
+
+        </div>
+    </div>
+    <!-- /Item in cart -->
+{% endfor %}

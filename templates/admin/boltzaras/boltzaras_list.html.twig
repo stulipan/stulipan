@@ -48,10 +48,11 @@
                             <i class="fas fa-shopping-basket text-muted fa-lg"></i>
                         </div>
                         <h5 class="text-muted font-weight-normal mt-0">Készpénz</h5>
-                        <h3 class="text-gray font-weight-normal my-1">{{ keszpenz|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
+                        <h3 class="text-gray my-0">{{ keszpenz|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
+                        <span class="text-sm font-weight-normal">&nbsp;</span>
                     </div>
                 </div>
-            </div> <!-- end col-->
+            </div> 
 
             <div class="col-xl-3 col-lg-6 col-6">
                 <div class="card widget-flat mb-2 mb-lg-3">
@@ -60,22 +61,41 @@
                             <i class="far fa-credit-card text-muted fa-lg"></i>
                         </div>
                         <h5 class="text-muted font-weight-normal mt-0">Bankkártya</h5>
-                        <h3 class="text-gray font-weight-normal my-1">{{ bankkartya|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
+                        <h3 class="text-gray my-0">{{ bankkartya|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
+                        <span class="text-sm font-weight-normal">&nbsp;</span>
                     </div>
                 </div>
-            </div> <!-- end col-->
+            </div>
 
-            {#<div class="col-xl-3 col-lg-6 col-6">#}
-                {#<div class="card widget-flat bg-info-lighten mb-2 mb-lg-3">#}
-                    {#<div class="card-body">#}
-                        {#<div class="float-right">#}
-                            {#<i class="fas fa-shopping-cart text-white"></i>#}
-                        {#</div>#}
-                        {#<h5 class="text-white font-weight-normal mt-0">Webshop</h5>#}
-                        {#<h3 class="my-1 text-white">{{ 0|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>#}
-                    {#</div>#}
-                {#</div>#}
-            {#</div> <!-- end col-->#}
+            <div class="col-xl-3 col-lg-6 col-6">
+                <div class="card widget-flat bg-success text-white mb-2 mb-lg-3">
+                    <div class="card-body">
+                        <div class="float-right">
+                            <i class="fas fa-dollar-sign text-white fa-lg"></i>
+                        </div>
+                        <h5 class="font-weight-normal mt-0">Bolt összesen</h5>
+                        <h3 class="my-0">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
+                        <span class="text-sm font-weight-normal">Mr. Feka: {{ (keszpenz + bankkartya - kassza)|number_format(0, ',', ' ') }} Ft</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-6 col-6">
+                <div class="card widget-flat bg-info text-white mb-2 mb-lg-3">
+                    <div class="card-body">
+                        <div class="float-right">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h5 class="font-weight-normal mt-0">Webshop</h5>
+                        <h3 class="my-0">{{ webshop|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
+                        <span class="text-sm font-weight-normal">*csak 2018 adatok</span>
+                    </div>
+                </div>
+            </div>
+
+            {#<div class="col-xl-12">#}
+                {#Bolt + Webshop: {{ (keszpenz + bankkartya + webshop)|number_format(0, ',', ' ') }} Ft#}
+            {#</div>#}
 
             {#<div class="col-xl-3 col-lg-6 col-6">#}
                 {#<div class="card widget-flat mb-2 mb-lg-3">#}
@@ -87,19 +107,9 @@
                         {#<h3 class="text-gray font-weight-normal my-1">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>#}
                     {#</div>#}
                 {#</div>#}
-            {#</div> <!-- end col-->#}
+            {#</div> #}
 
-            <div class="col-xl-3 col-lg-6 col-6">
-                <div class="card widget-flat bg-success text-white mb-2 mb-lg-3">
-                    <div class="card-body">
-                        <div class="float-right">
-                            <i class="fas fa-dollar-sign text-white fa-lg"></i>
-                        </div>
-                        <h5 class="font-weight-normal mt-0">Összbevétel</h5>
-                        <h3 class="font-weight-normal my-1">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
-                    </div>
-                </div>
-            </div> <!-- end col-->
+
 
         </div>
 
@@ -120,10 +130,11 @@
             <div class="col-lg-4">
                 <div class="text-lg-right my-1 my-lg-0">
                     <a href="{{ path('boltzaras_new') }}" class="btn btn-success mb-2 mr-2"><i class="fas fa-plus-circle mr-1"></i> Új jelentés</a>
+                    <a href="{{ path('boltzaras-webshop-edit') }}" class="btn btn-info mb-2"><i class="fas fa-shopping-cart mr-1"></i> Új web forgalom</a>
                     {#<button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">#}
                         {#<i class="fas fa-plus mr-1"></i> Új ablak</button>#}
                 </div>
-            </div><!-- end col-->
+            </div>
         </div>
 
 
@@ -149,7 +160,7 @@
 				{% if jelentesek is defined %}
 				{% for jelentes in jelentesek %}
 				<tr>
-                    <td class="align-middle font-weight-bold text-sm">{{ jelentes.idopont|date('M d, Y')}}</th>
+                    <td class="align-middle font-weight-bold text-sm">{{ jelentes.idopont|date('M d, Y')}}</td>
 				    <td class="align-middle text-right text-nowrap">{{ jelentes.kassza|number_format(0, ',', ' ') }}</td>
 				    <td class="align-middle text-right text-nowrap">{{ jelentes.bankkartya|number_format(0, ',', ' ') }}</td>
 				    <td class="align-middle text-right text-nowrap">{{ jelentes.keszpenz|number_format(0, ',', ' ') }}</td>
@@ -168,7 +179,7 @@
 				{% endfor %}
 				{% else %}
 				<tr>
-			        <li><em>nincs user found</em></li>
+			        <td><li><em>nincs user found</em></li></td>
 			    </tr>
 				{% endif %}
 			  </tbody>
@@ -183,7 +194,6 @@
         <!-- footer of default page content widget -->
         {{ include('/admin/_footer_of_default_page_content.html.twig') }}
 
-	</div>
 	{% endblock %}
 {% endblock %}
 
@@ -193,6 +203,57 @@
 
 {% block javascripts %}
     {{ parent() }}
+    {#
+     A dateRange-picker-widget.html.twig fajlban van hasznalva
+ #}
+    <script>
+        $(function() {
+            $('#JS--idosav input').daterangepicker({
+                opens: 'right',
+                autoApply: true,
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    separator: ' / ',
+                    applyLabel: 'Alkalmaz',
+                    cancelLabel: 'Mégse',
+                    daysOfWeek: [
+                        'V',
+                        'H',
+                        'K',
+                        'Sz',
+                        'Cs',
+                        'P',
+                        'Sz'
+                    ],
+                    monthNames: [
+                        'Január',
+                        'Február',
+                        'Március',
+                        'Április',
+                        'Május',
+                        'Június',
+                        'Július',
+                        'Augusztus',
+                        'Szeptember',
+                        'Október',
+                        'November',
+                        'December'
+                    ],
+                    firstDay: 1,
+                }
+            });
+
+            $('#JS--idosav input').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' / ' + picker.endDate.format('YYYY-MM-DD'));
+            });
+
+            $('#JS--idosav input').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+
+        });
+    </script>
 {% endblock %}
         
 

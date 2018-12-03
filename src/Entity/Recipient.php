@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\TimestampableTrait;
 use App\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -19,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Recipient
 {
+    use TimestampableTrait;
 
     /**
      * @var int
@@ -33,6 +35,7 @@ class Recipient
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a címzett nevét.")
      */
     private $name='';
 
@@ -44,6 +47,7 @@ class Recipient
      * @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=false)
      * @Assert\NotBlank(message="Egy címzetnek kell legyen egy címe.")
+     * @Assert\Valid()
      */
     private $address;
 
@@ -51,10 +55,11 @@ class Recipient
      * @var User
      *
      * ==== Many Recipients belong to one Customer ====
+     * ==== inversed By="recipients" => a User entitásban definiált 'recipients' attibútumról van szó; A Címzettet így kötjük vissza a Customerhez
      *
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false)
-     * @ Assert\NotBlank(message="Egy customernek van egy címzetje, azaz egy Recipient.")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="recipients")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @Assert\NotBlank(message="Egy címzetnek kell legyen felhasználója/Customer.")
      */
     private $customer;
 
@@ -63,6 +68,7 @@ class Recipient
      * @var int
      *
      * @ORM\Column(name="phone", type="integer", nullable=false)
+     * @Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $phone;
 

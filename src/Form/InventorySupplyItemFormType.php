@@ -18,7 +18,6 @@ class InventorySupplyItemFormType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $loop = 0;
         $builder
             ->add('product', InventoryProductFormType::class, [
                 'label' => false,
@@ -40,6 +39,17 @@ class InventorySupplyItemFormType extends AbstractType
                 'attr' => ['placeholder' => ''],
                 'required' => false,
             ])
+//            ->add('markup', NumberType::class, [
+//                'label' => 'Szorzó',
+//                'attr' => ['placeholder' => ''],
+//                'required' => false,
+//            ])
+            ->add('afterMarkup', NumberType::class, [
+                'label' => 'Szorzó után',
+                'attr' => ['placeholder' => ''],
+                'required' => false,
+                'mapped' => false,
+            ])
             ->add('retailPrice', NumberType::class, [
                 'label' => 'Eladási ár',
                 'attr' => ['placeholder' => ''],
@@ -54,7 +64,11 @@ class InventorySupplyItemFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => InventorySupplyItem::class,
         ]);
-    
+    }
+
+    public function getBlockPrefix()
+    {
+        return '';
     }
 
 }

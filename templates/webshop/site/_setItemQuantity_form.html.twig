@@ -1,8 +1,5 @@
-        {{ form_start(form) }}
+    {{ form_start(quantityForm, {'attr': {'class': "form-control-sm no-spinners"}}) }}
         <div class="float-md-left">
-            {{ form_widget(form.quantity) }}
+            {{ form_widget(quantityForm.quantity, {'attr': {'class': "form-control-sm no-spinners p-0 JS--Dropdown-setItemQuantity"}}) }}
         </div>
-        <div class="float-md-left">
-            {{ form_widget(form.submit) }}
-        </div>
-        {{ form_end(form) }}
+    {{ form_end(quantityForm) }}

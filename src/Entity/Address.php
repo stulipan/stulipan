@@ -38,6 +38,7 @@ class Address
      * @var string
      *
      * @ORM\Column(name="street", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a címet.")
      */
     private $street='';
 
@@ -45,15 +46,16 @@ class Address
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a települést.")
      */
-    private $city='';
+    private $city;
 
     /**
      * @var int
      *
-     * @ Assert\NotBlank()
-     * @ Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
-     * @ORM\Column(name="zip", type="integer")
+     * @Assert\Range(min=0, minMessage="Hibás irányítószám.")
+     * @Assert\NotBlank(message="Add meg az irányítószámot.")
+     * @ORM\Column(name="zip", type="integer", nullable=false)
      */
     private $zip;
 
@@ -61,6 +63,7 @@ class Address
      * @var string
      *
      * @ORM\Column(name="province", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a megyét.")
      */
     private $province='';
 
@@ -68,6 +71,7 @@ class Address
      * @var string
      *
      * @ORM\Column(name="country", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg az országot.")
      */
     private $country='';
 
@@ -99,7 +103,7 @@ class Address
     /**
      * @var string $street
      */
-    public function setStreet(string $street)
+    public function setStreet(?string $street)
     {
         $this->street = $street;
     }
@@ -115,7 +119,7 @@ class Address
     /**
      * @var string $city
      */
-    public function setCity(string $city)
+    public function setCity(?string $city)
     {
         $this->city = $city;
     }
@@ -131,7 +135,7 @@ class Address
     /**
      * @var int $zip
      */
-    public function setZip(int $zip)
+    public function setZip(?int $zip)
     {
         $this->zip = $zip;
     }
@@ -147,7 +151,7 @@ class Address
     /**
      * @var string $province
      */
-    public function setProvince(string $province)
+    public function setProvince(?string $province)
     {
         $this->province = $province;
     }
@@ -163,7 +167,7 @@ class Address
     /**
      * @var string $country
      */
-    public function setCountry(string $country)
+    public function setCountry(?string $country)
     {
         $this->country = $country;
     }
@@ -219,7 +223,7 @@ class Address
     /**
      * @var int $type
      */
-    public function setAddressType(int $type)
+    public function setAddressType(?int $type)
     {
         $this->addressType = $type;
     }

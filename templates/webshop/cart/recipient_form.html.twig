@@ -1,56 +1,57 @@
-{{ form_start(form) }}
+{% form_theme recipientForm 'bootstrap_4_layout.html.twig' %}
+{{ form_start(recipientForm, { 'attr': {'class': 'JS--editForm-recipient' }}) }}
         <div class="row">
             <div class="col-lg-8">
                 <p class="text-sm text-muted">Ide írd be annak a személynek a nevét, címét, telefonszámát aki kapni fogja a virágot/ajándékot.</p>
             </div>
 
-            <!-- delivery fields -->
-
             <div class="form-group col-lg-6">
-                <label for="{{ form.name.vars.full_name }}" class="form-label">Címzett neve</label>
-                {#<input type="text" name="fullname_shipping" placeholder="Szabó Lajos" id="{{ form.name.vars.id }}" class="form-control">#}
-                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                <label for="{{ recipientForm.name.vars.full_name }}" class="recipientForm-label">Címzett neve</label>
+                {#<input type="text" name="fullname_shipping" placeholder="Szabó Lajos" id="{{ recipientForm.name.vars.id }}" class="form-controlX">#}
+                {{ form_widget(recipientForm.name, {'attr': {'class': 'form-controlX'}}) }}
+                {{ form_errors(recipientForm.name) }}
             </div>
             <div class="form-group col-lg-6">
-                <label for="{{ form.address.street.vars.full_name }}" class="form-label">Címe</label>
-                <!--input type="text" name="street_shipping" placeholder="123 Main St." id="street_shipping" class="form-control"-->
-                {{ form_widget(form.address.street, {'attr': {'class': 'form-control'}}) }}
+                <label for="{{ recipientForm.address.street.vars.full_name }}" class="recipientForm-label">Címe</label>
+                {{ form_widget(recipientForm.address.street, {'attr': {'class': 'form-controlX'}}) }}
+                {{ form_errors(recipientForm.address.street) }}
             </div>
             <div class="form-group col-lg-6">
-                <label for="{{ form.address.city.vars.full_name }}" class="form-label">Város</label>
-                <!--input type="text" name="city_shipping" placeholder="City" id="city_shipping" class="form-control"-->
-                {{ form_widget(form.address.city, {'attr': {'class': 'form-control'}}) }}
+                <label for="{{ recipientForm.address.city.vars.full_name }}" class="recipientForm-label">Város</label>
+                {{ form_widget(recipientForm.address.city, {'attr': {'class': 'form-controlX'}}) }}
+                {{ form_errors(recipientForm.address.city) }}
             </div>
             <div class="form-group col-lg-6">
-                <label for="{{ form.address.zip.vars.full_name }}" class="form-label">Irányítószám</label>
-                <!--input type="text" name="zip_shipping" placeholder="Postal code" id="zip_shipping" class="form-control"-->
-                {{ form_widget(form.address.zip, {'attr': {'class': 'form-control'}}) }}
+                <label for="{{ recipientForm.address.zip.vars.full_name }}" class="recipientForm-label">Irányítószám</label>
+                {{ form_widget(recipientForm.address.zip, {'attr': {'class': 'form-controlX'}}) }}
+                {{ form_errors(recipientForm.address.zip) }}
             </div>
             <div class="form-group col-lg-6">
-                <label for="{{ form.address.province.vars.full_name }}" class="form-label">Megye</label>
-                <!--input type="text" name="state_shipping" placeholder="State" id="state_shipping" class="form-control"-->
-                {{ form_widget(form.address.province, {'attr': {'class': 'form-control'}}) }}
+                <label for="{{ recipientForm.address.province.vars.full_name }}" class="recipientForm-label">Megye</label>
+                {{ form_widget(recipientForm.address.province, {'attr': {'class': 'form-controlX'}}) }}
+                {{ form_errors(recipientForm.address.province) }}
             </div>
             <div class="form-group col-lg-6">
-                <label for="{{ form.address.country.vars.full_name }}" class="form-label">Ország</label>
-                <!--input type="text" name="state_shipping" placeholder="State" id="state_shipping" class="form-control"-->
-                {{ form_widget(form.address.country, {'attr': {'class': 'form-control'}}) }}
+                <label for="{{ recipientForm.address.country.vars.full_name }}" class="recipientForm-label">Ország</label>
+                {{ form_widget(recipientForm.address.country, {'attr': {'class': 'form-controlX'}}) }}
+                {{ form_errors(recipientForm.address.country) }}
             </div>
             <div class="form-group col-lg-6">
-                <label for="{{ form.phone.vars.full_name }}" class="form-label">Telefonszám</label>
-                {#<input type="text" name="phonenumber_shipping" placeholder="Phone Number" id="phonenumber_shipping" class="form-control">#}
-                {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
+                <label for="{{ recipientForm.phone.vars.full_name }}" class="recipientForm-label">Telefonszám</label>
+                {{ form_widget(recipientForm.phone, {'attr': {'class': 'form-controlX'}}) }}
+                {{ form_errors(recipientForm.phone) }}
             </div>
             <!-- /delivery fields -->
 
             <div class="form-group col-lg-12">
-                <!--button type="submit" class="btn btn-success btn-lg mb-1"> <i class="fa fa-shopping-cart mr-2"></i>Kosárba rakom</button-->
-                <button type="submit" class="btn btn-primary">Tovább <i class="fa fa-chevron-right"></i></button>
+                <button type="submit" class="btn btn-primary mr-2">Tovább <i class="fa fa-chevron-right"></i></button>
+                <a href="" class="JS--Button-getRecipients" data-url="{{ path('cart-getRecipients') }}">Mégse</a>
             </div>
 
         </div>
 
+{{ form_end(recipientForm) }}
+{#{% do recipientForm.setRendered() %}#}
 
 
 
-{{ form_end(form) }}

@@ -38,6 +38,11 @@ class InventorySupplyFormType extends AbstractType
             'attr' => ['autocomplete' => 'off'],
         ]);
     }
+
+    public function getBlockPrefix()
+    {
+        return '';
+    }
     
 }
 

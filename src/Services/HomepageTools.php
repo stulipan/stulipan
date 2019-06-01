@@ -4,13 +4,13 @@ namespace App\Services;
 
 use App\Entity\Product;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 //use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 //use Symfony\Bridge\Doctrine\RegistryInterface;
 
 
 
-class HomepageTools extends Controller
+class HomepageTools extends AbstractController
 {
 
     public function generateProductList()

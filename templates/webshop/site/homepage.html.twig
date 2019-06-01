@@ -16,33 +16,39 @@
 			<div class="row">
 				<div class="col-lg-4 d-flex d-noneX d-md-blockX align-items-lg-stretch order-2 order-lg-1">
 
-						<div class="row">
-							<div class="col-lg-12 col-sm-6">
-								<div style="background: center center url(https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/photo/rahul-anil-214671-unsplash.jpg) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-5 text-center mb-30px mb-lg-0"><a href="category.html" class="tile-link"> </a>
-									<div class="w-100">
-										<h1 class="text-uppercase">Men</h1>
-										<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>
+						<div class="row flex-grow-1">
+							<div class="col-lg-12 col-sm-6 d-flex align-items-stretch mb-lg-30px">
+								<div style="background: center center url(https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/cache/w0h0q80np1/Banner/card/otthon-card-8.jpg?v=1547034881) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-5 text-center mb-30px mb-lg-0"><a href="category.html" class="tile-link"> </a>
+									<div class="w-100 text-light">
+										<h3 class="text-uppercase font-weight-bold letter-spacing-0 mb-0">Otthon dekor</h3>
+                                        <a href="category.html" class="btn btn-link">Shop now <i class="fa-arrow-right fa ml-2"></i></a>
+										{#<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>#}
 									</div>
 								</div>
 							</div>
-							<div class="col-lg-12 col-sm-6 d-flex align-items-lg-end">
-								<div style="background: center center url(https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/photo/brooke-cagle-195856-unsplash.jpg) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-4 text-center mb-30px mb-lg-0"><a href="category.html" class="tile-link"> </a>
+							<div class="col-lg-12 col-sm-6 d-flex align-items-stretch">
+								<div style="background: center center url(https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/data/Banner/card/IMG_0826-2.jpg?v=1547034881) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-4 text-center mb-30px mb-lg-0"><a href="category.html" class="tile-link"> </a>
 									<div class="w-100">
-										<h1 class="text-uppercase">SALES</h1>
-										<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>
+										<h3 class="text-uppercase font-weight-bold letter-spacing-0">Virágdobozok</h3>
+										{#<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>#}
 									</div>
 								</div>
 							</div>
 						</div>
 
 				</div>
-				<div class="col-lg-8 order-1 order-lg-2 mb-lg-0 mb-30px">
-                    <!-- {{ asset('uploads/images/banner/IMG_1608.jpg') }}  -->
-					<div class="card light-overlay text-dark border-0"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/photo/pete-bellis-189599-unsplash.jpg" alt="Card image" class="card-img"><a href="category.html" class="tile-link"> </a>
-						<div class="card-img-overlay d-flex align-items-center">
-							<div class="text-center w-100 overlay-content">
-								<h1 class="text-uppercase">Virágküldés</h1>
-								<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>
+				<div class="col-lg-8 order-1 order-lg-2 mb-lg-0 mb-30px align-items-stretch" style="height: 487px;">
+					{#<div class="card light-overlay text-dark border-0">#}
+                    <div class="light-overlayX d-flex align-items-center text-white border-0 h-100 py-6 py-lg-5 text-center mb-30px mb-lg-0" style="height: 748px; background: center center url(http://www.stulipan.dfr/uploads/images/termekek/vegyes-pasztell-csokor-3.jpg) no-repeat; background-size: cover;">
+                        <a href="category.html" class="tile-link"> </a>
+                    </div>
+
+						{#<img src="https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/cache/w0h0q80np1/Landing/menyasszonyi-csokor-ankert-1.jpg?v=null.1510219410" alt="Card image" class="card-img">#}
+                        <a href="{{ path('site_product_listall') }}" class="tile-link"> </a>
+						<div class="card-img-overlay d-flex align-items-end">
+							<div class="text-center w-100 overlay-content p-2 text-light">
+								<h1 class="text-uppercase mb-0">Virágküldés</h1>
+								<p class="lead font-weight-bold">Budapestre és környékére. Házhozszállítás akár aznap vagy későbbi dátumra.</p>
 							</div>
 						</div>
 					</div>
@@ -63,7 +69,7 @@
                         <h2 class="hero-heading">Virágdobozok</h2>
                     </div>
 
-                    {{ include('/webshop/site/product_list_widget.html.twig') }}
+                    {{ include('/webshop/site/product-list-widget.html.twig') }}
 
 
                 </div>

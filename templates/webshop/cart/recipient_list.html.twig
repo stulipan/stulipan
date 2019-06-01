@@ -1,23 +1,56 @@
 <div class="row">
-{% if recipients is defined %}
-    {% for recipient in recipients %}
-        {{ include('webshop/cart/recipient_widget.html.twig') }}
-    {% endfor %}
-    <div class="col-md-6 col-lg-4">
-        <div class="card rounded visual-picker border-dashed  d-flex align-items-center pt-4 pb-5">
+    <div class="col-lg-12">
+        <div class="row row-narrow">
+        {% if recipients is defined %}
+            {% for recipient in recipients %}
+                {#{{ include('webshop/cart/recipient_widget.html.twig') }}#}
+                <div class="col-md-6 col-lg-6 col-narrow mb-10px">
+                    <div class="JS--item card card--choice h-100 {% if selectedRecipient is defined and selectedRecipient == recipient.id %} selected {% endif %}">
+                        <div class="minicard--body selected-body d-flex flex-column h-100">
+                            <div class="font-weight-bold card-titleX mb-1">{{ recipient.name }}</div>
+                            <div class="mb-3">
+                                <span class="minicard--address">Telefonszám: <em>{{ recipient.phone }}</em></span> <br>
+                                <span class="minicard--address">{{ recipient.address.zip }} {{ recipient.address.city }}, {{ recipient.address.street }}</span> <br>
+                                <span class="minicard--address">{{ recipient.address.province }}, {{ recipient.address.country }}</span>
+                            </div>
+                            <div class="d-flex align-items-end h-100">
+                                <div>
+                                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        <a class="JS--Button-pickRecipient minicard--mainLink" href="{{ path('cart-pickRecipient', {id: recipient.id}) }}">Szállítás erre a címre</a>
+                                    {% endif %}
 
-            <a href="" class="JS--editButton-recipient tile-link text-secondary" data-url="{{ path('cart-editRecipient') }}"></a>
-            <div class="card-body w-100 pt-4 pb-4 mt-1">
-                {#<h5 class="card-title">{{ recipient.name }} {{ recipient.id }}</h5>#}
-                <span class="visual-picker-content card-text text-center text-secondary">
+                                    <a href="" class="JS--Button-editRecipient minicard--toolLink" data-url="{{ path('cart-editRecipient', {id: recipient.id}) }}">Szerkeszt</a> |
+                                    <a href="#" class="minicard--toolLink">Töröl</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="col-lg-12 col-narrow mt-10px">
+                    <a href="" class="JS--Button-editRecipient btn btn-outline-dark px-3" data-url="{{ path('cart-editRecipient') }}"><i class="fas fa-plus mr-1"></i> Hozáadás</a>
+
+                </div>
+                {#<div class="col-md-6 col-lg-4 col-narrow">#}
+                    {#<div class="card visual-picker border-dashed  d-flex align-items-center pt-4 pb-5">#}
+
+                        {#<a href="" class="JS--Button-editRecipient tile-link minicard--toolLink text-sm" data-url="{{ path('cart-editRecipient') }}"></a>#}
+                        {#<div class="card-body w-100 pt-4 pb-4 mt-1">#}
+                            {#<h5 class="card-title">{{ recipient.name }} {{ recipient.id }}</h5>#}
+                            {#<span class="visual-picker-content card-text text-center">#}
                                 {#<span class="tile tile-lg">#}
 
-                    <i class="fas fa-plus fa-4x mb-2"></i>
-                        <h4>Új címzett</h4>
-                    {#</span>#}
-                </span>
-            </div>
+                                {#<i class="fas fa-plus fa-3x mb-2"></i>#}
+                        {#<span class="minicard--link d-block">Hozáadás</span>#}
+                                {#</span>#}
+                {#</span>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+            {% endif %}
+        {% endif %}
         </div>
     </div>
-{% endif %}
+
 </div>

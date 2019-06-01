@@ -13,6 +13,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * ShippingType is used in CheckoutFormType which is the Checkout page
+ */
 class ShippingType extends AbstractType
 {
 
@@ -31,7 +34,7 @@ class ShippingType extends AbstractType
                 'class' => Shipping::class,
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('s')
-                        ->orderBy('s.order', 'ASC');
+                        ->orderBy('s.ordering', 'ASC');
                 },
                 'choice_label' => 'name',
                 //'choice_label' => function($v) { return $v->getName(); },

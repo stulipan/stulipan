@@ -19,7 +19,7 @@ class PaymentRepository extends ServiceEntityRepository
     public function findAllOrdered()
      {
          $qb = $this->createQueryBuilder('p')
-             ->orderBy('p.order', 'ASC')
+             ->orderBy('p.ordering', 'ASC')
              ->getQuery();
 
          return $qb->execute();

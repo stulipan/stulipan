@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\InventoryProduct;
+use App\Entity\Inventory\InventoryProduct;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

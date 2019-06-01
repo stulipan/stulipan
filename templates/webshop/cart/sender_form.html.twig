@@ -1,47 +1,55 @@
 {# this tag only applies to the forms defined in this template #}
-{% form_theme senderForm 'bootstrap_4_layout.html.twig' %}
-{{ form_start(senderForm) }}
+{{ form_start(senderForm, { 'attr': {'class': 'JS--senderForm JS--editForm-sender' }}) }}
         <div class="row">
-            <div class="col-lg-8">
-                <p class="text-sm text-muted">Ide írd be annak a személynek a nevét, címét, telefonszámát aki kapni fogja a virágot/ajándékot.</p>
-            </div>
-            <!-- sender fields -->
+            {#<div class="col-lg-8">#}
+                {#<p class="text-sm text-muted">Ide írd be annak a személynek a nevét, címét, telefonszámát aki kapni fogja a virágot/ajándékot.</p>#}
+            {#</div>#}
+            
             <div class="form-group col-md-6">
-                <label for="{{ senderForm.name.vars.full_name }}" class="form-label">Neve</label>
-                {{ form_widget(senderForm.name, {'attr': {'class': 'form-control'}}) }}
+                <label for="{{ senderForm.name.vars.full_name }}" class="form-label">Név</label>
+                {{ form_widget(senderForm.name, {'attr': {'class': 'form-controlX'}}) }}
+                {{ form_errors(senderForm.name) }}
             </div>
             <div class="form-group col-md-6">
                 <label for="{{ senderForm.company.vars.full_name }}" class="form-label">Cégnév</label>
-                {{ form_widget(senderForm.company, {'attr': {'class': 'form-control', 'placeholder': 'Válalkozás Kft.' }}) }}
+                {{ form_widget(senderForm.company, {'attr': {'class': 'form-controlX', 'placeholder': 'Válalkozás Kft.' }}) }}
+                {{ form_errors(senderForm.company) }}
             </div>
             <div class="form-group col-md-6">
                 <label for="{{ senderForm.address.street.vars.full_name }}" class="form-label">Utca</label>
-                {{ form_widget(senderForm.address.street, {'attr': {'class': 'form-control' }}) }}
+                {{ form_widget(senderForm.address.street, {'attr': {'class': 'form-controlX' }}) }}
+                {{ form_errors(senderForm.address.street) }}
             </div>
             <div class="form-group col-md-6">
                 <label for="{{ senderForm.address.city.vars.full_name }}" class="form-label">Település</label>
-                {{ form_widget(senderForm.address.city, {'attr': {'class': 'form-control' }}) }}
+                {{ form_widget(senderForm.address.city, {'attr': {'class': 'JS--senderForm-city' }}) }}
+                {{ form_errors(senderForm.address.city) }}
             </div>
             <div class="form-group col-md-6">
                 <label for="{{ senderForm.address.zip.vars.full_name }}" class="form-label">Irányítószám</label>
-                {{ form_widget(senderForm.address.zip, {'attr': {'class': 'form-control' }}) }}
+                {{ form_widget(senderForm.address.zip, {'attr': {'class': 'JS--senderForm-zip', 'data-url' : path('cart-getPlaceByZip') }}) }}
+                {{ form_errors(senderForm.address.zip) }}
             </div>
             <div class="form-group col-md-6">
                 <label for="{{ senderForm.address.province.vars.full_name }}" class="form-label">Megye</label>
-                {{ form_widget(senderForm.address.province, {'attr': {'class': 'form-control' }}) }}
+                {{ form_widget(senderForm.address.province, {'attr': {'class': 'JS--senderForm-province' }}) }}
+                {{ form_errors(senderForm.address.province) }}
             </div>
             <div class="form-group col-md-6">
                 <label for="{{ senderForm.address.country.vars.full_name }}" class="form-label">Ország</label>
-                {{ form_widget(senderForm.address.country, {'attr': {'class': 'form-control' }}) }}
+                {{ form_widget(senderForm.address.country, {'attr': {'class': 'form-controlX' }}) }}
+                {{ form_errors(senderForm.address.country) }}
             </div>
             <div class="form-group col-md-6">
-                {#<label for="{{ senderForm.phone.vars.full_name }}" class="form-label">Telefonszám</label>#}
-                {#{{ form_widget(senderForm.phone, {'attr': {'class': 'form-control', 'placeholder': 'Válalkozás Kft.' }}) }}#}
+                <label for="{{ senderForm.phone.vars.full_name }}" class="form-label">Telefonszám</label>
+                {{ form_widget(senderForm.phone, {'attr': {'class': 'form-controlX', 'placeholder': '' }}) }}
+                {{ form_errors(senderForm.phone) }}
             </div>
             <!-- /sender fields -->
 
             <div class="form-group col-lg-12">
-                <button type="submit" class="btn btn-primary">Tovább <i class="fa fa-chevron-right"></i></button>
+                <button type="submit" class="btn btn-success mr-2">Mentés </button>
+                <a href="" class="JS--Button-getSenders text-secondary text-sm" data-url="{{ path('cart-getSenders') }}">Mégse</a>
             </div>
 
         </div>

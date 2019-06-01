@@ -3,31 +3,32 @@
 
 namespace App\Controller\Boltzaras;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
 //az alabbibol fogja tudni hogy a InventoryProduct entity-hez kapcsolodik es azzal dolgozik
-use App\Entity\InventoryProduct;
-use App\Entity\InventoryCategory;
-use App\Entity\InventorySupply;
-use App\Entity\InventorySupplyItem;
-use App\Form\InventoryProductFormType;
-use App\Form\InventorySupplyFormType;
-use App\Entity\InventoryWaste;
-use App\Entity\InventoryWasteItem;
-use App\Form\InventoryWasteFormType;
+use App\Entity\Inventory\InventoryProduct;
+use App\Entity\Inventory\InventoryCategory;
+use App\Entity\Inventory\InventorySupply;
+use App\Entity\Inventory\InventorySupplyItem;
+use App\Entity\Inventory\InventoryWaste;
+use App\Entity\Inventory\InventoryWasteItem;
+use App\Form\Inventory\InventoryProductFormType;
+use App\Form\Inventory\InventorySupplyFormType;
+use App\Form\Inventory\InventoryWasteFormType;
 
 use App\Pagination\PaginatedCollection;
 
 /**
  * @Route("/admin")
+ * @IsGranted("ROLE_MANAGE_INVENTORY")
  */
-class InventoryController extends Controller
+class InventoryController extends AbstractController
 {
 
     /**
@@ -170,8 +171,8 @@ class InventoryController extends Controller
                     $supply->removeItem($item);
                 }
             }
-            $supply->setUpdatedAt(new \DateTime('NOW'));
-            $supply->setCreatedAt(new \DateTime('NOW'));
+//            $supply->setUpdatedAt(new \DateTime('NOW'));
+//            $supply->setCreatedAt(new \DateTime('NOW'));
 
             /**
              * Végig megyek az Itemeken és hozzájuk rendelem az aktuális Supply-t
@@ -342,8 +343,8 @@ class InventoryController extends Controller
                     $waste->removeItem($item);
                 }
             }
-            $waste->setUpdatedAt(new \DateTime('NOW'));
-            $waste->setCreatedAt(new \DateTime('NOW'));
+//            $waste->setUpdatedAt(new \DateTime('NOW'));
+//            $waste->setCreatedAt(new \DateTime('NOW'));
 
             /**
              * Végig megyek az Itemeken és hozzájuk rendelem az aktuális Waste-t
@@ -424,8 +425,8 @@ class InventoryController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $items = $form->getData();
-            $items->setUpdatedAt(new \DateTime('NOW'));
-            $items->setCreatedAt(new \DateTime('NOW'));
+//            $items->setUpdatedAt(new \DateTime('NOW'));
+//            $items->setCreatedAt(new \DateTime('NOW'));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($items);

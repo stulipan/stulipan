@@ -1,60 +1,128 @@
     {{ form_start(form) }}
+    <div class="mb-2">
+        <span class="detail-option-heading font-weight-bold">1. Válasz csokortípust</span>
+    </div>
+    <div class="row">
+        {% for choice in form.selectedSubproduct %}
+            <div class="col-sm-4 col-4">
+            {{ include('webshop/site/choiceItem.html.twig') }}
+                {#{{ termek.subproducts[2].price }}#}
+            </div>
+        {% endfor %}
+        {% do form.selectedSubproduct.setRendered() %}
+
+        {#<div class="col-sm-4 col-4">#}
+            {#<div class="visual-picker visual-picker-sm has-peekX mr-1">#}
+                {#<input type="radio" name="fds" id="a1" checked>#}
+                {#<label class="visual-picker-figure bg-tulipan-gray required" for="a1">#}
+                    {#<span class="visual-picker-content text-muted">#}
+                        {#<h6 class="mb-1">Standard</h6>#}
+                                        {#<span> Ft</span>#}
+                    {#</span>#}
+                {#</label>#}
+            {#</div>#}
+        {#</div>#}
+        {#<div class="col-sm-4 col-4">#}
+            {#<div class="visual-picker visual-picker-sm has-peekX mr-1">#}
+                {#<input type="radio" name="fddsdsds" id="a2" >#}
+                {#id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>#}
+                {#<label class="visual-picker-figure bg-tulipan-gray required" for="a2">#}
+                    {#{% if choice.vars.checked is defined and choice.vars.checked == 1 %}visual-valami{% endif %}" for="{{ choice.vars.id }}">#}
+                    {#<span class="visual-picker-content text-muted">#}
+                                        {#<span class="tile tile-lg">#}
+                        {#<i class="text-lg fas fa-file-contract"></i>#}
+                        {#<h6 class="mb-1">Deluxe</h6>#}
+                                         {#<span>14.990 Ft</span>#}
+                        {#</span>#}
+                                    {#</span>#}
+                {#</label>#}
+                {#<span class="visual-picker-peek">{{ choice.vars.label }}</span>#}
+            {#</div>#}
+        {#</div>#}
+        {#<div class="col-sm-4 col-4">#}
+            {#<div class="visual-picker visual-picker-sm has-peekX mr-2">#}
+                {#<input type="radio" name="fetetteds" id="a3" >#}
+                {#id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>#}
+                {#<label class="visual-picker-figure bg-tulipan-gray required" for="a3">#}
+                    {#{% if choice.vars.checked is defined and choice.vars.checked == 1 %}visual-valami{% endif %}" for="{{ choice.vars.id }}">#}
+                    {#<span class="visual-picker-content text-muted">#}
+                                        {#<span class="tile tile-lg">#}
+                        {#<i class="text-lg fas fa-file-contract"></i>#}
+                        {#<h6 class="mb-1">Prémium</h6>#}
+                                         {#<span>20.990 Ft</span>#}
+                        {#</span>#}
+                                    {#</span>#}
+                {#</label>#}
+                {#<span class="visual-picker-peek">{{ choice.vars.label }}</span>#}
+            {#</div>#}
+        {#</div>#}
+    </div>
+
+    <div class="mb-2">
+        <span class="detail-option-heading font-weight-bold">2. Hova kéred? <span class="text-muted">Írd be a települést</span></span>
+    </div>
+    <div class="mb-4">
+        <input type="text" id="message_messageAuthor" name="message[messageAuthor]" class="form-control" placeholder="Szabó János" value="Liviu">
+    </div>
+
+    <div class="mb-2">
+        <span class="detail-option-heading font-weight-bold">3. Mikorra kéred? <span class="text-muted">Válasz időpontot</span></span>
+    </div>
+    <div class="order-delivery-date mb-4">
+        {#<div class="mb-2">#}
+        {#<button class="btn btn-smX btn-light w-100" type="submit" id="message_messageAuthor" name="message[messageAuthor]" value="Liviu">#}
+        {#Kattints ide a dátum és idősáv kiválasztásához#}
+        {#</button>#}
+        {#</div>#}
+        <div class="d-flex">
+            <select class="d-inline-flex form-control w-50 pt-1 text-sm" name="order_d_date" id="delivery-deliverydate" size="6">
+                <option class="py-1" value="2018-11-29">Nov 29 - Thursday</option>
+                <option class="py-1" value="2018-11-30">Nov 30 - Friday</option>
+                <option class="py-1" value="2018-12-01">Dec 1 - Saturday</option>
+                <option class="py-1" value="2018-12-02">Dec 2 - Sunday</option>
+                <option class="py-1" value="2018-12-03">Dec 3 - Monday</option>
+                <option class="py-1" value="2018-12-04">Dec 4 - Tuesday</option>
+                <option class="py-1" value="2018-12-05">Dec 5 - Wednesday</option>
+                <option class="py-1" value="2018-12-06">Dec 6 - Thursday</option>
+                <option class="py-1" value="2018-12-07">Dec 7 - Friday</option>
+                <option class="py-1" value="2018-12-08">Dec 8 - Saturday</option>
+                <option class="py-1" value="2018-12-09">Dec 9 - Sunday</option>
+                <option class="py-1" value="2018-12-10">Dec 10 - Monday</option>
+                <option class="py-1" value="2018-12-11">Dec 11 - Tuesday</option>
+                <option class="py-1" value="2018-12-12">Dec 12 - Wednesday</option>
+                <option class="py-1" value="2018-12-13">Dec 13 - Thursday</option>
+                <option class="py-1" value="2018-12-14">Dec 14 - Friday</option>
+                <option class="py-1" value="2018-12-15">Dec 15 - Saturday</option>
+                <option class="py-1" value="2018-12-16">Dec 16 - Sunday</option>
+                <option class="py-1" value="2018-12-17">Dec 17 - Monday</option>
+                <option class="py-1" value="2018-12-18">Dec 18 - Tuesday</option>
+                <option class="py-1" value="2018-12-19">Dec 19 - Wednesday</option>
+                <option class="py-1" value="2018-12-20">Dec 20 - Thursday</option>
+                <option class="py-1" value="2018-12-21">Dec 21 - Friday</option>
+                <option class="py-1" value="2018-12-22">Dec 22 - Saturday</option>
+                <option class="py-1" value="2018-12-23">Dec 23 - Sunday</option>
+                <option class="py-1" value="2018-12-24">Dec 24 - Monday</option>
+                <option class="py-1" value="2018-12-25">Dec 25 - Tuesday</option>
+                <option class="py-1" value="2018-12-26">Dec 26 - Wednesday</option>
+                <option class="py-1" value="2018-12-27">Dec 27 - Thursday</option>
+                <option class="py-1" value="2018-12-28">Dec 28 - Friday</option>
+                <option class="py-1" value="2018-12-29">Dec 29 - Saturday</option>
+                <option class="py-1" value="2018-12-30">Dec 30 - Sunday</option>
+                <option class="py-1" value="2018-12-31">Dec 31 - Monday</option>
+                <option class="py-1" value="2019-01-01">Jan 1 - Tuesday</option>
+                <option class="py-1" value="2019-01-02">Jan 2 - Wednesday</option>
+
+            </select>
+            <div class="">
+                <button class="btn btn-smX btn-infoX bg-gray-200 d-inline-flexX align-self-start p-3 ml-2" type="submit" id="message_messageAuthor" name="message[messageAuthor]" value="Liviu">
+                    <i class="far fa-calendar-alt fa-2x"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
         <div class="row">
-            <!-- Termékváltozók -->
-            <!--div class="col-sm-6 col-lg-12 detail-option mb-3">
-                <h6 class="detail-option-heading">Size <span>(required)</span></h6>
-                <label for="size_0" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-
-                    Small
-                    <input type="radio" name="size" value="value_0" id="size_0" class="input-invisible">
-                </label>
-                <label for="size_1" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-
-                    Medium
-                    <input type="radio" name="size" value="value_1" id="size_1" class="input-invisible">
-                </label>
-                <label for="size_2" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-
-                    Large
-                    <input type="radio" name="size" value="value_2" id="size_2" class="input-invisible">
-                </label>
-            </div>
-            <div class="col-sm-6 col-lg-12 detail-option mb-3">
-                <h6 class="detail-option-heading">Type <span>(required)</span></h6>
-                <label for="material_0" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-
-                    Hoodie
-                    <input type="radio" name="material" value="value_0" id="material_0" class="input-invisible">
-                </label>
-                <label for="material_1" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-
-                    College
-                    <input type="radio" name="material" value="value_1" id="material_1" class="input-invisible">
-                </label>
-            </div>
-            <div class="col-12 detail-option mb-3">
-                <h6 class="detail-option-heading">Colour <span>(required)</span></h6>
-                <ul class="list-inline mb-0 colours-wrapper">
-                    <li class="list-inline-item">
-                        <label for="colour_Blue" style="background-color: #668cb9" class="btn-colour"> </label>
-                        <input type="radio" name="colour" value="value_Blue" id="colour_Blue" class="input-invisible">
-                    </li>
-                    <li class="list-inline-item">
-                        <label for="colour_White" style="background-color: #fff" class="btn-colour"> </label>
-                        <input type="radio" name="colour" value="value_White" id="colour_White" class="input-invisible">
-                    </li>
-                    <li class="list-inline-item">
-                        <label for="colour_Violet" style="background-color: #8b6ea4" class="btn-colour"> </label>
-                        <input type="radio" name="colour" value="value_Violet" id="colour_Violet" class="input-invisible">
-                    </li>
-                    <li class="list-inline-item">
-                        <label for="colour_Red" style="background-color: #dd6265" class="btn-colour"> </label>
-                        <input type="radio" name="colour" value="value_Red" id="colour_Red" class="input-invisible">
-                    </li>
-                </ul>
-            </div-->
-
-
             <div class="col-12 detail-option mb-4">
                 <label class="detail-option-heading font-weight-bold">Items <span>(required)</span></label>
                 {# form_label(form.quantity, form.quantity, { 'label_attr': {'class': 'detail-option-heading font-weight-bold' }}) #}

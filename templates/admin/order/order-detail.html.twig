@@ -1,0 +1,263 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block bodyClass %}orderDetail{% endblock %}
+
+{% block page_content %}
+		
+	{% block LISTA %}
+
+		<!-- page title -->
+        {{ include('/admin/_title_widget.html.twig') }}
+
+        {{ include('/admin/_alert_widget.html.twig') }}
+
+
+        <div class="row">
+            <div class="col-sm-12 mb-2">
+                <span class="mr-2">{{ order.createdAt|date('M. j, Y') }}, {{ order.createdAt|date('H:i')}}</span>
+                <span class="mr-2">Belső azonosító: {{ order.id }}</span>
+                <span class="mr-2 badge badge-warning badge--order">Függőben levő</span>
+
+                <div class="rowX mt-2">
+                    <a class="btnX btn-lightX text-body mr-3" href="#"><i class="fas fa-print mr-2"></i>Nyomtatás</a>
+                    <a class="btnX btn-lightX text-body mr-3" href="#"><i class="far fa-file-alt mr-2"></i>Szállítólevél</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-5">
+            <div class="col-md-8 col-15">
+                <div name="items_in_order" class="card mb-2 mb-md-3">
+                    <div class="card-body card-airy">
+                        <h4 class="header-titleZ mb-3X">Termékek a #{{ order.number }} rendelésben:</h4>
+                        <div class="text-mutedZ">
+                            {% if order.items is defined and order.items is not empty %}
+                            {% for item in order.items %}
+                                <div class="cart-item">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-lg-12">
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                <div class="cartItem-productImage">
+                                                    <img src="{{ uploaded_asset(item.product.imagePath)|imagine_filter('product_thumbnail') }}" alt="..." class="cart-item-img img-thumbnail">
+                                                    <a href="{{ path('site-product-show', {'id': item.product.id}) }}" class="mr-1X tile-link product-hover-overlay-link" target="_blank"></a>
+                                                    <div class="cartItem-quantityBadge">
+                                                        <div class="badge badge-secondary">
+                                                            {{ item.quantity }} <span class="text-lowercase">db</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+
+                                                <div class="text-sm mb-1">
+                                                    {#Ár: {{ item.price|number_format(0, ',', ' ') }} Ft, #}
+                                                    <span class="text-muted">Menny.:</span> <em>{{ item.quantity }} db </em><br>
+                                                    <span class="text-muted">Összesen:</span> <em>{{ item.priceTotal|number_format(0, ',', ' ') }} Ft </em><br>
+                                                    <a href="{{ path('site-product-show', {'id': item.product.id}) }}" class="text-md" target="_blank">{{ item.product.productName }}</a> <span class="badge badge-danger ml-1">{{ item.subproductAttribute ? '' ~ item.subproductAttribute : ''  }}</span><br>
+                                                </div>
+
+
+                                                {#<a href="{{ path('site_product_show', {'id': item.product.id}) }}" class="mr-1" target="_blank">#}
+                                                    {#<img src="{{ asset('/uploads/images/termekek/' ~ item.product.image) }}" alt="..." class="cart-item-img img-thumbnail">#}
+                                                {#</a>#}
+                                                {#<div class="text-sm mb-1">#}
+                                                    {#Ár: {{ item.price|number_format(0, ',', ' ') }} Ft, #}
+                                                    {#<span class="text-muted">Menny.:</span> <em>{{ item.quantity }} db </em><br>#}
+                                                    {#<span class="text-muted">Összesen:</span> <em>{{ item.priceTotal|number_format(0, ',', ' ') }} Ft </em><br>#}
+                                                    {#<a href="{{ path('site_product_show', {'id': item.product.id}) }}" class="text-md" target="_blank">{{ item.product.productName }}</a> <span class="badge badge-danger ml-1">{{ item.subproductAttribute ? '' ~ item.subproductAttribute : ''  }}</span><br>#}
+                                                {#</div>#}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% else %}
+                                {{ include('admin/_notAvailable-insert.html.twig') }}
+                            {% endif %}
+                            <div class="rowX">
+                                <div class="col-autoX text-nowrapX">
+                                    <div class="cart-item">
+                                        <div class="d-flex align-items-center text-center">
+                                            <div class="d-flex align-items-start">
+                                                <div class="bg-light p-2">
+                                                    <div class="">
+                                                        <span><i class="far fa-envelope text-sm text-muted"></i></span>
+                                                        <br>
+                                                        <span class="d-block text-muted text-uppercase mt-1">Üzenet</span>
+                                                    </div>
+                                                </div>
+                                                <div class="text-left ml-1">
+                                                    <p class="text-smX mb-0">
+                                                        {% if order.message %}
+                                                            <span><em>{{ order.message }}</em></span> <br>
+                                                            <span>{{ order.messageAuthor }}</span> <br>
+                                                        {% else %}
+                                                            {{ include('admin/_notAvailable-insert.html.twig') }}
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-2 mb-md-3">
+                        <div class="card tilebox-one h-100 mb-0">
+                            <div class="card-body card-airy d-flex flex-column align-items-start">
+                                <i class="far fa-share-square"></i>
+                                <h4 class="header-titleZ mt-0 mb-3">Feladó</h4>
+                                {% if order.sender is defined and order.sender %}
+                                    <div class="minicard--body  h-100">
+                                        <div class="font-weight-bold">{{ order.sender.name }} {{ order.sender.company is defined and order.sender.company ? ' / ' ~ order.sender.company : ''}}</div>
+                                        <div class="">
+                                            <span class="minicard--address">Telefonszám: <em>{{ order.sender.phone }}</em></span> <br>
+                                            <span class="minicard--address">{{ order.sender.address.zip }} {{ order.sender.address.city }}, {{ order.sender.address.street }}</span> <br>
+                                            <span class="minicard--address">{{ order.sender.address.province }}, {{ order.sender.address.country }}</span>
+                                        </div>
+                                    </div>
+                                {% else %} {{ include('admin/_notAvailable-insert.html.twig') }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2 mb-md-3">
+                        <div class="card tilebox-one h-100 mb-0">
+                            <div class="card-body card-airy d-flex flex-column align-items-start">
+                                <i class="far fa-user"></i>
+                                <h4 class="header-titleZ mt-0 mb-3">Címzett</h4>
+                                {% if order.recipient is defined and order.recipient %}
+                                    <div class="minicard--body  h-100">
+                                        <div class="font-weight-bold">{{ order.recipient.name }}</div>
+                                        <div class="">
+                                            <span class="minicard--address">Telefonszám: <em>{{ order.sender.phone }}</em></span> <br>
+                                            <span class="minicard--address">{{ order.recipient.address.zip }} {{ order.recipient.address.city }}, {{ order.recipient.address.street }}</span> <br>
+                                            <span class="minicard--address">{{ order.recipient.address.province }}, {{ order.recipient.address.country }}</span>
+                                        </div>
+                                    </div>
+                                {% else %} {{ include('admin/_notAvailable-insert.html.twig') }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-4 col-15">
+
+                <div class="card tilebox-oneX text-white bg-info overflow-hidden mb-2 mb-md-3">
+                    <div class="card-body card-airy">
+                        <div class="text-center toll-free-box">
+                            <i class="float-left far fa-clock text-lg text-white"></i>
+                            <div class="">
+                                <span class="h4">Szállítási idő:
+                                    {% if order.deliveryDate %}
+                                    <strong>{{ order.deliveryDate|date('Y M j.')|lower }}</strong> </span><br>
+                                <span class="text-mutedZ">{{ order.deliveryInterval is defined and order.deliveryInterval ? order.deliveryInterval ~ ' óra között': '' }}</span> <br>
+                                {% else %}
+                                    {{ include('admin/_notAvailable-insert.html.twig') }}
+                                {% endif %}
+
+                                <span class="text-mutedZ text-sm">{{ order.shipping ? order.shipping.getName() : '' }}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-2 mb-md-3">
+                    <div class="card-body card-airy">
+                        <h4 class="header-titleZ mt-0 mb-3">Vásárló</h4>
+                        <div class="text-left">
+                            <p class="mb-0"><strong>Név:</strong> <span class="ml-2">
+                                {% if order.customer is defined and order.customer %}
+                                    <a href="{{ path('customer-show', {'id': order.customer.id}) }}">
+                                    {{  order.customer.fullname }}
+                                    </a>
+                                {% else %}
+                                    {{ include('admin/_notAvailable-insert.html.twig') }}
+                                {% endif %}
+                                </span></p>
+
+                            <p class="mb-0"><strong>Telefonszám:</strong><span class="ml-2">{% if order.sender is defined and order.sender %}
+                                    {{  order.sender.phone }}
+                                    {% else %} {{ include('admin/_notAvailable-insert.html.twig') }}
+                                    {% endif %}
+                                    </span></p>
+
+                            <p class="mb-0"><strong>Email:</strong> <span class="ml-2">{% if order.sender is defined and order.sender %}
+                                        {{  order.customer.email }}
+                                    {% else %} {{ include('admin/_notAvailable-insert.html.twig') }}
+                                    {% endif %}
+                                    </span></p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-2 mb-md-3">
+                    <div class="card-body card-airy">
+                        <h4 class="header-titleZ mt-0 mb-3">Fizetés</h4>
+                        <div class="toll-free-box">
+                            {#<h4> <i class="mdi mdi-deskphone"></i> Toll Free : 1-234-567-8901</h4>#}
+                            {% if order.payment is defined and order.payment %}
+                                <span class="">{{ order.payment.getName() }} </span> <br>
+                                {% if order.payment.image %}
+                                    <img class="img-thumbnail img-grayscaleX border-0 h-20px d-none d-md-inline" src="{{ asset('/uploads/images/termekek/' ~ order.payment.image) }}" />
+                                {% endif %}
+                            {% else %}
+                                {{ include('admin/_notAvailable-insert.html.twig') }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+
+
+                {#<div class="card text-white bg-info">#}
+                    {#<div class="card-body card-airy">#}
+                        {#<div class="toll-free-box text-center">#}
+                            {#<h4> <i class="mdi mdi-deskphone"></i> Toll Free : 1-234-567-8901</h4>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+            </div>
+
+
+
+        </div>
+
+
+
+	{% endblock %}
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}
+        
+

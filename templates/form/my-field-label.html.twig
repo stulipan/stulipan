@@ -1,0 +1,21 @@
+{% use 'bootstrap_4_layout.html.twig' %}
+
+
+{# A lenti reszt ha kikommentelem, akkor a hibauzentek felul, a label mellett is megjelennek!! #}
+
+{% block form_label_errors %}
+{% endblock form_label_errors %}
+
+
+{# Ez azért kell, hogy az ERROR badge ne jelenjen meg a hibaüzenetben. #}
+{% block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <span class="{% if form is not rootform %}invalid-feedback{% else %}alert alert-danger{% endif %} d-block">
+            {%- for error in errors -%}
+                <span class="d-block">
+                    <span class="form-error-message">{{ error.message }}</span>
+                </span>
+            {%- endfor -%}
+        </span>
+    {%- endif %}
+{%- endblock form_errors %}

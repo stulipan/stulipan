@@ -4,8 +4,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Boltzaras;
-//use Doctrine\ORM\EntityRepository;
+use App\Entity\Boltzaras\Boltzaras;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

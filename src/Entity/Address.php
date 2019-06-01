@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Entity\TimestampableTrait;
 use App\Entity\User;
+use App\Entity\Geo\GeoCountry;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -68,12 +69,13 @@ class Address
     private $province='';
 
     /**
-     * @var string
+     * @var GeoCountry
      *
-     * @ORM\Column(name="country", type="string", length=255, nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Geo\GeoCountry")  //, inversedBy="addresses"
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=false)
      * @Assert\NotBlank(message="Add meg az országot.")
      */
-    private $country='';
+    private $country;
 
     /**
      * @var int
@@ -157,20 +159,38 @@ class Address
     }
 
     /**
-     * @return string
+     * @return GeoCountry
      */
-    public function getCountry(): ?string
+    public function getCountry(): ?GeoCountry
     {
         return $this->country;
     }
 
     /**
-     * @var string $country
+     * @param GeoCountry $country
      */
-    public function setCountry(?string $country)
+    public function setCountry(?GeoCountry $country)
     {
         $this->country = $country;
     }
+
+    
+    
+//    /**
+//     * @return string
+//     */
+//    public function getCountry(): ?string
+//    {
+//        return $this->country;
+//    }
+//
+//    /**
+//     * @var string $country
+//     */
+//    public function setCountry(?string $country)
+//    {
+//        $this->country = $country;
+//    }
 
     /**
      * @return bool
@@ -182,7 +202,6 @@ class Address
         } else {
             return false;
         }
-        return null;
     }
 
     /**
@@ -195,7 +214,6 @@ class Address
         } else {
             return false;
         }
-        return null;
     }
 
     /**

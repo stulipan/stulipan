@@ -1,0 +1,61 @@
+{% if order.items is empty %}
+    <div class="cart-item text-center">
+        <div>
+            <h6 class="text-uppercase">A kosarad jelenleg üres</h6>
+            <p class="mb-0">...de nem sokáig! Válogass a több mint 100 gyönyörű <a href="{{ path('site_product_listall') }}">csokor és virágdoboz</a> közül.</p>
+        </div>
+        <span class="py-5"></span>
+    </div>
+{% endif %}
+{% for item in order.items %}
+{% set cart = '/rendeles/ajandek' %}
+    <!-- Item in cart -->
+    <div class="cart-item {% if app.request.pathinfo != cart %}py-3{% endif %}">
+        <div class="row d-flex align-items-center text-center">
+
+            {#<div class="col-lg-12">#}
+                {#{{ include('/webshop/site/flash_message_widget.html.twig') }}#}
+            {#</div>#}
+            <div class="{% if app.request.pathinfo == cart %}col-9{% else %}col-11{% endif %} pr-0">
+                <div class="d-flex align-items-center">
+                    <a href="{{ path('site-product-show', {'id': item.product.id}) }}" class="">
+                        <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.productName}}" class="cart-item-img">
+                    </a>
+                    <div class="cart-title text-left">
+                        <p class="text-muted text-sm mb-0">
+                            {#{% if item.selectedSubproduct is defined and form.selectedSubproduct is not empty %}#}
+                            Ár: {{ item.price |number_format(0, ',', ' ') }} Ft{% if app.request.pathinfo != cart %}, <span class="text-muted-extra text-xs font-italic ml-3">{{ (item.quantity) |number_format(0, ',', ' ') }} db</span>{% endif %} <br>
+                            Összesen: {{ (item.price * item.quantity) |number_format(0, ',', ' ') }} Ft <br>
+                        </p>
+                        {#<span class="text-muted">Ár: {{ item.price |number_format(0, ',', ' ') }} Ft</span> <br>#}
+                        {#<span class="text-muted">Összesen: {{ (item.price * item.quantity) |number_format(0, ',', ' ') }} Ft</span> <br>#}
+                        <a class="text-uppercaseX text-dark" href="{{ path('site-product-show', {'id': item.product.id}) }}"><strong>{{ item.product.productName }}</strong></a><br>
+
+                        <span class="text-muted text-sm">{{ item.subproductAttribute ? 'Változat: ' ~ item.subproductAttribute : ''  }}</span><br>
+                    </div>
+                </div>
+            </div>
+
+            {% if app.request.pathinfo == cart %}
+            <div class="col-2 px-0">
+                <div class="d-flex align-items-center">
+                    <div class="quantity d-flex align-items-center JS--formWrapper">
+                        {{ render(controller('App\\Controller\\Shop\\CartController::setItemQuantityForm', {'id' : item.id})) }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+
+            <div class="col-1 pl-0">
+                <!-- Remove item button -->
+                <a href="" class="JS--Button-removeItem cart-remove text--toolLink" data-url="{{ path('cart-removeItem', {'id': item.id}) }}"><i class="fas fa-times"></i></a>
+
+                {#{{ render(controller('App\\Controller\\Shop\\CartController::removeItemForm', {'id' : item.id})) }}#}
+                <!-- /Remove item button -->
+            </div>
+
+        </div>
+    </div>
+    <!-- /Item in cart -->
+{% endfor %}

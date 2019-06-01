@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * PaymentType is used in CheckoutFormType which is the Checkout page
+ */
 class PaymentType extends AbstractType
 {
 
@@ -30,7 +33,7 @@ class PaymentType extends AbstractType
                 'class' => Payment::class,
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('s')
-                        ->orderBy('s.order', 'ASC');
+                        ->orderBy('s.ordering', 'ASC');
                 },
                 'choice_label' => 'name',
 //                'choice_label' => function($v) {

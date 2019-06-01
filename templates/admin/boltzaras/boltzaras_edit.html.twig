@@ -1,7 +1,7 @@
 {% extends 'admin/base_admin.html.twig' %}
 
 {# this tag only applies to the forms defined in this template #}
-{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{#{% form_theme form 'bootstrap_4_layout.html.twig' %}#}
 
 {% block title %}
 	{{ title }}
@@ -15,18 +15,14 @@
 	<!-- header of default page content widget -->
 	{{ include('/admin/_header_of_default_page_content.html.twig') }}
 
-	<div class="row mb-2">
-		<div class="col-lg-8">
-			<!-- Kereso mezo + Filterek + Csoportos action opcio -->
-		</div>
-		<div class="col-lg-4">
-			<!-- Gombok -->
-			{#<div class="text-lg-right">#}
-			{#<a href="{{ path('inventory-supply-edit') }}" class="btn btn-success mb-2 mr-2"><i class="mdi mdi-basket mr-1"></i> Új bejövő áru rögzítése</a>#}
-			{#<a href="{{ path('inventory-product-edit') }}" class="btn btn-success mb-2"><i class="mdi mdi-package mr-1"></i> Új termék</a>#}
-			{#</div>#}
-		</div><!-- end col-->
-	</div>
+	{#<div class="row mb-2">#}
+		{#<div class="col-lg-8">#}
+			{#<!-- Kereso mezo + Filterek + Csoportos action opcio -->#}
+		{#</div>#}
+		{#<div class="col-lg-4">#}
+			{#<!-- Gombok -->#}
+		{#</div>#}
+	{#</div>#}
 
 	{{ include('/admin/boltzaras/_form.html.twig') }}
 

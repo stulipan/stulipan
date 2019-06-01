@@ -32,6 +32,8 @@
       <sourceFolder url="file://$MODULE_DIR$/vendor/doctrine/inflector/lib" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/vendor/doctrine/instantiator/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/vendor/doctrine/reflection/lib" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/api-platform/api-pack" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/api-platform/core" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/cache" />
@@ -51,9 +53,15 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/reflection" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/easycorp/easy-log-handler" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/egulias/email-validator" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/facebook/webdriver" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/fig/link-util" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/giggsey/libphonenumber-for-php" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/giggsey/locale" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/imagine/imagine" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/liip/imagine-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/nelmio/cors-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ocramius/package-versions" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ocramius/proxy-manager" />
@@ -73,6 +81,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/cache" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/config" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/console" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/css-selector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/debug" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/debug-bundle" />
@@ -97,9 +106,11 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/monolog-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/options-resolver" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/orm-pack" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/panther" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/phpunit-bridge" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-icu" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-idn" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php72" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/process" />
@@ -113,20 +124,24 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/serializer-pack" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/stopwatch" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/swiftmailer-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/templating" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/test-pack" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/translation" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/twig-bridge" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/twig-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/validator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/var-dumper" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/var-exporter" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/web-link" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/web-profiler-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/web-server-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/webpack-encore-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/webpack-encore-pack" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/white-october/pagerfanta-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/willdurand/negotiation" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/zendframework/zend-code" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/zendframework/zend-eventmanager" />
     </content>
@@ -150,6 +165,8 @@
     <orderEntry type="module-library">
       <library name="PHP" type="php">
         <CLASSES>
+          <root url="file://$MODULE_DIR$/vendor/api-platform/api-pack" />
+          <root url="file://$MODULE_DIR$/vendor/api-platform/core" />
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/cache" />
@@ -169,9 +186,15 @@
           <root url="file://$MODULE_DIR$/vendor/doctrine/reflection" />
           <root url="file://$MODULE_DIR$/vendor/easycorp/easy-log-handler" />
           <root url="file://$MODULE_DIR$/vendor/egulias/email-validator" />
+          <root url="file://$MODULE_DIR$/vendor/facebook/webdriver" />
           <root url="file://$MODULE_DIR$/vendor/fig/link-util" />
+          <root url="file://$MODULE_DIR$/vendor/giggsey/libphonenumber-for-php" />
+          <root url="file://$MODULE_DIR$/vendor/giggsey/locale" />
+          <root url="file://$MODULE_DIR$/vendor/imagine/imagine" />
           <root url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
+          <root url="file://$MODULE_DIR$/vendor/liip/imagine-bundle" />
           <root url="file://$MODULE_DIR$/vendor/monolog/monolog" />
+          <root url="file://$MODULE_DIR$/vendor/nelmio/cors-bundle" />
           <root url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
           <root url="file://$MODULE_DIR$/vendor/ocramius/package-versions" />
           <root url="file://$MODULE_DIR$/vendor/ocramius/proxy-manager" />
@@ -191,6 +214,7 @@
           <root url="file://$MODULE_DIR$/vendor/symfony/cache" />
           <root url="file://$MODULE_DIR$/vendor/symfony/config" />
           <root url="file://$MODULE_DIR$/vendor/symfony/console" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/contracts" />
           <root url="file://$MODULE_DIR$/vendor/symfony/css-selector" />
           <root url="file://$MODULE_DIR$/vendor/symfony/debug" />
           <root url="file://$MODULE_DIR$/vendor/symfony/debug-bundle" />
@@ -215,9 +239,11 @@
           <root url="file://$MODULE_DIR$/vendor/symfony/monolog-bundle" />
           <root url="file://$MODULE_DIR$/vendor/symfony/options-resolver" />
           <root url="file://$MODULE_DIR$/vendor/symfony/orm-pack" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/panther" />
           <root url="file://$MODULE_DIR$/vendor/symfony/phpunit-bridge" />
           <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
           <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-icu" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-idn" />
           <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
           <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-php72" />
           <root url="file://$MODULE_DIR$/vendor/symfony/process" />
@@ -231,24 +257,30 @@
           <root url="file://$MODULE_DIR$/vendor/symfony/serializer-pack" />
           <root url="file://$MODULE_DIR$/vendor/symfony/stopwatch" />
           <root url="file://$MODULE_DIR$/vendor/symfony/swiftmailer-bundle" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/templating" />
           <root url="file://$MODULE_DIR$/vendor/symfony/test-pack" />
           <root url="file://$MODULE_DIR$/vendor/symfony/translation" />
           <root url="file://$MODULE_DIR$/vendor/symfony/twig-bridge" />
           <root url="file://$MODULE_DIR$/vendor/symfony/twig-bundle" />
           <root url="file://$MODULE_DIR$/vendor/symfony/validator" />
           <root url="file://$MODULE_DIR$/vendor/symfony/var-dumper" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/var-exporter" />
           <root url="file://$MODULE_DIR$/vendor/symfony/web-link" />
           <root url="file://$MODULE_DIR$/vendor/symfony/web-profiler-bundle" />
           <root url="file://$MODULE_DIR$/vendor/symfony/web-server-bundle" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/webpack-encore-bundle" />
           <root url="file://$MODULE_DIR$/vendor/symfony/webpack-encore-pack" />
           <root url="file://$MODULE_DIR$/vendor/symfony/yaml" />
           <root url="file://$MODULE_DIR$/vendor/twig/twig" />
           <root url="file://$MODULE_DIR$/vendor/webmozart/assert" />
           <root url="file://$MODULE_DIR$/vendor/white-october/pagerfanta-bundle" />
+          <root url="file://$MODULE_DIR$/vendor/willdurand/negotiation" />
           <root url="file://$MODULE_DIR$/vendor/zendframework/zend-code" />
           <root url="file://$MODULE_DIR$/vendor/zendframework/zend-eventmanager" />
         </CLASSES>
         <SOURCES>
+          <root url="file://$MODULE_DIR$/vendor/api-platform/api-pack" />
+          <root url="file://$MODULE_DIR$/vendor/api-platform/core" />
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/cache" />
@@ -268,9 +300,15 @@
           <root url="file://$MODULE_DIR$/vendor/doctrine/reflection" />
           <root url="file://$MODULE_DIR$/vendor/easycorp/easy-log-handler" />
           <root url="file://$MODULE_DIR$/vendor/egulias/email-validator" />
+          <root url="file://$MODULE_DIR$/vendor/facebook/webdriver" />
           <root url="file://$MODULE_DIR$/vendor/fig/link-util" />
+          <root url="file://$MODULE_DIR$/vendor/giggsey/libphonenumber-for-php" />
+          <root url="file://$MODULE_DIR$/vendor/giggsey/locale" />
+          <root url="file://$MODULE_DIR$/vendor/imagine/imagine" />
           <root url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
+          <root url="file://$MODULE_DIR$/vendor/liip/imagine-bundle" />
           <root url="file://$MODULE_DIR$/vendor/monolog/monolog" />
+          <root url="file://$MODULE_DIR$/vendor/nelmio/cors-bundle" />
           <root url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
           <root url="file://$MODULE_DIR$/vendor/ocramius/package-versions" />
           <root url="file://$MODULE_DIR$/vendor/ocramius/proxy-manager" />
@@ -290,6 +328,7 @@
           <root url="file://$MODULE_DIR$/vendor/symfony/cache" />
           <root url="file://$MODULE_DIR$/vendor/symfony/config" />
           <root url="file://$MODULE_DIR$/vendor/symfony/console" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/contracts" />
           <root url="file://$MODULE_DIR$/vendor/symfony/css-selector" />
           <root url="file://$MODULE_DIR$/vendor/symfony/debug" />
           <root url="file://$MODULE_DIR$/vendor/symfony/debug-bundle" />
@@ -314,9 +353,11 @@
           <root url="file://$MODULE_DIR$/vendor/symfony/monolog-bundle" />
           <root url="file://$MODULE_DIR$/vendor/symfony/options-resolver" />
           <root url="file://$MODULE_DIR$/vendor/symfony/orm-pack" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/panther" />
           <root url="file://$MODULE_DIR$/vendor/symfony/phpunit-bridge" />
           <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
           <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-icu" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-idn" />
           <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
           <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-php72" />
           <root url="file://$MODULE_DIR$/vendor/symfony/process" />
@@ -330,20 +371,24 @@
           <root url="file://$MODULE_DIR$/vendor/symfony/serializer-pack" />
           <root url="file://$MODULE_DIR$/vendor/symfony/stopwatch" />
           <root url="file://$MODULE_DIR$/vendor/symfony/swiftmailer-bundle" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/templating" />
           <root url="file://$MODULE_DIR$/vendor/symfony/test-pack" />
           <root url="file://$MODULE_DIR$/vendor/symfony/translation" />
           <root url="file://$MODULE_DIR$/vendor/symfony/twig-bridge" />
           <root url="file://$MODULE_DIR$/vendor/symfony/twig-bundle" />
           <root url="file://$MODULE_DIR$/vendor/symfony/validator" />
           <root url="file://$MODULE_DIR$/vendor/symfony/var-dumper" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/var-exporter" />
           <root url="file://$MODULE_DIR$/vendor/symfony/web-link" />
           <root url="file://$MODULE_DIR$/vendor/symfony/web-profiler-bundle" />
           <root url="file://$MODULE_DIR$/vendor/symfony/web-server-bundle" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/webpack-encore-bundle" />
           <root url="file://$MODULE_DIR$/vendor/symfony/webpack-encore-pack" />
           <root url="file://$MODULE_DIR$/vendor/symfony/yaml" />
           <root url="file://$MODULE_DIR$/vendor/twig/twig" />
           <root url="file://$MODULE_DIR$/vendor/webmozart/assert" />
           <root url="file://$MODULE_DIR$/vendor/white-october/pagerfanta-bundle" />
+          <root url="file://$MODULE_DIR$/vendor/willdurand/negotiation" />
           <root url="file://$MODULE_DIR$/vendor/zendframework/zend-code" />
           <root url="file://$MODULE_DIR$/vendor/zendframework/zend-eventmanager" />
         </SOURCES>

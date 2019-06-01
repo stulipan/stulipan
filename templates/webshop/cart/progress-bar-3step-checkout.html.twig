@@ -1,0 +1,56 @@
+<section name="progress_bar">
+    <div class="progress--bar-container">
+        <div class="container">
+            <div class="row row-wide-mobile">
+                <div class="col-lg-12 mx-auto">
+                    <ul class="progress--bar">
+                        {% if progressBar is defined %}
+                            {% if progressBar == 'pickExtraGift' %}
+
+                                <li class="progress--bar-item active">
+                                    <span>Válassz ajándékot</span>
+                                </li>
+                                <li class="progress--bar-item">
+                                    <span>Kinek küldöd</span>
+                                </li>
+                                <li class="progress--bar-item ">
+                                    <span>Szállítás és fizetés</span>
+                                </li>
+
+                            {% elseif progressBar == 'pickRecipient' %}
+
+                                <li class="progress--bar-item with-tick">
+                                    <span class="progress--bar-tick"><i class="fa fa-check" ></i></span>
+                                    <span><a href="{{ path('site-checkout-step1-pickExtraGift') }}" class="text-white">Válassz ajándékot</a></span>
+                                </li>
+                                <li class="progress--bar-item active">
+                                    <span>Kinek küldöd</span>
+                                </li>
+                                <li class="progress--bar-item ">
+                                    <span>Szállítás és fizetés</span>
+                                </li>
+
+                            {% elseif progressBar == 'pickPayment' %}
+
+                                <li class="progress--bar-item with-tick">
+                                    <span class="progress--bar-tick"><i class="fa fa-check" ></i></span>
+                                    <span><a href="{{ path('site-checkout-step1-pickExtraGift') }}" class="text-white">Válassz ajándékot</a></span>
+                                </li>
+                                <li class="progress--bar-item with-tick">
+                                    <span class="progress--bar-tick"><i class="fa fa-check" ></i></span>
+                                    <span><a href="{{ path('site-checkout-step2-pickRecipient') }}" class="text-white">Kinek küldöd</a></span>
+                                </li>
+                                <li class="progress--bar-item active">
+                                    <span>Szállítás és fizetés</span>
+                                </li>
+
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</section>

@@ -1,23 +1,29 @@
 		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
 		{{ form_start(form, { 'attr': {'class': '' } }) }}
 
-        <div class="mb-3">
+        <div class="mb-2">
             <div class="form-group row">
                 <div class="col-sm-4 col-lg-2 text-sm-right">
                     <strong>{{ form_label(form.category) }}</strong>
                 </div>
-                <div class="col-sm-8 col-lg-10">
-                    {% for choice in form.category %}
-                        {{ include('admin/choiceItem.html.twig') }}
-                    {% endfor %}
-                    {% do form.category.setRendered() %}
+                <div class="col-sm-8 col-lg-5">
+                    <div class="form-row">
+                        {% for choice in form.category %}
+                            <div class="col-md-4">
+                            {{ include('admin/choiceItem.html.twig') }}
+                            </div>
+                        {% endfor %}
+                        {% do form.category.setRendered() %}
+                    </div>
+                    {{ form_errors(form.category) }}
+
 
                 </div>
                 <div class="col-lg-5"></div>
             </div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-2">
             <div class="form-group row">
                 <div class="col-sm-4 col-lg-2 text-sm-right">
                     {{ form_label(form.productName) }}
@@ -40,12 +46,12 @@
 				{{ form_rest(form) }}
 			</div>
 
-            <div class="mb-3">
+            <div class="mb-2">
                 <div class="form-group row">
                     <div class="col-sm-4 col-lg-2 text-sm-right">
                     </div>
                     <div class="col-sm-8 col-lg-5 ml-sm-auto">
-                        <input type="submit" value="Mentés" class="btn btn-lgg btn-success" formnovalidate>
+                        <input type="submit" value="Mentés" class="btn btn-lgg btn-primary" formnovalidate>
                         <a href="{{ path('inventory-product-list-all') }}" class="btn btn-outline-secondary">Mégse</a>
                     </div>
                     <div class="col-lg-5"></div>

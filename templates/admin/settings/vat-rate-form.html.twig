@@ -1,0 +1,27 @@
+    {{ form_start(form, { 'attr': {'class': '' }}) }}
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="mb-2">
+                {{ form_label(form.name) }}
+                {#<div class="col-sm-8">#}
+                    {{ form_widget(form.name) }}
+                    {{ form_errors(form.name) }}
+                {#</div>#}
+            </div>
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+            <div class="mb-2">
+                    <input type="submit" value="Mentés" class="btn btn-lgg btn-primary" formnovalidate>
+                    <a href="{{ path('vat-rate-list') }}" class="btn btn-outline-secondary">Mégse</a>
+            </div>
+
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+    {% do form.setRendered() %}

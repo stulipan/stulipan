@@ -7,8 +7,10 @@ namespace App\Form;
 use App\Entity\Sender;
 use App\Form\AddressType;
 
+use App\Validator\Constraints\PhoneNumber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,57 +28,50 @@ class SenderType extends AbstractType
         $this->urlGenerator = $urlGenerator;
     }
 
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->setAction($this->urlGenerator->generate('cart_set_sender'));
-        $builder->add(
-            'id',
-            HiddenType::class,
-            // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-            ['mapped' => false]
-        );
-        $builder->add(
-            'name',
-            TextType::class,
-            [
+        if (!$builder->getEmptyData()) {
+            $builder->setAction($this->urlGenerator->generate('cart-editSender', ['id' => $builder->getData()->getId()]));
+        } else {
+            $builder->setAction($this->urlGenerator->generate('cart-editSender', ['id' => $builder->getData()->getId()]));
+        }
+        $builder
+            ->add('id',HiddenType::class, [
+            'mapped' => false,  // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
+            ])
+            ->add('name',TextType::class, [
                 'label' => 'Feladó',
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Szabó Mária',
                     'autocomplete' => 'name'
                 ]
-            ]
-        );
-        $builder->add(
-            'company',
-            TextType::class,
-            [
+            ])
+            ->add('company',TextType::class, [
                 'label' => 'Cégnév',
                 'required' => false,
-            ]
-        );
-        $builder->add(
-            'address',
-            AddressType::class,
-            [
+            ])
+            ->add('address',AddressType::class, [
                 'label' => false,
-            ]
-        );
-        $builder->add(
-            'customer',
-            HiddenType::class,
-            // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-            [
+            ])
+            ->add('phone',TelType::class,[
+                'label' => 'Telefonszám',
+                'required' => false,
+                'constraints' => [
+                    new PhoneNumber(['regionCode' => 'HU']),
+                ],
+            ])
+            ->add('customer',HiddenType::class, [
                 'mapped' => false,
-            ]
-        );
+            ])
+            ->getForm();
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Sender::class
+            'data_class' => Sender::class,
+            'attr' => ['novalidate' => 'novalidate'],
         ]);
     }
 

@@ -1,0 +1,52 @@
+
+        <div class="row">
+            {% if not form.payment.payment.vars.valid %}
+            <div class="col-lg-12 mb-3">
+                <div class="alert alert-danger" role="alert">	{{ form.payment.payment.vars.errors }} </div>
+            </div>
+            {% endif %}
+            <div class="col-lg-12">
+                <div class="row">
+                    {% for choice in form.payment.payment %}
+                        <div class="col-lg-12 mb-2X mb-md-3X mb-1 mb-sm-0">
+                            <div class="cardX paymentMethod--card rounded JS--choiceContainer {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}">
+                                <div class="row minicard--body">
+                                    <div class="col-sm-12">
+                                        <div class="custom-control custom-radio JS--Button-pickChoice" data-url="{{ path('cart-setPayment', {id: choice.vars.value}) }}">
+                                            <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {% if choice.vars.checked is defined and choice.vars.checked %}checked{% endif %}/>
+                                            <label class="custom-control-label font-weight-bold mr-3" for="{{ choice.vars.id }}">
+                                                {{ choice.vars.label }}
+                                            </label> {% if paymentMethods[loop.index0].image is defined and paymentMethods[loop.index0].image != '' %}
+                                                <img class="img-fluid h-17px" src="{{ asset('/uploads/images/termekek/' ~ paymentMethods[loop.index0].image) }}" alt="{{ paymentMethods[loop.index0].name }}">
+                                            {% endif %}
+                                        </div>
+                                        <div class="text-sm mb-0 pl-4 pt-1" id="heading{{ loop.index }}">
+                                            {{ paymentMethods[loop.index0].short }}
+                                            <a tabindex="0" class="minicard--toolLink" role="button" data-toggle="popover" data-trigger="focus" data-content="{{ paymentMethods[loop.index0].description }}">Bővebben</a>
+
+                                            {#<a id="paymentDropdown{{ loop.index0 }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle minicard--toolLink">#}
+                                                {#Bővebben#}
+                                            {#</a>#}
+                                            {#<div aria-labelledby="paymentDropdown{{ loop.index0 }}" class="dropdown-menu dropdown-menu-right dropdown--flown mt-0" style="width: 100%; max-width:450px;">#}
+                                                {#<div class="p-2">#}
+                                                    {#<div class="dropdown--flown-a2 minicard--body">#}
+                                                        {#{{ paymentMethods[loop.index0].description|raw }}#}
+                                                    {#</div>#}
+                                                {#</div>#}
+                                            {#</div>#}
+
+                                        </div>
+                                    </div>
+                                    {#<div class="col-sm-4 text-sm-right mt-3 mt-sm-0">#}
+                                        {#{% if paymentMethods[loop.index0].image is defined and paymentMethods[loop.index0].image != '' %}#}
+                                            {#<img class="img-fluid h-20px pl-4" src="{{ asset('/uploads/images/termekek/' ~ paymentMethods[loop.index0].image) }}" alt="{{ paymentMethods[loop.index0].name }}">#}
+                                        {#{% endif %}#}
+                                    {#</div>#}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% do form.payment.payment.setRendered() %}
+                </div>
+            </div>
+        </div>

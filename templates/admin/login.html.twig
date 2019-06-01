@@ -6,18 +6,18 @@
 
 
 {% block body %}
-<div class="my-5">
+<div class="w-100 h-100 authentication-bg">
+<div class="py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-5">
                 <div class="card">
 
                     <!-- LOGO -->
-                    <div class="card-header py-2 text-center bg-primary">
-                        <a href="{{ path('homepage') }}" class="logo text-center my-3" target="_blank">
+                    <div class="card-header py-2 text-center bg-primaryX">
+                        <a href="{{ path('homepage') }}" class="logo text-center my-1" target="_blank">
                         <span class="logo-lg">
-                                <h3 class="font-weight-bold text-uppercase text-white">tulipan<span class="text-danger">.</span>futar  </h3>
-                            {#<img src="assets/images/logo-dark.png" alt="" height="16">#}
+                                <h2 class="font-weight-bold text-uppercase text-whiteX">tulipan<span class="text-danger">.</span>futar  </h2>
                         </span>
                         </a>
                     </div>
@@ -37,20 +37,22 @@
 
                             <div class="form-group">
                                 <label for="username" class="sr-only">Felhasználónév</label>
-                                <input type="text" id="username" name="_username" class="form-control" placeholder="Felhasználónév" required autofocus value="{{ last_username }}" />
+                                <input type="text" id="username" name="_username" class="form-control" placeholder="Felhasználónév" required {% if last_username is empty %}autofocus{% endif %} value="{{ last_username }}" />
                             </div>
 
                             <div class="form-group">
                                 <label for="inputPassword" class="sr-only">Jelszó</label>
-                                <input type="password" id="inputPassword" name="_password"  class="form-control" placeholder="Jelszó" required />
+                                <input type="password" id="inputPassword" name="_password" class="form-control" placeholder="Jelszó" required />
                             </div>
 
-                            <div class="form-group mb-3">
+                            <div class="form-group mb-3 text-left">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="checkbox-signin" checkedX="">
+                                    <input type="checkbox" id="checkbox-signin" name="_remember_me" class="custom-control-input">
                                     <label class="custom-control-label font-weight-normal" for="checkbox-signin">Remember me</label>
                                 </div>
                             </div>
+
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                             <div class="form-group mb-0 text-center">
                                 <button class="btn btn-primary btn-lg btn-block" type="submit"> Belépés </button>
@@ -69,41 +71,17 @@
                     </div> <!-- end col -->
                 </div>
                 <!-- end row -->
-
             </div> <!-- end col -->
+            <footer class="footer footer-alt">
+                2018 © Tulipanfutar.hu
+            </footer>
         </div>
         <!-- end row -->
+
     </div>
+
 </div>
-    <footer class="footer footer-alt">
-        2018 © Tulipanfutar.hu
-    </footer>
 
-{#<form class="form-signin text-center" action="{{ path('admin-login') }}" method="post">#}
-    {#<img class="mb-4" src="" alt="" width="72" height="72">#}
-    {#<h1 class="h3 mb-3 font-weight-normal">Bejelentkezés</h1>#}
-    {#{% if error %}#}
-        {#<div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
-    {#{% endif %}#}
-    {#<label for="username" class="sr-only">Felhasználónév</label>#}
-    {#<input type="text" id="username" name="_username" class="form-control" placeholder="Felhasználónév" required autofocus value="{{ last_username }}" />#}
 
-    {#<label for="inputPassword" class="sr-only">Jelszó</label>#}
-    {#<input type="password" id="inputPassword" name="_password"  class="form-control" placeholder="Jelszó" required />#}
-    {#<div class="checkbox mb-3">#}
-        {#<label>#}
-            {#<input type="checkbox" value="remember-me"> Remember me#}
-        {#</label>#}
-    {#</div>#}
-
-    {##}
-        {#If you want to control the URL the user#}
-        {#is redirected to on success (more details below)#}
-        {#<input type="hidden" name="_target_path" value="/account" />#}
-    {##}
-
-    {#<button type="submit" class="btn btn-lg btn-primary btn-block">Belépés</button>#}
-    {#<p class="mt-5 mb-3 text-muted">&copy; 2018 Stulipan.dfr</p>#}
-{#</form>#}
-
+</div>
 {% endblock %}

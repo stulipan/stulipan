@@ -1,0 +1,204 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block page_content %}
+		
+	{% block LISTA %}
+
+		<!-- page title -->
+        {{ include('/admin/_title_widget.html.twig') }}
+
+        {{ include('/admin/_alert_widget.html.twig') }}
+
+		<!-- header of default page content widget -->
+        {#{{ include('/admin/_header_of_default_page_content.html.twig') }}#}
+
+
+        <div class="row row-5">
+            <div class="col-md-9 col-15">
+
+                <div class="row">
+                    <div class="col-xl-4 col-lg-6 col-6">
+                        <div class="card tilebox-one mb-2 mb-lg-3">
+                            <div class="card-body">
+                                <div class="float-right text-muted">
+                                    <i class="fas fa-shopping-basket"></i>
+                                </div>
+                                <h6 class="text-muted text-uppercase font-weight-normalX mt-0">Rendelések száma</h6>
+                                <h4 class="my-0">{{ orderCount ? orderCount : orderCount }} <span class="h4 font-weight-normal"> db</span></h4>
+                                <span class="text-sm font-weight-normal">&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-6 col-6">
+                        <div class="card tilebox-one mb-2 mb-lg-3">
+                            <div class="card-body">
+                                <div class="float-right text-muted">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <h6 class="text-muted text-uppercase font-weight-normalX mt-0">Bevétel</h6>
+                                <h4 class="my-0">{{ totalRevenue is defined and totalRevenue ? totalRevenue|number_format(0, ',', ' ') : '0' }} <span class="h4 font-weight-normal"> Ft</span></h4>
+                                <span class="text-sm font-weight-normal">Átlag kosár:&nbsp;{{ totalRevenue is defined and totalRevenue ? (totalRevenue/orderCount)|number_format(0, ',', ' ') : '' }} Ft</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-6 col-6">
+                        <div class="card tilebox-one mb-2 mb-lg-3">
+                            <div class="card-body">
+                                <div class="float-right text-muted">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <h6 class="text-muted text-uppercase font-weight-normalX mt-0">Product Sold</h6>
+                                <h4 class="text-grayX my-0">1,890 <span class="h4 font-weight-normal"> db</span></h4>
+                                <span class="text-sm font-weight-normal">&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Eddigi rendelései</h4>
+                        {{ include('admin/order/order-list-widget.html.twig') }}
+                    </div>
+                </div>
+                <!-- End Chart-->
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">My Products</h4>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-centered mb-0">
+                                <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>ASOS Ridley High Waist</td>
+                                    <td>$79.49</td>
+                                    <td><span class="badge badge-primary">82 Pcs</span></td>
+                                    <td>$6,518.18</td>
+                                </tr>
+                                <tr>
+                                    <td>Marco Lightweight Shirt</td>
+                                    <td>$128.50</td>
+                                    <td><span class="badge badge-primary">37 Pcs</span></td>
+                                    <td>$4,754.50</td>
+                                </tr>
+                                <tr>
+                                    <td>Half Sleeve Shirt</td>
+                                    <td>$39.99</td>
+                                    <td><span class="badge badge-primary">64 Pcs</span></td>
+                                    <td>$2,559.36</td>
+                                </tr>
+                                <tr>
+                                    <td>Lightweight Jacket</td>
+                                    <td>$20.00</td>
+                                    <td><span class="badge badge-primary">184 Pcs</span></td>
+                                    <td>$3,680.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Marco Shoes</td>
+                                    <td>$28.49</td>
+                                    <td><span class="badge badge-primary">69 Pcs</span></td>
+                                    <td>$1,965.81</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div> <!-- end table responsive-->
+                    </div> <!-- end col-->
+                </div> <!-- end row-->
+
+            </div>
+
+            <div class="col-md-3 col-15">
+                <!-- Personal-Information -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="float-right text-center mt-sm-0 mt-3 text-sm-right">
+                            <a href="#" class="">Szerkeszt</a>
+                        </div>
+                        <h4 class="header-title mt-0 mb-3">Vásárló</h4>
+
+                        {% if user.image is defined and user.image %}
+                        <div class="d-flex justify-content-center">
+                            <span class="m-2"><img src="{{ asset('/uploads/images/termekek/' ~ user.image) }}" style="height: 100px;" alt="" class="rounded-circle img-thumbnail"></span>
+                        </div>
+                        {% endif %}
+                        <div class="text-left mt-2">
+                            <p class="mb-0"><strong>Név:</strong> <span class="ml-2">
+                                {% if user is defined and user %}
+                                    <a href="{{ path('customer-show', {'id': user.id}) }}">
+                                    {{  user.fullname }}
+                                    </a>
+                                {% else %}
+                                    {{ include('admin/_notAvailable-insert.html.twig') }}
+                                {% endif %}
+                                </span></p>
+
+                            <p class="mb-0"><strong>Telefonszám:</strong><span class="ml-2">{% if order.sender is defined and order.sender %}
+                                        {{  user.fullname}}
+                                    {% else %} {{ include('admin/_notAvailable-insert.html.twig') }}
+                                    {% endif %}
+                                    </span></p>
+
+                            <p class="mb-0"><strong>Email:</strong> <span class="ml-2">{% if user.email is defined and user.email %}
+                                        {{  user.email }}
+                                    {% else %} {{ include('admin/_notAvailable-insert.html.twig') }}
+                                    {% endif %}
+                                    </span></p>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Personal-Information -->
+
+                <!-- Toll free number box-->
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <div class="toll-free-box text-center">
+                            <h4> <i class="mdi mdi-deskphone"></i> Toll Free : 1-234-567-8901</h4>
+                        </div>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+                <!-- End Toll free number box-->
+            </div>
+        </div>
+
+
+
+        <!-- footer of default page content widget -->
+        {#{{ include('/admin/_footer_of_default_page_content.html.twig') }}#}
+
+	{% endblock %}
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}
+        
+

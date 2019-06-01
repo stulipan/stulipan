@@ -20,6 +20,8 @@ class Payment
 {
     use TimestampableTrait;
 
+    private const BANK_TRANSFER = 3; // the value is from db
+
     /**
      * @var int
      *
@@ -67,20 +69,26 @@ class Payment
      * @ Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
      */
-    private $cost;
+    private $price;
 
     /**
      * @var int
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="order", nullable=false, options={"default"="100"})
+     * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})
      */
-    private $order;
+    private $ordering;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="enabled", type="smallint", nullable=false, options={"default"="1"})
+     */
+    private $enabled = '1';
 
 
     /**
-     * @return string
+     * @return int
      */
     public function getId(): ?int
     {
@@ -101,6 +109,11 @@ class Payment
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
     /**
@@ -154,32 +167,65 @@ class Payment
     /**
      * @return float
      */
-    public function getCost(): float
+    public function getPrice(): float
     {
-        return (float) $this->cost;
+        return (float) $this->price;
     }
 
     /**
-     * @param float $cost
+     * @param float $price
      */
-    public function setCost(float $cost): void
+    public function setPrice(float $price): void
     {
-        $this->cost = $cost;
+        $this->price = $price;
     }
 
     /**
      * @return int
      */
-    public function getOrder(): int
+    public function getOrdering(): ?int
     {
-        return $this->order;
+        return $this->ordering;
     }
 
     /**
-     * @param int $order
+     * @param int $ordering
      */
-    public function setOrder(int $order): void
+    public function setOrdering(?int $ordering): void
     {
-        $this->order = $order;
+        $this->ordering = $ordering;
     }
+
+    /**
+     * @return bool
+     */
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return 1 !== $this->enabled ? false : true;
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public function setEnabled(bool $enabled)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBankTransfer(): bool
+    {
+        return self::BANK_TRANSFER == $this->id ? true : false;
+    }
+
 }

@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-lg-6">
 
-            <div class="mb-3">
+            <div class="mb-2">
                 <div class="form-group row">
                     <div class="col-sm-4 text-sm-right">
                         {{ form_label(form.company) }}
@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-2">
                 <div class="form-group row">
                     <div class="col-sm-4 text-sm-right">
                         {{ form_label(form.datum) }}
@@ -36,13 +36,14 @@
 						            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 					            </span>
                             </div>
+                            {{ form_errors(form.datum) }}
                         </div>
                     </div>
                 </div>
             </div>
 
 
-			<!--div class="mb-3">
+			<!--div class="mb-2">
 				{# form_label(form.datum) #}
 				<div id="datum">
 				<div class="input-group date">
@@ -55,7 +56,7 @@
 
 			</div-->
 
-            <div class="mb-3">
+            <div class="mb-2">
                 <div class="form-group row">
                     <div class="col-sm-4 text-sm-right">
                         {{ form_label(form.osszeg) }}
@@ -81,12 +82,12 @@
 				{{ form_rest(form) }}
 			</div>
 
-            <div class="mb-3">
+            <div class="mb-2">
                 <div class="form-group row">
                     <div class="col-sm-4 text-sm-right">
                     </div>
                     <div class="col-sm-8 ml-sm-auto">
-                        <input type="submit" value="Mentés" class="btn btn-lgg btn-success" formnovalidate>
+                        <input type="submit" value="Mentés" class="btn btn-lgg btn-primary" formnovalidate>
                         <a href="{{ path('invoice-list') }}" class="btn btn-outline-secondary">Mégse</a>
                     </div>
                 </div>

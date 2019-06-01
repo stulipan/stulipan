@@ -1,0 +1,8 @@
+{% block AZUZENET %}
+    {% for msg in app.session.flashBag.get('recipient-missing') %}
+        <div class="JS--alertMessage alert alert-danger mt-4 px-3 px-md-4 rounded-0" role="alert">
+            <i class="fas fa-exclamation-circle mr-1"></i>
+            {{ include('webshop/cart/alert-msg.html.twig') }}
+        </div>
+    {% endfor %}
+{% endblock %}

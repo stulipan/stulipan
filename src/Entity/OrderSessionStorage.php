@@ -57,4 +57,23 @@ class OrderSessionStorage
         return $this->session->get(self::ORDER_KEY_NAME);
     }
 
+    /**
+     * Adds an attribute.
+     *
+     * @param string $name
+     * @param mixed  $value
+     */
+    public function add($name, $value): void
+    {
+        $this->session->set($name, $value);
+    }
+
+    /**
+     *
+     */
+    public function fetch($name)
+    {
+        return $this->session->get($name);
+    }
+
 }

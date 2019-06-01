@@ -1,0 +1,170 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block page_content %}
+		
+	{% block LISTA %}
+
+		<!-- page title -->
+        {{ include('/admin/_title_widget.html.twig') }}
+
+		<!-- header of default page content widget -->
+        {{ include('/admin/_header_of_default_page_content.html.twig') }}
+
+		<div class="row mb-2X">
+			<div class="col-lg-8">
+                {#valami content#}
+			</div>
+			<div class="col-lg-4">
+				<div class="text-lg-right">
+					<a href="{{ path('delivery-special-date-edit') }}" class="btn btn-primary mb-2"><i class="far fa-calendar-plus mr-1"></i> Új szállítási nap</a>
+                    <a href="{{ path('delivery-date-type-list') }}" class="btn btn-secondary mb-2 ml-1"><i class="far fa-clock mr-1"></i> Idősávok</a>
+				</div>
+			</div><!-- end col-->
+		</div>
+
+        <div class="table-responsive mb-3">
+            <table class="table table-sm table-centeredX table-striped table-bordered table-hover mb-0 js--wrapper-table">
+                <thead class="thead-light">
+				<tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Szállítási nap</th>
+				    <th scope="col">Típus</th>
+				    <th scope="col">Idősávok</th>
+				    <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+                    <th scope="col">Módosítás időpontja</th>
+                </tr>
+			  </thead>
+			  <tbody>
+				{% if items is defined %}
+				{% for item in items %}
+				<tr>
+                    <td class="">{{ item.id }}</td>
+				    <td class=" font-weight-bold">{{ item.specialDate|date('M d, Y - l')}}</td>
+				    <td>{{ item.dateType }}
+						<a href="{{ path('delivery-date-type-edit', {'id': item.dateType.id }) }}" class="btn-link text-muted text-secondary ml-1"><i class="fas fa-edit"></i></a>
+					</td>
+                    <td class="text-nowrap">
+                        {% if item.dateType.intervals is not empty %}
+                        {% for interval in item.dateType.intervals %}
+                            <div class="row">
+                                <div class="col-auto text-nowrap">
+                                    {{ interval.name }} között
+                                    <span class="h6 font-italic text-mutedX text-nowrap ml-1"> {{ interval.price|number_format(0, ',', ' ') }} Ft</span>
+                                </div>
+                                <div class="col-3">
+                                    {{ interval.deliveryLimit }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% else %}
+                            <span class="text-muted"><em>nincs medadva</em></span>
+                        {% endif %}
+                    </td>
+				    <td>
+				  	    <a href="{{ path('delivery-special-date-edit', {'id': item.id}) }}" class="btn-smX">
+				  		    <i class="fas fa-edit"></i></a>
+							{#<a href="" class="js--button-delete" data-url="{{ path('invoice-delete', {id: item.id}) }}"><i class="fas fa-trash"></i></a>#}
+				    </td>
+                    <td class=" text-muted"><small>{{ item.updatedAt|date('Y M j')|lower }}, {{ item.updatedAt|date('H:i')}}</small></td>
+				</tr>
+				{% endfor %}
+				{% else %}
+				<tr>
+			        <td><li><em>nincs user found</em></li></td>
+			    </tr>
+				{% endif %}
+			  </tbody>
+			</table>
+		</div>
+		<div class="pagerfanta">
+            {% if paginator is defined %}
+                {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
+            {% endif %}
+		</div>
+        <!-- footer of default page content widget -->
+        {{ include('/admin/_footer_of_default_page_content.html.twig') }}
+
+	{% endblock %}
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        /**
+         * Removes an entry from a table with AJAX
+         *
+         *   - Delete button must have the 'js--button-delete' class.
+         *   - Enclosing table must have the 'js--wrapper-table' class.
+         *   - Delete button must have the 'data-url' attribute which holds the URL where the request is sent.
+         *   - URL must be defined on the server side
+         */
+        'use strict';
+
+        (function(window, $) {
+            window.DeleteAction = function ($wrapper) {
+                this.$wrapper = $wrapper;
+                this.$wrapper.find('.js--button-delete').on('click', this.handleDelete.bind(this));
+                this.$wrapper.find('tbody tr').on('click', this.handleRowClick.bind(this));
+            };
+
+            $.extend(window.DeleteAction.prototype, {
+
+                handleDelete: function(event) {
+                    event.preventDefault();
+                    var $element = $(event.currentTarget);
+                    $element.addClass('text-danger');
+                    $element.find('.fas')
+                        .removeClass('fa-trash')
+                        .addClass('fa-spinner')
+                        .addClass('fa-spin');
+
+                    var url = $element.data('url');
+                    var $row = $element.closest('tr');
+
+                    var self = this;
+
+                    $.ajax({
+                        url: url,
+                        method: 'DELETE',
+                        success: function() {
+                            $row.fadeOut('normal', function() {
+//                                $row.remove();
+//                                az alabbival ugyanaz
+                                $(this).remove();
+                            });
+                        }
+                    });
+                },
+
+                handleRowClick: function() {
+                    console.log('row clicked');
+                }
+
+            });
+        })(window, jQuery);
+
+
+        $(document).ready(function () {
+           var $table = $('.js--wrapper-table');
+           var deleteAction = new DeleteAction($table);
+        });
+
+    </script>
+{% endblock %}
+        
+

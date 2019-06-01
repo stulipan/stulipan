@@ -4,7 +4,7 @@
 namespace App\Controller\Boltzaras;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -19,7 +19,7 @@ use App\Pagination\PaginatedCollection;
 /**
  * @Route("/admin")
  */
-class DateRangeController extends Controller
+class DateRangeController extends AbstractController
 {
 
     /**

@@ -19,7 +19,7 @@ class ShippingRepository extends ServiceEntityRepository
     public function findAllOrdered()
      {
          $qb = $this->createQueryBuilder('s')
-             ->orderBy('s.order', 'ASC')
+             ->orderBy('s.ordering', 'ASC')
              ->getQuery();
 
          return $qb->execute();

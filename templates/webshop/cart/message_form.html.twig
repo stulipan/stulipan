@@ -1,22 +1,22 @@
 
-
-                            {{ form_start(messageForm) }}
-                            <div class="row">
-                                <!--div class="col-lg-8">
-                                    <p class="text-sm text-muted">Megadhatsz egy egyéni üzenetet, amelyet egy üdvözlölapra írunk.</p>
-                                </div-->
-                                <div class="form-group col-lg-12">
-                                    <label for="{{ messageForm.message.vars.full_name }}" class="form-label">Ide írd az üzenetet (max 200 karakter) *</label>
-                                    {{ form_widget(messageForm.message, {'attr': {'class': 'form-control', 'rows': messageForm.message.vars.attr.rows, 'placeholder': 'Ide írd az üzenetet' }} ) }}
-                                    {{ form_errors(messageForm.message) }}
-                                </div>
-                                <div class="form-group col-lg-12">
-                                    <label for="{{ messageForm.messageAuthor.vars.full_name }}" class="form-label">Aláírásnév (ezt írjuk az üdvözlőlapra)</label>
-                                    {{ form_widget(messageForm.messageAuthor, {'attr': {'class': 'form-control', 'placeholder': 'Szabó János' }}) }}
-                                    {{ form_errors(messageForm.messageAuthor) }}
-                                </div>
-                            </div>
-                            {{ form_end(messageForm) }}
-                            {% do messageForm.setRendered() %}
+            {#{{ form_start(messageForm) }}#}
+            <div class="row">
+                <div class="form-group col-md-12">
+                    {#<label for="{{ messageForm.message.vars.full_name }}" class="form-label">Üzenetet</label>#}
+                    {#<span class="detail-option-heading font-weight-bold"><span>(max 200 karakter)</span></span>#}
+                    {{ form_widget(messageForm.message, {'attr': {'class': 'form-control JS--messageForm-message', 'rows': 5, 'placeholder': messageForm.message.vars.label }} ) }}
+                    {#messageForm.message.vars.attr.rows#}
+                    {{ form_errors(messageForm.message) }}
+                </div>
+                <div class="form-group col-md-8">
+                    {#<label for="{{ messageForm.messageAuthor.vars.full_name }}" class="form-label">Aláírásnév</label>#}
+                    {#<span class="detail-option-heading font-weight-bold"><span>(ezt írjuk az üdvözlőlapra)</span></span>#}
+                    {{ form_widget(messageForm.messageAuthor, {'attr': {'class': 'form-control', 'placeholder': messageForm.messageAuthor.vars.label }}) }}
+                    {{ form_errors(messageForm.messageAuthor) }}
+                </div>
+            </div>
+            {#{{ form_end(messageForm) }}#}
+            {{ form_errors(messageForm) }}
+            {% do messageForm.setRendered() %}
 
 

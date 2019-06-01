@@ -1,7 +1,7 @@
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
-        <div class="page-title-box my-2 my-sm-3">
+        <div class="page-title-box my-2 mt-sm-3 mb-sm-2">
             {#<div class="page-title-right">#}
                 {#<ol class="breadcrumb m-0">#}
                     {#<li class="breadcrumb-item"><a href="{{ path('dashboard') }}">Admin</a></li>#}
@@ -13,22 +13,7 @@
             <!-- header of default page content widget -->
             {{ include('/admin/_title_insert.html.twig') }}
 
-            {#<small class="form-text text-muted">#}
-            {#Itt rögzíteni új szállítmányt vagy módosítani egy létezőt.#}
-            {#</small>#}
-
-            {% block AZUZENET %}
-            {% for msg in app.session.flashBag.get('success') %}
-            <div class="alert alert-success mt-2" role="alert">	{{ msg }} </div>
-            {% endfor %}
-            {% for msg in app.session.flashBag.get('warning') %}
-                <div class="alert alert-warning mt-2" role="alert">	{{ msg }} </div>
-            {% endfor %}
-            {% for msg in app.session.flashBag.get('danger') %}
-                <div class="alert alert-danger mt-2" role="alert">	{{ msg }} </div>
-            {% endfor %}
-
-            {% endblock %}
+            {{ include('/admin/_alert_widget.html.twig') }}
 
         </div>
     </div>

@@ -1,0 +1,38 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block page_content %}
+
+	<!-- page title -->
+    {{ include('/admin/_title_widget.html.twig') }}
+
+	<!-- header of default page content widget -->
+    {{ include('/admin/_header_of_default_page_content.html.twig') }}
+
+    <div class="row mb-2">
+        <div class="col-lg-12">
+        </div>
+    </div>
+
+    {{ include('/admin/product/_category-form.html.twig') }}
+
+	<!-- footer of default page content widget -->
+    {{ include('/admin/_footer_of_default_page_content.html.twig') }}
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+    <script>
+        $('.custom-file-input').on('change', function(event) {
+            var inputFile = event.currentTarget;
+            $(inputFile).parent()
+                .find('.custom-file-label')
+                .html(inputFile.files[0].name);
+        });
+    </script>
+{% endblock %}
+

@@ -1,0 +1,10 @@
+<div class="visual-picker visual-picker-fluid visual-picker-sm align-top has-peekX mr-2">
+    <input type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
+    <label class="visual-picker-figure required px-2" for="{{ choice.vars.id }}">
+            <span class="visual-picker-content">
+                <span class="tile tile-lg">
+                    {{ choice.vars.label|raw }}
+                </span>
+            </span>
+    </label>
+</div>

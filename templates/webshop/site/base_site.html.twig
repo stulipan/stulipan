@@ -6,9 +6,10 @@
 {% endblock %}
 
 {% block body %}
+    {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
 	<header class="header">
 		<!-- Top Bar-->
-		<div class="top-bar">
+		<div class="top-bar text-sm">
 			<div class="container-fluid">
 				<div class="row d-flex align-items-center">
 					<div class="col-sm-7 d-none d-sm-block">
@@ -28,8 +29,12 @@
 							<div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right"><a href="#" class="dropdown-item text-sm"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/germany.svg" alt="german" class="topbar-flag">German</a><a href="#" class="dropdown-item text-sm"> <img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/france.svg" alt="french" class="topbar-flag">French</a></div>
 						</div>
 						<!-- Currency Dropdown-->
-						<div class="dropdown pl-3 ml-0"><a id="currencyDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle topbar-link">USD</a>
-							<div aria-labelledby="currencyDropdown" class="dropdown-menu dropdown-menu-right"><a href="#" class="dropdown-item text-sm">EUR</a><a href="#" class="dropdown-item text-sm"> GBP</a></div>
+						<div class="dropdown pl-3 ml-0">
+                            <a id="currencyDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle topbar-link">USD</a>
+							<div aria-labelledby="currencyDropdown" class="dropdown-menu dropdown-menu-right">
+                                <a href="#" class="dropdown-item text-sm">EUR</a>
+                                <a href="#" class="dropdown-item text-sm"> GBP</a>
+                            </div>
 						</div>
 					</div>
 				</div>
@@ -38,18 +43,98 @@
 		<!-- Top Bar End-->
 		<!-- Navbar-->
 		<nav class="navbar navbar-expand-lg navbar-stickyX navbar-light bg-white bg-fixed-white">
-			<div class="container-fluid">
-				<!-- Navbar Header  --><a href="/" class="navbar-brand"><span class="font-weight-bold text-uppercase">tulipan<span class="text-danger">.</span>futar  </span></a>
-				<button type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"><i class="fa fa-bars"></i></button>
-				<!-- Navbar Collapse -->
-				<div id="navbarCollapse" class="collapse navbar-collapse">
+			<div class="container flex-lg-wrap">
+                <div class="w-100 d-flex justify-content-between align-items-center mb-1">
+                    {#<div class="row">#}
+
+                        <!-- Navbar Ted -->
+                        <div class="col-sm-3 col-lg-4 navbar--ted d-none d-md-flex justify-content-lg-start mt-1 mb-2 my-lg-0 order-lg-1 order-2">
+                            {#<div class="nav-item">#}
+                                {#<span class="text-sm text-uppercase font-weight-bold d-none d-lg-inline ml-1 ml-lg-2">Esküvő</span>#}
+                            {#</div>#}
+                            <div class="nav-item">
+                                <svg class="svg-icon mr-1">
+                                    <use xlink:href="#calls-1"> </use>
+                                </svg>
+                                <span class="login-cart--text d-lg-inline">06 1 466 6286</span>
+                            </div>
+                        </div>
+
+                        <!-- Navbar Logo -->
+                        <div class="col-sm-4 col-lg-4 navbar--logo d-flex text-center justify-content-lg-center order-lg-2 order-3">
+                            <a href="/" class="navbar-brand order-lg-1 order-2">
+                                <span class="h3 font-weight-bold text-uppercase">tulipan<span class="text-danger">.</span>futar  </span>
+                            </a>
+                        </div>
+
+                        <!-- Navbar Login Cart -->
+                        <div class="col-sm-4 col-lg-4 navbar--login-cart d-flex justify-content-end mt-1 mb-2 my-lg-0 order-lg-3 order-4">
+                        <!-- Search Button-->
+                        <div data-toggle="search" class="nav-item navbar-icon-link">
+                            <svg class="svg-icon login-cart--color">
+                                <use xlink:href="#search-1"> </use>
+                            </svg>
+                        </div>
+
+                        <div class="nav-item">
+                            {% if not is_granted('ROLE_USER') %}
+                                <a href="{{ path('site-login') }}" class="dropdown-toggle navbar-icon-link">
+                                    <svg class="svg-icon login-cart--color">
+                                        <use xlink:href="#male-user-1"> </use>
+                                    </svg>
+                                    <span class="login-cart--text d-none d-lg-inline ml-1 ml-lg-2 ">Bejelentkezés</span>
+                                </a>
+                            {% endif %}
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <a id="myaccountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle navbar-icon-link">
+                                    <svg class="svg-icon login-cart--color">
+                                        <use xlink:href="#male-user-1"> </use>
+                                    </svg>
+                                    <span class="login-cart--text d-none d-lg-inline ml-1 ml-lg-2">Fiókom</span>
+                                </a>
+                                <div aria-labelledby="myaccountDropdown" class="dropdown-menu dropdown-menu-right dropdown--flown mt-0">
+                                    <div class="p-2">
+                                        <div class="dropdown--flown-a2">
+											<span class="dropdown-item bg-light font-weight-bold">Helló, {{ app.user.firstname }}</span>
+											<div class="dropdown-divider"></div>
+											<a href="#" class="dropdown-item"><i class="far fa-user text-xs mr-2"></i> Saját fiókom</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" class="dropdown-item"><i class="far fa-list-alt text-xs mr-2"></i> Rendeléseim</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="{{ path('logout') }}" class="dropdown-item"><i class="fas fa-sign-out-alt text-xs mr-2"></i> Kijelentkezés</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {#<div aria-labelledby="myaccountDropdown" class="dropdown-menu dropdown-menu-right shad">#}
+                                {#<a href="#" class="dropdown-item">Saját fiókom</a>#}
+                                {#<div class="dropdown-divider"></div>#}
+                                {#<a href="#" class="dropdown-item">Rendeléseim</a>#}
+                                {#<div class="dropdown-divider"></div>#}
+                                {#<a href="{{ path('logout') }}" class="dropdown-item">Kijelentkezés</a>#}
+                                {#</div>#}
+                            {% endif %}
+                        </div>
+
+                        <!-- Cart Dropdown-->
+                        {{ render(controller('App\\Controller\\Shop\\CartUtilsController::cartDetailsDropdown')) }}
+                        <!-- /Cart Dropdown-->
+
+                    </div>
+                        <button type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right col-1 d-lg-none text-left order-lg-10 order-1 "><i class="fa fa-bars"></i></button>
+
+                    {#</div>#}
+                </div>
+
+				<!-- Navbar Collapse Menu -->
+				<div id="navbarCollapse" class="collapse navbar-collapse order-lg-2 order-1 mb-3">
 					<ul class="navbar-nav mx-auto">
 						<li class="nav-item"><a href="/" class="nav-link ">Home</a>
 						</li>
 						<li class="nav-item"><a href="{{ path('site_product_listall') }}" class="nav-link active">Virágok</a>
 						</li>
 						<!-- Megamenu-->
-						<li class="nav-item dropdown position-static"><a href="#" data-toggle="dropdown" class="nav-link">Template<i class="fa fa-angle-down"></i></a>
+						<li class="nav-item dropdown position-static"><a href="#" data-toggle="dropdown" class="nav-link">Template</a>
 							<div class="dropdown-menu megamenu py-lg-0">
 								<div class="row">
 									<div class="col-lg-9">
@@ -186,42 +271,38 @@
 						</li>
 						<!-- /Megamenu end-->
 						<!-- Multi level dropdown    -->
-						<li class="nav-item dropdown"><a id="navbarDropdownMenuLink" href="/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">Webshop<i class="fa fa-angle-down"></i></a>
-							<ul aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu">
-								<li><a href="{{ path('site_product_list', {'slug': 'csokrok'})  }}" class="dropdown-item">Csokrok</a></li>
-								<li><a href="{{ path('site_product_list', {'slug': 'viragdobozok'})  }}" class="dropdown-item">Virágdobozok</a></li>
+						<li class="nav-item dropdown">
+                            <a id="navbarDropdownMenuLink" href="/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">Webshop</a>
+                            <div aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-right dropdown--flown mt-0">
+                                <div class="p-2">
+                                    <div class="dropdown--flown-a2">
 
-							</ul>
-						</li>
+                                        {{ render(controller('App\\Controller\\Shop\\CartUtilsController::listProductCategoriesInMenu')) }}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
 						<!-- Multi level dropdown end-->
 						<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a>
 						</li>
 						<li class="nav-item"><a href="{{ path('about') }}" class="nav-link ">Rólunk</a>
 						</li>
 					</ul>
-					<div class="right-col d-flex align-items-center justify-content-between justify-content-lg-end mt-1 mb-2 my-lg-0">
-						<!-- Search Button-->
-						<div data-toggle="search" class="nav-item navbar-icon-link">
-							<svg class="svg-icon">
-								<use xlink:href="#search-1"> </use>
-							</svg>
-						</div>
-						<!-- User Not Logged - link to login page-->
-						<div class="nav-item"><a href="customer-login.html" class="navbar-icon-link">
-								<svg class="svg-icon">
-									<use xlink:href="#male-user-1"> </use>
-								</svg><span class="text-sm ml-2 ml-lg-0 text-uppercase text-sm font-weight-bold d-none d-sm-inline d-lg-none">Log in                   </span></a></div>
 
-                        <!-- Cart Dropdown-->
-
-                                {{ render(controller('App\\Controller\\Shop\\CartController::cartDetailsDropdown')) }}
-
-                        <!-- /Cart Dropdown-->
-
-					</div>
 				</div>
+
 			</div>
 		</nav>
+        <div class="info--underMenu warning">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <span class="info--underMenu-text">Ünnepi árak! A Difiori 4 éves évfordulója alkalmából minden virágtermék árát csökkentettük. <a href="" class="">Klikk ide!</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 		<!-- /Navbar -->
 
 		<!-- Fullscreen search area-->

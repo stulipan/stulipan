@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Controller\Utils\GeneralUtils;
 use App\Entity\TimestampableTrait;
 use App\Entity\User;
 
@@ -12,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as AssertApp;
 
 /**
  *
@@ -59,16 +61,17 @@ class Recipient
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="recipients")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @Assert\NotBlank(message="Egy címzetnek kell legyen felhasználója/Customer.")
+     * @ Assert\NotBlank(message="Egy címzetnek kell legyen felhasználója/Customer.")
      */
     private $customer;
 
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="phone", type="integer", nullable=false)
+     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
      * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     * @ AssertApp\PhoneNumber()
      */
     private $phone;
 
@@ -80,6 +83,11 @@ class Recipient
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
     /**
@@ -131,19 +139,20 @@ class Recipient
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPhone(): ?int
+    public function getPhone()
     {
         return $this->phone;
     }
 
     /**
-     * @var int $phone
+     * @var string $phone
      */
-    public function setPhone(?int $phone)
+    public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $utils = new GeneralUtils();
+        $this->phone = $utils->formatPhoneNumber($phone);
     }
 
 

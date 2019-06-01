@@ -2,7 +2,7 @@
 		<div class="row pb-2">
 			<div class="col-md-12 col-lg-8 col-xl-6">
 
-				<div class="mb-3">
+				<div class="mb-2">
                     {{ form_label(form.munkatars) }}
 					<div class="input-group">
                         {{ form_widget(form.munkatars, {'attr': {
@@ -12,13 +12,14 @@
                                 'aria-hidden' : 'true',
                         }}) }}
 					</div>
+                    {{ form_errors(form.munkatars) }}
 					<small class="form-text text-muted">
 						Kattints a legördülőre és válaszd ki a nevedet.
 					</small>
 
 				</div>
 
-				{#<div class="mb-3">#}
+				{#<div class="mb-2">#}
                     {#{{ form_label(form.munkatars) }}#}
 					{#<div class="input-group">#}
                         {#{{ form_widget(form.munkatars, {'attr': {'class': 'form-control custom-select'}}) }}#}
@@ -28,7 +29,7 @@
 					{#</small>#}
 				{#</div>#}
 
-				<div class="mb-3">
+				<div class="mb-2">
                     {{ form_label(form.idopont) }}
 					<div>
 						<div class="input-group" id="JS--datum">
@@ -37,13 +38,14 @@
                             }}) }}
                             {#<input type="text" class="form-control date" id="birthdatepicker" data-toggle="date-picker" data-single-date-picker="true">#}
 							<span class="input-group-append input-group-addon">
-						<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-					</span>
+						        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+					        </span>
 						</div>
+                        {{ form_errors(form.idopont) }}
 					</div>
 
 				</div>
-				<div class="mb-3">
+				<div class="mb-2">
                     {{ form_label(form.kassza) }} <br />
 					<div class="input-group no-spinners">
                         {{ form_widget(form.kassza, {'attr': {'class': ''}}) }}
@@ -51,8 +53,9 @@
 							<span class="input-group-text">Ft</span>
 						</div>
 					</div>
+                    {{ form_errors(form.kassza) }}
 				</div>
-				<div class="mb-3">
+				<div class="mb-2">
                     {{ form_label(form.bankkartya) }} <br />
 					<div class="input-group no-spinners">
 						<!--div class="input-group-prepend">
@@ -63,8 +66,9 @@
 							<span class="input-group-text">Ft</span>
 						</div>
 					</div>
+                    {{ form_errors(form.bankkartya) }}
 				</div>
-				<div class="mb-3">
+				<div class="mb-2">
                     {{ form_label(form.keszpenz) }} <br />
 					<div class="input-group no-spinners">
                         {{ form_widget(form.keszpenz, {'attr': {'class': ''}}) }}
@@ -72,13 +76,15 @@
 							<span class="input-group-text">Ft</span>
 						</div>
 					</div>
+                    {{ form_errors(form.keszpenz) }}
 				</div>
 
-				<div class="mb-3">
+				<div class="mb-2">
                     {{ form_label(form.note) }} <br />
 					<div class="input-group">
                         {{ form_widget(form.note, {'attr': {'class': ''}}) }}
 					</div>
+                    {{ form_errors(form.note) }}
                     <small class="form-text text-muted">
                         Ide írj be bármilyen megjegyzést. Pl: miért vagy mit módosítottál utólag ezen a boltzáráson.
                     </small>
@@ -90,8 +96,8 @@
                     {{ form_rest(form) }}
 				</div>
 
-                <input type="submit" value="Adatok mentése" class="btn btn-lgg btn-success" formnovalidate>
-                {#<button type="submit" class="btn btn-lgg btn-success" formnovalidate><i class="fas fa-save mr-1"></i> Adatok mentése</button>#}
+                <input type="submit" value="Adatok mentése" class="btn btn-lgg btn-primary" formnovalidate>
+                {#<button type="submit" class="btn btn-lgg btn-primary" formnovalidate><i class="fas fa-save mr-1"></i> Adatok mentése</button>#}
                 <a href="{{ path('boltzaras_list') }}" class="btn btn-outline-secondary">Mégse</a>
 
 			</div>

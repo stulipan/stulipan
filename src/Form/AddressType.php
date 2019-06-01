@@ -6,12 +6,21 @@ namespace App\Form;
 
 use App\Entity\Address;
 
+use App\Entity\GeoCountry;
+use App\Entity\GeoPlace;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -19,49 +28,101 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class AddressType extends AbstractType
 {
     private $urlGenerator;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->em = $em;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         //$builder->setAction($this->urlGenerator->generate('cart_set_delivery_address', ['id' => '0']));
-        $builder
-            ->add('id',HiddenType::class,[
+        $builder->add('id',HiddenType::class,[
                  // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
                 'mapped' => false,
-            ])
-            ->add('street',TextType::class,[
-                'required' => true,
+            ]);
+        $builder->add('street',TextType::class,[
                 'label' => 'Cím',
-            ])
-            ->add('city',TextType::class,[
+            ]);
+        $builder->add('city',TextType::class,[
                 'label' => 'Város',
-                'required' => true,
-            ])
-            ->add('zip',IntegerType::class,[
-                'required' => true,
+                'attr' => ['autocomplete' => 'cityXXX'],
+            ]);
+        $builder->add('zip',IntegerType::class,[
                 'label' => 'Iranyítószám',
-            ])
-            ->add('province',TextType::class,[
-                'required' => true,
+            ]);
+
+//        $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onPostSubmitData']);
+
+        $builder->add('province',TextType::class,[
                 'label' => 'Megye',
-            ])
-            ->add('country',TextType::class,[
-                'required' => true,
+            ]);
+        $builder->add('country',EntityType::class,[
+                'class' => GeoCountry::class,
                 'label' => 'Ország',
-            ])
-            ->add('street',TextType::class,[
-                'required' => true,
-                'label' => 'Street',
-            ])
-            ->add('addressType',HiddenType::class,[
+                'choice_label' => 'name',
+                'placeholder' => 'Válassz országot...',
+                'attr' => ['class' => 'custom-select'],
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
+                'preferred_choices' => function (GeoCountry $country) {
+                    if ($country->getAlpha2() === 'hu') {
+                        return $country;
+                    }
+                },
+            ]);
+        $builder->add('addressType',HiddenType::class,[
                 'attr' => ['value' => '2'],
-            ])
-            ->getForm();
+            ]);
+        $builder->getForm();
     }
+
+//    /**
+//     * Elősször azt próbáltam, hogy a form adatait manipulálom FormEvent kapcsán
+//     */
+//    function onPostSubmitData(FormEvent $event)
+//    {
+//        $form = $event->getForm();
+////        $formFieldData = $event->getForm()->getData(); // 'zip'
+//        $formData = $event->getData();
+//        if ($formData['zip']) {
+//            $place = $this->em->getRepository(GeoPlace::class)
+//                ->findOneBy(['zip' => $formData['zip']]);
+//
+//            if (null !== $place && '' !== $place) {
+//                $formData['city'] = $place->getCity();
+//                $formData['province'] = $place->getProvince();
+//                $event->setData($formData);
+//
+////                $this->addElements($form->getParent(), $place);
+//            }
+//        } else {
+//            return;
+//        }
+//    }
+//
+//    protected function addElements(FormInterface $form, GeoPlace $place = null)
+//    {
+//        $city = null === $place ? null : $place->getCity();
+//        $province = null === $place ? null : $place->getProvince();
+//
+//        $form->add('city', TextType::class,[
+//            'label' => 'Város',
+//            'attr' => ['autocomplete' => 'cityXXX'],
+//        ]);
+//        $form->get('city')->setData($city);
+//        $form->add('province',TextType::class,[
+//            'label' => 'Megye',
+//        ]);
+//        $form->get('province')->setData($province);
+//    }
 
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -72,6 +133,5 @@ class AddressType extends AbstractType
 //            'by_reference' => false,  // https://symfony.com/doc/current/reference/forms/types/form.html#by-reference
         ]);
     }
-
 
 }

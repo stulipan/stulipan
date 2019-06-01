@@ -40,84 +40,74 @@
         <!-- page title -->
         {{ include('/admin/_title_widget.html.twig') }}
 
-        <div class="row">
-            <div class="col-xl-3 col-lg-6 col-6">
-                <div class="card widget-flat mb-2 mb-lg-3">
-                    <div class="card-body">
-                        <div class="float-right">
-                            <i class="fas fa-shopping-basket text-muted fa-lg"></i>
+        {% if is_granted('ROLE_BOLTZARAS_STAT') %}
+        <div class="row row-5">
+            <div class="col-xl-3 col-lg-6 col-6 mb-2 mb-lg-3">
+                <div class="card tilebox-one h-100 mb-0">
+                    <div class="card-body d-flex flex-column">
+                        <div class="card--infoCard">
+                            <div class="float-right">
+                                <i class="fas fa-shopping-basket"></i>
+                            </div>
+                            <h6 class="card-title">Készpénz</h6>
+                            <h4 class="">{{ keszpenz|number_format(0, ',', ' ') }}<span class="h4 font-weight-normal"> Ft</span></h4>
                         </div>
-                        <h5 class="text-muted font-weight-normal mt-0">Készpénz</h5>
-                        <h3 class="text-gray my-0">{{ keszpenz|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
-                        <span class="text-sm font-weight-normal">&nbsp;</span>
-                    </div>
-                </div>
-            </div> 
-
-            <div class="col-xl-3 col-lg-6 col-6">
-                <div class="card widget-flat mb-2 mb-lg-3">
-                    <div class="card-body">
-                        <div class="float-right">
-                            <i class="far fa-credit-card text-muted fa-lg"></i>
-                        </div>
-                        <h5 class="text-muted font-weight-normal mt-0">Bankkártya</h5>
-                        <h3 class="text-gray my-0">{{ bankkartya|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
-                        <span class="text-sm font-weight-normal">&nbsp;</span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-lg-6 col-6">
-                <div class="card widget-flat bg-success text-white mb-2 mb-lg-3">
-                    <div class="card-body">
-                        <div class="float-right">
-                            <i class="fas fa-dollar-sign text-white fa-lg"></i>
+            <div class="col-xl-3 col-lg-6 col-6 mb-2 mb-lg-3">
+                <div class="card tilebox-one h-100 mb-0">
+                    <div class="card-body d-flex flex-column">
+                        <div class="card--infoCard">
+                            <div class="float-right">
+                                <i class="far fa-credit-card"></i>
+                            </div>
+                            <h6 class="card-title">Bankkártya</h6>
+                            <h4 class="">{{ bankkartya|number_format(0, ',', ' ') }}<span class="h4 font-weight-normal"> Ft</span></h4>
                         </div>
-                        <h5 class="font-weight-normal mt-0">Bolt összesen</h5>
-                        <h3 class="my-0">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
-                        <span class="text-sm font-weight-normal">Mr. Feka: {{ (keszpenz + bankkartya - kassza)|number_format(0, ',', ' ') }} Ft</span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-lg-6 col-6">
-                <div class="card widget-flat bg-info text-white mb-2 mb-lg-3">
-                    <div class="card-body">
-                        <div class="float-right">
-                            <i class="fas fa-shopping-cart"></i>
+            <div class="col-xl-3 col-lg-6 col-6 mb-2 mb-lg-3">
+                <div class="card tilebox-one bg-successX text-whitXe h-100 mb-0">
+                    <div class="card-body d-flex flex-column">
+                        <div class="card--infoCard">
+                            <div class="float-right">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <h6 class="card-title">Bolt összesen</h6>
+                            <h4 class="text-success ">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h4 font-weight-normal"> Ft</span></h4>
+                            <span class="text-sm font-weight-normal">Mr. Feka: {{ (keszpenz + bankkartya - kassza)|number_format(0, ',', ' ') }} Ft</span>
                         </div>
-                        <h5 class="font-weight-normal mt-0">Webshop</h5>
-                        <h3 class="my-0">{{ webshop|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>
-                        <span class="text-sm font-weight-normal">*csak 2018 adatok</span>
                     </div>
                 </div>
             </div>
 
-            {#<div class="col-xl-12">#}
-                {#Bolt + Webshop: {{ (keszpenz + bankkartya + webshop)|number_format(0, ',', ' ') }} Ft#}
-            {#</div>#}
-
-            {#<div class="col-xl-3 col-lg-6 col-6">#}
-                {#<div class="card widget-flat mb-2 mb-lg-3">#}
-                    {#<div class="card-body">#}
-                        {#<div class="float-right">#}
-                            {#<i class="fas fa-dollar-sign text-muted fa-lg"></i>#}
-                        {#</div>#}
-                        {#<h5 class="text-muted font-weight-normal mt-0">Összbevétel</h5>#}
-                        {#<h3 class="text-gray font-weight-normal my-1">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h5 font-weight-normal"> Ft</span></h3>#}
-                    {#</div>#}
-                {#</div>#}
-            {#</div> #}
-
-
+            <div class="col-xl-3 col-lg-6 col-6 mb-2 mb-lg-3">
+                <div class="card tilebox-one bg-infoX text-whiteX h-100 mb-0">
+                    <div class="card-body d-flex flex-column">
+                        <div class="card--infoCard">
+                            <div class="float-right">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h6 class="card-title">Webshop</h6>
+                            <h4 class="text-info ">{{ webshop|number_format(0, ',', ' ') }}<span class="h4 font-weight-normal"> Ft</span></h4>
+                            <span class="text-sm font-weight-normal">*csak 2018 adatok</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
+        {% endif %}
 
         <!-- header of default page content widget -->
         {{ include('/admin/_header_of_default_page_content.html.twig') }}
 
         <div class="row mb-2X">
-            <div class="col-lg-8">
+            <div class="col-sm-6 col-lg-8">
                 <div class="d-inline-block my-1 my-lg-0">
 
                     <!-- dateRange Widget -->
@@ -127,10 +117,10 @@
                     <a href="{{  path('boltzaras_list') }}" class="btn-link ml-1">Teljes lista</a>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="text-lg-right my-1 my-lg-0">
-                    <a href="{{ path('boltzaras_new') }}" class="btn btn-success mb-2 mr-2"><i class="fas fa-plus-circle mr-1"></i> Új jelentés</a>
-                    <a href="{{ path('boltzaras-webshop-edit') }}" class="btn btn-info mb-2"><i class="fas fa-shopping-cart mr-1"></i> Új web forgalom</a>
+            <div class="col-sm-6 col-lg-4">
+                <div class="text-sm-right my-1 my-lg-0">
+                    <a href="{{ path('boltzaras-edit') }}" class="btn btn-primary mb-2"><i class="fas fa-plus-circle mr-1"></i> Új jelentés</a>
+                    <a href="{{ path('boltzaras-webshop-edit') }}" class="btn btn-secondary mb-2 ml-1"><i class="fas fa-shopping-cart mr-1"></i> Új web forgalom</a>
                     {#<button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">#}
                         {#<i class="fas fa-plus mr-1"></i> Új ablak</button>#}
                 </div>
@@ -141,7 +131,7 @@
 
 
         <div class="table-responsive mb-3">
-            <table class="table table-sm table-centered table-striped table-hover mb-0" id="boltzaras-list">
+            <table class="table table-sm table-centered table-striped table-bordered table-hover mb-0" id="boltzaras-list">
                 <thead class="thead-light">
 				<tr>
                     <th scope="col">Dátum</th>
@@ -160,7 +150,8 @@
 				{% if jelentesek is defined %}
 				{% for jelentes in jelentesek %}
 				<tr>
-                    <td class="align-middle font-weight-bold text-sm">{{ jelentes.idopont|date('M d, Y')}}</td>
+                    <td class="align-middle font-weight-bold text-sm">
+                        {{ jelentes.idopont|date('M d,') }} <span class="font-weight-normal text-sm">{{ jelentes.idopont|date('Y')}}</span></td>
 				    <td class="align-middle text-right text-nowrap">{{ jelentes.kassza|number_format(0, ',', ' ') }}</td>
 				    <td class="align-middle text-right text-nowrap">{{ jelentes.bankkartya|number_format(0, ',', ' ') }}</td>
 				    <td class="align-middle text-right text-nowrap">{{ jelentes.keszpenz|number_format(0, ',', ' ') }}</td>
@@ -171,7 +162,7 @@
                     <td class="text-muted"><small><img class="img-thumbnail rounded-circle mr-2" src="{{ asset('/uploads/images/termekek/' ~ jelentes.munkatars.avatar) }}" width="20px;" />{{ jelentes.munkatars }} </small></td>
                     <td>
                         {#{% if is_granted('ROLE_POWER_ADMIN') %}#}
-                            <a href="{{ path('boltzaras_edit', {'id': jelentes.id}) }}" class="btn-smX">
+                            <a href="{{ path('boltzaras-edit', {'id': jelentes.id}) }}" class="btn-smX">
                                 <i class="fas fa-edit"></i></a>
                         {#{% endif %}#}
 				  	</td>
@@ -210,7 +201,7 @@
         $(function() {
             $('#JS--idosav input').daterangepicker({
                 opens: 'right',
-                autoApply: true,
+                autoApply: false,
                 autoUpdateInput: false,
                 locale: {
                     format: 'YYYY-MM-DD',

@@ -3,25 +3,30 @@
 
 namespace App\Controller\Boltzaras;
 
-use App\Entity\Boltzaras;
-use App\Entity\BoltzarasWeb;
-use App\Form\BoltzarasFormType;
-use App\Form\BoltzarasWebFormType;
+use App\Entity\Boltzaras\Boltzaras;
+use App\Entity\Boltzaras\BoltzarasWeb;
+use App\Form\Boltzaras\BoltzarasFormType;
+use App\Form\Boltzaras\BoltzarasWebFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
 
+use Pagerfanta\Exception\NotValidCurrentPageException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Bundle\MonologBundle\SwiftMailer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Pagination\PaginatedCollection;
 
 /**
  * @Route("/admin")
+ * @IsGranted("ROLE_MANAGE_BOLTZARAS")
  */
-class BoltzarasController extends Controller
+class BoltzarasController extends AbstractController
 {
 
     /**
@@ -68,71 +73,54 @@ class BoltzarasController extends Controller
         ]);
     }
 
+
 	/**
-     * @Route("/boltzaras/new", name="boltzaras_new")
+     * @Route("/boltzaras/edit/{id}", name="boltzaras-edit")
      */
-    public function newAction(Request $request)
+    public function editAction(Request $request, ?Boltzaras $boltzaras, $id = null, \Swift_Mailer $mailer)
     {
-        $form = $this->createForm(BoltzarasFormType::class);
-        
-        // handleRequest only handles data on POST
-        $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-         	//ezzel kiirom siman az POST-al submitolt adatokat
-         	//dump($form->getData());die;
-         	
-         	$zarasAdatok = $form->getData();
-         	$zarasAdatok->setModositasIdopontja(); 
-
-			// you can fetch the EntityManager via $this->getDoctrine()
-			// or you can add an argument to your action: index(EntityManagerInterface $entityManager)
-			$entityManager = $this->getDoctrine()->getManager();
-
-			// tell Doctrine you want to (eventually) save the Product (no queries yet)
-			$entityManager->persist($zarasAdatok);
-
-			// actually executes the queries (i.e. the INSERT query)
-			$entityManager->flush();
-			
-			$this->addFlash('success', 'Sikeresen leadtad a boltzárásjelentést! Jó pihenést!');
-			
-			//return $this->redirectToRoute('boltzaras_new');
-			return $this->redirectToRoute('boltzaras_list');
+        if (!$boltzaras) {
+            // new Boltzaras
+            $form = $this->createForm(BoltzarasFormType::class);
+            $title = 'Új boltzárás rögzítése';
+        } else {
+            // edit Boltzaras
+            $form = $this->createForm(BoltzarasFormType::class, $boltzaras);
+            $title = 'Boltzárás adatainak módosítása';
         }
-        
-        return $this->render('admin/boltzaras/boltzaras_edit.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Új boltzárás rögzítése',
-        ]);
-    }
 
-
-	/**
-     * @Route("/boltzaras/edit/{id}", name="boltzaras_edit")
-     */
-    public function editAction(Request $request, Boltzaras $zarasAdatok)
-    {
-    	//itt instanszolja a Jelentes formot, amit a $zarasAdatokkal populálja
-    	//lásd a második paramétert, ami megmondja a formnak milyen adatokat szórjon bele
-        $form = $this->createForm(BoltzarasFormType::class, $zarasAdatok);
-        
         // handleRequest only handles data on POST
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-         	//ezzel kiirom siman az POST-al submitolt adatokat
-         	//dump($form->getData());die;
-         	
-         	$zarasAdatok = $form->getData();
-         	$zarasAdatok->setModositasIdopontja(); 
+            $boltzaras = $form->getData();
+            $boltzaras->setModositasIdopontja();
          	
 			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($zarasAdatok);
+			$entityManager->persist($boltzaras);
 			$entityManager->flush();
-			
-			$this->addFlash('success', 'Sikeresen módosítottad a boltzárásadatokat!');
-			
+
+            $subject = 'Napi boltzárás';
+            $email = (new \Swift_Message())
+                ->setSubject($subject)
+                ->setFrom(['info@tulipanfutar.hu' => 'Difiori boltzárás'])
+                ->setTo('info@difiori.hu')
+                ->setBody(
+                    $this->renderView('admin/emails/boltzaras-napi-riport.html.twig', [
+                            'kassza' => $boltzaras->getKassza(),
+                            'keszpenz' => $boltzaras->getKeszpenz(),
+                            'bankkartya' => $boltzaras->getBankkartya(),
+                            'munkatars' => $boltzaras->getMunkatars(),
+                            'subject' => $subject,
+                            'idopont' => $boltzaras->getIdopont(),
+                        ]
+                    ),
+                    'text/html'
+                );
+            $mailer->send($email);
+
+            $this->addFlash('success', 'Boltzárás sikeresen elmentve!');
+
 			return $this->redirectToRoute('boltzaras_list');
 			
         }
@@ -146,7 +134,7 @@ class BoltzarasController extends Controller
     /**
      * @Route("/boltzaras/webshop/edit/{id}", name="boltzaras-webshop-edit")
      */
-    public function editBoltzarasWebshop(Request $request, ?BoltzarasWeb $boltzarasWeb, $id = null)
+    public function editBoltzarasWebshop(Request $request, ?BoltzarasWeb $boltzarasWeb , $id = null)
     {
         if (!$boltzarasWeb) {
             // new BoltzarasWeb
@@ -209,6 +197,8 @@ class BoltzarasController extends Controller
      */
     public function listActionWithPagination(Request $request, $page = 1)
     {
+//        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $start = $request->attributes->get('start');
         $end = $request->attributes->get('end');
 
@@ -309,7 +299,45 @@ class BoltzarasController extends Controller
             'kassza' => $totalKeszpenzEsBankkartya['kassza'],
             'webshop' => $totalWebshopForgalom['webshopforgalom'],
         ]);
-
-
     }
+
+    //	/**
+//     * @Route("/boltzaras/new", name="boltzaras_new")
+//     */
+//    public function newAction(Request $request)
+//    {
+//        $form = $this->createForm(BoltzarasFormType::class);
+//
+//        // handleRequest only handles data on POST
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//         	//ezzel kiirom siman az POST-al submitolt adatokat
+//         	//dump($form->getData());die;
+//
+//         	$zarasAdatok = $form->getData();
+//         	$zarasAdatok->setModositasIdopontja();
+//
+//			// you can fetch the EntityManager via $this->getDoctrine()
+//			// or you can add an argument to your action: index(EntityManagerInterface $entityManager)
+//			$entityManager = $this->getDoctrine()->getManager();
+//
+//			// tell Doctrine you want to (eventually) save the Product (no queries yet)
+//			$entityManager->persist($zarasAdatok);
+//
+//			// actually executes the queries (i.e. the INSERT query)
+//			$entityManager->flush();
+//
+//			$this->addFlash('success', 'Sikeresen leadtad a boltzárásjelentést! Jó pihenést!');
+//
+//			//return $this->redirectToRoute('boltzaras_new');
+//			return $this->redirectToRoute('boltzaras_list');
+//        }
+//
+//        return $this->render('admin/boltzaras/boltzaras_edit.html.twig', [
+//            'form' => $form->createView(),
+//            'title' => 'Új boltzárás rögzítése',
+//        ]);
+//    }
+
 }

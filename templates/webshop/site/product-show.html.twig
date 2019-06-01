@@ -1,0 +1,433 @@
+{% extends 'webshop/site/base_site.html.twig' %}
+
+{% block title %}
+    {{ product.name }} | 	{{ parent() }}
+{% endblock %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {#<link rel="stylesheet" href="{{ asset('build/v-shop.css') }}"/>#}
+
+    <link href="{{ asset('webshop/site/js/daterangepicker.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block page_content %}
+
+
+
+	<!-- Product detail -->
+	<section class="product-details">
+		<div class="container mb-4">
+			<div class="row">
+                <div class="col-lg-12">
+                    <ul class="breadcrumb undefined">
+                        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
+                        {#<li class="breadcrumb-item"><a href="{{ path('site-product-list', { 'slug': product.category.slug }) }}">{{ product.category }}</a></li>#}
+                        <li class="breadcrumb-item active">{{ product.name }}    </li>
+                    </ul>
+                </div>
+				<div class="col-md-6 order-2 order-md-1">
+					<div class="row">
+						<div class="col-2 pr-0">
+							<div data-slider-id="1" class="owl-thumbs">
+                                {% if product.images is defined %}
+                                {% for image in product.images %}
+                                    <button class="owl-thumb-item detail-thumb-item mb-3">
+                                        <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid">
+                                    </button>
+                                {% endfor %}
+                                {% endif %}
+							</div>
+						</div>
+						<div class="col-10 detail-carousel">
+                            {% set bestseller = false %}
+                            {% if product.isUnavailable %}
+							    <div class="ribbon ribbon-dark">MIND ELKELT</div>
+                            {% elseif product.hasBadges %}
+                                {% for badge in product.badges %}
+                                    {% if badge.css is defined and badge.css != 'bestseller' %}
+                                        <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                    {% else %}
+                                        {% set bestseller = true %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            <div>
+                                <span class="delivery show-for-large mr-10px"></span>
+                                <div data-slider-id="1" class="owl-carousel detail-slider">
+                                    {% if product.images is defined %}
+                                    {% for image in product.images %}
+                                        <div class="item"><a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
+                                                <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" alt="{{ product.name }} 1" class="img-fluid">
+                                                {% if bestseller %}
+                                                    <div class="card-img-overlay d-flex align-items-end p-0">
+                                                        <div class="text-center w-100 overlay--bestseller">
+                                                            <i class="fas fa-trophy"></i> Bestseller
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 pl-lg-4 order-1 order-md-2 mb-4">
+					<h1 class="">{{ product.name }}</h1>
+					{#<div class="d-flex align-items-center justify-content-between mb-4">#}
+						{#<ul class="list-inline mb-0">#}
+							{#<li class="list-inline-item h4 font-weight-light mb-0">{{ product.price.value|number_format(0, ',', ' ')  }} Ft</li>#}
+							{#<li class="list-inline-item text-muted font-weight-light">#}
+								{#<del>54 990 Ft</del>#}
+							{#</li>#}
+						{#</ul>#}
+						{##}
+					{#</div>#}
+					<p class="mb-2">{{ product.description }}
+					</p>
+                    <ul class="product--bullet-points text-smX mb-4">
+                        <li>Ingyenes szállítás Budapesten!</li>
+                        <li>Standard méret látható a képen</li>
+                        <li>Mindig friss virágból</li>
+                    </ul>
+
+
+                    <!-- Add to cart form -->
+                    {#{{ render(controller('App\\Controller\\Shop\\CartController::addItemForm', {'id' : product.id})) }}#}
+
+                    {% form_theme form 'bootstrap_4_layout.html.twig' %}
+                    {{ form_start(form) }}
+                    <div class="mt-2 mb-2">
+                        <span class="detail-option-heading">1. Válasz méretet</span>
+                    </div>
+                    <div class="form-row">
+                        {% if form.selectedSubproduct is defined and form.selectedSubproduct is not empty %}
+                        {% for choice in form.selectedSubproduct %}
+                            <div class="col-sm-4 col-4">
+                                {{ include('webshop/site/choiceItem-onProductPage.html.twig') }}
+                            </div>
+                        {% endfor %}
+                        {% do form.selectedSubproduct.setRendered() %}
+                        {% else %}
+                                <div class="col-sm-4 col-4">
+                                    <div class="visual-picker visual-picker-fluid visual-picker-checked visual-picker-sm align-top has-peekX mr-2">
+                                        <span class="visual-picker-figure required">
+                                            <span class="visual-picker-content">
+                                                <span class="tile tile-lg">
+                                                    <span class="font-weight-bold my-0">Egy méret</span><br>
+                                                    <span class="price--gross text-nowrap">{{ product.price.value|number_format(0, ',', ' ') }} Ft</span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-2 mb-2">
+                        <span class="detail-option-heading">2. Hova kéred? <span>Írd be a települést vagy irányítószámot</span></span>
+                    </div>
+                    <div class="form-group mb-4">
+                        <div id="V--whereTo">
+                            {#{{ form_widget(form.whereTo.whereTo, {'attr': {'class': 'form-control', 'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011' }}) }}#}
+                            {#{{ form_widget(form.whereTo.whereTo, {'attr': {#}
+                                {#'class': 'form-control select2 select2-multiple select2-hidden-accessible',#}
+                                {#'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011',#}
+                                {#'data-toggle' : 'select2',#}
+                                {#'aria-hidden' : 'true',#}
+                            {#}}) }}#}
+                            {#{{ form_errors(form.whereTo) }}#}
+                            {% do form.whereTo.setRendered() %}
+                        </div>
+                    </div>
+
+                    <div class="mt-2 mb-2">
+                        <span class="detail-option-heading">3. Mikorra kéred? <span>Válasz időpontot</span></span>
+                    </div>
+                    <div class="row order-delivery-date mb-4">
+                        <div class="col-md-12 col-lg-12 JS--dateWrapper">
+                            <div class="flex-grow-1X form-row">
+                                {% for choice in form.deliveryDate.deliveryDate %}
+                                    <div class="col-sm-3 col-3">
+                                    {% if not loop.last %}
+                                        {{ include('webshop/site/choiceItem.html.twig') }}
+                                    {% else %}
+                                        <div class="visual-picker visual-picker-fluid visual-picker-sm align-top has-peekX mr-2">
+                                            <input class="JS--Button-clickDate" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="" {{ choice.vars.checked ? 'checked' : '' }}/>
+                                            <label class="visual-picker-figure justify-content-lg-center justify-content-center required px-2" for="{{ choice.vars.id }}">
+                                                <span class="visual-picker-content">
+                                                    <span class="tile tile-lg JS--showDateValue">
+
+                                                    </span>
+                                                    <span class="tile tile-lg JS--showCalendarIcon">
+                                                        <i class="far fa-calendar-alt fa-2x text-gray-700"></i>
+                                                    </span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    {% endif %}
+                                    </div>
+                                {% endfor %}
+                                {% do form.deliveryDate.deliveryDate.setRendered() %}
+                                {#{{ form_widget(form.deliveryDate.deliveryDate, {'attr' : {'class' : 'd-inline-flex pt-1 text-sm'}}) }}#}
+                                {{ form_errors(form.deliveryDate.deliveryDate) }}
+
+
+                                {#<select class="d-inline-flex form-control pt-1 text-sm" name="order_d_date" id="delivery-deliverydate" size="6">#}
+                                    {#<option class="py-1" value="2018-11-29">Nov 29 - Thursday</option>#}
+                                    {#<option class="py-1" value="2018-11-30">Nov 30 - Friday</option>#}
+                                    {#<option class="py-1" value="2018-12-01">Dec 1 - Saturday</option>#}
+                                    {#<option class="py-1" value="2018-12-02">Dec 2 - Sunday</option>#}
+                                    {#<option class="py-1" value="2018-12-03">Dec 3 - Monday</option>#}
+                                    {#<option class="py-1" value="2018-12-04">Dec 4 - Tuesday</option>#}
+                                {#</select>#}
+                            </div>
+                            <div class="text-sm text-muted">
+                                Kosárba rakás után megadható a napszakasz is.
+
+                            </div>
+                            {#<div class="col-md-6X ml-2">#}
+                                {#<a class="btn btn-light btn--pickDate align-self-start JS--Button-clickDate">#}
+                                    {#<i class="far fa-calendar-alt fa-2x"></i>#}
+                                    {#<span class="d-block">Naptár</span>#}
+                                {#</a>#}
+                            {#</div>#}
+                        </div>
+                    </div>
+
+                    <div class="row d-none">
+                        <div class="col-12 detail-option mb-4">
+                            <label class="detail-option-heading">Items <span>(required)</span></label>
+                            {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
+
+                        </div>
+                    </div>
+
+                    <ul class="list-inline">
+                        <li class="list-inline-itemX flex-row d-flex">
+                            <button type="submit" class="btn btn-success btn-lg mb-1 w-100 py-4 h3 text-lg"> <i class="fa fa-shopping-cart mr-2"></i>Kosárba rakom</button>
+                        </li>
+                        {#<li class="list-inline-item"><a href="#" class="btn btn-outline-secondary mb-1"> <i class="far fa-heart mr-2"></i>Add to wishlist</a></li>#}
+                    </ul>
+
+                    {{ form_end(form) }}
+                    {#{% do form.setRendered() %}#}
+
+                    <!-- /Add to cart form -->
+
+                    <div class="card border-0 mb-3">
+                        <div class="card-body bg-warning-lightenX text-center p-0 px-2">
+                            <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/cache/w0h0q80np1/icons/CIB_logo.png?v=1537911486">
+                            <img alt="" class="img-fluid h-15px left-block mb-2" src="http://www.stulipan.dfr/uploads/images/termekek/paypal.png">
+                            <p class="card-text text-xs text-muted">
+                                 Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</p>
+                        </div>
+                    </div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+    <section class="marketing-details">
+        <div class="container-fluid bg-info-lighten">
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 order-2 order-lg-1 py-3">
+                            <section class="miert-dobozok bg-white p-3 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-10 mb-3">
+                                        <span class="marketing-title text-lg">Miért válaszd a Tulipánfutárt?</span>
+                                        <p></p>
+                                        <p class="marketing-subtitle">INGYENES szállítás Budapesten!</p>
+                                        <p class="text-muted text-sm">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="/szallitasi-dijak" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+                                        </p>
+
+                                        <p class="marketing-subtitle">Virágküldés a nap 24 órájában</p>
+                                        <p class="text-muted text-sm">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;
+                                        </p>
+
+                                        <p class="marketing-subtitle">Magas vásárlói elégedettség</p>
+                                        <p class="text-muted text-sm">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
+                                        </p>
+
+                                        <p class="marketing-subtitle">Egyedi terméket szeretnél?</p>
+                                        <p class="text-muted text-sm">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
+                                        </p>
+
+                                        <p class="marketing-subtitle">Ügyfélszolgálat</p>
+                                        <p class="text-muted text-sm">
+                                            Telefon: 06 1 466 6286<br>
+                                            Email: info@difiori.hu
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="col-lg-6 order-1 order-lg-2">
+                            <section class="miert-dobozok p-3 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12 mb-3 text-center">
+                                        <span class="detail-option-heading text-lg">Delivered by a carefully selected courier partner</span>
+                                    </div>
+                                    <div class="col-md-6 col-6 mb-3">
+                                        <h5>Courier Flower Delivery</h5>
+                                        <img class="img-fluid" src="https://www.ifloraimg.co.uk/kernel/client/images/test-images/tab-courier-pic1.jpg"/>
+                                        <p> We work closely with our courier partner to ensure that your beautifully designed bouquet arrives in pristine condition.</p>
+                                    </div>
+                                    <div class="col-md-6 col-6 mb-3">
+                                        <h5>Signature Interflora Black Gift Box</h5>
+                                        <img class="img-fluid" src="https://www.ifloraimg.co.uk/kernel/client/images/test-images/tab-courier-pic2.jpg"/>
+                                        <p>Your bouquet will be delivered in a signature Interflora black gift box, with the impact of the flowers seen as soon as the box is opened.</p>
+                                    </div>
+                                    <div class="col-md-6 col-6 mb-3">
+                                        <h5>Gift Wrap and Ribbon</h5>
+                                        <img class="img-fluid" src="https://www.ifloraimg.co.uk/kernel/client/images/test-images/tab-courier-pic3.jpg"/>
+                                        <p>Your bouquet will be presented in elegant Interflora gift wrap and a pretty ribbon. A specially formulated gel solution ensures freshness during delivery.	</p>
+                                    </div>
+                                    <div class="col-md-6 col-6 mb-3">
+                                        <h5>Gift Message and Flower Food</h5>
+                                        <img class="img-fluid" src="https://www.ifloraimg.co.uk/kernel/client/images/test-images/tab-hampers-pic4.jpg"/>
+                                        <p>Your personal message will be displayed on an attractive greeting card and will accompany your gift. To ensure the flowers remain fresh and in the best possible condition we include some flower food.</p>
+                                    </div>
+                                </div>
+
+
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+    <script src="{{ asset('build/v-shop.js') }}"></script>
+
+
+    <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
+    <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
+    <script>
+        // ------------------------------------------------------- //
+        // Detail Carousel with thumbs
+        // ------------------------------------------------------ //
+        $('.detail-slider').owlCarousel({
+            loop: true,
+            items: 1,
+            thumbs: true,
+            thumbsPrerendered: true,
+            dots: false,
+            responsiveClass: false
+        });
+
+        // ------------------------------------------------------- //
+        //   Ekko Lightbox
+        // ------------------------------------------------------ //
+
+        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+            event.preventDefault();
+            $(this).ekkoLightbox({
+                alwaysShowClose: true,
+//                leftArrow: '<span><img src="img/prev.svg" class="nav-arrow nav-arrow-left" alt="" width="50"></span>',
+//                rightArrow: '<span><img src="img/next.svg" class="nav-arrow nav-arrow-right" alt="" width="50"></span>'
+            });
+        });
+    </script>
+
+
+    <script>
+        $(function() {
+            $('.JS--Button-clickDate').daterangepicker({
+                opens: 'right',
+                autoApply: true,
+                autoUpdateInput: false,
+                singleDatePicker: true,
+    //            alwaysShowCalendars: true,
+                minDate: moment().add(4, 'hours'),
+                maxDate: moment().add(2, 'months'),
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    separator: ' / ',
+                    applyLabel: 'Alkalmaz',
+                    cancelLabel: 'Mégse',
+                    daysOfWeek: [
+                        'V',
+                        'H',
+                        'K',
+                        'Sz',
+                        'Cs',
+                        'P',
+                        'Sz'
+                    ],
+                    monthNames: [
+                        'Január',
+                        'Február',
+                        'Március',
+                        'Április',
+                        'Május',
+                        'Június',
+                        'Július',
+                        'Augusztus',
+                        'Szeptember',
+                        'Október',
+                        'November',
+                        'December'
+                    ],
+                    firstDay: 1,
+                }
+            });
+            $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {
+                ev.preventDefault();
+                $pickerDate = picker.startDate.format('YYYY-MM-DD');
+
+                $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
+                $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
+                /**
+                 * Csak az első 3 rádió opcióba keresi a pickerDate-et. És ha benne van, akkor a Calendárt mutatja.
+                 */
+                $selectedRadio = $(this).closest('.JS--dateWrapper').find('input[type="radio"][value="' + $pickerDate + '"]:not(".JS--Button-clickDate")');
+                if ($selectedRadio.val()) {
+                    console.log($selectedRadio);
+                    $selectedRadio.prop('checked', true);
+                    $dateValueWrapper.hide();
+                    $calendarIconWrapper.show();
+                }
+                /**
+                 * Ha nincs benne, akkor negyedik rádió inputhoz rendeli a pickerDate-et és elrejti a Calendárt.
+                 */
+                else {
+                    $(this).val($pickerDate);  // az input, amihez kötve van a gomb, megkapja a daterangepicker értékét (dátumot)
+                    $html = '<span class="font-weight-bold my-0">' + picker.startDate.format('MMM D') + '</span><br> <span class="price--gross text-nowrap">' + picker.startDate.format('ddd') + '</span>';
+                    $dateValueWrapper.html($html);
+                    $calendarIconWrapper.hide();
+                    $dateValueWrapper.show();
+                }
+            });
+            $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+            /**
+             * Amikor nem a Daterangepicker-re klikkel, akkor biztos a Calendárt kell mutatnia.
+             */
+            $('.JS--dateWrapper input[type="radio"]:not(".JS--Button-clickDate")').on('click', function () {
+                $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
+                $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
+                $dateValueWrapper.hide();
+                $calendarIconWrapper.show();
+            });
+        });
+    </script>
+{% endblock %}

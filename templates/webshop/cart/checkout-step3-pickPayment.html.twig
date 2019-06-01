@@ -1,0 +1,294 @@
+{% extends 'webshop/site/base-checkout.html.twig' %}
+
+
+{# this tag only applies to the forms defined in this template #}
+{#{% form_theme form 'bootstrap_4_layout.html.twig' %}#}
+
+{% block title %}
+    {{ title }} | {{ parent() }}
+{% endblock %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block page_content %}
+<div class="JS--globalWrapper">
+
+    {{ include('webshop/cart/progress-bar-3step-checkout.html.twig') }}
+    {{ include('webshop/site/alert-widget.html.twig') }}
+    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+        {{ include('webshop/cart/already-registered-widget.html.twig') }}
+    {% endif %}
+
+    <section name="checkout_pickPayment">
+        <div class="container mb-4">
+            <div class="row">
+                <div class="col-md-12 col-lg-12 mx-lg-auto">
+                    <div class="row row-narrow">
+
+                        <div name="left_column" class="col-md-7 col-lg-8 pt-3 col-narrow">
+
+
+                            <div name="billing_address" class="mb-20px">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="cart bg-white">
+                                            <div class="cart-wrapper JS--senderWrapper">
+
+                                                <div class="checkout-block-header">
+                                                    <h4>Számlázási adatok</h4>
+                                                </div>
+
+                                                {{ include('webshop/cart/alert-sender-insert.html.twig') }}
+                                                <div class="block-body">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 mb-3">
+                                                            <span class="detail-option-heading font-weight-bold"></span>
+                                                            <span class="text-mutedX">Add meg a számlázási adatokat, vagy válassz az előzőleg használtak közül.</span>
+                                                            {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                                Ha már regisztrált felhasználó vagy, <a href="{{ path('site-login') }}">itt tudsz bejelentkezni.</a>
+                                                            {% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="JS--senderListWrapper">
+                                                        {{ include('webshop/cart/sender_list.html.twig') }}
+                                                    </div>
+                                                    <div class="JS--senderEditFormWrapper">
+                                                        {% if senderForm is defined %}
+                                                            {{ include('webshop/cart/sender_form.html.twig') }}
+                                                        {% endif %}
+                                                    </div>
+                                                    {#{{ render(controller('App\\Controller\\Shop\\CartController::createSenderForm', {'id' : order.id})) }}#}
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {{ form_start(form) }}
+                            <div name="shipping_method" class="mb-20px">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="cart bg-white">
+                                            <div class="cart-wrapper JS--choicesContainer">
+
+                                                <div class="checkout-block-header">
+                                                    <h4>Szállítási mód</h4>
+                                                </div>
+
+                                                {{ include('webshop/cart/alert-shipping-insert.html.twig') }}
+                                                <div class="block-body">
+                                                    {{ include('webshop/cart/shipping-method-form.html.twig') }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div name="payment_method" class="mb-20px">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="cart bg-white">
+                                            <div class="cart-wrapper JS--choicesContainer">
+
+                                                <div class="checkout-block-header">
+                                                    <h4>Fizetési mód</h4>
+                                                </div>
+
+                                                {{ include('webshop/cart/alert-payment-insert.html.twig') }}
+                                                <div class="block-body">
+                                                    {{ include('webshop/cart/payment-method-form.html.twig') }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <div name="user_registration" class="mb-20px">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="cart bg-white">
+                                                <div class="cart-wrapper">
+
+                                                    <div class="checkout-block-header">
+                                                        <h4>Fiók létrehozása</h4>
+                                                    </div>
+
+                                                    <form>
+                                                        <div class="block-body col-lg-6">
+                                                            <div class="row">
+
+                                                                <!--div class="col-lg-8">
+                                                                    <p class="text-sm text-muted">Megadhatsz egy egyéni üzenetet, amelyet egy üdvözlölapra írunk.</p>
+                                                                </div-->
+                                                                <div class="form-group col-lg-12">
+                                                                    <label for="username" class="form-label">Felhasználónév</label>
+                                                                    <input type="text" name="username" id="username" placeholder="" class="form-control"></input>
+                                                                </div>
+                                                                <div class="form-group col-lg-12">
+                                                                    <label for="password" class="form-label">Jelszó</label>
+                                                                    <input type="password" name="password" placeholder="" id="password" class="form-control">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {# Render CSRF token etc .#}
+                            <div style="display:none">
+                                {{ form_rest(form) }}
+                            </div>
+                            {{ form_end(form) }}
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="d-flex justify-content-center flex-column flex-lg-row mb-4 mt-3">
+                                        {#<a href="{{ path('site-checkout-step2-pickRecipient') }}" class="btn btn-lg btn-link d-none d-md-inline-block text-muted order-2 order-lg-1 px-0"><i class="fa fa-chevron-left"></i> Vissza a címzetthez</a>#}
+                                        <a href="{{ path('site-checkout-step4-success') }}" class="JS--Button-placeOrder btn btn-lg btn-success order-1 order-lg-2 px-6 py-4 text-lg">Megrendelem <i class="fa fa-chevron-right"></i></a>
+                                        {#<button type="submit" value="Mentés" class="btn btn-lg btn-success order-1 order-lg-2" formnovalidate>Rendelés ellenörzése <i class="fa fa-chevron-right"></i></button>#}
+                                    </div>
+                                </div>
+                                <div class="text-lg-center col-lg-10 mx-auto">
+                                    <span class="text-sm text-muted">A 'Megrendelem' gombra kattintással rendelésed rögzítésre kerül, illetve elfogadod az ÁSZF-ben foglaltakat és hozzájárulsz, hogy némely itt megadott adatot a Difiori felhasználhassa, hogy számodra fokozott vásárlási élményt nyújtson a jövőben.</span>
+                                </div>
+                                <div class="col-lg-12 py-4"> </div>
+                            </div>
+
+
+                        </div>
+
+                        <div name="right_column" class="col-md-5 col-lg-4 col-narrow">
+                            <div class="navbar-sticky sticky-top pt-0 pt-md-3X mb-20px">
+                                <div class="cart block bg-whiteX bg-gray-200X JS--cartWrapper px-0 px-md-1">
+                                    <div class="block-header bg-whiteX">
+                                        <span class="h6 text-uppercase font-weight-bold mb-0">Kosár tartalma</span>
+                                        {#<h6 class="text-uppercase mb-0">Összesen</h6>#}
+                                        <a class="text--toolLink float-right" href="{{ path('site-checkout-step1-pickExtraGift') }}">Szerkeszt</a>
+                                    </div>
+                                    <div class="cart-body bg-whiteX JS--resultWrapper">
+                                        <div class="cart--scroll">
+                                            {{ include('webshop/cart/cart-product-list.html.twig') }}
+                                        </div>
+                                    </div>
+                                    <div class="cart-body text-sm p-3X p-md-4X bg-whiteX pt-1">
+                                        <div class="cart-itemX text-sm">
+                                            <div class="row d-flex align-items-center text-center">
+
+                                                <div class="col-12 pr-0">
+                                                    <div class="d-flex align-items-start py-3">
+                                                        <div class="bg-light order-summary-message">
+                                                            <div class="">
+                                                                {#<i class="fas fa-quote-right"></i>#}
+                                                                <span><i class="far fa-envelope text-sm text-muted"></i></span> <br>
+                                                                <span class="d-block text-muted text-uppercase mt-1">Üzenet</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="cart-title text-left">
+                                                            <p class="text-sm mb-0">
+                                                                <span><em>{{ order.currentOrder.message }}</em></span> <br>
+                                                                <span>{{ order.currentOrder.messageAuthor }}</span> <br>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+
+                                        </div>
+
+                                        <span class="">A szállítási díj a megadott adataid szerint került kiszámításra.</span>
+                                        <ul class="order-summary mb-0 list-unstyled">
+                                            <li class="order-summary-item">
+                                                <span>Részösszeg </span>
+                                                <span>{{  order.summary.totalBeforeDiscount|number_format(0, ',', ' ') }} Ft</span>
+                                            </li>
+                                            <li class="order-summary-item">
+                                                <span>Szállítás</span>
+                                                <span> Ft</span>
+                                            </li>
+                                            <li class="order-summary-item">
+                                                <span>Kedvezmény</span>
+                                                <span>25%:</span>
+                                            </li>
+                                            <li class="order-summary-item border-0">
+                                                <span>Fizentendő {# totalAmountToPay #}</span>
+                                                <strong class="order-summary-total">{{ order.summary.totalAmountToPay|number_format(0, ',', ' ') }} Ft</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {#<div name="goto_finish" class="col-lg-12  col-narrow mt-3 mb-5">#}
+                            {#<div class="row">#}
+                                {#<div class="col-lg-12">#}
+                                    {#<div class="d-flex justify-content-between flex-column flex-lg-row mb-4">#}
+                                        {#<a href="{{ path('site-checkout-step2-pickRecipient') }}" class="btn btn-lg btn-link d-none d-md-inline-block text-muted order-2 order-lg-1 px-0"><i class="fa fa-chevron-left"></i> Vissza a címzetthez</a>#}
+                                        {#<a href="{{ path('site-checkout-step4-success') }}" class="JS--Button-placeOrder btn btn-lg btn-success order-1 order-lg-2 px-6">Megrendelem <i class="fa fa-chevron-right"></i></a>#}
+                                        {#<button type="submit" value="Mentés" class="btn btn-lg btn-success order-1 order-lg-2" formnovalidate>Rendelés ellenörzése <i class="fa fa-chevron-right"></i></button>#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="text-lg-right col-lg-6 ml-auto">#}
+                                    {#<span class="text-sm text-muted">A 'Megrendelem' gombra kattintással rendelésed rögzítésre kerül, illetve elfogadod az ÁSZF-ben foglaltakat és hozzájárulsz, hogy némely itt megadott adatot a Difiori felhasználhassa, hogy számodra fokozott vásárlási élményt nyújtson a jövőben.</span>#}
+                                {#</div>#}
+                            {#</div>#}
+                        {#</div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+    <script>
+//        $(document).ready(function() {
+//            $('[data-toggle="popover"]').popover({
+//                trigger: 'focus'
+//            });
+//        });
+        $(document).ready(function () {
+            var $checkoutPageWrapper = $('.JS--globalWrapper');
+            var checkoutPageHandler  = new handleOrder($checkoutPageWrapper);
+
+            var $wrapper = $('.JS--choicesContainer');
+            var inlineEdit = new InlineEdit($wrapper);
+
+            var $senderWrapper = $('.JS--senderWrapper');
+            var senderEdit = new InlineEdit($senderWrapper);
+
+            var $cartWrapper = $('.JS--cartWrapper');
+            var cartEdit = new InlineEdit($cartWrapper);
+        });
+    </script>
+{% endblock %}

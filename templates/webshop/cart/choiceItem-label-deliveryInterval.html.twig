@@ -1,0 +1,12 @@
+        <div class="d-inline-block font-weight-bold my-1X">{{ intervalName }}</div>
+        <div class="d-inline-block text-sm text-muted">óra között:</div>
+        <div class="d-inline price--gross text-nowrapX font-weight-bold text-sm">
+            <em>
+            {% if intervalPrice %}
+                <span class="text-nowrap"> +{{ intervalPrice|number_format(0, ',', ' ') }} Ft</span>
+            {% else %}
+                <span class="text-sm text-success font-weight-normal">Ingyenes szállítás</span>
+                {#<span class="badge badge-success pt-1 font-weight-bold px-2">Ingyenes szállítás</span>#}
+            {% endif %}
+            </em>
+        </div>

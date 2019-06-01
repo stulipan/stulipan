@@ -8,6 +8,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/invoice.css') }}" />
 {% endblock %}
 
 
@@ -27,7 +28,7 @@
 			</div>
 			<div class="col-lg-4">
 				<div class="text-lg-right">
-					<a href="{{ path('invoice-edit') }}" class="btn btn-success mb-2 mr-2"><i class="fas fa-file-invoice-dollar mr-1"></i> Új számla rögzítése</a>
+					<a href="{{ path('invoice-edit') }}" class="btn btn-primary mb-2 mr-0"><i class="fas fa-file-invoice-dollar mr-1"></i> Új számla rögzítése</a>
 				</div>
 			</div><!-- end col-->
 		</div>
@@ -75,6 +76,15 @@
                 {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
             {% endif %}
 		</div>
+
+        <div class="rowX">
+            <hr />
+
+            <div id="RA--invoice">
+
+            </div>
+        </div>
+
         <!-- footer of default page content widget -->
         {{ include('/admin/_footer_of_default_page_content.html.twig') }}
 
@@ -189,6 +199,7 @@
 //            });
 //        });
     </script>
+    <script src="{{ asset('build/invoice.js') }}"></script>
 {% endblock %}
         
 

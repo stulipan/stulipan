@@ -5,7 +5,7 @@ namespace App\Controller\Boltzaras;
 
 use App\Entity\InventorySupplyItem;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -23,7 +23,7 @@ use App\Pagination\PaginatedCollection;
 /**
  * @Route("/admin")
  */
-class InventoryControllerNew extends Controller
+class InventoryControllerNew extends AbstractController
 {
     /**
      * @Route("/inventorynew/", name="inventorynew")

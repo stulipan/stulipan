@@ -24,30 +24,22 @@ class SetItemQuantityType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->setAction($this->urlGenerator->generate('cart_set_item_quantity', ['id' => $builder->getData()->getId()]));
-        $builder->add(
-            'quantity',
-            ChoiceType::class,
-            [
+        $builder->setAction($this->urlGenerator->generate('cart-setItemQuantity', ['id' => $builder->getData()->getId()]));
+        $builder
+            ->add('quantity',ChoiceType::class,[
                 'choices' => [
                     1 => 1,
                     2 => 2,
                     3 => 3,
                     4 => 4,
-                    5 => 5
+                    5 => 5,
+                    6 => 6,
+                    7 => 7,
+                    8 => 8,
+                    9 => 9,
+                    10 => 10,
                 ]
-            ]
-        );
-        $builder->add(
-            'submit',
-            SubmitType::class,
-            [
-                'label' => 'OK',
-                'attr' => [
-                    'icon' => 'fa fa-minus-circle'
-                ]
-            ]
-        );
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

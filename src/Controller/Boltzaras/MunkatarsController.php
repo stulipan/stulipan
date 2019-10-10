@@ -4,16 +4,16 @@
 namespace App\Controller\Boltzaras;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 //az alabbibol fogja tudni hogy a Munkatars entity-hez kapcsolodik es azzal dolgozik
-use App\Entity\Munkatars;
+use App\Entity\Boltzaras\Munkatars;
 
 /**
  * @Route("/admin")
  */
-class MunkatarsController extends Controller
+class MunkatarsController extends AbstractController
 {
     /**
      * @Route("/munkatars/new", name="munkatars_new")

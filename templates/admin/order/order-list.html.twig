@@ -1,0 +1,123 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block page_content %}
+		
+	{% block LISTA %}
+
+        <div class="row mt-3 mb-2">
+            <div class="col-lg-12">
+                <div class="page-title h3 d-inline mr-md-2 mr-1">{{ title }}</div>
+                <div class="d-inline float-rightX">
+                    <a href="{{ path('delivery-date-type-edit') }}" class="btn btn-xs btn-primary mb-2"><i class="fas fa-plus-circle mr-2"></i>Új rendelés</a>
+                </div>
+            </div>
+        </div>
+
+        {% include('/admin/_alert_widget.html.twig') %}
+
+        {{ include('/admin/_header_of_default_page_content.html.twig') }}
+
+        {#<div class="admin--list-header">#}
+            <div class="row">
+                <div class="col-sm-6 col-lg-8">
+                    <div class="d-inline-block my-1 my-lg-0">
+
+                        <!-- dateRange Widget -->
+                        {{ include('/admin/dateRange-picker-widget.html.twig') }}
+                    </div>
+                    <div class="d-inline-block">
+                        <a href="{{  path('order-list') }}" class="btn-link ml-1">Teljes lista</a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="text-sm-right my-1 my-lg-0">
+                        <a href="{{ path('boltzaras-edit') }}" class="btn btn-primary mb-2"><i class="fas fa-plus-circle mr-2"></i>Új rendelés</a>
+                    </div>
+                </div>
+            </div>
+        {#</div>#}
+
+        <div class="striped">
+            {{ include('admin/order/order-list-widget.html.twig') }}
+        </div>
+
+
+
+        {{ include('/admin/_footer_of_default_page_content.html.twig') }}
+
+
+
+	{% endblock %}
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {#
+     A dateRange-picker-widget.html.twig fajlban van hasznalva
+ #}
+    <script>
+        $(function() {
+            $('#JS--idosav input').daterangepicker({
+                opens: 'right',
+                autoApply: false,
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    separator: ' / ',
+                    applyLabel: 'Alkalmaz',
+                    cancelLabel: 'Mégse',
+                    daysOfWeek: [
+                        'V',
+                        'H',
+                        'K',
+                        'Sz',
+                        'Cs',
+                        'P',
+                        'Sz'
+                    ],
+                    monthNames: [
+                        'Január',
+                        'Február',
+                        'Március',
+                        'Április',
+                        'Május',
+                        'Június',
+                        'Július',
+                        'Augusztus',
+                        'Szeptember',
+                        'Október',
+                        'November',
+                        'December'
+                    ],
+                    firstDay: 1,
+                }
+            });
+
+            $('#JS--idosav input').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' / ' + picker.endDate.format('YYYY-MM-DD'));
+            });
+
+            $('#JS--idosav input').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+
+        });
+    </script>
+{% endblock %}
+        
+

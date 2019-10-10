@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Controller\Utils\GeneralUtils;
+use App\Entity\TimestampableTrait;
 use App\Entity\User;
 use App\Entity\Address;
 
@@ -21,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Sender
 {
+    use TimestampableTrait;
 
     /**
      * @var int
@@ -34,11 +37,12 @@ class Sender
     /**
      * @var User
      *
-     * ==== One Sender belongs to (is) one Customer ====
+     * ==== Many Senders belong to one Customer ====
+     * ==== inversed By="senders" => a User entitásban definiált 'senders' attibútumról van szó; A Sendert így kötjük vissza a Customerhez
      *
-     * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false)
-     * @ Assert\NotBlank(message="Egy feladónak van egy (billing) címe, azaz Sender.")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="senders")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ Assert\NotBlank(message="Egy számlázási címnek kell legyen felhasználója/Customer.")
      */
     private $customer;
 
@@ -49,23 +53,33 @@ class Sender
      *
      * @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Egy címzetnek kell legyen egy címe.")
+     * @ Assert\NotBlank(message="Egy címzetnek kell legyen egy címe.")
+     * @Assert\Valid()
      */
     private $address;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Assert\NotNull(message="Add meg a számlázási nevet.")
      */
     private $name='';
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="company", type="string", length=255, nullable=true)
      */
     private $company='';
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
+     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     */
+    private $phone;
 
 
     /**
@@ -74,6 +88,11 @@ class Sender
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
     /**
@@ -122,6 +141,23 @@ class Sender
     public function setCustomer(?User $customer): void
     {
         $this->customer = $customer;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @var string $phone
+     */
+    public function setPhone(?string $phone)
+    {
+        $utils = new GeneralUtils();
+        $this->phone = $utils->formatPhoneNumber($phone);
     }
 
     /**

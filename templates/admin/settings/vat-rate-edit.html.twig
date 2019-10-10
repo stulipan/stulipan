@@ -1,0 +1,31 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{# this tag only applies to the forms defined in this template #}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block page_content %}
+
+	<!-- page title -->
+	{{ include('/admin/_title_widget.html.twig') }}
+
+	<!-- header of default page content widget -->
+	{{ include('/admin/_header_of_default_page_content.html.twig') }}
+
+	<div class="row mb-2">
+		<div class="col-lg-8">
+		</div>
+		<div class="col-lg-4">
+		</div>
+	</div>
+
+	{{ include('/admin/settings/vat-rate-form.html.twig') }}
+
+	<!-- footer of default page content widget -->
+	{{ include('/admin/_footer_of_default_page_content.html.twig') }}
+
+{% endblock %}
+

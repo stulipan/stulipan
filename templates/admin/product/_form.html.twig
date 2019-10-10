@@ -1,127 +1,260 @@
-	{{ form_start(form, { 'attr': {'class': ' ' }}) }}
 
-			<div class="mb-3">
+    {{ form_start(form, { 'attr': {'class': ' ' }}) }}
+
+			<div class="mb-2">
 				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
-						{{ form_label(form.productName, form.productName, { 'label_attr': {'class': 'col-form-label' }}) }}
+					<div class="col-sm-12 col-md-2">
+						{{ form_label(form.name, form.name, { 'label_attr': {'class': 'col-form-label' }}) }}
 					</div>
-					<div class="col-sm-8 col-lg-5">
-                        {{ form_widget(form.productName) }}
-                        {{ form_errors(form.productName) }}
+					<div class="col-sm-12 col-md-6 col-xl-6 mr-auto">
+                        {{ form_widget(form.name) }}
+                        {{ form_errors(form.name) }}
 					</div>
-                    <div class="col-lg-5"></div>
+
 				</div>
 			</div>
-			<div class="mb-3">
+			<div class="mb-2">
 				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
+					<div class="col-sm-12 col-md-2">
+						{{ form_label(form.kind) }}
+					</div>
+					<div class="col-sm-12 col-md-6 col-xl-6 mr-auto">
+						<div class="form-row">
+							{% for choice in form.kind %}
+								<div class="col-md-4 col-6">
+									{{ include('admin/choiceItem.html.twig') }}
+								</div>
+							{% endfor %}
+							{% do form.kind.setRendered() %}
+						</div>
+					</div>
+				</div>
+			</div>
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-12 col-md-2">
+                        <div class="col-form-label">Termékkép</div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-6 mr-auto input-group">
+                        <div class="custom-file">
+                            {{ form_widget(form.imageFile) }}
+                            {#{{ form_label(form.imageFile, form.imageFile, { 'label_attr': {'class': '' }}) }}#}
+                        </div>
+                        {{ form_errors(form.imageFile) }}
+                        <div class="w-100 mt-2">
+                            {% if form.vars.data is defined and form.vars.data is not null and form.vars.data.image %}
+                                <img class="img-thumbnail" src="{{ uploaded_asset(form.vars.data.imagePath)|imagine_filter('product_thumbnail') }}" style="width: 200px; width: 200px;">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-lg-3 mr-auto input-group">
+
+                    </div>
+
+                </div>
+            </div>
+			<div class="mb-2">
+				<div class="form-group row">
+					<div class="col-sm-12 col-md-2">
                         {{ form_label(form.sku, form.sku, { 'label_attr': {'class': 'col-form-label' }}) }}
 					</div>
-					<div class="col-sm-8 col-lg-5">
+					<div class="col-sm-12 col-md-6 col-xl-5 mr-auto">
                         {{ form_widget(form.sku) }}
                         {{ form_errors(form.sku) }}
 					</div>
-                    <div class="col-lg-5"></div>
+
 				</div>
 			</div>
-			<div class="mb-3">
+			<div class="mb-2">
 				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
+					<div class="col-sm-12 col-md-2">
                         {{ form_label(form.description, form.description, { 'label_attr': {'class': 'col-form-label' }}) }}
 					</div>
-					<div class="col-sm-8 col-lg-5">
+					<div class="col-sm-12 col-md-6 col-xl-6 mr-auto">
                         {{ form_widget(form.description) }}
                         {{ form_errors(form.description) }}
 					</div>
-                    <div class="col-lg-5"></div>
+
 				</div>
 			</div>
-			<div class="mb-3">
-				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
-                        {{ form_label(form.status, form.status, { 'label_attr': {'class': 'col-form-label' }}) }}
+			<div class="mb-2">
+				<div class="row">
+					<div class="col-sm-12 mr-auto">
+						<hr>
 					</div>
-					<div class="col-sm-8 col-lg-5">
-                        {{ form_widget(form.status) }}
-                        {{ form_errors(form.status) }}
-					</div>
-                    <div class="col-lg-5"></div>
 				</div>
 			</div>
-			<div class="mb-3">
-				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
-                        {{ form_label(form.grossPrice, form.grossPrice, { 'label_attr': {'class': 'col-form-label' }}) }}
-					</div>
-					<div class="col-sm-8 col-lg-5 input-group">
-                        {{ form_widget(form.grossPrice) }}
-						<div class="input-group-append">
-							<span class="input-group-text">Ft</span>
-						</div>
-                        {{ form_errors(form.grossPrice) }}
-					</div>
-                    <div class="col-lg-5"></div>
+			{#<div class="mb-2">#}
+				{#<div class="form-group row">#}
+					{#<div class="col-sm-12 col-md-2">#}
+                        {#{{ form_label(form.grossPrice, form.grossPrice, { 'label_attr': {'class': 'col-form-label' }}) }}#}
+					{#</div>#}
+					{#<div class="col-md-9 col-lg-3 mr-auto input-group">#}
+                        {#{{ form_widget(form.grossPrice) }}#}
+						{#<div class="input-group-append">#}
+							{#<span class="input-group-text">Ft</span>#}
+						{#</div>#}
+                        {#{{ form_errors(form.grossPrice) }}#}
+					{#</div>#}
+
+				{#</div>#}
+			{#</div>#}
+			<div class="mb-2">
+				<div class="row">
+                    <div class="col-sm-12 col-md-2 order-1">
+                        {{ form_label(form.price.grossPrice, form.price.grossPrice, { 'label_attr': {'class': 'col-form-label' }}) }}
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-3 mr-auto form-group order-3 order-md-2">
+                        <div class="input-group">
+                            {{ form_widget(form.price.grossPrice) }}
+                            <div class="input-group-append">
+                                <span class="input-group-text">Ft</span>
+                            </div>
+                            {{ form_errors(form.price.grossPrice) }}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4 order-2 order-md-3">
+                        <div class="card h-100X ml-lg-2 ml-0 mb-2 mb-lg-0">
+                            <div class="card-body minicard--body bg-light d-flex flex-column h-100">
+                                <div class="">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Ez lesz a Standard méret ára, amennyiben 3 meretű termékről van szó.
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
 				</div>
 			</div>
-			<div class="mb-3">
+			<div class="mb-2">
 				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
+					<div class="col-sm-12 col-md-2">
                         {{ form_label(form.stock, form.stock, { 'label_attr': {'class': 'col-form-label' }}) }}
 					</div>
-					<div class="col-sm-8 col-lg-5 input-group">
+					<div class="col-sm-12 col-md-6 col-xl-3 mr-auto input-group">
                         {{ form_widget(form.stock) }}
 						<div class="input-group-append">
-							<span class="input-group-text">darab</span>
+							<span class="input-group-text">db</span>
 						</div>
                         {{ form_errors(form.stock) }}
 					</div>
-                    <div class="col-lg-5"></div>
+
 				</div>
 			</div>
-			<div class="mb-3">
-				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
-                        {{ form_label(form.category, form.category, { 'label_attr': {'class': 'col-form-label' }}) }}
-					</div>
-					<div class="col-sm-8 col-lg-5">
-                        {{ form_widget(form.category) }}
-                        {{ form_errors(form.category) }}
-					</div>
-                    <div class="col-lg-5"></div>
-				</div>
-			</div>
-			<div class="mb-3">
-				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
-						<div class="col-form-label">Termékkép</div>
-					</div>
-					<div class="col-sm-8 col-lg-5 input-group">
-						<div class="custom-file">
-                            {{ form_widget(form.image) }}
-							{{ form_label(form.image, form.image, { 'label_attr': {'class': 'custom-file-label' }}) }}
-						</div>
-						<div class="input-group-append">
-							<span class="input-group-text" id="inputGroupFileAddon02">Feltöltés</span>
-						</div>
-					</div>
-                    <div class="col-lg-5"></div>
-				</div>
-			</div>
+
+            {% if form.subproducts is defined and (form.subproducts|length) != 0 %}
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-12 col-md-2">
+                        {{ form_label(form.subproducts) }}
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-6 mr-auto JS--Wrapper-subproductsPriceFields"
+						{#data-prototype="{{ form_widget(form.subproducts.vars.prototype)|e('html_attr') }}"#}
+						data-index="{{ form.subproducts|length }}"
+					>
+                        <div class="form-row">
+						{% for item in form.subproducts %}
+								<div class="col-sm-6 col-md-4 col-6 mb-1">
+                                    <label>{{ item.attributeName.vars.value }}</label>
+                                    <div class="input-group">
+                                        {{ form_widget(item.price.grossPrice) }}
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Ft</span>
+                                        </div>
+                                    </div>
+                                    {{ form_errors(item.price.grossPrice) }}
+								</div>
+                        {% endfor %}
+                        {% do form.subproducts.setRendered() %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+
+            <div class="mb-2">
+                <div class="row">
+                    <div class="col-sm-12 mr-auto">
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-2">
+                <div class="row">
+                    <div class="col-sm-12 col-md-2 order-1">
+                        {{ form_label(form.status) }}
+                        {#{{ form_label(form.status, form.status, { 'label_attr': {'class': 'col-form-label' }}) }}#}
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-xl-6 mr-auto order-3 order-md-2">
+                        <div class="form-row">
+                            {% for choice in form.status %}
+                                <div class="col-md-4 col-6">
+                                    {{ include('admin/choiceItem.html.twig') }}
+                                </div>
+                            {% endfor %}
+                            {% do form.status.setRendered() %}
+                        </div>
+                        {#{{ form_widget(form.status) }}#}
+                        {{ form_errors(form.status) }}
+                    </div>
+                    <div class="col-sm-12 col-md-4 order-2 order-md-3">
+                        <div class="card h-100X ml-lg-2 ml-0 mb-2 mb-lg-0">
+                            <div class="card-body minicard--body bg-light d-flex flex-column h-100">
+                                <div class="">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    <strong>Kifutott</strong> állapotban a termék továbbra is látszik a weboldalon, csupán nem lesz neki <strong>Kosárba rakom</strong> gomb.
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <div class="row">
+                    <div class="col-sm-12 mr-auto">
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            {#<div class="mb-2">#}
+                {#<div class="form-group row">#}
+                    {#<div class="col-sm-12 col-md-2">#}
+                        {#{{ form_label(form.category, form.category, { 'label_attr': {'class': 'col-form-label' }}) }}#}
+                    {#</div>#}
+                    {#<div class="col-sm-12 col-md-5 col-xl-4 mr-auto">#}
+                        {#{{ form_widget(form.category) }}#}
+                        {#{{ form_errors(form.category) }}#}
+                    {#</div>#}
+
+                {#</div>#}
+            {#</div>#}
+
 
 			{# Render CSRF token etc .#}
 			<div style="display:none">
 				{{ form_rest(form) }}
 			</div>
 
-			<div class="mb-3">
+            <div class="mb-2">
+                <div class="row">
+                    <div class="col-sm-12 mr-auto">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+			<div class="mb-2">
 				<div class="form-group row">
-					<div class="col-sm-4 col-lg-2 text-sm-righttt">
+					<div class="col-sm-12 col-md-2">
 					</div>
-					<div class="col-sm-8 col-lg-5 ml-sm-auto">
-						<input type="submit" value="Mentés" class="btn btn-lgg btn-success" formnovalidate>
-						<a href="{{ path('product-list') }}" class="btn btn-outline-secondary">Mégse</a>
+					<div class="col-sm-12 col-md-8 col-xl-7 mr-auto">
+						<input type="submit" value="Mentés" class="btn btn-lgg btn-primary" formnovalidate>
+						<a href="{{ path('product-list') }}" class="btn btn-secondary">Mégse</a>
 					</div>
-                    <div class="col-lg-5"></div>
+
 				</div>
 			</div>
 

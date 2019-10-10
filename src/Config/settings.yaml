@@ -1,0 +1,11 @@
+parameters:
+    meta_title: 'Virágküldés Budapesten és környékén'
+    meta_description: 'A legnépszerűbb virágfutár Budapesten és környékén. Virágküldés: rózsadobozok, csokrok, esküvő, rendezvénydekoráció.'
+    items_per_page: 20
+    beallitas2: 'valami 9'
+    default_vat_rate:
+        value: 1
+        type: VatRate
+    cart_gift_category:
+        value: 59
+        type: ProductCategory

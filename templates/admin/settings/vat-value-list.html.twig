@@ -1,0 +1,205 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block page_content %}
+		
+	{% block LISTA %}
+
+		<!-- page title -->
+        {{ include('/admin/_title_widget.html.twig') }}
+
+		<!-- header of default page content widget -->
+        {{ include('/admin/_header_of_default_page_content.html.twig') }}
+
+		<div class="rowX mb-2X d-flex justify-content-between">
+			<div class="col-auto">
+                {#valami content#}
+			</div>
+			<div class="col-auto float-right">
+				<div class="text-lg-right">
+					<a href="{{ path('vat-value-edit') }}" class="btn btn-info mb-2 mr-1"><i class="fas fa-file-invoice-dollar mr-1"></i> Új ÁFA rögzítése</a>
+                    <a href="{{ path('vat-rate-edit') }}" class="btn btn-secondary mb-2 mr-1"><i class="fas fa-file-invoice-dollar mr-1"></i> Új ÁFA típus</a>
+                    <a href="{{ path('vat-rate-list') }}" class="btn btn-secondary mb-2 mr-0">ÁFA típusok</a>
+				</div>
+			</div>
+		</div>
+
+        <div class="table-responsive mb-3">
+            <table class="table table-sm table-centered table-striped table-bordered table-hover mb-0 js--wrapper-table">
+                <thead class="thead-light">
+				<tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ÁFA megnevezése</th>
+				    <th scope="col">ÁFA értéke</th>
+				    <th scope="col">Érvényes eddig</th>
+				    <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+                </tr>
+			  </thead>
+			  <tbody>
+				{% if vatValues is defined and vatValues %}
+				{% for vatValue in vatValues %}
+				<tr>
+                    <td class="">{{ vatValue.id }}</td>
+				    <td>
+                        <a href="{{ path('vat-rate-edit', {'id': vatValue.vatRate.id}) }}" class="">{{ vatValue.vatRate }}</a>
+                    </td>
+                    <td class="text-nowrap">{{ vatValue.value|number_format(0, ',', ' ') }}%</td>
+                    <td class=" font-weight-bold text-sm">
+                        {% if vatValue.value == vatValue.vatRate.value %}
+                            <span class="badge badge--missing badge-success">AKTÍV</span>
+                        {% else %}
+                            <span class="badge badge--missing badge-danger">LEJÁRT</span>
+                        {% endif %}
+
+                        {% if vatValue.expiresAt is defined and vatValue.expiresAt %}
+                            {{ vatValue.expiresAt|date('Y-M-d')}}
+                        {% else %}
+                            {{ include('admin/_notAvailable-insert.html.twig') }}
+                        {% endif %}
+                    </td>
+                    <td>
+				  	    <a href="{{ path('vat-value-edit', {'id': vatValue.id}) }}" class="">
+				  		    <i class="fas fa-edit"></i></a>
+				    </td>
+				</tr>
+				{% endfor %}
+				{% else %}
+				<tr>
+			        <td><em>Nincs találat</em></td>
+			    </tr>
+				{% endif %}
+			  </tbody>
+			</table>
+		</div>
+		<div class="pagerfanta">
+            {% if paginator is defined %}
+                {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
+            {% endif %}
+		</div>
+        <!-- footer of default page content widget -->
+        {{ include('/admin/_footer_of_default_page_content.html.twig') }}
+
+	{% endblock %}
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        /**
+         * Removes an entry from a table with AJAX
+         *
+         *   - Delete button must have the 'js--button-delete' class.
+         *   - Enclosing table must have the 'js--wrapper-table' class.
+         *   - Delete button must have the 'data-url' attribute which holds the URL where the request is sent.
+         *   - URL must be defined on the server side
+         */
+        'use strict';
+
+        (function(window, $) {
+            window.DeleteAction = function ($wrapper) {
+                this.$wrapper = $wrapper;
+                this.$wrapper.find('.js--button-delete').on('click', this.handleDelete.bind(this));
+                this.$wrapper.find('tbody tr').on('click', this.handleRowClick.bind(this));
+            };
+
+            $.extend(window.DeleteAction.prototype, {
+
+                handleDelete: function(event) {
+                    event.preventDefault();
+                    var $element = $(event.currentTarget);
+                    $element.addClass('text-danger');
+                    $element.find('.fas')
+                        .removeClass('fa-trash')
+                        .addClass('fa-spinner')
+                        .addClass('fa-spin');
+
+                    var url = $element.data('url');
+                    var $row = $element.closest('tr');
+
+                    var self = this;
+
+                    $.ajax({
+                        url: url,
+                        method: 'DELETE',
+                        success: function() {
+                            $row.fadeOut('normal', function() {
+//                                $row.remove();
+//                                az alabbival ugyanaz
+                                $(this).remove();
+                            });
+                        }
+                    });
+                },
+
+                handleRowClick: function() {
+                    console.log('row clicked');
+                }
+
+            });
+        })(window, jQuery);
+
+
+        $(document).ready(function () {
+           var $table = $('.js--wrapper-table');
+           var deleteAction = new DeleteAction($table);
+        });
+
+//        $(document).ready(function () {
+//            // ha var-ba rakom gyorsabb a feldolgozas
+//            // a $ jel a $table-ben sima karakter es azt jelzi, hogy jQuery obiektumrol van szo, amin lehet find() metodust alkalmazni
+//            var $table = $('.js--invoice-table');
+//
+//            // csak a $table-ben fogja keresni
+//            $table.find('.js--button-delete').on('click', function (event) {
+//                event.preventDefault();
+//
+//                //$(event.currentTarget).addClass('text-danger');
+//                // above line is  equivalent to this
+//                // this is just a shortcut to e.currentTarget
+//                $(this).addClass('text-danger');
+//                $(this).find('.fas')
+//                    .removeClass('fa-trash')
+//                    .addClass('fa-spinner')
+//                    .addClass('fa-spin');
+//
+//                var url = $(this).data('url');
+//                var $row = $(this).closest('tr');
+//
+//                $.ajax({
+//                    url: url,
+//                    method: 'DELETE',
+//                    success: function() {
+//                        $row.fadeOut();
+//                    }
+//                });
+//
+////                console.log(event.currentTarget === this);
+////                return false;
+//            });
+//
+//            // csak a $table-ben fogja keresni
+//            $table.find('tbody tr').on('click', function(event) {
+//                event.preventDefault();
+////                $(event.target).addClass('bg-warning');
+////                console.dir(event.target);
+//                console.log('row clicked');
+//            });
+//        });
+    </script>
+{% endblock %}
+        
+

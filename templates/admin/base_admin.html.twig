@@ -2,155 +2,354 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <meta name="format-detection" content="telephone=no">
 {% endblock %}
 
 {% block body %}
 <!-- Begin page -->
 <div class="wrapper">
-    <nav class="sidebar-sticky">
-    <div class="left-side-menu left-side-menu-light bg-dark text-light">
+    <div class="topnav navbar-sticky sticky-top">
+        <div class="container-fluid">
+            <nav class="navbar navbar-dark navbar-expand-lg topnav-menu">
 
-        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 443px;"><div class="slimscroll-menu active" style="overflow: hidden; width: auto; height: 443px;">
+                    <a href="/" class="navbar-brand order-lg-1 order-2 mr-4" target="_blank">
+                        <span class="h4 font-weight-bold text-uppercase text-white ml-0">tulipan<span class="text-danger">.</span>futar  </span>
+                    </a>
+                    <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#burgerMenuContent" aria-controls="burgerMenuContent" aria-expanded="false" aria-label="Toggle navigation">
+                        {#<span class="navbar-toggler-icon"></span>#}
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse active coll justify-content-center order-lg-2 order-5" id="burgerMenuContent">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="{{ path('dashboard') }}" class="nav-link text-nowrap">
+                                    {#<i class="dripicons-meter"></i>#}
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    {#<span class="badge badge-success float-right">7</span>#}
+                                    <span> Dashboard </span>
+                                </a>
+                            </li>
 
-                <!-- LOGO -->
-                <a href="{{ path('homepage') }}" class="logo text-center my-3" target="_blank">
-                    <span class="logo-lg">
-                            <h3 class="font-weight-bold text-uppercase text-light">tulipan<span class="text-danger">.</span>futar  </h3>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnavTermekek" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-boxes"></i> Termékek
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="topnavTermekek">
+                                    <a href="{{ path('product-list') }}" class="dropdown-item">
+                                        <i class="fas fa-boxes mr-1"></i></i>
+                                        Termékek
+                                    </a>
+                                    <a href="{{ path('product-listCategories') }}" class="dropdown-item">
+                                        <i class="fas fa-list-ul mr-1"></i>
+                                        Kategóriák
+                                    </a>
+
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnav-apps" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {#<i class="mdi mdi-apps mr-1X"></i>#}
+                                    <i class="fas fa-store"></i> Bolt
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="topnav-apps">
+                                    <a href="{{ path('boltzaras_list') }}" class="dropdown-item">
+                                        <i class="far fa-calendar-check mr-1"></i>
+                                        Boltzárás
+                                    </a>
+                                    <a href="{{ path('invoice-list') }}" class="dropdown-item">
+                                        <i class="fas fa-lgX fa-file-invoice-dollar fa-dollar-signX mr-1"></i>
+                                        Számlák
+                                    </a>
+
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnav-apps" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {#<i class="fas fa-lgX fa-file-invoice-dollar mr-1"></i>#}
+                                    <i class="fas fa-clipboard-list mr-1X"></i>
+                                    Rendelések 
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="topnav-apps">
+                                    <a href="{{ path('order-list-table') }}" class="dropdown-item"><i class="fas fa-clipboard-list mr-1"></i> Rendelések</a>
+                                    <a href="{{ path('order-list') }}" class="dropdown-item"><i class="fas fa-clipboard-list mr-1"></i> Rendelések #2</a>
+
+                                    <a href="{{ path('invoice-list') }}" class="dropdown-item"><i class="fas fa-user-friends mr-1"></i> Vásárlók</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnav-apps" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {#<i class="mdi mdi-apps mr-1"></i>#}
+                                    <i class="fas fa-cubes mr-1X"></i>
+                                    Leltár 
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="topnav-apps">
+                                    <a href="{{ path('inventory-supply-list') }}" class="dropdown-item">
+                                        <i class="fas fa-dolly mr-1"></i>
+                                        Szállítmányok</a>
+                                    <a href="{{ path('inventory-waste-list') }}" class="dropdown-item">
+                                        <i class="far fa-trash-alt mr-1"></i>
+                                        Selejt</a>
+                                    <a href="{{ path('inventory-product-list-all') }}" class="dropdown-item">
+                                        <i class="far fa-list-alt mr-1"></i>
+                                        Terméklista</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
+
+                                <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnav-apps" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {#<i class="mdi mdi-apps mr-1"></i>#}
+                                    <i class="fas fa-cog mr-1X"></i>
+                                    Beállítások 
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="topnav-apps">
+                                    {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
+                                        <a href="{{ path('settings-edit') }}" class="dropdown-item">
+                                            <i class="fas fa-cog"></i>
+                                            <span> Webshop beállítások</span>
+                                        </a>
+                                        <a href="{{ path('delivery-special-date-list') }}" class="dropdown-item">
+                                            <i class="far fa-calendar-alt"></i>
+                                            <span> Kiemelt szállítási napok</span>
+                                        </a>
+                                        <a href="{{ path('delivery-date-type-list') }}" class="dropdown-item">
+                                            <i class="far fa-clock"></i>
+                                            <span> Szállítási idősávok</span>
+                                        </a>
+                                        <a href="{{ path('shipping-list') }}" class="dropdown-item">
+                                            <i class="fas fa-shipping-fast"></i>
+                                            <span> Szállítás és fizetési módok</span>
+                                        </a>
+                                        <a href="{{ path('geo-price') }}" class="dropdown-item">
+                                            <i class="fas fa-shipping-fast"></i>
+                                            <span> Szállítási díjak</span>
+                                        </a>
+                                    {% endif %}
+
+                                    {% if is_granted('ROLE_MANAGE_VAT') %}
+                                        <div class="dropdown">
+                                            <a class="dropdown-item dropdown-toggle arrow-noneX" href="javascript: void(0);" id="vatRates" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-hand-holding-usd mr-1"></i>
+                                                ÁFA 
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="vatRates">
+                                                <a href="{{ path('vat-rate-list') }}" class="dropdown-item">ÁFA típusok</a>
+                                                <a href="{{ path('vat-value-list') }}" class="dropdown-item">ÁFA értékek</a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="order-lg-3 order-3">
+                        {{ include('/admin/navbar-widget.html.twig') }}
+                    </div>
+                    {#<button class="button-menu-mobile open-left disable-btn">#}
+
+                    {#</button>#}
+            </nav>
+        </div>
+    </div>
+
+    {#<nav class="sidebar-sticky">#}
+    {#<div class="left-side-menu left-side-menu-light bg-dark text-light">#}
+
+        {#<div class="slimScrollDivX" style="position: relative; overflow: hidden; width: auto; height: 443px;">#}
+            {#<div class="slimscroll-menu active" style="overflow: hidden; width: auto; height: 443px;">#}
+
+                {#<!-- LOGO -->#}
+                {#<a href="{{ path('homepage') }}" class="logo text-center my-3" target="_blank">#}
+                    {#<span class="logo-lg">#}
+                            {#<h3 class="font-weight-bold text-uppercase text-light">tulipan<span class="text-danger">.</span>futar  </h3>#}
                             {#<img src="assets/images/logo-dark.png" alt="" height="16">#}
-                    </span>
-                    <span class="logo-sm">
-                        <span class="font-weight-bold text-uppercase">tulipan<span class="text-danger">.</span>futar  </span>
+                    {#</span>#}
+                    {#<span class="logo-sm text">#}
+                        {#<span class="font-weight-bold text-uppercase text-light">t<span class="text-danger">.</span>f  </span>#}
                             {#<img src="assets/images/logo_sm.png" alt="" height="16">#}
-                    </span>
-                </a>
+                    {#</span>#}
+                {#</a>#}
 
-                <!--- Sidemenu -->
-                <ul class="metismenu side-nav side-nav-light in">
+                {#<!--- Sidemenu -->#}
+                {#<ul class="metismenu side-nav side-nav-light">#}
 
-                    <li class="side-nav-title side-nav-item">Webshop</li>
+                    {#<li class="side-nav-title side-nav-item">Webshop</li>#}
 
-                    <li class="side-nav-item">
-                        <a href="{{ path('dashboard') }}" class="side-nav-link">
+                    {#<li class="side-nav-item">#}
+                        {#<a href="{{ path('dashboard') }}" class="side-nav-link">#}
                             {#<i class="dripicons-meter"></i>#}
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span class="badge badge-success float-right">7</span>
-                            <span> Dashboard </span>
-                        </a>
-                    </li>
+                            {#<i class="fas fa-tachometer-alt"></i>#}
+                            {#<span class="badge badge-success float-right">7</span>#}
+                            {#<span> Dashboard </span>#}
+                        {#</a>#}
+                    {#</li>#}
 
-                    <li class="side-nav-item">
-                        <a href="javascript: void(0);" class="side-nav-link">
-                            <i class="fas fa-th"></i>
-                            <span> Termékek </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul class="side-nav-second-level collapse" aria-expanded="true">
-                            <li>
-                                <a href="{{ path('product-list') }}">Termékek</a>
-                            </li>
-                            {#<li class="side-nav-item">#}
-                                {#<a href="javascript: void(0);" aria-expanded="false">Kategoriak#}
-                                    {#<span class="menu-arrow"></span>#}
-                                {#</a>#}
-                                {#<ul class="side-nav-third-level collapse" aria-expanded="false">#}
-                                    {#<li>#}
-                                        {#<a href="apps-projects-list.html">Kepek</a>#}
-                                    {#</li>#}
-                                    {#<li>#}
-                                        {#<a href="apps-projects-details.html">Egyeb</a>#}
-                                    {#</li>#}
-                                {#</ul>#}
-                            {#</li>#}
-
-                        </ul>
-                    </li>
+                    {#<li class="side-nav-item">#}
+                        {#<a href="{{ path('product-list') }}" class="side-nav-link">#}
+                            {#<i class="fas fa-th"></i>#}
+                            {#<span> Termékek </span>#}
+                        {#</a>#}
+                    {#</li>#}
 
 
-                    <li class="side-nav-title side-nav-item mt-1">Bolt</li>
+                    {#<li class="side-nav-title side-nav-item mt-1 pb-1">Bolt</li>#}
 
-                    <li class="side-nav-item">
-                        <a href="{{ path('boltzaras_list') }}" class="side-nav-link">
-                            <i class="far fa-calendar-check"></i>
-                            <span> Boltzárás </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                    </li>
+                    {#<li class="side-nav-item">#}
+                        {#<a href="{{ path('boltzaras_list') }}" class="side-nav-link">#}
+                            {#<i class="far fa-calendar-check"></i>#}
+                            {#<span> Boltzárás </span>#}
+                        {#</a>#}
+                    {#</li>#}
 
-                    <li class="side-nav-item">
-                        <a href="{{ path('invoice-list') }}" class="side-nav-link">
+                    {#<li class="side-nav-item">#}
+                        {#<a href="{{ path('invoice-list') }}" class="side-nav-link">#}
                             {#<i class="dripicons-heart"></i>#}
-                            <i class="fas fa-lgX fa-file-invoice-dollar fa-dollar-signX"></i>
-                            <span class="badge badge-danger float-right">New</span>
-                            <span> Számlák </span>
-                        </a>
-                    </li>
+                            {#<i class="fas fa-lgX fa-file-invoice-dollar fa-dollar-signX"></i>#}
+                            {#<span class="badge badge-danger float-right">Új</span>#}
+                            {#<span> Számlák </span>#}
+                        {#</a>#}
+                    {#</li>#}
 
-                    <li class="side-nav-item">
-                        <a href="javascript: void(0);" class="side-nav-link">
-                            {#<i class="dripicons-document"></i>#}
-                            <i class="far fa-file-alt"></i>
-                            <span> Leltár </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul class="side-nav-second-level collapse" aria-expanded="true">
-                            <li>
-                                <a href="{{ path('inventory-supply-list') }}">Szállítmányok</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('inventory-product-list-all') }}">Terméklista</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('inventory-waste-list') }}">Selejt</a>
-                            </li>
-                        </ul>
-                    </li>
+                    {#<li class="side-nav-title side-nav-item mt-1 pb-1">Rendelések</li>#}
+
+                    {#<li class="side-nav-item">#}
+                        {#<a href="{{ path('order-list') }}" class="side-nav-link">#}
+                            {#<i class="far fa-calendar-check"></i>#}
+                            {#<span> Rendelések </span>#}
+                            {#<span class="badge badge-danger float-right mr-2">32</span>#}
+                        {#</a>#}
+                    {#</li>#}
+
+                    {#<li class="side-nav-item">#}
+                        {#<a href="{{ path('invoice-list') }}" class="side-nav-link">#}
+                            {#<i class="fas fa-lgX fa-file-invoice-dollar fa-dollar-signX"></i>#}
+                            {#<span>Vásárlók</span>#}
+                        {#</a>#}
+                    {#</li>#}
+
+                    {#<li class="side-nav-title side-nav-item mt-2">Leltár</li>#}
+                    {#<li class="side-nav-item">#}
+                        {#<a href="{{ path('inventory-supply-list') }}" class="side-nav-link">#}
+                            {#<i class="fas fa-cubes"></i>#}
+                            {#<span> Szállítmányok</span>#}
+                        {#</a>#}
+                    {#</li>#}
+                    {#<li class="side-nav-item mb-0">#}
+                        {#<a href="{{ path('inventory-waste-list') }}" class="side-nav-link">#}
+                            {#<i class="far fa-trash-alt"></i>#}
+                            {#<span> Selejt</span>#}
+                        {#</a>#}
+                    {#</li>#}
+                    {#<li class="side-nav-item">#}
+                        {#<a href="{{ path('inventory-product-list-all') }}" class="side-nav-link">#}
+                            {#<i class="far fa-list-alt"></i>#}
+                            {#<span> Terméklista</span>#}
+                        {#</a>#}
+                    {#</li>#}
 
 
-                </ul>
+                    {#{% if is_granted('ROLE_DELIVERY_SETTINGS') %}#}
+                    {#<li class="side-nav-title side-nav-item mt-2">Szállítási beállítások</li>#}
+                    {#<li class="side-nav-item">#}
+                        {#<a href="{{ path('delivery-special-date-list') }}" class="side-nav-link">#}
+                            {#<i class="far fa-calendar-alt"></i>#}
+                            {#<span> Szállítási napok</span>#}
+                        {#</a>#}
+                    {#</li>#}
+                    {#<li class="side-nav-item mb-0">#}
+                        {#<a href="{{ path('delivery-date-type-list') }}" class="side-nav-link">#}
+                            {#<i class="far fa-clock"></i>#}
+                            {#<span> Idősávok</span>#}
+                        {#</a>#}
+                    {#</li>#}
+                    {#<li class="side-nav-item mb-0">#}
+                        {#<a href="{{ path('shipping-list') }}" class="side-nav-link">#}
+                            {#<i class="fas fa-cog"></i>#}
+                            {#<span> Szállítás és fizetési módok</span>#}
+                        {#</a>#}
+                    {#</li>#}
+                    {#{% endif %}#}
 
-                <!-- Help Box -->
-                <div class="help-box text-light text-center">
-                    <a href="{{ path('homepage') }}" class="text-light" target="_blank">Webshop megnyitása</a>
+
+
+                {#</ul>#}
+
+                {#<!-- Help Box -->#}
+                {#<div class="help-box text-light text-center">#}
+                    {#<a href="{{ path('homepage') }}" class="text-light" target="_blank">Webshop megnyitása</a>#}
                     {#<img src="assets/images/help-icon.svg" height="90" alt="Helper Icon Image">#}
                     {#<h5 class="mt-3">Unlimited Access</h5>#}
                     {#<p class="mb-3">Upgrade to plan to get access to unlimited reports</p>#}
                     {#<a href="javascript: void(0);" class="btn btn-outline-light btn-sm">Upgrade</a>#}
-                </div>
-                <!-- end Help Box -->
-                <!-- End Sidebar -->
+                {#</div>#}
+                {#<!-- end Help Box -->#}
+                {#<!-- End Sidebar -->#}
 
-                <div class="clearfix"></div>
+                {#<div class="clearfix"></div>#}
 
-                <ul class="metismenu side-nav side-nav-light text-center">
-                <li class="side-nav-item">
-                    <a href="{{ path('logout') }}" class="side-nav-link">
-                        <span> Kilépés </span>
-                        <i class="fas fa-sign-out-alt"></i>
-                    </a>
-                </li>
-                </ul>
+                {#<ul class="metismenu side-nav side-nav-light text-center">#}
+                {#<li class="side-nav-item">#}
+                    {#<a href="{{ path('logout') }}" class="side-nav-link">#}
+                        {#<span> Kilépés </span>#}
+                        {#<i class="fas fa-sign-out-alt"></i>#}
+                    {#</a>#}
+                {#</li>#}
+                {#</ul>#}
 
-            </div><div class="slimScrollBar" style="background: rgb(158, 165, 171); width: 8px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 143.983px;"></div><div class="slimScrollRail" style="width: 8px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
-        <!-- Sidebar -left -->
+            {#</div>#}
+            {#<div class="slimScrollBar" style="background: rgb(158, 165, 171); width: 8px; position: absolute; top: 0; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 143.983px;"></div>#}
+            {#<div class="slimScrollRail" style="width: 8px; height: 100%; position: absolute; top: 0; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>#}
+        {#</div>#}
+        {#<!-- Sidebar -left -->#}
 
+    {#</div>#}
+    {#</nav>#}
+
+    <div class="content-page p-0" style="overflow: hidden; min-height: 0; ">
+        {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
     </div>
-    </nav>
-
-
     <div class="content-page">
         <div class="content">
-
-            {{ include('/admin/admin-navbar-widget.html.twig') }}
-
-            <div class="container-fluid">
-
+            {#{{ include('/admin/navbar-widget.html.twig') }}#}
+            <div class="container">
                 {% block page_content %}{% endblock %}
-
             </div>
+        </div>
+        <div class="position-relative">
+            <img class="bill-footer__illustration" src="//cdn.shopify.com/s/assets/admin-fresh/shared/leaf-15be1ea3a9e77954b44dbf7debab51e77c557305c02195b08afc4774cde379b0.svg">
         </div>
     </div>
 
+    <footer class="main-footer">
+        <div class="bg-gray-300 text-muted">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 mb-5X mb-lg-0">
+                        <div class="text-dark text-center py-3">
+                            {#{% set route = app.request.attributes.get('_route') %}#}
+                            {#{% set route_params = app.request.attributes.get('_route_params') %}#}
+                            {#{% set params = route_params|merge(app.request.query.all) %}#}
+                            {#{{  dump(app.request.locale) }}#}
+                            {#{% for locale in locales %}#}
+                                {#if locale != app.request.locale#}
+                            {#<a href="{{ path(route, params|merge({ _locale: locale })) }}" class="btn-link-secondary btn-sm">locale</a>#}
+                            {#{% endfor %}#}
 
+
+                            {#<a href="" class="btn-link-secondary btn-sm">English</a>#}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
 {% endblock %}
 
@@ -169,109 +368,50 @@
             });
         });
 	</script>
-
+    <script src="https://sciactive.com/pnotify/lib/iife/PNotify.js"></script>
+    <script src="https://sciactive.com/pnotify/lib/iife/PNotifyButtons.js"></script>
     <script>
-        $(function() {
-            $('#tulipan-datepicker input').daterangepicker({
-                opens: 'right',
-                autoApply: true,
-                autoUpdateInput: false,
-                singleDatePicker: true,
-                maxDate: moment(),
-                locale: {
-                    format: 'YYYY-MM-DD',
-                    separator: ' / ',
-                    applyLabel: 'Alkalmaz',
-                    cancelLabel: 'Mégse',
-                    daysOfWeek: [
-                        'V',
-                        'H',
-                        'K',
-                        'Sz',
-                        'Cs',
-                        'P',
-                        'Sz'
-                    ],
-                    monthNames: [
-                        'Január',
-                        'Február',
-                        'Március',
-                        'Április',
-                        'Május',
-                        'Június',
-                        'Július',
-                        'Augusztus',
-                        'Szeptember',
-                        'Október',
-                        'November',
-                        'December'
-                    ],
-                    firstDay: 1,
-                }
-            });
+        $(document).ready(function () {
+//            const stackBottomModal = {
+//                dir1: 'up', // With a dir1 of 'up', the stacks will start appearing at the bottom.
+//                // Without a `dir2`, this stack will be horizontally centered, since the `dir1` axis is vertical.
+//                firstpos1: 25, // The notices will appear 25 pixels from the bottom of the context.
+//                // Without a `spacing1`, this stack's notices will be placed 25 pixels apart.
+//                push: 'top', // Each new notice will appear at the bottom of the screen, which is where the 'top' of the stack is. Other notices will be pushed up.
+//                // modal: true, // When a notice appears in this stack, a modal overlay will be created.
+//                overlayClose: true, // When the user clicks on the overlay, all notices in this stack will be closed.
+//                context: document.getElementById('page-container') // The notices will be placed in the 'page-container' element.
+//            };
+            PNotify.defaults.styling = 'bootstrap4';
+            PNotify.defaults.icons = 'fontawesome5';
 
-//            $('.tulipan-datepicker input').val('');
-
-            $('#tulipan-datepicker input').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            {% for msg in app.session.flashBag.get('success') %}
+            PNotify.success({
+                title: 'Siker!',
+                text: '{{ msg|raw }}',
+                modules: { Desktop: { desktop: true } },
+                textTrusted: true,
+//                stack: stackBottomModal,
             });
-
-            $('#tulipan-datepicker input').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
+            {% endfor %}
+            {% for msg in app.session.flashBag.get('warning') %}
+            PNotify.notice({
+                title: 'Figyelem!',
+                text: '{{ msg|raw }}',
+                modules: { Desktop: { desktop: true } },
+//                stack: stackBottomModal,
             });
-        });
-    </script>
-
-    {#
-        A dateRange-picker-widget.html.twig fajlban van hasznalva
-    #}
-    <script>
-        $(function() {
-            $('#tulipan-daterange input').daterangepicker({
-                opens: 'right',
-                autoApply: true,
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD',
-                    separator: ' / ',
-                    applyLabel: 'Alkalmaz',
-                    cancelLabel: 'Mégse',
-                    daysOfWeek: [
-                        'V',
-                        'H',
-                        'K',
-                        'Sz',
-                        'Cs',
-                        'P',
-                        'Sz'
-                    ],
-                    monthNames: [
-                        'Január',
-                        'Február',
-                        'Március',
-                        'Április',
-                        'Május',
-                        'Június',
-                        'Július',
-                        'Augusztus',
-                        'Szeptember',
-                        'Október',
-                        'November',
-                        'December'
-                    ],
-                    firstDay: 1,
-                }
+            {% endfor %}
+            {% for msg in app.session.flashBag.get('danger') %}
+            PNotify.error({
+                title: 'Upsz...',
+                text: '{{ msg|raw }}',
+                modules: { Desktop: { desktop: true } },
+//                cornerClass: 'alert-dark',
+//                stack: stackBottomModal,
             });
-
-            $('#tulipan-daterange input').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' / ' + picker.endDate.format('YYYY-MM-DD'));
-            });
-
-            $('#tulipan-daterange input').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            });
+            {% endfor %}
 
         });
     </script>
-
 {% endblock %}

@@ -1,0 +1,52 @@
+    {{ form_start(form, { 'attr': {'class': '' }}) }}
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="mb-2">
+                {{ form_label(form.value) }}
+                <div class="input-group">
+                    {{ form_widget(form.value) }}
+                    <span class="input-group-append input-group-addon">
+                        <span class="input-group-text">%</span>
+                    </span>
+                </div>
+                {{ form_errors(form.value) }}
+            </div>
+
+            <div class="mb-2">
+                {{ form_label(form.vatRate) }}
+                {{ form_widget(form.vatRate) }}
+                {{ form_errors(form.vatRate) }}
+            </div>
+
+            <div class="mb-2">
+                {{ form_label(form.expiresAt) }}
+                <div class="input-group" id="JS--datum">
+                    {{ form_widget(form.expiresAt, {'attr': {
+                        'class': 'form-control',
+                    }}) }}
+                    <span class="input-group-append input-group-addon">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    </span>
+                </div>
+                {{ form_errors(form.expiresAt) }}
+                <small class="form-text">
+                    Csak akkor kell kitölteni, ha törvényileg változni fog az ÁFA.
+                </small>
+            </div>
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+            <div class="mb-2">
+                    <input type="submit" value="Mentés" class="btn btn-lgg btn-info" formnovalidate>
+                    <a href="{{ path('vat-value-list') }}" class="btn btn-secondary">Mégse</a>
+            </div>
+
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+    {% do form.setRendered() %}

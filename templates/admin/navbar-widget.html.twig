@@ -1,0 +1,37 @@
+<div class="navbar-custom">
+    <ul class="list-unstyled topbar-right-menu float-right mb-0">
+
+        <li class="dropdown notification-list">
+            <a class="navbar-text dropdown-toggle nav-user arrow-none mr-0" id="userDropdown" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <span class="account-user-avatar">
+                    <img src="{{ app.user.image is defined ? asset('/uploads/images/termekek/' ~ app.user.image) : '' }}" alt="" class="rounded-circle">
+                </span>
+                <span>
+                    <span class="account-user-name">Helló, {{ app.user.username|capitalize }}!</span>
+                    <span class="account-position">{{ app.user.email }}</span>
+                </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animatedX topbar-dropdown-menu profile-dropdown" aria-labelledby="userDropdown">
+                <div class="dropdown-header noti-title">
+                    <h6 class="text-overflowX m-0">Üdv, {{ app.user.firstName ? app.user.firstName : app.user.email }}!</h6>
+                </div>
+
+                <a href="{{ path('user-showProfile', {'id': app.user.id}) }}" class="dropdown-item notify-item">
+                    <i class="far fa-user"></i>
+                    Adatlap
+                </a>
+                {% if is_granted('ROLE_IMPERSONATE_USER') %}
+                <a href="{{ path('admin', {'_switch_user': 'liviu.chioran+1@gmail.com'}) }}" class="dropdown-item notify-item">
+                    <i class="fas fa-user-secret"></i>
+                    Impersonate user
+                </a>
+                {%  endif %}
+                <a href="{{ path('admin-logout') }}" class="dropdown-item notify-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Kijelentkezés</span>
+                </a>
+
+            </div>
+        </li>
+    </ul>
+</div>

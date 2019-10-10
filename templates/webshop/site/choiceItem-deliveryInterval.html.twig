@@ -1,0 +1,8 @@
+            <div class="custom-control custom-radio py-3 {% if choice.vars.checked is defined and choice.vars.checked %}selectedX{% endif %}">
+                <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
+                <label class="custom-control-label font-weight-bold" for="{{ choice.vars.id }}">
+                     <span class="">
+                         {{ choice.vars.label|raw }}
+                     </span>
+                </label>
+            </div>

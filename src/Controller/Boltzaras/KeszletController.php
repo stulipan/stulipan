@@ -4,7 +4,7 @@
 namespace App\Controller\Boltzaras;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -20,7 +20,7 @@ use App\Pagination\PaginatedCollection;
 /**
  * @Route("/admin")
  */
-class KeszletController extends Controller
+class KeszletController extends AbstractController
 {
 
     /**

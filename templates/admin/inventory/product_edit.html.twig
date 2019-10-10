@@ -1,8 +1,5 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{# this tag only applies to the forms defined in this template #}
-{% form_theme form 'bootstrap_4_layout.html.twig' %}
-
 {% block title %}
 	{{ title }}
 {% endblock %}
@@ -29,6 +26,7 @@
 	</div>
 
     {{ include('/admin/inventory/_product_form_withVisualPicker.html.twig') }}
+    {#{{ include('/admin/inventory/_product_form.html.twig') }}#}
 
 	<!-- footer of default page content widget -->
     {{ include('/admin/_footer_of_default_page_content.html.twig') }}

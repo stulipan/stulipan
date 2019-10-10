@@ -1,0 +1,60 @@
+    {{ form_start(form, { 'attr': {'class': '' }}) }}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        {{ form_label(form.specialDate) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-5 mr-auto">
+                        <div class="input-group" id="JS--datum">
+                            {{ form_widget(form.specialDate, {'attr': {
+                                'class': 'form-control',
+                            }}) }}
+                            <span class="input-group-append input-group-addon">
+						        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+					        </span>
+                            {{ form_errors(form.specialDate) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        {{ form_label(form.dateType) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-8 mr-auto">
+                        <div class="form-row">
+                            {% for choice in form.dateType %}
+                                <div class="col-md-6 col-6X">
+                                    {{ include('admin/choiceItem.html.twig') }}
+                                </div>
+                            {% endfor %}
+                            {% do form.dateType.setRendered() %}
+                            {{ form_errors(form.dateType) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                    </div>
+                    <div class="col-sm-8 col-lg-5">
+                        <input type="submit" value="Mentés" class="btn btn-info mr-1" formnovalidate>
+                        <a href="{{ path('delivery-special-date-list') }}" class="btn btn-secondary">Mégse</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{ form_end(form) }}

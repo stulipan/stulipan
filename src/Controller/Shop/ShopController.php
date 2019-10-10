@@ -2,14 +2,12 @@
 
 namespace App\Controller\Shop;
 
-use App\Entity\Product;
-use App\Entity\Category;
+use App\Entity\Product\Product;
+use App\Entity\Product\ProductCategory;
 //use App\Services\HomepageTools;
+use App\Form\CartAddItemType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-
 
 class ShopController extends AbstractController
 {
@@ -38,128 +36,120 @@ class ShopController extends AbstractController
         return $this->render('webshop/site/checkout_payment1.html.twig');
     }
 
-    /**
-     * @Route("/sikeres-rendeles", name="site_thankyou")
-     */
-    public function showThankyouPage()
-    {
-        return $this->render('webshop/site/checkout_thankyou.html.twig');
-    }
+
 
 
 //    public function generateProductList($categoryId = NULL)
 //    {
 //        //$entityManager = $this->getDoctrine()->getManager();
-//        //$termek= $entityManager->getRepository(Product::class)->findAll();
+//        //$products= $entityManager->getRepository(Product::class)->findAll();
 //
 //        if (!$categoryId) {
-//            $termek = $this->getDoctrine()->getManager()
+//            $products = $this->getDoctrine()->getManager()
 //                ->getRepository(Product::class)
 //                ->findAll();
 //
-//            $kategoria = 'Virágküldés';
+//            $category = 'Virágküldés';
 //        }
 //        else {
-//            $termek = $this->getDoctrine()->getManager()
+//            $products = $this->getDoctrine()->getManager()
 //                ->getRepository(Product::class)
 //                ->findByCategory($categoryId);
 //
-//            $kategoria = $this->getDoctrine()->getManager()
-//                ->getRepository(Category::class)
+//            $category = $this->getDoctrine()->getManager()
+//                ->getRepository(ProductCategory::class)
 //                ->find($categoryId);
 //        }
 //
-//        return $termek;
+//        return $products;
 //
 //    }
-
+    
+    /**
+     * @ Route("/", name="index")
+     */
+    public function index()
+    {
+        return $this->redirectToRoute('homepage');
+    }
     /**
      * @Route("/", name="homepage")
      */
     public function showHomepage()
     {
-        $kategoria = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->find(2);
-
-        $termek = $kategoria->getProducts();
-
-        return $this->render('webshop/site/homepage.html.twig', ['termekek' => $termek]);
+        $products= $this->getDoctrine()->getRepository(Product::class)->findAll();
+        return $this->render('webshop/site/homepage.html.twig', ['products' => $products]);
     }
 
     /**
-     * @Route("/termekek/", name="site_product_listall")
+     * @Route("/termekek/", name="site-product-listall")
      */
     public function showProductsAll()
     {
-        //$termek = $this->generateProductList();
+        //$products = $this->generateProductList();
         $entityManager = $this->getDoctrine()->getManager();
-        $termek= $entityManager->getRepository(Product::class)->findAll();
-        $kategoria = 'Virágküldés';
+        $products= $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $category = 'Virágküldés';
 
-        if (!$termek) {
+        if (!$products) {
             //throw $this->createNotFoundException(
             //    'Nem talált egy terméket sem! '  );
 
             $this->addFlash('success', 'Nem talált egy terméket sem! ');
-            return $this->redirectToRoute('site_product_list');
+            return $this->redirectToRoute('site-product-list');
         }
 
-        return $this->render('webshop/site/product_list.html.twig', [
-            'termekek' => $termek,
-            'kategoria' => $kategoria
+        return $this->render('webshop/site/product-list.html.twig', [
+            'products' => $products,
+            'category' => $category,
         ]);
     }
 
     /**
-     * @Route("/termekek/{slug}", name="site_product_list")
+     * @Route("/termekek/{slug}", name="site-product-list")
      */
     public function showProductsByCategory($slug)
     {
         // slug-ból visszafejtem a kategóriát
-        $kategoria = $this->getDoctrine()
-            ->getRepository(Category::class)
+        $category = $this->getDoctrine()
+            ->getRepository(ProductCategory::class)
             ->findOneBy(['slug' => $slug]);
 
-        if (!$kategoria) {
+        if (!$category) {
             return $this->redirectToRoute('404');
         } else {
-
-            //$termek = $this->generateProductList($kategoria->getId());
-            $termek = $kategoria->getProducts();
-
+            //$products = $this->generateProductList($category->getId());
+            $products = $category->getProducts();
         }
-
-
-
-        if (!$termek) {
+        if (!$products) {
             //throw $this->createNotFoundException(
             //    'Nem talált egy terméket sem! '  );
-
             $this->addFlash('livSuccess', 'Nem talált egy terméket sem! ');
-            return $this->redirectToRoute('site_product_list');
+            return $this->redirectToRoute('site-product-list');
         }
 
-
-        return $this->render('webshop/site/product_list.html.twig', [
-            'termekek' => $termek,
-            'kategoria' => $kategoria,
+        return $this->render('webshop/site/product-list.html.twig', [
+            'products' => $products,
+            'category' => $category,
         ]);
     }
 
     /**
-     * @Route("/termek/{id}", name="site_product_show")
+     * @Route("/termek/{id}", name="site-product-show")
      */
-    public function showProduct(Product $termek)
+    public function showProduct(Product $product)
     {
-
-        if (!$termek) {
-            throw $this->createNotFoundException('Nem talált egy terméket sem, ezzel az ID-vel: '.$id);
+        if (!$product) {
+            throw $this->createNotFoundException('Nem talált egy terméket sem, ezzel az ID-vel');
             //return $this->redirectToRoute('404');
         }
+        $form = $this->createForm(CartAddItemType::class, $product, ['subproducts' => $product->getSubproducts()]);
 
         // render a template and print things with {{ termek.productName }}
-        return $this->render('webshop/site/product_show.html.twig', ['termek' => $termek]);
+        return $this->render('webshop/site/product-show.html.twig', [
+            'product' => $product,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**

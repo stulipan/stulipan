@@ -8,6 +8,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/invoice.css') }}" />
 {% endblock %}
 
 
@@ -15,25 +16,25 @@
 		
 	{% block LISTA %}
 
-		<!-- page title -->
-        {{ include('/admin/_title_widget.html.twig') }}
+        <!-- page title -->
+        {#{{ include('/admin/_title_widget.html.twig') }}#}
+
+        <div class="row mt-3 mb-2">
+            <div class="col-lg-12">
+                <div class="page-title h3 d-inline mr-md-2 mr-1">{{ title }}</div>
+                <div class="d-inline float-rightX">
+                    <a href="{{ path('invoice-edit') }}" class="btn btn-outline-info mb-2 mr-0"><i class="fas fa-file-invoice-dollar mr-1"></i> Új számla rögzítése</a>
+                </div>
+            </div>
+        </div>
+
+        {{ include('/admin/_alert_widget.html.twig') }}
 
 		<!-- header of default page content widget -->
         {{ include('/admin/_header_of_default_page_content.html.twig') }}
 
-		<div class="row mb-2">
-			<div class="col-lg-8">
-                {#valami content#}
-			</div>
-			<div class="col-lg-4">
-				<div class="text-lg-right">
-					<a href="{{ path('invoice-edit') }}" class="btn btn-success mb-2 mr-2"><i class="fas fa-file-invoice-dollar mr-1"></i> Új számla rögzítése</a>
-				</div>
-			</div><!-- end col-->
-		</div>
-
         <div class="table-responsive mb-3">
-            <table class="table table-centered table-stripedX table-hover mb-0">
+            <table class="table table-sm table-centered table-stripedX table-hover mb-0 js--wrapper-table">
                 <thead class="thead-light">
 				<tr>
                     <th scope="col">#</th>
@@ -49,21 +50,22 @@
 				{% for szamla in szamlak %}
 				<tr>
                     <td class="align-middle">{{ szamla.id }}</td>
-				    <td class="align-middle font-weight-bold">{{ szamla.datum|date('Y. M d. ')}}</td>
+				    <td class="align-middle font-weight-bold text-sm">{{ szamla.datum|date('M d, Y')}}</td>
 				    <td>{{ szamla.company }}
 						<a href="{{ path('invoice-company-edit', {'id': szamla.company.id }) }}" class="btn-link text-muted text-secondary ml-1"><i class="fas fa-edit"></i></a>
 					</td>
-                    <td class="align-middle text-right text-nowrap">{{ szamla.osszeg|number_format(0, ',', ' ') }},-</td>
+                    <td class="align-middle text-right font-weight-bold text-nowrap">{{ szamla.osszeg|number_format(0, ',', ' ') }}</td>
 				    <td>
 				  	    <a href="{{ path('invoice-edit', {'id': szamla.id}) }}" class="btn-smX">
 				  		    <i class="fas fa-edit"></i></a>
+							<a href="" class="js--button-delete" data-url="{{ path('invoice-delete', {id: szamla.id}) }}"><i class="fas fa-trash"></i></a>
 				    </td>
-                    <td class="align-middle text-muted"><small>{{ szamla.updatedAt|date('Y. M d. \\| H:i')}}</small></td>
+                    <td class="align-middle text-muted"><small>{{ szamla.updatedAt|date('Y-m-d, H:i')}}</small></td>
 				</tr>
 				{% endfor %}
 				{% else %}
 				<tr>
-			        <li><em>nincs user found</em></li>
+			        <td><li><em>nincs user found</em></li></td>
 			    </tr>
 				{% endif %}
 			  </tbody>
@@ -74,10 +76,18 @@
                 {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
             {% endif %}
 		</div>
+
+        <div class="rowX">
+            <hr />
+
+            <div id="RA--invoice">
+
+            </div>
+        </div>
+
         <!-- footer of default page content widget -->
         {{ include('/admin/_footer_of_default_page_content.html.twig') }}
 
-	</div>
 	{% endblock %}
 {% endblock %}
 
@@ -87,6 +97,109 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        /**
+         * Removes an entry from a table with AJAX
+         *
+         *   - Delete button must have the 'js--button-delete' class.
+         *   - Enclosing table must have the 'js--wrapper-table' class.
+         *   - Delete button must have the 'data-url' attribute which holds the URL where the request is sent.
+         *   - URL must be defined on the server side
+         */
+        'use strict';
+
+        (function(window, $) {
+            window.DeleteAction = function ($wrapper) {
+                this.$wrapper = $wrapper;
+                this.$wrapper.find('.js--button-delete').on('click', this.handleDelete.bind(this));
+                this.$wrapper.find('tbody tr').on('click', this.handleRowClick.bind(this));
+            };
+
+            $.extend(window.DeleteAction.prototype, {
+
+                handleDelete: function(event) {
+                    event.preventDefault();
+                    var $element = $(event.currentTarget);
+                    $element.addClass('text-danger');
+                    $element.find('.fas')
+                        .removeClass('fa-trash')
+                        .addClass('fa-spinner')
+                        .addClass('fa-spin');
+
+                    var url = $element.data('url');
+                    var $row = $element.closest('tr');
+
+                    var self = this;
+
+                    $.ajax({
+                        url: url,
+                        method: 'DELETE',
+                        success: function() {
+                            $row.fadeOut('normal', function() {
+//                                $row.remove();
+//                                az alabbival ugyanaz
+                                $(this).remove();
+                            });
+                        }
+                    });
+                },
+
+                handleRowClick: function() {
+                    console.log('row clicked');
+                }
+
+            });
+        })(window, jQuery);
+
+
+        $(document).ready(function () {
+           var $table = $('.js--wrapper-table');
+           var deleteAction = new DeleteAction($table);
+        });
+
+//        $(document).ready(function () {
+//            // ha var-ba rakom gyorsabb a feldolgozas
+//            // a $ jel a $table-ben sima karakter es azt jelzi, hogy jQuery obiektumrol van szo, amin lehet find() metodust alkalmazni
+//            var $table = $('.js--invoice-table');
+//
+//            // csak a $table-ben fogja keresni
+//            $table.find('.js--button-delete').on('click', function (event) {
+//                event.preventDefault();
+//
+//                //$(event.currentTarget).addClass('text-danger');
+//                // above line is  equivalent to this
+//                // this is just a shortcut to e.currentTarget
+//                $(this).addClass('text-danger');
+//                $(this).find('.fas')
+//                    .removeClass('fa-trash')
+//                    .addClass('fa-spinner')
+//                    .addClass('fa-spin');
+//
+//                var url = $(this).data('url');
+//                var $row = $(this).closest('tr');
+//
+//                $.ajax({
+//                    url: url,
+//                    method: 'DELETE',
+//                    success: function() {
+//                        $row.fadeOut();
+//                    }
+//                });
+//
+////                console.log(event.currentTarget === this);
+////                return false;
+//            });
+//
+//            // csak a $table-ben fogja keresni
+//            $table.find('tbody tr').on('click', function(event) {
+//                event.preventDefault();
+////                $(event.target).addClass('bg-warning');
+////                console.dir(event.target);
+//                console.log('row clicked');
+//            });
+//        });
+    </script>
+    <script src="{{ asset('build/invoice.js') }}"></script>
 {% endblock %}
         
 

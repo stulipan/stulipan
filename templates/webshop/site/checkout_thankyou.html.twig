@@ -13,58 +13,134 @@
 
 {% block page_content %}
 
-    <section name="progress_bar">
-        <div class="container mt-4 mb-4">
-            <div class="row">
-                <div class="col-lg-12">
-                        <div class="row text-center">
-                            <div class="col-4 text-muted">
-                                <p class="text-primary font-weight-bold">1. Kosár</p>
-                            </div>
-                            <div class="col-4 text-muted">
-                                <p class="text-primary font-weight-bold">2. Pénztár</p>
-                            </div>
-                            <div class="col-4 text-muted">
-                                <p class="text-primary font-weight-bold">3. Rendelés véglegesítése</p>
-                            </div>
-                        </div>
-                        <div class="row text-center">
-                            <div class="col-4 text-muted">
-                            </div>
-                            <div class="col-4 text-muted">
-                            </div>
-                            <div class="col-4 text-muted" style="margin-bottom: -22px">
-                                <i class="fas fa-2x fa-sort-up text-primary"></i>
-                            </div>
-                        </div>
-                        <div class="progress rounded">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {#{{ include('webshop/cart/progress-bar-completed-widget.html.twig') }}#}
+    {{ include('webshop/site/alert-widget.html.twig') }}
 
-    <section class="hero">
-        <div class="container pt-3">
-
-            <!-- Hero Content-->
-            <div class="hero-content pb-5 mt-5 text-center">
-                <h1 class="hero-heading">Sikeres rendelés</h1>
-            </div>
-        </div>
-    </section>
-
-    <section class="pb-5">
+    <section class="mt-3">
         <div class="container text-center">
-            <div class="icon-rounded bg-success mb-3 mx-auto text-white">
-                <svg class="svg-icon w-2rem h-2rem align-middle">
+            <div class="icon-rounded bg-success mx-auto text-white">
+                <svg class="svg-icon w-1rem h-1rem align-middle">
                     <use xlink:href="#checkmark-1"> </use>
                 </svg>
             </div>
-            <h4 class="mb-3 ff-base">Köszönjük, Julie. A rendelést sikeresen leadtad.</h4>
-            <p class="text-muted mb-5">A rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
-            <p> <a href="customer-order.html" class="btn btn-outline-dark">Rendelés megtekintése</a></p>
+
+            <div class="row text-left">
+                <div class="col-lg-7 mx-auto">
+                    <div class="block text-center">
+                        {#{{ dump(order) }}#}
+                        <h4 class="mt-4 mb-2 ff-base">Köszönjük, {{ order.billingName }}. A rendelést sikeresen leadtad.</h4>
+                        <p class="text-muted mb-0">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
+                    </div>
+
+                    <div name="products_in_basket" class="card mt-4">
+                        <div class="cart-wrapper">
+                            <div class="block-body">
+                                <span class="h5 checkout--sidebar-title">Termékek:
+                                    {#Rendelés száma: <span class="text-success font-weight-bold">#{{ order.id }}</span>#}
+                                </span>
+                            </div>
+                            <div class="cart-body bg-white">
+                                <div class="">
+                                    <div class="cart-itemX">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-12">
+                                                {% for item in order.items %}
+                                                    {% include('webshop/cart/cart-item-single-widget.html.twig') %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div name="written_message" class="cart-body text-sm bg-white mt-2">
+                                <div class="row d-flex align-items-center text-center">
+
+                                    <div class="col-12 pr-0">
+                                        {% include 'webshop/cart/cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div name="sender_recipient" class="block-body">
+                                <div class="row row-narrow">
+
+                                    <div class="col-md-6 col-lg-6 col-narrow mt-4 mt-md-0">
+                                        <div class="">
+                                            {#<span class="h5 checkout--sidebar-title">Aki küldi:</span>#}
+                                            <span class="h5 checkout--sidebar-title">Feladó:</span>
+                                        </div>
+                                        <div class="minicard bg-light card--choice h-100X mt-1">
+                                            <div class="minicard--body h-100">
+                                                <div class="minicard--title mb-1">{{ order.sender.name }} {{ order.billingCompany is defined and order.billingCompany ? ' / ' ~ order.billingCompany : ''}}</div>
+                                                <div class="">
+                                                    <span class="minicard--address">Telefonszám: <em>{{ order.billingPhone }}</em></span> <br>
+                                                    <span class="minicard--address">{{ order.billingAddress.zip }} {{ order.billingAddress.city }}, {{ order.billingAddress.street }}</span> <br>
+                                                    <span class="minicard--address">{{ order.billingAddress.province }}, {{ order.billingAddress.country }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-narrow">
+                                        <div class="">
+                                            <span class="h5 checkout--sidebar-title">Címzett:</span>
+                                            {#<span class="h5 checkout--sidebar-title">Aki kapja:</span>#}
+                                        </div>
+                                        <div class="minicard bg-light recipient card--choice h-100X mt-1">
+                                            <div class="minicard--body h-100">
+                                                <div class="minicard--title mb-1">{{ order.shippingName }}</div>
+                                                <div class="">
+                                                    <span class="minicard--address">Telefonszám: <em>{{ order.shippingPhone }}</em></span> <br>
+                                                    <span class="minicard--address">{{ order.shippingAddress.zip }} {{ order.shippingAddress.city }}, {{ order.shippingAddress.street }}</span> <br>
+                                                    <span class="minicard--address">{{ order.shippingAddress.province }}, {{ order.shippingAddress.country }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div name="delivery_date" class="block-body">
+                                <div class="row row-narrow">
+
+                                    <div class="col-lg-12 col-narrow">
+                                        <div class="">
+                                            {#<span class="h5 checkout--sidebar-title">Aki küldi:</span>#}
+                                            <span class="h5 checkout--sidebar-title">Szállítási idő:</span><br>
+                                            <span class="text-smX text-muted">{{ order.deliveryDate|date('Y F j')|lower }}, {{ order.deliveryInterval }} óra között.</span>
+                                        </div>
+                                        {#<div class="text-sm mt-1">#}
+                                            {##}
+                                        {#</div>#}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {% if isBankTransfer is defined and isBankTransfer == true %}
+                            <div name="payment_bank_transfer" class="block-body">
+                                <div class="row row-narrow">
+
+                                    <div class="col-lg-12 col-narrow">
+                                        <div class="">
+                                            <span class="h5 checkout--sidebar-title">Banki utaláshoz szükséges adatok</span>
+                                        </div>
+                                        <div class="text-smX text-muted mt-1">
+                                                {{ order.payment.description|raw }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <p class="mt-4 mb-6"> <a href="customer-order.html" class="btn btn-outline-dark">Rendelés megtekintése</a></p>
         </div>
     </section>
 

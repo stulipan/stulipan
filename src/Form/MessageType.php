@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Order;
-use App\Form\AddressType;
-
+use App\Entity\Model\CartCard;
+use App\Validator\Constraints\MessageWithAuthor;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
 class MessageType extends AbstractType
@@ -26,51 +27,60 @@ class MessageType extends AbstractType
         $this->urlGenerator = $urlGenerator;
     }
 
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        //dump($builder->getData()->getId()); die;
-        $builder->setAction($this->urlGenerator->generate('cart_set_message'));
-//        $builder->add(
-//            'id',
-//            HiddenType::class,
-//            // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-//            ['mapped' => false]
-//        );
-        $builder->add(
-            'message',
-            TextareaType::class,
-            [
-                'label' => 'Ide írd az üzenetet (max 200 karakter) ***',
+        $builder->setAction($this->urlGenerator->generate('cart-setMessage'));
+        $builder
+            ->add('message',TextareaType::class,[
+                'label' => 'Ide írd az üzenetet...',
                 'required' => false,
                 'attr' => ['rows' => '5'],
-            ]
-        );
-        $builder->add(
-            'messageAuthor',
-            TextType::class,
-            [
-                'label' => 'Aláírásnév (ezt írjuk az üdvözlőlapra)))',
+// Ez akkor kell, ha form szintu validaciot akarok. Most a CartCard class-on van egy custom validator.
+//                'constraints' => [
+//                    new Callback([$this, 'validateMessage']),
+//                ],
+            ])
+            ->add('author',TextType::class,[
+                'label' => 'Kinek a részéről (neved)',
                 'required' => false,
-            ]
-        );
-//        $builder->add(
-//            'submit',
-//            SubmitType::class,
-//            [
-//                'label' => 'Mentés',
-//                'attr' => [
-//                    'icon' => 'fa fa-minus-circle'
+//                'constraints' => [
+//                    new Callback([$this, 'validateMessageAuthor']),
 //                ]
-//            ]
-//        );
+            ]);
+    }
 
+    public function validateMessage($value, ExecutionContextInterface $context)
+    {
+        $form = $context->getRoot();
+        $data = $form->getData()->getCard();
+
+        if($data) {
+            if (!$value && $data->getAuthor()) {
+                $context
+                    ->buildViolation('Az üzenet lemaradt!')
+                    ->addViolation();
+            }
+        }
+    }
+
+    public function validateMessageAuthor($value, ExecutionContextInterface $context)
+    {
+        $form = $context->getRoot();
+        $data = $form->getData()->getCard();
+        if ($data) {
+            if (!$value && $data->getMessage()) {
+                $context
+                    ->buildViolation('Nem írtad alá az üzenetet')
+                    ->addViolation();
+            }
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Order::class
+            'data_class' => CartCard::class,
+
         ]);
     }
 

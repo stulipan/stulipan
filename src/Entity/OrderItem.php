@@ -6,10 +6,11 @@ namespace App\Entity;
 
 use App\Entity\TimestampableTrait;
 use App\Entity\Order;
-use App\Entity\Product;
+use App\Entity\Product\Product;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,6 +25,7 @@ class OrderItem
 
     /**
      * @var int
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -32,7 +34,7 @@ class OrderItem
     private $id;
 
     /**
-     * @var int
+     * @var Order
      *
      * ==== Many OrderItems in one Order ====
      * ==== inversed By="items" => az Order entitásban definiált 'items' attibútumról van szó; A Tételt így kötjük vissza a Rendeléshez
@@ -44,18 +46,27 @@ class OrderItem
     private $order;
 
     /**
-     * @var int
+     * @var Product
+     * @Groups({"orderView", "orderList"})
      *
      * ==== One OrderItem is one Product => Egy tétel mindig egy termék ====
      *
-     * @ORM\OneToOne(targetEntity="Product")
+     * @ORM\OneToOne(targetEntity="App\Entity\Product\Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false)
      * @Assert\NotBlank(message="A tétel egy termék kell legyen.")
      */
     private $product;
 
     /**
+     * @var string
+     * @ORM\Column(name="subproduct_attribute", type="string", length=100, nullable=false)
+     */
+    private $subproductAttribute;
+
+    /**
      * @var int|null
+     * @Groups({"orderView", "orderList"})
+     *
      * @Assert\NotBlank()
      * @Assert\Range(min=0, minMessage="A mennyiség nem lehet negatív.")
      * @ORM\Column(name="quantity", type="smallint", nullable=false)
@@ -64,6 +75,8 @@ class OrderItem
 
     /**
      * @var float
+     * @Groups({"orderView", "orderList"})
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
      */
@@ -71,10 +84,19 @@ class OrderItem
 
     /**
      * @var float
+     * @Groups({"orderView", "orderList"})
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="price_total", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
      */
     private $priceTotal = 0;
+
+    /**
+     * @var float
+     * @ Assert\NotBlank()
+     * @ORM\Column(name="price_total_after_discount", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
+     */
+    private $priceTotalAfterDiscount = 0;
 
     /**
      * @return int
@@ -110,10 +132,28 @@ class OrderItem
 
     /**
      * @param Product $product
+     * @return OrderItem
      */
-    public function setProduct(Product $product): void
+    public function setProduct(Product $product): OrderItem
     {
         $this->product = $product;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubproductAttribute(): ?string
+    {
+        return $this->subproductAttribute;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setSubproductAttribute(string $name): void
+    {
+        $this->subproductAttribute = $name;
     }
 
     /**
@@ -153,7 +193,7 @@ class OrderItem
      */
     public function getPriceTotal(): float
     {
-        return $this->priceTotal;
+        return (float) $this->priceTotal;
     }
 
     /**
@@ -162,5 +202,21 @@ class OrderItem
     public function setPriceTotal(float $priceTotal): void
     {
         $this->priceTotal = $priceTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPriceTotalAfterDiscount(): float
+    {
+        return $this->priceTotalAfterDiscount;
+    }
+
+    /**
+     * @param float $priceTotal
+     */
+    public function setPriceTotalAfterDiscount(float $priceTotal): void
+    {
+        $this->priceTotalAfterDiscount = $priceTotal;
     }
 }

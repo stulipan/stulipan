@@ -1,0 +1,65 @@
+<div class="nav-item dropdown">
+    {#<!-- Cart icon for mobile -->#}
+    {#<a href="{{ path('site-checkout-step1-pickExtraGift') }}" class="navbar-icon-link d-lg-none d-none">#}
+        {#<svg class="svg-icon login-cart--color">#}
+            {#<use xlink:href="#cart-1"> </use>#}
+        {#</svg>#}
+    {#</a>#}
+    <!-- Cart icon for desktop -->
+    <div class="d-lg-block">
+        <a id="cartdetails" data-toggle="dropdownXXXX" aria-haspopup="true" aria-expanded="false" class="JS--cartDetails navbar-icon-link dropdown-toggle" role="button">
+            <div>
+            <svg class="svg-icon login-cart--color">
+                <use xlink:href="#cart-1"> </use>
+            </svg>
+            <div class="navbar-icon-link-badge">
+                {% if order.countItems is defined %}
+                    {{  order.countItems }}
+                {% else %}
+                    0
+                {% endif %}
+            </div>
+            </div>
+            <span class="login-cart--text d-none d-lg-inline ml-1 ml-lg-2">Kosár</span>
+        </a>
+
+        {#<!-- Cart details dropdown -->#}
+        {#<div aria-labelledby="cartdetails" class="dropdown-menu dropdown-menu-right dropdown--flown mt-0">#}
+            {#<div class="p-2">#}
+                {#<div class="dropdown--flown-a2 p-4">#}
+            {#{% if order.items is defined %}#}
+                {#{% for item in order.items %}#}
+                        {#<!-- cart item-->#}
+                        {#<div class="navbar-cart-product">#}
+                            {#<div class="d-flex align-items-center">#}
+                                {#<a href="{{ path('site-product-show', {'id': item.product.id}) }}">#}
+                                    {#<img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid navbar-cart-product-image">#}
+                                {#</a>#}
+                                {#<div class="d-flex w-100 justify-content-between">#}
+                                    {#<div class="pl-3">#}
+                                        {#<a href="{{ path('site-product-show', {'id': item.product.id}) }}" class="navbar-cart-product-link">{{ item.product.name }}</a>#}
+                                        {#<small class="d-block text-muted">Mennyiség: {{ item.quantity }} </small>#}
+                                        {#<strong class="d-block text-sm">{{ (item.price * item.quantity) |number_format(0, ',', ' ') }} </strong>#}
+                                    {#</div>#}
+                                    {#<a href="#"><i class="fa fa-trash-o"></i></a>#}
+                                {#</div>#}
+                            {#</div>#}
+                        {#</div>#}
+                {#{% endfor %}#}
+                {#<!-- total price-->#}
+                {#<div class="navbar-cart-total">#}
+                    {#<span class="text-uppercase text-muted">Összesen</span>#}
+                    {#<strong class="text-uppercase">{{  order.summary.totalAmountToPay|number_format(0, ',', ' ') }}</strong>#}
+                {#</div>#}
+                {#<!-- buttons-->#}
+                {#<div class="d-flex justify-content-end">#}
+                    {#<a href="{{ path('site-checkout-step1-pickExtraGift') }}" class="btn btn-outline-dark">Kosár tartalma <i class="fa fa-chevron-right"></i></a></div>#}
+            {#{% endif %}#}
+            {#</div>#}
+            {#</div>#}
+        {#</div>#}
+        {#<!-- /Cart details dropdown -->#}
+
+
+    </div>
+</div>

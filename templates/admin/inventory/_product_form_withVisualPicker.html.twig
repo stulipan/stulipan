@@ -1,38 +1,29 @@
 		{# az alabbi sorban a 'form-boltzaras' a signin.css-bol a class neve #}
 		{{ form_start(form, { 'attr': {'class': '' } }) }}
 
-        <div class="mb-3">
+        <div class="mb-2">
             <div class="form-group row">
                 <div class="col-sm-4 col-lg-2 text-sm-right">
                     <strong>{{ form_label(form.category) }}</strong>
                 </div>
-                <div class="col-sm-8 col-lg-10">
-                    {% for category in form.category %}
-                    <div class="visual-picker visual-picker-smX has-peek mr-2">
-                        <input type="radio" id="{{ category.vars.id }}" name="{{ category.vars.full_name }}" required="required" value="{{ category.vars.value }}" {% if category.vars.checked is defined and category.vars.checked == 1 %}checked{% endif %}/>
-                        <!-- .visual-picker-figure -->
-                        <label class="visual-picker-figure bg-tulipan-gray required {% if category.vars.checked is defined and category.vars.checked == 1 %}visual-valami{% endif %}" for="{{ category.vars.id }}">
-                            <!-- .visual-picker-content -->
-                            <span class="visual-picker-content">
-                                {#<span class="tile tile-lg">#}
-                                  <i class="text-lg fas fa-file-contract"></i>
-                                    <h5>{{ category.vars.label }}</h5>
-                                {#</span>#}
-                            </span>
-                            <!-- /.visual-picker-content -->
-                        </label>
-                        {#<span class="visual-picker-peek">{{ category.vars.label }}</span>#}
+                <div class="col-sm-8 col-lg-5">
+                    <div class="form-row">
+                        {% for choice in form.category %}
+                            <div class="col-md-4">
+                            {{ include('admin/choiceItem.html.twig') }}
+                            </div>
+                        {% endfor %}
+                        {% do form.category.setRendered() %}
                     </div>
-                    {% endfor %}
+                    {{ form_errors(form.category) }}
 
-                    {#{{ form_widget(form.category) }}#}
-                    {#{{ form_errors(form.category) }}#}
+
                 </div>
                 <div class="col-lg-5"></div>
             </div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-2">
             <div class="form-group row">
                 <div class="col-sm-4 col-lg-2 text-sm-right">
                     {{ form_label(form.productName) }}
@@ -55,12 +46,12 @@
 				{{ form_rest(form) }}
 			</div>
 
-            <div class="mb-3">
+            <div class="mb-2">
                 <div class="form-group row">
                     <div class="col-sm-4 col-lg-2 text-sm-right">
                     </div>
                     <div class="col-sm-8 col-lg-5 ml-sm-auto">
-                        <input type="submit" value="Mentés" class="btn btn-lgg btn-success" formnovalidate>
+                        <input type="submit" value="Mentés" class="btn btn-lgg btn-primary" formnovalidate>
                         <a href="{{ path('inventory-product-list-all') }}" class="btn btn-outline-secondary">Mégse</a>
                     </div>
                     <div class="col-lg-5"></div>
@@ -70,4 +61,3 @@
 
 
 		{{ form_end(form) }}
-        {#{{ form_end(form, {'render_rest': false}) }}#}

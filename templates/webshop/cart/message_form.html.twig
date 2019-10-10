@@ -1,47 +1,22 @@
-<section name="uzenet_irasa">
-    <div class="container mb-4">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="cartX bg-white">
-                    <div class="cart-wrapper">
 
-                        <!-- header -->
-                        <div class="checkout-block-header">
-                            <div class="row">
-                                <div class="col-xl-8 mx-autoX">
-                                    <h4 class="text-uppercase">Üzenet a címzettnek</h4>
-                                    <!--p class="text-sm text-muted">Megadhatsz egy egyéni üzenetet, amelyet egy üdvözlölapra írunk.</p-->
-                                    </div>
-                                </div>
-                            </div>
-
-                        <!-- body-->
-
-                        <div class="block-body col-lg-6">
-
-                            {{ form_start(messageForm) }}
-                            <div class="row">
-                                <!--div class="col-lg-8">
-                                    <p class="text-sm text-muted">Megadhatsz egy egyéni üzenetet, amelyet egy üdvözlölapra írunk.</p>
-                                </div-->
-                                <div class="form-group col-lg-12">
-                                    <label for="{{ messageForm.message.vars.full_name }}" class="form-label">Ide írd az üzenetet (max 200 karakter) *</label>
-                                    {{ form_widget(messageForm.message, {'attr': {'class': 'form-control', 'rows': messageForm.message.vars.attr.rows, 'placeholder': 'Ide írd az üzenetet' }} ) }}
-                                </div>
-                                <div class="form-group col-lg-12">
-                                    <label for="{{ messageForm.messageAuthor.vars.full_name }}" class="form-label">Aláírásnév (ezt írjuk az üdvözlőlapra)</label>
-                                    {{ form_widget(messageForm.messageAuthor, {'attr': {'class': 'form-control', 'placeholder': 'Szabó János' }}) }}
-                                </div>
-                                <div class="form-group col-lg-12">
-                                    <!--button type="submit" class="btn btn-success btn-lg mb-1"> <i class="fa fa-shopping-cart mr-2"></i>Kosárba rakom</button-->
-                                    <button type="submit" class="btn btn-primary">Tovább <i class="fa fa-chevron-right"></i></button>
-                                </div>
-                            </div>
-                            {{ form_end(messageForm) }}
-
-                        </div>
-                    </div>
+            {#{{ form_start(messageForm) }}#}
+            <div class="row">
+                <div class="form-group col-md-12">
+                    {#<label for="{{ messageForm.message.vars.full_name }}" class="form-label">Üzenetet</label>#}
+                    {#<span class="detail-option-heading font-weight-bold"><span>(max 200 karakter)</span></span>#}
+                    {{ form_widget(messageForm.message, {'attr': {'class': 'form-control JS--messageForm-message', 'rows': 5, 'placeholder': messageForm.message.vars.label }} ) }}
+                    {#messageForm.message.vars.attr.rows#}
+                    {{ form_errors(messageForm.message) }}
+                </div>
+                <div class="form-group col-md-8">
+                    {#<label for="{{ messageForm.messageAuthor.vars.full_name }}" class="form-label">Aláírásnév</label>#}
+                    {#<span class="detail-option-heading font-weight-bold"><span>(ezt írjuk az üdvözlőlapra)</span></span>#}
+                    {{ form_widget(messageForm.author, {'attr': {'class': 'form-control', 'placeholder': messageForm.author.vars.label }}) }}
+                    {{ form_errors(messageForm.author) }}
                 </div>
             </div>
-        </div>
-    </section>
+            {#{{ form_end(messageForm) }}#}
+            {{ form_errors(messageForm) }}
+            {% do messageForm.setRendered() %}
+
+

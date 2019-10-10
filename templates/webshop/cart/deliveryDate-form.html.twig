@@ -1,0 +1,260 @@
+{#{% extends 'webshop/site/base-checkout.html.twig' %}#}
+
+
+{# this tag only applies to the forms defined in this template #}
+{#{% form_theme form 'bootstrap_4_layout.html.twig' %}#}
+
+{#{% block title %}#}
+    {#{{ parent() }}#}
+{#{% endblock %}#}
+
+
+
+{#{% block stylesheets %}#}
+    {#{{ parent() }}#}
+{#{% endblock %}#}
+
+{#{% block page_content %}#}
+{#<div class="JS--deliveryDateContainer">#}
+
+    {% form_theme dateForm 'bootstrap_4_layout.html.twig' %}
+    {{ form_start(dateForm, { 'attr': {'class': 'JS--deliveryDateForm' }}) }}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="mb-2">
+                <span class="form-label">Kézbesítés napja:</span>
+                {#<span class="detail-option-heading font-weight-bold"><span>(Melyik napon szállítsuk ki?)</span></span>#}
+            </div>
+            <div class="row order-delivery-date">
+                <div class="col-md-12 col-lg-12 JS--dateWrapper">
+                    <div class="flex-grow-1X form-row">
+                        {% for choice in dateForm.deliveryDate %}
+                            <div class="col-sm-3 col-3">
+                                {% if not loop.last %}
+                                    {{ include('webshop/site/choiceItem.html.twig') }}
+                                {% else %}
+                                    <div class="visual-picker visual-picker-fluid visual-picker-sm align-top has-peekX mr-2">
+                                        <input class="JS--Button-clickDate" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="" {{ choice.vars.checked ? 'checked' : '' }}/>
+                                        <label class="visual-picker-figure justify-content-lg-center justify-content-center required px-2" for="{{ choice.vars.id }}">
+                                                    <span class="visual-picker-content">
+                                                        <span class="tile tile-lg JS--showDateValue">
+
+                                                        </span>
+                                                        <span class="tile tile-lg JS--showCalendarIcon">
+                                                            <i class="far fa-calendar-alt fa-2x text-gray-700"></i>
+                                                        </span>
+                                                    </span>
+                                        </label>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        {{ form_errors(dateForm.deliveryDate) }}
+                        {% do dateForm.deliveryDate.setRendered() %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="JS--intervalsWrapper">
+        {% if dateForm.deliveryInterval is defined %}
+        <div class="row">
+            <div class="col-lg-12 mb-3">
+                <span class="form-label mb-0">Válassz idősávot:</span> <br>
+                <span class="text-sm">Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.</span>
+            </div>
+        </div>
+        <div class="form-row order-delivery-date mb-1">
+                {% for choice in dateForm.deliveryInterval %}
+                    <div class="col-md-12 col-12">
+                        {{ include('webshop/site/choiceItem-deliveryInterval.html.twig') }}
+                    </div>
+                {% endfor %}
+                {{ form_errors(dateForm.deliveryInterval) }}
+                {% do dateForm.deliveryInterval.setRendered() %}
+        </div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-success">Mentes</button>
+
+    {{ form_end(dateForm) }}
+
+
+{#</div>#}
+{#{% endblock %}#}
+
+{#{% block javascripts %}#}
+    {#{{ parent() }}#}
+    {#<script>#}
+        {#$(function() {#}
+{#//            var options = {#}
+{#//                url: "http://www.stulipan.dfr/webshop/people.json",#}
+{#//#}
+{#//                getValue: "name",#}
+{#//#}
+{#//                template: {#}
+{#//                    type: "description",#}
+{#//                    fields: {#}
+{#//                        description: "email"#}
+{#//                    }#}
+{#//                },#}
+{#//#}
+{#//                list: {#}
+{#//                    match: {#}
+{#//                        enabled: true#}
+{#//                    }#}
+{#//                },#}
+{#//#}
+{#//                theme: "square"#}
+{#//            };#}
+
+            {#var options = {#}
+                {#data: ["blue", "green", "pink", "red", "yellow"]#}
+            {#};#}
+
+{#//            $(".JS--name").easyAutocomplete(options);#}
+        {#});#}
+    {#</script>#}
+    {#<script>#}
+        {#$(document).ready(function () {#}
+            {#var $globalWrapper = $('.JS--globalWrapper');#}
+            {#var $gotoStep3 = new handleOrder($globalWrapper);#}
+
+            {#var $cartWrapper = $('.JS--cartWrapper');#}
+            {#var cartEdit = new InlineEdit($cartWrapper);#}
+
+            {#var $recipientWrapper = $('.JS--recipientWrapper');#}
+            {#var recipientEdit = new InlineEdit($recipientWrapper);#}
+
+        {#});#}
+    {#</script>#}
+    {#<script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>#}
+    {#<script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>#}
+    {#<script>#}
+        {#$(function() {#}
+            {#$('.JS--Button-clickDate').daterangepicker({#}
+                {#opens: 'right',#}
+                {#autoApply: true,#}
+                {#autoUpdateInput: false,#}
+                {#singleDatePicker: true,#}
+                {#//            alwaysShowCalendars: true,#}
+                {#minDate: moment().add(4, 'hours'),#}
+                {#maxDate: moment().add(2, 'months'),#}
+                {#locale: {#}
+                    {#format: 'YYYY-MM-DD',#}
+                    {#separator: ' / ',#}
+                    {#applyLabel: 'Alkalmaz',#}
+                    {#cancelLabel: 'Mégse',#}
+                    {#daysOfWeek: [#}
+                        {#'V',#}
+                        {#'H',#}
+                        {#'K',#}
+                        {#'Sz',#}
+                        {#'Cs',#}
+                        {#'P',#}
+                        {#'Sz'#}
+                    {#],#}
+                    {#monthNames: [#}
+                        {#'Január',#}
+                        {#'Február',#}
+                        {#'Március',#}
+                        {#'Április',#}
+                        {#'Május',#}
+                        {#'Június',#}
+                        {#'Július',#}
+                        {#'Augusztus',#}
+                        {#'Szeptember',#}
+                        {#'Október',#}
+                        {#'November',#}
+                        {#'December'#}
+                    {#],#}
+                    {#firstDay: 1,#}
+                {#}#}
+            {#});#}
+            {#$('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {#}
+                {#ev.preventDefault();#}
+                {#$pickerDate = picker.startDate.format('YYYY-MM-DD');#}
+                {#$wrapper = $(this).closest('.JS--deliveryDateContainer');#}
+                {#$dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');#}
+                {#$calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');#}
+                {#/**#}
+                 {#* Csak az első 3 rádió opcióba keresi a pickerDate-et. És ha benne van, akkor a Calendárt mutatja.#}
+                 {#*/#}
+                {#$selectedRadio = $(this).closest('.JS--dateWrapper').find('input[type="radio"][value="' + $pickerDate + '"]:not(".JS--Button-clickDate")');#}
+                {#if ($selectedRadio.val()) {#}
+{#//                    console.log($selectedRadio);#}
+                    {#$selectedRadio.prop('checked', true);#}
+                    {#$dateValueWrapper.hide();#}
+                    {#$calendarIconWrapper.show();#}
+                {#}#}
+                {#/**#}
+                 {#* Ha nincs benne, akkor negyedik rádió inputhoz rendeli a pickerDate-et és elrejti a Calendárt.#}
+                 {#*/#}
+                {#else {#}
+                    {#$(this).val($pickerDate);  // az input, amihez kötve van a gomb, megkapja a daterangepicker értékét (dátumot)#}
+                    {#$html = '<span class="font-weight-bold my-0">' + picker.startDate.format('MMM D') + '</span><br> <span class="price--gross text-nowrap">' + picker.startDate.format('ddd') + '</span>';#}
+                    {#$dateValueWrapper.html($html);#}
+                    {#$calendarIconWrapper.hide();#}
+                    {#$dateValueWrapper.show();#}
+                {#}#}
+                {#console.log($wrapper.find('.JS--alertMessage')+ ' alertMessage');#}
+                {#$wrapper.find('.JS--alertMessage').hide();#}
+            {#});#}
+            {#$('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {#}
+                {#$(this).val('');#}
+            {#});#}
+            {#/**#}
+             {#* Amikor nem a Daterangepicker-re klikkel, akkor biztos a Calendárt kell mutatnia.#}
+             {#*/#}
+            {#$('.JS--dateWrapper input[type="radio"]:not(".JS--Button-clickDate")').on('click', function () {#}
+                {#$dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');#}
+                {#$calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');#}
+                {#$dateValueWrapper.hide();#}
+                {#$calendarIconWrapper.show();#}
+                {#$wrapper = $(this).closest('.JS--deliveryDateContainer');#}
+                {#$wrapper.find('.JS--alertMessage').hide();#}
+            {#});#}
+        {#});#}
+    {#</script>#}
+    {#<script>#}
+        {#$(function() {#}
+            {#var $option1 = $('input[name="dateForm[deliveryDate]"]');#}
+            {#$option1.click(function () {#}
+                {#var $form = $(this).closest('form'); // ...retrieve the corresponding form.#}
+                {#// Simulate form data, but only include the selected Kind value.#}
+                {#var data = {};#}
+                {#console.log('Action URL: ' + $form.attr('action'));#}
+                {#data[$option1.attr('name')] = $option1.val();#}
+{#//                console.log(data);#}
+                {#$('.JS--intervalsWrapper').fadeOut("slow", function () {#}
+{#//                    $('.JS--intervalsWrapper').show();#}
+                {#});#}
+                {#// Submit data via AJAX to the form's action path.#}
+                {#$.ajax({#}
+                    {#url: $form.attr('action'),#}
+                    {#type: 'POST',#}
+                    {#data: $form.serialize(),#}
+                    {#success: function (response) {#}
+                        {#$('.JS--intervalsWrapper').show();#}
+                        {#$('.JS--intervalsWrapper').replaceWith($(response).find('.JS--intervalsWrapper')); // Replace current form with the new one which now has the extra field: 'subproducts'#}
+                    {#},#}
+{#//                    error: function (err) {#}
+                    {#error: function(jqXHR) {#}
+                        {#$form.replaceWith(jqXHR.responseText);#}
+                    {#}#}
+                {#});#}
+            {#});#}
+        {#});#}
+
+    {#</script>#}
+    {#<script>#}
+        {#$(function() {#}
+
+        {#});#}
+
+    {#</script>#}
+{#{% endblock %}#}

@@ -3,8 +3,9 @@
 
 namespace App\Controller\Boltzaras;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -12,18 +13,33 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
 //az alabbibol fogja tudni hogy a InventoryInvoice entity-hez kapcsolodik es azzal dolgozik
-use App\Entity\InventoryInvoice;
-use App\Entity\InventoryInvoiceCompany;
-use App\Form\InventoryInvoiceFormType;
-use App\Form\InventoryInvoiceCompanyFormType;
+use App\Entity\Inventory\InventoryInvoice;
+use App\Entity\Inventory\InventoryInvoiceCompany;
+use App\Form\Inventory\InventoryInvoiceFormType;
+use App\Form\Inventory\InventoryInvoiceCompanyFormType;
 
 use App\Pagination\PaginatedCollection;
 
 /**
  * @Route("/admin")
+ * @IsGranted("ROLE_MANAGE_INVENTORY")
  */
-class InventoryInvoiceController extends Controller
+class InventoryInvoiceController extends AbstractController
 {
+
+    /**
+     * @Route("/invoice/delete/{id}", name="invoice-delete", methods={"DELETE"})
+     */
+    public function deleteInvoiceAction(InventoryInvoice $invoice)
+
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($invoice);
+        $em->flush();
+
+        return new Response(null, 204);
+    }
 
     /**
      * @Route("/invoice/company/edit/{id}", name="invoice-company-edit")

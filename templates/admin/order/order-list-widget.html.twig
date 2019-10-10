@@ -1,0 +1,159 @@
+        {% if orders is defined and orders is not empty %}
+            {% for order in orders %}
+                <div>
+                    <div class="col-md-12 mb-2X bg-order--header border-bottomX py-2">
+                        <div class="d-flex justify-content-between">
+                            <div class="">
+                                {#<span class="badge badge-number badge-primary text-sm">#{{ order.id }}</span>#}
+                                <a href="{{ path('order-detail', {'id': order.id}) }}" class="font-weight-bold">#{{ order.number }}</a>
+                                - <em><strong>{{ order.priceTotalAfterDiscount ? order.priceTotalAfterDiscount : 23980|number_format(0, ',', ' ') }} Ft</strong></em>
+                            </div>
+                            <div class="">
+                                <a href="#" class="">Módosít</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 pb-3 pb-md-2 mb-1 pt-1">
+                        <div class="">
+
+                            <div class="row">
+
+                                <div class="col-12 col-md-2 border-md-right">
+                                    <div class="font-weight-bold text-lgX d-inline d-md-block">{{ order.createdAt|date('M. j, Y') }}</div>
+                                    <div class="text-sm text-mutedZ d-inline d-md-block">{{ order.createdAt|date('H:i')}}</div>
+                                    <div class="mt-1 text-mutedZ d-inline d-md-block">
+                                        {#Összesen: <strong>{{ order.priceTotalAfterDiscount }} Ft</strong> <br>#}
+                                        <span class="text-sm">{{ order.payment ? order.payment.getName() : '' }} </span> <br>
+                                        {% if order.payment %}
+                                            {% if order.payment.image %}
+                                            <img class="img-thumbnail img-grayscale border-0 h-15px d-none d-md-inline" src="{{ asset('/uploads/images/termekek/' ~ order.payment.image) }}" />
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="mt-1 d-inline d-md-block">
+                                        {#<span class="text-muted">Állapot:</span> <em>Kifizetve</em><br>#}
+                                        <span class="badge badge-warning text-uppercase">Függőben levő</span>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3 border-md-right mt-2 mt-md-0">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span class="font-weight-bold text-lgX">{{ order.billingName ? order.billingName : '' }} {{ order.billingCompany is defined and order.billingCompany ? '/ ' ~ order.billingCompany : '' }}</span> <br>
+                                            <div class="text-mutedZ">
+                                                +{{ order.billingPhone ? order.billingPhone : ''}} <br>
+                                                {% if order.billingAddress %}
+                                                    {{ order.billingAddress.street }} <br>
+                                                    <span class="text-sm">{{ order.billingAddress.zip }} {{ order.billingAddress.city }}</span> <br>
+                                                {% endif %}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3 border-md-right mt-2 mt-md-0">
+                                    <span class="font-weight-bold text-lgX">{{ order.shippingName ? order.shippingName : '' }}</span> <br>
+                                    <div class="text-mutedZ">
+                                        +{{ order.shippingPhone ? order.shippingPhone : '' }} <br>
+                                        {% if order.shippingAddress %}
+                                            {{ order.shippingAddress.street }} <br>
+                                            <span class="text-sm">{{ order.shippingAddress.zip }} {{ order.shippingAddress.city }}</span> <br>
+                                        {% endif %}
+                                    </div>
+                                    <div class="mt-2">
+                                        {% if order.deliveryDate %}
+                                        <i class="far fa-clock mr-1 text-muted"></i> <strong>{{ order.deliveryDate|date('Y M j.')|lower }}</strong> <br>
+                                        <span class="text-mutedZ">{{ order.deliveryInterval ? order.deliveryInterval ~ ' óra között': '' }}</span> <br>
+                                        {% endif %}
+                                        <span class="text-mutedZ text-sm">{{ order.shipping ? order.shipping.getName() : '' }}</span>
+                                    </div>
+
+                                    {#<div class="mb-1">Címzett: <span class="font-weight-bold">{{ order.recipient ? order.recipient.name : '' }}</span></div>#}
+                                    {#<div>#}
+                                        {#<div class="d-flex float-left order--gray mr-1"><i class="far fa-user font-weight-bold text-lg"></i></div>#}
+                                        {#<div class="pl-2 border--recipient d-inline-block ">#}
+                                            {#{% if order.recipient %}#}
+                                                {#<p class="text-mutedX text-smX">#}
+                                                {#Tel: {{ order.recipient ? order.recipient.phone : '' }} <br>#}
+                                                {#{{ order.recipient.address.street }} <br>#}
+                                                {#{{ order.recipient.address.city }}, {{ order.recipient.address.province }} <br>#}
+                                                {#{{ order.recipient.address.zip }} {{ order.recipient.address.country }}#}
+                                                {#</p>#}
+                                            {#{% endif %}#}
+                                        {#</div>#}
+                                    {#</div>#}
+                                </div>
+                                <div class="col-12 col-md-4 pl-md-2 mt-2 mt-md-0">
+                                    <div class="text-mutedZ">
+                                        {% for item in order.items %}
+                                            <div class="rowX">
+                                                <div class="text-nowrapX">
+                                                    <div class="d-flex">
+                                                        <a class="mr-1" href="{{ path('site-product-show', {'id': item.product.id}) }}" target="_blank">
+                                                            <img class="img-thumbnail rounded-circleX" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" width="50px;" />
+                                                        </a>
+                                                        <div class="text-sm mb-1">
+                                                            {#Ár: {{ item.price|number_format(0, ',', ' ') }} Ft, #}
+                                                            <span class="text-muted">Menny.:</span> <em>{{ item.quantity }} db </em><br>
+                                                            <span class="text-muted">Összesen:</span> <em>{{ item.priceTotal|number_format(0, ',', ' ') }} Ft </em><br>
+                                                            <a href="{{ path('site-product-show', {'id': item.product.id}) }}" class="text-uppercaseX text-dark text-md"><strong>{{ item.product.productName }}</strong> <em><span class="badge badge-danger">{{ item.subproductAttribute ? '' ~ item.subproductAttribute : ''  }}</span></em></a><br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        <div class="rowX">
+                                            <div class="col-autoX text-nowrapX">
+                                                {% if order.message %}
+                                                <div class="text-sm">
+                                                    <div class="d-flex align-items-center text-center">
+                                                            <div class="d-flex align-items-start">
+                                                                <div class="bg-light p-2">
+                                                                    <div class="">
+                                                                        <span><i class="far fa-envelope text-sm text-muted"></i></span>
+                                                                        {#<br>#}
+                                                                        {#<span class="d-block text-muted text-uppercase mt-1">Üzenet</span>#}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-left ml-1">
+                                                                    <p class="text-sm mb-0">
+                                                                        <span><em>{{ order.message }}</em></span> <br>
+                                                                        <span>{{ order.messageAuthor }}</span> <br>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                                {% endif %}
+
+                                                {#<div class="d-flexX">#}
+                                                    {#{% if order.message %}#}
+                                                    {#<div class="order-message ml-1 mb-2">#}
+                                                        {#<p class="d-inline text-sm text-muted mb-0">#}
+                                                            {#<cite>{{ order.message }}</cite><br>#}
+                                                            {#{{ order.messageAuthor }} <br>#}
+                                                        {#</p>#}
+                                                    {#</div>#}
+                                                    {#{% endif %}#}
+                                                {#</div>#}
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 d-none d-sm-block">
+                                            Összesen: <strong>{{ order.priceTotalAfterDiscount }} Ft</strong> <br>
+                                            <span class="text-sm">{{ order.payment ? order.payment.getName() : '' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <em></em>
+            <div class="alert alert-warning mb-2">Ennek a felhasználónak nem volt még rendelése.</div>
+        {% endif %}
+
+        
+

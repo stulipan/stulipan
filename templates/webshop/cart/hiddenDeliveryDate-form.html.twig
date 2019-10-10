@@ -1,0 +1,20 @@
+    {{ form_start(hiddenDateForm, { 'attr': {'class': 'JS--hiddenDeliveryDateForm' }}) }}
+
+        {{ form_widget(hiddenDateForm.deliveryDate, { 'attr': {'class': 'd-none' }}) }}
+        {{ form_errors(hiddenDateForm.deliveryDate) }}
+
+        {{ form_widget(hiddenDateForm.deliveryInterval, { 'attr': {'class': 'd-none' }}) }}
+        {{ form_errors(hiddenDateForm.deliveryInterval) }}
+
+        {{ form_widget(hiddenDateForm.deliveryFee, { 'attr': {'class': 'd-none' }}) }}
+        {{ form_errors(hiddenDateForm.deliveryFee) }}
+
+        {#<button type="submit">Submit</button>#}
+
+        {# Render CSRF token etc .#}
+        <div style="display:none">
+            {{ form_rest(hiddenDateForm) }}
+        </div>
+
+    {{ form_end(hiddenDateForm) }}
+    {% do hiddenDateForm.setRendered() %}

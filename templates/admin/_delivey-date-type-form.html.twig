@@ -1,0 +1,110 @@
+{% import _self as myOwnMacro %}
+{% macro printIntervalRow(item) %}
+    <div class="row mb-2">
+        <div class="col-sm-6 col-md-4 col-lg-3 col-6 mb-1">
+            {{ form_widget(item.name) }}
+            {{ form_errors(item.name) }}
+        </div>
+        <div class="col-sm-6 col-md-3 col-lg-2 col-6 mb-1">
+            <div class="input-group">
+                {{ form_widget(item.price) }}
+                <div class="input-group-append">
+                    <span class="input-group-text">Ft</span>
+                </div>
+            </div>
+            {{ form_widget(item.price) }}
+            {{ form_errors(item.price) }}
+        </div>
+        <div class="col-sm-6 col-md-2 col-lg-1 col-6 mb-1">
+            {{ form_widget(item.ordering) }}
+            {{ form_errors(item.ordering) }}
+        </div>
+        <div class="col-sm-6 col-md-3  col-lg-2 col-6 mb-1">
+            {#{{ form_label(item.deliveryLimit) }}#}
+            {#{{ form_widget(item.deliveryLimit) }}#}
+            {#{{ form_errors(item.deliveryLimit) }}#}
+        </div>
+    </div>
+{% endmacro %}
+
+    {{ form_start(form, { 'attr': {'class': '' }}) }}
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        {{ form_label(form.name) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-5 ">
+                        {{ form_widget(form.name, {'attr': {
+                            'class': '',
+                        }}) }}
+                        {{ form_errors(form.name) }}
+                        <small class="form-text text-muted">
+                            Add meg a dátumtípus nevét.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        {{ form_label(form.description) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-5 ">
+                        {{ form_widget(form.description) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+                </div>
+            </div>
+
+            {% if form.intervals is defined %}
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        <strong>{{ form_label(form.intervals) }}</strong>
+                    </div>
+                    <div class="col-sm-8 col-lg-10 JS--Wrapper-allIntervals">
+                        {% if form.intervals is not empty %}
+                        <div class="JS--Wrapper-fieldsForOneInterval" data-prototype="{{ myOwnMacro.printIntervalRow(form.intervals.vars.prototype)|e('html_attr') }}" data-index="{{ form.intervals|length }}">
+                            {% for item in form.intervals %}
+                                {{ myOwnMacro.printIntervalRow(item) }}
+                            {% endfor %}
+                            {% do form.intervals.setRendered() %}
+                        </div>
+                            {{ form_errors(form.intervals) }}
+                            <a href="" class="JS--Button-addNewInterval btn btn-secondary mb-2"><i class="fas fa-plus text-sm mr-1"></i> Új idősáv beszúrása</a>
+                            <small class="form-text text-muted">
+                                Az idősávokat így nevezd el: <em>08-12, 12-18, 16-20</em> <br>
+                                Az utolsó oszlopba írd be az egyes sávok sorrendjét, így: <em>1, 2, stb.</em>
+                                {#Szabd meg, hány szállítást tudsz válalni ebben az idősávban.#}
+                            </small>
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                    </div>
+                    <div class="col-sm-8 col-lg-5">
+                        <input type="submit" value="Mentés" class="btn btn-lgg btn-info mr-1" formnovalidate>
+                        <a href="{{ path('delivery-date-type-list') }}" class="btn btn-secondary">Mégse</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{ form_end(form) }}

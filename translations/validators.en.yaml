@@ -1,0 +1,3 @@
+"This value should not be blank.": "Ne hagyd üressen ezt a mezőt."
+"This file is not a valid image.": "A feltölteni kívánt fájl nem kép! Elfogadott képformátumok: .jpg, .png"
+"The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}.": "A fájl mérete túl nagy: {{ size }} {{ suffix }}! Megengedett maximum méret: {{ limit }} {{ suffix }}."

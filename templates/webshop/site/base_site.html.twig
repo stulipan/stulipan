@@ -6,222 +6,302 @@
 {% endblock %}
 
 {% block body %}
+
+    {{ render(controller('App\\Controller\\Shop\\CartUtilsController::cartSliderSidebar')) }}
+
+    <div class="body__fade"></div>
 	<header class="header">
+        {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
 		<!-- Top Bar-->
-		<div class="top-bar">
+		<div class="top-bar text-sm d-none d-md-block">
 			<div class="container-fluid">
 				<div class="row d-flex align-items-center">
-					<div class="col-sm-7 d-none d-sm-block">
+					<div class="col-sm-12 text-center">
 						<ul class="list-inline mb-0">
-							<li class="list-inline-item pr-3 mr-0">
-								<svg class="svg-icon mr-2">
-									<use xlink:href="#calls-1"> </use>
-								</svg>06 1 466 6286
-							</li>
-							<li class="list-inline-item px-3 border-left d-none d-lg-inline-block">Ingyenes szállítás Budapesten!
+							{#<li class="list-inline-item pr-3 mr-0">#}
+								{#<svg class="svg-icon mr-2">#}
+									{#<use xlink:href="#calls-1"> </use>#}
+								{#</svg>06 1 466 6286#}
+							{#</li>#}
+							<li class="list-inline-item px-3 border-leftX d-none d-lg-inline-block">Ingyenes szállítás Budapesten!
 								<a class="..." href="{{ path ('shipping_details') }}">Bővebben itt</a></li>
 						</ul>
 					</div>
-					<div class="col-sm-5 d-flex justify-content-end">
-						<!-- Language Dropdown-->
-						<div class="dropdown border-right px-3"><a id="langsDropdown" href="https://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle topbar-link"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/united-kingdom.svg" alt="english" class="topbar-flag">English</a>
-							<div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right"><a href="#" class="dropdown-item text-sm"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/germany.svg" alt="german" class="topbar-flag">German</a><a href="#" class="dropdown-item text-sm"> <img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/france.svg" alt="french" class="topbar-flag">French</a></div>
-						</div>
-						<!-- Currency Dropdown-->
-						<div class="dropdown pl-3 ml-0"><a id="currencyDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle topbar-link">USD</a>
-							<div aria-labelledby="currencyDropdown" class="dropdown-menu dropdown-menu-right"><a href="#" class="dropdown-item text-sm">EUR</a><a href="#" class="dropdown-item text-sm"> GBP</a></div>
-						</div>
-					</div>
+					{#<div class="col-sm-5 d-flex justify-content-end">#}
+						{#<!-- Language Dropdown-->#}
+						{#<div class="dropdown border-right px-3"><a id="langsDropdown" href="https://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle topbar-link"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/united-kingdom.svg" alt="english" class="topbar-flag">English</a>#}
+							{#<div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right"><a href="#" class="dropdown-item text-sm"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/germany.svg" alt="german" class="topbar-flag">German</a><a href="#" class="dropdown-item text-sm"> <img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/france.svg" alt="french" class="topbar-flag">French</a></div>#}
+						{#</div>#}
+						{#<!-- Currency Dropdown-->#}
+						{#<div class="dropdown pl-3 ml-0">#}
+                            {#<a id="currencyDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle topbar-link">USD</a>#}
+							{#<div aria-labelledby="currencyDropdown" class="dropdown-menu dropdown-menu-right">#}
+                                {#<a href="#" class="dropdown-item text-sm">EUR</a>#}
+                                {#<a href="#" class="dropdown-item text-sm"> GBP</a>#}
+                            {#</div>#}
+						{#</div>#}
+					{#</div>#}
 				</div>
 			</div>
 		</div>
 		<!-- Top Bar End-->
 		<!-- Navbar-->
-		<nav class="navbar navbar-expand-lg navbar-stickyX navbar-light bg-white bg-fixed-white">
-			<div class="container-fluid">
-				<!-- Navbar Header  --><a href="/" class="navbar-brand"><span class="font-weight-bold text-uppercase">tulipan<span class="text-danger">.</span>futar  </span></a>
-				<button type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"><i class="fa fa-bars"></i></button>
-				<!-- Navbar Collapse -->
-				<div id="navbarCollapse" class="collapse navbar-collapse">
-					<ul class="navbar-nav mx-auto">
-						<li class="nav-item"><a href="/" class="nav-link ">Home</a>
-						</li>
-						<li class="nav-item"><a href="{{ path('site_product_listall') }}" class="nav-link active">Virágok</a>
-						</li>
-						<!-- Megamenu-->
-						<li class="nav-item dropdown position-static"><a href="#" data-toggle="dropdown" class="nav-link">Template<i class="fa fa-angle-down"></i></a>
-							<div class="dropdown-menu megamenu py-lg-0">
-								<div class="row">
-									<div class="col-lg-9">
-										<div class="row p-3 pr-lg-0 pl-lg-5 pt-lg-5">
-											<div class="col-lg-3">
-												<!-- Megamenu list-->
-												<h6 class="text-uppercase">Homepage</h6>
-												<ul class="megamenu-list list-unstyled">
-													<li class="megamenu-list-item"><a href="index.html" class="megamenu-list-link">Fullscreen home + Lookbook   </a></li>
-													<li class="megamenu-list-item"><a href="index2.html" class="megamenu-list-link">Split-screen home   </a></li>
-													<li class="megamenu-list-item"><a href="index3.html" class="megamenu-list-link">Classic home   </a></li>
-													<li class="megamenu-list-item"><a href="index4.html" class="megamenu-list-link">Parallax sections  <span class="badge badge-info ml-1">New</span>   </a></li>
-												</ul>
-												<!-- Megamenu list-->
-												<h6 class="text-uppercase">Shop</h6>
-												<ul class="megamenu-list list-unstyled">
-													<li class="megamenu-list-item"><a href="category.html" class="megamenu-list-link">Category - left sidebar   </a></li>
-													<li class="megamenu-list-item"><a href="category-right.html" class="megamenu-list-link">Category - right sidebar   </a></li>
-													<li class="megamenu-list-item"><a href="category-no-sidebar.html" class="megamenu-list-link">Category - no sidebar   </a></li>
-													<li class="megamenu-list-item"><a href="category-full.html" class="megamenu-list-link">Category - full width   </a></li>
-													<li class="megamenu-list-item"><a href="category-masonry.html" class="megamenu-list-link">Category - masonry items   </a></li>
-													<li class="megamenu-list-item"><a href="category-banner.html" class="megamenu-list-link">Category - w/ banner   </a></li>
-													<li class="megamenu-list-item"><a href="detail.html" class="megamenu-list-link">Product detail   </a></li>
-													<li class="megamenu-list-item"><a href="detail-2.html" class="megamenu-list-link">Product detail - v.2   </a></li>
-												</ul>
-											</div>
-											<div class="col-lg-3">
-												<!-- Megamenu list-->
-												<h6 class="text-uppercase">Order process</h6>
-												<ul class="megamenu-list list-unstyled">
-													<li class="megamenu-list-item"><a href="cart.html" class="megamenu-list-link">Shopping cart   </a></li>
-													<li class="megamenu-list-item"><a href="checkout1.html" class="megamenu-list-link">Checkout 1 - Address   </a></li>
-													<li class="megamenu-list-item"><a href="checkout2.html" class="megamenu-list-link">Checkout 2 - Delivery   </a></li>
-													<li class="megamenu-list-item"><a href="checkout3.html" class="megamenu-list-link">Checkout 3 - Payment   </a></li>
-													<li class="megamenu-list-item"><a href="checkout4.html" class="megamenu-list-link">Checkout 4 - Review     </a></li>
-													<li class="megamenu-list-item"><a href="checkout5.html" class="megamenu-list-link">Checkout 5 - Confirmation   </a></li>
-												</ul>
-												<!-- Megamenu list-->
-												<h6 class="text-uppercase">Blog</h6>
-												<ul class="megamenu-list list-unstyled">
-													<li class="megamenu-list-item"><a href="blog.html" class="megamenu-list-link">Blog   </a></li>
-													<li class="megamenu-list-item"><a href="post.html" class="megamenu-list-link">Post   </a></li>
-												</ul>
-											</div>
-											<div class="col-lg-3">
-												<!-- Megamenu list-->
-												<h6 class="text-uppercase">Pages</h6>
-												<ul class="megamenu-list list-unstyled">
-													<li class="megamenu-list-item"><a href="contact.html" class="megamenu-list-link">Contact   </a></li>
-													<li class="megamenu-list-item"><a href="contact-2.html" class="megamenu-list-link">Contact v.2   </a></li>
-													<li class="megamenu-list-item"><a href="text.html" class="megamenu-list-link">Text page   </a></li>
-													<li class="megamenu-list-item"><a href="faq.html" class="megamenu-list-link">F.A.Q.s  <span class="badge badge-info ml-1">New</span>   </a></li>
-													<li class="megamenu-list-item"><a href="coming-soon.html" class="megamenu-list-link">Coming soon   </a></li>
-												</ul>
-												<!-- Megamenu list-->
-												<h6 class="text-uppercase">Customer</h6>
-												<ul class="megamenu-list list-unstyled">
-													<li class="megamenu-list-item"><a href="customer-login.html" class="megamenu-list-link">Login/sign up   </a></li>
-													<li class="megamenu-list-item"><a href="customer-orders.html" class="megamenu-list-link">Orders   </a></li>
-													<li class="megamenu-list-item"><a href="customer-order.html" class="megamenu-list-link">Order detail   </a></li>
-													<li class="megamenu-list-item"><a href="customer-addresses.html" class="megamenu-list-link">Addresses   </a></li>
-													<li class="megamenu-list-item"><a href="customer-account.html" class="megamenu-list-link">Profile   </a></li>
-												</ul>
-											</div>
-											<div class="col-lg-3">
-												<!-- Megamenu list-->
-												<h6 class="text-uppercase">Documentation</h6>
-												<ul class="megamenu-list list-unstyled">
-													<li class="megamenu-list-item"><a href="docs-introduction.html" class="megamenu-list-link">Introduction   </a></li>
-													<li class="megamenu-list-item"><a href="docs-directory-structure.html" class="megamenu-list-link">Directory structure   </a></li>
-													<li class="megamenu-list-item"><a href="docs-gulp.html" class="megamenu-list-link">Gulp   </a></li>
-													<li class="megamenu-list-item"><a href="docs-customizing-css.html" class="megamenu-list-link">Customizing CSS   </a></li>
-													<li class="megamenu-list-item"><a href="docs-credits.html" class="megamenu-list-link">Credits   </a></li>
-													<li class="megamenu-list-item"><a href="docs-changelog.html" class="megamenu-list-link">Changelog   </a></li>
-												</ul>
-												<!-- Megamenu list-->
-												<h6 class="text-uppercase">Components</h6>
-												<ul class="megamenu-list list-unstyled">
-													<li class="megamenu-list-item"><a href="components-bootstrap.html" class="megamenu-list-link">Bootstrap   </a></li>
-													<li class="megamenu-list-item"><a href="components-sell.html" class="megamenu-list-link">Theme   </a></li>
-												</ul>
-											</div>
-										</div>
-										<div class="row megamenu-services d-none d-lg-flex">
-											<div class="col-xl-3 col-lg-6 d-flex">
-												<div class="megamenu-services-item">
-													<svg class="svg-icon megamenu-services-icon">
-														<use xlink:href="#delivery-time-1"> </use>
-													</svg>
-													<div>
-														<h6 class="text-uppercase">Free shipping &amp; return</h6>
-														<p class="mb-0 text-muted text-sm">Free Shipping over $300</p>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-lg-6 d-flex">
-												<div class="megamenu-services-item">
-													<svg class="svg-icon megamenu-services-icon">
-														<use xlink:href="#money-1"> </use>
-													</svg>
-													<div>
-														<h6 class="text-uppercase">Money back guarantee</h6>
-														<p class="mb-0 text-muted text-sm">30 Days Money Back</p>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-lg-6 d-flex">
-												<div class="megamenu-services-item">
-													<svg class="svg-icon megamenu-services-icon">
-														<use xlink:href="#customer-support-1"> </use>
-													</svg>
-													<div>
-														<h6 class="text-uppercase">020-800-456-747</h6>
-														<p class="mb-0 text-muted text-sm">24/7 Available Support</p>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-lg-6 d-flex">
-												<div class="megamenu-services-item">
-													<svg class="svg-icon megamenu-services-icon">
-														<use xlink:href="#secure-payment-1"> </use>
-													</svg>
-													<div>
-														<h6 class="text-uppercase">Secure Payment</h6>
-														<p class="mb-0 text-muted text-sm">Secure Payment</p>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-lg-3 d-none d-lg-block"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/megamenu.jpg" alt="" class="bg-image"></div>
-								</div>
-							</div>
-						</li>
-						<!-- /Megamenu end-->
-						<!-- Multi level dropdown    -->
-						<li class="nav-item dropdown"><a id="navbarDropdownMenuLink" href="/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link">Webshop<i class="fa fa-angle-down"></i></a>
-							<ul aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu">
-								<li><a href="{{ path('site_product_list', {'slug': 'csokrok'})  }}" class="dropdown-item">Csokrok</a></li>
-								<li><a href="{{ path('site_product_list', {'slug': 'viragdobozok'})  }}" class="dropdown-item">Virágdobozok</a></li>
+		<nav class="navbar navbar-expand-lg flex-lg-wrap navbar-stickyX navbar-darkX navbar--bg-white">
+			<div class="container">
+                <div class="w-100 d-flex justify-content-between align-items-center mb-1X mb-md-3 mt-1 mt-md-3">
+                        <!-- Navbar Ted -->
+                        <div class="col-md-3 col-lg-4 navbar--ted d-none d-md-flex justify-content-lg-start mt-1 mb-2 my-lg-0 order-lg-1 order-2">
+                            <div class="nav-item">
+                                <svg class="svg-icon mr-1">
+                                    <use xlink:href="#calls-1"> </use>
+                                </svg>
+                                <span class="login-cart--text d-lg-inline">06 1 466 6286</span>
+                            </div>
+                        </div>
 
-							</ul>
-						</li>
-						<!-- Multi level dropdown end-->
-						<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a>
-						</li>
-						<li class="nav-item"><a href="{{ path('about') }}" class="nav-link ">Rólunk</a>
-						</li>
-					</ul>
-					<div class="right-col d-flex align-items-center justify-content-between justify-content-lg-end mt-1 mb-2 my-lg-0">
-						<!-- Search Button-->
-						<div data-toggle="search" class="nav-item navbar-icon-link">
-							<svg class="svg-icon">
-								<use xlink:href="#search-1"> </use>
-							</svg>
-						</div>
-						<!-- User Not Logged - link to login page-->
-						<div class="nav-item"><a href="customer-login.html" class="navbar-icon-link">
-								<svg class="svg-icon">
-									<use xlink:href="#male-user-1"> </use>
-								</svg><span class="text-sm ml-2 ml-lg-0 text-uppercase text-sm font-weight-bold d-none d-sm-inline d-lg-none">Log in                   </span></a></div>
+                        <!-- Navbar Logo -->
+                        <div class="col-md-4 col-lg-4 navbar--logo d-flex text-center justify-content-lg-center order-lg-2 order-3 ml-2X ml-md-0">
+                            <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
+                                <span class="h3 font-weight-bold text-uppercase text-info">tulipan<span class="text-danger">.</span>futar  </span>
+                            </a>
+                        </div>
+
+                        <!-- Navbar Login Cart -->
+                        <div class="col-md-4 col-lg-4 navbar--login-cart d-flex justify-content-end mt-1 mb-1 my-lg-0 pl-0 order-lg-3 order-4">
+                        <!-- Search Button-->
+                        <div data-toggle="search" class="nav-item navbar-icon-link">
+                            <svg class="svg-icon login-cart--color">
+                                <use xlink:href="#search-1"> </use>
+                            </svg>
+                        </div>
+
+                        <div class="nav-item">
+                            {% if not is_granted('ROLE_USER') %}
+                                <a href="{{ path('site-login') }}" class="dropdown-toggle navbar-icon-link">
+                                    <svg class="svg-icon login-cart--color">
+                                        <use xlink:href="#male-user-1"> </use>
+                                    </svg>
+                                    <span class="login-cart--text d-none d-lg-inline ml-1 ml-lg-2 ">Bejelentkezés</span>
+                                </a>
+                            {% endif %}
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <a id="myaccountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle navbar-icon-link">
+                                    <svg class="svg-icon login-cart--color">
+                                        <use xlink:href="#male-user-1"> </use>
+                                    </svg>
+                                    <span class="login-cart--text d-none d-lg-inline ml-1 ml-lg-2">Fiókom</span>
+                                </a>
+                                <div aria-labelledby="myaccountDropdown" class="dropdown-menu dropdown-menu-right dropdown--flown mt-0">
+                                    <div class="p-2">
+                                        <div class="dropdown--flown-a2">
+											<span class="dropdown-item bg-light font-weight-bold">Helló, {{ app.user.firstname }}</span>
+											<div class="dropdown-divider"></div>
+											<a href="#" class="dropdown-item"><i class="far fa-user text-xs mr-2"></i> Saját fiókom</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" class="dropdown-item"><i class="far fa-list-alt text-xs mr-2"></i> Rendeléseim</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="{{ path('logout') }}" class="dropdown-item"><i class="fas fa-sign-out-alt text-xs mr-2"></i> Kijelentkezés</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {#<div aria-labelledby="myaccountDropdown" class="dropdown-menu dropdown-menu-right shad">#}
+                                {#<a href="#" class="dropdown-item">Saját fiókom</a>#}
+                                {#<div class="dropdown-divider"></div>#}
+                                {#<a href="#" class="dropdown-item">Rendeléseim</a>#}
+                                {#<div class="dropdown-divider"></div>#}
+                                {#<a href="{{ path('logout') }}" class="dropdown-item">Kijelentkezés</a>#}
+                                {#</div>#}
+                            {% endif %}
+                        </div>
 
                         <!-- Cart Dropdown-->
-
-                                {{ render(controller('App\\Controller\\Shop\\CartController::cartDetailsDropdown')) }}
-
+                        {{ render(controller('App\\Controller\\Shop\\CartUtilsController::cartDetailsDropdown')) }}
                         <!-- /Cart Dropdown-->
 
-					</div>
-				</div>
+                    </div>
+                        <button type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right col-1 d-lg-none text-left order-lg-10 order-1 "><i class="fas fa-bars"></i></button>
+
+                </div>
+
 			</div>
+            <div class="flex-grow-1 bg-menu">
+                <div id="navbarCollapse" class="collapse navbar-collapse order-lg-2 order-1 mb-1 py-1">
+                    <ul class="navbar-nav mx-auto px-3 px-lg-0">
+                        <li class="nav-item"><a href="/" class="nav-link ">Home</a>
+                        </li>
+                        <li class="nav-item"><a href="{{ path('site-product-listall') }}" class="nav-link active">Virágok</a>
+                        </li>
+                        <!-- Megamenu-->
+                        <li class="nav-item dropdown position-static"><a href="#" data-toggle="dropdown" class="nav-link">Template</a>
+                            <div class="dropdown-menu megamenu py-lg-0">
+                                <div class="row">
+                                    <div class="col-lg-9">
+                                        <div class="row p-3 pr-lg-0 pl-lg-5 pt-lg-5">
+                                            <div class="col-lg-3">
+                                                <!-- Megamenu list-->
+                                                <h6 class="text-uppercase">Homepage</h6>
+                                                <ul class="megamenu-list list-unstyled">
+                                                    <li class="megamenu-list-item"><a href="index.html" class="megamenu-list-link">Fullscreen home + Lookbook   </a></li>
+                                                    <li class="megamenu-list-item"><a href="index2.html" class="megamenu-list-link">Split-screen home   </a></li>
+                                                    <li class="megamenu-list-item"><a href="index3.html" class="megamenu-list-link">Classic home   </a></li>
+                                                    <li class="megamenu-list-item"><a href="index4.html" class="megamenu-list-link">Parallax sections  <span class="badge badge-info ml-1">New</span>   </a></li>
+                                                </ul>
+                                                <!-- Megamenu list-->
+                                                <h6 class="text-uppercase">Shop</h6>
+                                                <ul class="megamenu-list list-unstyled">
+                                                    <li class="megamenu-list-item"><a href="category.html" class="megamenu-list-link">Category - left sidebar   </a></li>
+                                                    <li class="megamenu-list-item"><a href="category-right.html" class="megamenu-list-link">Category - right sidebar   </a></li>
+                                                    <li class="megamenu-list-item"><a href="category-no-sidebar.html" class="megamenu-list-link">Category - no sidebar   </a></li>
+                                                    <li class="megamenu-list-item"><a href="category-full.html" class="megamenu-list-link">Category - full width   </a></li>
+                                                    <li class="megamenu-list-item"><a href="category-masonry.html" class="megamenu-list-link">Category - masonry items   </a></li>
+                                                    <li class="megamenu-list-item"><a href="category-banner.html" class="megamenu-list-link">Category - w/ banner   </a></li>
+                                                    <li class="megamenu-list-item"><a href="detail.html" class="megamenu-list-link">Product detail   </a></li>
+                                                    <li class="megamenu-list-item"><a href="detail-2.html" class="megamenu-list-link">Product detail - v.2   </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <!-- Megamenu list-->
+                                                <h6 class="text-uppercase">Order process</h6>
+                                                <ul class="megamenu-list list-unstyled">
+                                                    <li class="megamenu-list-item"><a href="cart.html" class="megamenu-list-link">Shopping cart   </a></li>
+                                                    <li class="megamenu-list-item"><a href="checkout1.html" class="megamenu-list-link">Checkout 1 - Address   </a></li>
+                                                    <li class="megamenu-list-item"><a href="checkout2.html" class="megamenu-list-link">Checkout 2 - Delivery   </a></li>
+                                                    <li class="megamenu-list-item"><a href="checkout3.html" class="megamenu-list-link">Checkout 3 - Payment   </a></li>
+                                                    <li class="megamenu-list-item"><a href="checkout4.html" class="megamenu-list-link">Checkout 4 - Review     </a></li>
+                                                    <li class="megamenu-list-item"><a href="checkout5.html" class="megamenu-list-link">Checkout 5 - Confirmation   </a></li>
+                                                </ul>
+                                                <!-- Megamenu list-->
+                                                <h6 class="text-uppercase">Blog</h6>
+                                                <ul class="megamenu-list list-unstyled">
+                                                    <li class="megamenu-list-item"><a href="blog.html" class="megamenu-list-link">Blog   </a></li>
+                                                    <li class="megamenu-list-item"><a href="post.html" class="megamenu-list-link">Post   </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <!-- Megamenu list-->
+                                                <h6 class="text-uppercase">Pages</h6>
+                                                <ul class="megamenu-list list-unstyled">
+                                                    <li class="megamenu-list-item"><a href="contact.html" class="megamenu-list-link">Contact   </a></li>
+                                                    <li class="megamenu-list-item"><a href="contact-2.html" class="megamenu-list-link">Contact v.2   </a></li>
+                                                    <li class="megamenu-list-item"><a href="text.html" class="megamenu-list-link">Text page   </a></li>
+                                                    <li class="megamenu-list-item"><a href="faq.html" class="megamenu-list-link">F.A.Q.s  <span class="badge badge-info ml-1">New</span>   </a></li>
+                                                    <li class="megamenu-list-item"><a href="coming-soon.html" class="megamenu-list-link">Coming soon   </a></li>
+                                                </ul>
+                                                <!-- Megamenu list-->
+                                                <h6 class="text-uppercase">Customer</h6>
+                                                <ul class="megamenu-list list-unstyled">
+                                                    <li class="megamenu-list-item"><a href="customer-login.html" class="megamenu-list-link">Login/sign up   </a></li>
+                                                    <li class="megamenu-list-item"><a href="customer-orders.html" class="megamenu-list-link">Orders   </a></li>
+                                                    <li class="megamenu-list-item"><a href="customer-order.html" class="megamenu-list-link">Order detail   </a></li>
+                                                    <li class="megamenu-list-item"><a href="customer-addresses.html" class="megamenu-list-link">Addresses   </a></li>
+                                                    <li class="megamenu-list-item"><a href="customer-account.html" class="megamenu-list-link">Profile   </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <!-- Megamenu list-->
+                                                <h6 class="text-uppercase">Documentation</h6>
+                                                <ul class="megamenu-list list-unstyled">
+                                                    <li class="megamenu-list-item"><a href="docs-introduction.html" class="megamenu-list-link">Introduction   </a></li>
+                                                    <li class="megamenu-list-item"><a href="docs-directory-structure.html" class="megamenu-list-link">Directory structure   </a></li>
+                                                    <li class="megamenu-list-item"><a href="docs-gulp.html" class="megamenu-list-link">Gulp   </a></li>
+                                                    <li class="megamenu-list-item"><a href="docs-customizing-css.html" class="megamenu-list-link">Customizing CSS   </a></li>
+                                                    <li class="megamenu-list-item"><a href="docs-credits.html" class="megamenu-list-link">Credits   </a></li>
+                                                    <li class="megamenu-list-item"><a href="docs-changelog.html" class="megamenu-list-link">Changelog   </a></li>
+                                                </ul>
+                                                <!-- Megamenu list-->
+                                                <h6 class="text-uppercase">Components</h6>
+                                                <ul class="megamenu-list list-unstyled">
+                                                    <li class="megamenu-list-item"><a href="components-bootstrap.html" class="megamenu-list-link">Bootstrap   </a></li>
+                                                    <li class="megamenu-list-item"><a href="components-sell.html" class="megamenu-list-link">Theme   </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="row megamenu-services d-none d-lg-flex">
+                                            <div class="col-xl-3 col-lg-6 d-flex">
+                                                <div class="megamenu-services-item">
+                                                    <svg class="svg-icon megamenu-services-icon">
+                                                        <use xlink:href="#delivery-time-1"> </use>
+                                                    </svg>
+                                                    <div>
+                                                        <h6 class="text-uppercase">Free shipping &amp; return</h6>
+                                                        <p class="mb-0 text-muted text-sm">Free Shipping over $300</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3 col-lg-6 d-flex">
+                                                <div class="megamenu-services-item">
+                                                    <svg class="svg-icon megamenu-services-icon">
+                                                        <use xlink:href="#money-1"> </use>
+                                                    </svg>
+                                                    <div>
+                                                        <h6 class="text-uppercase">Money back guarantee</h6>
+                                                        <p class="mb-0 text-muted text-sm">30 Days Money Back</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3 col-lg-6 d-flex">
+                                                <div class="megamenu-services-item">
+                                                    <svg class="svg-icon megamenu-services-icon">
+                                                        <use xlink:href="#customer-support-1"> </use>
+                                                    </svg>
+                                                    <div>
+                                                        <h6 class="text-uppercase">020-800-456-747</h6>
+                                                        <p class="mb-0 text-muted text-sm">24/7 Available Support</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-3 col-lg-6 d-flex">
+                                                <div class="megamenu-services-item">
+                                                    <svg class="svg-icon megamenu-services-icon">
+                                                        <use xlink:href="#secure-payment-1"> </use>
+                                                    </svg>
+                                                    <div>
+                                                        <h6 class="text-uppercase">Secure Payment</h6>
+                                                        <p class="mb-0 text-muted text-sm">Secure Payment</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 d-none d-lg-block"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/megamenu.jpg" alt="" class="bg-image"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- /Megamenu end-->
+                        <!-- Multi level dropdown    -->
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdownMenuLink" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggleX nav-link">Webshop<i class="fa fa-angle-down"></i></a>
+                            <ul aria-labelledby="navbarDropdownMenuLink" class="d-block dropdown-menu dropdown-menu-right dropdown--flown mt-0">
+                                <div class="p-2">
+                                    <div class="dropdown--flown-a2">
+
+                                        {{ render(controller('App\\Controller\\Shop\\CartUtilsController::listProductCategoriesInMenu')) }}
+
+                                    </div>
+                                </div>
+                            </ul>
+                        </li>
+                        <!-- Multi level dropdown end-->
+                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a>
+                        </li>
+                        <li class="nav-item"><a href="{{ path('about') }}" class="nav-link ">Rólunk</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
 		</nav>
+        <div class="info--underMenu warning-lightenX success d-none">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <span class="info--underMenu-text">Ünnepi árak! A Difiori 4 éves évfordulója alkalmából minden virágtermék árát csökkentettük. <a href="" class="">Klikk ide!</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 		<!-- /Navbar -->
 
 		<!-- Fullscreen search area-->
@@ -248,46 +328,79 @@
 
 	</header>
 
-
-
-    {% block page_content %}{% endblock %}
-
-
+    <main>
+        {% block page_content %}{% endblock %}
+    </main>
 
 
 	<footer class="main-footer">
 		<!-- Services block-->
-		<div class="bg-gray-100 text-dark-700 py-6">
+		<div class="bg-custom-blueX py-6">
 			<div class="container">
-				<div class="row">
-					<div class="col-lg-4 service-column">
-						<svg class="svg-icon service-icon">
-							<use xlink:href="#delivery-time-1"> </use>
-						</svg>
-						<div class="service-text">
-							<h6 class="text-uppercase">Free shipping &amp; return</h6>
-							<p class="text-muted font-weight-light text-sm mb-0">Free Shipping over $300</p>
+				<div class="miert-dobozok">
+					<div class="row">
+						<div class="col-md-3 col-sm-6 col-6 text-center px-md-5 mb-5 mb-md-0">
+							<img class="center-block w-25 mb-4 service-icon" src="{{  asset('uploads/images/icons/legnepszerubb-2.png') }}">
+							<h6 class="text-uppercase">A legnépszerűbb virágfutár</h6>
+
+							<p class="font-weight-light text-sm">Budapesten és környékén. A Difiori kevesebb csupán 4 év alatt a legnépszerűbb virágfutárrá nőtte ki magát. Válassz te is minket!
+							</p>
 						</div>
-					</div>
-					<div class="col-lg-4 service-column">
-						<svg class="svg-icon service-icon">
-							<use xlink:href="#money-1"> </use>
-						</svg>
-						<div class="service-text">
-							<h6 class="text-uppercase">Money back guarantee</h6>
-							<p class="text-muted font-weight-light text-sm mb-0">30 Days Money Back Guarantee</p>
+
+						<div class="col-md-3 col-sm-6 col-6 text-center px-md-5 mb-5 mb-md-0">
+							<img class="center-block w-25 mb-4 service-icon" src="{{  asset('uploads/images/icons/futar-kezbesites-1.png') }}">
+							<h6 class="text-uppercase">Házhozszállítás akár aznap</h6>
+
+							<p class="font-weight-light text-sm">A gyors kézbesítést saját futárokkal biztosítjuk, választható időpontban. A szállítási módokról és díjakról <a class="text-underlineX" href="{{ path('shipping_details') }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+							</p>
 						</div>
-					</div>
-					<div class="col-lg-4 service-column">
-						<svg class="svg-icon service-icon">
-							<use xlink:href="#customer-support-1"> </use>
-						</svg>
-						<div class="service-text">
-							<h6 class="text-uppercase">020-800-456-747</h6>
-							<p class="text-muted font-weight-light text-sm mb-0">24/7 Available Support</p>
+
+						<div class="col-md-3 col-sm-6 col-6 text-center px-md-5 mb-5 mb-md-0">
+							<img class="center-block w-25 mb-4 service-icon" src="{{  asset('uploads/images/icons/kockazat-nelkul-1.png') }}">
+							<h6 class="text-uppercase">Virágküldés kockázat nélkül!</h6>
+
+							<p class="font-weight-light text-sm">Fizess online kényelmesen és biztonságosan bankkártyáddal. A bankkártyás fizetést a CIB Bank biztosítja.
+							</p>
+						</div>
+
+						<div class="col-md-3 col-sm-6 col-6 text-center px-md-5 mb-5 mb-md-0">
+							<img class="center-block w-25 mb-4 service-icon" src="{{  asset('uploads/images/icons/vasarloi-elegedetseg-1.png') }}">
+							<h6 class="text-uppercase">Magas vásárlói elégedettség</h6>
+
+							<p class="font-weight-light text-sm">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
+							</p>
 						</div>
 					</div>
 				</div>
+				{#<div class="row">#}
+					{#<div class="col-lg-4 service-column">#}
+						{#<svg class="svg-icon service-icon">#}
+							{#<use xlink:href="#delivery-time-1"> </use>#}
+						{#</svg>#}
+						{#<div class="service-text">#}
+							{#<h6 class="text-uppercase">Igyenes szállítás Budapesten</h6>#}
+							{#<p class="text-muted font-weight-light text-sm">Free Shipping over $300</p>#}
+						{#</div>#}
+					{#</div>#}
+					{#<div class="col-lg-4 service-column">#}
+						{#<svg class="svg-icon service-icon">#}
+							{#<use xlink:href="#money-1"> </use>#}
+						{#</svg>#}
+						{#<div class="service-text">#}
+							{#<h6 class="text-uppercase">Money back guarantee</h6>#}
+							{#<p class="text-muted font-weight-light text-sm">30 Days Money Back Guarantee</p>#}
+						{#</div>#}
+					{#</div>#}
+					{#<div class="col-lg-4 service-column">#}
+						{#<svg class="svg-icon service-icon">#}
+							{#<use xlink:href="#customer-support-1"> </use>#}
+						{#</svg>#}
+						{#<div class="service-text">#}
+							{#<h6 class="text-uppercase">020-800-456-747</h6>#}
+							{#<p class="text-muted font-weight-light text-sm">24/7 Available Support</p>#}
+						{#</div>#}
+					{#</div>#}
+				{#</div>#}
 			</div>
 		</div>
 		<!-- Main block - menus, subscribe form-->
@@ -295,8 +408,8 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-4 mb-5 mb-lg-0">
-						<div class="font-weight-bold text-uppercase text-lg text-dark mb-3">Sell<span class="text-primary">.</span></div>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing.</p>
+						<div class="font-weight-bold text-uppercase text-lg text-dark mb-3">Tulipán<span class="text-primary">.</span>Futár</div>
+						<p>1114 Budapest, Bartók Béla út 9.</p>
 						<ul class="list-inline">
 							<li class="list-inline-item"><a href="#" target="_blank" title="twitter" class="text-muted text-hover-primary"><i class="fab fa-twitter"></i></a></li>
 							<li class="list-inline-item"><a href="#" target="_blank" title="facebook" class="text-muted text-hover-primary"><i class="fab fa-facebook"></i></a></li>
@@ -306,23 +419,23 @@
 						</ul>
 					</div>
 					<div class="col-lg-2 col-md-6 mb-5 mb-lg-0">
-						<h6 class="text-uppercase text-dark mb-3">Shop</h6>
+						<h6 class="text-uppercase text-dark mb-3">Virágküldés</h6>
 						<ul class="list-unstyled">
-							<li> <a href="#" class="text-muted">For Women</a></li>
-							<li> <a href="#" class="text-muted">For Men</a></li>
-							<li> <a href="#" class="text-muted">Stores</a></li>
-							<li> <a href="#" class="text-muted">Our Blog</a></li>
-							<li> <a href="#" class="text-muted">Shop</a></li>
+							<li> <a href="/termekek/csokrok" class="text-muted" title="Virágcsokrok">Csokrok</a></li>
+							<li> <a href="/termekek/viragdobozok" class="text-muted" title="Virágboxok">Virágdobozok</a></li>
+							{#<li> <a href="#" class="text-muted">Stores</a></li>#}
+							{#<li> <a href="#" class="text-muted">Our Blog</a></li>#}
+							{#<li> <a href="#" class="text-muted">Shop</a></li>#}
 						</ul>
 					</div>
 					<div class="col-lg-2 col-md-6 mb-5 mb-lg-0">
-						<h6 class="text-uppercase text-dark mb-3">Company</h6>
+						<h6 class="text-uppercase text-dark mb-3">Információk</h6>
 						<ul class="list-unstyled">
-							<li> <a href="#" class="text-muted">Login                    </a></li>
-							<li> <a href="#" class="text-muted">Register                    </a></li>
-							<li> <a href="#" class="text-muted">Wishlist                    </a></li>
-							<li> <a href="#" class="text-muted">Our Products                    </a></li>
-							<li> <a href="#" class="text-muted">Checkouts                    </a></li>
+							<li> <a href="{{ path('about') }}" class="text-muted">Rólunk                    </a></li>
+							<li> <a href="{{ path('shipping_details') }}" class="text-muted">Szállítási díjak                    </a></li>
+							{#<li> <a href="#" class="text-muted">Wishlist                    </a></li>#}
+							{#<li> <a href="#" class="text-muted">Our Products                    </a></li>#}
+							{#<li> <a href="#" class="text-muted">Checkouts                    </a></li>#}
 						</ul>
 					</div>
 					<div class="col-lg-4">
@@ -341,7 +454,7 @@
 			</div>
 		</div>
 		<!-- Copyright section of the footer-->
-		<div class="py-4 font-weight-light bg-gray-800 text-gray-300">
+		<div class="py-4 font-weight-light bg-gray-400 bg-info-lightenX text-whiteX">
 			<div class="container">
 				<div class="row align-items-center">
 					<div class="col-md-8 text-center text-md-left">
@@ -349,10 +462,7 @@
 					</div>
 					<div class="col-md-4">
 						<ul class="list-inline mb-0 mt-2 mt-md-0 text-center text-md-right">
-							<li class="list-inline-item"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/visa.svg" alt="..." class="w-2rem"></li>
-							<li class="list-inline-item"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/mastercard.svg" alt="..." class="w-2rem"></li>
-							<li class="list-inline-item"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/paypal.svg" alt="..." class="w-2rem"></li>
-							<li class="list-inline-item"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/western-union.svg" alt="..." class="w-2rem"></li>
+							<li class="list-inline-item"><img src="{{  asset('uploads/images/icons/CIB_logo.png') }}" alt="..." class="w-50"></li>
 						</ul>
 					</div>
 				</div>
@@ -360,10 +470,102 @@
 		</div>
 	</footer>
 
-
-
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
+    <script>
+        $(function() {
+            var $bag = $('.JS--cartDetails');
+            var $html = $('html');
+            var $header = $('header');
+            var $main = $('main');
+            var $footer = $('footer');
+
+//            var $section = $('body-content');
+            var $summary = $('#JS--slideCheckout');
+            $bag.on('click', function (e) {
+                e.preventDefault();
+                $header[0].scrollIntoView({ block: 'start'});
+                if (!$bag.hasClass('slideOpen')) {
+                    if ($main.hasClass('main-left')) {
+                        $header.removeClass('main-left');
+                        $main.removeClass('main-left');
+                        $footer.removeClass('main-left');
+                        $html.addClass('nav-hidden');
+                        setTimeout(function () {
+                            $bag.addClass('slideOpen');
+                            $summary.addClass('slideOpen');
+                            $header.addClass('main-right');
+                            $main.addClass('main-right');
+                            $footer.addClass('main-right');
+//                            $section.addClass('main-right');
+                            $('body').addClass('body-right');
+                        }, 600);
+                    } else {
+                        $bag.addClass('slideOpen');
+                        $summary.addClass('slideOpen');
+                        $header.addClass('main-right');
+                        $main.addClass('main-right');
+                        $footer.addClass('main-right');
+//                        $section.addClass('main-right');
+                        $html.addClass('nav-hidden');
+                        $('body').addClass('body-right');
+                    }
+                } else {
+                    $bag.removeClass('slideOpen');
+                    $summary.removeClass('slideOpen');
+                    $header.removeClass('main-right');
+                    $main.removeClass('main-right');
+                    $footer.removeClass('main-right');
+//                    $section.removeClass('main-right');
+                    $html.removeClass('nav-hidden');
+                    $('body').removeClass('body-right');
+                }
+            });
+            function triggerSummaryClose() {
+                $bag.removeClass('slideOpen');
+                $summary.removeClass('slideOpen');
+                $header.removeClass('main-right');
+                $main.removeClass('main-right');
+                $footer.removeClass('main-right');
+//                $section.removeClass('main-right');
+                $html.removeClass('nav-hidden');
+                $('body').removeClass('body-right');
+            }
+            $('#JS--checkoutClose').on('click', function() {
+                triggerSummaryClose();
+            });
+//            var $grey = $('section');
+//            $grey.on('click', function() {
+//                triggerSummaryClose();
+//            });
+            $(document).on('click', '.body__fade', function(e) {
+                if (e.pageX < $('.slide-checkout').position().left) {
+                    triggerSummaryClose();
+                }
+            });
+
+            // Displays the loading circle
+            var proceed = false;
+            $(document).on('click', '.JS--Button-gotoCheckout', function (event) {
+//                if (!$(event.currentTarget).hasClass('disabled')) {
+                    if (proceed) {
+                        proceed = false;
+                        return;
+                    }
+                    event.preventDefault();
+                    var $element = $(event.currentTarget);
+                    $element.addClass('text-warning-faded');
+                    $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+                    proceed = true;
+                    $element.trigger('click');
+//                    $element.addClass('disabled');
+                    var url = $element.attr('href');
+                    window.location.href = url;
+//                }
+
+            });
+        });
+    </script>
 {% endblock %}

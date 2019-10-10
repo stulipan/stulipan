@@ -1,0 +1,101 @@
+
+    {{ form_start(form, { 'attr': {'class': '' }}) }}
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        {{ form_label(form.name) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-5 ">
+                        {{ form_widget(form.name, {'attr': {
+                            'class': '',
+                        }}) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        {{ form_label(form.description) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-5 ">
+                        {{ form_widget(form.description) }}
+                        {{ form_errors(form.description) }}
+                        <small class="form-text text-muted">
+                            Rövid leírás, ami látszani fog a webshopban.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        {{ form_label(form.price) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-5 ">
+                        <div class="input-group">
+                            {{ form_widget(form.price) }}
+                            <div class="input-group-append">
+                                <span class="input-group-text">Ft</span>
+                            </div>
+                        </div>
+                        {{ form_errors(form.price) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        {{ form_label(form.ordering) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-5 ">
+                        {{ form_widget(form.ordering) }}
+                        {{ form_errors(form.ordering) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                        {#{{ form_label(form.enabled) }}#}
+                        <label">Engedélyezve</label>
+                    </div>
+                    <div class="col-sm-8 col-lg-5 ">
+                        <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="info">
+                        <label class="form-check-label required" for="{{ form.enabled.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+
+                        {{ form_errors(form.enabled) }}
+                        {% do form.enabled.setRendered() %}
+                    </div>
+                </div>
+            </div>
+
+
+
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+            <div class="mb-2">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-2">
+                    </div>
+                    <div class="col-sm-8 col-lg-5">
+                        <input type="submit" value="Mentés" class="btn btn-info mr-1" formnovalidate>
+                        <a href="{{ path('shipping-list') }}" class="btn btn-secondary">Mégse</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{ form_end(form) }}

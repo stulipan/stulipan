@@ -3,28 +3,30 @@
 
 namespace App\Controller\Boltzaras;
 
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Pagerfanta;
-
-//az alabbibol fogja tudni hogy a Boltzaras entity-hez kapcsolodik es azzal dolgozik
-use App\Entity\Boltzaras;
-use App\Form\BoltzarasFormType;
-//use App\Controller\Boltzaras\DateRangeController;
+use App\Entity\Boltzaras\Boltzaras;
+use App\Entity\Boltzaras\BoltzarasWeb;
+use App\Form\Boltzaras\BoltzarasFormType;
+use App\Form\Boltzaras\BoltzarasWebFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
 
+use Pagerfanta\Exception\NotValidCurrentPageException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
+use Symfony\Bundle\MonologBundle\SwiftMailer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 use App\Pagination\PaginatedCollection;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @Route("/admin")
+ * @IsGranted("ROLE_MANAGE_BOLTZARAS")
  */
-class BoltzarasController extends Controller
+class BoltzarasController extends AbstractController
 {
 
     /**
@@ -35,6 +37,10 @@ class BoltzarasController extends Controller
 		$jelentes = $this->getDoctrine()
 			->getRepository(Boltzaras::class)
 			->findAll();
+        $totalKeszpenzEsBankkartya = $this->getDoctrine()
+            ->getRepository(Boltzaras::class)
+            ->sumAllQueryBuilder()
+            ->getSingleResult();
 
 		if (!$jelentes) {
 			throw $this->createNotFoundException(
@@ -52,6 +58,8 @@ class BoltzarasController extends Controller
 		return $this->render('admin/boltzaras/boltzaras_list.html.twig', [
 		    'jelentesek' => $jelentes,
             'title' => 'Boltzárások listája',
+            'keszpenz' => $totalKeszpenzEsBankkartya['keszpenz'],
+            'bankkartya' => $totalKeszpenzEsBankkartya['bankkartya'],
             ]);
 	}
 
@@ -65,71 +73,54 @@ class BoltzarasController extends Controller
         ]);
     }
 
+
 	/**
-     * @Route("/boltzaras/new", name="boltzaras_new")
+     * @Route("/boltzaras/edit/{id}", name="boltzaras-edit")
      */
-    public function newAction(Request $request)
+    public function editAction(Request $request, ?Boltzaras $boltzaras, $id = null, \Swift_Mailer $mailer)
     {
-        $form = $this->createForm(BoltzarasFormType::class);
-        
-        // handleRequest only handles data on POST
-        $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-         	//ezzel kiirom siman az POST-al submitolt adatokat
-         	//dump($form->getData());die;
-         	
-         	$zarasAdatok = $form->getData();
-         	$zarasAdatok->setModositasIdopontja(); 
-
-			// you can fetch the EntityManager via $this->getDoctrine()
-			// or you can add an argument to your action: index(EntityManagerInterface $entityManager)
-			$entityManager = $this->getDoctrine()->getManager();
-
-			// tell Doctrine you want to (eventually) save the Product (no queries yet)
-			$entityManager->persist($zarasAdatok);
-
-			// actually executes the queries (i.e. the INSERT query)
-			$entityManager->flush();
-			
-			$this->addFlash('success', 'Sikeresen leadtad a boltzárásjelentést! Jó pihenést!');
-			
-			//return $this->redirectToRoute('boltzaras_new');
-			return $this->redirectToRoute('boltzaras_list');
+        if (!$boltzaras) {
+            // new Boltzaras
+            $form = $this->createForm(BoltzarasFormType::class);
+            $title = 'Új boltzárás rögzítése';
+        } else {
+            // edit Boltzaras
+            $form = $this->createForm(BoltzarasFormType::class, $boltzaras);
+            $title = 'Boltzárás adatainak módosítása';
         }
-        
-        return $this->render('admin/boltzaras/boltzaras_edit.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Új boltzárás rögzítése',
-        ]);
-    }
 
-
-	/**
-     * @Route("/boltzaras/edit/{id}", name="boltzaras_edit")
-     */
-    public function editAction(Request $request, Boltzaras $zarasAdatok)
-    {
-    	//itt instanszolja a Jelentes formot, amit a $zarasAdatokkal populálja
-    	//lásd a második paramétert, ami megmondja a formnak milyen adatokat szórjon bele
-        $form = $this->createForm(BoltzarasFormType::class, $zarasAdatok);
-        
         // handleRequest only handles data on POST
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-         	//ezzel kiirom siman az POST-al submitolt adatokat
-         	//dump($form->getData());die;
-         	
-         	$zarasAdatok = $form->getData();
-         	$zarasAdatok->setModositasIdopontja(); 
+            $boltzaras = $form->getData();
+            $boltzaras->setModositasIdopontja();
          	
 			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($zarasAdatok);
+			$entityManager->persist($boltzaras);
 			$entityManager->flush();
-			
-			$this->addFlash('success', 'Sikeresen módosítottad a boltzárásadatokat!');
-			
+
+            $subject = 'Napi boltzárás';
+            $email = (new \Swift_Message())
+                ->setSubject($subject)
+                ->setFrom(['info@tulipanfutar.hu' => 'Difiori boltzárás'])
+                ->setTo('info@difiori.hu')
+                ->setBody(
+                    $this->renderView('admin/emails/boltzaras-napi-riport.html.twig', [
+                            'kassza' => $boltzaras->getKassza(),
+                            'keszpenz' => $boltzaras->getKeszpenz(),
+                            'bankkartya' => $boltzaras->getBankkartya(),
+                            'munkatars' => $boltzaras->getMunkatars(),
+                            'subject' => $subject,
+                            'idopont' => $boltzaras->getIdopont(),
+                        ]
+                    ),
+                    'text/html'
+                );
+            $mailer->send($email);
+
+            $this->addFlash('success', 'Boltzárás sikeresen elmentve!');
+
 			return $this->redirectToRoute('boltzaras_list');
 			
         }
@@ -140,7 +131,42 @@ class BoltzarasController extends Controller
         ]);
     }
 
-	
+    /**
+     * @Route("/boltzaras/webshop/edit/{id}", name="boltzaras-webshop-edit")
+     */
+    public function editBoltzarasWebshop(Request $request, ?BoltzarasWeb $boltzarasWeb , $id = null)
+    {
+        if (!$boltzarasWeb) {
+            // new BoltzarasWeb
+            $form = $this->createForm(BoltzarasWebFormType::class);
+            $title = 'Új webes boltzárás';
+        } else {
+            // edit BoltzarasWeb
+            $form = $this->createForm(BoltzarasWebFormType::class, $boltzarasWeb);
+            $title = 'Webes boltzárás módosítása';
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $boltzarasWeb = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($boltzarasWeb);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Webes boltzárás sikeresen elmentve!');
+
+            return $this->redirectToRoute('boltzaras_list');
+
+        }
+
+        return $this->render('admin/boltzaras/boltzaras-web_edit.html.twig', [
+            'form' => $form->createView(),
+            'title' => $title,
+        ]);
+    }
+
 
 //	/**
 //	 * @Route("/boltzaras/show/{id}", name="boltzaras_show")
@@ -171,6 +197,8 @@ class BoltzarasController extends Controller
      */
     public function listActionWithPagination(Request $request, $page = 1)
     {
+//        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $start = $request->attributes->get('start');
         $end = $request->attributes->get('end');
 
@@ -199,11 +227,27 @@ class BoltzarasController extends Controller
                 ->getRepository(Boltzaras::class)
 //                ->findAllBetweenDates($dateRange->getStart(), $dateRange->getEnd());
                 ->findAllBetweenDates($start, $end);
+            $totalKeszpenzEsBankkartya = $this->getDoctrine()
+                ->getRepository(Boltzaras::class)
+                ->sumAllBetweenDates($start, $end)
+                ->getSingleResult();
+            $totalWebshopForgalom = $this->getDoctrine()
+                ->getRepository(BoltzarasWeb::class)
+                ->sumAllBetweenDates($start, $end)
+                ->getSingleResult();
         } else {
             $queryBuilder = $this->getDoctrine()
                 ->getRepository(Boltzaras::class)
                 ->findAllQueryBuilder();
             //->findAllGreaterThanKassza(10);
+            $totalKeszpenzEsBankkartya = $this->getDoctrine()
+                ->getRepository(Boltzaras::class)
+                ->sumAllQueryBuilder()
+                ->getSingleResult();
+            $totalWebshopForgalom = $this->getDoctrine()
+                ->getRepository(BoltzarasWeb::class)
+                ->sumAllQueryBuilder()
+                ->getSingleResult();
         }
 
         //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
@@ -226,8 +270,6 @@ class BoltzarasController extends Controller
             $jelentes[] = $result;
         }
 
-        //dump($jelentes);die;
-
         if (!$jelentes) {
 //            throw $this->createNotFoundException(
 //                'Nem talált egy boltzárást sem! ' );
@@ -244,7 +286,6 @@ class BoltzarasController extends Controller
 
         $paginatedCollection = new PaginatedCollection($jelentes, $pagerfanta->getNbResults());
 
-
         // render a template, then in the template, print things with {{ jelentes.munkatars }}
         return $this->render('admin/boltzaras/boltzaras_list.html.twig', [
             'jelentesek' => $jelentes,
@@ -253,8 +294,50 @@ class BoltzarasController extends Controller
             'count' => count($jelentes),
             'title' => 'Boltzárások listája',
             'dateRangeForm' => $dateRangeForm->createView(),
+            'keszpenz' => $totalKeszpenzEsBankkartya['keszpenz'],
+            'bankkartya' => $totalKeszpenzEsBankkartya['bankkartya'],
+            'kassza' => $totalKeszpenzEsBankkartya['kassza'],
+            'webshop' => $totalWebshopForgalom['webshopforgalom'],
         ]);
-
-
     }
+
+    //	/**
+//     * @Route("/boltzaras/new", name="boltzaras_new")
+//     */
+//    public function newAction(Request $request)
+//    {
+//        $form = $this->createForm(BoltzarasFormType::class);
+//
+//        // handleRequest only handles data on POST
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//         	//ezzel kiirom siman az POST-al submitolt adatokat
+//         	//dump($form->getData());die;
+//
+//         	$zarasAdatok = $form->getData();
+//         	$zarasAdatok->setModositasIdopontja();
+//
+//			// you can fetch the EntityManager via $this->getDoctrine()
+//			// or you can add an argument to your action: index(EntityManagerInterface $entityManager)
+//			$entityManager = $this->getDoctrine()->getManager();
+//
+//			// tell Doctrine you want to (eventually) save the Product (no queries yet)
+//			$entityManager->persist($zarasAdatok);
+//
+//			// actually executes the queries (i.e. the INSERT query)
+//			$entityManager->flush();
+//
+//			$this->addFlash('success', 'Sikeresen leadtad a boltzárásjelentést! Jó pihenést!');
+//
+//			//return $this->redirectToRoute('boltzaras_new');
+//			return $this->redirectToRoute('boltzaras_list');
+//        }
+//
+//        return $this->render('admin/boltzaras/boltzaras_edit.html.twig', [
+//            'form' => $form->createView(),
+//            'title' => 'Új boltzárás rögzítése',
+//        ]);
+//    }
+
 }

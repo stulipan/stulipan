@@ -1,0 +1,46 @@
+<div class="JS--formWrapper">
+    {#{% form_theme form 'bootstrap_4_horizontal_layout.html.twig' %}#}
+    {{ form_start(form, { 'attr': {'class': 'form-inline JS--editForm needs-validation' }}) }}
+    <div class="input-group input-group-sm">
+        <div class="form-group no-spinners">
+            {#<input type="text" class="form-control" ="">#}
+            {#<div class="d-inline">#}
+            {{ form_widget(form.stock, { 'attr': {
+                'aria-describedby' : 'button-addon2',
+            }}) }}
+            {#</div>#}
+
+            <div class="input-group-append">
+                {#<button class="btn btn-outline-primary" type="button" >Button</button>#}
+                <button type="submit" value="OK" class="btn btn-sm btn-success ml-1" id="button-addon2" formnovalidate>
+                    <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+        <div class="text-left">{{ form_errors(form.stock) }}</div>
+    </div>
+
+    {# Render CSRF token etc .#}
+    <div style="display:none">
+        {{ form_rest(form) }}
+    </div>
+
+
+			{#<div class="mb-3">#}
+				{#<div class="form-group row">#}
+					{#<div class="col-sm-4 col-lg-2 text-sm-righttt">#}
+                        {#{{ form_label(form.stock, form.stock, { 'label_attr': {'class': 'col-form-label' }}) }}#}
+					{#</div>#}
+					{#<div class="col-sm-8 col-lg-5 input-group">#}
+                        {#{{ form_widget(form.stock) }}#}
+						{#<div class="input-group-append">#}
+							{#<span class="input-group-text">darab</span>#}
+						{#</div>#}
+                        {#{{ form_errors(form.stock) }}#}
+					{#</div>#}
+                    {#<div class="col-lg-5"></div>#}
+				{#</div>#}
+			{#</div>#}
+
+    {{ form_end(form) }}
+</div>

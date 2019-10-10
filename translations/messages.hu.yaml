@@ -1,0 +1,37 @@
+#Admin
+  #Dashboard
+Dashboard: "Kezelőpult"
+Welcome to Stulipan admin: Üdv a Stulipán admin oldalán! Csak csínnyán...!
+
+admin:
+  orderDetail:
+      Orders: Rendelések
+      Order:: "Rendelés:"
+      Order ID:: Belső azonosító:
+      Delivery date overdue!: Határidő túllépés!
+      Print: Nyomtatás
+      Shipping letter: Szállítólevél
+      Order status: Rendelés állapota
+      More actions: Műveletek
+      Sender edit: Feladó módosítása
+      Recipient edit: Címzett módosítása
+      New delivery date: Új szállítási idő
+      cart:
+          Products: Termékek:
+      Message: Üzenet
+      Sender: Feladó:
+      Phone number: Telefonszám:
+      Delivery date: Szállítási idő:
+      
+      payment:
+          Payment: Fizetés
+          Instructions for bank transfer: Banki utaláshoz szükséges adatok
+      
+  customer:
+      Customer: Vásárló
+      View profile: Részletek
+      Email: Email:
+      "%count% orders": "%count% rendelés"
+
+  generic:
+      Not available: nincs

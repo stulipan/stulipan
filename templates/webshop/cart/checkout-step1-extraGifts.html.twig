@@ -1,0 +1,194 @@
+{% extends 'webshop/site/base-checkout.html.twig' %}
+
+{% block title %}
+    Kosár | {{ parent() }}
+{% endblock %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {#<link href="{{ asset('build/v-shop.css') }}" rel="stylesheet" />#}
+{% endblock %}
+
+{% block page_content %}
+<div class="JS--globalWrapper">
+
+    {#{{ include('webshop/site/alert-widget.html.twig') }}#}
+
+	<section name="checkout_pickExtraGifts">
+		<div class="container mb-4">
+			<div class="row row-narrowX">
+                <div class="" id="v--checkout">
+
+                        {#<checkout :order-id="{{ orderId is defined and orderId ? orderId : 0}}"#}
+                                  {#:gift-category-id="{{ giftCategory is defined ? giftCategory.id : 0 }}"#}
+                        {#></checkout>#}
+
+                        <div name="left_column" class="col-md-12 col-lg-12 col-narrowX px-0 px-md-10px">
+                            {{ include('webshop/cart/progress-bar-3step-checkout.html.twig') }}
+                            {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                {{ include('webshop/cart/already-registered-widget.html.twig') }}
+                            {% endif %}
+                            <div name="basket_content" class="mb-20px">
+                                <div class="row no-gutters">
+                                    <div class="col-lg-12">
+                                        <div class="card bg-white">
+                                            <div class="cart-wrapper">
+                                                <div class="JS--cartWrapper">
+                                                    <div class="checkout-block-header JS--alertBlock">
+                                                        <h4>Kosár</h4>
+                                                    </div>
+
+                                                    {{ include('webshop/cart/alert-cartItems-insert.html.twig') }}
+                                                    <div class="cart-body JS--resultWrapper px-3 px-md-4">
+                                                        <div name="kosar_tartalma" class="">
+                                                            {{ include('webshop/cart/cart-product-list.html.twig') }}
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div class="JS--giftsWrapper">
+
+                                                        <div class="checkout-block-header px-3 px-md-3X">
+                                                            <h4>A virág mellé válassz ajándékot</h4>
+                                                        </div>
+
+                                                        <div class="block-body px-3 px-md-4">
+
+                                                            {% include('/webshop/cart/extra-gifts-list-widget.html.twig') %}
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {#<div name="choose_extras" class="mb-20px">#}
+                                {#<div class="row no-gutters">#}
+                                    {#<div class="col-lg-12 ">#}
+                                        {#<div class="cart bg-white shadow-none">#}
+
+                                        {#</div>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+
+
+                            {% include('webshop/cart/message-and-customer-form.html.twig') %}
+
+
+                        </div>
+
+                        {#<div name="right_column" class="col-md-5 col-lg-12 col-narrow">#}
+                            {#<div class="navbar-sticky sticky-top pt-0 pt-md-3 mb-20px">#}
+                                {#<div class="cart block bg-white bg-gray-200X px-0 px-md-1">#}
+                                    {#<div class="block-header">#}
+                                        {#<h6 class="text-uppercase mb-0">Összesen</h6>#}
+                                    {#</div>#}
+                                    {#<div class="block-body text-sm p-3 p-md-4 pt-1">#}
+                                        {#<div class="mb-3">#}
+                                            {#<span class="">Shipping and additional costs are calculated based on values you have entered.</span>#}
+                                            {#<ul class="order-summary mb-0 list-unstyled">#}
+                                                {#<li class="order-summary-item">#}
+                                                    {#<span>Részösszeg </span>#}
+                                                    {#<span>{{  order.summary.totalBeforeDiscount|number_format(0, ',', ' ') }} Ft</span>#}
+                                                {#</li>#}
+                                                {#<li class="order-summary-item">#}
+                                                    {#<span>Szállítás</span>#}
+                                                    {#<span> Ft</span>#}
+                                                {#</li>#}
+                                                {#<li class="order-summary-item">#}
+                                                    {#<span>Kedvezmény</span>#}
+                                                    {#<span>25%:</span>#}
+                                                {#</li>#}
+                                                {#<li class="order-summary-item border-0">#}
+                                                    {#<span>Fizentendő #}{# totalAmountToPay #}{#</span>#}
+                                                    {#<strong class="order-summary-total">{{ order.summary.totalAmountToPay|number_format(0, ',', ' ') }} Ft</strong>#}
+                                                {#</li>#}
+                                            {#</ul>#}
+                                        {#</div>#}
+                                        {#<div name="kupon_ervenyesites" class="mb-3X">#}
+                                            {#<div class="row">#}
+                                                {#<div class="col-lg-12">#}
+                                                    {#<span class="d-block form-label mb-2">Promóciós kód / kupon beváltása</span>#}
+                                                    {#{% form_theme setDiscountForm 'bootstrap_4_layout.html.twig' %}#}
+                                                    {#{{ form_start(setDiscountForm) }}#}
+                                                    {#<div class="">#}
+                                                        {#<div class="row row-narrow">#}
+                                                            {#<div class="form-group col-sm-6 col-8 col-narrow">#}
+                                                                {#{{ form_widget(setDiscountForm.id) }}#}
+                                                                {#{{ form_widget(setDiscountForm.couponCode, {'attr' : {'class' : 'form-control-smX'}}) }}#}
+                                                                {#{{ form_errors(setDiscountForm.couponCode) }}#}
+                                                            {#</div>#}
+                                                            {#<div class="form-group col-sm-6 col-4 col-narrow">#}
+                                                                {#<button type="submit" class="JS--Button-validateCoupon w-100 btn btn-smX btn-primary" data-url="/cart/validateCoupon"><i class="fas fa-tag mr-1 d-none d-md-inline-block"></i> Érvényesít</button>#}
+                                                            {#</div>#}
+                                                        {#</div>#}
+                                                        {#<span class="text-xs text-muted-extra"><span class="font-weight-bold text-muted">Jó tudni!</span> Csak egy promóciós kódot / kupont tudsz felhasználni rendeléskor.</span>#}
+                                                    {#</div>#}
+                                                    {#{{ form_end(setDiscountForm) }}#}
+                                                {#</div>#}
+                                            {#</div>#}
+                                        {#</div>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+                        {#</div>#}
+
+                        <div name="goto_checkout" class="col-lg-12 mt-3 mb-5">
+                            <div class="row">
+                                <div class="col-lg-12 mb-4">
+                                    <div class="d-flex justify-content-betweenX justify-content-center flex-column flex-md-row px-4 px-md-0">
+                                        {#<a href="category.html" class="btn btn-lg btn-link d-none d-md-inline-block text-muted order-2 order-lg-1 px-0"><i class="fa fa-chevron-left"></i> Vásárlás folytatása</a>#}
+
+                                        <button data-url="{{ path('site-checkout-step2-pickRecipient') }}" class="JS--Button-gotoStep2 btn btn-lg btn-success order-1 order-lg-2 px-3 px-md-6 py-4">Tovább a címzett megadásához <i class="fa fa-chevron-right"></i></button>
+                                        <div class="JS--loadingOverlay d-flex align-items-stretch loading-lg"></div>
+                                    </div>
+                                </div>
+                                {#<div class="text-lg-right col-lg-6 ml-auto">#}
+                                    {#<span class="text-sm text-muted">Lépj tovább és add meg kinek szeretnéd küldeni a virágot. Itt fogod tudni megadni a címzett személy címét, illetve a házhozszállítás időpontját.</span>#}
+                                {#</div>#}
+                                <div class="col-lg-12 py-4"> </div>
+                            </div>
+                        </div>
+
+
+                </div>
+			</div>
+		</div>
+	</section>
+
+
+</div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+    <script src="{{ asset('build/v-shop.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            var $globalWrapper = $('.JS--globalWrapper');
+            var $gotoStep2 = new handleOrder($globalWrapper);
+
+            var $cartWrapper = $('.JS--cartWrapper');
+            var cartEdit = new InlineEdit($cartWrapper);
+
+            let $giftsWrapper = $('.JS--giftsWrapper');
+            new InlineEdit($giftsWrapper);
+
+
+            var $cardMessages = $('.JS--cardMessages');
+            var $pickCardMessage = new InlineEdit($cardMessages);
+        });
+    </script>
+
+{% endblock %}

@@ -22,7 +22,8 @@ class ProductImage //implements \JsonSerializable
 {
     /**
      * @var int
-     * @Groups({"productView", "productList"})
+     * @Groups({"productView", "productList",
+     *     "orderView"})
      *
      * @ORM\Column(name="id", length=11, nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -58,7 +59,8 @@ class ProductImage //implements \JsonSerializable
     
     /**
      * @var string|null
-     * @Groups({"productView"})
+     * @Groups({"productView", "productList",
+     *     "orderView"})
      */
     private $imageUrl;
     
@@ -158,7 +160,7 @@ class ProductImage //implements \JsonSerializable
     }
     
     /**
-     * This is used in ImageSetFullPath service. The service calls setImageUrl to set full URL to the image (eg: https://www....../image_filename.jpeg )
+     * This is used in App\Event\ImageSetFullPath service/event. The service calls setImageUrl to set full URL to the image (eg: https://www....../image_filename.jpeg )
      * @param null|string $imageUrl
      */
     public function setImageUrl($imageUrl)

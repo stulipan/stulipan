@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity\Model;
 
-use App\Entity\Model\Message;
+use App\Entity\Model\CartCard;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator\Constraints as AssertApp;
 
 /**
  *
@@ -14,41 +14,42 @@ use App\Validator\Constraints as AssertApp;
 class MessageAndCustomer
 {
     /**
-     * @var Message
+     * @var CartCard
+     * @Groups({"orderView", "orderList"})
      *
-     * @Assert\NotNull()
-     * AssertApp\MessageWithAuthor()
+     * @Assert\Valid()   This is required so that validation at CartCard class level validation is triggered!
      */
-    private $message;
+    private $card;
 
     /**
      * @var CustomerBasic
+     * @Groups({"orderView", "orderList"})
      *
-     * Assert\NotNull()
+     * @ Assert\Valid()
      */
     private $customer;
 
 
-    public function __construct(Message $message = null, CustomerBasic $customer = null)
+    public function __construct(CartCard $card = null, CustomerBasic $customer = null)
     {
-        $this->message = $message;
+        $this->card = $card;
         $this->customer = $customer;
     }
 
     /**
-     * @return Message
+     * @return CartCard
      */
-    public function getMessage(): ?Message
+    public function getCard(): ?CartCard
     {
-        return $this->message;
+        return $this->card;
     }
 
     /**
-     * @param Message $message
+     * @param CartCard $card
      */
-    public function setMessage(?Message $message)
+    public function setCard(?CartCard $card)
     {
-        $this->message = $message;
+        $this->card = $card;
     }
 
     /**
@@ -66,5 +67,5 @@ class MessageAndCustomer
     {
         $this->customer = $customer;
     }
-
+    
 }

@@ -39,8 +39,10 @@ class OrderGoesToSession implements EventSubscriberInterface
 
     public function onOrderCreated(GenericEvent $event): void
     {
+        /** Put orderId into session */
         $this->session->set('orderId', $event->getSubject()->getId());
 
+        /** On order creation generate and assign automatically an Order Number */
         $order = $this->entityManager->getRepository(Order::class)->findOneById($event->getSubject()->getId());
 
         $today = new \DateTime('now');

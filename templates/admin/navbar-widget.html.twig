@@ -1,4 +1,4 @@
-<div class="navbar-customX">
+<div class="navbar-custom">
     <ul class="list-unstyled topbar-right-menu float-right mb-0">
 
         <li class="dropdown notification-list">
@@ -7,9 +7,7 @@
                     <img src="{{ app.user.image is defined ? asset('/uploads/images/termekek/' ~ app.user.image) : '' }}" alt="" class="rounded-circle">
                 </span>
                 <span>
-                    <span class="account-user-name">
-                        Helló, {{ app.user.username|capitalize }}!
-                    </span>
+                    <span class="account-user-name">Helló, {{ app.user.username|capitalize }}!</span>
                     <span class="account-position">{{ app.user.email }}</span>
                 </span>
             </a>

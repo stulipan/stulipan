@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 
 
-class CheckoutFormType extends AbstractType
+class ShipAndPayFormType extends AbstractType
 {
     private $urlGenerator;
 
@@ -29,7 +29,7 @@ class CheckoutFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->setAction($this->urlGenerator->generate('cart-setCheckout'));
+//        $builder->setAction($this->urlGenerator->generate('cart-setCheckout'));
         $builder
             ->add('id',HiddenType::class, [
                 'mapped' => false // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.

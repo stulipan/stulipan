@@ -3,6 +3,7 @@
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\Common\Collections\Collection;
@@ -19,6 +20,9 @@ class User implements UserInterface, \Serializable
     use TimestampableTrait;
 
     /**
+     * @var int
+     * @Groups({"orderView", "orderList"})
+     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -26,6 +30,8 @@ class User implements UserInterface, \Serializable
     private $id;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="username", type="string", length=64, unique=true)
      */
     private $username;
@@ -37,6 +43,9 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
+     * @var string
+     * @Groups({"orderView", "orderList"})
+     *
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank(message="Írd be az email címedet!")
      * @Assert\Email(message="Ellenőrizd, hogy helyesen írtad be az email címet!")
@@ -49,11 +58,17 @@ class User implements UserInterface, \Serializable
     private $isActive;
 
     /**
+     * @var string
+     * @Groups({"orderView"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $firstname;
 
     /**
+     * @var string
+     * @Groups({"orderView"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $lastname;
@@ -67,7 +82,7 @@ class User implements UserInterface, \Serializable
     private $image;
 
     /**
-     * var Collection
+     * @var Recipient[]|ArrayCollection|null
      *
      * ==== One User/Customer has Recipients ====
      * ==== mappedBy="customer" => az Recipients entitásban definiált 'customer' attribútumról van szó ====
@@ -79,7 +94,7 @@ class User implements UserInterface, \Serializable
     private $recipients;
 
     /**
-     * var Collection
+     * @var Sender[]|ArrayCollection|null
      *
      * ==== One User/Customer has Senders ====
      * ==== mappedBy="customer" => a Senders entitásban definiált 'customer' attribútumról van szó ====
@@ -91,7 +106,7 @@ class User implements UserInterface, \Serializable
     private $senders;
 
     /**
-     * var Collection
+     * @var Order[]|ArrayCollection|null
      *
      * ==== One User/Customer has Orders ====
      * ==== mappedBy="customer" => az Order entitásban definiált 'customer' attribútumról van szó ====
@@ -192,7 +207,7 @@ class User implements UserInterface, \Serializable
         // not needed when using bcrypt or argon
         return null;
     }
-
+    
     public function getEmail(): ?string
     {
         return $this->email;
@@ -200,12 +215,10 @@ class User implements UserInterface, \Serializable
 
     /**
      * @param null|string $email
-     * return string
      */
     public function setEmail(?string $email)
     {
         $this->email = $email;
-//        return $this;
     }
 
     /**
@@ -218,26 +231,18 @@ class User implements UserInterface, \Serializable
 
     /**
      * @param string $name
-     *
-     * @return User
      */
     public function setFirstname(?string $name)
     {
         $this->firstname = $name;
-
-        return $this;
     }
 
     /**
      * @param string $name
-     *
-     * @return User
      */
     public function setLastname(?string $name)
     {
         $this->lastname = $name;
-
-        return $this;
     }
 
     /**
@@ -249,6 +254,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @Groups({"orderView", "orderList"})
      * @return string
      */
     public function getFullname(): ?string
@@ -337,11 +343,25 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return Collection
+     * @return Recipient[]|Collection
      */
     public function getRecipients(): Collection
     {
         return $this->recipients;
+    }
+    
+    /**
+     * Checking if the Customer has Recipients.
+     *
+     * @return bool
+     */
+    public function hasRecipients(): bool
+    {
+        if ($this->recipients and !$this->recipients->isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -361,20 +381,68 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return Collection
+     * @return Sender[]|Collection
      */
     public function getSenders(): Collection
     {
         return $this->senders;
     }
+    
+    /**
+     * Checking if the Customer has Senders.
+     *
+     * @return bool
+     */
+    public function hasSenders(): bool
+    {
+        if ($this->senders and !$this->senders->isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
-     * @return Collection
+     * @return Order[]|Collection
      */
     public function getOrders(): Collection
     {
         return $this->orders;
     }
-
-
+    
+    /**
+     * @return Order[]|Collection
+     */
+    public function getRealOrders(): Collection
+    {
+        $realOrders = new ArrayCollection();
+        foreach ($this->orders as $order) {
+            if ($order->getStatus() !== null) {
+                $realOrders->add($order);
+            }
+        }
+        return $realOrders;
+    }
+    
+    /**
+     * @return int
+     */
+    public function countOrders(): int
+    {
+        return $this->orders->count();
+    }
+    
+    /**
+     * @return int
+     */
+    public function countRealOrders(): int
+    {
+        $realOrders = new ArrayCollection();
+        foreach ($this->orders as $order) {
+            if ($order->getStatus() !== null) {
+                $realOrders->add($order);
+            }
+        }
+        return $realOrders->count();
+    }
 }

@@ -42,7 +42,7 @@ class BaseController extends AbstractController
             [ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
         );
         $normalizer = [
-//            new ArrayDenormalizer(),
+            new ArrayDenormalizer(),
             $objNormalizer,
         ];
         $this->serializer = new Serializer($normalizer, [new JsonEncoder()]);
@@ -118,7 +118,7 @@ class BaseController extends AbstractController
      * @param mixed $object
      * @return array            Array of errors, empty otherwise
      */
-    protected function getValidationErrors($object, ValidatorInterface $validator)
+    protected function getValidationErrors($object, ValidatorInterface $validator) //, $constraints = null
     {
         $violations = $validator->validate($object);
         if ($violations->count() > 0) {
@@ -162,6 +162,11 @@ class BaseController extends AbstractController
             }
         }
         return $errors;
+    }
+    
+    public function toArray($data)
+    {
+        return is_array($data) ? $data : [$data];
     }
 
 }

@@ -28,7 +28,8 @@ class Price //implements \JsonSerializable
 
     /**
      * @var int
-     * @Groups({"productView", "productList"})
+     * @Groups({"productView", "productList",
+     *     "geoPriceView", "geoPriceList"})
      *
      * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -46,7 +47,8 @@ class Price //implements \JsonSerializable
 
     /**
      * @var float
-     * @Groups({"productView", "productList"})
+     * @Groups({"productView", "productList",
+     *     "geoPriceView", "geoPriceList"})
      *
      * @ORM\Column(name="value", type="decimal", precision=10, scale=2, nullable=false)
      * @Assert\NotBlank()

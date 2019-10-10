@@ -21,7 +21,7 @@
 				<!-- Grid -->
 
 				<div class="products-grid col-lg-12 sidebar-none mt-4X">
-                    <div class="landing--grid d-none d-md-flex" style="background-image: url({{ uploaded_asset(category.imagePath)|imagine_filter('category_image') }});">
+                    <div class="landing--grid d-none d-md-flex" {% if category.imagePath is defined %} style="background-image: url({{ uploaded_asset(category.imagePath)|imagine_filter('category_image') }});" {% endif %}>
                         <div class="row flex-grow-1">
                             <div class="col-md-8 d-flex align-items-center">
                                 <div class="landing--heading p-md-3 ml-2 ml-lg-3">

@@ -17,47 +17,53 @@
 {% block page_content %}
 <div class="JS--globalWrapper">
 
-    {{ include('webshop/cart/progress-bar-3step-checkout.html.twig') }}
-    {{ include('webshop/site/alert-widget.html.twig') }}
-    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-        {{ include('webshop/cart/already-registered-widget.html.twig') }}
-    {% endif %}
+    {#{% include('webshop/site/alert-widget.html.twig') }}#}
 
     <section name="checkout_pickRecipient_andDeliveryDate">
         <div class="container mb-4">
             <div class="row">
                 <div class="col-md-12 col-lg-12 mx-lg-auto">
-                    <div class="row row-narrow">
+                    <div class="row row-narrowX">
 
-                        <div name="left_column" class="col-md-7 col-lg-8 pt-3 col-narrow">
+                        <div name="left_column" class="col-md-7 col-lg-8 col-narrowX px-0 px-md-10px">
 
+                            {% include('webshop/cart/progress-bar-3step-checkout.html.twig') %}
+                            {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                {% include('webshop/cart/already-registered-widget.html.twig') %}
+                            {% endif %}
                             <div name="shipping_address" class="mb-20px">
-                                <div class="row">
+                                <div class="row no-gutters">
                                     <div class="col-lg-12">
-                                        <div class="cart bg-white">
+                                        <div class="card bg-white">
                                             <div class="cart-wrapper JS--recipientWrapper">
 
-                                                <div class="checkout-block-header">
+                                                <div class="checkout-block-header JS--alertBlock px-3 px-md-3X">
                                                     <h4>Kinek küldöd?</h4>
                                                 </div>
 
-                                                {{ include('webshop/cart/alert-recipient-insert.html.twig') }}
-                                                <div class="block-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-12 mb-3">
-                                                            <span class="detail-option-heading font-weight-bold"></span>
-                                                            <span class="text-mutedX">A sikeres kézbesítéshez add meg a címzett személy nevét, címét, telefonszámát.</span>
-                                                        </div>
-                                                    </div>
+                                                {% include('webshop/cart/alert-recipient-insert.html.twig') %}
+                                                <div class="block-body px-3 px-md-4">
+                                                    {#<div class="row">#}
+                                                        {#<div class="col-lg-12 mb-3">#}
+                                                            {#<span class="detail-option-heading font-weight-bold"></span>#}
+                                                            {#<span class="text-mutedX">A sikeres kézbesítéshez add meg a címzett személy nevét, címét, telefonszámát.</span>#}
+                                                        {#</div>#}
+                                                    {#</div>#}
 
-                                                    <div class="JS--recipientListWrapper">
-                                                        {{ include('webshop/cart/recipient_list.html.twig') }}
-                                                    </div>
-                                                    <div class="JS--recipientEditFormWrapper">
+                                                    <div class="JS--recipientContentBlock">
+                                                        {% if recipients is defined %}
+                                                            {% include('webshop/cart/recipient_list.html.twig') %}
+                                                        {% endif %}
                                                         {% if recipientForm is defined %}
-                                                            {{ include('webshop/cart/recipient_form.html.twig') }}
+                                                            {% include('webshop/cart/recipient_form.html.twig') %}
                                                         {% endif %}
                                                     </div>
+                                                    {#<div class="JS--recipientListWrapper">#}
+                                                        {##}
+                                                    {#</div>#}
+                                                    {#<div class="JS--recipientEditFormWrapper">#}
+                                                        {##}
+                                                    {#</div>#}
                                                 </div>
 
                                             </div>
@@ -68,28 +74,24 @@
                             </div>
 
                             <div name="shipping_deliveryDate" class="mb-20px">
-                                <div class="row">
+                                <div class="row no-gutters">
                                     <div class="col-lg-12">
-                                        <div class="cart bg-white">
+                                        <div class="card bg-white">
                                             <div class="cart-wrapper JS--deliveryDateContainer">
 
-                                                <div class="checkout-block-header">
+                                                <div class="checkout-block-header JS--alertBlock px-3 px-md-3x">
                                                     <h4>Szállítás ideje</h4>
                                                 </div>
 
-                                                {{ include('webshop/cart/alert-deliveryDate-insert.html.twig') }}
-                                                <div class="block-body">
-                                                    <div class="d-noneX">
-                                                        {{ include('/webshop/cart/hiddenDeliveryDate-form.html.twig') }}
-
-
-                                                        {#<input type="hidden" id="Hidden_deliveryDate" name="Hidden_deliveryDate" value="" />#}
-                                                        {#<input type="hidden" id="Hidden_deliveryInterval" name="Hidden_deliveryInterval" value="" />#}
-                                                    </div>
+                                                {% include('webshop/cart/alert-deliveryDate-insert.html.twig') %}
+                                                <div class="block-body px-3 px-md-4">
+                                                    {#<div class="d-noneX">#}
+                                                        {#{% include('/webshop/cart/hiddenDeliveryDate-form.html.twig') %}#}
+                                                    {#</div>#}
                                                     <div class="row">
                                                         <div class="col-lg-12">
-                                                            <div class="mb-2">
-                                                                <span class="form-label">Kézbesítés napja:</span>
+                                                            <div class="mb-2 mt-2">
+                                                                <span class="form-label text-body">Válaszd ki mikor szállítsuk ki!</span>
                                                                 {#<span class="detail-option-heading font-weight-bold"><span>(Melyik napon szállítsuk ki?)</span></span>#}
                                                             </div>
                                                             <div class="row order-delivery-date">
@@ -98,7 +100,7 @@
 
                                                                         {% for date in generatedDates.dates %}
                                                                         <div class="col-sm-3 col-3 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} {% if loop.index > 3 %}JS--Button-clickDate d-none {% endif %}" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
-                                                                            <div class="visual-picker visual-picker-fluid visual-picker-sm mr-2 {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}visual-picker-checked{% endif %}">
+                                                                            <div class="visual-picker visual-picker-fluid visual-picker-sm mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}visual-picker-checked{% endif %}">
                                                                                 <div class="visual-picker-figure justify-content-lg-center justify-content-center required px-2">
                                                                                     <span class="visual-picker-content">
                                                                                         <span class="tile tile-lg">
@@ -129,57 +131,99 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="JS--intervalsWrapper">
+                                                    <div class="JS--intervalsWrapper mt-4">
                                                         {#{% if date.intervals is defined %}#}
                                                             <div class="row">
-                                                                <div class="col-lg-12 mb-3">
-                                                                    <span class="form-label mb-0">Válassz idősávot:</span> <br>
-                                                                    <span class="text-sm">Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.</span>
+                                                                <div class="col-lg-12 mb-3X">
+                                                                    <span class="form-label text-body mb-0">A kézbesítés az általad kért időpontban történik:</span> <br>
+
                                                                 </div>
                                                             </div>
-                                                            <div class="form-row order-delivery-date mb-1">
+                                                            <div class="form-row order-delivery-date">
                                                                 {% for date in generatedDates.dates %}
                                                                 <div class="col-md-12 col-12 JS--generatedInterval-{{ date.deliveryDate|date('Y-m-d') }} d-none">
                                                                     <form>
-                                                                        {#{{ dump(date) }}#}
-                                                                    {% set index = loop.index %}
+                                                                        {% set index = loop.index %}
 
-                                                                    {% for interval in date.intervals %}
-                                                                    <div class="custom-control custom-radio py-3 ">
-                                                                        <input class="custom-control-input" type="radio" id="dateForm_deliveryInterval_{{ index }}_{{ loop.index }}" name="dateForm[deliveryInterval]" required="required" value="{{ interval }}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}checked="checked"{% endif %}>
-                                                                        <label class="custom-control-label font-weight-bold" for="dateForm_deliveryInterval_{{ index }}_{{ loop.index }}">
-
-
-                                                                            <div class="">
-
-                                                                                <div class="d-inline-block font-weight-bold my-1X">{{ interval }}</div>
-                                                                                <div class="d-inline-block text-sm text-muted">óra között:</div>
-                                                                                <div class="d-inline price--gross text-nowrapX font-weight-bold text-sm">
-                                                                                    <em>
-                                                                                        {% if interval.price %}
-                                                                                            <span class="text-nowrap"> +{{ interval.price|number_format(0, ',', ' ') }} Ft</span>
-                                                                                        {% else %}
-                                                                                            <span class="text-sm text-success font-weight-normal">Ingyenes szállítás</span>
-                                                                                            {#<span class="badge badge-success pt-1 font-weight-bold px-2">Ingyenes szállítás</span>#}
-                                                                                        {% endif %}
-                                                                                    </em>
+                                                                        <div class="row">
+                                                                            <div class="col-lg-8 col-12">
+                                                                                <div class="custom-control custom-radio py-1 px-0">
+                                                                                    <select id="dateForm_deliveryInterval" name="dateForm_deliveryInterval" required="required" class="JS--intervalDropdown form-control form-control-dropdown">
+                                                                                        <option value="">Válassz idősávot...</option>
+                                                                                        {% for interval in date.intervals %}
+                                                                                            <option value="{{ interval }}" data-fee="{% if interval.price %}{{ interval.price }}{% else %}0{% endif %}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}selected="selected"{% endif %}>
+                                                                                            {{ interval }} óra között: {% if interval.price %} +{{ interval.price|number_format(0, ',', ' ') }} Ft {% else %} Ingyenes szállítás {% endif %}
+                                                                                            </option>
+                                                                                        {% endfor %}
+                                                                                    </select>
+                                                                                    {#<i class="fas fa-chevron-down form-control-dropdown"></i>#}
                                                                                 </div>
-
+                                                                            </div>
+                                                                            <div class="col-lg-4 col-12">
+                                                                                <div class="text-sm text-muted-extra alertX alert-warningX py-3X mt-lg-0 mt-1">
+                                                                                    <span class="text-info-lighten mr-1">
+                                                                                        <i class="fas fa-info-circle"></i>
+                                                                                    </span>
+                                                                                    Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.
+                                                                                </div>
                                                                             </div>
 
-                                                                        </label>
-                                                                    </div>
-                                                                    {% endfor %}
+
+                                                                        </div>
                                                                     </form>
                                                                 </div>
                                                                 {% endfor %}
+                                                                <div class="col-md-12 col-12 mb-1 d-noneX">
+                                                                    {% include('/webshop/cart/hiddenDeliveryDate-form.html.twig') %}
+                                                                </div>
                                                             </div>
+
+
+                                                            {#<div class="form-row order-delivery-date mb-1">#}
+                                                                {#{% for date in generatedDates.dates %}#}
+                                                                {#<div class="col-md-12 col-12 JS--generatedInterval-{{ date.deliveryDate|date('Y-m-d') }} d-none">#}
+                                                                    {#<form>#}
+                                                                    {#{% set index = loop.index %}#}
+
+                                                                    {#{% for interval in date.intervals %}#}
+                                                                    {#<div class="custom-control custom-radio py-3 ">#}
+                                                                        {#<input class="JS--intervalDropdown custom-control-input" type="radio" id="dateForm_deliveryInterval_{{ index }}_{{ loop.index }}" name="dateForm[deliveryInterval]" required="required" value="{{ interval }}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}checked="checked"{% endif %}>#}
+                                                                        {#<label class="custom-control-label font-weight-bold" for="dateForm_deliveryInterval_{{ index }}_{{ loop.index }}">#}
+
+
+                                                                            {#<div class="">#}
+
+                                                                                {#<div class="d-inline-block font-weight-bold my-1X">{{ interval }}</div>#}
+                                                                                {#<div class="d-inline-block text-sm text-muted">óra között:</div>#}
+                                                                                {#<div class="d-inline price--gross text-nowrapX font-weight-bold text-sm">#}
+                                                                                    {#<em>#}
+                                                                                        {#{% if interval.price %}#}
+                                                                                            {#<span class="text-nowrap"> +{{ interval.price|number_format(0, ',', ' ') }} Ft</span>#}
+                                                                                        {#{% else %}#}
+                                                                                            {#<span class="text-sm text-success font-weight-normal">Ingyenes szállítás</span>#}
+                                                                                            {#<span class="badge badge-success pt-1 font-weight-bold px-2">Ingyenes szállítás</span>#}
+                                                                                        {#{% endif %}#}
+                                                                                    {#</em>#}
+                                                                                {#</div>#}
+
+                                                                            {#</div>#}
+
+                                                                        {#</label>#}
+                                                                    {#</div>#}
+                                                                    {#{% endfor %}#}
+                                                                    {#</form>#}
+                                                                {#</div>#}
+                                                                {#{% endfor %}#}
+                                                            {#</div>#}
+
+
+
                                                         {#{% endif %}#}
                                                     </div>
 
 
 
-                                                    {#{{ include('/webshop/cart/deliveryDate-form.html.twig') }}#}
+                                                    {#{% include('/webshop/cart/deliveryDate-form.html.twig') %}#}
 
 
                                                 </div>
@@ -190,10 +234,11 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="d-flex justify-content-center flex-column flex-lg-row mb-4 mt-3">
-                                        <a href="{{ path('site-checkout-step3-pickPayment') }}" class="JS--Button-gotoStep3 btn btn-lg btn-success order-1 order-lg-2 px-lg-5 py-4">Tovább a fizetéshez <i class="fa fa-chevron-right"></i></a>
+                            <div class="row no-gutters">
+                                <div class="col-lg-12 mb-4 mt-3">
+                                    <div class="d-flex justify-content-center flex-column flex-lg-row px-4 px-md-0">
+                                        <button data-url="{{ path('site-checkout-step3-pickPayment') }}" class="JS--Button-gotoStep3 btn btn-lg btn-success order-1 order-lg-2 px-3 px-md-6 py-4">Tovább a fizetéshez <i class="fa fa-chevron-right"></i></button>
+                                        <div class="JS--loadingOverlay d-flex align-items-stretch loading-lg"></div>
                                     </div>
                                 </div>
                                 {#<div class="text-lg-center col-lg-10 mx-auto">#}
@@ -203,65 +248,10 @@
                             </div>
                         </div>
 
-                        <div name="right_column" class="col-md-5 col-lg-4 col-narrow">
-                            <div class="navbar-sticky sticky-top pt-0 pt-md-3X mb-20px">
-                                <div class="cart block bg-whiteX bg-gray-200X JS--cartWrapper px-0 px-md-1">
-                                    <div class="block-header bg-whiteX">
-                                        <span class="h6 text-uppercase font-weight-bold mb-0">Kosár tartalma</span>
-                                        {#<h6 class="text-uppercase mb-0">Összesen</h6>#}
-                                        <a class="text--toolLink float-right" href="{{ path('site-checkout-step1-pickExtraGift') }}">Szerkeszt</a>
-                                    </div>
-                                    <div class="cart-body bg-whiteX JS--resultWrapper">
-                                        <div class="cart--scroll">
-                                            {{ include('webshop/cart/cart-product-list.html.twig') }}
-                                        </div>
-                                    </div>
-                                    <div class="cart-body text-sm p-3X p-md-4X bg-whiteX pt-1">
-                                        <div class="cart-itemX text-sm">
-                                            <div class="row d-flex align-items-center text-center">
-
-                                                <div class="col-12 pr-0">
-                                                    <div class="d-flex align-items-start py-3">
-                                                        <div class="bg-light order-summary-message">
-                                                            <div class="">
-                                                                {#<i class="fas fa-quote-right"></i>#}
-                                                                <span><i class="far fa-envelope text-sm text-muted"></i></span> <br>
-                                                                <span class="d-block text-muted text-uppercase mt-1">Üzenet</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="cart-title text-left">
-                                                            <p class="text-sm mb-0">
-                                                                <span><em>{{ order.currentOrder.message }}</em></span> <br>
-                                                                <span>{{ order.currentOrder.messageAuthor }}</span> <br>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <span class="">A szállítási díj a megadott adataid szerint került kiszámításra.</span>
-                                        <ul class="order-summary mb-0 list-unstyled">
-                                            <li class="order-summary-item">
-                                                <span>Részösszeg </span>
-                                                <span>{{  order.summary.totalBeforeDiscount|number_format(0, ',', ' ') }} Ft</span>
-                                            </li>
-                                            <li class="order-summary-item">
-                                                <span>Szállítás</span>
-                                                <span> Ft</span>
-                                            </li>
-                                            <li class="order-summary-item">
-                                                <span>Kedvezmény</span>
-                                                <span>25%:</span>
-                                            </li>
-                                            <li class="order-summary-item border-0">
-                                                <span>Fizentendő {# totalAmountToPay #}</span>
-                                                <strong class="order-summary-total">{{ order.summary.totalAmountToPay|number_format(0, ',', ' ') }} Ft</strong>
-                                            </li>
-                                        </ul>
-                                    </div>
+                        <div name="right_column" class="col-md-5 col-lg-4 col-narrowX px-0 px-md-10px">
+                            <div class="row no-gutters navbar-sticky sticky-top">
+                                <div class="col-md-12">
+                                    {% include('/webshop/cart/sidebar-summary.html.twig') %}
                                 </div>
                             </div>
                         </div>
@@ -415,14 +405,36 @@
     </script>
     <script>
         $(function() {
-            var $wrapper = $('.JS--deliveryDateContainer');
-            var $vp = $wrapper.find('.visual-picker-checked');
-//            $selectedDate = $vp.closest("[class*='JS--generatedDate-']");
-            $dateValue = $wrapper.find('#hidden_deliveryDate').val();
-            $intervalValue = $wrapper.find('#hidden_deliveryInterval').val();
-
-            $selectedDate = $wrapper.find('.JS--generatedDate-' + $dateValue);
-            $selectedInterval = $wrapper.find('.JS--generatedInterval-' + $dateValue);
+            let $wrapper = $('.JS--deliveryDateContainer');
+            let $vp = $wrapper.find('.visual-picker-checked');
+            let hiddenForm = {
+                date: {
+                    element: $wrapper.find('#hidden_deliveryDate'),
+                    value: $wrapper.find('#hidden_deliveryDate').val(),
+                    setDateValue: function (value) {
+                        this.element.val(value);
+                    },
+                },
+                interval: {
+                    element: $wrapper.find('#hidden_deliveryInterval'),
+                    value: $wrapper.find('#hidden_deliveryInterval').val(),
+                    setIntervalValue: function (value) {
+                        this.element.val(value);
+                    },
+                },
+                fee: {
+                    element: $wrapper.find('#hidden_deliveryFee'),
+                    value: $wrapper.find('#hidden_deliveryFee').val(),
+                    setFeeValue: function (value) {
+//                        console.log(this.element);
+                        this.element.val(value);
+//                        console.log(this.element.val());
+                    },
+                },
+            };
+            $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);
+            $selectedInterval = $wrapper.find('.JS--generatedInterval-' + hiddenForm.date.value);
+            $intervalDropdown = $selectedInterval.find('.JS--intervalDropdown');
 
             console.log($vp);
 
@@ -430,12 +442,56 @@
                 $selectedDate.removeClass('d-none').addClass('d-temporary');
                 $wrapper.find('.JS--showCalendarIcon').hide();
             }
-
             if ($selectedInterval.hasClass('d-none')) {
                 $selectedInterval.removeClass('d-none').addClass('d-temporary');
             }
+
+            $summaryDeliveryFeePos = $('.JS--cartWrapper').find('.JS--summaryDeliveryFee');
+            $summaryTotal = $('.JS--cartWrapper').find('.JS--summaryTotal');
+            $summaryTotalPos = $('.JS--cartWrapper').find('.JS--summaryTotalPos');
+            function onSelectInterval(dropdown) {
+                 dropdown.on('change', function () {
+                     hiddenForm.interval.setIntervalValue($(this).val());
+                     // retrieve delivery fee from 'data-' attribute
+                     $dropdownValue = $(this).children('option:selected').data('fee'); //.toString()
+                     hiddenForm.fee.setFeeValue($dropdownValue);
+
+                     $summaryDeliveryFeePos.html(
+                         $dropdownValue.toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
+                     );
+                     $summaryTotal.html(
+                         ($summaryTotalPos.data('summary-total') - hiddenForm.fee.value + $dropdownValue).toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
+                     );
+                     $('.JS--deliveryDateContainer').find('.JS--alertMessage').replaceWith('');
+                     alert.deliveryDate.hasError = false;
+                 });
+            }
+            
+            // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
+            // Ez akkor triggerelődik, amikor nem kattintunk sem dátumboxra, sem kalendáriumra.
+            console.log($intervalDropdown);
+            onSelectInterval($intervalDropdown);
+
+//            $selectedInterval.find('.JS--intervalDropdown').on('change', function () {
+//                $wrapper.find('#hidden_deliveryInterval').val($(this).val());
+//
+//                // retrieve delivery fee from data- attribute
+//                $dropdownValue = $(this).children('option:selected').data('fee');
+//                $wrapper.find('#hidden_deliveryFee').val($dropdownValue);
+//
+//                $deliveryFee = $('.JS--cartWrapper').find('.JS--summaryDeliveryFee');
+//                $deliveryFee.html(
+//                    $dropdownValue.toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
+//                );
+//
+//                $('.JS--cartWrapper').find('.JS--summaryTotal').html(
+//                    ($('.JS--cartWrapper').find('.JS--summaryTotalPos').data('summary-total') - $initialDeliveryFee + $dropdownValue).toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
+//                );
+//            });
+
             /**
-             *
+             * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.
+             * Továbbá mutatja a dátumhoz tartozó idősávot.
              */
             $("[class*='JS--generatedDate-']").click(function () {
                 $wrapper = $(this).closest('.JS--deliveryDateContainer');
@@ -444,31 +500,32 @@
 
                 $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
                 $(this).find('.visual-picker').addClass('visual-picker-checked');
-                $chosenInterval = $intervalsWrapper.find('.JS--generatedInterval-' + $(this).data('date-value'));
+                $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $(this).data('date-value'));
 
-                $wrapper.find('#hidden_deliveryDate').val($(this).data('date-value'));
-                console.log($wrapper.find('#hidden_deliveryDate').val());
+//                $wrapper.find('#hidden_deliveryDate').val($(this).data('date-value'));
+                hiddenForm.date.setDateValue($(this).data('date-value'));
+                console.log($(this).data('date-value'));
 
                 // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
                 // amugy visszallitja (ujra mutatja) a CalendarIcont
                 if (! ($(this).hasClass('d-temporary')) ) {
                     $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
                     $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                    $chosenInterval.removeClass('d-none').addClass('d-temporary');
+                    $intervalModule.removeClass('d-none').addClass('d-temporary');
                     $dateWrapper.find('.JS--showCalendarIcon').show();
                 }
 
+                //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
+                $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);
+                hiddenForm.interval.setIntervalValue('');
 
-                //minden elozoleg becsekkolt input mezot uresre allitok, es torlom a hidden input mezobol is!
-                $intervalsWrapper.find('input').prop('checked', false);
-                $wrapper.find('#hidden_deliveryInterval').val('');
-
-                $chosenInterval.find('input').on('click', function () {
-                    $wrapper.find('#hidden_deliveryInterval').val($(this).val());
-                });
-
+                // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
+                // Ez akkor triggerelődik, amikor kattintunk a dátumboxra.
+                onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
             });
-
+            /**
+             * Kezeli a kalendáriumra kattintást.
+             */
             $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {
                 ev.preventDefault();
                 $pickerDate = picker.startDate.format('YYYY-MM-DD');
@@ -476,100 +533,38 @@
                 $dateWrapper = $(this).closest('.JS--dateWrapper');
                 $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
 
-                $wrapper.find('#hidden_deliveryDate').val($pickerDate);
+                hiddenForm.date.setDateValue($pickerDate);
 
                 $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
                 $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
                 $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
 
-                $chosenDate = $wrapper.find('.JS--generatedDate-' + $pickerDate);
-                $chosenInterval = $wrapper.find('.JS--generatedInterval-' + $pickerDate);
+                $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
+                $intervalModule = $wrapper.find('.JS--generatedInterval-' + $pickerDate);
 
-                if ($chosenDate.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon
+                if ($dateModule.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon
                     $wrapper.find('.JS--showCalendarIcon').hide();
-                    $chosenDate.removeClass('d-none').addClass('d-temporary');
+                    $dateModule.removeClass('d-none').addClass('d-temporary');
                 }
-                $chosenDate.find('.visual-picker').addClass('visual-picker-checked');
-                $chosenInterval.removeClass('d-none').addClass('d-temporary');
+                $dateModule.find('.visual-picker').addClass('visual-picker-checked');
+                $intervalModule.removeClass('d-none').addClass('d-temporary');
 
                 if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
                     $wrapper.find('.JS--showCalendarIcon').show();
                 }
 
-                //minden elozoleg becsekkolt input mezot uresre allitok, es torlom a hidden input mezobol is!
-                $intervalsWrapper.find('input').prop('checked', false);
-                $wrapper.find('#hidden_deliveryInterval').val('');
+                //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
+                $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);
+                hiddenForm.interval.setIntervalValue('');
 
-                $chosenInterval.find('input').on('click', function () {
-                    $wrapper.find('#hidden_deliveryInterval').val($(this).val());
-                });
-
-
-
-
-
-
-//                $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
-//                $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
-//                /**
-//                 * Csak az első 3 rádió opcióba keresi a pickerDate-et. És ha benne van, akkor a Calendárt mutatja.
-//                 */
-//                $selectedRadio = $(this).closest('.JS--dateWrapper').find('input[type="radio"][value="' + $pickerDate + '"]:not(".JS--Button-clickDate")');
-//                if ($selectedRadio.val()) {
-////                    console.log($selectedRadio);
-//                    $selectedRadio.prop('checked', true);
-//                    $dateValueWrapper.hide();
-//                    $calendarIconWrapper.show();
-//                }
-//                /**
-//                 * Ha nincs benne, akkor negyedik rádió inputhoz rendeli a pickerDate-et és elrejti a Calendárt.
-//                 */
-//                else {
-//                    $(this).val($pickerDate);  // az input, amihez kötve van a gomb, megkapja a daterangepicker értékét (dátumot)
-//                    $html = '<span class="font-weight-bold my-0">' + picker.startDate.format('MMM D') + '</span><br> <span class="price--gross text-nowrap">' + picker.startDate.format('ddd') + '</span>';
-//                    $dateValueWrapper.html($html);
-//                    $calendarIconWrapper.hide();
-//                    $dateValueWrapper.show();
-//
-//
-//                }
-//                console.log($wrapper.find('.JS--alertMessage')+ ' alertMessage');
-//                $wrapper.find('.JS--alertMessage').hide();
+                // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
+                // Ez akkor triggerelődik, amikor kattintunk a kalendáriumra.
+                onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
             });
             $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
             });
         });
     </script>
-    {#<script>#}
-        {#$(function() {#}
-            {#var $option1 = $('input[name="dateForm[deliveryDate]"]:not(".JS--Button-clickDate")'); //#}
-            {#$option1.click(function () {#}
-                {#var $form = $(this).closest('form'); // ...retrieve the corresponding form.#}
-                {#// Simulate form data, but only include the selected Kind value.#}
-                {#var data = {};#}
-                {#console.log('Action URL: ' + $form.attr('action'));#}
-                {#data[$option1.attr('name')] = $option1.val();#}
-{#//                console.log(data);#}
-                {#$('.JS--intervalsWrapper').fadeOut("slow", function () {#}
-{#//                    $('.JS--intervalsWrapper').show();#}
-                {#});#}
-                {#// Submit data via AJAX to the form's action path.#}
-                {#$.ajax({#}
-                    {#url: $form.attr('action'),#}
-                    {#type: 'POST',#}
-                    {#data: $form.serialize(),#}
-                    {#success: function (response) {#}
-                        {#$('.JS--intervalsWrapper').show();#}
-                        {#$('.JS--intervalsWrapper').replaceWith($(response).find('.JS--intervalsWrapper')); // Replace current form with the new one which now has the extra field: 'subproducts'#}
-                    {#},#}
-{#//                    error: function (err) {#}
-                    {#error: function(jqXHR) {#}
-                        {#$form.replaceWith(jqXHR.responseText);#}
-                    {#}#}
-                {#});#}
-            {#});#}
-        {#});#}
 
-    {#</script>#}
 {% endblock %}

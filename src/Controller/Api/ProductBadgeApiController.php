@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Api;
 
 use App\Controller\BaseController;
 use App\Entity\Product\ProductBadge;
@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/admin")
  */
-class ProductBadgeController extends BaseController
+class ProductBadgeApiController extends BaseController
 {
     //////////////////////////////////////////////////////////////////////////////////////
     ///                                                                                ///
@@ -25,7 +25,7 @@ class ProductBadgeController extends BaseController
     {
         $data = $this->getDoctrine()->getRepository(ProductBadge::class)->findAll();
         if ($data) {
-            return $this->jsonNormalized(['badges' => is_array($data) ? $data : [$data]]);
+            return $this->jsonNormalized(['badges' => $this->toArray($data)]);
         } else {
             $errors['message'] = sprintf('Nem talált matricát.');
             return $this->jsonNormalized(['errors' => [$errors]], 422);

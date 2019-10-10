@@ -40,12 +40,19 @@ class UserAccountController extends AbstractController
             throw $this->createNotFoundException('Nincs ilyen felhasználó!');
             //return $this->redirectToRoute('404');
         }
+    
+        $totalRevenue = 0;
+        foreach ($user->getRealOrders() as $o => $order) {
+            $totalRevenue += $order->getSummary()->getTotalAmountToPay();
+        }
 
         return $this->render('admin/customer-profile-show.html.twig', [
             'user' => $user,
             'inheritedRoles' => $this->roles,
             'title' => 'Felhasználó adatlapja',
+            'orders' => $user->getRealOrders(),
             'orderCount' => 'Nincs rendelés',
+            'totalRevenue' => $totalRevenue,
         ]);
     }
 

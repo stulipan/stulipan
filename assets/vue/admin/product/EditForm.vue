@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="py-2 text-center">
                                         <p class="productList--name mb-1">
-                                            <a @click.prevent="onRemoveImage(item)" href="#" class="btn btn-sm btn-outline-secondary" title="Töröl">
+                                            <a @click.prevent="onRemoveImage(item)" href="#" class="btn btn-sm btn-secondary" title="Töröl">
                                                 <i class="far fa-trash-alt"></i> Töröl
                                             </a>
                                         </p>
@@ -144,7 +144,7 @@
                     <div class="col-sm-12 col-md-2">
                         <label class="col-form-label required" for="category">Kategóriák</label>
                     </div>
-                    <div class="col-sm-12 col-md-5 col-xl-4 mr-auto">
+                    <div class="col-sm-12 col-md-6 col-xl-6 mr-auto">
                         <multiselect
                                 v-model="product.categories"
                                 :options="categories"
@@ -158,7 +158,7 @@
                                 class="mb-2"
                         >
                             <!--:loading="dataIsLoading"-->
-                            <span slot="noResult">Upsz! Nincs ilyen megye vagy elírtad...</span>
+                            <span slot="noResult">Upsz! Nincs ilyen kategória...</span>
                         </multiselect>
                         <!--<select v-model="product.category" id="category" required="required" class="custom-select form-control">-->
                         <!--<option value="">Válassz valamit...</option>-->

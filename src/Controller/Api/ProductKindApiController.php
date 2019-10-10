@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Api;
 
 use App\Controller\BaseController;
 use App\Entity\Product\ProductAttribute;
@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/admin")
  */
-class ProductKindController extends BaseController
+class ProductKindApiController extends BaseController
 {
     //////////////////////////////////////////////////////////////////////////////////////
     ///                                                                                ///
@@ -26,7 +26,7 @@ class ProductKindController extends BaseController
     {
         $data = $this->getDoctrine()->getRepository(ProductKind::class)->findAll();
         if ($data) {
-            return $this->jsonObjNormalized(['kinds' => is_array($data) ? $data : [$data]], 200, ['groups' => 'productView']);
+            return $this->jsonObjNormalized(['kinds' => $this->toArray($data)], 200, ['groups' => 'productView']);
         } else {
             $errors['message'] = sprintf('Nem talált terméktípust.');
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -41,7 +41,7 @@ class ProductKindController extends BaseController
         $data = $this->getDoctrine()->getRepository(ProductAttribute::class)->findBy(['kind' => $kind], ['ordering' => 'ASC']);
         if ($data) {
 //            dd($data);
-            return $this->jsonObjNormalized(['attributes' => is_array($data) ? $data : [$data]], 200, ['groups' => 'productView']);
+            return $this->jsonObjNormalized(['attributes' => $this->toArray($data)], 200, ['groups' => 'productView']);
         } else {
             $errors['message'] = sprintf('Nem talált termékváltozatot.');
             return $this->jsonNormalized(['errors' => [$errors]], 422);

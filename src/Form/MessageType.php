@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Model\Message;
+use App\Entity\Model\CartCard;
 use App\Validator\Constraints\MessageWithAuthor;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -35,26 +35,27 @@ class MessageType extends AbstractType
                 'label' => 'Ide írd az üzenetet...',
                 'required' => false,
                 'attr' => ['rows' => '5'],
-                'constraints' => [
-                    new Callback([$this, 'validateMessage']),
-                ],
+// Ez akkor kell, ha form szintu validaciot akarok. Most a CartCard class-on van egy custom validator.
+//                'constraints' => [
+//                    new Callback([$this, 'validateMessage']),
+//                ],
             ])
-            ->add('messageAuthor',TextType::class,[
+            ->add('author',TextType::class,[
                 'label' => 'Kinek a részéről (neved)',
                 'required' => false,
-                'constraints' => [
-                    new Callback([$this, 'validateMessageAuthor']),
-                ]
+//                'constraints' => [
+//                    new Callback([$this, 'validateMessageAuthor']),
+//                ]
             ]);
     }
 
     public function validateMessage($value, ExecutionContextInterface $context)
     {
         $form = $context->getRoot();
-        $data = $form->getData()->getMessage();
+        $data = $form->getData()->getCard();
 
         if($data) {
-            if (!$value && $data->getMessageAuthor()) {
+            if (!$value && $data->getAuthor()) {
                 $context
                     ->buildViolation('Az üzenet lemaradt!')
                     ->addViolation();
@@ -65,7 +66,7 @@ class MessageType extends AbstractType
     public function validateMessageAuthor($value, ExecutionContextInterface $context)
     {
         $form = $context->getRoot();
-        $data = $form->getData()->getMessage();
+        $data = $form->getData()->getCard();
         if ($data) {
             if (!$value && $data->getMessage()) {
                 $context
@@ -78,7 +79,7 @@ class MessageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Message::class,
+            'data_class' => CartCard::class,
 
         ]);
     }

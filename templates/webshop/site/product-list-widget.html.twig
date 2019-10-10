@@ -8,11 +8,11 @@
                                     <div class="product-image">
                                         {% set bestseller = false %}
                                         {% if product.isUnavailable() %}
-                                            <div class="ribbon ribbon-dark">MIND ELKELT</div>
+                                            <div class="ribbon-bottom ribbon-dark">MIND ELKELT</div>
                                         {% elseif product.hasBadges %}
                                             {% for badge in product.badges %}
                                                 {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                                    <div class="ribbon-bottom ribbon-{{ badge.css }}">{{ badge }}</div>
                                                 {% else %}
                                                     {% set bestseller = true %}
                                                 {% endif %}

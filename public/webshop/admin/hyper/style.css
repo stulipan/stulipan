@@ -259,7 +259,8 @@ th {
 
 label {
     display: inline-block;
-    margin-bottom: .25rem
+    margin-bottom: .25rem;
+    font-weight: bold;
 }
 
 button {
@@ -2180,6 +2181,7 @@ pre code {
     line-height: 1.35rem;
     /*color: inherit;*/
     border: 1px solid #ced4da;
+    background: #fff;
     border-radius: 3px;
     font-weight: 600;
 

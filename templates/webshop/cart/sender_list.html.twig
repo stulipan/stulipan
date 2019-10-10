@@ -1,17 +1,28 @@
 <div class="row">
     <div class="col-lg-12">
-        <div class="row row-narrow">
-        {% if senders is defined %}
+        <div class="row row-narrowX">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="col-lg-12 col-narrowX mt-10pxX mb-3">
+                    <div class="loadingWrapper loadingWrapper-secondary">
+                        <a href="" class="JS--Button-editSender btn btn-outline-info px-3" data-url="{{ path('cart-editSender') }}"><i class="fas fa-plus mr-1"></i> Új számlázási cím</a>
+                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                    </div>
+
+                </div>
+            {% endif %}
+                <div class="col-lg-12 col-narrowX mb-2 mt-2">
+                    <span class="form-label">Előzőleg megadott számlázási címek:</span>
+                </div>
             {% for sender in senders %}
                 {#{{ include('webshop/cart/sender_widget.html.twig') }}#}
-                <div class="col-md-6 col-lg-6 col-narrow mb-10px">
-                    <div class="JS--item card card--choice h-100 {% if selectedSender is defined and selectedSender == sender.id %} selected {% endif %}">
+                <div class="col-md-6 col-lg-6 col-narrowX mb-4">
+                    <div class="JS--item card minicard h-100 {% if selectedSender is defined and selectedSender == sender.id %} selected {% endif %}">
                         <div class="minicard--body selected-body d-flex flex-column h-100">
                             {#{% if sender.company is defined and sender.company %}#}
                                 {#<div class="font-weight-bold card-titleX">{{ sender.company }}</div>#}
                             {#{% endif %}#}
                             {#<a class="" data-toggle="collapse" href="#collapse{{ loop.index }}" role="button" aria-expanded="false" aria-controls="cardCollapse{{ loop.index }}">#}
-                            <div class="font-weight-bold card-titleX mb-1">
+                            <div class="minicard--title mb-1">
                                     {{ sender.company is defined and sender.company ? sender.company ~ ' /' : ''}} {{ sender.name }}
                             </div>
                             {#</a>#}
@@ -23,37 +34,29 @@
 
                             <div class="d-flex align-items-end h-100">
                                 <div>
-                                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                        <a class="JS--Button-pickSender minicard--mainLink" href="{{ path('cart-pickSender', {id: sender.id}) }}">Kiválaszt</a>
-                                    {% endif %}
 
-                                    <a href="#" class="JS--Button-editSender minicard--toolLink" data-url="{{ path('cart-editSender', {id: sender.id}) }}">Szerkeszt</a> |
-                                    <a href="#" class="minicard--toolLink">Töröl</a>
+                                    <div class="loadingWrapper loadingWrapper-secondary">
+                                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                            {#<a class="JS--Button-pickSender minicard--mainLink {% if selectedSender is defined and selectedSender == sender.id %}d-none{% endif %}" href="{{ path('cart-pickSender', {id: sender.id}) }}">Kiválaszt</a>#}
+                                            <a class="JS--Button-pickSender minicard--mainLink" href="{{ path('cart-pickSender', {id: sender.id}) }}">Kiválaszt</a>
+                                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="loadingWrapper loadingWrapper-secondary">
+                                        <a href="#" class="JS--Button-editSender minicard--toolLink" data-url="{{ path('cart-editSender', {id: sender.id}) }}">Szerkeszt</a>
+                                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                                    </div> |
+                                    <div class="loadingWrapper loadingWrapper-secondary">
+                                        <a href="#" class="JS--Button-deleteSender minicard--toolLink"  data-url="{{ path('cart-deleteSender', {id: sender.id}) }}">Töröl</a>
+                                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <div class="col-lg-12 col-narrow mt-10px">
-                    <a href="" class="JS--Button-editSender btn btn-outline-dark px-3" data-url="{{ path('cart-editSender') }}"><i class="fas fa-plus mr-1"></i> Hozáadás</a>
-
-                </div>
-                {#<div class="col-md-6 col-lg-4 col-narrow">#}
-                    {#<div class="card visual-picker border-dashed d-flex align-items-center pt-4 pb-5">#}
-
-                        {#<a href="" class="JS--Button-editSender tile-link recipient--toolLink" data-url="{{ path('cart-editSender') }}"></a>#}
-                        {#<div class="card-body w-100 pt-4 pb-4 mt-1">#}
-                            {#<span class="visual-picker-content card-text text-center">#}
-                                {#<i class="fas fa-plus fa-3x mb-2"></i>#}
-                                {#<span class="recipient--link d-block">Hozáadás</span>#}
-                            {#</span>#}
-                        {#</div>#}
-                    {#</div>#}
-                {#</div>#}
-            {% endif %}
-        {% endif %}
         </div>
     </div>
 

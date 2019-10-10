@@ -6,8 +6,8 @@ namespace App\Form;
 
 use App\Entity\Address;
 
-use App\Entity\GeoCountry;
-use App\Entity\GeoPlace;
+use App\Entity\Geo\GeoCountry;
+use App\Entity\Geo\GeoPlace;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -41,46 +41,43 @@ class AddressType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $preferredCountries = $this->em->getRepository(GeoCountry::class)->findBy(['alpha2' => 'hu']);
         //$builder->setAction($this->urlGenerator->generate('cart_set_delivery_address', ['id' => '0']));
         $builder->add('id',HiddenType::class,[
-                 // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-                'mapped' => false,
-            ]);
+             // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
+            'mapped' => false,
+        ]);
         $builder->add('street',TextType::class,[
-                'label' => 'Cím',
-            ]);
+            'label' => 'Cím',
+        ]);
         $builder->add('city',TextType::class,[
-                'label' => 'Város',
-                'attr' => ['autocomplete' => 'cityXXX'],
-            ]);
+            'label' => 'Város',
+            'attr' => ['autocomplete' => 'cityXXX'],
+        ]);
         $builder->add('zip',IntegerType::class,[
-                'label' => 'Iranyítószám',
-            ]);
+            'label' => 'Iranyítószám',
+        ]);
 
 //        $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onPostSubmitData']);
 
         $builder->add('province',TextType::class,[
-                'label' => 'Megye',
-            ]);
+            'label' => 'Megye',
+        ]);
         $builder->add('country',EntityType::class,[
-                'class' => GeoCountry::class,
-                'label' => 'Ország',
-                'choice_label' => 'name',
-                'placeholder' => 'Válassz országot...',
-                'attr' => ['class' => 'custom-select'],
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('c')
-                        ->orderBy('c.name', 'ASC');
-                },
-                'preferred_choices' => function (GeoCountry $country) {
-                    if ($country->getAlpha2() === 'hu') {
-                        return $country;
-                    }
-                },
-            ]);
+            'class' => GeoCountry::class,
+            'label' => 'Ország',
+            'placeholder' => 'Válassz országot...',
+            'attr' => ['class' => 'custom-select'],
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('c')
+                    ->orderBy('c.name', 'ASC');
+            },
+            'choice_label' => 'name',
+            'preferred_choices' => $preferredCountries,
+        ]);
         $builder->add('addressType',HiddenType::class,[
-                'attr' => ['value' => '2'],
-            ]);
+            'attr' => ['value' => $options['addressType']],
+        ]);
         $builder->getForm();
     }
 
@@ -128,6 +125,7 @@ class AddressType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Address::class,
+            'addressType' => '',
             'attr' => ['novalidate' => 'novalidate'],
             'error_bubbling' => true,
 //            'by_reference' => false,  // https://symfony.com/doc/current/reference/forms/types/form.html#by-reference

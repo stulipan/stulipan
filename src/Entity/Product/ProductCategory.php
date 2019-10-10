@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ApiResource(
@@ -54,6 +55,7 @@ class ProductCategory implements \JsonSerializable
      *
      * @ORM\Column(name="slug", type="string", length=100, nullable=false, unique=true)
      * @Assert\NotBlank(message="A slug nem lehet üres. Pl: szuletesnapi-csokor")
+     * @Gedmo\Slug(fields={"name"})
      */
     private $slug;
 
@@ -87,7 +89,7 @@ class ProductCategory implements \JsonSerializable
      * ==== One parent is a Category ====
      *
      * @ MaxDepth(1)
-     * @ORM\OneToOne(targetEntity="App\Entity\Product\ProductCategory", cascade={"persist"}) //,  , inversedBy="subcategories", ,
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product\ProductCategory", inversedBy="subcategories", cascade={"persist"}) //
      * @ORM\JoinColumn(name="parent_category_id", referencedColumnName="id") //, nullable=true
      * Assert\NotBlank(message="Legalább egy apa kategória kell legyen.")
      */

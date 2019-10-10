@@ -36,7 +36,8 @@ class Product //implements \JsonSerializable
 
     /**
      * @var int
-     * @Groups({"productView", "productList"})
+     * @Groups({"productView", "productList",
+     *     "orderView"})
      *
      * @ORM\Column(name="id", type="smallint", length=11, nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -46,7 +47,8 @@ class Product //implements \JsonSerializable
     
     /**
      * @var string|null
-     * @Groups({"productView", "productList"})
+     * @Groups({"productView", "productList",
+     *     "orderView"})
      *
      * @Assert\NotBlank(message="Adj nevet a terméknek.")
      * @ORM\Column(name="product_name", type="string", length=100, nullable=true)
@@ -63,7 +65,8 @@ class Product //implements \JsonSerializable
     
     /**
      * @var string|null
-     * @Groups({"productView", "productList"})
+     * @Groups({"productView", "productList",
+     *     "orderView"})
      *
      * @Assert\NotBlank(message="Nem adtál meg SKU-t.")
      * @ORM\Column(name="sku", type="string", length=20, nullable=false)
@@ -86,7 +89,7 @@ class Product //implements \JsonSerializable
      * @ORM\JoinColumn(name="price_id", referencedColumnName="id", nullable=false)
      * @Assert\Type(type="App\Entity\Price")
      * @Assert\Valid
-     * @Assert\NotNull(message="Adj árat a terméknek.")
+     * @ Assert\NotNull(message="Adj árat a terméknek.")
      */
     private $price;
 
@@ -102,7 +105,8 @@ class Product //implements \JsonSerializable
      * @ApiSubresource()
      *
      * @var ProductImage[]|ArrayCollection|null
-     * @Groups({"productView", "productList"})
+     * @Groups({"productView", "productList",
+     *     "orderView"})
      *
      * ==== One Product has many product Images ====
      * ==== mappedBy="order" => az OrderItem entitásban definiált 'order' attribútumról van szó ====
@@ -115,7 +119,8 @@ class Product //implements \JsonSerializable
 
     /**
      * @var int|null
-     * @Groups({"productView", "productList"})
+     * @Groups({"productView", "productList",
+     *     "orderView"})
      *
      * @Assert\NotBlank()
      * @Assert\Range(min=0, max="1000000", minMessage="Nem lehet negatív.")
@@ -223,7 +228,7 @@ class Product //implements \JsonSerializable
      * @var Product|null
      * @Groups({"productView"})
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\Product\Product", inversedBy="subproducts")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product\Product", inversedBy="subproducts")
      * @ORM\JoinColumn(name="parent_product_id", referencedColumnName="id", nullable=true)
      * Assert\NotBlank(message="Legalább egy apatermék kell legyen.")
      */
@@ -432,6 +437,7 @@ class Product //implements \JsonSerializable
     
     /**
      * Returns the main ProductImage (ordering=0)
+     * @Groups({"orderView"})
      *
      * @return null|string
      */
@@ -447,24 +453,16 @@ class Product //implements \JsonSerializable
         }
         return '';
     }
-
-//    /**
-//     * @param null|string $image
-//     */
-//    public function setImage($image)
-//    {
-//        $this->image = $image;
-//    }
     
-    /**
-     * Ez a regi mikor a kep nem volt kulon ProductImage entitasban
-     */
-    public function getImagePath()
-    {
-        if ($this->getImage()) {
-            return FileUploader::PRODUCT_FOLDER . '/' . $this->getImage();
-        }
-    }
+//    /**
+//     * Ez a regi mikor a kep nem volt kulon ProductImage entitasban
+//     */
+//    public function getImagePath()
+//    {
+//        if ($this->getImage()) {
+//            return FileUploader::PRODUCT_FOLDER . '/' . $this->getImage();
+//        }
+//    }
 
     /**
      * @return null|string

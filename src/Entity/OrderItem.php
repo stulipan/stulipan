@@ -10,6 +10,7 @@ use App\Entity\Product\Product;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,6 +25,7 @@ class OrderItem
 
     /**
      * @var int
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -45,6 +47,7 @@ class OrderItem
 
     /**
      * @var Product
+     * @Groups({"orderView", "orderList"})
      *
      * ==== One OrderItem is one Product => Egy tétel mindig egy termék ====
      *
@@ -62,6 +65,8 @@ class OrderItem
 
     /**
      * @var int|null
+     * @Groups({"orderView", "orderList"})
+     *
      * @Assert\NotBlank()
      * @Assert\Range(min=0, minMessage="A mennyiség nem lehet negatív.")
      * @ORM\Column(name="quantity", type="smallint", nullable=false)
@@ -70,6 +75,8 @@ class OrderItem
 
     /**
      * @var float
+     * @Groups({"orderView", "orderList"})
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
      */
@@ -77,6 +84,8 @@ class OrderItem
 
     /**
      * @var float
+     * @Groups({"orderView", "orderList"})
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="price_total", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
      */
@@ -123,10 +132,12 @@ class OrderItem
 
     /**
      * @param Product $product
+     * @return OrderItem
      */
-    public function setProduct(Product $product): void
+    public function setProduct(Product $product): OrderItem
     {
         $this->product = $product;
+        return $this;
     }
 
     /**

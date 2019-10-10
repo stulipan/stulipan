@@ -23,7 +23,7 @@ use Pagerfanta\Pagerfanta;
 use App\Pagination\PaginatedCollection;
 
 /**
- * @IsGranted("ROLE_DELIVERY_DATES")
+ * @IsGranted("ROLE_DELIVERY_SETTINGS")
  * @Route("/admin")
  */
 class DeliveryDateController extends AbstractController

@@ -18,79 +18,46 @@
 
     <section class="mt-3">
         <div class="container text-center">
-            <div class="icon-rounded bg-success mb-3 mx-auto text-white">
-                <svg class="svg-icon w-2rem h-2rem align-middle">
+            <div class="icon-rounded bg-success mx-auto text-white">
+                <svg class="svg-icon w-1rem h-1rem align-middle">
                     <use xlink:href="#checkmark-1"> </use>
                 </svg>
             </div>
 
-            <div class="row mt-4 text-left">
+            <div class="row text-left">
                 <div class="col-lg-7 mx-auto">
                     <div class="block text-center">
                         {#{{ dump(order) }}#}
-                        <h4 class="mt-4 mb-2 ff-base">Köszönjük, {{ order.currentOrder.billingName }}. A rendelést sikeresen leadtad.</h4>
-                        <p class="text-muted mb-0">A <span class="text-success font-weight-bold">#{{ order.currentOrder.id }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
+                        <h4 class="mt-4 mb-2 ff-base">Köszönjük, {{ order.billingName }}. A rendelést sikeresen leadtad.</h4>
+                        <p class="text-muted mb-0">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
                     </div>
 
-                    <div name="products_in_basket" class="cart bg-white mt-4">
+                    <div name="products_in_basket" class="card mt-4">
                         <div class="cart-wrapper">
                             <div class="block-body">
-                                <span class="h6 font-weight-bold text-uppercase">Termékek:
-                                    {#Rendelés száma: <span class="text-success font-weight-bold">#{{ order.currentOrder.id }}</span>#}
+                                <span class="h5 checkout--sidebar-title">Termékek:
+                                    {#Rendelés száma: <span class="text-success font-weight-bold">#{{ order.id }}</span>#}
                                 </span>
                             </div>
                             <div class="cart-body bg-white">
                                 <div class="">
                                     <div class="cart-itemX">
-                                        <div class="row d-flex align-items-center text-center">
-                                    {% for item in order.items %}
-                                        <!-- Item in cart -->
-
-
-                                                <div class="col-12 col-md-6 pr-0 mb-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <a href="{{ path('site-product-show', {'id': item.product.id}) }}" class="">
-                                                            <img src="{{ uploaded_asset(item.product.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.productName}}" class="cart-item-img">
-                                                        </a>
-                                                        <div class="cart-title text-left">
-                                                            <p class="text-muted text-sm mb-0">
-                                                                Ár: {{ item.price |number_format(0, ',', ' ') }} Ft <span class="text-muted-extra text-xs font-italic ml-3">{{ (item.quantity) |number_format(0, ',', ' ') }} db</span> <br>
-                                                                Összesen: {{ (item.price * item.quantity) |number_format(0, ',', ' ') }} Ft <br>
-                                                            </p>
-                                                            <a class="text-uppercaseX text-dark" href="{{ path('site-product-show', {'id': item.product.id}) }}"><strong>{{ item.product.productName }}</strong></a><br>
-
-                                                            <span class="text-muted text-sm">{{ item.subproductAttribute ? 'Változat: ' ~ item.subproductAttribute : ''  }}</span><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                        <!-- /Item in cart -->
-                                    {% endfor %}
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-12">
+                                                {% for item in order.items %}
+                                                    {% include('webshop/cart/cart-item-single-widget.html.twig') %}
+                                                {% endfor %}
+                                            </div>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
-                            <div name="written_message" class="cart-body text-sm bg-white">
+                            <div name="written_message" class="cart-body text-sm bg-white mt-2">
                                 <div class="row d-flex align-items-center text-center">
 
                                     <div class="col-12 pr-0">
-                                        <div class="d-flex align-items-start mb-3">
-                                            <div class="bg-light order-summary-message">
-                                                <div class="">
-                                                    {#<i class="fas fa-quote-right"></i>#}
-                                                    <span><i class="far fa-envelope text-sm text-muted"></i></span> <br>
-                                                    <span class="d-block text-muted text-uppercase mt-1">Üzenet</span>
-                                                </div>
-                                            </div>
-                                            <div class="cart-title text-left">
-                                                <p class="text-muted text-sm mb-0">
-                                                    <span><em>{{ order.currentOrder.message }}</em></span> <br>
-                                                    <span>{{ order.currentOrder.messageAuthor }}</span> <br>
-                                                </p>
-                                            </div>
-                                        </div>
+                                        {% include 'webshop/cart/cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
                                     </div>
 
                                 </div>
@@ -98,34 +65,34 @@
                             <div name="sender_recipient" class="block-body">
                                 <div class="row row-narrow">
 
-                                    <div class="col-md-6 col-lg-6 col-narrow">
+                                    <div class="col-md-6 col-lg-6 col-narrow mt-4 mt-md-0">
                                         <div class="">
-                                            <span class="h6 font-weight-bold text-uppercase">Címzett:</span>
-                                            {#<span class="h6 font-weight-bold text-uppercase">Aki kapja:</span>#}
+                                            {#<span class="h5 checkout--sidebar-title">Aki küldi:</span>#}
+                                            <span class="h5 checkout--sidebar-title">Feladó:</span>
                                         </div>
-                                        <div class="card card--choice h-100X mt-1">
-                                            <div class="minicard--body  h-100">
-                                                <div class="font-weight-bold card-titleX mb-1">{{ order.currentOrder.recipient.name }}</div>
+                                        <div class="minicard bg-light card--choice h-100X mt-1">
+                                            <div class="minicard--body h-100">
+                                                <div class="minicard--title mb-1">{{ order.sender.name }} {{ order.billingCompany is defined and order.billingCompany ? ' / ' ~ order.billingCompany : ''}}</div>
                                                 <div class="">
-                                                    <span class="minicard--address">Telefonszám: <em>{{ order.currentOrder.sender.phone }}</em></span> <br>
-                                                    <span class="minicard--address">{{ order.currentOrder.recipient.address.zip }} {{ order.currentOrder.recipient.address.city }}, {{ order.currentOrder.recipient.address.street }}</span> <br>
-                                                    <span class="minicard--address">{{ order.currentOrder.recipient.address.province }}, {{ order.currentOrder.recipient.address.country }}</span>
+                                                    <span class="minicard--address">Telefonszám: <em>{{ order.billingPhone }}</em></span> <br>
+                                                    <span class="minicard--address">{{ order.billingAddress.zip }} {{ order.billingAddress.city }}, {{ order.billingAddress.street }}</span> <br>
+                                                    <span class="minicard--address">{{ order.billingAddress.province }}, {{ order.billingAddress.country }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-lg-6 col-narrow mt-4 mt-md-0">
+                                    <div class="col-md-6 col-lg-6 col-narrow">
                                         <div class="">
-                                            {#<span class="h6 font-weight-bold text-uppercase">Aki küldi:</span>#}
-                                            <span class="h6 font-weight-bold text-uppercase">Feladó:</span>
+                                            <span class="h5 checkout--sidebar-title">Címzett:</span>
+                                            {#<span class="h5 checkout--sidebar-title">Aki kapja:</span>#}
                                         </div>
-                                        <div class="card card--choice h-100X mt-1">
-                                            <div class="minicard--body  h-100">
-                                                <div class="font-weight-bold mb-1">{{ order.currentOrder.sender.name }} {{ order.currentOrder.sender.company is defined and order.currentOrder.sender.company ? ' / ' ~ order.currentOrder.sender.company : ''}}</div>
+                                        <div class="minicard bg-light recipient card--choice h-100X mt-1">
+                                            <div class="minicard--body h-100">
+                                                <div class="minicard--title mb-1">{{ order.shippingName }}</div>
                                                 <div class="">
-                                                    <span class="minicard--address">Telefonszám: <em>{{ order.currentOrder.sender.phone }}</em></span> <br>
-                                                    <span class="minicard--address">{{ order.currentOrder.sender.address.zip }} {{ order.currentOrder.sender.address.city }}, {{ order.currentOrder.sender.address.street }}</span> <br>
-                                                    <span class="minicard--address">{{ order.currentOrder.sender.address.province }}, {{ order.currentOrder.sender.address.country }}</span>
+                                                    <span class="minicard--address">Telefonszám: <em>{{ order.shippingPhone }}</em></span> <br>
+                                                    <span class="minicard--address">{{ order.shippingAddress.zip }} {{ order.shippingAddress.city }}, {{ order.shippingAddress.street }}</span> <br>
+                                                    <span class="minicard--address">{{ order.shippingAddress.province }}, {{ order.shippingAddress.country }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,9 +106,9 @@
 
                                     <div class="col-lg-12 col-narrow">
                                         <div class="">
-                                            {#<span class="h6 font-weight-bold text-uppercase">Aki küldi:</span>#}
-                                            <span class="h6 font-weight-bold text-uppercase">Szállítási idő:</span>
-                                            <span class="text-sm">{{ order.currentOrder.deliveryDate|date('Y F j')|lower }}, {{ order.currentOrder.deliveryInterval }} óra között.</span>
+                                            {#<span class="h5 checkout--sidebar-title">Aki küldi:</span>#}
+                                            <span class="h5 checkout--sidebar-title">Szállítási idő:</span><br>
+                                            <span class="text-smX text-muted">{{ order.deliveryDate|date('Y F j')|lower }}, {{ order.deliveryInterval }} óra között.</span>
                                         </div>
                                         {#<div class="text-sm mt-1">#}
                                             {##}
@@ -151,16 +118,16 @@
                                 </div>
                             </div>
 
-                            {% if paymentMethod is defined and paymentMethod == true %}
+                            {% if isBankTransfer is defined and isBankTransfer == true %}
                             <div name="payment_bank_transfer" class="block-body">
                                 <div class="row row-narrow">
 
                                     <div class="col-lg-12 col-narrow">
                                         <div class="">
-                                            <span class="h6 font-weight-bold text-uppercase">Banki utaláshoz szükséges adatok</span>
+                                            <span class="h5 checkout--sidebar-title">Banki utaláshoz szükséges adatok</span>
                                         </div>
-                                        <div class="text-sm text-muted mt-1">
-                                                {{ order.currentOrder.payment.description|raw }}
+                                        <div class="text-smX text-muted mt-1">
+                                                {{ order.payment.description|raw }}
                                         </div>
                                     </div>
 

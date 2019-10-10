@@ -25,11 +25,8 @@ class MessageAndCustomerFormType extends AbstractType
     {
         $builder->setAction($this->urlGenerator->generate('cart-setMessageAndCustomer'));
         $builder
-            ->add('message',MessageType::class,[
+            ->add('card',MessageType::class,[
                 'required' => false,
-//                'constraints' => [
-//                    new MessageWithAuthor(),
-//                ],
             ])
             ->add('customer',CustomerBasicsFormType::class,[
 //                'label' => 'Aláírásnév (ezt írjuk az üdvözlőlapra)))',

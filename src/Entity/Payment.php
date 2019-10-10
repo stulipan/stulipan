@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Entity\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 //* @MappedSuperclass
@@ -24,6 +25,7 @@ class Payment
 
     /**
      * @var int
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -33,14 +35,25 @@ class Payment
 
     /**
      * @var string
+     * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank(message="A fizetési mód megnevezése hiányzik!")
      * @ORM\Column(name="payment_name", type="string", length=100, nullable=false)
      */
     private $name;
+    
+    /**
+     * @var string
+     * @Groups({"orderView", "orderList"})
+     *
+     * @Assert\NotBlank(message="A rövid kód hiányzik!")
+     * @ORM\Column(name="short_code", type="string", length=10, nullable=false)
+     */
+    private $shortCode;
 
     /**
      * @var string
+     * @Groups({"orderView"})
      *
      * @ORM\Column(name="short", type="string", length=255, nullable=false)
      * @ Assert\NotBlank(message="A fizetési mód rövid rövid leírása hiányzik!")
@@ -57,6 +70,7 @@ class Payment
 
     /**
      * @var string|null
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="image", type="string", length=1000, nullable=true)
      * @Assert\File(mimeTypes={ "image/png", "image/jpeg" }, groups = {"create"})
@@ -65,6 +79,7 @@ class Payment
 
     /**
      * @var float
+     * @Groups({"orderView", "orderList"})
      *
      * @ Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
@@ -73,6 +88,7 @@ class Payment
 
     /**
      * @var int
+     * @Groups({"orderView"})
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})
@@ -114,6 +130,22 @@ class Payment
     public function __toString(): string
     {
         return $this->getName();
+    }
+    
+    /**
+     * @return string
+     */
+    public function getShortCode(): ?string
+    {
+        return $this->shortCode;
+    }
+    
+    /**
+     * @param string $shortCode
+     */
+    public function setShortCode(?string $shortCode)
+    {
+        $this->shortCode = $shortCode;
     }
 
     /**
@@ -201,7 +233,8 @@ class Payment
      */
     public function getEnabled(): ?bool
     {
-        return $this->enabled;
+        return 1 !== $this->enabled ? false : true;
+//            $this->enabled;
     }
 
     /**

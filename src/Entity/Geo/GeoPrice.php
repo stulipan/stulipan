@@ -6,6 +6,7 @@ use App\Entity\Price;
 use App\Entity\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,6 +20,8 @@ class GeoPrice implements \JsonSerializable
     use TimestampableTrait;
 
     /**
+     * @Groups({"geoPriceView", "geoPriceList"})
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="smallint", name="id", length=11)
@@ -26,6 +29,8 @@ class GeoPrice implements \JsonSerializable
     private $id;
 
     /**
+     * @Groups({"geoPriceView", "geoPriceList"})
+     *
      * @var GeoPlace
      *
      * @Assert\NotBlank(message="Válassz települést.")
@@ -35,6 +40,7 @@ class GeoPrice implements \JsonSerializable
     private $city;
     
     /**
+     * @Groups({"geoPriceView", "geoPriceList"})
      * @var Price
      *
      * @Assert\NotBlank(message="Adj meg szállítá díjat.")

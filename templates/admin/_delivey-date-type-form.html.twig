@@ -75,7 +75,7 @@
                             {% do form.intervals.setRendered() %}
                         </div>
                             {{ form_errors(form.intervals) }}
-                            <a href="" class="JS--Button-addNewInterval btn btn-xs btn-secondary mb-2"><i class="fas fa-plus text-sm mr-1"></i> Új idősáv beszúrása</a>
+                            <a href="" class="JS--Button-addNewInterval btn btn-secondary mb-2"><i class="fas fa-plus text-sm mr-1"></i> Új idősáv beszúrása</a>
                             <small class="form-text text-muted">
                                 Az idősávokat így nevezd el: <em>08-12, 12-18, 16-20</em> <br>
                                 Az utolsó oszlopba írd be az egyes sávok sorrendjét, így: <em>1, 2, stb.</em>
@@ -99,8 +99,8 @@
                     <div class="col-sm-4 col-lg-2">
                     </div>
                     <div class="col-sm-8 col-lg-5">
-                        <input type="submit" value="Mentés" class="btn btn-lgg btn-primary" formnovalidate>
-                        <a href="{{ path('delivery-date-type-list') }}" class="btn btn-outline-secondary">Mégse</a>
+                        <input type="submit" value="Mentés" class="btn btn-lgg btn-info mr-1" formnovalidate>
+                        <a href="{{ path('delivery-date-type-list') }}" class="btn btn-secondary">Mégse</a>
                     </div>
                 </div>
             </div>

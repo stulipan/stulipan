@@ -1,33 +1,29 @@
-					<div class="row row-narrow">
+					<div class="row row-narrow no-gutters">
                         {% if products is defined %}
                         {% for product in products %}
                         <!-- product-->
-						<div class="col-xl-2 col-lg-2 col-md-3 col-3 col-narrow">
-							<div class="product">
+						<div class="col-xl-2 col-lg-2 col-md-3 col-4 col-narrow">
+							<div class="product position-relative">
 								<div class="product-image">
                                         {#<div class="ribbon ribbon-info">Új termék</div>#}
                                         {#<div class="ribbon ribbon-primary">Akció</div>#}
                                         {#<div class="ribbon ribbon-danger">Mind elkelt</div>#}
                                     <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ product.productName}}" class="img-fluid">
-                                    <a href="{{ path('site-product-show', {'id': product.id}) }}" class="tile-link product-hover-overlay-link">
+                                    {#<a href="{{ path('site-product-show', {'id': product.id}) }}" class="tile-link product-hover-overlay-link">#}
                                     </a>
-                                    {% set pos = random(7) %}
-                                    {% if loop.index0 == pos %}
-                                    <div class="card-img-overlay d-flex align-items-end p-0">
-                                        <div class="text-center w-100 overlay--bestseller">
-                                            <i class="fas fa-trophy"></i> Bestseller
-                                        </div>
-                                    </div>
-                                    {% endif %}
-
                                 </div>
 								<div class="py-2 text-center">
-									{#<p class="text-muted text-sm mb-1">{{ product.category }}</p>#}
 									<p class="productList--name mb-1"><a href="{{ path('site-product-show', {'id': product.id}) }}" class="text-dark">{{ product.productName }}</a></p>
                                     <span class="productList--price-gross">{{ product.price.value|number_format(0, ',', ' ')  }} Ft</span>
 								</div>
-
+                                <div class="text-center">
+                                    <div class="loadingWrapper loadingWrapper-secondary">
+                                        <a href="#" data-url="{{ path('cart-addGift', {'id': product.id}) }}" title="Kiválaszt" class="JS--Button-selectGift btn btn-sm btn-outline-secondary">Kiválaszt</a>
+                                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                                    </div>
+                                </div>
 							</div>
+
 						</div>
 						<!-- /product-->
                         {% endfor %}

@@ -91,7 +91,7 @@ class Recipient
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getName(): ?string
     {

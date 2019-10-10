@@ -5,15 +5,19 @@ namespace App\Controller\Shop;
 use App\Entity\User;
 use App\Form\UserRegistrationFormType;
 use App\Security\LoginFormAuthenticator;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class LoginController extends AbstractController
 {
+    use TargetPathTrait;
+    
     /**
      * @Route("/logout", name="logout")
      */
@@ -36,6 +40,16 @@ class LoginController extends AbstractController
 
         $registrationForm = $this->createForm(UserRegistrationFormType::class);
 
+        /**
+         * TargetPathTrait segitsegevel el tudom menteni session-be a referer URL-t.
+         * When initiating login by coming to the Login page, we save the referer URL into the targetPath.
+         * Why? Because targetPath existence will be checked during the authentication process in App\Security\LoginFormAuthenticator,
+         * thus the authenticator will know where to bring back the user after successful login.
+         *
+         * Fontos, hogy sikeres login utan toroljem a session-bol!  >> legalabbis ez az elmelet. MOST NINCS TOROLVE!!
+         */
+        $this->saveTargetPath($request->getSession(), 'main', $request->headers->get('referer'));
+        
         return $this->render('webshop/site/user-login-register.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
@@ -52,17 +66,18 @@ class LoginController extends AbstractController
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('homepage');
         }
-        $registrationForm = $this->createForm(UserRegistrationFormType::class);
-        $registrationForm->handleRequest($request);
+        $form = $this->createForm(UserRegistrationFormType::class);
+        $form->handleRequest($request);
 
-        if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
-            $data = $registrationForm->getData();
+//        dd($form->isValid());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
             $user = new User();
             $user->setEmail($data->getEmail());
             $user->setFirstname($data->getFirstname());
             $user->setLastname($data->getLastname());
             $user->setUsername('' != $data->getUsername() && null != $data->getUsername() ? $data->getUsername() : $data->getEmail());
-            $password = $encoder->encodePassword($user, $registrationForm->get('password')->getData());
+            $password = $encoder->encodePassword($user, $form->get('password')->getData());
             $user->setPassword($password);
             $roles[] = 'ROLE_USER';
             $user->setRoles($roles);
@@ -83,10 +98,21 @@ class LoginController extends AbstractController
                 'main'     // the "provider key". That's just the name of your firewall: main
             );
         }
+    
+        /**
+         * Renders the form with errors
+         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
+         */
+        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('webshop/cart/registration-form-duringCheckout.html.twig', [
+                'registrationForm' => $form->createView(),
+            ]);
+            return new Response($html,400);
+        }
 
         return $this->render('webshop/site/user-register.html.twig', [
             'title' => 'Fiók létrehozása',
-            'registrationForm' => $registrationForm->createView(),
+            'registrationForm' => $form->createView(),
         ]);
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Address;
 use App\Entity\Recipient;
 use App\Form\AddressType;
 
@@ -51,8 +52,9 @@ class RecipientType extends AbstractType
                 ]
             ]);
         $builder->add('address',AddressType::class,[
-                'label' => false,
-            ]);
+            'label' => false,
+            'addressType' => Address::DELIVERY_ADDRESS,  // this option is defined in AddressType, so that it can receive a value
+        ]);
         $builder->add('phone',TelType::class,[
                 'label' => 'Telefonszám',
                 'required' => false,
@@ -78,10 +80,10 @@ class RecipientType extends AbstractType
             ],
         ]);
     }
-    public function getBlockPrefix()
-    {
-        return '';
-    }
+//    public function getBlockPrefix()
+//    {
+//        return '';
+//    }
 
 
 }

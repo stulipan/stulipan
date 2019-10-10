@@ -34,9 +34,12 @@ class OrderSessionStorage
         $this->session->set(self::ORDER_KEY_NAME, $orderId);
     }
 
-    public function remove(): void
+    public function removeOrderFromSession(): void
     {
         $this->session->remove(self::ORDER_KEY_NAME);
+        $this->session->remove('email');
+        $this->session->remove('firstname');
+        $this->session->remove('lastname');
     }
 
     public function getOrderById(): ?Order
@@ -58,7 +61,8 @@ class OrderSessionStorage
     }
 
     /**
-     * Adds an attribute.
+     * Adds data to the session.
+     * Eg: email, firstname, lastname, phone - which are used in Checkout at Step1
      *
      * @param string $name
      * @param mixed  $value
@@ -69,7 +73,8 @@ class OrderSessionStorage
     }
 
     /**
-     *
+     * Fetch data from the session.
+     * Eg: email, firstname, lastname, phone - which are used in Checkout at Step1
      */
     public function fetch($name)
     {

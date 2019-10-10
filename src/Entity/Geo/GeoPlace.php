@@ -17,7 +17,7 @@ class GeoPlace implements \JsonSerializable
 {
     /**
      * @var int
-     * @Groups("main")
+     * @Groups({"geoPriceView", "geoPriceList"})
      *
      * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -42,8 +42,9 @@ class GeoPlace implements \JsonSerializable
     private $countryCode='';
 
     /**
+     * @Groups({"geoPriceView", "geoPriceList"})
+     *
      * @var string
-     * @Groups("main")
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Add meg a települést.")
@@ -51,8 +52,9 @@ class GeoPlace implements \JsonSerializable
     private $city;
 
     /**
+     * @Groups({"geoPriceView", "geoPriceList"})
+     *
      * @var int
-     * @Groups("main")
      *
      * @Assert\Range(min=0, minMessage="Hibás irányítószám.")
      * @Assert\NotBlank(message="Add meg az irányítószámot.")
@@ -61,6 +63,8 @@ class GeoPlace implements \JsonSerializable
     private $zip;
 
     /**
+     * @Groups({"geoPriceView", "geoPriceList"})
+     *
      * @var string
      *
      * @ORM\Column(name="province", type="string", length=255, nullable=false)
@@ -69,6 +73,8 @@ class GeoPlace implements \JsonSerializable
     private $province='';
 
     /**
+     * @Groups({"geoPriceView", "geoPriceList"})
+     *
      * @var string
      *
      * @ORM\Column(name="district", type="string", length=50, nullable=false)

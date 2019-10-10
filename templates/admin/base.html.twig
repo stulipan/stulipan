@@ -15,30 +15,26 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-
-
-        {#<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">#}
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.css" rel="stylesheet"/>
 
         <link href="{{ asset('webshop/admin/hyper/dataTables.bootstrap4.css') }}" rel="stylesheet" type="text/css" />
 
-        {#<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />#}
-
-        {#<link href="https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.dataTables.min.css" rel="stylesheet" type="text/css" />#}
-        {#<link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />#}
-
-        <link href="{{ asset('webshop/admin/hyper/responsive.bootstrap4.css') }}" rel="stylesheet" type="text/css" />
+        {#<link href="{{ asset('webshop/admin/hyper/responsive.bootstrap4.css') }}" rel="stylesheet" type="text/css" />#}
+        <link href="{{ asset('webshop/site/bootstrap.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('webshop/site/style.css') }}" rel="stylesheet" type="text/css" />
 
         <!-- HYPER CSS -->
-        <link href="{{ asset('webshop/admin/hyper/style.css') }}" rel="stylesheet" type="text/css" />
+        {#<link href="{{ asset('webshop/admin/hyper/style.css') }}" rel="stylesheet" type="text/css" />#}
         <link href="{{ asset('webshop/admin/hyper/custom.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('webshop/admin/v-style.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('build/v-admin.css') }}" rel="stylesheet" type="text/css"/>
         <link rel="shortcut icon" href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/favicon.png">
 
+        <link href="{{ asset('webshop/site/js/daterangepicker.css') }}" rel="stylesheet" />
+
     {% endblock %}
 </head>
-<body data-layout="topnav" class="{% block bodyClass %} {% endblock %}">
+<body data-layout="topnav" class="admin {% block bodyClass %} {% endblock %}">
 
 
     {% block body %}{% endblock %}
@@ -63,11 +59,13 @@
     {#<script src="https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>#}
     {#<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>#}
 
-
+    <!-- Date Picker -->
+    <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
+    <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('webshop/admin/hyper/js/custom.js') }}"></script>
     <script src="{{ asset('webshop/admin/hyper/js/jquery.formula.js') }}"></script>
-    <script src="{{ asset('webshop/admin/hyper/js/tulipan.tools.js') }}"></script>
 
+    <script src="{{ asset('webshop/admin/hyper/js/order.detail.js') }}"></script>
     <script src="{{ asset('build/v-admin.js') }}"></script>
 {% endblock %}
 </body>

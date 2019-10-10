@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Entity\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 //* @MappedSuperclass
@@ -21,6 +22,7 @@ class Shipping
 
     /**
      * @var int
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -30,6 +32,7 @@ class Shipping
 
     /**
      * @var string
+     * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank(message="A szállítási mód megnevezése hiányzik!")
      * @ORM\Column(name="shipping_name", type="string", length=100, nullable=false)
@@ -46,6 +49,7 @@ class Shipping
 
     /**
      * @var float
+     * @Groups({"orderView", "orderList"})
      *
      * @Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
@@ -54,6 +58,7 @@ class Shipping
 
     /**
      * @var int
+     * @Groups({"orderView"})
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})

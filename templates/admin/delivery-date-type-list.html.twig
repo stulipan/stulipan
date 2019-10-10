@@ -18,23 +18,21 @@
 		<!-- page title -->
         {#{{ include('/admin/_title_widget.html.twig') }}#}
 
-        {{ include('/admin/_alert_widget.html.twig') }}
-
 		<!-- header of default page content widget -->
         {#{{ include('/admin/_header_of_default_page_content.html.twig') }}#}
 
-		<div class="row mt-3">
+		<div class="row mt-3 mb-2">
 			<div class="col-lg-12">
-				<div class="page-title h2 d-inline mr-md-2 mr-1">{{ title }}</div>
+				<div class="page-title h3 d-inline mr-md-2 mr-1">{{ title }}</div>
 				<div class="d-inline float-rightX">
-                    <a href="{{ path('delivery-date-type-edit') }}" class="btn btn-xs btn-primary mb-2 ml-1"><i class="far fa-clock mr-1"></i> Új idősáv csoport</a>
-					<a href="{{ path('delivery-special-date-list') }}" class="btn btn-xs btn-secondary mb-2"><i class="far fa-calendar-alt mr-1"></i> Szállítási napok</a>
+                    <a href="{{ path('delivery-date-type-edit') }}" class="btn btn-outline-info mb-2 ml-1 mr-1"><i class="far fa-clock mr-1"></i> Új idősáv csoport</a>
+					<a href="{{ path('delivery-special-date-list') }}" class="btn btn-outline-secondary mb-2"><i class="far fa-calendar-alt mr-1"></i> Szállítási napok</a>
 				</div>
 			</div>
 		</div>
-		<div class="jdfgn ">
 
-        </div>
+        {% include('/admin/_alert_widget.html.twig') %}
+
         {{ include('/admin/_header_of_default_page_content.html.twig') }}
         {% if items is defined %}
             {% for item in items %}
@@ -44,7 +42,8 @@
 							<div class="col-md-6 border-md-right mb-md-0 mb-1 pr-md-4">
 								<div class="">
 									<a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btnX btn-successX">
-										<span class="h5 mb-1">{{ item.name }} <i class="fas fa-edit ml-1 text-sm text-gray"></i></span></a>
+										<span class="entry-lg mb-1">{{ item.name }} </span>
+									</a>
 								</div>
 								<div class="text-mutedX mb-0">
                                     {{ item.description|raw  }}
@@ -56,7 +55,7 @@
                                         <div class="row">
                                             <div class="col-auto text-nowrap">
                                                 {{ interval.name }} között
-                                                <span class="h6 font-italic text-mutedX text-nowrap ml-1"> {{ interval.price|number_format(0, ',', ' ') }} Ft</span>
+                                                <span class="badge badge-{% if interval.price == 0 %}success{% else %}warning{% endif %} text-nowrap ml-1"> {{ interval.price|number_format(0, ',', ' ') }} Ft</span>
                                             </div>
                                             <div class="col-3">
                                                 {{ interval.deliveryLimit }}
@@ -66,12 +65,12 @@
 								</div>
 							</div>
                             <div class="col-md-3 col-6 pl-md-2">
-                                <a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btn btn-xs btn-primary mb-1">
+                                <a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btn btn-sm btn-secondary mb-2">
                                 {#<i class="fas fa-edit mr-1"></i>#}
                                     Módosít</a> <br>
-                                <p class="text-xs">
-									<span class="text-muted">Létrehozva:</span> <em>{{ item.createdAt|date('Y M j')|lower }}, {{ item.createdAt|date('H:i')}}</em><br>
-                                    <span class="text-muted">Utolsó módosítás:</span> <em>{{ item.updatedAt|date('Y M j')|lower }}, {{ item.updatedAt|date('H:i')}}</em><br>
+                                <p class="text-xs text-muted-extra">
+									<em>Létrehozva: {{ item.createdAt|date('Y M j')|lower }}, {{ item.createdAt|date('H:i')}}</em><br>
+                                    <em>Utolsó módosítás: {{ item.updatedAt|date('Y M j')|lower }}, {{ item.updatedAt|date('H:i')}}</em><br>
                                 </p>
                             </div>
 

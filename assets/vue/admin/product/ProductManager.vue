@@ -109,8 +109,8 @@
 //                                this.products.splice(index, 1, response.data.products[0]);   /// ITT MAJD LEHET HOGY CELSZERU BETOLTENI A VISSZAJOVO objektumot
                             },
                             response => {
+                                this.formIsPosting = false;
                                 if (response.status === 422) {
-                                    this.formIsPosting = false;
                                     this.showToast('Upsz... valami hiba történt. Ellenőrizd az adatokat.', 'danger');
                                     for (let value of Object.values(response.body.errors)) {
                                         this.formErrors.push(value);
@@ -126,10 +126,11 @@
                     this.$http.post('/admin/api/products/', productData)
                         .then(
                             response => {
-                                this.formIsPosting = true;
+                                this.formIsPosting = false;
 //                                this.products.push(response.body);
                             },
                             response => {
+                                this.formIsPosting = false;
                                 if (response.status === 422) {
                                     for (let value of Object.values(response.body.errors)) {
                                         this.formErrors.push(value);

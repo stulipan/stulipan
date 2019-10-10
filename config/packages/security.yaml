@@ -32,7 +32,7 @@ security:
         # Symfony\Component\Security\Core\User\User: plaintext
         # ezt váltja ki a loading users from database, ami ez esetben a User entitásban található
         App\Entity\User:
-            algorithm: bcrypt
+            algorithm: auto
             #cost: 12
     firewalls:
         dev:
@@ -42,8 +42,27 @@ security:
 #   Ez a rész arra szolgál, hogy az Admin és a sima Weboldal autentikációja különvegyük, ne legyen átjárás.
 #   Párhuzamosan két user léphet így be kettő kontextusba: egy Adminba, egy a Weboldalra.
 #   A kontextuson tudnak osztozkodni ezzel a két beállítással:  'context: my_context' és 'stateless: false'
+        api_login:
+            pattern:  ^/admin/api/login
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path:               /admin/api/login   # This must defined in routes.yaml
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern: ^/admin/api/
+            anonymous: true
+#            stateless: true   # it tells Symfony to not store the user in the session
+            stateless: false
+            context: my_context
+            logout: ~
+            guard:
+                authenticators:
+                    - App\Security\TokenAuthenticator
+#                    - lexik_jwt_authentication.jwt_token_authenticator # Hasznald ezt a sajat authenticatorod helyett.
         admin:
-            pattern: ^/admin/
+            pattern: ^/{_locale}/admin/
             provider: app_user_provider_from_sajat_db
             anonymous: true
             guard:
@@ -54,7 +73,7 @@ security:
                 lifetime: 2592000 # 30 days in seconds, if missing, default is one year.
             switch_user: true  # Add to any URL '?_switch_user=' and the email address of a user to impersonate
             logout:
-                path:   admin-logout #/admin/logout
+                path:   logout # admin-logout #/admin/logout
                 target: admin-login
             context: my_context
             stateless: false
@@ -67,6 +86,7 @@ security:
                     - App\Security\LoginFormAuthenticator
             form_login:
                 login_path: site-login
+                check_path: site-login
                 use_referer: true
             remember_me:
                 secret: '%kernel.secret%'
@@ -128,9 +148,10 @@ security:
             ROLE_MANAGER,
             ROLE_BOLTZARAS_STAT,
             ROLE_ORDER_STAT,
-            ROLE_DELIVERY_DATES,
+            ROLE_DELIVERY_SETTINGS,
             ROLE_MANAGE_SHIPPING,
-            ROLE_MANAGE_VAT
+            ROLE_MANAGE_VAT,
+            ROLE_MANAGE_SETTINGS
             ] # pl: Mariann
         ROLE_POWER_ADMIN: [
             ROLE_ADMIN,
@@ -141,13 +162,15 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(hu|en)/admin/api/login,   roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(hu|en)/admin/api,         roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(hu|en)/admin/$,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(hu|en)/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        - { path: ^/admin/deliverydate/type, roles: ROLE_ADMIN }
-        - { path: ^/admin/user, roles: ROLE_MANAGER }
+#        - { path: ^/admin/deliverydate/type, roles: ROLE_ADMIN }
+        - { path: ^/(hu|en)/admin/user, roles: ROLE_MANAGER }
 #        - { path: ^/admin/, roles: ROLE_MANAGER }
-#        - { path: ^/termekek/, roles: ROLE_USER }  # csak testeles miatt
+#        - { path: ^/termekek/, roles: ROLE_USER }  # csak testeles miatt, ha azt akarom hogy logged in userek lassak
 
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 

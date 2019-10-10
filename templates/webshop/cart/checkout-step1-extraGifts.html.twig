@@ -8,32 +8,35 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    {#<link href="{{ asset('build/v-shop.css') }}" rel="stylesheet" />#}
 {% endblock %}
 
 {% block page_content %}
 <div class="JS--globalWrapper">
 
-    {{ include('webshop/cart/progress-bar-3step-checkout.html.twig') }}
     {#{{ include('webshop/site/alert-widget.html.twig') }}#}
-    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-        {{ include('webshop/cart/already-registered-widget.html.twig') }}
-    {% endif %}
 
 	<section name="checkout_pickExtraGifts">
 		<div class="container mb-4">
-			<div class="row">
-                <div class="col-md-12 col-lg-12 mx-lg-autoX">
+			<div class="row row-narrowX">
+                <div class="" id="v--checkout">
 
-                    <div class="row row-wide-mobileX">
+                        {#<checkout :order-id="{{ orderId is defined and orderId ? orderId : 0}}"#}
+                                  {#:gift-category-id="{{ giftCategory is defined ? giftCategory.id : 0 }}"#}
+                        {#></checkout>#}
 
-                        <div name="left_column" class="col-lg-12 pt-3">
-                            <div name="basket_content" class="mb-20pxX">
-                                <div class="row">
+                        <div name="left_column" class="col-md-12 col-lg-12 col-narrowX px-0 px-md-10px">
+                            {{ include('webshop/cart/progress-bar-3step-checkout.html.twig') }}
+                            {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                {{ include('webshop/cart/already-registered-widget.html.twig') }}
+                            {% endif %}
+                            <div name="basket_content" class="mb-20px">
+                                <div class="row no-gutters">
                                     <div class="col-lg-12">
-                                        <div class="cart bg-white">
+                                        <div class="card bg-white">
                                             <div class="cart-wrapper">
                                                 <div class="JS--cartWrapper">
-                                                    <div class="checkout-block-header">
+                                                    <div class="checkout-block-header JS--alertBlock">
                                                         <h4>Kosár</h4>
                                                     </div>
 
@@ -44,41 +47,40 @@
                                                         </div>
 
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div name="choose_extras" class="mb-20px">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="cart bg-white shadow-none">
-                                            <div class="cart-wrapper JS--extraGiftsWrapper">
 
-                                                <div class="checkout-block-header">
-                                                    <h4>A virág mellé válassz ajándékot</h4>
-                                                </div>
+                                                    <div class="JS--giftsWrapper">
 
-                                                <div class="block-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-12 mb-3">
+                                                        <div class="checkout-block-header px-3 px-md-3X">
+                                                            <h4>A virág mellé válassz ajándékot</h4>
                                                         </div>
+
+                                                        <div class="block-body px-3 px-md-4">
+
+                                                            {% include('/webshop/cart/extra-gifts-list-widget.html.twig') %}
+
+                                                        </div>
+
                                                     </div>
-
-                                                    {{ include('/webshop/cart/extra-gifts-list-widget.html.twig') }}
-
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
+                            {#<div name="choose_extras" class="mb-20px">#}
+                                {#<div class="row no-gutters">#}
+                                    {#<div class="col-lg-12 ">#}
+                                        {#<div class="cart bg-white shadow-none">#}
 
-                            {{ include('webshop/cart/message-and-customer-form.html.twig') }}
+                                        {#</div>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+
+
+                            {% include('webshop/cart/message-and-customer-form.html.twig') %}
 
 
                         </div>
@@ -141,13 +143,12 @@
 
                         <div name="goto_checkout" class="col-lg-12 mt-3 mb-5">
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="d-flex justify-content-betweenX justify-content-center flex-column flex-md-row mb-4 px-4 px-sm-0">
+                                <div class="col-lg-12 mb-4">
+                                    <div class="d-flex justify-content-betweenX justify-content-center flex-column flex-md-row px-4 px-md-0">
                                         {#<a href="category.html" class="btn btn-lg btn-link d-none d-md-inline-block text-muted order-2 order-lg-1 px-0"><i class="fa fa-chevron-left"></i> Vásárlás folytatása</a>#}
 
-                                        <a href="{{ path('site-checkout-step2-pickRecipient') }}" class="JS--Button-gotoStep2 btn btn-lg btn-success order-1 order-lg-2 px-lg-6 py-4">Tovább a címzett megadásához <i class="fa fa-chevron-right"></i></a>
-
-                                        {#<button type="submit" class="JS--Button-gotoStep2X btn btn-lg btn-success order-1 order-lg-2 px-lg-6 py-4">Tovább a címzett megadásához <i class="fa fa-chevron-right"></i></button>#}
+                                        <button data-url="{{ path('site-checkout-step2-pickRecipient') }}" class="JS--Button-gotoStep2 btn btn-lg btn-success order-1 order-lg-2 px-3 px-md-6 py-4">Tovább a címzett megadásához <i class="fa fa-chevron-right"></i></button>
+                                        <div class="JS--loadingOverlay d-flex align-items-stretch loading-lg"></div>
                                     </div>
                                 </div>
                                 {#<div class="text-lg-right col-lg-6 ml-auto">#}
@@ -158,7 +159,6 @@
                         </div>
 
 
-                    </div>
                 </div>
 			</div>
 		</div>
@@ -173,6 +173,7 @@
 
 {% block javascripts %}
 	{{ parent() }}
+    <script src="{{ asset('build/v-shop.js') }}"></script>
     <script>
         $(document).ready(function () {
             var $globalWrapper = $('.JS--globalWrapper');
@@ -180,6 +181,10 @@
 
             var $cartWrapper = $('.JS--cartWrapper');
             var cartEdit = new InlineEdit($cartWrapper);
+
+            let $giftsWrapper = $('.JS--giftsWrapper');
+            new InlineEdit($giftsWrapper);
+
 
             var $cardMessages = $('.JS--cardMessages');
             var $pickCardMessage = new InlineEdit($cardMessages);

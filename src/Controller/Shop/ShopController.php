@@ -64,24 +64,25 @@ class ShopController extends AbstractController
 //        return $products;
 //
 //    }
-
+    
+    /**
+     * @ Route("/", name="index")
+     */
+    public function index()
+    {
+        return $this->redirectToRoute('homepage');
+    }
     /**
      * @Route("/", name="homepage")
      */
     public function showHomepage()
     {
-//        $category = $this->getDoctrine()
-//            ->getRepository(ProductCategory::class)
-//            ->find(1);
-//        $products = $category->getProducts();
         $products= $this->getDoctrine()->getRepository(Product::class)->findAll();
-        $category = 'Virágküldés';
-
         return $this->render('webshop/site/homepage.html.twig', ['products' => $products]);
     }
 
     /**
-     * @Route("/termekek/", name="site_product_listall")
+     * @Route("/termekek/", name="site-product-listall")
      */
     public function showProductsAll()
     {

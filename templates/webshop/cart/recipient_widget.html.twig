@@ -10,6 +10,7 @@
                     <span class="">Telefonszám: {{ recipient.phone }}</span></p>
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <a href="{{ path('cart-pickRecipient', {id: recipient.id}) }}" class="JS--Button-pickRecipient btn btn-sm btn-secondary mb-2">Szállítás erre a címre</a>
+
                         <br>
                     {% endif %}
 

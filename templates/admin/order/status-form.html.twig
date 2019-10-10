@@ -1,0 +1,98 @@
+{#{% form_theme statusForm 'bootstrap_4_layout.html.twig' %}#}
+{{ form_start(statusForm, { 'attr': {'class': 'JS--statusForm' }}) }}
+    {#<div class="custom-control custom-radio py-1 px-0">#}
+        {#<select id="statusForm" name="statusForm" required="required" class="form-control form-control-dropdown">#}
+            {#<option value="">Válassz...</option>#}
+            {#{% for entry in statuses %}#}
+                {#<option value="{{ entry }}" #}
+                        {#{% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}selected="selected"{% endif %}#}
+                {#>#}
+                    {#{{ entry }}#}
+                {#</option>#}
+            {#{% endfor %}#}
+        {#</select>#}
+    {#</div>#}
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="border-bottom">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-4">
+                        {{ form_label(statusForm.status, '', {'label_attr': {'class': 'col-form-label'}}) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-8">
+                        {{ form_widget(statusForm.status, {'attr': {'class': 'form-controlX' }}) }}
+                        {{ form_errors(statusForm.status) }}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 border-bottom">
+                <div class="form-group row justi">
+                    <div class="col-8 col-md-4">
+                        <label class="">Értesítés az ügyfélnek</label>
+                    </div>
+                    <div class="col-4 col-md-8 d-flex justify-content-md-start justify-content-end">
+                        <input type="checkbox" id="{{ statusForm.sendNotification.vars.id }}" name="{{ statusForm.sendNotification.vars.full_name }}" required="required" class="form-check-input" value="{{ statusForm.sendNotification.vars.value }}" {{ statusForm.sendNotification.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="info">
+                        <label class="form-check-label required" for="{{ statusForm.sendNotification.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+
+                        {#{{ form_widget(form.enabled) }}#}
+                        {{ form_errors(statusForm.sendNotification) }}
+                        {% do statusForm.sendNotification.setRendered() %}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 border-bottom">
+                <div class="form-group row">
+                    <div class="col-8 col-md-4">
+                        <label class="">Megjegyzés hozzáadása</label>
+                    </div>
+                    <div class="col-4 col-md-8 d-flex justify-content-md-start justify-content-end">
+                        <input type="checkbox" id="{{ statusForm.addNote.vars.id }}" name="{{ statusForm.addNote.vars.full_name }}" required="required" class="form-check-input" value="{{ statusForm.addNote.vars.value }}" {{ statusForm.addNote.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="info">
+                        <label class="form-check-label required" for="{{ statusForm.addNote.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+
+                        {#{{ form_widget(form.enabled) }}#}
+                        {{ form_errors(statusForm.addNote) }}
+                        {% do statusForm.addNote.setRendered() %}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-4">
+                        {{ form_label(statusForm.note, '', {'label_attr': {'class': 'col-form-label'}}) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-8">
+                        {{ form_widget(statusForm.note) }}
+                        {{ form_errors(statusForm.note) }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {#<div class="row">#}
+        {#<div class="form-group col-md-6">#}
+            {#<label for="{{ statusForm.status.vars.full_name }}" class="form-label">Állapot</label>#}
+            {#{{ form_widget(statusForm.status, {'attr': {'class': 'form-controlX' }}) }}#}
+            {#{{ form_errors(statusForm.status) }}#}
+        {#</div>#}
+        {#<div class="form-group col-md-10">#}
+            {#<label for="{{ statusForm.sendNotification.vars.full_name }}" class="form-label">Állapot</label>#}
+            {#{{ form_widget(statusForm.sendNotification, {'attr': {'class': 'custom-control-input' }}) }}#}
+            {#{{ form_errors(statusForm.sendNotification) }}#}
+        {#</div>#}
+        {#<div class="form-group col-md-10">#}
+            {#<label for="{{ statusForm.addNote.vars.full_name }}" class="form-label">Állapot</label>#}
+            {#{{ form_widget(statusForm.addNote, {'attr': {'class': 'form-controlX' }}) }}#}
+            {#{{ form_errors(statusForm.addNote) }}#}
+        {#</div>#}
+        {#<div class="form-group col-md-10">#}
+            {#<label for="{{ statusForm.note.vars.full_name }}" class="form-label">Megjegyzés</label>#}
+            {#{{ form_widget(statusForm.note, {'attr': {'class': 'form-controlX' }}) }}#}
+            {#{{ form_errors(statusForm.note) }}#}
+        {#</div>#}
+    {#</div>#}
+
+{{ form_end(statusForm) }}
+{% do statusForm.setRendered() %}

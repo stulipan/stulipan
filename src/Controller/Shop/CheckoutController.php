@@ -3,17 +3,21 @@
 namespace App\Controller\Shop;
 
 use App\Controller\Utils\GeneralUtils;
+use App\Entity\Address;
 use App\Entity\CardCategory;
 use App\Entity\DeliveryDateType;
 use App\Entity\DeliverySpecialDate;
+use App\Entity\Geo\GeoCountry;
 use App\Entity\Model\GeneratedDates;
 use App\Entity\Model\DeliveryDateWithIntervals;
 use App\Entity\Model\HiddenDeliveryDate;
-use App\Entity\Model\Message;
+use App\Entity\Model\CartCard;
 use App\Entity\Model\MessageAndCustomer;
 use App\Entity\Model\DeliveryDate;
 
+use App\Entity\Order;
 use App\Entity\OrderBuilder;
+use App\Entity\OrderStatus;
 use App\Entity\Product\ProductCategory;
 use App\Entity\Recipient;
 use App\Entity\Sender;
@@ -21,17 +25,20 @@ use App\Entity\Shipping;
 use App\Entity\Payment;
 
 use App\Entity\Model\CustomerBasic;
+use App\Entity\User;
 use App\Form\CartHiddenDeliveryDateFormType;
 use App\Form\CartSelectDeliveryDateFormType;
 use App\Form\MessageAndCustomerFormType;
 use App\Form\RecipientType;
-use App\Form\CheckoutFormType;
 use App\Form\SenderType;
 use App\Form\SetDiscountType;
 
+use App\Form\ShipAndPayFormType;
 use App\Form\UserBasicDetailsFormType;
+use App\Form\UserRegistrationFormType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -57,23 +64,23 @@ class CheckoutController extends AbstractController
         $customer = $this->getUser();  // equivalent of: $customer = $this->get('security.token_storage')->getToken()->getUser();
 
         $setDiscountForm = $this->createForm(SetDiscountType::class, $orderBuilder->getCurrentOrder());
-
-        $kategoria = $this->getDoctrine()->getRepository(ProductCategory::class)
-            ->find(2);
-        $extras = $kategoria->getProducts();
+    
+        $giftCategory = $this->getDoctrine()->getRepository(ProductCategory::class)
+            ->findOneBy(['slug' => 'ajandek']);
+        $extras = $giftCategory->getProducts();
 
 
 //        $basicUser = new CustomerBasic();
 //        $customerForm = $this->createForm(CustomerBasicsFormType::class, $basicUser);
-
-        $message = new Message($orderBuilder->getCurrentOrder()->getMessage(), $orderBuilder->getCurrentOrder()->getMessageAuthor());
+    
+        $card = new CartCard($orderBuilder->getCurrentOrder()->getMessage(), $orderBuilder->getCurrentOrder()->getMessageAuthor());
         $customerBasic = new CustomerBasic(
             $orderBuilder->getCurrentSession()->fetch('email'),
             $orderBuilder->getCurrentSession()->fetch('firstname'),
             $orderBuilder->getCurrentSession()->fetch('lastname'),
             $orderBuilder->getCurrentOrder()->getBillingPhone()
         );
-        $messageAndCustomer = new MessageAndCustomer($message, $customerBasic);
+        $messageAndCustomer = new MessageAndCustomer($card, $customerBasic);
         $messageAndCustomerForm = $this->createForm(MessageAndCustomerFormType::class, $messageAndCustomer);
 //        $messageAndCustomerForm->get('customer')->get('phone')->addError(new FormError('Hol a telszam?!'));
 //        dd($messageAndCustomerForm->get('customer')->get('phone'));
@@ -91,12 +98,15 @@ class CheckoutController extends AbstractController
             return $this->render('webshop/cart/checkout-step1-extraGifts.html.twig', [
                 'title' => 'Kosár',
                 'order' => $orderBuilder,
+                'orderId' => $orderBuilder->getCurrentOrder()->getId(),
                 'setDiscountForm' => $setDiscountForm->createView(),
                 'products' => $extras,
+                'giftCategory' => $giftCategory,
                 'progressBar' => 'pickExtraGift',
                 'customerDataForm' => isset($customerForm) ? $customerForm->createView() : null,
                 'messageAndCustomerForm' => isset($messageAndCustomerForm) ? $messageAndCustomerForm->createView() : null,
                 'cardCategories' => $cardCategories,
+                'showQuantity' => true,
             ]);
         }
 
@@ -136,15 +146,18 @@ class CheckoutController extends AbstractController
         return $this->render('webshop/cart/checkout-step1-extraGifts.html.twig', [
             'title' => 'Kosár',
             'order' => $orderBuilder,
+            'orderId' => $orderBuilder->getCurrentOrder()->getId(),
             'setDiscountForm' => $setDiscountForm->createView(),
             'itemsInCart' => $orderBuilder->countItems(),
             'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
 //            'messageForm' => $messageForm->createView(),
             'progressBar' => 'pickExtraGift',
             'products' => $extras,
+            'giftCategory' => $giftCategory,
             'customerForm' => isset($customerForm) ? $customerForm->createView() : null,
             'messageAndCustomerForm' => isset($messageAndCustomerForm) ? $messageAndCustomerForm->createView() : null,
             'cardCategories' => $cardCategories,
+            'showQuantity' => true,
         ]);
     }
 
@@ -160,9 +173,10 @@ class CheckoutController extends AbstractController
          *    public: true
          */
         $orderBuilder = $this->orderBuilder;
-
-        if (!$this->isValidOrder($orderBuilder, 1)) {
-            return $this->redirectToRoute('site-checkout-step1-pickExtraGift');
+    
+        $validation = $this->validateOrderAtStep($orderBuilder, 1);
+        if (!$validation['isValid']) {
+            return $this->redirectToRoute($validation['route']);
         }
 
         $shippingMethods = $this->getDoctrine()
@@ -204,8 +218,9 @@ class CheckoutController extends AbstractController
 
         $selectedDate = null === $orderBuilder->getCurrentOrder()->getDeliveryDate() ? null : $orderBuilder->getCurrentOrder()->getDeliveryDate();
         $selectedInterval = null === $orderBuilder->getCurrentOrder()->getDeliveryInterval() ? null : $orderBuilder->getCurrentOrder()->getDeliveryInterval();
+        $selectedIntervalFee = null === $orderBuilder->getCurrentOrder()->getDeliveryFee() ? null : $orderBuilder->getCurrentOrder()->getDeliveryFee();
 
-        $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval);
+        $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
         $hiddenDateForm = $this->createForm(CartHiddenDeliveryDateFormType::class,$hiddenDates);
 
 //        if ($orderBuilder->getCurrentOrder()->getDeliveryDate()) {
@@ -277,6 +292,9 @@ class CheckoutController extends AbstractController
         if ($recipients->isEmpty()) {
             $recipient = new Recipient();
             $recipient->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
+            $address = new Address();
+            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
+            $recipient->setAddress($address);
             $recipientForm = $this->createForm(RecipientType::class, $recipient);
 
             return $this->render('webshop/cart/checkout-step2-pickRecipient.html.twig', [
@@ -314,12 +332,18 @@ class CheckoutController extends AbstractController
     public function checkoutStep3PickPayment()
     {
         $orderBuilder = $this->orderBuilder;
-
-        if (!$this->isValidOrder($orderBuilder, 2)) {
-            return $this->redirectToRoute('site-checkout-step2-pickRecipient');
+    
+        $validation = $this->validateOrderAtStep($orderBuilder, 2);
+        if (!$validation['isValid']) {
+            return $this->redirectToRoute($validation['route']);
         }
 
-        $checkoutForm = $this->createForm(CheckoutFormType::class, $orderBuilder->getCurrentOrder());
+        $checkoutForm = $this->createForm(ShipAndPayFormType::class, $orderBuilder->getCurrentOrder());
+        $user = new User();
+        $user->setEmail($orderBuilder->getCurrentSession()->fetch('email'));
+        $user->setFirstname($orderBuilder->getCurrentSession()->fetch('firstname'));
+        $user->setLastname($orderBuilder->getCurrentSession()->fetch('lastname'));
+        $registrationForm = $this->createForm(UserRegistrationFormType::class, $user);
 
         $shippingMethods = $this->getDoctrine()
             ->getRepository(Shipping::class)
@@ -372,7 +396,16 @@ class CheckoutController extends AbstractController
 
         if ($senders->isEmpty()) {
             $sender = new Sender();
+            if ($customer) {
+                $sender->setName($customer->getFullname());
+            } else {
+                $sender->setName($orderBuilder->getCurrentSession()->fetch('firstname').' '.$orderBuilder->getCurrentSession()->fetch('lastname'));
+            }
+            
             $sender->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
+            $address = new Address();
+            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
+            $sender->setAddress($address);
             $senderForm = $this->createForm(SenderType::class, $sender);
 
             return $this->render('webshop/cart/checkout-step3-pickPayment.html.twig', [
@@ -383,6 +416,7 @@ class CheckoutController extends AbstractController
                 'paymentMethods' => $paymentMethods,
                 'senderForm' => $senderForm->createView(),
                 'progressBar' => 'pickPayment',
+                'registrationForm' => $registrationForm->createView(),
             ]);
         }
 
@@ -395,25 +429,53 @@ class CheckoutController extends AbstractController
             'senders' => $senders,
             'selectedSender' => null !== $orderBuilder->getCurrentOrder()->getSender() ? $orderBuilder->getCurrentOrder()->getSender()->getId() : null,
             'progressBar' => 'pickPayment',
+            'registrationForm' => $registrationForm->createView(),
         ]);
     }
 
     /**
-     * @Route("/rendeles/koszonjuk", name="site-checkout-step4-success")
+     * Ez csupán annyit csinál, hogy megjeleníti a Thank you oldal.
+     *
+     * @Route("/rendeles/leadas/{order}", name="site-checkout-place-order", methods={"POST"})
+     */
+    public function checkoutPlaceOrder(Order $order)
+    {
+        if ($order) {
+            $isBankTransfer = $order->getPayment()->isBankTransfer() ? true : false;
+    
+            return $this->render('webshop/site/checkout_thankyou.html.twig',[
+                'title' => 'Sikeres rendelés!',
+                'order' => $order,
+                'progressBar' => 'thankyou',
+                'isBankTransfer' => $isBankTransfer,
+            ]);
+        }
+    }
+    
+    /**
+     * Rögzíti a rendelést (azaz törli a sessionből) és tovább küld a 'checkoutPlaceOrder'-re,
+     * ahol a Thankyou oldal megjelenítése történik.
+     *
+     * @Route("/rendeles/koszonjuk", name="site-checkout-step4-thankyou")
      */
     public function checkoutThankyou()
     {
         $orderBuilder = $this->orderBuilder;
-        if (!$this->isValidOrder($orderBuilder, 3)) {
-            return $this->redirectToRoute('site-checkout-step3-pickPayment');
+        $validation = $this->validateOrderAtStep($orderBuilder, 3);
+        if (!$validation['isValid']) {
+            return $this->redirectToRoute($validation['route']);
         }
-        $paymentMethod = $orderBuilder->getCurrentOrder()->getPayment()->isBankTransfer() ? true : false;
-
-        return $this->render('webshop/site/checkout_thankyou.html.twig',[
-            'title' => 'Sikeres rendelés!',
-            'order' => $orderBuilder,
-            'progressBar' => 'thankyou',
-            'paymentMethod' => $paymentMethod,
+        
+        $status = $this->getDoctrine()->getRepository(OrderStatus::class)->findOneBy(['shortcode' => Order::STATUS_CREATED]);
+        $orderBuilder->setStatus($status);
+        $order = $orderBuilder->getCurrentOrder();
+        
+        /** When at this step, the Order has been
+         * successfully placed, so it can be removed from session */
+//        $orderBuilder->getCurrentSession()->removeOrderFromSession();    /////  EZT LE KELL VENNI KOMMENTBOL HA VALOBAN EL AKAROM A RENDELEST POSZTOLNI
+        
+        return $this->forward('App\Controller\Shop\CheckoutController::checkoutPlaceOrder', [
+            'order' => $order,
         ]);
     }
 
@@ -424,30 +486,39 @@ class CheckoutController extends AbstractController
      * This is executed when next step is loaded, either
      * directly by URL or by clicking Continue button.
      */
-    public function isValidOrder(OrderBuilder $orderBuilder, int $checkoutStep)
+    public function validateOrderAtStep(OrderBuilder $orderBuilder, int $checkoutStep): array 
     {
         $validOrder = true;
         if ($checkoutStep == 1) {
+//            return true;
             if (!$orderBuilder->hasItems()) {
                 $validOrder = false;
                 $this->addFlash('items-missing', 'A kosarad üres.');
             }
             if (!$orderBuilder->hasCustomer()) {
                 $validOrder = false;
-                $this->addFlash('customer-missing', 'Nem adtad meg az adataidat vagy valamelyik mezőt nem tölötted ki.');
+                // az alabbi sor nem szukseges, mert ha ide ugrik vissza akkor mar tuti van Customer adat.
+//                $this->addFlash('customer-missing', 'Nem adtad meg az adataidat vagy valamelyik mezőt nem tölötted ki.');
             }
 //            if (!$orderBuilder->hasMessage()) {
 //                $validOrder = false;
 //                $this->addFlash('message-warning', 'Ha szeretnél üzenni a virággal, itt tudod kifejezni pár szóban, mit írjunk az üdvözlőlapra. (Nem kötelező)');
 //            }
             if ($validOrder) {
-                return true;
+                return ['isValid' => true, 'route' => null];
             } else {
-                return false;
+                return ['isValid' => false, 'route' => 'site-checkout-step1-pickExtraGift'];
             }
         }
 
         if ($checkoutStep == 2) {
+            // If step1 is invalid, then no need to check step2. Return route to step1
+            $validation = $this->validateOrderAtStep($orderBuilder, 1);
+            if (!$validation['isValid']) {
+                return ['isValid' => false, 'route' => $validation['route']];
+//                return ['isValid' => false, 'route' => 'site-checkout-step1-pickExtraGift'];
+            }
+            // Continue normally and check step2
             if (!$orderBuilder->hasRecipient()) {
                 $validOrder = false;
                 $this->addFlash('recipient-missing', 'Nem adtál meg címzettet.');
@@ -456,22 +527,31 @@ class CheckoutController extends AbstractController
                 $validOrder = false;
                 $this->addFlash('date-missing', 'Add meg a szállítás idejét! Bizonyosodj meg róla, hogy választottál szállítási idősávot is.');
             }
-            if ($orderBuilder->isDeliveryDateInPast()) {
-                $validOrder = false;
-                $this->addFlash('date-missing', 'Nem adtál meg szállítási napot! Bizonyosodj meg róla, hogy választottál szállítási idősávot is!');
-            }
+//            if ($orderBuilder->isDeliveryDateInPast()) {
+//                $validOrder = false;
+//                $this->addFlash('date-missing', 'Nem adtál meg szállítási napot! Bizonyosodj meg róla, hogy választottál szállítási idősávot is!');
+//            }
+
 //            if (!$orderBuilder->hasShipping()) {
 //                $validOrder = false;
 //                $this->addFlash('shipping-missing', 'Válassz szállítási módot.');
 //            }
             if ($validOrder) {
-                return true;
+                return ['isValid' => true, 'route' => null];
             } else {
-                return false;
+                return ['isValid' => false, 'route' => 'site-checkout-step2-pickRecipient'];
             }
+    
         }
 
         if ($checkoutStep == 3) {
+            // If step2 is invalid, then no need to check step3. Return route to step2
+            $validation = $this->validateOrderAtStep($orderBuilder, 2);
+            if (!$validation['isValid']) {
+//                return ['isValid' => false, 'route' => 'site-checkout-step2-pickRecipient'];
+                return ['isValid' => false, 'route' => $validation['route']];
+            }
+            // Continue normally and check step3
             if (!$orderBuilder->hasSender()) {
                 $validOrder = false;
                 $this->addFlash('sender-missing', 'Adj meg egy számlázási címet.');
@@ -484,11 +564,11 @@ class CheckoutController extends AbstractController
                 $validOrder = false;
                 $this->addFlash('shipping-missing', 'Válassz szállítási módot.');
             }
-
+    
             if ($validOrder) {
-                return true;
+                return ['isValid' => true, 'route' => null];
             } else {
-                return false;
+                return ['isValid' => false, 'route' => 'site-checkout-step3-pickPayment'];
             }
         }
     }

@@ -8,12 +8,12 @@
 {% block body %}
 <!-- Begin page -->
 <div class="wrapper">
-    <div class="topnav">
+    <div class="topnav navbar-sticky sticky-top">
         <div class="container-fluid">
             <nav class="navbar navbar-dark navbar-expand-lg topnav-menu">
 
                     <a href="/" class="navbar-brand order-lg-1 order-2 mr-4" target="_blank">
-                        <span class="h4 font-weight-bold text-uppercase ml-0">tulipan<span class="text-danger">.</span>futar  </span>
+                        <span class="h4 font-weight-bold text-uppercase text-white ml-0">tulipan<span class="text-danger">.</span>futar  </span>
                     </a>
                     <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#burgerMenuContent" aria-controls="burgerMenuContent" aria-expanded="false" aria-label="Toggle navigation">
                         {#<span class="navbar-toggler-icon"></span>#}
@@ -107,7 +107,11 @@
                                     Beállítások 
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-apps">
-                                    {% if is_granted('ROLE_DELIVERY_DATES') %}
+                                    {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
+                                        <a href="{{ path('settings-edit') }}" class="dropdown-item">
+                                            <i class="fas fa-cog"></i>
+                                            <span> Webshop beállítások</span>
+                                        </a>
                                         <a href="{{ path('delivery-special-date-list') }}" class="dropdown-item">
                                             <i class="far fa-calendar-alt"></i>
                                             <span> Kiemelt szállítási napok</span>
@@ -250,7 +254,7 @@
                     {#</li>#}
 
 
-                    {#{% if is_granted('ROLE_DELIVERY_DATES') %}#}
+                    {#{% if is_granted('ROLE_DELIVERY_SETTINGS') %}#}
                     {#<li class="side-nav-title side-nav-item mt-2">Szállítási beállítások</li>#}
                     {#<li class="side-nav-item">#}
                         {#<a href="{{ path('delivery-special-date-list') }}" class="side-nav-link">#}
@@ -311,19 +315,41 @@
         {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
     </div>
     <div class="content-page">
-
         <div class="content">
-
             {#{{ include('/admin/navbar-widget.html.twig') }}#}
-
             <div class="container">
                 {% block page_content %}{% endblock %}
-
             </div>
+        </div>
+        <div class="position-relative">
+            <img class="bill-footer__illustration" src="//cdn.shopify.com/s/assets/admin-fresh/shared/leaf-15be1ea3a9e77954b44dbf7debab51e77c557305c02195b08afc4774cde379b0.svg">
         </div>
     </div>
 
+    <footer class="main-footer">
+        <div class="bg-gray-300 text-muted">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 mb-5X mb-lg-0">
+                        <div class="text-dark text-center py-3">
+                            {#{% set route = app.request.attributes.get('_route') %}#}
+                            {#{% set route_params = app.request.attributes.get('_route_params') %}#}
+                            {#{% set params = route_params|merge(app.request.query.all) %}#}
+                            {#{{  dump(app.request.locale) }}#}
+                            {#{% for locale in locales %}#}
+                                {#if locale != app.request.locale#}
+                            {#<a href="{{ path(route, params|merge({ _locale: locale })) }}" class="btn-link-secondary btn-sm">locale</a>#}
+                            {#{% endfor %}#}
 
+
+                            {#<a href="" class="btn-link-secondary btn-sm">English</a>#}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
 {% endblock %}
 
@@ -342,4 +368,50 @@
             });
         });
 	</script>
+    <script src="https://sciactive.com/pnotify/lib/iife/PNotify.js"></script>
+    <script src="https://sciactive.com/pnotify/lib/iife/PNotifyButtons.js"></script>
+    <script>
+        $(document).ready(function () {
+//            const stackBottomModal = {
+//                dir1: 'up', // With a dir1 of 'up', the stacks will start appearing at the bottom.
+//                // Without a `dir2`, this stack will be horizontally centered, since the `dir1` axis is vertical.
+//                firstpos1: 25, // The notices will appear 25 pixels from the bottom of the context.
+//                // Without a `spacing1`, this stack's notices will be placed 25 pixels apart.
+//                push: 'top', // Each new notice will appear at the bottom of the screen, which is where the 'top' of the stack is. Other notices will be pushed up.
+//                // modal: true, // When a notice appears in this stack, a modal overlay will be created.
+//                overlayClose: true, // When the user clicks on the overlay, all notices in this stack will be closed.
+//                context: document.getElementById('page-container') // The notices will be placed in the 'page-container' element.
+//            };
+            PNotify.defaults.styling = 'bootstrap4';
+            PNotify.defaults.icons = 'fontawesome5';
+
+            {% for msg in app.session.flashBag.get('success') %}
+            PNotify.success({
+                title: 'Siker!',
+                text: '{{ msg|raw }}',
+                modules: { Desktop: { desktop: true } },
+                textTrusted: true,
+//                stack: stackBottomModal,
+            });
+            {% endfor %}
+            {% for msg in app.session.flashBag.get('warning') %}
+            PNotify.notice({
+                title: 'Figyelem!',
+                text: '{{ msg|raw }}',
+                modules: { Desktop: { desktop: true } },
+//                stack: stackBottomModal,
+            });
+            {% endfor %}
+            {% for msg in app.session.flashBag.get('danger') %}
+            PNotify.error({
+                title: 'Upsz...',
+                text: '{{ msg|raw }}',
+                modules: { Desktop: { desktop: true } },
+//                cornerClass: 'alert-dark',
+//                stack: stackBottomModal,
+            });
+            {% endfor %}
+
+        });
+    </script>
 {% endblock %}

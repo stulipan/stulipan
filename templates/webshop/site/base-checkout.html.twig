@@ -14,7 +14,7 @@
     {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
 	<header class="header">
 		<!-- Navbar-->
-		<nav class="navbarX navbar-expand-lg navbar-stickyX navbar-light bg-fixed-white mb-2 mb-md-4 mt-2X mt-4">
+		<nav class="navbarX navbar-expand-lg navbar-stickyX navbar-light pb-2 pb-md-2 pt-3 pt-md-4">
 			<div class="container flex-lg-wrap">
 
                 <div class="row">
@@ -24,9 +24,9 @@
                     {#<div class="row">#}
 
                         <!-- Navbar Logo -->
-                            <div class="col-sm-4 col-lg-4 navbar--ted d-flex justify-content-lg-start my-lg-0 order-lg-1 order-1">
-                                <a href="/" class="navbar-brand order-lg-1 order-2">
-                                    <span class="h4 font-weight-bold text-uppercase ml-0">tulipan<span class="text-danger">.</span>futar  </span>
+                            <div class="col-sm-4 col-lg-4 navbar--logo-checkout d-flex justify-content-lg-start my-lg-0 order-lg-1 order-1 px-0 px-md-10px">
+                                <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
+                                    <span class="h4 font-weight-bold text-uppercase text-info ml-0">tulipan<span class="text-danger">.</span>futar  </span>
                                 </a>
                             </div>
 
@@ -36,7 +36,7 @@
                         {#</div>#}
 
                         <!-- Navbar Login Cart -->
-                            <div class="col-sm-4 col-lg-4 navbar--login-cart d-flex justify-content-end my-lg-0 order-lg-3 order-3">
+                            <div class="col-sm-4 col-lg-4 navbar--login-cart d-flex justify-content-end my-lg-0 order-lg-3 order-3 pl-0 pl-md-10px">
                                 <div class="nav-item">
                                     <svg class="svg-icon mr-1">
                                         <use xlink:href="#calls-1"> </use>

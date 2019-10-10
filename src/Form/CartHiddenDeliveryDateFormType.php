@@ -6,6 +6,7 @@ namespace App\Form;
 
 use App\Entity\Model\HiddenDeliveryDate;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,6 +35,11 @@ class CartHiddenDeliveryDateFormType extends AbstractType
 //                ]
             ]);
         $builder->add('deliveryInterval', TextType::class, [
+            'mapped' => true,
+            'required' => true,
+            'label' => '',
+        ]);
+        $builder->add('deliveryFee', NumberType::class, [
             'mapped' => true,
             'required' => true,
             'label' => '',

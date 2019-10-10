@@ -3,12 +3,21 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\Utils\GeneralUtils;
+use App\Entity\DeliveryDateType;
+use App\Entity\DeliverySpecialDate;
+use App\Entity\Model\DeliveryDateWithIntervals;
+use App\Entity\Model\GeneratedDates;
+use App\Entity\Model\HiddenDeliveryDate;
 use App\Entity\Order;
-use App\Form\BoltzarasFormType;
-use App\Form\BoltzarasWebFormType;
+use App\Form\CartHiddenDeliveryDateFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
 
+use App\Form\OrderBillingAddressType;
+use App\Form\OrderShippingAddressType;
+use App\Form\OrderStatusType;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -164,18 +173,11 @@ class OrderController extends AbstractController
 //                ->sumAllBetweenDates($start, $end)
 //                ->getSingleResult();
         } else {
-            $queryBuilder = $this->getDoctrine()
-                ->getRepository(Order::class)
-                ->findAllQueryBuilder();
-            //->findAllGreaterThanKassza(10);
-//            $totalKeszpenzEsBankkartya = $this->getDoctrine()
-//                ->getRepository(Boltzaras::class)
-//                ->sumAllQueryBuilder()
-//                ->getSingleResult();
-//            $totalWebshopForgalom = $this->getDoctrine()
-//                ->getRepository(BoltzarasWeb::class)
-//                ->sumAllQueryBuilder()
-//                ->getSingleResult();
+//            $criteria = new \Doctrine\Common\Collections\Criteria();
+//            $criteria->where($criteria->expr()->neq('status', null));
+            $queryBuilder = $this->getDoctrine()->getRepository(Order::class)->findAllByQueryBuilder();
+//            dd($queryBuilder);
+            
         }
 
         //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
@@ -216,7 +218,7 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/order/{page}/{start}/{end}", name="order-list",
+     * @Route("/order/list/{page}/{start}/{end}", name="order-list",
      *     requirements={"page"="\d+"},
      *     defaults={"start"=null, "end"=null}
      *     )
@@ -426,28 +428,299 @@ class OrderController extends AbstractController
     /**
      * @Route("/order/detail/{id}", name="order-detail")
      */
-    public function editBoltzarasWebshop(Request $request, ?Order $order, $id = null)
+    public function showOrderDetail(Request $request, ?Order $order, $id = null)
     {
         if (!$order) {
-            throw $this->createNotFoundException(
-                'DFR hiba: Nincs ilyen rendelés!' );
+            throw $this->createNotFoundException('STUPID: Nincs ilyen rendelés!' );
         }
 
-//        dd($order);
-        $title = 'Rendelés: #'.$order->getNumber();
-        $rendeles = $this->getDoctrine()->getRepository(Order::class)
-            ->findOneById($id);
+        $isBankTransfer = $order->getPayment()->isBankTransfer() ? true : false;
+        $shippingForm = $this->createForm(OrderShippingAddressType::class, $order);
+        $billingForm = $this->createForm(OrderBillingAddressType::class, $order);
+    
+        $offset = GeneralUtils::DELIVERY_DATE_HOUR_OFFSET;
+        $days = (new \DateTime('+2 months'))->diff(new \DateTime('now'))->days;
+        for ($i = 0; $i <= $days; $i++) {
+            /**
+             * ($i*24 + offset) = 0x24+4 = 4 órával későbbi dátum lesz
+             * Ez a '4' megegyezik azzal, amit a javascriptben adtunk meg, magyarán 4 órával
+             * későbbi időpont az első lehetséges szállítási nap.
+             */
+            $dates[] = (new \DateTime('+'. ($i*24 + $offset).' hours'));
+        }
 
-
-
-
-
+//        dd($dates);
+        $generatedDates = new GeneratedDates();
+        foreach ($dates as $date) {
+        
+            $specialDate = $this->getDoctrine()->getRepository(DeliverySpecialDate::class)
+                ->findOneBy(['specialDate' => $date]);
+        
+            if (!$specialDate) {
+                $dateType = $this->getDoctrine()->getRepository(DeliveryDateType::class)
+                    ->findOneBy(['default' => DeliveryDateType::IS_DEFAULT]);
+            } else {
+                $dateType = $specialDate->getDateType();
+            }
+            $intervals = null === $dateType ? null : $dateType->getIntervals();
+        
+            $dateWithIntervals = new DeliveryDateWithIntervals();
+            $dateWithIntervals->setDeliveryDate($date);
+            $dateWithIntervals->setIntervals($intervals);
+        
+            $generatedDates->addItem($dateWithIntervals);
+        }
+    
+        $selectedDate = null === $order->getDeliveryDate() ? null : $order->getDeliveryDate();
+        $selectedInterval = null === $order->getDeliveryInterval() ? null : $order->getDeliveryInterval();
+        $selectedIntervalFee = null === $order->getDeliveryFee() ? null : $order->getDeliveryFee();
+    
+        $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
+        $hiddenDateForm = $this->createForm(CartHiddenDeliveryDateFormType::class, $hiddenDates);
+    
+        /**
+         *
+         */
+//        if ($order->getStatus()->getShortcode() === Order::STATUS_FULFILLED || $order->getStatus()->getShortcode() === Order::STATUS_REJECTED ||
+//            $order->getStatus()->getShortcode() === Order::STATUS_RETURNED || $order->getStatus()->getShortcode() === Order::STATUS_DELETED) {
+//            $isDeliveryOverdue = false;
+//        } else {
+        if ($order->getStatus() && $order->getStatus()->getShortcode() === Order::STATUS_CREATED) {
+            $isDeliveryOverdue = $order->isDeliveryDateInPast();
+        } else {
+            $isDeliveryOverdue = false;
+        }
+        
+        $statusForm = $this->createForm(OrderStatusType::class, $order);
+        
         return $this->render('admin/order/order-detail.html.twig', [
             'order' => $order,
-            'title' => $title,
+            'overdue' => true,
+            'isBankTransfer' => $isBankTransfer,
+            'shippingForm' => $shippingForm->createView(),
+            'billingForm' => $billingForm->createView(),
+            'generatedDates' => $generatedDates,
+            'hiddenDateForm' => $hiddenDateForm->createView(),
+            'selectedDate' => $selectedDate,
+            'selectedInterval' => $selectedInterval,
+            'isDeliveryOverdue' => $isDeliveryOverdue,
+            'statusForm' => $statusForm->createView(),
+            
         ]);
     }
-
+    
+    /**
+     * Edit the shipping address information in an Order.
+     * Used in AJAX.
+     *
+     * @Route("/order/{id}/editShippingInfo", name="order-editShippingInfo", methods={"POST"})
+     */
+    public function editShippingForm(Request $request, ?Order $order, $id = null) //, ValidatorInterface $validator
+    {
+        if (!$order) {
+            throw $this->createNotFoundException("STUPID: Nincs ilyen rendelés!");
+        } else {
+            $form = $this->createForm(OrderShippingAddressType::class, $order);
+        }
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $order->setShippingName($data->getShippingName());
+            $order->setShippingAddress($data->getShippingAddress());
+            $order->setShippingPhone($data->getShippingPhone());
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($order);
+            $entityManager->flush();
+            
+            /**
+             * If AJAX request, returns the list of Recipients
+             */
+            if ($request->isXmlHttpRequest()) {
+                $this->addFlash('success', 'Címzett sikeresen módosítva!');
+                $html = $this->render('admin/item.html.twig', [
+                    'item' => 'Címzett sikeresen módosítva!',
+                ]);
+                return new Response($html, 200);
+            }
+        }
+        /**
+         * Renders form with errors
+         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
+         * (!?, there is a validation error)
+         */
+        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('admin/order/shippingInfo-form.html.twig', [
+                'order' => $order,
+                'shippingForm' => $form->createView(),
+            ]);
+            return new Response($html,400);
+        }
+        
+        /**
+         * Renders form initially with data
+         */
+        return $this->render('admin/order/shippingInfo-form.html.twig', [
+            'order' => $order,
+            'shippingForm' => $form->createView(),
+        ]);
+    }
+    
+    /**
+     * Edit the shipping address information in an Order.
+     * Used in AJAX.
+     *
+     * @Route("/order/{id}/editBillingInfo", name="order-editBillingInfo", methods={"POST"})
+     */
+    public function editBillingForm(Request $request, ?Order $order, $id = null) //, ValidatorInterface $validator
+    {
+        if (!$order) {
+            throw $this->createNotFoundException("STUPID: Nincs ilyen rendelés!");
+        } else {
+            $form = $this->createForm(OrderBillingAddressType::class, $order);
+        }
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $order->setBillingName($data->getBillingName());
+            $order->setBillingCompany($data->getBillingCompany());
+            $order->setBillingAddress($data->getBillingAddress());
+            $order->setBillingPhone($data->getBillingPhone());
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($order);
+            $entityManager->flush();
+            
+            /**
+             * If AJAX request, returns the list of Recipients
+             */
+            if ($request->isXmlHttpRequest()) {
+                $this->addFlash('success', 'Feladó sikeresen módosítva!');
+                $html = $this->render('admin/item.html.twig', [
+                    'item' => 'Feladó sikeresen módosítva!',
+                ]);
+                return new Response($html, 200);
+            }
+        }
+        /**
+         * Renders form with errors
+         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
+         * (!?, there is a validation error)
+         */
+        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('admin/order/billingInfo-form.html.twig', [
+                'order' => $order,
+                'billingForm' => $form->createView(),
+            ]);
+            return new Response($html,400);
+        }
+        
+        /**
+         * Renders form initially with data
+         */
+        return $this->render('admin/order/billingInfo-form.html.twig', [
+            'order' => $order,
+            'billingForm' => $form->createView(),
+        ]);
+    }
+    
+    /**
+     * Edit the delivery date information in an Order.
+     * Used in AJAX.
+     *
+     * @Route("/order/{id}/editDeliveryDate", name="order-editDeliveryDate", methods={"POST"})
+     */
+    public function editDeliveryDate(Request $request, ?Order $order, $id = null, HiddenDeliveryDate $date)
+    {
+        if (!$order) {
+            throw $this->createNotFoundException("STUPID: Nincs ilyen rendelés!");
+        } else {
+            $form = $this->createForm(CartHiddenDeliveryDateFormType::class, $date);
+        }
+        $form->handleRequest($request);
+//        dd($form->getData());
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $order->setDeliveryDate(\DateTime::createFromFormat('!Y-m-d', $data->getDeliveryDate()));
+            $order->setDeliveryInterval($data->getDeliveryInterval());
+            $order->setDeliveryFee($data->getDeliveryFee());
+    
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($order);
+            $entityManager->flush();
+        
+            /**
+             * If AJAX request, and because at this point the form data is processed, it returns Success (code 200)
+             */
+            if ($request->isXmlHttpRequest()) {
+                $this->addFlash('success', 'Szállítási idő sikeresen módosítva!');
+                $html = $this->render('admin/item.html.twig', [
+                    'item' => 'Szállítási idő sikeresen módosítva!',
+                ]);
+                return new Response($html, 200);
+            }
+        }
+        /**
+         * Renders form with errors
+         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
+         */
+        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('webshop/cart/hiddenDeliveryDate-form.html.twig', [
+                'hiddenDateForm' => $form->createView(),
+            ]);
+            return new Response($html,400);
+        }
+    }
+    
+    /**
+     * Edit the delivery date information in an Order.
+     * Used in AJAX.
+     *
+     * @Route("/order/{id}/editStatus", name="order-editStatus", methods={"POST"})
+     */
+    public function editStatus(Request $request, ?Order $order, $id = null)
+    {
+        if (!$order) {
+            throw $this->createNotFoundException("STUPID: Nincs ilyen rendelés!");
+        } else {
+            $form = $this->createForm(OrderStatusType::class, $order);
+        }
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Order $data */
+            $data = $form->getData();
+            $order->setStatus($data->getStatus());
+        
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($order);
+            $entityManager->flush();
+        
+            /**
+             * If AJAX request, and because at this point the form data is processed, it returns Success (code 200)
+             */
+            if ($request->isXmlHttpRequest()) {
+                $this->addFlash('success', 'Rendelés állapota sikeresen módosítva! <br>Új állapot: <strong>'.$order->getStatus().'</strong>');
+                $html = $this->render('admin/item.html.twig', [
+                    'item' => 'Rendelés állapota sikeresen módosítva!',
+                ]);
+                return new Response($html, 200);
+            }
+        }
+        /**
+         * Renders form with errors
+         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
+         */
+        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('admin/order/status-form.html.twig', [
+                'statusForm' => $form->createView(),
+            ]);
+            return new Response($html,400);
+        }
+    }
 
 //	/**
 //	 * @Route("/order/show/{id}", name="order-show")

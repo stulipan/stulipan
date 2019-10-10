@@ -53,19 +53,21 @@ class Sender
      *
      * @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Egy címzetnek kell legyen egy címe.")
+     * @ Assert\NotBlank(message="Egy címzetnek kell legyen egy címe.")
+     * @Assert\Valid()
      */
     private $address;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Assert\NotNull(message="Add meg a számlázási nevet.")
      */
     private $name='';
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="company", type="string", length=255, nullable=true)
      */

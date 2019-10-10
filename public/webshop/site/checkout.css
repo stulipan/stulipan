@@ -1,6 +1,6 @@
 body {
-    /*background-color: #f5f5f5;*/
     background-color: #eeeeee;
+    /*background-color: #f4f6f8;*/
 }
 
 .checkout-block-header h4 {
@@ -27,11 +27,8 @@ body {
 /*}*/
 
 .form-label {
-    /*color: #495057;*/
-    /*font-size: .875rem;*/
     text-transform: none;
     letter-spacing: 0;
-    /*font-weight: bold;*/
 }
 
 .cart-body {
@@ -40,5 +37,5 @@ body {
 
 .cart-item,
 .order-summary-item {
-    border-bottom: 1px solid #bec0c3;
+    border-bottom: 1px solid #d8dee0;
 }

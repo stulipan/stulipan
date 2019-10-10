@@ -37,4 +37,20 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             FileUploader::class,
         ];
     }
+    
+//    // This is for converting object to array   >>> NOT IN USE
+//    public function getFilters()
+//    {
+//        return array(
+//            new \Twig_SimpleFilter('cast_to_array', array($this, 'objectToArrayFilter')),
+//        );
+//    }
+//
+//    public function objectToArrayFilter($stdClassObject) {
+//        // Just typecast it to an array
+//        $response = (array)$stdClassObject;
+//
+//        return $response;
+//    }
+    
 }

@@ -20,12 +20,18 @@ class HiddenDeliveryDate
 
     /**
      * @var string
-     * @Assert\Expression("this.notDeliveryInterval()", message = "Válaszd ki, mely napszakban történjen meg a kiszállítás.")
+     * @Assert\Expression("this.missingDeliveryInterval()", message = "Válaszd ki, mely napszakban történjen meg a kiszállítás.")
      *
      */
     private $deliveryInterval;
+    
+    /**
+     * @var float
+     * @Assert\Range(min=0, minMessage="Hiányzik a szállítási díj.")
+     */
+    private $deliveryFee;
 
-    public function __construct($date = null, string $interval = null)
+    public function __construct($date = null, string $interval = null, float $fee = null)
     {
         if ($date instanceof \Datetime) {
             $this->deliveryDate = $date->format('Y-m-d');
@@ -34,6 +40,7 @@ class HiddenDeliveryDate
         }
 
         $this->deliveryInterval = $interval;
+        $this->deliveryFee = $fee;
     }
 
     /**
@@ -71,13 +78,29 @@ class HiddenDeliveryDate
     /**
      *
      */
-    public function notDeliveryInterval()
+    public function missingDeliveryInterval()
     {
         if ($this->deliveryDate && !$this->deliveryInterval) {
             return false;
         } else {
             return true;
         }
+    }
+    
+    /**
+     * @return float
+     */
+    public function getDeliveryFee(): ?float
+    {
+        return (float) $this->deliveryFee;
+    }
+    
+    /**
+     * @param float $deliveryFee
+     */
+    public function setDeliveryFee(?float $deliveryFee)
+    {
+        $this->deliveryFee = $deliveryFee;
     }
 
 

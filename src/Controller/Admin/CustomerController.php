@@ -42,17 +42,16 @@ class CustomerController extends AbstractController
 //        }
 
         $totalRevenue = 0;
-        foreach ($user->getOrders() as $o => $order) {
-            $totalRevenue += $order->getPriceTotal();
+        foreach ($user->getRealOrders() as $o => $order) {
+            $totalRevenue += $order->getSummary()->getTotalAmountToPay();
         }
 
         return $this->render('admin/customer-profile-show.html.twig', [
             'title' => 'Vásárlói adatlap',
             'user' => $user,
-            'orders' => $user->getOrders(),
+            'orders' => $user->getRealOrders(),
 //            'shippings' => $shippings,
 //            'payments' => $payments,
-            'orderCount' => $user->getOrders()->isEmpty() ? 0 : $user->getOrders()->count(),
             'totalRevenue' => $totalRevenue,
         ]);
     }

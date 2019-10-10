@@ -65,13 +65,12 @@
                 <div class="form-group row">
                     <div class="col-sm-4 col-lg-2">
                         {#{{ form_label(form.enabled) }}#}
-                        <label class="form-control-label">Engedélyezve</label>
+                        <label">Engedélyezve</label>
                     </div>
                     <div class="col-sm-8 col-lg-5 ">
-                        <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="success">
+                        <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="info">
                         <label class="form-check-label required" for="{{ form.enabled.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
 
-                        {#{{ form_widget(form.enabled) }}#}
                         {{ form_errors(form.enabled) }}
                         {% do form.enabled.setRendered() %}
                     </div>
@@ -91,8 +90,8 @@
                     <div class="col-sm-4 col-lg-2">
                     </div>
                     <div class="col-sm-8 col-lg-5">
-                        <input type="submit" value="Mentés" class="btn btn-lgg btn-primary" formnovalidate>
-                        <a href="{{ path('shipping-list') }}" class="btn btn-outline-secondary">Mégse</a>
+                        <input type="submit" value="Mentés" class="btn btn-info mr-1" formnovalidate>
+                        <a href="{{ path('shipping-list') }}" class="btn btn-secondary">Mégse</a>
                     </div>
                 </div>
             </div>

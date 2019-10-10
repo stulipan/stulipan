@@ -22,8 +22,8 @@
                 createText: 'Hozzáadás',
                 updateText: 'Adatok mentése',
                 cancelText: 'Mégse',
-                buttonSubmitCss: 'btn-success',
-                buttonCancelCss: 'btn-outline-secondary',
+                buttonSubmitCss: 'btn-info',
+                buttonCancelCss: 'btn-secondary',
             }
         }
     }

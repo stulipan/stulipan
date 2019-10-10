@@ -34,7 +34,7 @@ fieldset[disabled] .multiselect {
     height: 16px;
     border-radius: 100%;
     border: 2px solid transparent;
-    border-top-color: #6cb8d5;
+    border-top-color: #008CDE;
     box-shadow: 0 0 0 1px transparent
 }
 
@@ -63,7 +63,7 @@ fieldset[disabled] .multiselect {
 .multiselect__input,
 .multiselect__single {
     font-family: inherit;
-    font-size: 16px;
+    /*font-size: 16px;*/
     -ms-touch-action: manipulation;
     touch-action: manipulation
 }
@@ -75,7 +75,8 @@ fieldset[disabled] .multiselect {
     width: 100%;
     min-height: 40px;
     text-align: left;
-    color: #40484c
+    color: #40484c;
+    box-shadow: rgba(22, 29, 37, 0.05) 0px 1px 0px 0px;
 }
 
 .multiselect * {
@@ -169,7 +170,7 @@ fieldset[disabled] .multiselect {
     display: block;
     padding: 8px 40px 0 8px;
     border-radius: 5px;
-    border: 1px solid #ced4da;
+    border: 1px solid #c4cdd5;
     background: #fff;
     font-size: 14px
 }
@@ -182,7 +183,7 @@ fieldset[disabled] .multiselect {
     margin-right: 10px;
     color: #fff;
     line-height: 1;
-    background: #6cb8d5;
+    background: #008CDE;
     margin-bottom: 5px;
     white-space: nowrap;
     overflow: hidden;
@@ -282,7 +283,7 @@ fieldset[disabled] .multiselect {
     width: 100%;
     max-height: 240px;
     overflow: auto;
-    border: 1px solid #ced4da;
+    border: 1px solid #c4cdd5;
     border-top: none;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -306,7 +307,7 @@ fieldset[disabled] .multiselect {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom: none;
-    border-top: 1px solid #ced4da
+    border-top: 1px solid #c4cdd5
 }
 
 .multiselect__content::webkit-scrollbar {
@@ -341,14 +342,14 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__option--highlight {
-    background: #6cb8d5;
+    background: #008CDE;
     outline: none;
     color: #fff
 }
 
 .multiselect__option--highlight:after {
     content: attr(data-select);
-    background: #6cb8d5;
+    background: #008CDE;
     color: #fff
 }
 
@@ -475,7 +476,8 @@ fieldset[disabled] .multiselect {
 }
 
 .product-details .multiselect:not(.multiselect--active) .multiselect__tags {
-    background: #f4f4f5;
+    /*background: #f4f4f5;*/
+    background: linear-gradient(to bottom, #f9fafb, #f4f4f5);
 }
 
 .product-details .multiselect:not(.multiselect--active) .multiselect__input,

@@ -11,8 +11,8 @@
                 <div class="form-group col-md-8">
                     {#<label for="{{ messageForm.messageAuthor.vars.full_name }}" class="form-label">Aláírásnév</label>#}
                     {#<span class="detail-option-heading font-weight-bold"><span>(ezt írjuk az üdvözlőlapra)</span></span>#}
-                    {{ form_widget(messageForm.messageAuthor, {'attr': {'class': 'form-control', 'placeholder': messageForm.messageAuthor.vars.label }}) }}
-                    {{ form_errors(messageForm.messageAuthor) }}
+                    {{ form_widget(messageForm.author, {'attr': {'class': 'form-control', 'placeholder': messageForm.author.vars.label }}) }}
+                    {{ form_errors(messageForm.author) }}
                 </div>
             </div>
             {#{{ form_end(messageForm) }}#}

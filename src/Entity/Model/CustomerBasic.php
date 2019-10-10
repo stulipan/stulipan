@@ -7,8 +7,9 @@ namespace App\Entity\Model;
 use App\Controller\Utils\GeneralUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator\Constraints as AssertApp;
+use App\Validator\Constraints as CustomAssert;
 
 /**
  *
@@ -18,6 +19,7 @@ class CustomerBasic
 {
     /**
      * @var string
+     * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank()
      * @Assert\Email(message="Ellenőrizd, hogy helyesen írtad be az email címet!")
@@ -26,6 +28,7 @@ class CustomerBasic
 
     /**
      * @var string
+     * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank()
      */
@@ -33,6 +36,7 @@ class CustomerBasic
 
     /**
      * @var string
+     * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank()
      */
@@ -40,9 +44,10 @@ class CustomerBasic
 
     /**
      * @var string
+     * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank(message="Add meg a telefonszámot.")
-     * @AssertApp\PhoneNumber()
+     * @CustomAssert\PhoneNumber(regionCode="HU")
      */
     private $phone;
 

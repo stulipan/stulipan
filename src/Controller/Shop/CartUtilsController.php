@@ -103,10 +103,20 @@ class CartUtilsController extends AbstractController
     public function cartDetailsDropdown()
     {
         $orderBuilder = $this->orderBuilder;
-
         return $this->render('webshop/site/navbar-cartDropdown.html.twig', [
-            'order' => $orderBuilder,
-            'itemsInCart' => $orderBuilder->countItems(),
+            'order' => $orderBuilder->getCurrentOrder(),
+            'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
+        ]);
+    }
+    
+    /**
+     * Renders the slider cart. The items are retrieved from session
+     */
+    public function cartSliderSidebar()
+    {
+        $orderBuilder = $this->orderBuilder;
+        return $this->render('webshop/site/cart-slider-sidebar.html.twig', [
+            'order' => $orderBuilder->getCurrentOrder(),
             'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
         ]);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Address;
 use App\Entity\Sender;
 use App\Form\AddressType;
 
@@ -53,6 +54,7 @@ class SenderType extends AbstractType
             ])
             ->add('address',AddressType::class, [
                 'label' => false,
+                'addressType' => Address::BILLING_ADDRESS,  // this option is defined in AddressType, so that it can receive a value
             ])
             ->add('phone',TelType::class,[
                 'label' => 'Telefonszám',

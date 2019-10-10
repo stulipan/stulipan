@@ -66,6 +66,19 @@ class OrderRepository extends EntityRepository
             ->getQuery()
             ;
     }
+    
+    /**
+     * @return \Doctrine\ORM\Query
+     */
+    public function findAllByQueryBuilder()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
+            ->where('p.status IS NOT NULL')
+//            ->setParameter('status', 1)
+            ->getQuery()
+            ;
+    }
 
     /**
      * @return \Doctrine\ORM\Query

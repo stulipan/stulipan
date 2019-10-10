@@ -1,4 +1,3 @@
-    {% form_theme hiddenDateForm 'bootstrap_4_layout.html.twig' %}
     {{ form_start(hiddenDateForm, { 'attr': {'class': 'JS--hiddenDeliveryDateForm' }}) }}
 
         {{ form_widget(hiddenDateForm.deliveryDate, { 'attr': {'class': 'd-none' }}) }}
@@ -6,6 +5,9 @@
 
         {{ form_widget(hiddenDateForm.deliveryInterval, { 'attr': {'class': 'd-none' }}) }}
         {{ form_errors(hiddenDateForm.deliveryInterval) }}
+
+        {{ form_widget(hiddenDateForm.deliveryFee, { 'attr': {'class': 'd-none' }}) }}
+        {{ form_errors(hiddenDateForm.deliveryFee) }}
 
         {#<button type="submit">Submit</button>#}
 

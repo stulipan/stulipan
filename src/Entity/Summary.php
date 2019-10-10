@@ -41,6 +41,7 @@ final class Summary
             $totalToPay += $item->getPrice() * $item->getQuantity();
         }
 
+        $totalToPay += $this->order->getDeliveryFee();
         return $totalToPay;
     }
 

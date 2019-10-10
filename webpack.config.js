@@ -18,7 +18,7 @@ Encore
     // the following line enables hashed filenames (e.g. app.abc123.css)
     // .enableVersioning(Encore.isProduction())
 
-    .enableReactPreset()
+    // .enableReactPreset()
 
     // uncomment to define the assets of the project
     //.addEntry('js/app', './assets/js/app.js')

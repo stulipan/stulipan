@@ -16,33 +16,33 @@
 	{% block LISTA %}
 
 		<!-- page title -->
-        {{ include('/admin/_title_widget.html.twig') }}
+        {#{{ include('/admin/_title_widget.html.twig') }}#}
+
+        <div class="row mt-3 mb-2">
+            <div class="col-lg-12">
+                <div class="page-title h3 d-inline mr-md-2 mr-1">{{ title }}</div>
+                <div class="d-inline float-rightX">
+                    <a href="{{ path('delivery-special-date-edit') }}" class="btn btn-outline-info mb-2"><i class="far fa-calendar-plus mr-1"></i> Új szállítási nap</a>
+                    <a href="{{ path('delivery-date-type-list') }}" class="btn btn-outline-secondary mb-2 ml-1"><i class="far fa-clock mr-1"></i> Idősávok</a>
+                </div>
+            </div>
+        </div>
+
+        {{ include('/admin/_alert_widget.html.twig') }}
 
 		<!-- header of default page content widget -->
         {{ include('/admin/_header_of_default_page_content.html.twig') }}
 
-		<div class="row mb-2X">
-			<div class="col-lg-8">
-                {#valami content#}
-			</div>
-			<div class="col-lg-4">
-				<div class="text-lg-right">
-					<a href="{{ path('delivery-special-date-edit') }}" class="btn btn-primary mb-2"><i class="far fa-calendar-plus mr-1"></i> Új szállítási nap</a>
-                    <a href="{{ path('delivery-date-type-list') }}" class="btn btn-secondary mb-2 ml-1"><i class="far fa-clock mr-1"></i> Idősávok</a>
-				</div>
-			</div><!-- end col-->
-		</div>
-
         <div class="table-responsive mb-3">
-            <table class="table table-sm table-centeredX table-striped table-bordered table-hover mb-0 js--wrapper-table">
+            <table class="table table-hover mb-0 js--wrapper-table">
                 <thead class="thead-light">
 				<tr>
                     <th scope="col">#</th>
                     <th scope="col">Szállítási nap</th>
 				    <th scope="col">Típus</th>
 				    <th scope="col">Idősávok</th>
-				    <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
                     <th scope="col">Módosítás időpontja</th>
+                    <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
                 </tr>
 			  </thead>
 			  <tbody>
@@ -50,7 +50,10 @@
 				{% for item in items %}
 				<tr>
                     <td class="">{{ item.id }}</td>
-				    <td class=" font-weight-bold">{{ item.specialDate|date('M d, Y - l')}}</td>
+				    <td class="">
+                        <a href="{{ path('delivery-special-date-edit', {'id': item.id}) }}" class="btn-smX">{{ item.specialDate|date('M d., Y')}} <br>
+                            {{ item.specialDate|date('l')}}</a>
+                    </td>
 				    <td>{{ item.dateType }}
 						<a href="{{ path('delivery-date-type-edit', {'id': item.dateType.id }) }}" class="btn-link text-muted text-secondary ml-1"><i class="fas fa-edit"></i></a>
 					</td>
@@ -60,7 +63,8 @@
                             <div class="row">
                                 <div class="col-auto text-nowrap">
                                     {{ interval.name }} között
-                                    <span class="h6 font-italic text-mutedX text-nowrap ml-1"> {{ interval.price|number_format(0, ',', ' ') }} Ft</span>
+                                    <span class="badge badge-{% if interval.price == 0 %}success{% else %}warning{% endif %} text-nowrap ml-1"> {{ interval.price|number_format(0, ',', ' ') }} Ft</span>
+                                    {#<span class="h6 font-italic text-mutedX text-nowrap ml-1"> {{ interval.price|number_format(0, ',', ' ') }} Ft</span>#}
                                 </div>
                                 <div class="col-3">
                                     {{ interval.deliveryLimit }}
@@ -71,12 +75,14 @@
                             <span class="text-muted"><em>nincs medadva</em></span>
                         {% endif %}
                     </td>
-				    <td>
-				  	    <a href="{{ path('delivery-special-date-edit', {'id': item.id}) }}" class="btn-smX">
-				  		    <i class="fas fa-edit"></i></a>
-							{#<a href="" class="js--button-delete" data-url="{{ path('invoice-delete', {id: item.id}) }}"><i class="fas fa-trash"></i></a>#}
-				    </td>
-                    <td class=" text-muted"><small>{{ item.updatedAt|date('Y M j')|lower }}, {{ item.updatedAt|date('H:i')}}</small></td>
+                    <td class="text-xs text-muted-extra">
+                        <em>{{ item.updatedAt|date('Y M j')|lower }}, {{ item.updatedAt|date('H:i')}}</em>
+                    </td>
+                    <td>
+                        <a href="{{ path('delivery-special-date-edit', {'id': item.id}) }}" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-edit"></i></a>
+                        {#<a href="" class="js--button-delete" data-url="{{ path('invoice-delete', {id: item.id}) }}"><i class="fas fa-trash"></i></a>#}
+                    </td>
 				</tr>
 				{% endfor %}
 				{% else %}

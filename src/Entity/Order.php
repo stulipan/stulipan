@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Controller\Utils\GeneralUtils;
+use App\Entity\OrderStatus;
+use App\Entity\Product\Product;
 use App\Entity\TimestampableTrait;
 use App\Entity\OrderItem;
 use App\Entity\User;
@@ -19,6 +22,7 @@ use Doctrine\Common\Collections\Collection;
 
 use Egulias\EmailValidator\Warning\AddressLiteral;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -26,13 +30,28 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="cart_order_2")
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
  * @UniqueEntity("number", message="Már létezik rendelés ezzel a számmal!")
+ *
  */
 class Order
 {
+    public const STATUS_CREATED = 'created'; // rendelés létrehozva
+    public const STATUS_PAYMENT_PENDING = 'pending'; // fizetésre vár
+    public const STATUS_PAYMENT_FAILED = 'failed'; // fizetésre sikertelen
+    public const STATUS_PAYMENT_REFUNDED = 'refunded'; // összeg visszafizetve
+    
+    public const STATUS_SENT = 'sent'; // elküldve, azaz szállítás alatt
+    public const STATUS_FULFILLED = 'fulfilled'; // teljesítve
+    public const STATUS_RETURNED = 'returned'; // visszaküldve
+    
+    public const STATUS_REJECTED = 'rejected'; // elutasítva - ezt még nem tudom mikor kell használni
+    public const STATUS_DELETED = 'deleted'; // törölve
+    
+    
     use TimestampableTrait;
 
     /**
      * @var int
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -41,22 +60,24 @@ class Order
     private $id;
 
     /**
-     * @var string
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="number", type="string", length=20, nullable=false)
+     * @ORM\Column(name="number", type="string", length=20, nullable=true)
      */
     private $number;
 
     /**
-     * @var int
+     * @var OrderStatus|null
      *
-     * @ORM\Column(name="status", type="smallint", length=5, nullable=true)
-     * @ Assert\NotBlank(message="Válassz egy állapotot.")
+     * @ORM\OneToOne(targetEntity="OrderStatus")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=true)
      */
     private $status;
 
     /**
      * @var User|null
+     * @Groups({"orderView", "orderList"})
      *
      * ==== Many Orders belong to one Customer ====
      * ==== inversed By="orders" => a User entitásban definiált 'orders' attibútumról van szó; A Ordert így kötjük vissza a Customerhez
@@ -66,9 +87,38 @@ class Order
      * @ Assert\NotBlank(message="Egy rendelésnek kell legyen customer-je.")
      */
     private $customer;
+    
+    /**
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="customer_firstname", type="string", length=255, nullable=true)
+     * @ Assert\NotBlank(message="Hiányzik a vásárló keresztneve!")
+     */
+    private $firstname;
+    
+    /**
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="customer_lastname", type="string", length=255, nullable=true)
+     * @ Assert\NotBlank(message="Hiányzik a vásárló keresztneve!")
+     */
+    private $lastname;
+    
+    /**
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="customer_email", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Hiányzik az email cím!")
+     * @Assert\Email(message="Ellenőrizd, hogy helyesen írtad be az email címet!")
+     */
+    private $email;
 
     /**
-     * @var Recipient
+     * @var Recipient|null
+     * @Groups({"orderView", "orderList"})
      *
      * ==== One Order has one Recipient ====
      *
@@ -79,7 +129,8 @@ class Order
     private $recipient;
 
     /**
-     * @var Sender
+     * @var Sender|null
+     * @Groups({"orderView", "orderList"})
      *
      * ==== One Order has one Sender ====
      *
@@ -90,7 +141,8 @@ class Order
     private $sender;
 
     /**
-     * @var string
+     * @var string|null
+     * @Groups({"orderView"})
      *
      * @ORM\Column(name="message", type="string", length=255, nullable=true)
      * @ Assert\NotBlank(message="Nincs uzenet!")
@@ -98,7 +150,8 @@ class Order
     private $message = '';
 
     /**
-     * @var string
+     * @var string|null
+     * @Groups({"orderView"})
      *
      * @ORM\Column(name="message_author", type="string", length=255, nullable=true)
      * @ Assert\NotBlank(message="Nincs uzenet alairas!")
@@ -106,19 +159,21 @@ class Order
     private $messageAuthor = '';
 
     /**
-     * @var Collection
+     * @var OrderItem[]|ArrayCollection|null
+     * @Groups({"orderView"})
      *
      * ==== One Order has Items ====
      * ==== mappedBy="order" => az OrderItem entitásban definiált 'order' attribútumról van szó ====
      *
-     * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderItem", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="order_id", nullable=true)
      * @Assert\NotBlank(message="Egy rendelésben több tétel lehet.")
      */
     private $items;
 
     /**
-     * @var Shipping
+     * @var Shipping|null
+     * @Groups({"orderView", "orderList"})
      *
      * ==== Many Orders have one Shipping => Egy rendeléshez egy Szállítás tartozik ====
      *
@@ -129,7 +184,8 @@ class Order
     private $shipping;
 
     /**
-     * @var Payment
+     * @var Payment|null
+     * @Groups({"orderView", "orderList"})
      *
      * ==== Many Orders have one Payment => Egy rendeléshez egy Fizetés tartozik ====
      *
@@ -141,7 +197,7 @@ class Order
 
 
     /**
-     * @var Discount
+     * @var Discount|null
      *
      * ==== Many Orders have one Discount => Egy rendeléshez egy Kedvezmény tartozik ====
      *
@@ -152,21 +208,31 @@ class Order
     private $discount;
 
     /**
-     * @var float
+     * @var float|null
      * @Assert\NotBlank()
      * @ORM\Column(name="price_total", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
      */
     private $priceTotal = 0;
 
     /**
-     * @var float
+     * @var float|null
      * @Assert\NotBlank()
      * @ORM\Column(name="price_total_after_discount", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
      */
     private $priceTotalAfterDiscount = 0;
-
+    
     /**
-     * @var string
+     * @var float|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @Assert\NotBlank()
+     * @ORM\Column(name="delivery_fee", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
+     */
+    private $deliveryFee = 0;
+    
+    /**
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="shipping_name", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Add meg a címzett nevét.")
@@ -174,7 +240,8 @@ class Order
     private $shippingName='';
 
     /**
-     * @var int
+     * @var int|null
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="shipping_phone", type="string", length=15, nullable=false)
      * @Assert\NotBlank(message="Add meg a telefonszámot.")
@@ -182,7 +249,8 @@ class Order
     private $shippingPhone;
 
     /**
-     * @var OrderAddress
+     * @var OrderAddress|null
+     * @Groups({"orderView", "orderList"})
      *
      * ==== One Order has one Shipping Address ====
      *
@@ -194,7 +262,8 @@ class Order
     private $shippingAddress;
 
     /**
-     * @var string
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="billing_name", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Add meg a címzett nevét.")
@@ -202,14 +271,16 @@ class Order
     private $billingName;
 
     /**
-     * @var string
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="billing_company", type="string", length=255, nullable=true)
      */
     private $billingCompany;
 
     /**
-     * @var int
+     * @var int|null
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="billing_phone", type="string", length=15, nullable=false)
      * @Assert\NotBlank(message="Add meg a telefonszámot.")
@@ -217,14 +288,15 @@ class Order
     private $billingPhone;
 
     /**
-     * @var string
+     * @var float|null
      *
      * @ORM\Column(name="billing_vat_number", type="string", length=255, nullable=true)
      */
     private $billingVatNumber;
 
     /**
-     * @var OrderAddress
+     * @var OrderAddress|null
+     * @Groups({"orderView", "orderList"})
      *
      * ==== One Order has one Billing Address ====
      *
@@ -236,7 +308,8 @@ class Order
     private $billingAddress;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="delivery_date", type="date", nullable=true)
      *
@@ -245,7 +318,8 @@ class Order
 
 
     /**
-     * @var string
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="delivery_interval", type="string", length=50, nullable=true)
      */
@@ -266,7 +340,7 @@ class Order
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getNumber(): ?string
     {
@@ -280,19 +354,19 @@ class Order
     {
         $this->number = $number;
     }
-
+    
     /**
-     * @return int
+     * @return OrderStatus|null
      */
-    public function getStatus(): int
+    public function getStatus(): ?OrderStatus
     {
         return $this->status;
     }
-
+    
     /**
-     * @param int $status
+     * @param OrderStatus|null $status
      */
-    public function setStatus(int $status)
+    public function setStatus(?OrderStatus $status)
     {
         $this->status = $status;
     }
@@ -302,7 +376,10 @@ class Order
      */
     public function addItem(OrderItem $item): void
     {
-        $this->items->add($item);
+        if (!$this->items->contains($item)) {
+            $item->setOrder($this);
+            $this->items->add($item);
+        }
     }
 
     /**
@@ -314,11 +391,11 @@ class Order
     }
 
     /**
-     * @return Collection
+     * @return OrderItem[]|Collection
      */
-    public function getItems(): Collection
+    public function getItems() //: Collection
     {
-        return $this->items;
+        return $this->items; //->getValues();   // t ->getValues() is required because of
     }
 
     /**
@@ -326,11 +403,59 @@ class Order
      */
     public function hasItems(): bool
     {
-        return !$this->getItems()->isEmpty();
+        return !$this->items->isEmpty();
+    }
+    
+    /**
+     * Counts the number of items in an order
+     *
+     * @return int
+     */
+    public function countItems(): int
+    {
+        $c = 0;
+        foreach ($this->getItems() as $item) {
+            if ($item->getId()) {
+                $c += 1;
+            }
+        }
+        return $c;
+    }
+    
+    /**
+     * Checking if the basket contains the product.
+     *
+     * @param Product $product
+     * @return bool
+     */
+    public function containsTheProduct(Product $product): bool
+    {
+        foreach ($this->items as $item) {
+            if ($item->getProduct() === $product) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Return key number of orderItem has product
+     *
+     * @param Product $product
+     * @return int|null
+     */
+    public function indexOfProduct(Product $product): ?int
+    {
+        foreach ($this->items as $key => $item) {
+            if ($item->getProduct() === $product) {
+                return $key;
+            }
+        }
+        return null;
     }
 
     /**
-     * @return User
+     * @return User|null
      */
     public function getCustomer(): ?User
     {
@@ -344,9 +469,67 @@ class Order
     {
         $this->customer = $customer;
     }
+    
+    /**
+     * @return null|string
+     */
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+    
+    /**
+     * @param null|string $firstname
+     */
+    public function setFirstname(?string $firstname)
+    {
+        $this->firstname = $firstname;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+    
+    /**
+     * @param null|string $lastname
+     */
+    public function setLastname(?string $lastname)
+    {
+        $this->lastname = $lastname;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getFullname(): ?string
+    {
+        $fullname = $this->firstname.' '.$this->lastname;
+        return $fullname;
+    }
+    
+    
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+    
+    /**
+     * @param string $email
+     */
+    public function setEmail(?string $email)
+    {
+        $this->email = $email;
+    }
 
     /**
-     * @return Recipient
+     * @return Recipient|null
      */
     public function getRecipient(): ?Recipient
     {
@@ -362,7 +545,7 @@ class Order
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMessage(): ?string
     {
@@ -378,7 +561,7 @@ class Order
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMessageAuthor(): ?string
     {
@@ -394,7 +577,7 @@ class Order
     }
 
     /**
-     * @return Sender
+     * @return Sender|null
      */
     public function getSender(): ?Sender
     {
@@ -410,7 +593,7 @@ class Order
     }
 
     /**
-     * @return mixed
+     * @return Payment|null
      */
     public function getPayment(): ?Payment
     {
@@ -420,13 +603,13 @@ class Order
     /**
      * @ param Payment $payment
      */
-    public function setPayment(Payment $payment): void
+    public function setPayment(?Payment $payment): void
     {
         $this->payment = $payment;
     }
 
     /**
-     * @return Shipping
+     * @return Shipping|null
      */
     public function getShipping(): ?Shipping
     {
@@ -436,13 +619,13 @@ class Order
     /**
      * @param Shipping $shipping
      */
-    public function setShipping(Shipping $shipping): void
+    public function setShipping(?Shipping $shipping): void
     {
         $this->shipping = $shipping;
     }
 
     /**
-     * @return Discount
+     * @return Discount|null
      */
     public function getDiscount(): ?Discount
     {
@@ -474,7 +657,7 @@ class Order
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getPriceTotalAfterDiscount(): ?float
     {
@@ -488,6 +671,33 @@ class Order
     {
         $this->priceTotalAfterDiscount = $priceTotal;
     }
+    
+    /**
+     * Get information needed to summarize the basket.
+     *
+     * @return Summary
+     */
+    public function getSummary(): Summary
+    {
+        return new Summary($this);
+    }
+    
+    /**
+     * @return float|null
+     */
+    public function getDeliveryFee(): ?float
+    {
+        if ($this->deliveryFee === null) { return 0; }
+        return (float) $this->deliveryFee;
+    }
+    
+    /**
+     * @param float|null $deliveryFee
+     */
+    public function setDeliveryFee(?float $deliveryFee)
+    {
+        $this->deliveryFee = $deliveryFee;
+    }
 
     /**
      * @return int
@@ -500,7 +710,7 @@ class Order
 
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getShippingName(): ?string
     {
@@ -516,7 +726,7 @@ class Order
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getShippingPhone(): ?string
     {
@@ -532,7 +742,7 @@ class Order
     }
 
     /**
-     * @return OrderAddress
+     * @return OrderAddress|null
      */
     public function getShippingAddress(): ?OrderAddress
     {
@@ -542,13 +752,13 @@ class Order
     /**
      * @var OrderAddress $address
      */
-    public function setShippingAddress(OrderAddress $address): void
+    public function setShippingAddress(?OrderAddress $address): void
     {
         $this->shippingAddress = $address;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBillingName(): ?string
     {
@@ -564,7 +774,7 @@ class Order
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBillingCompany(): ?string
     {
@@ -580,23 +790,23 @@ class Order
     }
 
     /**
-     * @return string
+     * @return float|null
      */
-    public function getBillingVatNumber(): ?string
+    public function getBillingVatNumber(): ?float
     {
-        return $this->billingVatNumber;
+        return (float) $this->billingVatNumber;
     }
 
     /**
-     * @var string $vat
+     * @var float $vat
      */
-    public function setBillingVatNumber(?string $vat): void
+    public function setBillingVatNumber(?float $vat): void
     {
         $this->billingVatNumber = $vat;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBillingPhone(): ?string
     {
@@ -612,7 +822,7 @@ class Order
     }
 
     /**
-     * @return OrderAddress
+     * @return OrderAddress|null
      */
     public function getBillingAddress(): ?OrderAddress
     {
@@ -622,13 +832,13 @@ class Order
     /**
      * @var OrderAddress $address
      */
-    public function setBillingAddress(OrderAddress $address): void
+    public function setBillingAddress(?OrderAddress $address): void
     {
         $this->billingAddress = $address;
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getDeliveryDate(): ?\DateTime
     {
@@ -644,7 +854,7 @@ class Order
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDeliveryInterval(): ?string
     {
@@ -657,6 +867,34 @@ class Order
     public function setDeliveryInterval(?string $deliveryInterval): void
     {
         $this->deliveryInterval = $deliveryInterval;
+    }
+    
+    /**
+     * Checking if delivery date is in the past.
+     * Returns 'true' if in the past.
+     *
+     * @return bool
+     */
+    public function isDeliveryDateInPast(): bool
+    {
+        $date = $this->getDeliveryDate();
+//        dd((new \DateTime('now +'. GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours')));
+//        dd((new \DateTime('now +4 hours'))->diff($date)->format('%r%h'));
+//        dd((new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day')));
+        
+        if ($date) {
+            /** A '+1 day' azert kell mert az adott datum 00:00 orajat veszi.
+             * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
+             * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
+             */
+            $diff = (new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
+            if ($diff->days >= 0 && $diff->invert == 0) {
+                return false;
+            } elseif ($diff->invert == 1) {
+                return true;
+            }
+        }
+        return true;
     }
 
 }

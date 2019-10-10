@@ -64,7 +64,7 @@ class InventoryController extends AbstractController
 //            throw $this->createNotFoundException(
 //                'Nem talált egy szállítmányt sem!'
 //            );
-            $this->addFlash('danger', 'Nem talált egy szállítmányt sem!');
+            $this->addFlash('warning', 'Nem talált egy szállítmányt sem...');
         } else {
             /**
              * Megmondom neki milyen kategoriák vannak a Supply-ban
@@ -239,7 +239,7 @@ class InventoryController extends AbstractController
 //            throw $this->createNotFoundException(
 //                'Nem talált egy számlát sem!'
 //            );
-            $this->addFlash('danger', 'Nem talált egy selejtet sem!');
+            $this->addFlash('warning', 'Nem talált egy selejtet sem...');
         } else {
             /**
              * Megmondom neki milyen kategoriák vannak a Waste-ban

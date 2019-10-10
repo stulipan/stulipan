@@ -10,7 +10,7 @@ use App\Entity\DeliverySpecialDate;
 use App\Entity\Geo\GeoPlace;
 use App\Entity\Model\CustomerBasic;
 use App\Entity\Model\HiddenDeliveryDate;
-use App\Entity\Model\Message;
+use App\Entity\Model\CartCard;
 use App\Entity\Model\MessageAndCustomer;
 use App\Entity\Order;
 
@@ -25,6 +25,7 @@ use App\Entity\Payment;
 
 use App\Form\CartHiddenDeliveryDateFormType;
 use App\Form\MessageAndCustomerFormType;
+use App\Form\ShipAndPayFormType;
 use App\Repository\GeoPlaceRepository;
 use App\Validator\Constraints as AssertApp;
 
@@ -33,7 +34,6 @@ use App\Form\CartSelectDeliveryDateFormType;
 use App\Form\CartSelectDeliveryIntervalType;
 use App\Form\RecipientType;
 use App\Form\CartAddItemType;
-use App\Form\CheckoutFormType;
 use App\Form\ClearCartType;
 use App\Form\PaymentType;
 use App\Form\NOTUSED;
@@ -141,7 +141,7 @@ class CartController extends AbstractController
         }
 
         $kategoria = $this->getDoctrine()->getRepository(ProductCategory::class)
-            ->find(1);
+            ->findBy(['slug' => 'ajandek']);
         $extras = $kategoria->getProducts();
 
         if ($recipients->isEmpty()) {
@@ -257,7 +257,7 @@ class CartController extends AbstractController
             return $this->redirectToRoute('site-cart');
         }
 
-        $checkoutForm = $this->createForm(CheckoutFormType::class, $orderBuilder->getCurrentOrder());
+        $checkoutForm = $this->createForm(ShipAndPayFormType::class, $orderBuilder->getCurrentOrder());
 //        $shippingForm = $this->createForm(ShippingType::class, $orderBuilder->getCurrentOrder());
 //        $paymentForm = $this->createForm(PaymentType::class, $orderBuilder->getCurrentOrder());
 
@@ -363,43 +363,44 @@ class CartController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/cart/setCheckout", name="cart-setCheckout", methods={"POST", "GET"})
-     */
-    public function setCheckoutForm(Request $request): Response
-    {
-        $orderBuilder = $this->orderBuilder;
-        $form = $this->createForm(CheckoutFormType::class, $orderBuilder->getCurrentOrder());
-        $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-            if ($form->getData()->getShipping()) {
-                $orderBuilder->setShipping($form->getData()->getShipping());
-            }
-            if ($form->getData()->getPayment()) {
-                $orderBuilder->setPayment($form->getData()->getPayment());
-            }
-            if ($form->isValid()) {
-                return $this->redirectToRoute('site-checkout');
-            }
-        }
-
-        $shippingMethods = $this->getDoctrine()
-            ->getRepository(Shipping::class)
-            ->findAllOrdered();
-        $paymentMethods = $this->getDoctrine()
-            ->getRepository(Payment::class)
-            ->findAllOrdered();
-
-        $senderForm = $this->createForm(SenderType::class, $orderBuilder->getCurrentOrder()->getSender());
-
-        return $this->render('webshop/site/checkout_checkout.html.twig', [
-            'order' => $orderBuilder,
-            'form' => $form->createView(),
-            'shippingMethods' => $shippingMethods,
-            'paymentMethods' => $paymentMethods,
-            'senderForm' => $senderForm->createView(),
-        ]);
-    }
+//    /**
+//     * @Route("/cart/setCheckout", name="cart-setCheckout", methods={"POST"}) //, "GET"
+//     */
+//    public function setCheckoutForm(Request $request): Response
+//    {
+//        $orderBuilder = $this->orderBuilder;
+//        $form = $this->createForm(ShipAndPayFormType::class, $orderBuilder->getCurrentOrder());
+//        $form->handleRequest($request);
+//        if ($form->isSubmitted()) {
+//            if ($form->getData()->getShipping()) {
+//                $orderBuilder->setShipping($form->getData()->getShipping());
+//            }
+//            if ($form->getData()->getPayment()) {
+//                $orderBuilder->setPayment($form->getData()->getPayment());
+//            }
+//            if ($form->isValid()) {
+//                return $this->redirectToRoute('site-checkout');  // a regi checkout oldal, URL: /penztar
+//            }
+//        }
+//
+//
+//        $shippingMethods = $this->getDoctrine()
+//            ->getRepository(Shipping::class)
+//            ->findAllOrdered();
+//        $paymentMethods = $this->getDoctrine()
+//            ->getRepository(Payment::class)
+//            ->findAllOrdered();
+//
+//        $senderForm = $this->createForm(SenderType::class, $orderBuilder->getCurrentOrder()->getSender());
+//
+//        return $this->render('webshop/site/checkout_checkout.html.twig', [
+//            'order' => $orderBuilder,
+//            'form' => $form->createView(),
+//            'shippingMethods' => $shippingMethods,
+//            'paymentMethods' => $paymentMethods,
+//            'senderForm' => $senderForm->createView(),
+//        ]);
+//    }
 
     /**
      * @Route("/cart/setDeliveryDate", name="cart-setDeliveryDate", methods={"POST", "GET"})
@@ -407,47 +408,26 @@ class CartController extends AbstractController
      */
     public function setDeliveryDate(Request $request, HiddenDeliveryDate $date) //: Response
     {
-
-//        if ($request->isXmlHttpRequest()) {
-//            $orderBuilder = $this->orderBuilder;
-//            $orderBuilder->setDeliveryDate($date->getDeliveryDate(), $date->getDeliveryInterval());
-//            $html = "All good";
-//            return new Response($html,200);
-//        } else {
-//            throw $this->createNotFoundException(
-//                'setDeliveryDate not allowed!'
-//            );
-//        }
-
         $orderBuilder = $this->orderBuilder;
         $form = $this->createForm(CartHiddenDeliveryDateFormType::class, $date);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $date = $data->getDeliveryDate();
-            $interval = $data->getDeliveryInterval();
             $orderBuilder->setDeliveryDate($data->getDeliveryDate(), $data->getDeliveryInterval());
+//            dd($data->getDeliveryFee());
+            $orderBuilder->setDeliveryFee($data->getDeliveryFee());
 
             /**
              * If AJAX request, and because at this point the form data is processed, it returns Success (code 200)
              */
             if ($request->isXmlHttpRequest()) {
-//            if (true) {
                 return $this->redirectToRoute('site-checkout-step3-pickPayment');
-//                $html = "All good";
-//                return new Response($html, 200);
             }
-//            else {
-//                throw $this->createNotFoundException(
-//                    'DFR error: setDeliveryDate not allowed!'
-//                );
-//            }
         }
         /**
          * Renders form with errors
          * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
-         * (!?, there is a validation error)
          */
         if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
             $html = $this->renderView('webshop/cart/hiddenDeliveryDate-form.html.twig', [
@@ -458,7 +438,7 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart/setShipping/{id}", name="cart-setShipping") //, methods={"POST"}
+     * @Route("/cart/setShipping/{id}", name="cart-setShipping", methods={"POST"})
      */
     public function setShipping(Request $request, Shipping $shipping): Response
     {
@@ -472,17 +452,6 @@ class CartController extends AbstractController
                 'setShipping not allowed!'
             );
         }
-//        $html = "All good";
-//        return new Response($html,200);
-
-        // Ez volt az eredeti kod
-//        $form = $this->createForm(ShippingType::class, $orderBuilder->getCurrentOrder());
-//        $form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $this->orderBuilder->setShipping($form->getData()->getShipping());
-//            $this->addFlash('success', 'A szállítási mód sikeresen beállítva.');
-//        }
-//        return $this->redirectToRoute('site-cart');
     }
 
     /**
@@ -500,16 +469,6 @@ class CartController extends AbstractController
                 'setPayment not allowed!'
             );
         }
-//        $html = "All good";
-//        return new Response($html,200);
-
-//        $form = $this->createForm(PaymentType::class, $orderBuilder->getCurrentOrder());
-//        $form->handleRequest($request);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $this->orderBuilder->setPayment($form->getData()->getPayment());
-//            $this->addFlash('success', 'A fizetési mód sikeresen beállítva.');
-//        }
-//        return $this->redirectToRoute('site-cart');
     }
 
 
@@ -876,9 +835,9 @@ class CartController extends AbstractController
         $form = $this->createForm(MessageAndCustomerFormType::class, $messageAndCustomer); //,
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var MessageAndCustomer $data */
             $data = $form->getData();
-            $message = $data->getMessage();
-            $orderBuilder->setMessage($data->getMessage());
+            $orderBuilder->setMessage($data->getCard());
             $orderBuilder->setCustomerBasic($data->getCustomer());
                 /**
                  * If AJAX request, and because at this point the form data is processed, it redirects to Step2.
@@ -954,19 +913,36 @@ class CartController extends AbstractController
             );
         }
     }
+    
+    /**
+     * Used on the Checkout Step1 page to add a gift product as an Item to the Order.
+     *
+     * @Route("/cart/addGift/{id}", name="cart-addGift", methods={"POST"})
+     */
+    public function addGiftItem(Request $request, Product $product, $id = null)
+    {
+        $orderBuilder = $this->orderBuilder;
+        $orderBuilder->addItem($product, 1);
+        $showQuantity = true;
+        return $this->render('webshop/cart/cart-product-list.html.twig', [
+            'order' => $orderBuilder,
+            'showQuantity' => $showQuantity,
+        ]);
+    }
 
     /**
      * Removes an item from the cart. Used in JS.
      *
-     * @Route("/cart/removeItemFromCart/{id}", name="cart-removeItem")
+     * @Route("/cart/removeItemFromCart/{id}/{showQuantity}", name="cart-removeItem")
      */
-    public function removeItemFromCart(Request $request, OrderItem $item): Response
+    public function removeItemFromCart(Request $request, OrderItem $item, bool $showQuantity = false): Response
     {
         $orderBuilder = $this->orderBuilder;
         $orderBuilder->removeItem($item);
         if ($request->isXmlHttpRequest()) {
             return $this->render('webshop/cart/cart-product-list.html.twig', [
                 'order' => $orderBuilder,
+                'showQuantity' => $showQuantity,
             ]);
         }
         return $this->render('webshop/cart/cart-product-list.html.twig', [

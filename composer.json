@@ -6,6 +6,7 @@
         "ext-iconv": "*",
         "api-platform/api-pack": "^1.2",
         "giggsey/libphonenumber-for-php": "^8.10",
+        "lexik/jwt-authentication-bundle": "^2.6",
         "liip/imagine-bundle": "^2.1",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/asset": "^4.1",

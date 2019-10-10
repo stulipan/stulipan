@@ -81,7 +81,8 @@ class OrderAddress
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Geo\GeoCountry")  //, inversedBy="orderAddresses"
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Add meg az országot.")
+     * @ Assert\NotBlank(message="Add meg az országot.")
+     * @Assert\Valid()
      */
     private $country;
 
@@ -169,7 +170,7 @@ class OrderAddress
     /**
      * @return GeoCountry
      */
-    public function getCountry(): GeoCountry
+    public function getCountry(): ?GeoCountry
     {
         return $this->country;
     }

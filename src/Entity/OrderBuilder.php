@@ -6,7 +6,7 @@ namespace App\Entity;
 
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\Model\CustomerBasic;
-use App\Entity\Model\Message;
+use App\Entity\Model\CartCard;
 use Symfony\Component\Security\Core\Security;
 use App\Entity\User;
 use App\Entity\Order;
@@ -75,12 +75,13 @@ class OrderBuilder
     }
 
     /**
-     * @param User $customer    Add current user as Customer (to the current Order)
+     * @param User $customer    Add current user as Customer (to the current Order) + update email in order with email from Customer
      */
     public function setCustomer(User $customer): void
     {
         $orderBeforeId = $this->order->getId();
         $this->order->setCustomer($customer);
+        $this->order->setEmail($customer->getEmail());  // must update the email
 
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
@@ -93,25 +94,24 @@ class OrderBuilder
             $event = new GenericEvent($this->order);
             $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
         }
-
-//        // Run events
-//        $event = new GenericEvent($this->order);
-//        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
-
     }
 
     /**
-     * @param CustomerBasic $customer    Add a CustomerBasic to the current Order
+     * @param CustomerBasic $customerBasic    Add a CustomerBasic to the current Order
      */
-    public function setCustomerBasic(CustomerBasic $customer): void
+    public function setCustomerBasic(CustomerBasic $customerBasic): void
     {
         $orderBeforeId = $this->order->getId();
-
-        $this->order->setBillingName($customer->getLastname().' '.$customer->getFirstname());
-        $this->order->setBillingPhone($customer->getPhone());
-        $this->storage->add('email', $customer->getEmail());
-        $this->storage->add('firstname', $customer->getFirstname());
-        $this->storage->add('lastname', $customer->getLastname());
+        
+        $this->order->setEmail($customerBasic->getEmail());
+        $this->order->setFirstname($customerBasic->getFirstname());
+        $this->order->setLastname($customerBasic->getLastname());
+        
+        $this->order->setBillingName($customerBasic->getLastname().' '.$customerBasic->getFirstname());
+        $this->order->setBillingPhone($customerBasic->getPhone());
+        $this->storage->add('email', $customerBasic->getEmail());
+        $this->storage->add('firstname', $customerBasic->getFirstname());
+        $this->storage->add('lastname', $customerBasic->getLastname());
 
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
@@ -150,8 +150,17 @@ class OrderBuilder
          * Creates a new Order (with id!) if there's none in the session
          */
         $newOrder = new Order;
-
         return $newOrder;
+    }
+    
+    /**
+     * @param Order $order
+     */
+    public function setCurrentOrder(Order $order)
+    {
+        $this->storage->set($order->getId());
+        $this->order = $order;
+    
     }
 
     /**
@@ -287,6 +296,19 @@ class OrderBuilder
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
     }
+    
+    /**
+     * @param float $deliveryFee
+     */
+    public function setDeliveryFee(?float $deliveryFee) {
+        $this->order->setDeliveryFee($deliveryFee);
+    
+        // Run events
+        $event = new GenericEvent($this->order);
+        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+        $this->entityManager->persist($this->order);
+        $this->entityManager->flush();
+    }
 
     /**
      * @param Recipient $recipient
@@ -310,6 +332,28 @@ class OrderBuilder
         $event = new GenericEvent($this->order);
         $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
         $this->entityManager->persist($this->order);
+        $this->entityManager->flush();
+    }
+    
+    /**
+     * Remove Recipient from Order
+     */
+    public function removeRecipient(): void
+    {
+        $prevShippingAddress = $this->order->getShippingAddress();
+        $this->order->setRecipient(null);
+        $this->order->setShippingName(null);
+        $this->order->setShippingPhone(null);
+        $this->order->setShippingAddress(null);
+        
+        // Run events
+        $event = new GenericEvent($this->order);
+        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+        
+        $this->entityManager->persist($this->order);
+        if ($prevShippingAddress) {
+            $this->entityManager->remove($prevShippingAddress);
+        }
         $this->entityManager->flush();
     }
 
@@ -336,6 +380,30 @@ class OrderBuilder
         $event = new GenericEvent($this->order);
         $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
         $this->entityManager->persist($this->order);
+        $this->entityManager->flush();
+    }
+    
+    /**
+     * Remove Sender from Order
+     */
+    public function removeSender(): void
+    {
+        $prevBillingAddress = $this->order->getBillingAddress();
+        $this->order->setSender(null);
+        $this->order->setBillingName($this->storage->fetch('firstname').' '.$this->storage->fetch('lastname'));
+        $this->order->setBillingCompany(null);
+        $this->order->setBillingPhone($this->storage->fetch('phone'));
+        $this->order->setBillingAddress(null);
+        
+        // Run events
+        $event = new GenericEvent($this->order);
+        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+        
+        $this->entityManager->persist($this->order);
+        
+        if ($prevBillingAddress) {
+            $this->entityManager->remove($prevBillingAddress);
+        }
         $this->entityManager->flush();
     }
 
@@ -509,13 +577,32 @@ class OrderBuilder
     /**
      * Set message method
      *
-     * @param Message $message
+     * @param CartCard $card
      */
-    public function setMessage(?Message $message): void
+    public function setMessage(?CartCard $card): void
     {
         if ($this->order) {
-            $this->order->setMessage($message->getMessage());
-            $this->order->setMessageAuthor($message->getMessageAuthor());
+            if ($card) {
+                $this->order->setMessage($card->getMessage());
+                $this->order->setMessageAuthor($card->getAuthor());
+                // Run events
+                $event = new GenericEvent($this->order);
+                $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+                $this->entityManager->persist($this->order);
+                $this->entityManager->flush();
+            }
+        }
+    }
+    
+    /**
+     * Set order status
+     *
+     * @param OrderStatus $status
+     */
+    public function setStatus(OrderStatus $status): void
+    {
+        if ($this->order) {
+            $this->order->setStatus($status);
             // Run events
             $event = new GenericEvent($this->order);
             $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
@@ -647,21 +734,24 @@ class OrderBuilder
      */
     public function isDeliveryDateInPast(): bool
     {
-
         $date = $this->order->getDeliveryDate();
 //        dd((new \DateTime('now +'. GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours')));
 //        dd((new \DateTime('now +4 hours'))->diff($date)->format('%r%h'));
 //        dd((new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day')));
-
-        // A '+1 day' azert kell mert az adott datum 00:00 orajat veszi.
-        // Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
-        // Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
-        $diff = (new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
-        if ($diff->days >= 0 && $diff->invert == 0) {
-            return false;
-        } elseif ($diff->invert == 1) {
-            return true;
+    
+        if ($date) {
+            /** A '+1 day' azert kell mert az adott datum 00:00 orajat veszi.
+             * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
+             * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
+             */
+            $diff = (new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
+            if ($diff->days >= 0 && $diff->invert == 0) {
+                return false;
+            } elseif ($diff->invert == 1) {
+                return true;
+            }
         }
+        return true;
     }
 
     /**

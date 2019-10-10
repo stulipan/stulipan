@@ -23,8 +23,8 @@ class Address
 {
     use TimestampableTrait;
 
-    private const BILLING_ADDRESS = 1; // ha 1, akkor SZÁMLÁZÁSI cím
-    private const DELIVERY_ADDRESS = 2; // ha 2, akkor SZÁLLÍTÁSI cím
+    public const BILLING_ADDRESS = 1; // ha 1, akkor SZÁMLÁZÁSI cím
+    public const DELIVERY_ADDRESS = 2; // ha 2, akkor SZÁLLÍTÁSI cím
 
     /**
      * @var int
@@ -73,7 +73,8 @@ class Address
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Geo\GeoCountry")  //, inversedBy="addresses"
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Add meg az országot.")
+     * @ Assert\NotBlank(message="Add meg az országot.")
+     * @Assert\Valid()
      */
     private $country;
 

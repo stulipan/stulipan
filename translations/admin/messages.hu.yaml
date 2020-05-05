@@ -1,0 +1,148 @@
+order:
+    orders: Rendelések
+    order: 'Rendelés:'
+    order-id: 'Belső azonosító:'
+    delivery-date-overdue: 'Határidő túllépés!'
+    print: Nyomtatás
+    shipping-letter: Szállítólevél
+    order-status: 'Rendelés állapota'
+    more-actions: Műveletek
+    subtotal: Részösszeg
+    shipping: Szállítás
+    discount: Kedvezmény
+    total-amount-to-pay: Fizetendő
+    edit-sender: 'Feladó módosítása'
+    recipient: Címzett
+    edit-recipient: 'Címzett módosítása'
+    new-delivery-date: 'Új szállítási idő'
+    cart-products: Termékek
+    message: Üzenet
+    sender: Feladó
+    phone-number: 'Telefonszám:'
+    delivery-date: 'Szállítási idő'
+    time-of-delivery: 'Szállítási idő'
+    pick-delivery-date: 'Válaszd ki mikor szállítsuk ki!'
+    pick-delivery-interval: 'A kézbesítés az általad kért időpontban történik'
+    choose-time-frame: 'Válassz idősávot...'
+    free-delivery: 'Ingyenes szállítás'
+    choose-the-timeframe-when-the-recipient-will-available-at-delivery-address: 'Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.'
+    save-delivery-time: 'Szállítási időpont mentése'
+    payment: Fizetés
+    instructions-for-bank-transfer: 'Banki utaláshoz szükséges adatok'
+    payment-status: 'Fizetés állapota'
+    mark-as-paid: 'Jelöld meg fizetettként'
+    history:
+        history-timeline: Előzmények
+        order-id: 'Rendelés ID'
+        amount: Összeg
+        payment-method: 'Fizetési mód'
+    user-agent:
+        user-agent-details: null
+        see-more: null
+        ip-address: null
+        browser: null
+        platform: null
+        user-agent: null
+        browser-language: null
+    customer:
+        customer: Vásárló
+        view-profile: Részletek
+        email: Email
+        count-orders: '{{ count }} rendelés'
+        account-created-at: 'Regisztráció ideje'
+        no-account: 'Nem regisztrált'
+        last-order: 'Utolsó rendelés'
+    filter:
+        filters: 'Rendelések szűrése'
+        more-filters: 'Rendelések szűrése'
+        filter-by-date: 'Szűrés dátumra'
+        search: Keresés
+        search-button: OK
+        search-placeholder: Keresés...
+        search-result: 'Keresés:'
+        filter-by-order-status: 'Rendelés állapota'
+        choose-order-status: 'Rendelés státusza'
+        filter-by-payment-status: 'Fizetés állapota'
+        choose-payment-status: 'Fizetés állapota'
+dashboard:
+    dashboard: Kezelőpult
+    settings: Beállítások
+    welcome-message: 'Üdv a Stulipán admin oldalán! Csak csínnyán...!'
+    orders: Rendelések
+    customers: Vásárlók
+    products: Termékek
+    sales-last-day: 'Utolsó 24 óra eladásai'
+    sales-last-week: 'Utolsó 7 nap eladásai'
+    sales-last-month: 'Utolsó 30 nap eladásai'
+    details: Részletek
+    view-more: Részletek
+    order-count: '{{ count }} rendelés'
+    orders-count: '{{ count }} rendelés'
+    to-capture-payment: 'vár fizetésre'
+    to-fulfill: 'vár teljesítésre'
+    setup-your-store-general-settings: 'Állítsd be a webshopod működését: az online bolt neve és elérhetőségei, vállalkozás adatai, SEO, közösségi elérhetőségek, egyéb beállítások.'
+    edit-general-settings: 'A webshop beállítások szerkesztése'
+    your-store-and-company-details: 'Az online bolt és a vállalkozás'
+    edit-store-details: 'Adatok módosítása'
+settings:
+    settings: Beállítások
+    dashboard:
+        general-settings-title: 'Webshop beállítások'
+        general-settings-description: 'Webáruház adatainak megtekintése és frissítése'
+        translation-title: 'Webshop nyelvek'
+        translation-description: 'Kezelje azokat a nyelveket, amelyeket ügyfelei megnézhetnek az üzletében'
+    translation:
+        translation-title: Fordítás
+        translation-is-missing: '{{ count }} fordítás hiányzik.'
+        translations-are-missing: '{{ count }} fordítás hiányzik.'
+        interface: 'Felület:'
+        store-texts: Webáruház
+        admin-texts: Admin
+    general-settings:
+        store-name: 'Bolt neve'
+        store-url: 'Webshop URL'
+        customer-support: Ügyfélszolgálat
+        business-name: 'Vállalkozás neve'
+        business-address: 'Vállalkozás címe'
+customer:
+    customer: Vásárló
+    customers: Vásárlók
+    new-customer: 'Új vásárló'
+    all-customers: 'Összes vásárló'
+    search: Keresés
+    search-button: Keres
+    search-placeholder: Keresés...
+    search-result: 'Keresés:'
+    choose-status: Állapot
+    filter:
+        all-customers: 'Összes vásárló'
+        active-customers: Aktív
+        custom-filter: 'Egyedi keresés'
+        not-found: 'Nem talált vásárlókat!'
+        not-found-suggestion: 'Próbáld módosítani a szűrőket vagy a keresési kifejezést.'
+    send-account-invite: null
+    previous-orders: 'Előző rendelések'
+    view-profile: 'Vásárlói részletek'
+    orders: Rendelések
+    spent-total: 'Össz költés'
+    average-cart-value: 'Átlag kosár'
+    order-count: '{{ count }} rendelés'
+    orders-count: '{{ count }} rendelés'
+generic:
+    not-available: nincs
+    prev: Előző
+    next: Következő
+    edit: Szerkesztés
+    modify: Módosít
+    preview: Előnézet
+    save: Mentés
+    save-changes: 'Módosítások mentése'
+    cancel: Mégse
+    close: Bezár
+    more-actions: Műveletek
+    ok: OK
+    apply: Alkalmaz
+    delete: Töröl
+    search-button: Keres
+    search-title: Keresés
+    search-placeholder: Keresés...

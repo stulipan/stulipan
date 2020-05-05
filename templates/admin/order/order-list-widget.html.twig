@@ -6,7 +6,7 @@
                             <div class="">
                                 {#<span class="badge badge-number badge-primary text-sm">#{{ order.id }}</span>#}
                                 <a href="{{ path('order-detail', {'id': order.id}) }}" class="font-weight-bold">#{{ order.number }}</a>
-                                - <em><strong>{{ order.priceTotalAfterDiscount ? order.priceTotalAfterDiscount : 23980|number_format(0, ',', ' ') }} Ft</strong></em>
+                                - <em><strong>{{ order.priceTotalAfterDiscount ? order.priceTotalAfterDiscount : 23980|money }}</strong></em>
                             </div>
                             <div class="">
                                 <a href="#" class="">Módosít</a>
@@ -89,14 +89,14 @@
                                             <div class="rowX">
                                                 <div class="text-nowrapX">
                                                     <div class="d-flex">
-                                                        <a class="mr-1" href="{{ path('site-product-show', {'id': item.product.id}) }}" target="_blank">
+                                                        <a class="mr-1" href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
                                                             <img class="img-thumbnail rounded-circleX" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" width="50px;" />
                                                         </a>
                                                         <div class="text-sm mb-1">
-                                                            {#Ár: {{ item.price|number_format(0, ',', ' ') }} Ft, #}
+                                                            {#Ár: {{ item.price|money }}, #}
                                                             <span class="text-muted">Menny.:</span> <em>{{ item.quantity }} db </em><br>
-                                                            <span class="text-muted">Összesen:</span> <em>{{ item.priceTotal|number_format(0, ',', ' ') }} Ft </em><br>
-                                                            <a href="{{ path('site-product-show', {'id': item.product.id}) }}" class="text-uppercaseX text-dark text-md"><strong>{{ item.product.productName }}</strong> <em><span class="badge badge-danger">{{ item.subproductAttribute ? '' ~ item.subproductAttribute : ''  }}</span></em></a><br>
+                                                            <span class="text-muted">Összesen:</span> <em>{{ item.priceTotal|money }} </em><br>
+                                                            <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="text-uppercaseX text-dark text-md"><strong>{{ item.product.productName }}</strong> <em><span class="badge badge-danger">{{ item.subproductAttribute ? '' ~ item.subproductAttribute : ''  }}</span></em></a><br>
                                                         </div>
                                                     </div>
                                                 </div>

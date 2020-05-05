@@ -1,4 +1,8 @@
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore');
+
+if (!Encore.isRuntimeEnvironmentConfigured()) {
+    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+}
 
 Encore
     // the project directory where compiled assets will be stored
@@ -11,18 +15,27 @@ Encore
     // .addEntry('stulipan_react', './assets/js/my_react_app.js')
     // .addEntry('invoice', './assets/js/invoice-app.js')
     .addEntry('v-admin', './assets/vue/admin/v-admin.js')
+    .addEntry('ProductEdit', './assets/vue/admin/product/ProductEdit.js')
+    .addEntry('CmsImageUpload', './assets/vue/admin/_components/CmsImageUpload.js')
+
+
     .addEntry('v-shop', './assets/vue/shop/v-shop.js')
+
+    // .addStyleEntry('v-bootstrap', './assets/css/bootstrap/bootstrap.scss')
+
+    .addEntry('v-boostrap-js', './assets/js/sidebar.js')
+    .addStyleEntry('v-bootstrap', './assets/css/admin-theme.scss')
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
 
     // the following line enables hashed filenames (e.g. app.abc123.css)
-    // .enableVersioning(Encore.isProduction())
+    .enableVersioning(Encore.isProduction())
 
     // .enableReactPreset()
 
     // uncomment to define the assets of the project
     //.addEntry('js/app', './assets/js/app.js')
-    //.addStyleEntry('css/app', './assets/css/app.scss')
+    // .addStyleEntry('css/app', './assets/css/app.scss')
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
@@ -31,10 +44,10 @@ Encore
     .enableVueLoader()
 
     // uncomment if you use Sass/SCSS files
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment for legacy applications that require $/jQuery as a global variable
-    //.autoProvidejQuery()
+    // .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

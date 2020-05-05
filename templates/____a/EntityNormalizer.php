@@ -40,7 +40,7 @@ class EntityNormalizer extends ObjectNormalizer
     /**
      * @inheritDoc
      */
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         return $this->em->find($class, $data);
     }

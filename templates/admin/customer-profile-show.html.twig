@@ -1,155 +1,109 @@
-{% extends 'admin/base_admin.html.twig' %}
+{% extends 'admin/template-with-sidebar.html.twig' %}
 
+{% set pageTitle = user.fullname %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+    1: {
+        'url': path('customer-list'),
+        'text': 'customer.customers'|trans,
+    }
+} %}
+
+{% if order.isClosed is defined and order.isClosed == false %}
+    {% set isEditEnabled = true %}
+{% else %}
+    {% set isEditEnabled = false %}
+{% endif %}
 
 {% block title %}
-	{{ title }}
+    {{ pageTitle }}
 {% endblock %}
 
-
-{% block stylesheets %}
-    {{ parent() }}
+{% block headerMoreActions %}
+    <div class="mt-2">
+        <a class="btn-link-secondary mr-3" href="#"><i class="far fa-envelope"></i>{{ 'customer.send-account-invite'|trans }}</a>
+    </div>
 {% endblock %}
 
-
-{% block page_content %}
-		
-	{% block LISTA %}
-
-		<!-- page title -->
-        {#{{ include('/admin/_title_widget.html.twig') }}#}
-        <div class="row mt-3 mb-2">
-            <div class="col-lg-12">
-                <div class="page-title h3 d-inline mr-md-2 mr-1">{{ user.fullname }}</div>
-                <div class="d-inline float-rightX">
-                    {#<a href="{{ path('delivery-date-type-edit') }}" class="btn btn-outline-info mb-2"><i class="fas fa-plus-circle mr-2"></i>Új rendelés</a>#}
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card tilebox-one mb-20px">
+                <div class="card-body">
+                    <div class="float-right text-muted">
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                    <span class="h6 quickinfo-title">{{ 'customer.orders'|trans }}</span>
+                    <span class="h5 quickinfo-highlight">{{ user.ordersPlaced ? user.ordersPlaced.count : user.ordersPlaced.count }} </span>
+                    <span class="text-sm font-weight-normal">&nbsp;</span>
                 </div>
             </div>
         </div>
 
-        {{ include('/admin/_alert_widget.html.twig') }}
-
-		<!-- header of default page content widget -->
-        {#{{ include('/admin/_header_of_default_page_content.html.twig') }}#}
-
-
-        <div class="row row-5">
-            <div class="col-md-9 col-15">
-
-                <div class="row">
-                    <div class="col-xl-4 col-lg-6 col-6">
-                        <div class="card tilebox-one mb-2 mb-lg-3">
-                            <div class="card-body">
-                                <div class="float-right text-muted">
-                                    <i class="fas fa-shopping-basket"></i>
-                                </div>
-                                <h6 class="text-muted font-weight-normal mt-0">Rendelések</h6>
-                                <h5 class="my-0">{{ orders ? orders.count : orders.count }} <span class=""> db</span></h5>
-                                <span class="text-sm font-weight-normal">&nbsp;</span>
-                            </div>
-                        </div>
+        <div class="col-md-6">
+            <div class="card tilebox-one mb-20px">
+                <div class="card-body">
+                    <div class="float-right text-muted">
+                        <i class="fas fa-dollar-sign"></i>
                     </div>
-
-                    <div class="col-xl-4 col-lg-6 col-6">
-                        <div class="card tilebox-one mb-2 mb-lg-3">
-                            <div class="card-body">
-                                <div class="float-right text-muted">
-                                    <i class="fas fa-dollar-sign"></i>
-                                </div>
-                                <h6 class="text-muted font-weight-normal mt-0">Össz költés</h6>
-                                <h5 class="my-0">{{ totalRevenue is defined and totalRevenue ? totalRevenue|number_format(0, ',', ' ') : '0' }} Ft</h5>
-                                <div class="text-muted">Átlag kosár:&nbsp;{{ totalRevenue is defined and totalRevenue ? (totalRevenue/orders.count)|number_format(0, ',', ' ') : '' }} Ft</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4 col-lg-6 col-6">
-                        <div class="card tilebox-one mb-2 mb-lg-3">
-                            <div class="card-body">
-                                <div class="float-right text-muted">
-                                    <i class="fas fa-dollar-sign"></i>
-                                </div>
-                                <h6 class="text-muted font-weight-normal mt-0">Product Sold</h6>
-                                <h5 class="text-grayX my-0">1,890 <span class=""> db</span></h5>
-                                <span class="text-sm font-weight-normal">&nbsp;</span>
-                            </div>
-                        </div>
-                    </div>
-
+                    <span class="h6 quickinfo-title">{{ 'customer.spent-total'|trans }}</span>
+                    <span class="h5 quickinfo-highlight">{{ totalRevenue|money }} </span>
+                    <div class="text-muted">{{ 'customer.average-cart-value'|trans }}:&nbsp;{{ user.ordersPlaced.count != 0 ? (totalRevenue/user.ordersPlaced.count)|money : 0|money }}</div>
                 </div>
-
-                {#<div class="card mb-20px">#}
-                    {#<div class="card-body">#}
-                        {#<h4 class="header-title mb-3">Eddigi rendelései</h4>#}
-                        {#{{ include('admin/order/order-list-widget.html.twig') }}#}
-                    {#</div>#}
-                {#</div>#}
-
-                <div class="card mb-20px">
-                    <div class="card-body">
-                        <h4 class="header-title mb-3">Előző rendelések</h4>
-
-                        <div class="table-responsive">
-                            <table class="table table-hover table-centered mb-0">
-                                <thead>
-                                <tr>
-                                    <th>Rendelés</th>
-                                    <th>Dátum</th>
-                                    <th>Címzett</th>
-                                    <th>Termékek</th>
-                                    <th>Összesen</th>
-                                    <th>Állapot</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% if orders is defined and orders is not empty %}
-                                {% for order in orders %}
-                                    <tr>
-                                        <td><a href="{{ path('order-detail', {'id': order.id}) }}" class="font-weight-boldX">#{{ order.number|number_format(0, '', '') }}</a></td>
-                                        <td class="text-nowrap">{{ order.createdAt|date('Y-m-d')}}</td>
-
-                                        <td>{{ order.shippingName ? order.shippingName : '' }}</td>
-                                        <td>
-                                            {% for item in order.items %}
-                                                <a class="mr-1" href="{{ path('site-product-show', {'id': item.product.id}) }}" target="_blank">
-                                                    <img class="img-thumbnail rounded-circleX" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" width="30px;" />
-                                                </a>
-                                            {% endfor %}
-                                        </td>
-                                        <td class="text-nowrap text-right">{{ order.summary.totalAmountToPay|number_format(0, ',', '.') }} Ft</td>
-                                        <td><span class="badge badge-sm badge-{{ order.status.css }}">{{ order.status }}</span></td>
-                                    </tr>
-                                {% endfor %}
-                                {% endif %}
-                                </tbody>
-                            </table>
-                        </div> <!-- end table responsive-->
-                    </div> <!-- end col-->
-                </div> <!-- end row-->
-
-            </div>
-
-            <div class="col-md-3 col-15 orderDetail--sidebar">
-                {% include 'admin/customer-card.html.twig' with {'customer': user} %}
-
-
             </div>
         </div>
 
+    </div>
+    <div class="card mb-20px">
+        <div class="card-body">
+            <span class="h5 admin-card-title mb-3">{{ 'customer.previous-orders'|trans }}</span>
 
+            <div class="table-responsive">
+                <table class="table table-hover table-centered mb-0">
+                    <thead>
+                    <tr>
+                        <th>Rendelés</th>
+                        <th>Dátum</th>
+                        <th>Címzett</th>
+                        <th>Termékek</th>
+                        <th>Összesen</th>
+                        <th>Állapot</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if user.ordersPlaced is defined and user.ordersPlaced.isEmpty == false %}
+                        {% for order in user.ordersPlaced %}
+                            <tr>
+                                <td><a href="{{ path('order-detail', {'id': order.id}) }}" class="font-weight-boldX">#{{ order.number|number_format(0, '', '') }}</a></td>
+                                <td class="text-nowrap">{{ order.createdAt|date('Y-m-d')}}</td>
 
-        <!-- footer of default page content widget -->
-        {#{{ include('/admin/_footer_of_default_page_content.html.twig') }}#}
-
-	{% endblock %}
+                                <td class="text-nowrap">{{ order.shippingName ? order.shippingName : '' }}</td>
+                                <td>
+                                    {% for item in order.items %}
+                                        <a class="mr-1" href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
+                                            <img class="img-thumbnail mb-1" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" width="30px;" />
+                                        </a>
+                                    {% endfor %}
+                                </td>
+                                <td class="text-nowrap text-right">{{ order.summary.totalAmountToPay|number_format(0, ',', '.') }} Ft</td>
+                                <td><span class="badge badge-sm badge-{{ order.status.css }}">{{ order.status }}</span></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
-
-
-
-
-{% block javascripts %}
-    {{ parent() }}
-
+{% block sidebar %}
+    <div class="card card-sidebar mb-20px">
+        <div class="card-body card-sidebar">
+            {% include 'admin/customer-card.html.twig' with {'customer': user} %}
+        </div>
+    </div>
 {% endblock %}
-        
-

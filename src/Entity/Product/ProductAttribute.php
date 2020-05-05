@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity\Product;
-use ApiPlatform\Core\Annotation\ApiResource;
+//use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
+ * (
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put", "delete"},
  *     normalizationContext={"groups"={"productView"}}
@@ -47,7 +47,7 @@ class ProductAttribute //implements \JsonSerializable
      * @var ProductKind
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Product\ProductKind", inversedBy="attributes")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="kind_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Assert\NotBlank(message="Add meg a terméktípust amihez tartozik ez a tulajdonságérték!")
      */
     private $kind;

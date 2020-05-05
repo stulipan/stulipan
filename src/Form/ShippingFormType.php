@@ -20,12 +20,14 @@ class ShippingFormType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Megnevezés',
+                'required' => false,
                 'attr' => [
                     'placeholder' => '',
                 ]
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Leírás',
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'Szállítási mód leírása ide...',
                     'rows' => '3'
@@ -33,6 +35,7 @@ class ShippingFormType extends AbstractType
             ])
             ->add('price', NumberType::class, [
                 'label' => 'Szállítási díj',
+                'required' => false,
                 'attr' => [
                     'placeholder' => '',
                     'min' => 0,
@@ -40,6 +43,7 @@ class ShippingFormType extends AbstractType
             ])
             ->add('ordering', NumberType::class, [
                 'label' => "Sorrend",
+                'required' => false,
                 'attr' => [
                     'placeholder' => '',
                     'min' => 0,
@@ -47,6 +51,7 @@ class ShippingFormType extends AbstractType
             ])
             ->add('enabled', CheckboxType::class, [
                 'label' => 'Engedélyezve',
+                'required' => false,
 //                'choices' => [
 //                    'Igen' => 1,
 //                    'Nem' => 0,

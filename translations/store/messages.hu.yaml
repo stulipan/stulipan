@@ -1,0 +1,135 @@
+datetime:
+    january: Január
+    february: Február
+    march: Március
+    april: Április
+    mayy: Május
+    june: Június
+    july: Július
+    august: Augusztus
+    september: Szeptember
+    october: Október
+    november: November
+    december: December
+    jan: Jan
+    feb: Feb
+    mar: Már
+    apr: Ápr
+    may: Máj
+    jun: Jún
+    jul: Júl
+    aug: Aug
+    sep: Szep
+    oct: Okt
+    nov: Nov
+    dec: Dec
+    monday: Hétfő
+    tuesday: Kedd
+    wednesday: Szerda
+    thursday: Csütörtök
+    friday: Péntek
+    saturday: Szombat
+    sunday: Vasárnap
+    mon: Hé
+    tue: Ke
+    wed: Sze
+    thu: Csü
+    fri: Pé
+    sat: Szo
+    sun: Va
+    lifetime: 'Teljes élettartam'
+    today: Ma
+    yesterday: Tegnap
+    last-7-days: 'Utolsó 7 nap'
+    last-30-days: 'Utolsó 30 nap'
+    this-month: 'Aktuális hónap'
+    previous-month: 'Előző hónap'
+    custom-range: 'Egyedi időszak'
+    date-range: Időintervallumok
+    this-year: 'Aktuális év'
+    previous-year: 'Előző év'
+    timeAgo:
+        second: másodperce
+        seconds: másodperce
+        minute: perce
+        minutes: perce
+        hour: órája
+        hours: órája
+        day: napja
+        days: napja
+        month: hónapja
+        months: hónapja
+        year: éve
+        years: éve
+        and: és
+        prefix: null
+        postfix: null
+currency:
+    short: Ft
+    code: HUF
+generic:
+    not-available: 'nincs @````~""'''''
+    prev: Előző
+    next: Kővetkező
+    save: Mentés
+    save-changes: 'Módosítások mentése'
+    cancel: Mégse
+    edit: Szerkesztés
+    modify: Módosít
+    close: Bezár
+admin:
+    datetime:
+        january: Január
+        february: Február
+        march: Március
+        april: Április
+        mayy: Május
+        june: Június
+        july: Július
+        august: Augusztus
+        september: Szeptember
+        october: Október
+        november: November
+        december: December
+        jan: Jan
+        feb: Feb
+        mar: Már
+        apr: Ápr
+        may: Máj
+        jun: Jún
+        jul: Júl
+        aug: Aug
+        sep: Szep
+        oct: Okt
+        nov: Nov
+        dec: Dec
+        monday: Hétfő
+        tuesday: Kedd
+        wednesday: Szerda
+        thursday: Csütörtök
+        friday: Péntek
+        saturday: Szombat
+        sunday: Vasárnap
+        mon: Hé
+        tue: Ke
+        wed: Sze
+        thu: Csü
+        fri: Pé
+        sat: Szo
+        sun: Va
+        timeAgo:
+            second: másodperce
+            seconds: másodperce
+            minute: perce
+            minutes: perce
+            hour: órája
+            hours: órája
+            day: napja
+            days: napja
+            month: hónapja
+            months: hónapja
+            year: éve
+            years: éve
+            and: és
+            prefix: null
+            postfix: null

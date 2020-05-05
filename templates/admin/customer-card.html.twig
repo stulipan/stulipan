@@ -1,36 +1,71 @@
 
                 {#<div>#}
-                    <h4 class="mt-0 mb-3 d-inline-block">{{ 'admin.customer.Customer'|trans }}</h4>
+                    <span class="h5 mt-0 mb-3 admin-card-title">{{ 'order.customer.customer'|trans }}</span>
                     <div class="d-inline-block float-right">
-                        <a href="{{ path('customer-show', {'id': customer.id}) }}">
-                            {{ 'admin.customer.View profile'|trans }}
-                        </a>
+                        {% if customer is defined and customer is not null %}
+                            <a href="{{ path('customer-show', {'id': customer.id}) }}">
+                                {{ 'order.customer.view-profile'|trans }}
+                            </a>
+                        {% endif %}
                     </div>
                 {#</div>#}
                 <div class="text-left">
                     <p class="mb-0">
-                        {% if customer is defined and customer %}
+                        {% if customer is defined and customer is not null %}
                             <a href="{{ path('customer-show', {'id': customer.id}) }}">
                                 {{  customer.fullname }}
                             </a>
+                        {% elseif order.billingName is defined and order.billingName is not null %}
+                            {{ order.billingName }}
                         {% else %}
-                            {{ include('admin/_notAvailable-insert.html.twig') }}
+                            {% include 'admin/_notAvailable-insert.html.twig' %}
                         {% endif %}
                     </p>
-                    {% if customer is defined and customer %}
-                        <p>
-                            {{ 'admin.customer.%count% orders'|trans({'%count%': customer.realOrders.count}) }}
+                    {% if customer is defined and customer is not null %}
+                        <p class="mb-0">
+                            {{ 'order.customer.count-orders'|trans({'{{ count }}': customer.ordersPlaced.count}) }}
                         </p>
                     {% endif %}
 
 
-                    <p class="mb-0">
-                        <strong>{{ 'admin.customer.Email'|trans }}</strong>
-                        <span class="ml-2">
-                            {% if customer.email is defined and customer.email %}
+                    <p class="mt-3">
+                        <span>{{ 'order.customer.email'|trans }}</span><br>
+                        <span class="text-muted">
+                            {% if customer.email is defined and customer.email is not null %}
                                 {{  customer.email }}
-                            {% else %} {{ include('admin/_notAvailable-insert.html.twig') }}
+                                {% if customer.isVerifiedEmail is defined and customer.isVerifiedEmail == true %}
+                                    <i class="far fa-check-circle text-success"></i>
+                                {% else %}
+                                    <i class="far fa-times-circle"></i>
+                                {% endif %}
+                            {% elseif order.email is defined and order.email is not null %}
+                                {{  order.email }}
+                            {% else %}
+                                {% include 'admin/_notAvailable-insert.html.twig' %}
                             {% endif %}
                         </span>
                     </p>
+
+                    <p class="">
+                        <span>{{ 'order.customer.account-created-at'|trans }}</span><br>
+                        <span class="text-muted">
+                            {% if customer.createdAt is defined and customer.createdAt is not null %}
+                                {{  customer.createdAt|date('Y-m-d') }}
+                            {% else %}
+                                {{ 'order.customer.no-account'|trans }}
+                            {% endif %}
+                        </span>
+                    </p>
+
+                    {% if customer is defined and customer is not null %}
+                    <p class="">
+                        <span>{{ 'order.customer.last-order'|trans }}</span><br>
+                        <span class="text-muted">
+{#                            {{ dump(customer.ordersPlaced.isEmpty) }}#}
+                            {% if customer.ordersPlaced.isEmpty == false  %}
+                                {{  customer.ordersPlaced.first.createdAt|date('Y-m-d') }}
+                            {% endif %}
+                        </span>
+                    </p>
+                    {% endif %}
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Serializable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity("email", message="Az email címet elgépelted, vagy már regisztráltál vele!")
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, Serializable
 {
     use TimestampableTrait;
 
@@ -51,6 +52,28 @@ class User implements UserInterface, \Serializable
      * @Assert\Email(message="Ellenőrizd, hogy helyesen írtad be az email címet!")
      */
     private $email;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
+     * @ Assert\NotBlank(message="Add meg a telefonszámot.")
+     */
+    private $phone;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="verified_email", type="smallint", length=1, nullable=false, options={"default"="0"})
+     */
+    private $verifiedEmail = 0;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="accepts_marketing", type="smallint", length=1, nullable=false, options={"default"="0"})
+     */
+    private $acceptsMarketing = 0;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -113,6 +136,7 @@ class User implements UserInterface, \Serializable
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="customer", orphanRemoval=true)  //, cascade={"persist"}
      * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
+     * @ORM\OrderBy({"id" = "DESC"})
      * @ Assert\NotBlank(message="Egy felhasználónak több rendelése lehet.")
      */
     private $orders = [];
@@ -222,6 +246,54 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string|null $phone
+     */
+    public function setPhone(?string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVerifiedEmail(): bool
+    {
+        return 1 !== $this->verifiedEmail ? false : true;
+    }
+
+    /**
+     * @param bool $verifiedEmail
+     */
+    public function setVerifiedEmail(bool $verifiedEmail): void
+    {
+        $this->verifiedEmail = $verifiedEmail;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAcceptsMarketing(): bool
+    {
+        return 1 !== $this->acceptsMarketing ? false : true;
+    }
+
+    /**
+     * @param bool $acceptsMarketing
+     */
+    public function setAcceptsMarketing(bool $acceptsMarketing): void
+    {
+        $this->acceptsMarketing = $acceptsMarketing;
+    }
+
+    /**
      * @return string
      */
     public function getFirstname(): ?string
@@ -259,6 +331,9 @@ class User implements UserInterface, \Serializable
      */
     public function getFullname(): ?string
     {
+        if (!$this->firstname && !$this->lastname) {
+            return null;
+        }
         $fullname = $this->firstname.' '.$this->lastname;
         return $fullname;
     }
@@ -412,8 +487,9 @@ class User implements UserInterface, \Serializable
     
     /**
      * @return Order[]|Collection
+     *
      */
-    public function getRealOrders(): Collection
+    public function getOrdersPlaced(): Collection
     {
         $realOrders = new ArrayCollection();
         foreach ($this->orders as $order) {
@@ -421,9 +497,29 @@ class User implements UserInterface, \Serializable
                 $realOrders->add($order);
             }
         }
+
+//        if ($realOrders->isEmpty()) {
+//            return null;
+//        }
         return $realOrders;
     }
-    
+
+    /**
+     * @return Order[]|Collection
+     */
+    public function getLastOrder()
+    {
+        return $this->getOrdersPlaced()->first();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOrder(Order $order)
+    {
+        return $this->orders->contains($order);
+    }
+
     /**
      * @return int
      */
@@ -444,5 +540,17 @@ class User implements UserInterface, \Serializable
             }
         }
         return $realOrders->count();
+    }
+
+    /**
+     * @return float
+     */
+    public function getSpentAmount(): float
+    {
+        $spent = 0;
+        foreach ($this->getOrdersPlaced() as $o => $order) {
+            $spent += $order->getSummary()->getTotalAmountToPay();
+        }
+        return (float) $spent;
     }
 }

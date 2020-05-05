@@ -1,0 +1,36 @@
+{# admin/base_admin.html.twig #}
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block page_content %}
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="row mt-3 mb-4">
+{#                <div class="col-lg-12 mb-3">#}
+{#                    <i class="fas fa-angle-left btn-link-secondary"></i> <a href="{{ path('dashboard') }}" class="btn-link-secondary">{{ 'Dashboard'|trans }}</a>#}
+{#                </div>#}
+                <div class="col-lg-12">
+                    <div class="page-title h1 d-inline mr-md-2 mr-1">{{ 'settings.settings'|trans }}</div>
+                </div>
+            </div>
+            <div class="row row-5">
+                <div class="col-lg-12">
+                    <div class="card mb-20px">
+                        <div class="card-wrapper">
+                            <div class="card-body">
+                                {% include '/admin/settings/_settings-dashboard-widget.html.twig' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

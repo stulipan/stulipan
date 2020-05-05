@@ -1,0 +1,111 @@
+# Localization file for EN language.
+
+# This file is loaded into the Translation page in admin. The English file is the base
+# for all future translations, meaning all new resources must be put here and they will be
+# shown automatically in the Translation page.
+
+
+# Level 0 is used to separate Admin resources from Site resources.
+# Their names are fixed and MUST NOT be changed!
+# There are only two resources: 'admin', 'site'
+
+
+# Level 1 is the category or admin module. It is used in URLs: /admin/translation/{category}
+# Examples:
+#           'order'
+#           'generic'
+
+# Level 2 is the subcategory and is used to group certain resources within a category.
+# Examples:
+#           order > 'history'
+#           order > 'customer'
+#           etc
+
+
+datetime:
+    january: January
+    february: February
+    march: March
+    april: April
+    mayy: May
+    june: June
+    july: July
+    august: August
+    september: September
+    october: October
+    november: November
+    december: December
+
+    jan: Jan
+    feb: Feb
+    mar: Mar
+    apr: Apr
+    may: May
+    jun: Jun
+    jul: Jul
+    aug: Aug
+    sep: Sep
+    oct: Oct
+    nov: Nov
+    dec: Dec
+
+    monday: Monday
+    tuesday: Tuesday
+    wednesday: Wednesday
+    thursday: Thursday
+    friday: Friday
+    saturday: Saturday
+    sunday: Sunday
+
+
+    mon: Mon
+    tue: Tue
+    wed: Wed
+    thu: Thu
+    fri: Fri
+    sat: Sat
+    sun: Sun
+
+    lifetime: Lifetime
+    today: Today
+    yesterday: Yesterday
+    last-7-days: 'Last 7 days'
+    last-30-days: Last 30 days
+    this-month: This month
+    previous-month: Previous month
+    custom-range: Custom
+    date-range: Date range
+    this-year: This year
+    previous-year: Previous year
+
+    timeAgo:
+        second: second
+        seconds: seconds
+        minute: minute
+        minutes: minutes
+        hour: hour
+        hours: hours
+        day: day
+        days: days
+        month: month
+        months: months
+        year: year
+        years: years
+        and: and
+        prefix: ''
+        postfix: ago
+
+currency:
+    short: Ft
+    code: HUF
+
+generic:
+    not-available: n/a
+    prev: Previous
+    next: Next
+    save: Save
+    save-changes: Save changes
+    cancel: Cancel
+    edit: Edit
+    modify: Modify
+    close: Close

@@ -24,16 +24,16 @@ class PriceDenormalizer implements DenormalizerInterface, DenormalizerAwareInter
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         if (isset($data['id'])) {
             $object = $this->em->find(Price::class, $data['id']);
-            if (isset($data['value'])) {
-                $object->setValue($data['value']);
+            if (isset($data['numericValue'])) {
+                $object->setNumericValue($data['numericValue']);
             }
         } else {
             $object = new Price();
-            $object->setValue($data['value']);
+            $object->setNumericValue($data['numericValue']);
         }
         return $object;
     }

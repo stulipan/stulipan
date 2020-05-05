@@ -29,7 +29,6 @@ class VatValueFormType extends AbstractType
                 'class' => VatRate::class,
                 'label' => 'ÁFA típusa',
                 'placeholder' => 'Válassz...',
-                'attr' => ['class' => 'custom-select'],
             ])
             ->add('expiresAt', DateType::class, [
                 'label' => 'Lejár ekkor',

@@ -1,0 +1,41 @@
+{% extends 'webshop/site/template-account.html.twig' %}
+
+{% set pageTitle = 'Rendeléseim' %}
+{% set breadcrumb = {
+    0: {
+        'url': path('homepage'),
+        'text': 'Home',
+    },
+    1: {
+        'url': path('site-user-myAccount'),
+        'text': 'Fiókom',
+    },
+    2: {
+        'url': path('site-user-myOrders'),
+        'text': 'Rendeléseim',
+    },
+} %}
+
+{% block content %}
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-header">
+                <span class="h4 myaccount-card-title">Előző rendeléseid</span>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% if orders is defined and orders is not empty %}
+                        {% for order in orders %}
+                            {% include('webshop/site/user-myOrders-list-widget.html.twig') %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="pagerfanta">
+                    {% if paginator is defined and paginator is not empty %}
+                        {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

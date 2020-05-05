@@ -131,12 +131,12 @@ class GeoPriceApiController extends BaseController
                 $city = $this->getDoctrine()->getRepository(GeoPlace::class)->find($c['id']);
                 $geoPrice = $this->getDoctrine()->getRepository(GeoPrice::class)->findOneBy(['city' => $city->getId()]);
                 if ($geoPrice) {
-                    $geoPrice->getPrice()->setValue($priceValue);
+                    $geoPrice->getPrice()->setNumericValue($priceValue);
                 } else {
                     $geoPrice = new GeoPrice();
                     $geoPrice->setCity($city);
                     $price = new Price();
-                    $price->setValue($priceValue);
+                    $price->setNumericValue($priceValue);
                     $price->setVatRate($this->vatRate);
                     
                     $geoPrice->setPrice($price);

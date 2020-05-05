@@ -20,7 +20,7 @@
                                         {% if shippingMethods[loop.index0].price == 0 %}
                                             <span class="badge badge-success pt-1 px-2">INGYENES</span>
                                         {% else %}
-                                            {{ shippingMethods[loop.index0].price|number_format(0, ',', ' ') }} Ft
+                                            {{ shippingMethods[loop.index0].price|money }}
                                         {% endif %}
                                     </span>
 
@@ -28,7 +28,7 @@
                                 <div class="text-sm shippingMethod--description-muted mb-0 pl-4 pt-1">{{ shippingMethods[loop.index0].description|raw }}</div>
                             </div>
                             {#<div class="col-sm-4 text-right mt-3 mt-sm-0">#}
-                                {#<span class="price--shipping">{{ shippingMethods[loop.index0].price|number_format(0, ',', ' ') }} Ft</span>#}
+                                {#<span class="price--shipping">{{ shippingMethods[loop.index0].price|money }}</span>#}
                             {#</div>#}
                         </div>
                         <div class="JS--loadingOverlay d-flex align-items-stretch loading-lg"></div>

@@ -1,10 +1,15 @@
 <template>
     <div>
-        <content-loader v-if="isDataLoading"
-                        :speed="2"
-                        :animate="true"
-                        :height="30"
-        ></content-loader>
+        <div v-if="isDataLoading" class="d-flex justify-content-center w-100 h-100" style="z-index: 15000; opacity: 1;">
+            <div class="d-flex justify-content-center h-100 mt-5 align-items-center">
+                <div>
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-2">Tartalom betöltése...</div>
+                </div>
+            </div>
+        </div>
         <div v-else name="left_column" class="pt-3">
                 <div class="row">
                     <div class="col-lg-12">
@@ -43,7 +48,6 @@
 </template>
 
 <script>
-    import { ContentLoader } from 'vue-content-loader'
     import { required, minLength, alpha, email } from 'vuelidate/lib/validators'
     import Items from './Items.vue'
     import Gifts from './Gifts.vue'
@@ -91,10 +95,10 @@
 
     export default {
         components: {
-            ContentLoader,
             Items,
             Gifts,
             MessageForm,
+            Circle2
         },
         props: [
             'orderId',

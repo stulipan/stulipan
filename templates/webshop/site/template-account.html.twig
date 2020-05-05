@@ -1,0 +1,79 @@
+{% extends 'webshop/site/base-site.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('webshop/site/checkout.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block page_content %}
+
+    {% block modal %}
+    {% endblock %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-xl-10 mx-auto">
+                {% block header %}
+                    <div class="row">
+                        <div class="col-lg-12 mb-3 mb-md-0">
+                            <div class="d-none d-md-block">
+                                <ul class="breadcrumb undefined">
+                                    {% if breadcrumb is defined and breadcrumb is not empty %}
+                                        {% for item in breadcrumb %}
+                                            <li class="breadcrumb-item"><a href="{{ item.url }}">{{ item.text }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endblock %}
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        {% block sidebar %}
+                            <div class="card mb-20px">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <a href="{{ path('site-user-myAccount') }}" class="text-dark">
+                                            <svg class="svg-icon svg-icon-heavy">
+                                                <use xlink:href="#male-user-1"> </use>
+                                            </svg>
+                                            Fiókom
+                                        </a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="{{ path('site-user-myOrders') }}" class="text-dark">
+                                            <svg class="svg-icon svg-icon-heavy"><use xlink:href="#retail-bag-2"></use></svg>
+                                            Rendeléseim
+                                        </a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="{{ path('site-user-myDetails') }}" class="text-dark">
+                                            <i class="fas fa-clipboard-list"></i>
+                                            Adataim
+                                        </a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="{{ path('site-user-myAccount') }}" class="text-dark">
+                                            <i class="fa fa-sign-in-alt"></i>
+                                            Jelszó módosítás
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endblock %}
+                    </div>
+                    <div class="col-md-8 mb-4">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footerServices %}
+{% endblock %}

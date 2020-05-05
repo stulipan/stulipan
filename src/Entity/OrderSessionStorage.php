@@ -45,7 +45,7 @@ class OrderSessionStorage
     public function getOrderById(): ?Order
     {
         if ($this->has()) {
-            return $this->entityManager->getRepository(Order::class)->findOneById($this->get());
+            return $this->entityManager->getRepository(Order::class)->find($this->get());
         }
         return null;
     }

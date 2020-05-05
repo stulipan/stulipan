@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entity\ImageEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use ErrorException;
 use Symfony\Component\Asset\Context\RequestStackContext;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -19,10 +20,12 @@ class FileUploader
     const IMAGES_FOLDER = '/uploads/images';
     const CATEGORY_FOLDER = 'categories';
     const PRODUCT_FOLDER = 'products';
+    const PAGES_FOLDER = 'pages';
     const OTHER_FOLDER = 'other';
     
     const IMAGE_OF_CATEGORY_TYPE = '1';
     const IMAGE_OF_PRODUCT_TYPE = '2';
+    const IMAGE_OF_PAGE_TYPE = '3';
     const IMAGE_OF_OTHER_TYPE = '0';
 
     private $targetDirectory;
@@ -77,7 +80,7 @@ class FileUploader
         if ($existingFilename) {
             try {
                 unlink($destination.'/'.$existingFilename);
-            } catch (\ErrorException $e) {
+            } catch (ErrorException $e) {
                 throw new \Symfony\Component\Filesystem\Exception\FileNotFoundException();
             }
             $this->em->remove($existingImage);

@@ -1,0 +1,92 @@
+{{ form_start(form, { 'attr': {'class': ' ' }}) }}
+
+    <div class="form-group row">
+        <div class="col-sm-12 col-md-2">
+            {{ form_label(form.name, form.name, { 'label_attr': {'class': 'col-form-label' }}) }}
+        </div>
+        <div class="col-sm-12 col-md-10">
+            {{ form_widget(form.name) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-12 col-md-2 text-sm-righttt">
+            {{ form_label(form.parent, form.parent, { 'label_attr': {'class': 'col-form-label' }}) }}
+        </div>
+        <div class="col-sm-12 col-md-8 col-lg-6">
+            {{ form_widget(form.parent) }}
+            {{ form_errors(form.parent) }}
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-12 col-md-2">
+            {#{{ form_label(form.enabled) }}#}
+            <label class="form-control-label">Engedélyezve</label>
+        </div>
+        <div class="col-sm-8 col-md-10 ">
+            <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="info">
+            <label class="form-check-label required" for="{{ form.enabled.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+
+            {#{{ form_widget(form.enabled) }}#}
+            {{ form_errors(form.enabled) }}
+            {% do form.enabled.setRendered() %}
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-12 col-md-2">
+            {{ form_label(form.slug, form.slug, { 'label_attr': {'class': 'col-form-label' }}) }}
+        </div>
+        <div class="col-sm-8 col-md-10 ">
+            {{ form_widget(form.slug) }}
+            {{ form_errors(form.slug) }}
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-12">
+            {{ form_label(form.content, form.content, { 'label_attr': {'class': 'col-form-label' }}) }}
+            {{ form_widget(form.content, {'attr': {'class': 'JS--cmsPageContent'}}) }}
+            {{ form_errors(form.content) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-12">
+            <div class="col-form-label">Kép</div>
+{#            <div class="custom-file">#}
+{#                {{ form_widget(form.imageFile) }}#}
+{#                {{ form_label(form.imageFile, form.imageFile, { 'label_attr': {'class': '' }}) }}#}
+{#            </div>#}
+{#            {{ form_errors(form.imageFile) }}#}
+
+            {{ form_widget(form.imageId, { 'attr': {'class': 'V--imageId' }}) }}
+            {{ form_errors(form.imageId) }}
+            <div id="v--imageUpload" class="d-flex justify-content-center align-items-center" style="border-radius: 6px; background-color: #f4f4f5; height:100px; width: 100%;">
+                <div class="spinner-border text-light" role="status"></div>
+            </div>
+
+
+{#            <div class="w-100 mt-2">#}
+{#                {% if form.vars.data.image|default %}#}
+{#                    <div class="d-flexX w-100 img-thumbnail" style="background: url('{{ uploaded_asset(form.vars.data.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; height: 200px;"></div>#}
+{#                {% endif %}#}
+{#            </div>#}
+        </div>
+    </div>
+
+
+    {# Render CSRF token etc .#}
+    <div style="display:none">
+        {{ form_rest(form) }}
+    </div>
+
+    <div class="form-group row mb-0 mt-4">
+        <div class="col-sm-12">
+            <input type="submit" value="Mentés" class="btn btn-lgg btn-primary mr-1" formnovalidate>
+            <a href="{{ cancelUrl }}" class="btn btn-secondary">Mégse</a>
+        </div>
+    </div>
+
+
+{{ form_end(form) }}

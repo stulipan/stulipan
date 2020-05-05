@@ -24,7 +24,7 @@
                                             </div>
                                             <div class="py-2 text-center">
                                                 <p class="productList--name mb-1"><a href="#" class="text-dark">{{ gift.name }}</a></p>
-                                                <span class="productList--price-gross">{{ gift.price.value }} Ft</span>
+                                                <span class="productList--price-gross">{{ gift.price.numericValue }} Ft</span>
                                             </div>
                                             <div class="text-center">
                                                 <a href="#" class="btn btn-sm btn-outline-secondary" title="Kiválaszt">
@@ -47,7 +47,7 @@
     const initialData = () => {
         return {
         }
-    }
+    };
 
     export default {
         props: [

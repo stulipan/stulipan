@@ -67,7 +67,6 @@ class AddressType extends AbstractType
             'class' => GeoCountry::class,
             'label' => 'Ország',
             'placeholder' => 'Válassz országot...',
-            'attr' => ['class' => 'custom-select'],
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('c')
                     ->orderBy('c.name', 'ASC');

@@ -2,6 +2,10 @@ index:
     path: /
     controller: App\Controller\Shop\ShopController::index
 
+admin:
+    path: /admin
+    controller: App\Controller\Admin\AdminController::showAdmin
+
 logout:
     path: /logout
 

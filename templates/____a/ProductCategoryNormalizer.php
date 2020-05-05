@@ -43,7 +43,7 @@ class ProductCategoryNormalizer extends Denormalizer
      * @inheritDoc
      * @return ProductCategory
      */
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         $category = new ProductCategory();
         $category->setId($data->id);
@@ -104,7 +104,7 @@ class ProductCategoryNormalizer extends Denormalizer
 //    /**
 //     * @inheritDoc
 //     */
-//    public function denormalize($data, $class, $format = null, array $context = [])
+//    public function denormalize($data, string $type, string $format = null, array $context = [])
 //    {
 //        dd($data->getName());
 //        return $data->getName();

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+//use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Product\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ *
  *
  * @ORM\Table(name="price")
  * @ORM\Entity()
@@ -54,11 +54,11 @@ class Price //implements \JsonSerializable
      * @Assert\NotBlank()
      * @Assert\Range(min=0.0001, minMessage="Az összeg nem lehet nulla vagy negatív.")
      */
-    private $value;
+    private $numericValue = 0;
 
     /**
      * @var VatRate
-     * @Groups({"productView"})
+     * @ Groups({""})
      *
      * @ORM\OneToOne(targetEntity="App\Entity\VatRate")
      * @ORM\JoinColumn(name="vat_rate_id", referencedColumnName="id")
@@ -73,7 +73,7 @@ class Price //implements \JsonSerializable
     {
         return [
             'id'        => $this->getId(),
-            'value'     => $this->getValue(),
+            'value'     => $this->getNumericValue(),
             'vatRate'   => $this->getVatRate(),
         ];
     }
@@ -114,7 +114,7 @@ class Price //implements \JsonSerializable
      */
     public function getGrossPrice(): ?float
     {
-        return (float) $this->value;
+        return (float) $this->numericValue;
     }
 
     /**
@@ -122,23 +122,23 @@ class Price //implements \JsonSerializable
      */
     public function setGrossPrice(?float $grossPrice)
     {
-        $this->value = $grossPrice;
+        $this->numericValue = $grossPrice;
     }
-    
+
     /**
      * @return float
      */
-    public function getValue(): ?float
+    public function getNumericValue(): ?float
     {
-        return (float) $this->value;
+        return (float) $this->numericValue;
     }
     
     /**
      * @param float $value
      */
-    public function setValue(?float $value)
+    public function setNumericValue(?float $value)
     {
-        $this->value = $value;
+        $this->numericValue = $value;
     }
 
     /**

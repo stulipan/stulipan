@@ -8,6 +8,7 @@ use App\Entity\DeliveryDateType;
 use App\Entity\DeliverySpecialDate;
 use App\Form\DeliveryDateTypeFormType;
 use App\Form\DeliverySpecialDateFormType;
+use DateTime;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -67,7 +68,7 @@ class DeliveryDateController extends AbstractController
 
         return $this->render('admin/delivery-date-type-list.html.twig', [
             'items' => $types,
-            'title' => 'Szállítási idősávok',
+            'title' => 'Idősávok',
             'paginator' => $pagerfanta,
             'total' => $pagerfanta->getNbResults(),
             'count' => count($types),
@@ -108,13 +109,13 @@ class DeliveryDateController extends AbstractController
                 $dateType->addInterval($interval);
             }
             $form = $this->createForm(DeliveryDateTypeFormType::class, $dateType);
-            $title = 'Idősávok módosítása';
+            $title = 'Idősávok szerkesztése';
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $dateType = $form->getData();
-            $dateType->setUpdatedAt(new \DateTime('NOW'));
-            $dateType->setCreatedAt(new \DateTime('NOW'));
+            $dateType->setUpdatedAt(new DateTime('NOW'));
+            $dateType->setCreatedAt(new DateTime('NOW'));
 
             foreach ($dateType->getIntervals() as $i => $interval) {
                 if (!$interval->getName() && !$interval->getPrice()) {
@@ -141,7 +142,7 @@ class DeliveryDateController extends AbstractController
     }
 
     /**
-     * @Route("/delivery/specialdate/{page}", name="delivery-special-date-list", requirements={"page"="\d+"})
+     * @Route("/delivery/occasion/{page}", name="occasion-list", requirements={"page"="\d+"})
      */
     public function listSpecialDatesWithPagination($page = 1)
     {
@@ -177,9 +178,9 @@ class DeliveryDateController extends AbstractController
 
 //        $paginatedCollection = new PaginatedCollection($items, $pagerfanta->getNbResults());
 
-        return $this->render('admin/delivery-special-date-list.html.twig', [
+        return $this->render('admin/occasion-list.html.twig', [
             'items' => $dates,
-            'title' => 'Kiemelt szállítási napok',
+            'title' => 'Kiemelt napok',
             'paginator' => $pagerfanta,
             'total' => $pagerfanta->getNbResults(),
             'count' => count($dates),
@@ -187,7 +188,7 @@ class DeliveryDateController extends AbstractController
     }
 
     /**
-     * @Route("/delivery/specialdate/edit/{id}", name="delivery-special-date-edit")
+     * @Route("/delivery/occasion/edit/{id}", name="occasion-edit")
      */
     public function editSpecialDate(Request $request, ?DeliverySpecialDate $specialDate, $id = null)
     {
@@ -198,19 +199,19 @@ class DeliveryDateController extends AbstractController
             $specialDate = new DeliverySpecialDate();
 
             $form = $this->createForm(DeliverySpecialDateFormType::class, $specialDate);
-            $title = 'Új szállítási nap';
+            $title = 'Új kiemelt nap';
         } else {
             /**
              * edit existing
              */
             $form = $this->createForm(DeliverySpecialDateFormType::class, $specialDate);
-            $title = 'Szállítási nap módosítása';
+            $title = 'Kiemelt nap';
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $specialDate = $form->getData();
-            $specialDate->setUpdatedAt(new \DateTime('NOW'));
-            $specialDate->setCreatedAt(new \DateTime('NOW'));
+            $specialDate->setUpdatedAt(new DateTime('NOW'));
+            $specialDate->setCreatedAt(new DateTime('NOW'));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($specialDate);
@@ -218,10 +219,10 @@ class DeliveryDateController extends AbstractController
 
             $this->addFlash('success', 'Dátum sikeresen elmentve!');
 
-//            return $this->redirectToRoute('delivery-special-date-list');
+//            return $this->redirectToRoute('occasion-list');
         }
 
-        return $this->render('admin/delivery-special-date-edit.html.twig', [
+        return $this->render('admin/occasion-edit.html.twig', [
             'form' => $form->createView(),
             'title' => $title,
         ]);

@@ -2,19 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+//use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Imagine\Gd\Image;
+use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ *
  * @ORM\Entity
  * @ORM\Table(name="image")
  */
 
-class ImageEntity implements \JsonSerializable
+class ImageEntity implements JsonSerializable
 {
     /**
      * @var int

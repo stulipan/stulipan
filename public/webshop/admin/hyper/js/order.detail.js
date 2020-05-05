@@ -72,6 +72,9 @@ var Order = {
     submitStatusForm: function (options) {
         return new OrderDetail(options,'submitStatusForm');
     },
+    submitPaymentStatusForm: function (options) {
+        return new OrderDetail(options,'submitPaymentStatusForm');
+    },
 };
 
 (function(window, $) {
@@ -84,11 +87,13 @@ var Order = {
     window.OrderDetail = function (wrapper) {
         this.$wrapper = wrapper;
 
-        // this.$wrapper.on('submit','.JS--editForm-recipient', this.submitShippingInfoForm.bind(this));
-        this.$wrapper.on('click','.JS--editForm-submitRecipient', this.submitShippingInfoForm.bind(this));
-        this.$wrapper.on('click','.JS--editForm-submitSender', this.submitBillingInfoForm.bind(this));
-        this.$wrapper.on('click','.JS--Button-submitDeliveryDate', this.submitDeliveryDate.bind(this));
-        this.$wrapper.on('click','.JS--editForm-submitStatus', this.submitStatusForm.bind(this));
+        // this.$wrapper.on('submit','.JS--btn-recipient', this.submitShippingInfoForm.bind(this));
+        this.$wrapper.on('click','.JS--btn-submitRecipient', this.submitShippingInfoForm.bind(this));
+        this.$wrapper.on('click','.JS--btn-submitSender', this.submitBillingInfoForm.bind(this));
+        this.$wrapper.on('click','.JS--btn-submitDeliveryDate', this.submitDeliveryDate.bind(this));
+        this.$wrapper.on('click','.JS--btn-submitStatus', this.submitStatusForm.bind(this));
+        this.$wrapper.on('click','.JS--btn-submitPaymentStatus', this.submitPaymentStatusForm.bind(this));
+        this.$wrapper.on('click','.JS--btn-submitComment', this.submitCommentForm.bind(this));
 
     };
 
@@ -285,6 +290,91 @@ var Order = {
                     $wrapper.closest('.modal').modal('hide');
                     window.location.reload(true);
 
+                    proceed = false;
+
+                    $element.removeClass('text-success-faded');
+                    $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                    $element.prop('disabled', false);
+                },
+                error: function(jqXHR) {
+                    $form.replaceWith(jqXHR.responseText);
+                    $element.removeClass('text-success-faded');
+                    $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                    $element.prop('disabled', false);
+                    proceed = false;
+                }
+            });
+        },
+        submitPaymentStatusForm: function(event) {
+            if (proceed) {
+                proceed = false;
+                return;
+            }
+            event.preventDefault();
+            let $element = $(event.currentTarget);
+            $element.addClass('text-success-faded');
+            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            proceed = true;
+            $element.trigger('click');
+            $element.prop('disabled', true);
+
+            let $wrapper = $element.closest('.JS--paymentStatusWrapper');
+            let $form = $wrapper.find('.JS--paymentStatusForm');
+
+            $.ajax({
+                url: $form.attr('action'),
+                method: 'POST',
+                data: $form.serialize(),
+                success: function(data) {
+
+                    // $form.after(data);
+                    $wrapper.closest('.modal').modal('hide');
+                    window.location.reload(true);
+
+                    proceed = false;
+
+                    $element.removeClass('text-success-faded');
+                    $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                    $element.prop('disabled', false);
+                },
+                error: function(jqXHR) {
+                    $form.replaceWith(jqXHR.responseText);
+                    $element.removeClass('text-success-faded');
+                    $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                    $element.prop('disabled', false);
+                    proceed = false;
+                }
+            });
+        },
+        submitCommentForm: function(event) {
+            if (proceed) {
+                proceed = false;
+                return;
+            }
+            event.preventDefault();
+            let $element = $(event.currentTarget);
+            let $form = $element.closest('.JS--commentWrapper').find('.JS--form');
+            $element.addClass('text-success-faded');
+            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            proceed = true;
+            // $element.trigger('click');
+            // $form.trigger('submit');
+            $element.prop('disabled', true);
+
+            // let $wrapper = $element.closest('.JS--recipientWrapper');
+            let $contentBlock = $form.closest('.JS--commentContentBlock');
+            let $url = $form.attr('action');
+            console.log('form action url:' + $url);
+            // alert('form action url:' + $url);
+
+            $.ajax({
+                url: $form.attr('action'),
+                method: 'POST',
+                data: $form.serialize(),
+                success: function(data) {
+                    // $contentBlock.html(data);
+
+                    window.location.reload(true);
                     proceed = false;
 
                     $element.removeClass('text-success-faded');

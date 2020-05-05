@@ -1,77 +1,32 @@
-{% extends 'admin/base_admin.html.twig' %}
+{% extends 'admin/template-editing.html.twig' %}
+{#{% extends 'admin/template-with-sidebar.html.twig' %}#}
 
-{% block title %}
-	{{ title }}
+{% set pageTitle = title %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+    1: {
+        'url': path('product-list'),
+        'text': 'Termékek',
+    }
+} %}
+{% set cancelUrl = path('product-list') %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('ProductEdit') }}
 {% endblock %}
 
-{% block page_content %}
-
-	<!-- page title -->
-    {{ include('/admin/_title_widget.html.twig') }}
-
-	<!-- header of default page content widget -->
-    {{ include('/admin/_header_of_default_page_content.html.twig') }}
-
-    <div id="v--product">
+{% block content %}
+    <div id="v--product" class="mb-6">
         <product :product-id="{{ product is defined ? product.id : 0}}">
         </product>
     </div>
-
-    <div class="row mb-2">
-        <div class="col-lg-12">
-        </div>
-    </div>
-
-    {#{{ include('/admin/product/_form.html.twig') }}#}
-
-	<!-- footer of default page content widget -->
-    {{ include('/admin/_footer_of_default_page_content.html.twig') }}
-
 {% endblock %}
 
 {% block javascripts %}
-	{{ parent() }}
-    <script>
-        // Used for showing the selected filename in the File input field
-        $('.custom-file-input').on('change', function(event) {
-            var inputFile = event.currentTarget;
-            $(inputFile).parent()
-                .find('.custom-file-label')
-                .html(inputFile.files[0].name);
-        });
-    </script>
-    <script>
-        var $option1 = $('#product_form_kind_0');  // When 'Több méretű csokor' gets selected...
-        var $option2 = $('#product_form_kind_1');
-        $option1.click(function() {
-            var $form = $(this).closest('form'); // ...retrieve the corresponding form.
-            console.log($form);
-            // Simulate form data, but only include the selected Kind value.
-            var data = {};
-            console.log($form.attr('action'));
-            data[$option1.attr('name')] = $option1.val();
-            // Submit data via AJAX to the form's action path.
-            $.ajax({
-                url : $form.attr('action'),
-                type: $form.attr('method'),
-//                data: $form.serialize(),
-                data: data,
-                success: function(html) {
-                    console.log('true');
-                    console.dir($(html).find('.JS--Wrapper-subproductsPriceFields'));
-
-                    $('.JS--Wrapper-subproductsPriceFields').replaceWith($(html).find('.JS--Wrapper-subproductsPriceFields')); // Replace current form with the new one which now has the extra field: 'subproducts'
-                },
-                error: function (err) {
-                    alert("Hiba történt... [JS]");
-                }
-            });
-        });
-        $option2.click(function() {
-            var $form = $(this).closest('form'); // ...retrieve the corresponding form.
-            $('.JS--Wrapper-subproductsPriceFields').empty();
-        });
-
-    </script>
+    {{ parent() }}
+    {{ encore_entry_script_tags('ProductEdit') }}
 {% endblock %}
-

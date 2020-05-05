@@ -3,23 +3,23 @@
                         {% for product in products %}
 
                             {% if product.isEnabled or product.isUnavailable %}
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-6 col-narrowX">
+                            <div class="col-lg-3 col-md-4 col-6 col-narrowX">
                                 <div class="product">
                                     <div class="product-image">
                                         {% set bestseller = false %}
                                         {% if product.isUnavailable() %}
-                                            <div class="ribbon-bottom ribbon-dark">MIND ELKELT</div>
+                                            <div class="ribbon ribbon-dark">MIND ELKELT</div>
                                         {% elseif product.hasBadges %}
                                             {% for badge in product.badges %}
                                                 {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                    <div class="ribbon-bottom ribbon-{{ badge.css }}">{{ badge }}</div>
+                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
                                                 {% else %}
                                                     {% set bestseller = true %}
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}
                                         <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_image') }}" alt="{{ product.name }}" class="img-fluid">
-                                        <a href="{{ path('site-product-show', {'id': product.id}) }}" class="tile-link product-hover-overlay-link">
+                                        <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link product-hover-overlay-link">
                                         </a>
                                         {% if bestseller %}
                                             <div class="card-img-overlay d-flex align-items-end p-0">
@@ -41,8 +41,8 @@
                                     </div>
                                     <div class="py-2 text-center">
                                         {#<p class="text-muted text-sm mb-1">{{ product.category }}</p>#}
-                                        <p class="productList--name mb-1"><a href="{{ path('site-product-show', {'id': product.id}) }}" class="text-dark">{{ product.name }}</a></p>
-                                        <span class="productList--price-gross">{{ product.price.grossPrice|number_format(0, ',', ' ')  }} Ft</span>
+                                        <p class="productList--name mb-1"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-dark">{{ product.name }}</a></p>
+                                        <span class="productList--price-gross">{{ product.price.grossPrice|money }}</span>
                                     </div>
 
                                 </div>

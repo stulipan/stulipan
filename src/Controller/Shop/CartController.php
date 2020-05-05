@@ -4,6 +4,7 @@ namespace App\Controller\Shop;
 
 use App\Entity\Address;
 use App\Entity\CardCategory;
+use App\Entity\ClientDetails;
 use App\Entity\Model\DeliveryDate;
 use App\Entity\DeliveryDateType;
 use App\Entity\DeliverySpecialDate;
@@ -355,7 +356,7 @@ class CartController extends AbstractController
         }
         $paymentMethod = $orderBuilder->getCurrentOrder()->getPayment()->isBankTransfer() ? true : false;
 
-        return $this->render('webshop/site/checkout_thankyou.html.twig',[
+        return $this->render('webshop/cart/checkout-step4-thankyou.html.twig',[
             'title' => 'Sikeres rendelés!',
             'order' => $orderBuilder,
             'progressBar' => 'thankyou',
@@ -897,7 +898,7 @@ class CartController extends AbstractController
     public function addItem(Request $request, Product $product): Response
     {
         $orderBuilder = $this->orderBuilder;
-        $form = $this->createForm(CartAddItemType::class, $product, ['subproducts' => $product->getSubproducts()]);
+        $form = $this->createForm(CartAddItemType::class, $product);
         $form->handleRequest($request);
 
 //        dd($form);
@@ -905,6 +906,10 @@ class CartController extends AbstractController
             $orderBuilder->addItem($product, $form->get('quantity')->getData());
             $deliveryDate = $form->get('deliveryDate')->get('deliveryDate')->getData();
             $orderBuilder->setDeliveryDate($deliveryDate ? $deliveryDate : null, null);
+
+
+            $clientDetails = new ClientDetails($request->getClientIp(), $request->headers->get('user-agent'), $request->headers->get('accept-language'));
+            $orderBuilder->setClientDetails($clientDetails);
 
             return $this->redirectToRoute('site-checkout-step1-pickExtraGift');
         } else {
@@ -924,7 +929,7 @@ class CartController extends AbstractController
         $orderBuilder = $this->orderBuilder;
         $orderBuilder->addItem($product, 1);
         $showQuantity = true;
-        return $this->render('webshop/cart/cart-product-list.html.twig', [
+        return $this->render('webshop/cart/_cart-items-withSummary-widget.html.twig', [
             'order' => $orderBuilder,
             'showQuantity' => $showQuantity,
         ]);
@@ -940,12 +945,12 @@ class CartController extends AbstractController
         $orderBuilder = $this->orderBuilder;
         $orderBuilder->removeItem($item);
         if ($request->isXmlHttpRequest()) {
-            return $this->render('webshop/cart/cart-product-list.html.twig', [
+            return $this->render('webshop/cart/_cart-items-withSummary-widget.html.twig', [
                 'order' => $orderBuilder,
                 'showQuantity' => $showQuantity,
             ]);
         }
-        return $this->render('webshop/cart/cart-product-list.html.twig', [
+        return $this->render('webshop/cart/_cart-items-withSummary-widget.html.twig', [
             'order' => $orderBuilder,
         ]);
     }
@@ -958,7 +963,7 @@ class CartController extends AbstractController
     public function setItemQuantityForm(OrderItem $item): Response
     {
         $form = $this->createForm(SetItemQuantityType::class, $item);
-        return $this->render('webshop/site/_setItemQuantity_form.html.twig', [
+        return $this->render('webshop/cart/_setItemQuantity_form.html.twig', [
             'quantityForm' => $form->createView()
         ]);
     }
@@ -979,7 +984,7 @@ class CartController extends AbstractController
              */
             if ($request->isXmlHttpRequest()) {
 
-                return $this->render('webshop/site/_setItemQuantity_form.html.twig', [
+                return $this->render('webshop/cart/_setItemQuantity_form.html.twig', [
                     'quantityForm' => $form->createView(),
                 ]);
             }
@@ -1202,7 +1207,7 @@ class CartController extends AbstractController
      */
     public function addItemForm(Product $product): Response
     {
-        $form = $this->createForm(CartAddItemType::class, $product, ['subproducts' => $product->getSubproducts()]);
+        $form = $this->createForm(CartAddItemType::class, $product);
 
         return $this->render('webshop/site/_addItem_form.html.twig', [
             'form' => $form->createView()

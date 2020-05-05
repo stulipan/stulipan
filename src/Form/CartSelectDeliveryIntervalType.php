@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 
 class CartSelectDeliveryIntervalType extends AbstractType
@@ -27,7 +28,7 @@ class CartSelectDeliveryIntervalType extends AbstractType
      */
     private $intervalTransformer;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em, \Twig_Environment $twig,
+    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em, Environment $twig,
                                 DeliveryIntervalToStringTransformer $intervalTransformer)
     {
         $this->urlGenerator = $urlGenerator;

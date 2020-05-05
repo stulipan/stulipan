@@ -1,0 +1,81 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set pageTitle = title %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+} %}
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block headerTopright %}
+	<a href="{{ path('cms-page-new') }}" class="btn btn-outline-primary mb-2"><i class="fas fa-plus-circle"></i>Új oldal</a>
+{% endblock %}
+
+{% block tableHeader %}
+	<tr>
+		<th scope="col">Név</th>
+		<th scope="col">Slug</th>
+		<th scope="col">Aktív</th>
+		<th scope="col">Szülő</th>
+		<th scope="col">Kép</th>
+		<th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+	</tr>
+{% endblock %}
+
+{% block tableBody %}
+	{% if items is defined %}
+		{% for page in items %}
+			<tr>
+				<td class="align-middle entryX">
+					<a href="{{ path('cms-page-edit', {'id': page.id}) }}" class="">
+						{{ page.name }}
+					</a>
+				</td>
+				<td class="align-middle entryX">
+					{{ page.slug }}
+				</td>
+				<td class="align-middle">
+					{% if page.enabled is defined and page.enabled == true %}
+						<span class="badge badge-success">&nbsp;</span>
+					{% else %}
+						<span class="badge badge-secondary">&nbsp;</span>
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					{% if page.parent is defined and page.parent is not null %}
+						{{ page.parent }}
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					{% if page.image|default %}
+						<div class="d-flexX w-100X img-thumbnail" style="background: url('{{ uploaded_asset(page.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
+					{% else %}
+						<span class="text-muted">{{ 'generic.Not available'|trans }}</span>
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					<div class="w-100">
+						{#                            <a href="{{ path('product-edit', {'id': product.id}) }}" class="btn btn-sm btn-secondary" title="Módosít">#}
+						<i class="far fa-edit"></i>
+						{#							</a>#}
+						{#                            <a href="{{ path('site-product-show', {'id': product.id}) }}" class="btn btn-sm btn-secondary" target="_blank" title="Megtekinti a weboldalon">#}
+						{#                                <i class="fas fa-external-link-alt"></i>#}
+						{#							</a>#}
+						{#                            <a href="{{ path('product-delete', {'id': product.id}) }}" onclick="alert('Biztosan törölni akarod?')" class="btn btn-sm btn-secondary" title="Töröl">#}
+						{#                                <i class="far fa-trash-alt"></i>#}
+						{#							</a>#}
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+	{% else %}
+		<tr>
+			<td><li><em>Nem talált CMS oldalakat!</em></li></td>
+		</tr>
+	{% endif %}
+{% endblock %}

@@ -10,7 +10,7 @@
                     <div class="form-row">
                         {% for choice in form.category %}
                             <div class="col-md-4">
-                            {{ include('admin/choiceItem.html.twig') }}
+                            {{ include('admin/visualPicker.html.twig') }}
                             </div>
                         {% endfor %}
                         {% do form.category.setRendered() %}

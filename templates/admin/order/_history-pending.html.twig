@@ -1,0 +1,18 @@
+<strong>{{ 'order.history.order-id'|trans }}</strong><br>
+<span>#{{ order.number }}</span><br>
+<strong>{{ 'order.history.amount'|trans }}</strong><br>
+<span>
+    {%- if order.summary.totalAmountToPay is defined and order.summary.totalAmountToPay is not null -%}
+        {{  order.summary.totalAmountToPay|money }}
+    {%- else -%}
+        -
+    {%- endif -%}
+</span><br>
+<strong>{{ 'order.history.payment-method'|trans }}</strong><br>
+<span>
+    {%- if order.payment is defined and order.payment is not null -%}
+        {{  order.payment }}
+    {%- else -%}
+        -
+    {%- endif -%}
+</span>

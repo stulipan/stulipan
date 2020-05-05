@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Product;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+//use ApiPlatform\Core\Annotation\ApiResource;
+
 use App\Entity\Product\ProductCategory;
 use App\Entity\Price;
 use App\Entity\TimestampableTrait;
@@ -13,24 +13,27 @@ use App\Services\FileUploader;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
+ * @ ApiResource(
  * )
  *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * @UniqueEntity("sku", message="Ez az SKU kód már használatban!")
+ * @UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
  */
 class Product //implements \JsonSerializable
 {
-    const ENABLED = 1;
-    const UNAVAILABLE = 2;
-    const REMOVED = 3;
+    // Ezeket mar nem hasznalom
+    const STATUS_ENABLED = 1;
+    const STATUS_UNAVAILABLE = 2;
+    const STATUS_REMOVED = 3;
     
     use TimestampableTrait;
 
@@ -54,6 +57,14 @@ class Product //implements \JsonSerializable
      * @ORM\Column(name="product_name", type="string", length=100, nullable=true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slug", type="string", length=255, nullable=false, unique=true)
+     * @Assert\NotBlank(message="A slug nem lehet üres. Pl: ez-egy-termek")
+     */
+    private $slug;
     
     /**
      * @var string|null
@@ -69,7 +80,7 @@ class Product //implements \JsonSerializable
      *     "orderView"})
      *
      * @Assert\NotBlank(message="Nem adtál meg SKU-t.")
-     * @ORM\Column(name="sku", type="string", length=20, nullable=false)
+     * @ORM\Column(name="sku", type="string", length=100, nullable=false)
      */
     private $sku;
 
@@ -102,7 +113,7 @@ class Product //implements \JsonSerializable
 //    private $image;
     
     /**
-     * @ApiSubresource()
+     * ()
      *
      * @var ProductImage[]|ArrayCollection|null
      * @Groups({"productView", "productList",
@@ -113,6 +124,7 @@ class Product //implements \JsonSerializable
      *
      * @ORM\OneToMany(targetEntity="ProductImage", mappedBy="product", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="id", referencedColumnName="product_id", nullable=false)
+     * @ORM\OrderBy({"ordering": "ASC"})
      * @ Assert\NotBlank(message="Egy terméknek legalább egy kép szükséges.")
      */
     private $images;
@@ -128,20 +140,6 @@ class Product //implements \JsonSerializable
      */
     private $stock;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_discontinued", type="boolean", nullable=false, )
-     */
-    private $isDiscontinued = '0';
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_unlimited", type="boolean", nullable=false, options={"default":0})
-     */
-    private $isUnlimited=0;
-    
     /**
      * @var int|null
      *
@@ -164,6 +162,14 @@ class Product //implements \JsonSerializable
     private $cog;
 
     /**
+     * @var bool
+     * @Groups({"productView", "productList"})
+     *
+     * @ORM\Column(name="is_flower", type="boolean", nullable=false, options={"default"=false})
+     */
+    private $flower = 0;
+
+    /**
      * @var ProductStatus
      * @Groups({"productView", "productList"})
      *
@@ -181,7 +187,7 @@ class Product //implements \JsonSerializable
 //    private $categoryId;
  
     /**
-     * @ApiSubresource()
+     * ()
      *
      * @var ProductCategory[]|ArrayCollection|null
      * @Groups({"productView"})
@@ -197,7 +203,7 @@ class Product //implements \JsonSerializable
     private $categories;
     
     /**
-     * @ApiSubresource()
+     * ()
      *
      * @var ProductBadge[]|ArrayCollection|null
      * @Groups({"productView"})
@@ -213,7 +219,38 @@ class Product //implements \JsonSerializable
     private $badges;
 
     /**
-     * @ApiSubresource()
+     * ()
+     *
+     * @var ProductOption[]|ArrayCollection|null
+     * @Groups({"productView"})
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Product\ProductOption", mappedBy="product", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="product_id")
+     * @ORM\OrderBy({"position" = "ASC"})
+     * @Assert\NotBlank(message="Válassz optionokat.")
+     */
+    private $options;
+
+    /**
+     * ()
+     *
+     * @var ProductVariant[]|ArrayCollection|null
+     * @Groups({"productView"})
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Product\ProductVariant", mappedBy="product", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="product_id")
+     * @ORM\OrderBy({"position" = "ASC"})
+     * @Assert\NotBlank(message="Válassz variansokat.")
+     */
+    private $variants;
+
+    /** @var bool
+     *  @Groups({"productView"})
+     */
+    private $hasVariants;
+
+    /**
+     * ()
      *
      * @var ProductKind|null
      * @Groups({"productView", "productList"})
@@ -225,16 +262,6 @@ class Product //implements \JsonSerializable
     private $kind;
 
     /**
-     * @var Product|null
-     * @Groups({"productView"})
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product\Product", inversedBy="subproducts")
-     * @ORM\JoinColumn(name="parent_product_id", referencedColumnName="id", nullable=true)
-     * Assert\NotBlank(message="Legalább egy apatermék kell legyen.")
-     */
-    private $parent;
-
-    /**
      * @var ProductAttribute|null
      *
      * ==== One Subproduct is one Attribute => Egy altermék mindig egy attribútum ====
@@ -244,20 +271,6 @@ class Product //implements \JsonSerializable
      * Assert\NotBlank(message="Az altermék egy attribútum kell legyen.")
      */
     private $attribute;
-
-    /**
-     * @var Product[]|ArrayCollection|null
-     * @Groups({"productView"})
-     *
-     * ==== One Product has Subproducts ====
-     * ==== mappedBy="product" => a Subproduct entitásban definiált 'product'-ról van szó ====
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Product\Product", mappedBy="parent")
-     * @ORM\JoinColumn(name="id", referencedColumnName="parent_product_id", nullable=true)
-     * @ORM\OrderBy({"attribute" = "ASC"})   ///// >????????
-     * @Assert\NotBlank(message="Egy terméknek több alterméke lehet.")
-     */
-    private $subproducts;
     
     //////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -270,33 +283,14 @@ class Product //implements \JsonSerializable
      * @Groups({"productView"})
      */
     private $backToList;
-    
-//    /**
-//     * @var Collection
-//     *
-//     * ==== One Product has Subproducts ====
-//     * ==== mappedBy="product" => a Subproduct entitásban definiált 'product'-ról van szó ====
-//     *
-//     * @ORM\OneToMany(targetEntity="App\Entity\Subproduct", mappedBy="product", orphanRemoval=true, cascade={"persist"})
-//     * @ORM\JoinColumn(name="id", referencedColumnName="product_id", nullable=true)
-//     * @ORM\OrderBy({"attribute" = "ASC"})
-//     * @Assert\NotBlank(message="Egy terméknek több alterméke lehet.")
-//     */
-//    private $subproducts;
-
-//    /**
-//     * @var nincs
-//     *
-//     * @ Assert\NotBlank(message="Válassz egy terméktípust.")
-//     */
-//    private $selectedSubproduct;
 
     public function __construct()
     {
-        $this->subproducts = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->badges = new ArrayCollection();
+        $this->options = new ArrayCollection();
+        $this->hasVariants =  $this->hasVariants();
     }
     
     /**
@@ -307,6 +301,7 @@ class Product //implements \JsonSerializable
         return [
             'id'            => $this->getId(),
             'name'          => $this->getName(),
+            'slug'          => $this->getSlug(),
             'kind'          => $this->getKind(),
             'sku'           => $this->getSku(),
             'description'   => $this->getDescription(),
@@ -364,6 +359,22 @@ class Product //implements \JsonSerializable
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
     }
     
     /**
@@ -520,6 +531,33 @@ class Product //implements \JsonSerializable
         return $this->weight;
     }
 
+//    /**
+//     * @return bool
+//     */
+//    public function getFlower(): bool
+//    {
+//        return null === $this->flower ? false : $this->flower;
+//    }
+
+    /**
+     * Returns true or false, after transformation (1 or 0 which are stored in db)
+     * @return bool
+     */
+    public function isFlower(): bool
+    {
+        return null === $this->flower ? false : $this->flower;
+    }
+
+    /**
+     * Sets value to 1 or 0 which are stored in db
+     * @param bool $flower
+     */
+    public function setFlower(?bool $flower)
+    {
+//        $this->enabled = true === $enabled ? 1 : 0;
+        $this->flower = $flower;
+    }
+
     /**
      * @return ProductStatus|null
      */
@@ -535,13 +573,25 @@ class Product //implements \JsonSerializable
     {
         $this->status = $allapot;
     }
+
+    /**
+     * @return bool
+     */
+    public function isPubliclyAvailable(): bool
+    {
+        if ($this->status->getShortcode() != ProductStatus::STATUS_UNAVAILABLE && $this->status->getShortcode() != ProductStatus::STATUS_REMOVED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     
     /**
      * @return bool
      */
     public function isEnabled(): bool
     {
-        return self::ENABLED === $this->status->getId() ? true : false;
+        return ProductStatus::STATUS_ENABLED === $this->status->getShortcode() ? true : false;
     }
     
     /**
@@ -549,7 +599,7 @@ class Product //implements \JsonSerializable
      */
     public function isUnavailable(): bool
     {
-        return self::UNAVAILABLE === $this->status->getId() ? true : false;
+        return ProductStatus::STATUS_UNAVAILABLE === $this->status->getShortcode() ? true : false;
     }
     
     /**
@@ -557,9 +607,9 @@ class Product //implements \JsonSerializable
      */
     public function isRemoved(): bool
     {
-        return self::REMOVED === $this->status->getId() ? true : false;
+        return ProductStatus::STATUS_REMOVED === $this->status->getShortcode() ? true : false;
     }
-    
+
     /**
      * @ return ProductCategory[]|Collection
      */
@@ -612,6 +662,93 @@ class Product //implements \JsonSerializable
     }
 
     /**
+     * @return ProductOption[]|Collection
+     */
+    public function getOptions(): Collection
+    {
+        $criteria = Criteria::create()->orderBy(['position' => Criteria::ASC]);
+        return $this->options->matching($criteria);
+    }
+
+    public function addOption(ProductOption $option): void
+    {
+        if (!$this->options->contains($option)) {
+            $option->setProduct($this);
+            $this->options->add($option);
+        }
+    }
+
+    public function removeOption(ProductOption $option): void
+    {
+        $this->options->removeElement($option);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOptions(): bool
+    {
+        return $this->options->isEmpty() ? false : true;
+    }
+
+    /**
+     * @return ProductVariant[]|Collection
+     */
+    public function getVariants()
+    {
+        return $this->variants;
+    }
+
+    /**
+     * Returns the Variant for the given option and option value
+     * @return ProductVariant|null
+     */
+    public function getVariant(ProductOption $option, ProductOptionValue $value)
+    {
+//        $criteria = Criteria::create()->where(Criteria::expr()->contains("options", $option));
+//        $dem = $this->variants->filter($criteria);
+
+        $variants = new ArrayCollection();
+        foreach ($this->variants as $variant) {
+            if ($variant->getOptions()->contains($option)) {
+                if ($variant->getOptions())
+//                $variants[] = $variant;
+                $variants->add($variant);
+            }
+        }
+
+        if ($variants->isEmpty()) {
+            return null;
+        }
+        return $variants;
+    }
+
+
+
+    public function addVariant(ProductVariant $item): void
+    {
+        if (!$this->variants->contains($item)) {
+            $item->setProduct($this);
+            $this->variants->add($item);
+        }
+    }
+
+    public function removeVariant(ProductVariant $item): void
+    {
+        $this->variants->removeElement($item);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasVariants(): bool
+    {
+        return $this->variants
+            ? $this->variants->isEmpty() ? false : true
+            : false ;
+    }
+
+    /**
      * @return ProductKind
      */
     public function getKind(): ?ProductKind
@@ -649,30 +786,26 @@ class Product //implements \JsonSerializable
     {
         $this->weight = $weight;
     }
-    
+
     /**
-     * @param bool $isUnlimited
+     * Finds a ProductOption by its name
+     * $criteria array must have a key called 'name'. Eg: ['name' => 'Size']
+     *
+     * @param array $criteria
+     * @return ProductOption|null
      */
-    public function setIsUnlimited(bool $isUnlimited)
+    public function findOptionBy($criteria = []): ?ProductOption
     {
-        $this->isUnlimited = $isUnlimited;
+        if (isset($criteria['name'])) {
+            return $option = $this->options->filter(
+                function ($item) use ($criteria) {
+                    return $item->getName() === $criteria['name'] ? $item : null;
+                }
+            )->first();
+        }
+        return null;
     }
-    
-    /**
-     * @return Product
-     */
-    public function getParent(): ?Product
-    {
-        return $this->parent;
-    }
-    
-    /**
-     * @param Product $parentProduct
-     */
-    public function setParent(?Product $parentProduct)
-    {
-        $this->parent = $parentProduct;
-    }
+
     
     /**
      * @return ProductAttribute|null
@@ -698,54 +831,6 @@ class Product //implements \JsonSerializable
         return $this->getAttribute() ? $this->getAttribute()->getName() : '';
     }
 
-    /**
-     * @param Product $item
-     */
-    public function addSubproduct(Product $item): void
-    {
-        if (!$this->subproducts->contains($item)) {
-            $item->setParent($this);
-            $this->subproducts->add($item);
-        }
-    }
-
-    /**
-     * @param Product $item
-     */
-    public function removeSubproduct(Product $item): void
-    {
-        $item->setParent(null);
-        $this->subproducts->removeElement($item);
-    }
-
-    /**
-     * @return Product[]|Collection
-     */
-    public function getSubproducts(): Collection
-    {
-        return $this->subproducts;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSubproducts(): bool
-    {
-        return $this->getSubproducts()->isEmpty() ? false : true;
-    }
-
-    /**
-     * Returns the Subproduct containing the Attribute
-     * @return Product $subproduct
-     */
-    public function getSubproductWithAttribute(ProductAttribute $attribute)
-    {
-        foreach ($this->subproducts as $i => $subproduct) {
-            if ($subproduct->getAttribute() == $attribute) {
-                return $subproduct;
-            }
-        }
-    }
     
     /**
      * @param null|string $backToList
@@ -762,24 +847,4 @@ class Product //implements \JsonSerializable
     {
         return $this->backToList;
     }
-    
-    
-    
-
-//    /**
-//     * @param Product $subproduct
-//     */
-//    public function setSelectedSubproduct(?Product $subproduct)
-//    {
-//        $this->selectedSubproduct = $subproduct;
-//    }
-//
-//    /**
-//     * @return Product
-//     */
-//    public function getSelectedSubproduct(): ?Product
-//    {
-//        return $this->selectedSubproduct;
-//    }
-
 }

@@ -24,7 +24,7 @@ class CustomerDenormalizer implements DenormalizerInterface, DenormalizerAwareIn
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         if (isset($data['id'])) {
             $object = $this->em->find(User::class, $data['id']);

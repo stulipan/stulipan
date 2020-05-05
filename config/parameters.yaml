@@ -1,7 +1,7 @@
 parameters:
     database_host: localhost
-    database_port: null
-    database_name: LOCALHOST_stulipan_dfr
+    database_port: 3306
+    database_name: tulipdb
     database_user: liviu
     database_password: Sssl9000
 

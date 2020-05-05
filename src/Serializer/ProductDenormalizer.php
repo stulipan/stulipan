@@ -9,10 +9,13 @@ use App\Entity\Product\ProductBadge;
 use App\Entity\Product\ProductCategory;
 use App\Entity\Product\ProductImage;
 use App\Entity\Product\ProductKind;
+use App\Entity\Product\ProductOption;
 use App\Entity\Product\ProductStatus;
+use App\Entity\Product\ProductVariant;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use libphonenumber\Leniency\Possible;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
@@ -64,11 +67,11 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
      * {@inheritdoc}
      * @return Product
      */
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-//        $object = $this->normalizer->denormalize($data, $class, $format, $context);
+//        $object = $this->denormalizer->denormalize($data, $class);
 //        $clasa = json_decode(json_encode($data));
-//        dd($object);
+//        dd($data);
         
         if (isset($data['id'])) {
             $object = $this->em->find(Product::class, $data['id']);
@@ -80,6 +83,9 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
         $object->setSku($data['sku']);
         $object->setStock($data['stock']);
         $object->setName($data['name']);
+
+        $context = array_merge($context, ['product' => $object]);
+
         if (isset($data['kind'])) {
             $kind = $this->denormalizer->denormalize($data['kind'],ProductKind::class, $format, $context);
             $object->setKind($kind);
@@ -93,7 +99,6 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
             $object->setPrice($price);
         }
         if (isset($data['categories'])) {
-//            dd($object->getCategories()->getValues());
             foreach ($object->getCategories() as $category) {
                 $object->removeCategory($category);
             }
@@ -113,8 +118,6 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
         }
         if (isset($data['images'])) {
             $initialImages = $object->getImages();
-            
-            $context = array_merge($context, ['product' => $object]);
             $images = $this->denormalizer->denormalize($data['images'],ProductImage::class.'[]', $format, $context);
             // normalisan ide kene egy: $object->addImage() foreach loop-ban
             // de nem kell, mivel az uj kepek a ProductImageDenormalizerben vannak hozzaadva!
@@ -123,6 +126,32 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
             foreach ($initialImages as $image) {
                 if (! (new ArrayCollection($images))->contains($image) ) {
                     $object->removeImage($image);
+                }
+            }
+        }
+        if (isset($data['options'])) {
+            $initialOptions = $object->getOptions();
+            $options = $this->denormalizer->denormalize($data['options'],ProductOption::class.'[]', $format, $context);
+            foreach ($options as $option) {
+                $option->setProduct($object);
+                $object->addOption($option);
+            }
+            foreach ($initialOptions as $item) {
+                if (!(new ArrayCollection($options))->contains($item)) {
+                    $object->removeOption($item);
+                }
+            }
+        }
+        if (isset($data['variants'])) {
+            $initialVariants = $object->getVariants();
+            $variants = $this->denormalizer->denormalize($data['variants'], ProductVariant::class.'[]', $format, $context);
+            foreach ($variants as $variant) {
+                $variant->setProduct($object);
+                $object->addVariant($variant);
+            }
+            foreach ($initialVariants as $variant) {
+                if (!(new ArrayCollection($variants))->contains($variant)) {
+                    $object->removeVariant($variant);
                 }
             }
         }

@@ -1,258 +1,235 @@
-{% extends 'webshop/site/base_site.html.twig' %}
+{% extends 'webshop/site/template-general.html.twig' %}
 
-{% block title %}
-    {{ product.name }} | 	{{ parent() }}
-{% endblock %}
+{% set pageTitle = product.name %}
+{% set breadcrumb = {
+    0: {
+        'url': path('homepage'),
+        'text': 'Home',
+    },
+    1: {
+        'url': path('site-product-list', { 'slug': product.categories[0].slug }),
+        'text': product.categories[0].name,
+    },
+    2: {
+        'url': path('site-product-show', { 'slug': product.slug }),
+        'text': product.name,
+    },
+} %}
 
-
+{% set isThumbnailsLeft = true %}
 
 {% block stylesheets %}
     {{ parent() }}
     {#<link rel="stylesheet" href="{{ asset('build/v-shop.css') }}"/>#}
-
     <link href="{{ asset('webshop/site/js/daterangepicker.css') }}" rel="stylesheet" />
 {% endblock %}
 
-{% block page_content %}
+{% block bodyClass %}
+    product-details
+{% endblock %}
 
-
-
-	<!-- Product detail -->
-	<div class="product-details">
-		<div class="container mb-0 mb-md-4">
-			<div class="row">
-                <div class="col-lg-12 mb-3 mb-md-0">
-                    <div class="d-none d-md-block">
-                        <ul class="breadcrumb undefined">
-                            <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ path('site-product-list', { 'slug': product.categories[0].slug }) }}">{{ product.categories[0].name }}</a></li>
-                            <li class="breadcrumb-item active">{{ product.name }}    </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-xl-10 col-lg-10 mx-auto">
+{% block content %}
+    <div class="row">
+        <div class="col-xl-10X col-lg-12 mx-auto">
+            <div class="row">
+                <div class="col-lg-12">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-md-6 col-lg-7 order-1 mb-4">
                             <div class="row">
-                                <div class="col-md-6 col-lg-7 order-1 mb-4">
-                                    <div class="row">
-                                        <div class="col-2 pr-0">
-                                            <div data-slider-id="1" class="owl-thumbs">
-                                                {% if product.images is defined %}
-                                                    {% for image in product.images %}
-                                                        <button class="owl-thumb-item detail-thumb-item mb-3">
-                                                            <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
-                                                        </button>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <div class="col-10 detail-carousel pl-3">
-                                            {% set bestseller = false %}
-                                            {% if product.isUnavailable %}
-                                                <div class="ribbon ribbon-dark">MIND ELKELT</div>
-                                            {% elseif product.hasBadges %}
-                                                {% for badge in product.badges %}
-                                                    {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                        <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
-                                                    {% else %}
-                                                        {% set bestseller = true %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% endif %}
-                                            <div>
-                                                {#<span class="delivery show-for-large mr-10px"></span>#}
-                                                <div data-slider-id="1" class="owl-carousel detail-slider product-image">
-                                                    {% if product.images is defined %}
-                                                        {% for image in product.images %}
-                                                            <div class="item"><a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
-                                                                    <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" alt="{{ product.name }} 1" class="img-fluid">
-                                                                    {% if bestseller %}
-                                                                        <div class="card-img-overlay d-flex align-items-end p-0">
-                                                                            <div class="text-center w-100 overlay--bestseller">
-                                                                                <i class="fas fa-trophy"></i> Bestseller
-                                                                            </div>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                </a>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {#<div class="row">#}
-                                    {#<div class="col-12 mt-4">#}
-                                    {#<p class="mb-2">{{ product.description }}#}
-                                    {#</p>#}
-                                    {#</div>#}
-                                    {#</div>#}
-                                </div>
-                                <div class="col-md-6 col-lg-5 pl-lg-4 order-2 mb-4">
-                                    <h1 class="mb-1">{{ product.name }}</h1>
-                                    <div class="d-flex align-items-center justify-content-between mb-4">
-                                        {#<ul class="list-inline mb-0">#}
-                                            {#<li class="list-inline-item h4 font-weight-light mb-0">{{ product.price.value|number_format(0, ',', ' ')  }} Ft</li>#}
-                                            {#<li class="list-inline-item text-muted font-weight-light">#}
-                                                {#<del>54 990 Ft</del>#}
-                                            {#</li>#}
-                                        {#</ul>#}
-                                        <div class="d-flex align-items-center">
-                                            <ul class="list-inline mr-2 mb-0">
-                                                <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                                <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                                <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                                <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                                <li class="list-inline-item mr-0"><i class="fa fa-star text-gray-300"></i></li>
-                                            </ul>
-                                            <a href="#" class="minicard--toolLink">25 értékelés</a>
-                                        </div>
-                                    </div>
-
-
-
-                                    {#<p class="mb-2">{{ product.description }}</p>#}
-
-
-                                    {#<ul class="product--bullet-points text-smX mb-4">#}
-                                        {#<li>Ingyenes szállítás Budapesten!</li>#}
-                                        {#<li>Standard méret látható a képen</li>#}
-                                        {#<li>Mindig friss virágból</li>#}
-                                    {#</ul>#}
-
-
-                                    <!-- Add to cart form -->
-                                    {#{{ render(controller('App\\Controller\\Shop\\CartController::addItemForm', {'id' : product.id})) }}#}
-
-                                    {% form_theme form 'bootstrap_4_layout.html.twig' %}
-                                    {{ form_start(form) }}
-                                    <div class="mt-2 mb-2">
-                                        <span class="detail-option-heading">1. Válasz méretet</span>
-                                    </div>
-                                    <div class="form-row">
-                                        {% if form.selectedSubproduct is defined and form.selectedSubproduct is not empty %}
-                                            {% for choice in form.selectedSubproduct %}
-                                                <div class="col-sm-4 col-4">
-                                                    {{ include('webshop/site/choiceItem-onProductPage.html.twig') }}
-                                                </div>
+                                {% if isThumbnailsLeft == true %}
+                                <div class="col-2 pr-0">
+                                    <div data-slider-id="1" class="owl-thumbs">
+                                        {% if product.images is defined %}
+                                            {% for image in product.images %}
+                                                <button class="owl-thumb-item detail-thumb-item mb-3">
+                                                    <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
+                                                </button>
                                             {% endfor %}
-                                            {% do form.selectedSubproduct.setRendered() %}
-                                        {% else %}
-                                            <div class="col-sm-4 col-4">
-                                                <div class="visual-picker visual-picker-fluid visual-picker-checked visual-picker-sm align-top has-peekX mr-2">
-                                        <span class="visual-picker-figure required">
-                                            <span class="visual-picker-content">
-                                                <span class="tile tile-lg">
-                                                    <span class="font-weight-bold my-0">Egy méret</span><br>
-                                                    <span class="price--gross text-nowrap">{{ product.price.value|number_format(0, ',', ' ') }} Ft</span>
-                                                </span>
-                                            </span>
-                                        </span>
-                                                </div>
-
-                                            </div>
                                         {% endif %}
                                     </div>
-
-                                    <div class="mt-2 mb-2">
-                                <span class="detail-option-heading">2. Hova kéred?
-                                    {#<span>Írd be a települést vagy irányítószámot</span>#}
-                                </span>
-                                    </div>
-                                    <div class="form-group mb-4">
-                                        <div id="v--whereTo">
-                                            {#{{ form_widget(form.whereTo.whereTo, {'attr': {'class': 'form-control', 'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011' }}) }}#}
-                                            {#{{ form_widget(form.whereTo.whereTo, {'attr': {#}
-                                            {#'class': 'form-control select2 select2-multiple select2-hidden-accessible',#}
-                                            {#'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011',#}
-                                            {#'data-toggle' : 'select2',#}
-                                            {#'aria-hidden' : 'true',#}
-                                            {#}}) }}#}
-                                            {#{{ form_errors(form.whereTo) }}#}
-                                            {% do form.whereTo.setRendered() %}
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-2 mb-2">
-                                <span class="detail-option-heading">3. Mikorra kéred?
-                                    {#<span>Válasz időpontot</span>#}
-                                </span>
-                                    </div>
-                                    <div class="row order-delivery-date mb-4">
-                                        <div class="col-md-12 col-lg-12 JS--dateWrapper">
-                                            <div class="flex-grow-1X form-row">
-                                                {% for choice in form.deliveryDate.deliveryDate %}
-                                                    <div class="col-sm-3 col-3">
-                                                        {% if not loop.last %}
-                                                            {{ include('webshop/site/choiceItem.html.twig') }}
-                                                        {% else %}
-                                                            <div class="visual-picker visual-picker-fluid visual-picker-sm align-top has-peekX mr-2">
-                                                                <input class="JS--Button-clickDate" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="" {{ choice.vars.checked ? 'checked' : '' }}/>
-                                                                <label class="visual-picker-figure justify-content-lg-center justify-content-center required px-2" for="{{ choice.vars.id }}">
-                                                <span class="visual-picker-content">
-                                                    <span class="tile tile-lg JS--showDateValue">
-
-                                                    </span>
-                                                    <span class="tile tile-lg JS--showCalendarIcon">
-                                                        <i class="far fa-calendar-alt fa-2x text-gray-700"></i>
-                                                    </span>
-                                                </span>
-                                                                </label>
-                                                            </div>
-                                                        {% endif %}
+                                </div>
+                                {% endif %}
+                                <div class="{% if isThumbnailsLeft == true %}col-10{% else %}col-12{% endif %} detail-carousel pl-3">
+                                    {% set bestseller = false %}
+                                    {% if product.isUnavailable %}
+                                        <div class="ribbon ribbon-dark">MIND ELKELT</div>
+                                    {% elseif product.hasBadges %}
+                                        {% for badge in product.badges %}
+                                            {% if badge.css is defined and badge.css != 'bestseller' %}
+                                                <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                            {% else %}
+                                                {% set bestseller = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div>
+                                        {#<span class="delivery show-for-large mr-10px"></span>#}
+                                        <div data-slider-id="1" class="owl-carousel detail-slider product-image">
+                                            {% if product.images is defined %}
+                                                {% for image in product.images %}
+                                                    <div class="item"><a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
+                                                            <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" alt="{{ product.name }} 1" class="img-fluid">
+                                                            {% if bestseller %}
+                                                                <div class="card-img-overlay d-flex align-items-end p-0">
+                                                                    <div class="text-center w-100 overlay--bestseller">
+                                                                        <i class="fas fa-trophy"></i> Bestseller
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        </a>
                                                     </div>
                                                 {% endfor %}
-                                                {% do form.deliveryDate.deliveryDate.setRendered() %}
-                                                {#{{ form_widget(form.deliveryDate.deliveryDate, {'attr' : {'class' : 'd-inline-flex pt-1 text-sm'}}) }}#}
-                                                {{ form_errors(form.deliveryDate.deliveryDate) }}
-                                            </div>
-                                            <div class="text-sm text-muted">
-                                                Kosárba rakás után megadható a napszakasz is.
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if isThumbnailsLeft == false %}
+                                <div class="col-12">
+                                    <div data-slider-id="1" class="owl-thumbs row">
+                                        {% if product.images is defined %}
+                                            {% for image in product.images %}
+                                                <button class="owl-thumb-item detail-thumb-item col-2 mt-3 mb-3 ml-3">
+                                                    <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
+                                                </button>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {#<div class="row">#}
+                            {#<div class="col-12 mt-4">#}
+                            {#<p class="mb-2">{{ product.description }}#}
+                            {#</p>#}
+                            {#</div>#}
+                            {#</div>#}
+                        </div>
+                        <div class="col-md-6 col-lg-5 pl-lg-4 order-2 mb-4">
+                            <h1 class="mb-1">{{ product.name }}</h1>
+                            {% if product.isPubliclyAvailable %}
+                                {% if product.isFlower %}
+
+                                {% else %}
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <ul class="list-inline mb-0">
+                                            <li class="list-inline-item price">
+                                                <del>{{ (product.price.numericValue*4)|money }}</del>
+                                            </li>
+                                            <li class="list-inline-item h4 price price-sale">{{ product.price.numericValue|money }}</li>
+
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div class="d-flex align-items-center">
+                                    <ul class="list-inline mr-2 mb-0">
+                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
+                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
+                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
+                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
+                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-gray-300"></i></li>
+                                    </ul>
+                                    <a href="#" class="minicard--toolLink">25 értékelés</a>
+                                </div>
+                            </div>
+
+
+
+                            {#<p class="mb-2">{{ product.description }}</p>#}
+
+
+                            {#<ul class="product--bullet-points text-smX mb-4">#}
+                            {#<li>Ingyenes szállítás Budapesten!</li>#}
+                            {#<li>Standard méret látható a képen</li>#}
+                            {#<li>Mindig friss virágból</li>#}
+                            {#</ul>#}
+
+
+                            <!-- Add to cart form -->
+
+                            {% if product.isPubliclyAvailable %}
+{#                                {% form_theme form 'bootstrap_4_layout.html.twig' %}#}
+                                {{ form_start(form) }}
+
+                                    {% if product.isFlower %}
+
+                                        {% include 'webshop/site/product-widget-addToCartForm-isFlower.html.twig' %}
+
+                                    {% else %}
+
+                                        {% if form.options is defined and form.options is not empty %}
+                                            {% for item in form.options %}
+                                                <div class="form-group row">
+                                                    <div class="col-md-12">
+                                                        <label class="detail-option-heading">{{ item.selectedOption.vars.value }}</label>
+                                                        <div class="form-row">
+                                                            {% if settings.get('general.product-variant-view') == 'dropdown' %}
+                                                                <div class="col-8 col-sm-8 col-md-6">
+                                                                    {{ form_widget(item.selectedOptionValue) }}
+                                                                </div>
+                                                            {% elseif settings.get('general.product-variant-view') == 'variant-picker' %}
+                                                                {% for choice in item.selectedOptionValue %}
+                                                                    <div class="col-sm-4 col-4">
+                                                                        {% include 'webshop/site/visual-picker-4-product-variant.html.twig' %}
+                                                                    </div>
+                                                                {% endfor %}
+                                                                {% do item.selectedOptionValue.setRendered() %}
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                            {{ form_errors(form.options) }}
+                                        {% endif %}
+                                        {% do form.options.setRendered() %}
+
+                                        {% do form.deliveryDate.deliveryDate.setRendered() %}
+
+                                        <div class="row">
+                                            <div class="col-12 detail-option mb-4">
+                                                <label class="detail-option-heading">Items <span>(required)</span></label>
+                                                {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
 
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="row d-none">
-                                        <div class="col-12 detail-option mb-4">
-                                            <label class="detail-option-heading">Items <span>(required)</span></label>
-                                            {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
-
-                                        </div>
-                                    </div>
+                                    {% endif %}
 
                                     <div class="row mb-3">
                                         <div class="col-lg-12">
-                                            <button type="submit" class="JS--Button-addToCart btn btn-success btn-lg mb-1 w-100 h3"> <i class="fa fa-shopping-cart mr-2"></i>Kosárba rakom</button>
+                                            <button type="submit" class="JS--Button-addToCart btn btn-success btn-lg mb-1 w-100">
+                                                <svg class="svg-icon svg-icon-heavy addtocart">
+                                                    <use xlink:href="#cart-1"> </use>
+                                                </svg>
+                                                Kosárba rakom
+                                            </button>
                                             <div class="JS--loadingOverlay d-flex align-items-stretch loading-lg"></div>
                                         </div>
                                     </div>
 
-                                    {{ form_end(form) }}
-                                    {#{% do form.setRendered() %}#}
+                                {{ form_end(form) }}
 
-                                    <!-- /Add to cart form -->
-
-                                    <div class="card border-0 mb-3">
-                                        <div class="card-body bg-warning-lightenX text-center p-0 px-2">
-                                            <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/cache/w0h0q80np1/icons/CIB_logo.png?v=1537911486">
-                                            <img alt="" class="img-fluid h-15px left-block mb-2" src="http://www.stulipan.dfr/uploads/images/termekek/paypal.png">
-                                            <p class="card-text text-xs text-muted">
-                                                Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</p>
-                                        </div>
+                                <div class="cardX border-0 mb-3">
+                                    <div class="card-bodyX bg-warning-lightenX text-center p-0 px-2">
+                                        <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
+                                        <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/termekek/paypal.png">
+                                        <p class="card-text text-xs text-muted">
+                                            Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</p>
                                     </div>
-
                                 </div>
-                            </div>
+                            {% else %}
+                                <span class="badge badge--unavailableProduct"><i class="fas fa-info-circle"></i>A termék már nem áll forgalmazásban</span>
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-			</div>
-		</div>
-	</div>
-
+{% block contentWide %}
     <div class="marketing-details">
         <div class="d-flex flex-column flex-md-row">
             <div class="d-flex flex-grow-1 w-100 justify-content-center justify-content-md-end bg-custom-gray py-3 my-4X ml-3X">
@@ -298,22 +275,22 @@
                             </div>
                             <div class="col-md-6 col-6 mb-3">
                                 <h5>Courier Flower Delivery</h5>
-                                <img class="img-fluid mb-2" src="https://www.ifloraimg.co.uk/kernel/client/images/test-images/tab-courier-pic1.jpg"/>
+                                <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic1.jpg"/>
                                 <p class="text-muted font-weight-light"> We work closely with our courier partner to ensure that your beautifully designed bouquet arrives in pristine condition.</p>
                             </div>
                             <div class="col-md-6 col-6 mb-3">
                                 <h5>Signature Interflora Black Gift Box</h5>
-                                <img class="img-fluid mb-2" src="https://www.ifloraimg.co.uk/kernel/client/images/test-images/tab-courier-pic2.jpg"/>
+                                <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic2.jpg"/>
                                 <p class="text-muted font-weight-light">Your bouquet will be delivered in a signature Interflora black gift box, with the impact of the flowers seen as soon as the box is opened.</p>
                             </div>
                             <div class="col-md-6 col-6 mb-3">
                                 <h5>Gift Wrap and Ribbon</h5>
-                                <img class="img-fluid mb-2" src="https://www.ifloraimg.co.uk/kernel/client/images/test-images/tab-courier-pic3.jpg"/>
+                                <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic3.jpg"/>
                                 <p class="text-muted font-weight-light">Your bouquet will be presented in elegant Interflora gift wrap and a pretty ribbon. A specially formulated gel solution ensures freshness during delivery.	</p>
                             </div>
                             <div class="col-md-6 col-6 mb-3">
                                 <h5>Gift Message and Flower Food</h5>
-                                <img class="img-fluid mb-2" src="https://www.ifloraimg.co.uk/kernel/client/images/test-images/tab-hampers-pic4.jpg"/>
+                                <img class="img-fluid mb-2" src="/uploads/images/other/tab-hampers-pic4.jpg"/>
                                 <p class="text-muted font-weight-light">Your personal message will be displayed on an attractive greeting card and will accompany your gift. To ensure the flowers remain fresh and in the best possible condition we include some flower food.</p>
                             </div>
                         </div>
@@ -322,9 +299,6 @@
             </div>
         </div>
     </div>
-
-
-
 {% endblock %}
 
 {% block javascripts %}
@@ -365,7 +339,7 @@
     <script>
         $(function() {
             $('.JS--Button-clickDate').daterangepicker({
-                opens: 'right',
+                opens: 'left',
                 autoApply: true,
                 autoUpdateInput: false,
                 singleDatePicker: true,
@@ -403,44 +377,102 @@
                     firstDay: 1,
                 }
             });
+        //     $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {
+        //         ev.preventDefault();
+        //         $pickerDate = picker.startDate.format('YYYY-MM-DD');
+        //
+        //         $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
+        //         $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
+        //         /**
+        //          * Csak az első 3 rádió opcióba keresi a pickerDate-et. És ha benne van, akkor a Calendárt mutatja.
+        //          */
+        //         $selectedRadio = $(this).closest('.JS--dateWrapper').find('input[type="radio"][value="' + $pickerDate + '"]:not(".JS--Button-clickDate")');
+        //         if ($selectedRadio.val()) {
+        //             console.log($selectedRadio);
+        //             $selectedRadio.prop('checked', true);
+        //             $dateValueWrapper.hide();
+        //             $calendarIconWrapper.show();
+        //         }
+        //         /**
+        //          * Ha nincs benne, akkor negyedik rádió inputhoz rendeli a pickerDate-et és elrejti a Calendárt.
+        //          */
+        //         else {
+        //             $(this).val($pickerDate);  // az input, amihez kötve van a gomb, megkapja a daterangepicker értékét (dátumot)
+        //             $html = '<span class="font-weight-bold my-0">' + picker.startDate.format('MMM D') + '</span><br> <span class="price--gross text-nowrap">' + picker.startDate.format('ddd') + '</span>';
+        //             $dateValueWrapper.html($html);
+        //             $calendarIconWrapper.hide();
+        //             $dateValueWrapper.show();
+        //         }
+        //     });
+        //     $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
+        //         $(this).val('');
+        //     });
+        //     /**
+        //      * Amikor nem a Daterangepicker-re klikkel, akkor biztos a Calendárt kell mutatnia.
+        //      */
+        //     $('.JS--dateWrapper input[type="radio"]:not(".JS--Button-clickDate")').on('click', function () {
+        //         $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
+        //         $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
+        //         $dateValueWrapper.hide();
+        //         $calendarIconWrapper.show();
+        //     });
+        });
+    </script>
+    <script>
+        $(function() {
+            let $wrapper = $('.JS--deliveryDateContainer');
+            let $vp = $wrapper.find('.visual-picker-checked');
+            // let $currentValue = $vp.find('input').val();
+            // console.log($currentValue);
+
+            // $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);
+
+            /**
+             * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.
+             */
+            $("[class*='JS--generatedDate-']").click(function () {
+                $dateWrapper = $wrapper.find('.JS--dateWrapper');
+
+                $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
+                $(this).find('.visual-picker').find('input').prop('checked', true);
+                $(this).find('.visual-picker').addClass('visual-picker-checked');
+
+                // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
+                // amugy visszallitja (ujra mutatja) a CalendarIcont
+                if (! ($(this).hasClass('d-temporary')) ) {
+                    $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
+                    $dateWrapper.find('.JS--showCalendarIcon').show();
+                }
+
+            });
+            /**
+             * Kezeli a kalendáriumra kattintást.
+             */
             $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {
                 ev.preventDefault();
                 $pickerDate = picker.startDate.format('YYYY-MM-DD');
+                $wrapper = $(this).closest('.JS--deliveryDateContainer');
+                $dateWrapper = $(this).closest('.JS--dateWrapper');
 
-                $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
-                $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
-                /**
-                 * Csak az első 3 rádió opcióba keresi a pickerDate-et. És ha benne van, akkor a Calendárt mutatja.
-                 */
-                $selectedRadio = $(this).closest('.JS--dateWrapper').find('input[type="radio"][value="' + $pickerDate + '"]:not(".JS--Button-clickDate")');
-                if ($selectedRadio.val()) {
-                    console.log($selectedRadio);
-                    $selectedRadio.prop('checked', true);
-                    $dateValueWrapper.hide();
-                    $calendarIconWrapper.show();
+                $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
+                $dateWrapper.find('.visual-picker-checked').find('input').prop('checked', false);
+                $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
+
+                $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
+
+                if ($dateModule.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon
+                    $wrapper.find('.JS--showCalendarIcon').hide();
+                    $dateModule.removeClass('d-none').addClass('d-temporary');
                 }
-                /**
-                 * Ha nincs benne, akkor negyedik rádió inputhoz rendeli a pickerDate-et és elrejti a Calendárt.
-                 */
-                else {
-                    $(this).val($pickerDate);  // az input, amihez kötve van a gomb, megkapja a daterangepicker értékét (dátumot)
-                    $html = '<span class="font-weight-bold my-0">' + picker.startDate.format('MMM D') + '</span><br> <span class="price--gross text-nowrap">' + picker.startDate.format('ddd') + '</span>';
-                    $dateValueWrapper.html($html);
-                    $calendarIconWrapper.hide();
-                    $dateValueWrapper.show();
+                $dateModule.find('.visual-picker').find('input').prop('checked', true);
+                $dateModule.find('.visual-picker').addClass('visual-picker-checked');
+
+                if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
+                    $wrapper.find('.JS--showCalendarIcon').show();
                 }
             });
             $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
-            });
-            /**
-             * Amikor nem a Daterangepicker-re klikkel, akkor biztos a Calendárt kell mutatnia.
-             */
-            $('.JS--dateWrapper input[type="radio"]:not(".JS--Button-clickDate")').on('click', function () {
-                $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
-                $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
-                $dateValueWrapper.hide();
-                $calendarIconWrapper.show();
             });
         });
     </script>

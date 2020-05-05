@@ -1,6 +1,8 @@
 <template>
     <div>
-        <geo-price-manager></geo-price-manager>
+        <geo-price-manager
+                :backUrl="backUrl"
+        ></geo-price-manager>
     </div>
 </template>
 
@@ -8,6 +10,9 @@
     import GeoPriceManager from './GeoPriceManager.vue'
 
     export default {
+        props: [
+            'backUrl',
+        ],
         components: {
             GeoPriceManager
         },

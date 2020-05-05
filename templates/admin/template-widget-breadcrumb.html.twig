@@ -1,0 +1,9 @@
+<div class="navbar--toolbar">
+    {% if breadcrumb is defined and breadcrumb is not empty %}
+        {% for item in breadcrumb %}
+            <div class="nav-item mr-0">
+                <a href="{{ item.url }}" class="btn btn-link-secondary"><i class="fas fa-angle-left text-muted"></i> {{ item.text }}</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

@@ -38,8 +38,10 @@ class CartSenderController extends AbstractController
         $customer = $orderBuilder->getCurrentOrder()->getCustomer() ? $orderBuilder->getCurrentOrder()->getCustomer() : null;
         if (!$sender) {
             $sender = new Sender();
-            $sender->setName($customer->getFullname());
-            $sender->setCustomer($customer); // kitoltom a step1-ben megadott nevvel.
+            if ($customer) {
+                $sender->setName($customer->getFullname());
+                $sender->setCustomer($customer); // kitoltom a step1-ben megadott nevvel.
+            }
             // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
             $address = new Address();
             $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));

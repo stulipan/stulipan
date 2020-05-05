@@ -2,7 +2,8 @@
 
 namespace App\Entity\Product;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+//use ApiPlatform\Core\Annotation\ApiResource;
+use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use App\Entity\ImageEntity;
@@ -15,14 +16,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ApiResource(
+ * (
  *
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProductCategoryRepository")
  * @ORM\Table(name="product_category")
  * @UniqueEntity("slug", message="Ilyen slug már létezik!")
  */
-class ProductCategory implements \JsonSerializable
+class ProductCategory implements JsonSerializable
 {
     /**
      * @var int
@@ -55,7 +56,7 @@ class ProductCategory implements \JsonSerializable
      *
      * @ORM\Column(name="slug", type="string", length=100, nullable=false, unique=true)
      * @Assert\NotBlank(message="A slug nem lehet üres. Pl: szuletesnapi-csokor")
-     * @Gedmo\Slug(fields={"name"})
+     * @ Gedmo\Slug(fields={"name"})
      */
     private $slug;
 
@@ -278,7 +279,7 @@ class ProductCategory implements \JsonSerializable
     }
     
     /**
-     * Returns "products/image_filename.jpeg"
+     * Returns "categories/image_filename.jpeg"
      * This is to be used in Twig templates with uploaded_asset()
      *
      * @return string

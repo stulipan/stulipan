@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 class DeliverySpecialDateFormType extends AbstractType
 {
@@ -20,7 +21,7 @@ class DeliverySpecialDateFormType extends AbstractType
     private $em;
     private $twig;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em, \Twig_Environment $twig)
+    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em, Environment $twig)
     {
         $this->urlGenerator = $urlGenerator;
         $this->twig = $twig;
@@ -40,7 +41,7 @@ class DeliverySpecialDateFormType extends AbstractType
                 'class' => DeliveryDateType::class,
 //                'choice_label' => 'name',
                 'choice_label' => function (DeliveryDateType $type) {
-                    return $this->twig->render('admin/choiceContent-specialDateType.html.twig', [
+                    return $this->twig->render('admin/occasion-choice-widget.html.twig', [
                         'type' => $type,
                     ]);
                 },

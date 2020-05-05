@@ -1,27 +1,33 @@
-{% extends 'admin/base_admin.html.twig' %}
+{% extends 'admin/template-editing.html.twig' %}
+
+{% set pageTitle = title %}
+{% set breadcrumb = {
+    0: {
+        'url': path('settings-home'),
+        'text': 'settings.settings'|trans,
+    },
+    1: {
+        'url': path('delivery-date-type-list'),
+        'text': 'Idősávok',
+    }
+} %}
+
+{% set cancelUrl = path('delivery-date-type-list') %}
 
 {% block title %}
-	{{ title }}
+    {{ pageTitle }}
 {% endblock %}
 
-{% block page_content %}
+{% block moduleTitle %}
+    Idősávok
+{% endblock %}
 
-	<!-- page title -->
-	{{ include('/admin/_title_widget.html.twig') }}
+{% block moduleDescription %}
+    Itt tudsz megadni idősávokat. Az itt megadott idősávokat majd egy kiemelt naphoz rendelheted. <a href="{{ path('occasion-list') }}">Kiemelt napok listája itt'</a>
+{% endblock %}
 
-	<!-- header of default page content widget -->
-	{{ include('/admin/_header_of_default_page_content.html.twig') }}
-
-	<div class="row mb-2">
-		<div class="col-lg-12">
-		</div>
-	</div>
-
-	{{ include('/admin/_delivey-date-type-form.html.twig') }}
-
-	<!-- footer of default page content widget -->
-	{{ include('/admin/_footer_of_default_page_content.html.twig') }}
-
+{% block contentInner %}
+    {% include '/admin/_delivey-date-type-form.html.twig' with {'cancelUrl': cancelUrl}  %}
 {% endblock %}
 
 {% block javascripts %}

@@ -17,7 +17,9 @@ use App\Entity\Model\DeliveryDate;
 
 use App\Entity\Order;
 use App\Entity\OrderBuilder;
+use App\Entity\OrderLog;
 use App\Entity\OrderStatus;
+use App\Entity\PaymentStatus;
 use App\Entity\Product\ProductCategory;
 use App\Entity\Recipient;
 use App\Entity\Sender;
@@ -26,6 +28,7 @@ use App\Entity\Payment;
 
 use App\Entity\Model\CustomerBasic;
 use App\Entity\User;
+use App\Event\OrderEvent;
 use App\Form\CartHiddenDeliveryDateFormType;
 use App\Form\CartSelectDeliveryDateFormType;
 use App\Form\MessageAndCustomerFormType;
@@ -36,9 +39,12 @@ use App\Form\SetDiscountType;
 use App\Form\ShipAndPayFormType;
 use App\Form\UserBasicDetailsFormType;
 use App\Form\UserRegistrationFormType;
+use App\Services\Settings;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -58,41 +64,40 @@ class CheckoutController extends AbstractController
     /**
      * @Route("/rendeles/ajandek", name="site-checkout-step1-pickExtraGift")
      */
-    public function checkoutStep1PickExtraGift()
+    public function checkoutStep1PickExtraGift(Settings $settings)
     {
         $orderBuilder = $this->orderBuilder;
-        $customer = $this->getUser();  // equivalent of: $customer = $this->get('security.token_storage')->getToken()->getUser();
+        $customer = $this->getUser();
 
         $setDiscountForm = $this->createForm(SetDiscountType::class, $orderBuilder->getCurrentOrder());
-    
+
         $giftCategory = $this->getDoctrine()->getRepository(ProductCategory::class)
-            ->findOneBy(['slug' => 'ajandek']);
+            ->find($settings->get('general.giftCategory'));
         $extras = $giftCategory->getProducts();
 
-
-//        $basicUser = new CustomerBasic();
-//        $customerForm = $this->createForm(CustomerBasicsFormType::class, $basicUser);
-    
         $card = new CartCard($orderBuilder->getCurrentOrder()->getMessage(), $orderBuilder->getCurrentOrder()->getMessageAuthor());
-        $customerBasic = new CustomerBasic(
-            $orderBuilder->getCurrentSession()->fetch('email'),
-            $orderBuilder->getCurrentSession()->fetch('firstname'),
-            $orderBuilder->getCurrentSession()->fetch('lastname'),
-            $orderBuilder->getCurrentOrder()->getBillingPhone()
-        );
-        $messageAndCustomer = new MessageAndCustomer($card, $customerBasic);
-        $messageAndCustomerForm = $this->createForm(MessageAndCustomerFormType::class, $messageAndCustomer);
-//        $messageAndCustomerForm->get('customer')->get('phone')->addError(new FormError('Hol a telszam?!'));
-//        dd($messageAndCustomerForm->get('customer')->get('phone'));
-
         $cardCategories = $this->getDoctrine()->getRepository(CardCategory::class)
             ->findAll();
 
-//        $cardMessages = [];
-//        foreach ($cardCategories as $category) {
-//            $cardMessages[$category->getName()] = $category->getMessages();
-//            dd($cardCategories);
-//        }
+        /** If Customer exists (is logged in), add current user as Customer (to the current Order) */
+        if ($customer) {
+            $orderBuilder->setCustomer($customer);
+        }
+        /** Else, create form for basic details */
+        else {
+            if ($orderBuilder->getCustomer()) {
+                $customer = $orderBuilder->getCustomer();
+            }
+        }
+        $customerBasic = new CustomerBasic(
+            $customer->getEmail() ?? $orderBuilder->getCurrentSession()->fetch('email'),
+            $customer->getFirstname() ?? $orderBuilder->getCurrentSession()->fetch('firstname'),
+            $customer->getLastname() ?? $orderBuilder->getCurrentSession()->fetch('lastname'),
+            $customer->getPhone() ?? $orderBuilder->getCurrentOrder()->getBillingPhone()
+        );
+        $messageAndCustomer = new MessageAndCustomer($card, $customerBasic);
+        $messageAndCustomerForm = $this->createForm(MessageAndCustomerFormType::class, $messageAndCustomer);
+
 
         if (!$orderBuilder->hasItems()) {
             return $this->render('webshop/cart/checkout-step1-extraGifts.html.twig', [
@@ -103,44 +108,10 @@ class CheckoutController extends AbstractController
                 'products' => $extras,
                 'giftCategory' => $giftCategory,
                 'progressBar' => 'pickExtraGift',
-                'customerDataForm' => isset($customerForm) ? $customerForm->createView() : null,
                 'messageAndCustomerForm' => isset($messageAndCustomerForm) ? $messageAndCustomerForm->createView() : null,
                 'cardCategories' => $cardCategories,
                 'showQuantity' => true,
             ]);
-        }
-
-//        dd('wer');
-
-        //ez CSAK akkor kell ha nem renderelem bele a template-be!!
-//        $messageForm = $this->createForm(MessageType::class, $orderBuilder->getCurrentOrder());
-
-        /**
-         * After login, add current user as Customer (to the current Order)
-         */
-        if ($customer) {
-            $orderBuilder->setCustomer($customer);
-        }
-
-        /**
-         * If Customer exists (is logged in), get all his basic details
-         */
-        if ($customer) {
-//            $basicUser = new CustomerBasic();
-//            $customerForm = $this->createForm(CustomerBasicsFormType::class, $basicUser);
-//
-//            $messageAndCustomer = new MessageAndCustomer();
-            $messageAndCustomerForm = $this->createForm(MessageAndCustomerFormType::class, $messageAndCustomer);
-        }
-        /**
-         *  Else, create form for basic details
-         */
-        else {
-//            $basicUser = new CustomerBasic();
-//            $customerForm = $this->createForm(CustomerBasicsFormType::class, $basicUser);
-//
-//            $messageAndCustomer = new MessageAndCustomer();
-//            $messageAndCustomerForm = $this->createForm(MessageAndCustomerFormType::class, $messageAndCustomer);
         }
 
         return $this->render('webshop/cart/checkout-step1-extraGifts.html.twig', [
@@ -148,13 +119,11 @@ class CheckoutController extends AbstractController
             'order' => $orderBuilder,
             'orderId' => $orderBuilder->getCurrentOrder()->getId(),
             'setDiscountForm' => $setDiscountForm->createView(),
-            'itemsInCart' => $orderBuilder->countItems(),
-            'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
-//            'messageForm' => $messageForm->createView(),
+//            'itemsInCart' => $orderBuilder->countItems(),
+//            'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
             'progressBar' => 'pickExtraGift',
             'products' => $extras,
             'giftCategory' => $giftCategory,
-            'customerForm' => isset($customerForm) ? $customerForm->createView() : null,
             'messageAndCustomerForm' => isset($messageAndCustomerForm) ? $messageAndCustomerForm->createView() : null,
             'cardCategories' => $cardCategories,
             'showQuantity' => true,
@@ -184,17 +153,16 @@ class CheckoutController extends AbstractController
             ->findAllOrdered();
 
         $offset = GeneralUtils::DELIVERY_DATE_HOUR_OFFSET;
-        $days = (new \DateTime('+2 months'))->diff(new \DateTime('now'))->days;
+        $days = (new DateTime('+2 months'))->diff(new DateTime('now'))->days;
         for ($i = 0; $i <= $days; $i++) {
             /**
              * ($i*24 + offset) = 0x24+4 = 4 órával későbbi dátum lesz
              * Ez a '4' megegyezik azzal, amit a javascriptben adtunk meg, magyarán 4 órával
              * későbbi időpont az első lehetséges szállítási nap.
              */
-            $dates[] = (new \DateTime('+'. ($i*24 + $offset).' hours'));
+            $dates[] = (new DateTime('+'. ($i*24 + $offset).' hours'));
         }
 
-//        dd($dates);
         $generatedDates = new GeneratedDates();
         foreach ($dates as $date) {
 
@@ -443,7 +411,7 @@ class CheckoutController extends AbstractController
         if ($order) {
             $isBankTransfer = $order->getPayment()->isBankTransfer() ? true : false;
     
-            return $this->render('webshop/site/checkout_thankyou.html.twig',[
+            return $this->render('webshop/cart/checkout-step4-thankyou.html.twig',[
                 'title' => 'Sikeres rendelés!',
                 'order' => $order,
                 'progressBar' => 'thankyou',
@@ -458,7 +426,7 @@ class CheckoutController extends AbstractController
      *
      * @Route("/rendeles/koszonjuk", name="site-checkout-step4-thankyou")
      */
-    public function checkoutThankyou()
+    public function checkoutThankyou(EventDispatcherInterface $eventDispatcher)
     {
         $orderBuilder = $this->orderBuilder;
         $validation = $this->validateOrderAtStep($orderBuilder, 3);
@@ -466,10 +434,21 @@ class CheckoutController extends AbstractController
             return $this->redirectToRoute($validation['route']);
         }
         
-        $status = $this->getDoctrine()->getRepository(OrderStatus::class)->findOneBy(['shortcode' => Order::STATUS_CREATED]);
+        $status = $this->getDoctrine()->getRepository(OrderStatus::class)->findOneBy(['shortcode' => OrderStatus::STATUS_CREATED]);
+        $paymentStatus = $this->getDoctrine()->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
         $orderBuilder->setStatus($status);
+        $orderBuilder->setPaymentStatus($paymentStatus);
         $order = $orderBuilder->getCurrentOrder();
-        
+
+        $event = new OrderEvent($order, [
+            'channel' => OrderLog::CHANNEL_CHECKOUT,
+            'orderStatus' => $order->getStatus()->getShortcode(),
+            'paymentStatus' => $order->getPaymentStatus()->getShortcode(),
+        ]);
+        $eventDispatcher->dispatch($event, OrderEvent::ORDER_CREATED);
+        $eventDispatcher->dispatch($event, OrderEvent::PAYMENT_UPDATED);
+        $eventDispatcher->dispatch($event, OrderEvent::DELIVERY_DATE_UPDATED);
+
         /** When at this step, the Order has been
          * successfully placed, so it can be removed from session */
 //        $orderBuilder->getCurrentSession()->removeOrderFromSession();    /////  EZT LE KELL VENNI KOMMENTBOL HA VALOBAN EL AKAROM A RENDELEST POSZTOLNI

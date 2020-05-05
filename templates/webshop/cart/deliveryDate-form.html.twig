@@ -33,7 +33,7 @@
                                 {% if not loop.last %}
                                     {{ include('webshop/site/choiceItem.html.twig') }}
                                 {% else %}
-                                    <div class="visual-picker visual-picker-fluid visual-picker-sm align-top has-peekX mr-2">
+                                    <div class="visual-picker visual-picker-md align-top mr-2">
                                         <input class="JS--Button-clickDate" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="" {{ choice.vars.checked ? 'checked' : '' }}/>
                                         <label class="visual-picker-figure justify-content-lg-center justify-content-center required px-2" for="{{ choice.vars.id }}">
                                                     <span class="visual-picker-content">
@@ -41,7 +41,7 @@
 
                                                         </span>
                                                         <span class="tile tile-lg JS--showCalendarIcon">
-                                                            <i class="far fa-calendar-alt fa-2x text-gray-700"></i>
+                                                            <i class="far fa-calendar-alt fa-2x text-gray-700 mr-0"></i>
                                                         </span>
                                                     </span>
                                         </label>

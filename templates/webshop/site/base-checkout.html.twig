@@ -1,4 +1,4 @@
-{# webshop/site/base_site.html.twig #}
+{# webshop/site/base-site.html.twig #}
 {% extends 'webshop/site/base.html.twig' %}
 
 {% block stylesheets %}
@@ -41,8 +41,8 @@
                                     <svg class="svg-icon mr-1">
                                         <use xlink:href="#calls-1"> </use>
                                     </svg>
-                                    <span class="h6 font-weight-bold text-uppercase d-none d-md-inline">06 1 46 66 286</span>
-                                    <span class="text-sm font-weight-bold text-uppercase letter-spacing-0 d-md-none d-inline">06 1 46 66 286</span>
+                                    <span class="h6 font-weight-bold text-uppercase d-none d-md-inline">{{ settings.get('store.phone') }}</span>
+                                    <span class="text-sm font-weight-bold text-uppercase letter-spacing-0 d-md-none d-inline">{{ settings.get('store.phone') }}</span>
                                 </div>
                             </div>
 
@@ -74,7 +74,7 @@
                             <svg class="svg-icon mr-1">
                                 <use xlink:href="#calls-1"> </use>
                             </svg>
-                            <span class="login-cart--text d-lg-inline">06 1 466 6286</span>
+                            <span class="login-cart--text d-lg-inline">{{ settings.get('store.phone') }}</span>
                         </div>
 
 					</div>

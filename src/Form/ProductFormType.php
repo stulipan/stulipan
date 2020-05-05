@@ -27,6 +27,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Twig\Environment;
 
 class ProductFormType extends AbstractType
 {
@@ -41,12 +42,12 @@ class ProductFormType extends AbstractType
     private $numberToPriceTransformer;
     
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     private $twig;
 
     public function __construct(EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator,
-                                NumberToPriceTransformer $numberToPriceTransformer, \Twig_Environment $twig)
+                                NumberToPriceTransformer $numberToPriceTransformer, Environment $twig)
     {
         $this->em = $em;
         $this->urlGenerator = $urlGenerator;
@@ -76,7 +77,7 @@ class ProductFormType extends AbstractType
 //            'choices' => 'name',
             'label' => 'Kategóriák',
             'placeholder' => 'Válassz valamit...',
-            'attr' => ['class' => 'custom-select'],
+            'attr' => ['class' => 'form-control'],
             'multiple' => true,
             'expanded' => false,   // it makes it a multioption select element
         ]);

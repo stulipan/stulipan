@@ -1,0 +1,10 @@
+<div class="vp vp-secondary vp-lgX vp-has-checkbox" role="button">
+    <input type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
+    <label class="vp-figure" for="{{ choice.vars.id }}">
+            <div class="vp-content">
+                <div class="tile tile-lg">
+                    {{ choice.vars.label|raw }}
+                </div>
+            </div>
+    </label>
+</div>

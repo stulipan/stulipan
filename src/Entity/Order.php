@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Controller\Utils\GeneralUtils;
+use App\Entity\OrderItem;
 use App\Entity\OrderStatus;
 use App\Entity\Product\Product;
 use App\Entity\TimestampableTrait;
-use App\Entity\OrderItem;
 use App\Entity\User;
 use App\Entity\Recipient;
 use App\Entity\Sender;
@@ -16,11 +16,14 @@ use App\Entity\Payment;
 use App\Entity\Shipping;
 use App\Entity\Discount;
 
+use App\Model\Summary;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use Egulias\EmailValidator\Warning\AddressLiteral;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,19 +37,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Order
 {
-    public const STATUS_CREATED = 'created'; // rendelés létrehozva
-    public const STATUS_PAYMENT_PENDING = 'pending'; // fizetésre vár
-    public const STATUS_PAYMENT_FAILED = 'failed'; // fizetésre sikertelen
-    public const STATUS_PAYMENT_REFUNDED = 'refunded'; // összeg visszafizetve
-    
-    public const STATUS_SENT = 'sent'; // elküldve, azaz szállítás alatt
-    public const STATUS_FULFILLED = 'fulfilled'; // teljesítve
-    public const STATUS_RETURNED = 'returned'; // visszaküldve
-    
-    public const STATUS_REJECTED = 'rejected'; // elutasítva - ezt még nem tudom mikor kell használni
-    public const STATUS_DELETED = 'deleted'; // törölve
-    
-    
     use TimestampableTrait;
 
     /**
@@ -74,6 +64,14 @@ class Order
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=true)
      */
     private $status;
+
+    /**
+     * @var PaymentStatus|null
+     *
+     * @ORM\OneToOne(targetEntity="PaymentStatus")
+     * @ORM\JoinColumn(name="payment_status_id", referencedColumnName="id", nullable=true)
+     */
+    private $paymentStatus;
 
     /**
      * @var User|null
@@ -147,7 +145,7 @@ class Order
      * @ORM\Column(name="message", type="string", length=255, nullable=true)
      * @ Assert\NotBlank(message="Nincs uzenet!")
      */
-    private $message = '';
+    private $message;
 
     /**
      * @var string|null
@@ -156,7 +154,7 @@ class Order
      * @ORM\Column(name="message_author", type="string", length=255, nullable=true)
      * @ Assert\NotBlank(message="Nincs uzenet alairas!")
      */
-    private $messageAuthor = '';
+    private $messageAuthor;
 
     /**
      * @var OrderItem[]|ArrayCollection|null
@@ -210,14 +208,14 @@ class Order
     /**
      * @var float|null
      * @Assert\NotBlank()
-     * @ORM\Column(name="price_total", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
+     * @ORM\Column(name="price_total_", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
      */
     private $priceTotal = 0;
 
     /**
      * @var float|null
      * @Assert\NotBlank()
-     * @ORM\Column(name="price_total_after_discount", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
+     * @ORM\Column(name="price_total_after_discount_", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
      */
     private $priceTotalAfterDiscount = 0;
     
@@ -237,7 +235,7 @@ class Order
      * @ORM\Column(name="shipping_name", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Add meg a címzett nevét.")
      */
-    private $shippingName='';
+    private $shippingName;
 
     /**
      * @var int|null
@@ -308,7 +306,7 @@ class Order
     private $billingAddress;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="delivery_date", type="date", nullable=true)
@@ -325,10 +323,37 @@ class Order
      */
     private $deliveryInterval;
 
+    /**
+     * @var ClientDetails
+     *
+     * ==== One Order has one ClientDetails ====
+     *
+     * @ORM\OneToOne(targetEntity="ClientDetails", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="client_details_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank(message="Egy rendelésnek kell legyen egy ClientDetails.")
+     * @Assert\Valid()
+     */
+    private $clientDetails;
+
+    /**
+     * @var OrderLog[]|ArrayCollection|null
+     * @Groups({"orderView"})
+     *
+     * ==== One Order has History entries ====
+     * ==== mappedBy="order" => az OrderLog entitásban definiált 'order' attribútumról van szó ====
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderLog", mappedBy="order", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="order_id", nullable=true)
+     * @ORM\OrderBy({"createdAt"="DESC", "id"="DESC"})
+     * @Assert\NotBlank(message="Egy rendelésnek több előzménye lehet.")
+     */
+    private $logs;
+
 
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     /**
@@ -369,6 +394,22 @@ class Order
     public function setStatus(?OrderStatus $status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return PaymentStatus|null
+     */
+    public function getPaymentStatus(): ?PaymentStatus
+    {
+        return $this->paymentStatus;
+    }
+
+    /**
+     * @param PaymentStatus|null $paymentStatus
+     */
+    public function setPaymentStatus(?PaymentStatus $paymentStatus): void
+    {
+        $this->paymentStatus = $paymentStatus;
     }
 
     /**
@@ -483,7 +524,7 @@ class Order
      */
     public function setFirstname(?string $firstname)
     {
-        $this->firstname = $firstname;
+        $this->firstname = ucwords($firstname);
     }
     
     /**
@@ -499,7 +540,7 @@ class Order
      */
     public function setLastname(?string $lastname)
     {
-        $this->lastname = $lastname;
+        $this->lastname = ucwords($lastname);
     }
     
     /**
@@ -508,7 +549,7 @@ class Order
     public function getFullname(): ?string
     {
         $fullname = $this->firstname.' '.$this->lastname;
-        return $fullname;
+        return ucwords($fullname);
     }
     
     
@@ -687,7 +728,7 @@ class Order
      */
     public function getDeliveryFee(): ?float
     {
-        if ($this->deliveryFee === null) { return 0; }
+        if ($this->deliveryFee === null) { return (float) 0; }
         return (float) $this->deliveryFee;
     }
     
@@ -722,7 +763,7 @@ class Order
      */
     public function setShippingName(?string $name): void
     {
-        $this->shippingName = $name;
+        $this->shippingName = ucwords($name);
     }
 
     /**
@@ -770,7 +811,7 @@ class Order
      */
     public function setBillingName(?string $name): void
     {
-        $this->billingName = $name;
+        $this->billingName = ucwords($name);
     }
 
     /**
@@ -838,17 +879,17 @@ class Order
     }
 
     /**
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getDeliveryDate(): ?\DateTime
+    public function getDeliveryDate(): ?DateTime
     {
         return $this->deliveryDate;
     }
 
     /**
-     * @param \DateTime $deliveryDate
+     * @param DateTime $deliveryDate
      */
-    public function setDeliveryDate(\DateTime $deliveryDate)
+    public function setDeliveryDate(DateTime $deliveryDate)
     {
         $this->deliveryDate = $deliveryDate;
     }
@@ -867,6 +908,57 @@ class Order
     public function setDeliveryInterval(?string $deliveryInterval): void
     {
         $this->deliveryInterval = $deliveryInterval;
+    }
+
+    /**
+     * @return ClientDetails
+     */
+    public function getClientDetails(): ClientDetails
+    {
+        return $this->clientDetails;
+    }
+
+    /**
+     * @param ClientDetails $clientDetails
+     */
+    public function setClientDetails(ClientDetails $clientDetails): void
+    {
+        $this->clientDetails = $clientDetails;
+    }
+
+    /**
+     * @param OrderLog $log
+     */
+    public function addLog(OrderLog $log): void
+    {
+        if (!$this->logs->contains($log)) {
+            $log->setOrder($this);
+            $this->logs->add($log);
+        }
+    }
+
+    /**
+     * @param OrderLog $log
+     */
+    public function removeLog(OrderLog $log): void
+    {
+        $this->logs->removeElement($log);
+    }
+
+    /**
+     * @return OrderLog[]|Collection
+     */
+    public function getLogs()
+    {
+        return $this->logs;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasLogs(): bool
+    {
+        return !$this->logs->isEmpty();
     }
     
     /**
@@ -887,7 +979,7 @@ class Order
              * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
              * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
              */
-            $diff = (new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
+            $diff = (new DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
             if ($diff->days >= 0 && $diff->invert == 0) {
                 return false;
             } elseif ($diff->invert == 1) {
@@ -897,4 +989,74 @@ class Order
         return true;
     }
 
+    public function isDeliveryOverdue(): bool
+    {
+        if ($this->getStatus() && $this->getStatus()->getShortcode() === OrderStatus::STATUS_CREATED) {
+            return $this->isDeliveryDateInPast();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isClosed(): bool
+    {
+        if ($this->getStatus() && (
+                $this->getStatus()->getShortcode() === OrderStatus::STATUS_PAYMENT_REFUNDED ||
+                $this->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED ||
+                $this->getStatus()->getShortcode() === OrderStatus::STATUS_DELETED
+            )) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFulfilled(): bool
+    {
+        if ($this->getStatus() && $this->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUnpaid(): bool
+    {
+        if ($this->getPaymentStatus() && (
+                $this->getPaymentStatus()->getShortcode() === PaymentStatus::STATUS_PENDING ||
+                $this->getPaymentStatus()->getShortcode() === PaymentStatus::STATUS_PARTIALLY_PAID)
+            ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isBankTransfer(): bool
+    {
+        if ($this->getPayment() && $this->getPayment()->isBankTransfer()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function hasComment(): bool
+    {
+        foreach ($this->logs as $log) {
+            if ($log->isComment()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -6,17 +6,35 @@ namespace App\Controller\Admin;
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\DeliveryDateType;
 use App\Entity\DeliverySpecialDate;
+use App\Entity\Events;
+use App\Entity\Locales;
+use App\Entity\Localization;
 use App\Entity\Model\DeliveryDateWithIntervals;
 use App\Entity\Model\GeneratedDates;
 use App\Entity\Model\HiddenDeliveryDate;
 use App\Entity\Order;
+use App\Entity\OrderLog;
+use App\Entity\OrderLogChannel;
+use App\Entity\OrderStatus;
+use App\Event\OrderEvent;
+use App\Entity\PaymentStatus;
 use App\Form\CartHiddenDeliveryDateFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
 
 use App\Form\OrderBillingAddressType;
+use App\Form\OrderCommentType;
+use App\Form\OrderFilterType;
 use App\Form\OrderShippingAddressType;
 use App\Form\OrderStatusType;
+use App\Form\PaymentStatusType;
+use App\Services\Settings;
+use BarionClient;
+use BarionEnvironment;
+use DateTime;
+use phpDocumentor\Reflection\Types\This;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +45,10 @@ use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Pagination\PaginatedCollection;
+use Symfony\Component\Translation\MessageCatalogue;
+use Symfony\Component\Translation\MessageCatalogueInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 /**
  * @IsGranted("ROLE_MANAGE_ORDERS")
@@ -34,158 +56,131 @@ use App\Pagination\PaginatedCollection;
  */
 class OrderController extends AbstractController
 {
+    private $translator;
+    private $twig;
+    private $dispatcher;
 
-    /**
-     * @Route("/order-table/{page}/{start}/{end}", name="order-list-table",
-     *     requirements={"page"="\d+"},
-     *     defaults={"start"=null, "end"=null}
-     *     )
-     */
-    public function listInTable(Request $request, $page = 1)
+    public function __construct(TranslatorInterface $translator, Environment $twig, EventDispatcherInterface $dispatcher)
     {
-        $start = $request->attributes->get('start');
-        $end = $request->attributes->get('end');
-
-        /**
-         *  DateRange form creation
-         */
-        $dateRange = new DateRange();
-        if ( !isset($start) or $start === null or $start == "") {
-        } else {
-            $dateRange->setStart(\DateTime::createFromFormat('!Y-m-d',$start));
-            $start = $dateRange->getStart();
-//            $dateRange->setStart(\DateTime::createFromFormat('Y-m-d h:m',$start));
-        }
-        if (!isset($end) or $end === null or $end == "") {
-        } else {
-            $dateRange->setEnd(\DateTime::createFromFormat('!Y-m-d',$end));
-            $end = $dateRange->getEnd();
-//            $dateRange->setEnd(\DateTime::createFromFormat('Y-m-d h:m',$end));
-        }
-//        $dateRangeForm = $this->createForm(DateRangeType::class, $dateRange);
-        $dateRangeForm = $this->createForm(DateRangeType::class);
-
-        if ($start and $end) {
-            $queryBuilder = $this->getDoctrine()
-                ->getRepository(Order::class)
-                ->findAllBetweenDates($start, $end);
-//            $totalKeszpenzEsBankkartya = $this->getDoctrine()
-//                ->getRepository(Boltzaras::class)
-//                ->sumAllBetweenDates($start, $end)
-//                ->getSingleResult();
-//            $totalWebshopForgalom = $this->getDoctrine()
-//                ->getRepository(BoltzarasWeb::class)
-//                ->sumAllBetweenDates($start, $end)
-//                ->getSingleResult();
-        } else {
-            $queryBuilder = $this->getDoctrine()
-                ->getRepository(Order::class)
-                ->findAllQueryBuilder();
-            //->findAllGreaterThanKassza(10);
-//            $totalKeszpenzEsBankkartya = $this->getDoctrine()
-//                ->getRepository(Boltzaras::class)
-//                ->sumAllQueryBuilder()
-//                ->getSingleResult();
-//            $totalWebshopForgalom = $this->getDoctrine()
-//                ->getRepository(BoltzarasWeb::class)
-//                ->sumAllQueryBuilder()
-//                ->getSingleResult();
-        }
-
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        //On the Pagerfanta object, call setMaxPerPage() to set displayed items to 10, the set current page
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
-        //$pagerfanta->setCurrentPage($page);
-
-        try {
-            $pagerfanta->setCurrentPage($page);
-        } catch(NotValidCurrentPageException $e) {
-            throw new NotFoundHttpException();
-        }
-
-
-        $orders = [];
-        foreach ($pagerfanta->getCurrentPageResults() as $result) {
-            $orders[] = $result;
-        }
-
-        if (!$orders) {
-            $this->addFlash('danger', 'Keresés eredménye: Nem talált boltzárást az adott idősávban!');
-            return $this->redirectToRoute('order-list');
-        }
-
-
-        return $this->render('admin/order/order-list-table.html.twig', [
-            'orders' => $orders,
-            'paginator' => $pagerfanta,
-            'total' => $pagerfanta->getNbResults(),
-            'count' => count($orders),
-            'title' => 'Rendelések',
-            'dateRangeForm' => $dateRangeForm->createView(),
-            'orderCount' => empty($orders) ? 'Nincsenek rendelések' : count($orders),
-        ]);
+        $this->translator = $translator;
+        $this->twig = $twig;
+        $this->dispatcher = $dispatcher;
     }
 
 
     /**
-     * @Route("/order-table2/{page}/{start}/{end}", name="order-list-table",
+     * Route("/order-table2/{orderStatus}-{paymentStatus}/{page}/{start}/{end}", name="order-list-table",
+     * ==== Az alabbi resz akkor kell, ha a route-be adjuk at a parametereket ====
+     * @ Route("/order-table2/{orderStatus}-{paymentStatus}/{dateRange}", name="order-list-table",
+     *     defaults={
+     *          "paymentStatus"=null,
+     *          "orderStatus"=null,
+     *          "dateRange"=null,
+     *          "page"=1,
+     *         }
+     * ===========================================================================
+     * @Route("/orders", name="order-list-table",
      *     requirements={"page"="\d+"},
-     *     defaults={"start"=null, "end"=null}
      *     )
      */
-    public function listInTable2(Request $request, $page = 1)
+    public function listOrders(Request $request, $page = 1, Settings $settings) //, $dateRange = null, $paymentStatus = null, $orderStatus = null
     {
-        $start = $request->attributes->get('start');
-        $end = $request->attributes->get('end');
+        $dateRange = $request->query->get('dateRange');
+        $searchTerm = $request->query->get('searchTerm');
+        $paymentStatus = $request->query->get('paymentStatus');
+        $orderStatus = $request->query->get('orderStatus');
+        $page = $request->query->get('page') ? $request->query->get('page') : $page;
+//        dd($request->attributes->get('_route_params'));
+//        dd($request->query->all());
 
-        /**
-         *  DateRange form creation
-         */
-        $dateRange = new DateRange();
-        if ( !isset($start) or $start === null or $start == "") {
-        } else {
-            $dateRange->setStart(\DateTime::createFromFormat('!Y-m-d',$start));
-            $start = $dateRange->getStart();
-//            $dateRange->setStart(\DateTime::createFromFormat('Y-m-d h:m',$start));
+        $filterTags = [];
+        $urlParams = [];
+        $data = $filterTags;
+        $em = $this->getDoctrine();
+        if ($dateRange) {
+            $filterTags['dateRange'] = 'Idősáv: '.$dateRange;
+            $data['dateRange'] = $dateRange;
+            $urlParams['dateRange'] = $dateRange;
         }
-        if (!isset($end) or $end === null or $end == "") {
-        } else {
-            $dateRange->setEnd(\DateTime::createFromFormat('!Y-m-d',$end));
-            $end = $dateRange->getEnd();
-//            $dateRange->setEnd(\DateTime::createFromFormat('Y-m-d h:m',$end));
+        if ($searchTerm) {
+            $filterTags['searchTerm'] = 'Keresés: '.$searchTerm;
+            $data['searchTerm'] = $searchTerm;
+            $urlParams['searchTerm'] = $searchTerm;
         }
-//        $dateRangeForm = $this->createForm(DateRangeType::class, $dateRange);
-        $dateRangeForm = $this->createForm(DateRangeType::class);
+        if ($orderStatus) {
+            $filterTags['orderStatus'] = $em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $orderStatus])->getName();
+            $urlParams['orderStatus'] = $orderStatus;
+            $data['orderStatus'] = $em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $orderStatus]);
+        }
+        if ($paymentStatus) {
+            $filterTags['paymentStatus'] = $em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus])->getName();
+            $urlParams['paymentStatus'] = $paymentStatus;
+            $data['paymentStatus'] = $em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus]);
+        }
+        $filterForm = $this->createForm(OrderFilterType::class, $data);
 
-        if ($start and $end) {
-            $queryBuilder = $this->getDoctrine()
-                ->getRepository(Order::class)
-                ->findAllBetweenDates($start, $end);
-//            $totalKeszpenzEsBankkartya = $this->getDoctrine()
-//                ->getRepository(Boltzaras::class)
-//                ->sumAllBetweenDates($start, $end)
-//                ->getSingleResult();
-//            $totalWebshopForgalom = $this->getDoctrine()
-//                ->getRepository(BoltzarasWeb::class)
-//                ->sumAllBetweenDates($start, $end)
-//                ->getSingleResult();
-        } else {
-//            $criteria = new \Doctrine\Common\Collections\Criteria();
-//            $criteria->where($criteria->expr()->neq('status', null));
-            $queryBuilder = $this->getDoctrine()->getRepository(Order::class)->findAllByQueryBuilder();
-//            dd($queryBuilder);
-            
+        $filterUrls = [];
+        foreach ($filterTags as $key => $value) {
+            // remove the current filter from the urlParams
+            $shortlist = array_diff_key($urlParams,[$key => '']);
+
+            // generate the URL with the remaining filters
+            $filterUrls[$key] = $this->generateUrl('order-list-table',[
+                'dateRange' => isset($shortlist['dateRange']) ? $shortlist['dateRange'] : null,
+                'searchTerm' => isset($shortlist['searchTerm']) ? $shortlist['searchTerm'] : null,
+                'orderStatus' => isset($shortlist['orderStatus']) ? $shortlist['orderStatus'] : null,
+                'paymentStatus' => isset($shortlist['paymentStatus']) ? $shortlist['paymentStatus'] : null,
+            ]);
         }
 
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        //On the Pagerfanta object, call setMaxPerPage() to set displayed items to 10, the set current page
+        $filterQuickLinks['all'] = [
+            'name' => 'Összes rendelés',
+            'url' => $this->generateUrl('order-list-table'),
+            'active' => false,
+        ];
+        $filterQuickLinks['unpaid'] = [
+            'name' => 'Fizetésre váró',
+            'url' => $this->generateUrl('order-list-table',['paymentStatus' => PaymentStatus::STATUS_PENDING]),
+            'active' => false,
+        ];
+        $filterQuickLinks['unfulfilled'] = [
+            'name' => 'Feldolgozás alatt',
+            'url' => $this->generateUrl('order-list-table',['orderStatus' => OrderStatus::STATUS_CREATED]),
+            'active' => false,
+        ];
+
+        // Generate the quicklinks which are placed above the filter
+        $hasCustomFilter = false;
+        if (!$dateRange && !$orderStatus && !$paymentStatus && !$searchTerm) {
+            $filterQuickLinks['all']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$dateRange && $paymentStatus && ( $paymentStatus === PaymentStatus::STATUS_PENDING || $paymentStatus === PaymentStatus::STATUS_PARTIALLY_PAID)) {
+            $filterQuickLinks['unpaid']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$dateRange && $orderStatus && $orderStatus === OrderStatus::STATUS_CREATED) {
+            $filterQuickLinks['unfulfilled']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$hasCustomFilter) {
+            $filterQuickLinks['custom'] = [
+                'name' => 'Egyedi szűrés',
+                'url' => $this->generateUrl('order-list-table',$request->query->all()),
+                'active' => true,
+            ];
+        }
+
+        $queryBuilder = $em->getRepository(Order::class)->findAllQuery([
+            'dateRange' => $dateRange,
+            'searchTerm' => $searchTerm,
+            'orderStatus' => $orderStatus,
+            'paymentStatus' => $paymentStatus,
+        ]);
+
         $adapter = new DoctrineORMAdapter($queryBuilder);
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
         try {
@@ -194,259 +189,100 @@ class OrderController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-
         $orders = [];
         foreach ($pagerfanta->getCurrentPageResults() as $result) {
             $orders[] = $result;
         }
 
         if (!$orders) {
-            $this->addFlash('danger', 'Keresés eredménye: Nem talált boltzárást az adott idősávban!');
-            return $this->redirectToRoute('order-list');
+//            $this->addFlash('danger', 'Nem talált rendeléseket! Próbáld módosítani a szűrőket.');
         }
-
 
         return $this->render('admin/order/order-list-table-withProducts.html.twig', [
             'orders' => $orders,
             'paginator' => $pagerfanta,
             'total' => $pagerfanta->getNbResults(),
             'count' => count($orders),
-            'title' => 'Rendelések',
-            'dateRangeForm' => $dateRangeForm->createView(),
             'orderCount' => empty($orders) ? 'Nincsenek rendelések' : count($orders),
+            'filterQuickLinks' => $filterQuickLinks,
+            'filterForm' => $filterForm->createView(),
+            'filterTags' => $filterTags,
+            'filterUrls' => $filterUrls,
+            'filterFormModal' => $filterForm->createView(),
         ]);
     }
 
     /**
-     * @Route("/order/list/{page}/{start}/{end}", name="order-list",
-     *     requirements={"page"="\d+"},
-     *     defaults={"start"=null, "end"=null}
-     *     )
+     * @Route("/orders/filter", name="order-list-filter")
      */
-    public function listActionWithPagination(Request $request, $page = 1)
+    public function handleFilterForm(Request $request)
     {
-//        $this->denyAccessUnlessGranted('ROLE_USER');
-
-        $start = $request->attributes->get('start');
-        $end = $request->attributes->get('end');
-
-        /**
-         *  DateRange form creation
-         */
-        $dateRange = new DateRange();
-        if ( !isset($start) or $start === null or $start == "") {
-        } else {
-            $dateRange->setStart(\DateTime::createFromFormat('!Y-m-d',$start));
-            $start = $dateRange->getStart();
-//            $dateRange->setStart(\DateTime::createFromFormat('Y-m-d h:m',$start));
-        }
-        if (!isset($end) or $end === null or $end == "") {
-        } else {
-            $dateRange->setEnd(\DateTime::createFromFormat('!Y-m-d',$end));
-            $end = $dateRange->getEnd();
-//            $dateRange->setEnd(\DateTime::createFromFormat('Y-m-d h:m',$end));
-        }
-//        $dateRangeForm = $this->createForm(DateRangeType::class, $dateRange);
-        $dateRangeForm = $this->createForm(DateRangeType::class);
-
-        if ($start and $end) {
-            $queryBuilder = $this->getDoctrine()
-                ->getRepository(Order::class)
-                ->findAllBetweenDates($start, $end);
-//            $totalKeszpenzEsBankkartya = $this->getDoctrine()
-//                ->getRepository(Boltzaras::class)
-//                ->sumAllBetweenDates($start, $end)
-//                ->getSingleResult();
-//            $totalWebshopForgalom = $this->getDoctrine()
-//                ->getRepository(BoltzarasWeb::class)
-//                ->sumAllBetweenDates($start, $end)
-//                ->getSingleResult();
-        } else {
-            $queryBuilder = $this->getDoctrine()
-                ->getRepository(Order::class)
-                ->findAllQueryBuilder();
-            //->findAllGreaterThanKassza(10);
-//            $totalKeszpenzEsBankkartya = $this->getDoctrine()
-//                ->getRepository(Boltzaras::class)
-//                ->sumAllQueryBuilder()
-//                ->getSingleResult();
-//            $totalWebshopForgalom = $this->getDoctrine()
-//                ->getRepository(BoltzarasWeb::class)
-//                ->sumAllQueryBuilder()
-//                ->getSingleResult();
-        }
-
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        //On the Pagerfanta object, call setMaxPerPage() to set displayed items to 10, the set current page
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
-        //$pagerfanta->setCurrentPage($page);
-
-        try {
-            $pagerfanta->setCurrentPage($page);
-        } catch(NotValidCurrentPageException $e) {
-            throw new NotFoundHttpException();
-        }
-
-
-        $orders = [];
-        foreach ($pagerfanta->getCurrentPageResults() as $result) {
-            $orders[] = $result;
-        }
-
-        if (!$orders) {
-//            throw $this->createNotFoundException(
-//                'Nem talált egy boltzárást sem! ' );
-            $this->addFlash('danger', 'Keresés eredménye: Nem talált boltzárást az adott idősávban!');
-            return $this->redirectToRoute('order-list');
-
-        }
-
-//        foreach($orders as $i => $item) {
-//            $orders[$i]->getIdopont()->format('Y-m-d H:i:s');
-//            $orders[$i]->getModositasIdopontja()->format('Y-m-d H:i:s');
-//        }
-
-        $paginatedCollection = new PaginatedCollection($orders, $pagerfanta->getNbResults());
-
-        // render a template, then in the template, print things with {{ jelentes.munkatars }}
-        return $this->render('admin/order/order-list.html.twig', [
-            'orders' => $orders,
-            'paginator' => $pagerfanta,
-            'total' => $pagerfanta->getNbResults(),
-            'count' => count($orders),
-            'title' => 'Rendelések',
-            'dateRangeForm' => $dateRangeForm->createView(),
-            'orderCount' => empty($orders) ? 'Nincsenek rendelések' : count($orders),
-        ]);
-    }
-
-    /**
-	 * @Route("/order/all", name="order-list_all")
-	 */
-	public function listActionOld()
-	{
-		$jelentes = $this->getDoctrine()
-			->getRepository(Boltzaras::class)
-			->findAll();
-        $totalKeszpenzEsBankkartya = $this->getDoctrine()
-            ->getRepository(Boltzaras::class)
-            ->sumAllQueryBuilder()
-            ->getSingleResult();
-
-		if (!$jelentes) {
-			throw $this->createNotFoundException(
-				'Nem talált egy boltzárást sem! '
-			);
-		}
-
-		// render a template, then in the template, print things with {{ jelentes.munkatars }}
-		foreach($jelentes as $i => $item) {
-			// $jelentes[$i] is same as $item
-			$jelentes[$i]->getIdopont()->format('Y-m-d H:i:s');
-			$jelentes[$i]->getModositasIdopontja()->format('Y-m-d H:i:s');
-		}
-
-		return $this->render('admin/order/order-list.html.twig', [
-		    'jelentesek' => $jelentes,
-            'title' => 'Boltzárások listája',
-            'keszpenz' => $totalKeszpenzEsBankkartya['keszpenz'],
-            'bankkartya' => $totalKeszpenzEsBankkartya['bankkartya'],
-            ]);
-	}
-
-	public function addBoltzarasForm()
-    {
-        $form = $this->createForm(BoltzarasFormType::class);
-
-        return $this->render('admin/order/_form.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Új boltzárás rögzítése',
-        ]);
-    }
-
-
-	/**
-     * @Route("/order/edit/{id}", name="order-edit")
-     */
-    public function editAction(Request $request, ?Boltzaras $boltzaras, $id = null, \Swift_Mailer $mailer)
-    {
-        if (!$boltzaras) {
-            // new Boltzaras
-            $form = $this->createForm(BoltzarasFormType::class);
-            $title = 'Új boltzárás rögzítése';
-        } else {
-            // edit Boltzaras
-            $form = $this->createForm(BoltzarasFormType::class, $boltzaras);
-            $title = 'Boltzárás adatainak módosítása';
-        }
-
-        // handleRequest only handles data on POST
+        $form = $this->createForm(OrderFilterType::class);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $boltzaras = $form->getData();
-            $order->setModositasIdopontja();
-         	
-			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($boltzaras);
-			$entityManager->flush();
+            $filters = $form->getData();
+            $dateRange = null;
+            $searchTerm = null;
+            $orderStatus = null;
+            $paymentStatus = null;
 
-            $subject = 'Napi boltzárás';
-            $email = (new \Swift_Message())
-                ->setSubject($subject)
-                ->setFrom(['info@tulipanfutar.hu' => 'Difiori boltzárás'])
-                ->setTo('info@difiori.hu')
-                ->setBody(
-                    $this->renderView('admin/emails/order-napi-riport.html.twig', [
-                            'kassza' => $order->getKassza(),
-                            'keszpenz' => $order->getKeszpenz(),
-                            'bankkartya' => $order->getBankkartya(),
-                            'munkatars' => $order->getMunkatars(),
-                            'subject' => $subject,
-                            'idopont' => $order->getIdopont(),
-                        ]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($email);
-
-            $this->addFlash('success', 'Boltzárás sikeresen elmentve!');
-
-			return $this->redirectToRoute('order-list');
-			
+            if ($filters['dateRange']) {
+                $dateRange = $filters['dateRange'];
+            }
+            if ($filters['searchTerm']) {
+                $searchTerm = $filters['searchTerm'];
+            }
+            if ($filters['orderStatus']) {
+                $orderStatus = $this->getDoctrine()->getRepository(OrderStatus::class)->find($filters['orderStatus'])->getShortcode();
+            }
+            if ($filters['paymentStatus']) {
+                $paymentStatus = $this->getDoctrine()->getRepository(PaymentStatus::class)->find($filters['paymentStatus'])->getShortcode();
+            }
+//            dd($orderStatus);
+            return $this->redirectToRoute('order-list-table',[
+                'dateRange' => $dateRange,
+                'searchTerm' => $searchTerm,
+                'orderStatus' => $orderStatus,
+                'paymentStatus' => $paymentStatus,
+            ]);
         }
-        
-        return $this->render('admin/order/order-edit.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Boltzárás adatainak módosítása',
-        ]);
+        return $this->redirectToRoute('order-list-table');
     }
 
     /**
-     * @Route("/order/detail/{id}", name="order-detail")
+     * @Route("/orders/{id}", name="order-detail")
      */
-    public function showOrderDetail(Request $request, ?Order $order, $id = null)
+    public function showOrderDetail(Request $request, ?Order $order, $id = null, \App\Services\Localization $localization)
     {
+        $myPosKey = '44bbe1be18864434b28f2d09df89351c';
+        $apiVersion = 2;
+        $environment = BarionEnvironment::Test;
+
+        $barionClient = new BarionClient($myPosKey, $apiVersion, $environment);
+
+//        $money = $this->twig->getFilter('money')->getCallable();
+//        dd($money(4876));
+
+//        setlocale(LC_TIME, "hu_HU");
+//        dd(strftime(" in Finnish is %A,"));
+
         if (!$order) {
             throw $this->createNotFoundException('STUPID: Nincs ilyen rendelés!' );
         }
 
-        $isBankTransfer = $order->getPayment()->isBankTransfer() ? true : false;
         $shippingForm = $this->createForm(OrderShippingAddressType::class, $order);
         $billingForm = $this->createForm(OrderBillingAddressType::class, $order);
     
         $offset = GeneralUtils::DELIVERY_DATE_HOUR_OFFSET;
-        $days = (new \DateTime('+2 months'))->diff(new \DateTime('now'))->days;
+        $days = (new DateTime('+2 months'))->diff(new DateTime('now'))->days;
         for ($i = 0; $i <= $days; $i++) {
             /**
              * ($i*24 + offset) = 0x24+4 = 4 órával későbbi dátum lesz
              * Ez a '4' megegyezik azzal, amit a javascriptben adtunk meg, magyarán 4 órával
              * későbbi időpont az első lehetséges szállítási nap.
              */
-            $dates[] = (new \DateTime('+'. ($i*24 + $offset).' hours'));
+            $dates[] = (new DateTime('+'. ($i*24 + $offset).' hours'));
         }
 
 //        dd($dates);
@@ -481,30 +317,33 @@ class OrderController extends AbstractController
         /**
          *
          */
-//        if ($order->getStatus()->getShortcode() === Order::STATUS_FULFILLED || $order->getStatus()->getShortcode() === Order::STATUS_REJECTED ||
-//            $order->getStatus()->getShortcode() === Order::STATUS_RETURNED || $order->getStatus()->getShortcode() === Order::STATUS_DELETED) {
+//        if ($order->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED || $order->getStatus()->getShortcode() === OrderStatus::STATUS_REJECTED ||
+//            $order->getStatus()->getShortcode() === OrderStatus::STATUS_RETURNED || $order->getStatus()->getShortcode() === OrderStatus::STATUS_DELETED) {
 //            $isDeliveryOverdue = false;
 //        } else {
-        if ($order->getStatus() && $order->getStatus()->getShortcode() === Order::STATUS_CREATED) {
-            $isDeliveryOverdue = $order->isDeliveryDateInPast();
-        } else {
-            $isDeliveryOverdue = false;
-        }
         
         $statusForm = $this->createForm(OrderStatusType::class, $order);
+        $paymentStatusForm = $this->createForm(PaymentStatusType::class, $order);
+
+        $log = new OrderLog();
+
+        $log->setChannel($this->getDoctrine()->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => OrderLog::CHANNEL_ADMIN]));
+        $log->setOrder($order);
+        $log->setComment(true);
+//        $orderLog->setMessage('');
+        $commentForm = $this->createForm(OrderCommentType::class, $log);
         
         return $this->render('admin/order/order-detail.html.twig', [
             'order' => $order,
-            'overdue' => true,
-            'isBankTransfer' => $isBankTransfer,
             'shippingForm' => $shippingForm->createView(),
             'billingForm' => $billingForm->createView(),
             'generatedDates' => $generatedDates,
             'hiddenDateForm' => $hiddenDateForm->createView(),
             'selectedDate' => $selectedDate,
             'selectedInterval' => $selectedInterval,
-            'isDeliveryOverdue' => $isDeliveryOverdue,
             'statusForm' => $statusForm->createView(),
+            'paymentStatusForm' => $paymentStatusForm->createView(),
+            'commentForm' => $commentForm->createView(),
             
         ]);
     }
@@ -513,7 +352,7 @@ class OrderController extends AbstractController
      * Edit the shipping address information in an Order.
      * Used in AJAX.
      *
-     * @Route("/order/{id}/editShippingInfo", name="order-editShippingInfo", methods={"POST"})
+     * @Route("/orders/{id}/editShippingInfo", name="order-editShippingInfo", methods={"POST"})
      */
     public function editShippingForm(Request $request, ?Order $order, $id = null) //, ValidatorInterface $validator
     {
@@ -571,7 +410,7 @@ class OrderController extends AbstractController
      * Edit the shipping address information in an Order.
      * Used in AJAX.
      *
-     * @Route("/order/{id}/editBillingInfo", name="order-editBillingInfo", methods={"POST"})
+     * @Route("/orders/{id}/editBillingInfo", name="order-editBillingInfo", methods={"POST"})
      */
     public function editBillingForm(Request $request, ?Order $order, $id = null) //, ValidatorInterface $validator
     {
@@ -630,7 +469,7 @@ class OrderController extends AbstractController
      * Edit the delivery date information in an Order.
      * Used in AJAX.
      *
-     * @Route("/order/{id}/editDeliveryDate", name="order-editDeliveryDate", methods={"POST"})
+     * @Route("/orders/{id}/editDeliveryDate", name="order-editDeliveryDate", methods={"POST"})
      */
     public function editDeliveryDate(Request $request, ?Order $order, $id = null, HiddenDeliveryDate $date)
     {
@@ -644,9 +483,14 @@ class OrderController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $order->setDeliveryDate(\DateTime::createFromFormat('!Y-m-d', $data->getDeliveryDate()));
+            $order->setDeliveryDate(DateTime::createFromFormat('!Y-m-d', $data->getDeliveryDate()));
             $order->setDeliveryInterval($data->getDeliveryInterval());
             $order->setDeliveryFee($data->getDeliveryFee());
+
+            $event = new OrderEvent($order, [
+                'channel' => OrderLog::CHANNEL_ADMIN,
+            ]);
+            $this->dispatcher->dispatch($event, OrderEvent::DELIVERY_DATE_UPDATED);
     
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($order);
@@ -679,7 +523,7 @@ class OrderController extends AbstractController
      * Edit the delivery date information in an Order.
      * Used in AJAX.
      *
-     * @Route("/order/{id}/editStatus", name="order-editStatus", methods={"POST"})
+     * @Route("/orders/{id}/editStatus", name="order-editStatus", methods={"POST"})
      */
     public function editStatus(Request $request, ?Order $order, $id = null)
     {
@@ -694,6 +538,12 @@ class OrderController extends AbstractController
             /** @var Order $data */
             $data = $form->getData();
             $order->setStatus($data->getStatus());
+
+            $event = new OrderEvent($order, [
+                'channel' => OrderLog::CHANNEL_ADMIN,
+                'orderStatus' => $order->getStatus()->getShortcode(),
+            ]);
+            $this->dispatcher->dispatch($event, OrderEvent::ORDER_UPDATED);
         
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($order);
@@ -722,66 +572,127 @@ class OrderController extends AbstractController
         }
     }
 
-//	/**
-//	 * @Route("/order/show/{id}", name="order-show")
-//	 */
-//	public function showAction(Boltzaras $jelentes)
-//	{
-//		if (!$jelentes) {
-//			throw $this->createNotFoundException(
-//				'Nem talált egy boltzárásjelentést, ezzel az ID-vel: '.$id
-//			);
-//		}
-//
-//       	//ezzel kiírom simán az db-ből kinyert adatokat
-//		//dump($jelentes);die;
-//
-//		// or render a template and print things with {{ jelentes.munkatars }}
-//		$jelentes->getIdopont()->format('Y-m-d H:i:s');
-//		$jelentes->getModositasIdopontja()->format('Y-m-d H:i:s');
-//		return $this->render('admin/order/order-list.html.twig', ['jelentes' => $jelentes]);
-//	}
+    /**
+     * Edit the Payment Status in an Order.
+     * Used in AJAX.
+     *
+     * @Route("/orders/{id}/editPaymentStatus", name="order-editPaymentStatus", methods={"POST"})
+     */
+    public function editPaymentStatus(Request $request, ?Order $order, $id = null)
+    {
+        if (!$order) {
+            throw $this->createNotFoundException("STUPID: Nincs ilyen rendelés!");
+        } else {
+            $form = $this->createForm(PaymentStatusType::class, $order);
+        }
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Order $data */
+            $data = $form->getData();
+            $order->setPaymentStatus($data->getPaymentStatus());
 
+            $event = new OrderEvent($order, [
+                'channel' => OrderLog::CHANNEL_ADMIN,
+                'paymentStatus' => $data->getPaymentStatus()->getShortcode(),
+            ]);
+            $this->dispatcher->dispatch($event, OrderEvent::PAYMENT_UPDATED);
 
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($order);
+            $entityManager->flush();
 
-    //	/**
-//     * @Route("/order/new", name="order-new")
-//     */
-//    public function newAction(Request $request)
-//    {
-//        $form = $this->createForm(BoltzarasFormType::class);
-//
-//        // handleRequest only handles data on POST
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//         	//ezzel kiirom siman az POST-al submitolt adatokat
-//         	//dump($form->getData());die;
-//
-//         	$zarasAdatok = $form->getData();
-//         	$zarasAdatok->setModositasIdopontja();
-//
-//			// you can fetch the EntityManager via $this->getDoctrine()
-//			// or you can add an argument to your action: index(EntityManagerInterface $entityManager)
-//			$entityManager = $this->getDoctrine()->getManager();
-//
-//			// tell Doctrine you want to (eventually) save the Product (no queries yet)
-//			$entityManager->persist($zarasAdatok);
-//
-//			// actually executes the queries (i.e. the INSERT query)
-//			$entityManager->flush();
-//
-//			$this->addFlash('success', 'Sikeresen leadtad a boltzárásjelentést! Jó pihenést!');
-//
-//			//return $this->redirectToRoute('order-new');
-//			return $this->redirectToRoute('order-list');
-//        }
-//
-//        return $this->render('admin/order/order-edit.html.twig', [
-//            'form' => $form->createView(),
-//            'title' => 'Új boltzárás rögzítése',
-//        ]);
-//    }
+            /**
+             * If AJAX request, and because at this point the form data is processed, it returns Success (code 200)
+             */
+            if ($request->isXmlHttpRequest()) {
+                $this->addFlash('success', 'Fizetés állapota sikeresen módosítva! <br>Új állapot: <strong>'.$order->getPaymentStatus().'</strong>');
+                $html = $this->render('admin/item.html.twig', [
+                    'item' => 'Fizetés állapota sikeresen módosítva!',
+                ]);
+                return new Response($html, 200);
+            }
+        }
+        /**
+         * Renders form with errors
+         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
+         */
+        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('admin/order/status-form.html.twig', [
+                'paymentStatusForm' => $form->createView(),
+            ]);
+            return new Response($html,400);
+        }
+    }
 
+    /**
+     * Add a comment to an Order. In fact this is just a simple OrderLog added to the Order.
+     * Used in AJAX.
+     *
+     * @Route("/orders/{orderId}/editComment/", name="order-editComment", methods={"POST"})
+     */
+    public function editCommentForm(Request $request, ?OrderLog $log, $orderId = null) //, $id = null
+    {
+        if (!$orderId) {
+            throw $this->createNotFoundException("STUPID: Nincs ilyen rendelés!");
+        }
+        $order = $this->getDoctrine()->getRepository(Order::class)->find($orderId);
+
+        if (!$log) {
+            $log = new OrderLog();
+            $log->setOrder($order);
+            $log->setComment(true);
+            $log->setChannel($this->getDoctrine()->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => OrderLog::CHANNEL_ADMIN]));
+            $form = $this->createForm(OrderCommentType::class, $log);
+        } else {
+            $form = $this->createForm(OrderCommentType::class, $log);
+            $order = $log->getOrder();
+        }
+        $form->handleRequest($request);
+//        dd($form->isSubmitted() && $request->isXmlHttpRequest());
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var OrderLog $data */
+            $log = $form->getData();
+            $order = $log->getOrder();
+
+//            $log->setMessage($data->getMessage());
+//            $log->setOrder($order);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($log);
+            $entityManager->flush();
+
+            /**
+             * If AJAX request, returns the list of Recipients
+             */
+            if ($request->isXmlHttpRequest()) {
+                $this->addFlash('success', 'Komment sikeresen hozzáadva!');
+                $html = $this->render('admin/item.html.twig', [
+                    'item' => 'Komment sikeresen hozzáadva!',
+                ]);
+                return new Response($html, 200);
+            }
+        }
+        /**
+         * Renders form with errors
+         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
+         * (!?, there is a validation error)
+         */
+        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('admin/order/_form-order-comment.html.twig', [
+                'order' => $order,
+                'commentForm' => $form->createView(),
+            ]);
+            return new Response($html,400);
+        }
+
+        /**
+         * Renders form initially with data
+         */
+        return $this->render('admin/order/_form-order-comment.html.twig', [
+            'order' => $order,
+            'commentForm' => $form->createView(),
+        ]);
+    }
 }

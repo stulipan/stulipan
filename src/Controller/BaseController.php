@@ -12,6 +12,7 @@ use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -72,14 +73,15 @@ class BaseController extends AbstractController
     protected function jsonObjNormalized($data, $statusCode = 200, array $context = [])
     {
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $objNormalizer = new ObjectNormalizer($classMetadataFactory,null,null,new PhpDocExtractor(),
+        $objNormalizer = new ObjectNormalizer($classMetadataFactory,null,null, new PhpDocExtractor(),
             null,null,
             [
                 ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
-//                ObjectNormalizer::CIRCULAR_REFERENCE_HANDLER=>function ($object) {
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $content) {
+                    return $object->getName();
 //                    if ($object instanceof ProductCategory) { return ['id' => $object->getId(), 'name' => $object->getName()]; }
 //                    return $object->getId();
-//                }
+                }
             ]);
         $serializer = new Serializer([$objNormalizer], [new JsonEncoder()]);
         $json = $serializer->serialize($data, 'json', $context);

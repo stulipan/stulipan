@@ -3,6 +3,8 @@ framework:
     translator:
         paths:
             - '%kernel.project_dir%/translations'
+            - '%kernel.project_dir%/translations/store'
+            - '%kernel.project_dir%/translations/admin'
         fallbacks:
             - '%locale%'
             - 'hu'

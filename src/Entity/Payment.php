@@ -8,6 +8,7 @@ use App\Entity\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 //* @MappedSuperclass
 /**
@@ -15,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="cart_payment")
  * @ORM\Entity(repositoryClass="App\Repository\PaymentRepository")
+ * @UniqueEntity("shortcode", message="Ez a shortcode már használatban van!")
  */
 
 class Payment
@@ -47,9 +49,9 @@ class Payment
      * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank(message="A rövid kód hiányzik!")
-     * @ORM\Column(name="short_code", type="string", length=10, nullable=false)
+     * @ORM\Column(name="shortcode", type="string", length=10, nullable=false)
      */
-    private $shortCode;
+    private $shortcode;
 
     /**
      * @var string
@@ -135,17 +137,17 @@ class Payment
     /**
      * @return string
      */
-    public function getShortCode(): ?string
+    public function getShortcode(): ?string
     {
-        return $this->shortCode;
+        return $this->shortcode;
     }
     
     /**
-     * @param string $shortCode
+     * @param string $shortcode
      */
-    public function setShortCode(?string $shortCode)
+    public function setShortcode(?string $shortcode)
     {
-        $this->shortCode = $shortCode;
+        $this->shortcode = $shortcode;
     }
 
     /**

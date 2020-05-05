@@ -1,18 +1,22 @@
 <?php
 
 namespace App\Entity\Product;
-use ApiPlatform\Core\Annotation\ApiResource;
+//use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ *
  *
  * @ORM\Entity
  * @ORM\Table(name="product_status")
  */
-class ProductStatus implements \JsonSerializable
+class ProductStatus implements JsonSerializable
 {
+    const STATUS_ENABLED = 'enabled';
+    const STATUS_UNAVAILABLE = 'unavailable';
+    const STATUS_REMOVED = 'removed';
 
     /**
      * @var int
@@ -39,6 +43,22 @@ class ProductStatus implements \JsonSerializable
      * @ORM\Column(name="icon", type="string", length=200, nullable=true)
      */
     private $icon;
+
+    /**
+     * @var string
+     * @Groups({"productView", "productList"})
+     *
+     * @ORM\Column(name="shortcode", type="string", length=20, nullable=false)
+     */
+    private $shortcode;
+
+    /**
+     * @var string
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="css", type="string", length=20, nullable=false)
+     */
+    private $css;
     
     /**
      * {@inheritdoc}
@@ -49,6 +69,8 @@ class ProductStatus implements \JsonSerializable
             'id'            => $this->getId(),
             'name'          => $this->getName(),
             'icon'          => $this->getIcon(),
+            'shortcode'     => $this->getShortcode(),
+            'css'           => $this->getCss(),
         ];
     }
     
@@ -96,6 +118,38 @@ class ProductStatus implements \JsonSerializable
     {
         $this->icon = $icon;
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getShortcode(): ?string
+    {
+        return $this->shortcode;
+    }
+
+    /**
+     * @param string $shortcode
+     */
+    public function setShortcode(?string $shortcode): void
+    {
+        $this->shortcode = $shortcode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCss(): ?string
+    {
+        return $this->css;
+    }
+
+    /**
+     * @param string $css
+     */
+    public function setCss(string $css): void
+    {
+        $this->css = $css;
+    }
+
 
 }

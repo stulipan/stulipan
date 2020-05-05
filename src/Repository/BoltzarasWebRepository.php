@@ -4,12 +4,13 @@ namespace App\Repository;
 
 use App\Entity\Boltzaras\BoltzarasWeb;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\Query;
+use Doctrine\Persistence\ManagerRegistry;
 
 
 class BoltzarasWebRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BoltzarasWeb::class);
     }
@@ -17,7 +18,7 @@ class BoltzarasWebRepository extends ServiceEntityRepository
     /**
      * @param $start
      * @param $end
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function sumAllBetweenDates($start, $end)
     {
@@ -34,7 +35,7 @@ class BoltzarasWebRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function sumAllQueryBuilder()
     {

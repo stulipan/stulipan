@@ -6,6 +6,7 @@ use App\Controller\BaseController;
 use App\Entity\ApiModel\ProductApiModel;
 use App\Entity\ApiModel\ProductCategoryApiModel;
 use App\Entity\Product\Product;
+use App\Entity\Product\ProductVariant;
 use App\Normalizer\DfrObjectSerializer;
 use App\Serializer\ImageEntityDenormalizer;
 use App\Serializer\PriceDenormalizer;
@@ -14,7 +15,11 @@ use App\Serializer\ProductCategoryDenormalizer;
 use App\Serializer\ProductDenormalizer;
 use App\Serializer\ProductImageDenormalizer;
 use App\Serializer\ProductKindDenormalizer;
+use App\Serializer\ProductOptionDenormalizer;
+use App\Serializer\ProductOptionValueDenormalizer;
+use App\Serializer\ProductSelectedOptionDenormalizer;
 use App\Serializer\ProductStatusDenormalizer;
+use App\Serializer\ProductVariantDenormalizer;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +49,7 @@ class ProductApiController extends BaseController
     //////////////////////////////////////////////////////////////////////////////////////
     
     /**
-     * @Route("/api/products/", name="api-product-getProducts", methods={"GET"})
+     * @Route("/api/products/", name="api-product-list", methods={"GET"})
      */
     public function apiGetProducts()
     {
@@ -63,7 +68,7 @@ class ProductApiController extends BaseController
     /**
      * Example: /admin/api/products/1
      *
-     * @Route("/api/products/{id}", name="api-product-getProduct", methods={"GET"})
+     * @Route("/api/products/{id}", name="api-product-get", methods={"GET"})
      */
     public function apiGetProduct(Request $request)
     {
@@ -93,7 +98,7 @@ class ProductApiController extends BaseController
     }
     
     /**
-     * @Route("/api/products/{id}", name="api-product-deleteProduct", methods={"DELETE"})
+     * @Route("/api/products/{id}", name="api-product-delete", methods={"DELETE"})
      */
     public function apiDeleteProduct(Request $request)
     {
@@ -112,7 +117,7 @@ class ProductApiController extends BaseController
     }
     
     /**
-     * @Route("/api/products/", name="api-product-newProduct", methods={"POST"})
+     * @Route("/api/products/", name="api-product-new", methods={"POST"})
      */
     public function apiNewProduct(Request $request, ValidatorInterface $validator)
     {
@@ -155,9 +160,9 @@ class ProductApiController extends BaseController
     }
     
     /**
-     * @Route("/api/products/{id}", name="api-product-updateProduct", methods={"PUT"})
+     * @Route("/api/products/{id}", name="api-product-update", methods={"PUT"})
      */
-    public function apiUpdateProduct(Request $request, Product $product, ValidatorInterface $validator)
+    public function updateProduct(Request $request, Product $product, ValidatorInterface $validator)
     {
         $data = json_decode($request->getContent(), true);
         if ($data === null) {
@@ -174,35 +179,32 @@ class ProductApiController extends BaseController
             new PriceDenormalizer($em),
             new ProductImageDenormalizer($em),
             new ImageEntityDenormalizer($em),
+            new ProductVariantDenormalizer($em),
+            new ProductSelectedOptionDenormalizer($em),
+            new ProductOptionDenormalizer($em),
+            new ProductOptionValueDenormalizer($em),
             new ArrayDenormalizer(),
         ];
         $serializer = new Serializer($normalizer, [new JsonEncoder()]);
+//        dd($serializer->denormalize($request->getContent(), Product::class));
         $serializer->deserialize($request->getContent(),Product::class,'json',[
             'object_to_populate' => $product,
 //            'skip_null_values' => true,
         ]);
-        
 
-//        dd($product);
-//        $form = $this->createForm(ProductFormType::class, $product, ['csrf_protection' => false,]);
-//        dd($data);
-//        $form->submit($data);
-////        dd($form->getErrors());
-//        if (!$form->isValid()) {
-//            $errors = $this->getErrorsFromForm($form);
-//            return $this->jsonNormalized(['errors' => $errors], 400);
-//        }
-//
-//        /** @var Product $product */
-//        $product = $form->getData();
-//        dd($product);
-        
-        
+//        $variants = $serializer->denormalize()
+//        dd($product->findOptionBy(['name'=> 'Color'])->findValueBy(['value' => 'Red']));
+//        dd($product->findOptionBy(['name'=> 'Color']));
+
         $errors = $this->getValidationErrors($product, $validator);
         if (!empty($errors)) {
             return $this->jsonNormalized(['errors' => $errors], 422);
         }
-        
+
+
+//        foreach ($product->getVariants() as $variant) {
+//            $em->persist($variant);
+//        }
         $em->persist($product);
         $em->flush();
         return $this->jsonObjNormalized(['products' => [$product]],200, ['groups' => 'productView']);

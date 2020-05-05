@@ -1,0 +1,40 @@
+{% extends 'webshop/site/template-account.html.twig' %}
+
+{% set pageTitle = 'Rendeléseim' %}
+{% set breadcrumb = {
+    0: {
+        'url': path('homepage'),
+        'text': 'Home',
+    },
+    1: {
+        'url': path('site-user-myAccount'),
+        'text': 'Fiókom',
+    },
+    2: {
+        'url': path('site-user-myDetails'),
+        'text': 'Adataim',
+    },
+} %}
+
+{% block content %}
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-header bg-transparent">
+                <span class="h4 myaccount-card-title">Adataim</span>
+            </div>
+            <div class="card-body">
+                <div class="">
+                    {{ form_start(customerForm, { 'attr': {'class': 'JS--messageAndCustomerForm' }}) }}
+                    {% include('webshop/cart/user-basicDetails-form.html.twig') %}
+                    {# Render CSRF token etc .#}
+                    <div style="display:none">
+                        {{ form_rest(customerForm) }}
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Módosítások mentése">
+                    {{ form_end(customerForm) }}
+                    {% do customerForm.setRendered() %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

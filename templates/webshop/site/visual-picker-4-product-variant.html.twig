@@ -1,0 +1,10 @@
+<div class="variant-picker variant-picker-light align-top mr-2">
+    <input type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
+    <label class="variant-picker-figure required px-2" for="{{ choice.vars.id }}">
+            <span class="variant-picker-content">
+                <span class="tile tile-lg">
+                    {{ choice.vars.label|raw }}
+                </span>
+            </span>
+    </label>
+</div>

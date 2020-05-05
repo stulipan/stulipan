@@ -1,33 +1,32 @@
-{% extends 'admin/base_admin.html.twig' %}
+{% extends 'admin/template-editing.html.twig' %}
+
+{% set pageTitle = title %}
+{% set backToText = 'Szállítási módok' %}
+{% set breadcrumb = {
+	0: {
+		'url': path('settings-home'),
+		'text': 'settings.settings'|trans,
+	},
+	1: {
+		'url': path('shipping-list'),
+		'text': 'Szállítási módok',
+	}
+} %}
+{% set cancelUrl = path('shipping-list') %}
 
 {% block title %}
-	{{ title }}
+	{{ pageTitle }}
 {% endblock %}
 
-{% block page_content %}
-
-	<!-- page title -->
-	{{ include('/admin/_title_widget.html.twig') }}
-
-	<!-- header of default page content widget -->
-	{{ include('/admin/_header_of_default_page_content.html.twig') }}
-
-	<div class="row mb-2">
-		<div class="col-lg-8">
-			<!-- Kereso mezo + Filterek + Csoportos action opcio -->
-		</div>
-		<div class="col-lg-4">
-		</div>
-	</div>
-
-	{{ include('/admin/_shipping-form.html.twig') }}
-
-	<!-- footer of default page content widget -->
-	{{ include('/admin/_footer_of_default_page_content.html.twig') }}
-
+{% block moduleTitle %}
+	Szállítási mód
 {% endblock %}
 
-{% block javascripts %}
-	{{ parent() }}
+{% block moduleDescription %}
+	Vegyél fel új szállítási módot.
 {% endblock %}
 
+
+{% block contentInner %}
+	{% include '/admin/_shipping-form.html.twig' with {'cancelUrl': cancelUrl} %}
+{% endblock %}

@@ -6,7 +6,7 @@ use App\Entity\Product;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 //use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-//use Symfony\Bridge\Doctrine\RegistryInterface;
+//use Doctrine\Persistence\ManagerRegistry;
 
 
 

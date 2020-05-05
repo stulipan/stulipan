@@ -11,23 +11,13 @@
         >
         </edit-form>
         <template>
-            <!--<div v-if="dataIsLoading" class="w-40 py-2">
-                <bullet-list-loader
-                                    :speed="2"
-                                    :animate="true"
-                                    :width="400"
-                                    :height="160"
-                                    primaryColor="#eee"
-                                    secondaryColor="#ccc"
-                                    :preserveAspectRatio="'xMidYMid meet'"
-                ></bullet-list-loader>
-            </div>-->
             <category-list
                     :isDataLoading="dataIsLoading"
                     :categories1="categories"
                     v-on:edit="onEditClicked"
                     v-on:removeEntry="onDeleteClicked"
-            ></category-list>
+            >
+            </category-list>
         </template>
     </section>
 </template>
@@ -35,7 +25,6 @@
 <script>
     import CategoryList from './CategoryList'
     import EditForm from './EditForm'
-    import { BulletListLoader } from 'vue-content-loader'
 
     const initialData = () => {
         return {
@@ -54,13 +43,12 @@
             formErrors: [],
             resetForm: false,  // If true will hide form errors and uploaded images preview
         }
-    }
+    };
 
     export default {
         components: {
             CategoryList,
             EditForm,
-            BulletListLoader,
 //            Modal,
         },
         data: initialData,
@@ -79,7 +67,7 @@
                 const index = this.categories.findIndex((c) => c.id === categoryData.id);
                     // update category if it exists or create it if it doesn't
                     if (index !== -1) {
-                        this.$http.put('/admin/api/product/categories/'+ categoryData.id, categoryData)
+                        this.$http.put('/hu/admin/api/product/categories/'+ categoryData.id, categoryData)
                             .then(
                                 response => {
 //                                    console.log(response.body.categories[0]);
@@ -100,7 +88,7 @@
                                 })
                     } else {
                         // add it to the category list
-                        this.$http.post('/admin/api/product/categories/', categoryData)
+                        this.$http.post('/hu/admin/api/product/categories/', categoryData)
                             .then(
                                 response => {
                                     this.categories.push(response.body.categories[0]);
@@ -133,7 +121,7 @@
                 this.resetForm = initialData().resetForm;
             },
             cancelForm () {
-                this.categoryInForm = initialData().categoryInForm
+                this.categoryInForm = initialData().categoryInForm;
                 this.resetForm = true
             },
             onDeleteClicked (catId) {
@@ -155,11 +143,11 @@
                 }).catch(err => {});
             },
             deleteEntry (catId) {
-                this.$http.delete(`/admin/api/product/categories/${catId}`)
+                this.$http.delete(`/hu/admin/api/product/categories/${catId}`)
                     .then(
                         response => {
-                            const index = this.categories.findIndex((c) => c.id === catId)
-                            this.categories.splice(index, 1)
+                            const index = this.categories.findIndex((c) => c.id === catId);
+                            this.categories.splice(index, 1);
 
                             if (catId === this.categoryInForm.id) {
                                 this.resetCategoryInForm()
@@ -202,7 +190,7 @@
             },
         },
         created () {
-            this.$http.get('/admin/api/product/categories/')
+            this.$http.get('/hu/admin/api/product/categories/')
                 .then(response => {
                     this.categories = response.data.categories;
                     this.dataIsLoading = false;

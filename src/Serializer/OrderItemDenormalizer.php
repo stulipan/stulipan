@@ -25,7 +25,7 @@ class OrderItemDenormalizer implements DenormalizerInterface, DenormalizerAwareI
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         $order = $context['order'];
         
@@ -39,7 +39,7 @@ class OrderItemDenormalizer implements DenormalizerInterface, DenormalizerAwareI
             $object->setOrder($order);
             $object->setProduct($product);
             $object->setQuantity(1);
-            $object->setPrice($product->getPrice()->getValue());
+            $object->setPrice($product->getPrice()->getNumericValue());
     
             $object->setPriceTotal($object->getPrice() * $object->getQuantity());
             $order->addItem($object);

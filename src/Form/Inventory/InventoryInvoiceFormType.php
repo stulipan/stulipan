@@ -33,7 +33,6 @@ class InventoryInvoiceFormType extends AbstractType
                 'multiple' => false,
                 'label' => 'Beszállító',
                 'placeholder' => 'Válassz beszállítót...',
-//                'attr' => ['class' => 'custom-select'],
             ])
             ->add('datum', DateType::class, [
 					'label' => 'Dátum',

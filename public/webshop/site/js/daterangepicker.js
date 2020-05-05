@@ -16,18 +16,74 @@
     } else t.daterangepicker = a(t.moment, t.jQuery)
 }(this, function(H, R) {
     var i = function(t, e, a) {
-        if (this.parentEl = "body", this.element = R(t), this.startDate = H().startOf("day"), this.endDate = H().endOf("day"), this.minDate = !1, this.maxDate = !1, this.maxSpan = !1, this.autoApply = !1, this.singleDatePicker = !1, this.showDropdowns = !1, this.minYear = H().subtract(100, "year").format("YYYY"), this.maxYear = H().add(100, "year").format("YYYY"), this.showWeekNumbers = !1, this.showISOWeekNumbers = !1, this.showCustomRangeLabel = !0, this.timePicker = !1, this.timePicker24Hour = !1, this.timePickerIncrement = 1, this.timePickerSeconds = !1, this.linkedCalendars = !0, this.autoUpdateInput = !0, this.alwaysShowCalendars = !1, this.ranges = {}, this.opens = "right", this.element.hasClass("pull-right") && (this.opens = "left"), this.drops = "down", this.element.hasClass("dropup") && (this.drops = "up"), this.buttonClasses = "btn btn-sm", this.applyButtonClasses = "btn-primary", this.cancelButtonClasses = "btn-default", this.locale = {
+        if (this.parentEl = "body",
+            this.element = R(t),
+            this.startDate = H().startOf("day"),
+            this.endDate = H().endOf("day"), this.minDate = !1, this.maxDate = !1, this.maxSpan = !1, this.autoApply = !1, this.singleDatePicker = !1,
+            this.showDropdowns = !1, this.minYear = H().subtract(100, "year").format("YYYY"),
+            this.maxYear = H().add(100, "year").format("YYYY"), this.showWeekNumbers = !1, this.showISOWeekNumbers = !1, this.showCustomRangeLabel = !0,
+            this.timePicker = !1, this.timePicker24Hour = !1, this.timePickerIncrement = 1, this.timePickerSeconds = !1, this.linkedCalendars = !0,
+            this.autoUpdateInput = !0, this.alwaysShowCalendars = !1,
+            this.ranges = {}, this.opens = "right", this.element.hasClass("pull-right") && (this.opens = "left"),
+            this.drops = "down", this.element.hasClass("dropup") && (this.drops = "up"), this.buttonClasses = "btn btn-sm", this.applyButtonClasses = "btn-primary",
+            this.cancelButtonClasses = "btn-default",
+            this.locale = {
                 direction: "ltr",
                 format: H.localeData().longDateFormat("L"),
                 separator: " - ",
                 applyLabel: "Apply",
                 cancelLabel: "Cancel",
                 weekLabel: "W",
+                dateRange: "Date range",
                 customRangeLabel: "Custom Range",
                 daysOfWeek: H.weekdaysMin(),
                 monthNames: H.monthsShort(),
                 firstDay: H.localeData().firstDayOfWeek()
-            }, this.callback = function() {}, this.isShowing = !1, this.leftCalendar = {}, this.rightCalendar = {}, "object" == typeof e && null !== e || (e = {}), "string" == typeof(e = R.extend(this.element.data(), e)).template || e.template instanceof R || (e.template = '<div class="daterangepicker"><div class="ranges"></div><div class="drp-calendar left"><div class="calendar-table"></div><div class="calendar-time"></div></div><div class="drp-calendar right"><div class="calendar-table"></div><div class="calendar-time"></div></div><div class="drp-buttons"><span class="drp-selected"></span><button class="cancelBtn" type="button"></button><button class="applyBtn" disabled="disabled" type="button"></button> </div></div>'), this.parentEl = e.parentEl && R(e.parentEl).length ? R(e.parentEl) : R(this.parentEl), this.container = R(e.template).appendTo(this.parentEl), "object" == typeof e.locale && ("string" == typeof e.locale.direction && (this.locale.direction = e.locale.direction), "string" == typeof e.locale.format && (this.locale.format = e.locale.format), "string" == typeof e.locale.separator && (this.locale.separator = e.locale.separator), "object" == typeof e.locale.daysOfWeek && (this.locale.daysOfWeek = e.locale.daysOfWeek.slice()), "object" == typeof e.locale.monthNames && (this.locale.monthNames = e.locale.monthNames.slice()), "number" == typeof e.locale.firstDay && (this.locale.firstDay = e.locale.firstDay), "string" == typeof e.locale.applyLabel && (this.locale.applyLabel = e.locale.applyLabel), "string" == typeof e.locale.cancelLabel && (this.locale.cancelLabel = e.locale.cancelLabel), "string" == typeof e.locale.weekLabel && (this.locale.weekLabel = e.locale.weekLabel), "string" == typeof e.locale.customRangeLabel)) {
+            },
+            this.callback = function() {}, this.isShowing = !1, this.leftCalendar = {}, this.rightCalendar = {},
+            "object" == typeof e && null !== e || (e = {}),
+            "string" == typeof(e = R.extend(this.element.data(), e)).template || e.template instanceof R || (e.template = '' +
+            '<div class="daterangepicker daterangepicker-smX">\n' +
+                '\t<div class="drp-content">\n' +
+                '\t\t<div class="drp-body">\n' +
+                '\t\t\t<div class="drp-row">\n' +
+                '\t\t\t\t<div class="drp-col ranges">\n' +
+                '\t\t\t\t</div>\n' +
+                '\t\t\t</div>\n' +
+                '\t\t\t<div class="drp-row drp-calendars">\n' +
+                '\t\t\t\t<div class="drp-col drp-calendar left">\n' +
+                '\t\t\t\t\t<div class="calendar-table"></div>\n' +
+                '\t\t\t\t\t<div class="calendar-time"></div>\n' +
+                '\t\t\t\t</div>\n' +
+                '\t\t\t\t<div class="drp-col drp-calendar right">\n' +
+                '\t\t\t\t\t<div class="calendar-table"></div>\n' +
+                '\t\t\t\t\t<div class="calendar-time"></div>\n' +
+                '\t\t\t\t</div>\n' +
+                '\t\t\t</div>\n' +
+                '\t\t</div>\n' +
+                '\t\t<div class="drp-footer">\n' +
+                '\t\t\t<div class="drp-buttons"><span class="drp-selected"></span>\n' +
+                '\t\t\t\t<button class="cancelBtn" type="button"></button>\n' +
+                '\t\t\t\t<button class="applyBtn" disabled="disabled" type="button"></button>\n' +
+                '\t\t\t</div>\n' +
+                '\t\t</div>\n' +
+                '\t</div>\n' +
+                '</div>'),
+            this.parentEl = e.parentEl && R(e.parentEl).length ? R(e.parentEl) : R(this.parentEl),
+            this.container = R(e.template).appendTo(this.parentEl),
+            "object" == typeof e.locale && (
+                "string" == typeof e.locale.direction && (this.locale.direction = e.locale.direction),
+                "string" == typeof e.locale.format && (this.locale.format = e.locale.format),
+                "string" == typeof e.locale.separator && (this.locale.separator = e.locale.separator),
+                "object" == typeof e.locale.daysOfWeek && (this.locale.daysOfWeek = e.locale.daysOfWeek.slice()),
+                "object" == typeof e.locale.monthNames && (this.locale.monthNames = e.locale.monthNames.slice()),
+                "number" == typeof e.locale.firstDay && (this.locale.firstDay = e.locale.firstDay),
+                "string" == typeof e.locale.applyLabel && (this.locale.applyLabel = e.locale.applyLabel),
+                "string" == typeof e.locale.cancelLabel && (this.locale.cancelLabel = e.locale.cancelLabel),
+                "string" == typeof e.locale.weekLabel && (this.locale.weekLabel = e.locale.weekLabel),
+                "string" == typeof e.locale.dateRange && (this.locale.dateRange = e.locale.dateRange),
+                "string" == typeof e.locale.customRangeLabel)
+        ) {
             (d = document.createElement("textarea")).innerHTML = e.locale.customRangeLabel;
             var i = d.value;
             this.locale.customRangeLabel = i
@@ -51,11 +107,14 @@
                     this.ranges[i] = [n, r]
                 }
             }
-            var m = "<ul>";
-            for (o in this.ranges) m += '<li data-range-key="' + o + '">' + o + "</li>";
-            this.showCustomRangeLabel && (m += '<li data-range-key="' + this.locale.customRangeLabel + '">' + this.locale.customRangeLabel + "</li>"), m += "</ul>", this.container.find(".ranges").prepend(m)
+            var m = '<div class="drp-form-group">\n' +
+                '<label class="drp-label">' + this.locale.dateRange +'</label>\n' +
+                '<div class="drp-select-container form-control--Background">\n' +
+                '<select id="custom_ranges" name="custom_ranges" class="form-control">\n';
+            for (o in this.ranges) m += '<option value="' + o + '" data-range-key="' + o + '">' + o + "</option>";
+            this.showCustomRangeLabel && (m += '<option value="' + o + '" data-range-key=' + this.locale.customRangeLabel + '">' + this.locale.customRangeLabel + "</option>"), m += "</select>\n</div></div>", this.container.find(".ranges").prepend(m)
         }
-        "function" == typeof a && (this.callback = a), this.timePicker || (this.startDate = this.startDate.startOf("day"), this.endDate = this.endDate.endOf("day"), this.container.find(".calendar-time").hide()), this.timePicker && this.autoApply && (this.autoApply = !1), this.autoApply && this.container.addClass("auto-apply"), "object" == typeof e.ranges && this.container.addClass("show-ranges"), this.singleDatePicker && (this.container.addClass("single"), this.container.find(".drp-calendar.left").addClass("single"), this.container.find(".drp-calendar.left").show(), this.container.find(".drp-calendar.right").hide(), this.timePicker || this.container.addClass("auto-apply")), (void 0 === e.ranges && !this.singleDatePicker || this.alwaysShowCalendars) && this.container.addClass("show-calendar"), this.container.addClass("opens" + this.opens), this.container.find(".applyBtn, .cancelBtn").addClass(this.buttonClasses), this.applyButtonClasses.length && this.container.find(".applyBtn").addClass(this.applyButtonClasses), this.cancelButtonClasses.length && this.container.find(".cancelBtn").addClass(this.cancelButtonClasses), this.container.find(".applyBtn").html(this.locale.applyLabel), this.container.find(".cancelBtn").html(this.locale.cancelLabel), this.container.find(".drp-calendar").on("click.daterangepicker", ".prev", R.proxy(this.clickPrev, this)).on("click.daterangepicker", ".next", R.proxy(this.clickNext, this)).on("mousedown.daterangepicker", "td.available", R.proxy(this.clickDate, this)).on("mouseenter.daterangepicker", "td.available", R.proxy(this.hoverDate, this)).on("change.daterangepicker", "select.yearselect", R.proxy(this.monthOrYearChanged, this)).on("change.daterangepicker", "select.monthselect", R.proxy(this.monthOrYearChanged, this)).on("change.daterangepicker", "select.hourselect,select.minuteselect,select.secondselect,select.ampmselect", R.proxy(this.timeChanged, this)), this.container.find(".ranges").on("click.daterangepicker", "li", R.proxy(this.clickRange, this)), this.container.find(".drp-buttons").on("click.daterangepicker", "button.applyBtn", R.proxy(this.clickApply, this)).on("click.daterangepicker", "button.cancelBtn", R.proxy(this.clickCancel, this)), this.element.is("input") || this.element.is("button") ? this.element.on({
+        "function" == typeof a && (this.callback = a), this.timePicker || (this.startDate = this.startDate.startOf("day"), this.endDate = this.endDate.endOf("day"), this.container.find(".calendar-time").hide()), this.timePicker && this.autoApply && (this.autoApply = !1), this.autoApply && this.container.addClass("auto-apply"), "object" == typeof e.ranges && this.container.addClass("show-ranges"), this.singleDatePicker && (this.container.addClass("single"), this.container.find(".drp-calendar.left").addClass("single"), this.container.find(".drp-calendar.left").show(), this.container.find(".drp-calendar.right").hide(), this.timePicker || this.container.addClass("auto-apply")), (void 0 === e.ranges && !this.singleDatePicker || this.alwaysShowCalendars) && this.container.addClass("show-calendar"), this.container.addClass("opens" + this.opens), this.container.find(".applyBtn, .cancelBtn").addClass(this.buttonClasses), this.applyButtonClasses.length && this.container.find(".applyBtn").addClass(this.applyButtonClasses), this.cancelButtonClasses.length && this.container.find(".cancelBtn").addClass(this.cancelButtonClasses), this.container.find(".applyBtn").html(this.locale.applyLabel), this.container.find(".cancelBtn").html(this.locale.cancelLabel), this.container.find(".drp-calendar").on("click.daterangepicker", ".prev", R.proxy(this.clickPrev, this)).on("click.daterangepicker", ".next", R.proxy(this.clickNext, this)).on("mousedown.daterangepicker", "td.available", R.proxy(this.clickDate, this)).on("mouseenter.daterangepicker", "td.available", R.proxy(this.hoverDate, this)).on("change.daterangepicker", "select.yearselect", R.proxy(this.monthOrYearChanged, this)).on("change.daterangepicker", "select.monthselect", R.proxy(this.monthOrYearChanged, this)).on("change.daterangepicker", "select.hourselect,select.minuteselect,select.secondselect,select.ampmselect", R.proxy(this.timeChanged, this)), this.container.find(".ranges").on("change.daterangepicker", "select", R.proxy(this.clickRange, this)), this.container.find(".drp-buttons").on("click.daterangepicker", "button.applyBtn", R.proxy(this.clickApply, this)).on("click.daterangepicker", "button.cancelBtn", R.proxy(this.clickCancel, this)), this.element.is("input") || this.element.is("button") ? this.element.on({
             "click.daterangepicker": R.proxy(this.show, this),
             "focus.daterangepicker": R.proxy(this.show, this),
             "keyup.daterangepicker": R.proxy(this.elementChanged, this),
@@ -94,7 +153,7 @@
                 } else if (t = parseInt(this.container.find(".right .hourselect").val(), 10), e = parseInt(this.container.find(".right .minuteselect").val(), 10), a = this.timePickerSeconds ? parseInt(this.container.find(".right .secondselect").val(), 10) : 0, !this.timePicker24Hour) "PM" === (i = this.container.find(".right .ampmselect").val()) && t < 12 && (t += 12), "AM" === i && 12 === t && (t = 0);
                 this.leftCalendar.month.hour(t).minute(e).second(a), this.rightCalendar.month.hour(t).minute(e).second(a)
             }
-            this.renderCalendar("left"), this.renderCalendar("right"), this.container.find(".ranges li").removeClass("active"), null != this.endDate && this.calculateChosenLabel()
+            this.renderCalendar("left"), this.renderCalendar("right"), this.container.find(".ranges option").prop("checked", false), null != this.endDate && this.calculateChosenLabel()
         },
         renderCalendar: function(t) {
             var e, a = (e = "left" == t ? this.leftCalendar : this.rightCalendar).month.month(),
@@ -228,14 +287,45 @@
             }))
         },
         show: function(t) {
-            this.isShowing || (this._outsideClickProxy = R.proxy(function(t) {
+            this.isShowing || (this._outsideClickProxy = R.proxy(
+                function(t) {
                 this.outsideClick(t)
-            }, this), R(document).on("mousedown.daterangepicker", this._outsideClickProxy).on("touchend.daterangepicker", this._outsideClickProxy).on("click.daterangepicker", "[data-toggle=dropdown]", this._outsideClickProxy).on("focusin.daterangepicker", this._outsideClickProxy), R(window).on("resize.daterangepicker", R.proxy(function(t) {
-                this.move(t)
-            }, this)), this.oldStartDate = this.startDate.clone(), this.oldEndDate = this.endDate.clone(), this.previousRightTime = this.endDate.clone(), this.updateView(), this.container.show(), this.move(), this.element.trigger("show.daterangepicker", this), this.isShowing = !0)
+            }, this),
+                R(document)
+                    .on("mousedown.daterangepicker", this._outsideClickProxy)
+                    .on("touchend.daterangepicker", this._outsideClickProxy)
+                    .on("click.daterangepicker", "[data-toggle=dropdown]", this._outsideClickProxy)
+                    .on("focusin.daterangepicker", this._outsideClickProxy),
+                R(window).on("resize.daterangepicker", R.proxy(function(t) {
+                    this.move(t)
+                }, this)),
+                this.oldStartDate = this.startDate.clone(),
+                this.oldEndDate = this.endDate.clone(),
+                this.previousRightTime = this.endDate.clone(),
+                this.updateView(),
+                // this.container.show(),
+                this.container.addClass("show"),
+                this.move(),
+                this.element.trigger("show.daterangepicker", this),
+                this.isShowing = !0)
         },
         hide: function(t) {
-            this.isShowing && (this.endDate || (this.startDate = this.oldStartDate.clone(), this.endDate = this.oldEndDate.clone()), this.startDate.isSame(this.oldStartDate) && this.endDate.isSame(this.oldEndDate) || this.callback(this.startDate.clone(), this.endDate.clone(), this.chosenLabel), this.updateElement(), R(document).off(".daterangepicker"), R(window).off(".daterangepicker"), this.container.hide(), this.element.trigger("hide.daterangepicker", this), this.isShowing = !1)
+            this.isShowing &&
+                (
+                    this.endDate || (this.startDate = this.oldStartDate.clone(), this.endDate = this.oldEndDate.clone()),
+                    this.startDate.isSame(this.oldStartDate) &&
+                        this.endDate.isSame(this.oldEndDate) || this.callback
+                            (
+                                this.startDate.clone(), this.endDate.clone(), this.chosenLabel
+                            ),
+                    this.updateElement(),
+                    R(document).off(".daterangepicker"),
+                    R(window).off(".daterangepicker"),
+                    // this.container.hide(),
+                    this.container.removeClass("show"),
+                    this.element.trigger("hide.daterangepicker", this),
+                    this.isShowing = !1
+                )
         },
         toggle: function(t) {
             this.isShowing ? this.hide() : this.show()
@@ -251,7 +341,8 @@
             this.container.removeClass("show-calendar"), this.element.trigger("hideCalendar.daterangepicker", this)
         },
         clickRange: function(t) {
-            var e = t.target.getAttribute("data-range-key");
+            // var e = t.target.getAttribute("data-range-key");
+            var e = t.target.value;
             if ((this.chosenLabel = e) == this.locale.customRangeLabel) this.showCalendars();
             else {
                 var a = this.ranges[e];
@@ -320,16 +411,18 @@
                 if (this.timePicker) {
                     var i = this.timePickerSeconds ? "YYYY-MM-DD hh:mm:ss" : "YYYY-MM-DD hh:mm";
                     if (this.startDate.format(i) == this.ranges[a][0].format(i) && this.endDate.format(i) == this.ranges[a][1].format(i)) {
-                        t = !1, this.chosenLabel = this.container.find(".ranges li:eq(" + e + ")").addClass("active").attr("data-range-key");
+                        t = !1, this.chosenLabel = this.container.find(".ranges option:eq(" + e + ")").prop("selected", true).attr("data-range-key");
                         break
                     }
                 } else if (this.startDate.format("YYYY-MM-DD") == this.ranges[a][0].format("YYYY-MM-DD") && this.endDate.format("YYYY-MM-DD") == this.ranges[a][1].format("YYYY-MM-DD")) {
-                    t = !1, this.chosenLabel = this.container.find(".ranges li:eq(" + e + ")").addClass("active").attr("data-range-key");
+                    t = !1, this.chosenLabel = this.container.find(".ranges option:eq(" + e + ")").prop("selected", true).attr("data-range-key");
                     break
                 }
                 e++
             }
-            t && (this.showCustomRangeLabel ? this.chosenLabel = this.container.find(".ranges li:last").addClass("active").attr("data-range-key") : this.chosenLabel = null, this.showCalendars())
+            // console.log(this.container.find(".ranges option:eq(" + e + ")").prop("selected", true).attr("data-range-key"));
+            // console.log(this.showCalendars());
+            t && (this.showCustomRangeLabel ? this.chosenLabel = this.container.find(".ranges option:last").prop("selected", true).attr("data-range-key") : this.chosenLabel = null, this.showCalendars())
         },
         clickApply: function(t) {
             this.hide(), this.element.trigger("apply.daterangepicker", this)

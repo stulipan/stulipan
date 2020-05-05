@@ -88,7 +88,7 @@ class CustomerBasic
      */
     public function setFirstname($firstname)
     {
-        $this->firstname = $firstname;
+        $this->firstname = ucwords($firstname);
     }
 
     /**
@@ -104,7 +104,7 @@ class CustomerBasic
      */
     public function setLastname($lastname)
     {
-        $this->lastname = $lastname;
+        $this->lastname = ucwords($lastname);
     }
 
     /**

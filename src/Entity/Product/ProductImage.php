@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Entity\Product;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+//use ApiPlatform\Core\Annotation\ApiResource;
+
 use App\Entity\ImageEntity;
 use App\Services\FileUploader;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ *
  *
  * @ORM\Entity
  * @ORM\Table(name="product_image")
@@ -43,11 +43,8 @@ class ProductImage //implements \JsonSerializable
     private $product;
     
     /**
-     * @ ApiSubresource()
-     *
-     *
      * @var ImageEntity
-     * @Groups({"productView", "productList"})
+     * @Groups({""})
      *
      * ==== One ProductImage is one ImageEntity => Egy termékkép mindig egy sima kép lesz ====
      *

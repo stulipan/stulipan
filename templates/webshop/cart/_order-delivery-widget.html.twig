@@ -1,0 +1,17 @@
+
+    <span class="h5 myaccount-card-title mb-3">{{ 'order.Delivery date'|trans }}</span>
+
+    {% if order.deliveryDate is defined and order.deliveryDate is not null %}
+        <div class="font-weight-bold">{{ order.deliveryDate|date('Y M j.')|lower }}</div>
+        <div class="text-mutedZ">{{ order.deliveryInterval is defined and order.deliveryInterval ? order.deliveryInterval ~ ' óra között': '' }}</div>
+{#    {% else %}#}
+{#        <br>#}
+{#        {% include('admin/_notAvailable-insert.html.twig') %}#}
+    {% endif %}
+
+    {% if order.deliveryDate is defined and order.deliveryDate is not null %}
+        <em class="text-muted text-sm">{{ order.shipping.getName() }}</em>
+{#    {% else %}#}
+{#        <br>#}
+{#        {% include('admin/_notAvailable-insert.html.twig') %}#}
+    {% endif %}

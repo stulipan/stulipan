@@ -16,17 +16,19 @@
     <div class="slide-checkout__wrapper px-2 px-md-3">
         <div id="dvBasketItemsContainer" class="slide-checkout__basket-container mt-3">
             {% if order.items is empty %}
-                {% include('webshop/cart/cart-empty-widget.html.twig') %}
+                {% include('webshop/cart/_cart-empty-widget.html.twig') %}
             {% endif %}
 
             {% if order.items is defined %}
                 {% for item in order.items %}
-                    {% include('webshop/cart/cart-item-single-widget.html.twig') %}
+                    <div class="cart-item">
+                        {% include('webshop/cart/_cart-item-single-widget.html.twig') %}
+                    </div>
                 {% endfor %}
 
                 <div class="navbar-cart-total">
                     <span class="text-uppercase text-muted">Összesen</span>
-                    <strong class="text-uppercase">{{  order.summary.totalAmountToPay|number_format(0, ',', ' ') }} Ft</strong>
+                    <strong class="text-uppercase">{{  order.summary.totalAmountToPay|money }}</strong>
                 </div>
             {% endif %}
 
@@ -39,8 +41,13 @@
             <div class="col-lg-12 mb-4 mx-2">
             {#<ul class="list-inline">#}
                 {#<li class="list-inline-itemX flex-row d-flex">#}
-                    <a href="{{ path('site-checkout-step1-pickExtraGift') }}" class="JS--Button-gotoCheckout btn btn-warning btn-lg mb-1 w-100"> <i class="fa fa-shopping-cart mr-2"></i>Fizetés</a>
-                    <div class="JS--loadingOverlay d-flex align-items-stretch loading-lg"></div>
+                    <a href="{{ path('site-checkout-step1-pickExtraGift') }}" class="JS--Button-gotoCheckout btn btn-warning mb-1 w-100">
+                        <svg class="svg-icon addtocartX">
+                            <use xlink:href="#cart-1"> </use>
+                        </svg>
+                        Fizetés
+                    </a>
+                    <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
                 {#</li>#}
             {#</ul>#}
             </div>

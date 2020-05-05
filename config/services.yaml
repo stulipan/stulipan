@@ -9,6 +9,9 @@
 parameters:
     locale: 'hu'
     app_locales: en|hu
+    supported_locales:
+      hu_HU: hu
+      en_US: en
     images_directory: '%kernel.project_dir%/public/uploads/images'
     product_images_directory: '%kernel.project_dir%/public/uploads/images/termekek'
     category_images_directory: '%kernel.project_dir%/public/uploads/images/categories'
@@ -28,6 +31,7 @@ services:
             $imagePath: '%images_directory%'          # used in Form\ImageType.php
 #            $default_vat_rate: 1
             $locales: '%app_locales%'
+            $supportedLocales: '%supported_locales%'
             $defaultLocale: '%locale%'
 
     # makes classes in src/ available to be used as services
@@ -57,6 +61,7 @@ services:
     App\Event\ImageSetFullPath:
         tags:
             - { name: doctrine.event_listener, event: postLoad }
+            - { name: doctrine.event_listener, event: postUpdate }
     App\Event\SetDefaultVatRateForNewPrice:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
@@ -65,7 +70,9 @@ services:
         public: true
 #        arguments:
 #            $targetDirectory: '%images_directory%'
-
+    App\Services\TranslationLoader:
+        tags:
+            - { name: translation.loader, alias: yaml }
 
     App\Entity\Model\MessageAndCustomer:
         public: true
@@ -75,6 +82,11 @@ services:
         public: true
 
 
+    app.eventListeners.routeLocaleRewriteSubscriber:
+        class: App\Event\routeLocaleRewriteSubscriber
+        arguments: ["@router", "%kernel.default_locale%", "%supported_locales%"]
+        tags:
+            - { name: kernel.event_subscriber }
 
     App\Repository\:
         resource: '../src/Repository'
@@ -96,7 +108,7 @@ services:
 #        arguments:
 #            $em: 'doctrine.orm.default_entity_manager'
 
-#
+
 twig:
     globals:
         locales: '%app_locales%'

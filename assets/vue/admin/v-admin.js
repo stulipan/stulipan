@@ -4,34 +4,21 @@ import VueResource from 'vue-resource'
 import VueClip from 'vue-clip'
 import VModal from 'vue-js-modal'
 
-import BootstrapVue from 'bootstrap-vue'
-import VueCarousel from 'vue-carousel'
-
-import Product from './../admin/product/Product.vue'
 import Category from './../admin/category/Category.vue'
-import GeoPrice from './../admin/geoprice/GeoPrice.vue'
+import CmsImageUpload from './../admin/_components/CmsImageUpload.vue'
 
 
-Vue.use(VueResource)
-Vue.use(VueClip)
+Vue.use(VueResource);
+Vue.use(VueClip);   // Simple and hackable file uploader
 Vue.use(VModal, { dialog: true });
-Vue.use(BootstrapVue)
-Vue.use(VueCarousel)
 
-// import 'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
+import './../../css/v-theme.scss';
 
-Vue.http.options.root = 'http://stulipan.dfr'
+Vue.http.options.root = 'http://stulipan.dfr';
+const uploadUrls = {
+    productImage: '/hu/admin/api/images/product/',
+};
 
-if (document.getElementById('v--product')) {
-    Vue.component('product', require('./../admin/product/Product.vue').default );
-
-    new Vue({
-        el: '#v--product',
-        // template: '<Product/>',
-        // components: { Product },
-    });
-}
 
 if (document.getElementById('v--productCategory')) {
     new Vue({
@@ -42,9 +29,21 @@ if (document.getElementById('v--productCategory')) {
 }
 
 if (document.getElementById('v--geoPrice')) {
+    Vue.component('geo-price', require('./../admin/geoprice/GeoPrice.vue').default );
+    // A fentivel megegyezik
+    // Vue.component('GeoPrice', require('./../admin/geoprice/GeoPrice.vue').default );
+
     new Vue({
         el: '#v--geoPrice',
-        template: '<GeoPrice/>',
-        components: {GeoPrice},
+        // template: '<GeoPrice/>',
+        // components: {GeoPrice},
     });
 }
+
+// if (document.getElementById('v--imageUpload')) {
+//     new Vue({
+//         el: '#v--imageUpload',
+//         template: '<CmsImageUpload/>',
+//         components: {CmsImageUpload},
+//     });
+// }

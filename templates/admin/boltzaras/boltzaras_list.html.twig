@@ -1,113 +1,82 @@
-{% extends 'admin/base_admin.html.twig' %}
+{% extends 'admin/template-listing.html.twig' %}
 
+{% set pageTitle = title %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+} %}
 
 {% block title %}
-	{{ title }}
+    {{ title }}
 {% endblock %}
 
+{% block bodyClass %}boltzaras boltzaras-list{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
+{% block modal %}
 {% endblock %}
 
+{% block headerTopright %}
+    <a href="{{ path('boltzaras-edit') }}" class="btn btn-outline-primary mb-2"><i class="fas fa-plus-circle mr-1"></i> Új jelentés</a>
+    <a href="{{ path('boltzaras-webshop-edit') }}" class="btn btn-outline-primary mb-2 ml-1"><i class="fas fa-shopping-cart mr-1"></i> Új web forgalom</a>
+{% endblock %}
 
-{% block page_content %}
-		
-	{% block LISTA %}
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <!-- insert plain title -->
-                        {{ include('/admin/_title_insert.html.twig') }}
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        {{ render(controller('App\\Controller\\Boltzaras\\BoltzarasController::addBoltzarasForm')) }}
-                    </div>
-                    {#<div class="modal-footer">#}
-                        {#<button type="button" class="btn btn-secondary" data-dismiss="modal">Mégse</button>#}
-                        {#<button type="button" class="btn btn-primary">M</button>#}
-                    {#</div>#}
-                </div>
-            </div>
-        </div>
-
-        <!-- page title -->
-        {#{{ include('/admin/_title_widget.html.twig') }}#}
-
-        <div class="row mt-3 mb-2">
-            <div class="col-lg-12">
-                <div class="page-title h3 d-inline mr-md-2 mr-1">{{ title }}</div>
-                <div class="d-inline float-rightX">
-                    <a href="{{ path('boltzaras-edit') }}" class="btn btn-outline-info mb-2"><i class="fas fa-plus-circle mr-1"></i> Új jelentés</a>
-                    <a href="{{ path('boltzaras-webshop-edit') }}" class="btn btn-outline-primary mb-2 ml-1"><i class="fas fa-shopping-cart mr-1"></i> Új web forgalom</a>
-                    {#<button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">#}
-                    {#<i class="fas fa-plus mr-1"></i> Új ablak</button>#}
-                </div>
-            </div>
-        </div>
-
-        {{ include('/admin/_alert_widget.html.twig') }}
-
-        {% if is_granted('ROLE_BOLTZARAS_STAT') %}
+{% block beforeContent %}
+    {% if is_granted('ROLE_BOLTZARAS_STAT') %}
         <div class="row row-5">
-            <div class="col-xl-3 col-lg-6 col-6 mb-2 mb-lg-3">
+            <div class="col-xl-3 col-lg-6 col-6 mb-20px">
                 <div class="card tilebox-one h-100 mb-0">
                     <div class="card-body d-flex flex-column">
                         <div class="card--infoCard">
                             <div class="float-right">
                                 <i class="fas fa-shopping-basket"></i>
                             </div>
-                            <h6 class="card-title">Készpénz</h6>
-                            <h4 class="">{{ keszpenz|number_format(0, ',', ' ') }}<span class="h4 font-weight-normal"> Ft</span></h4>
+                            <span class="h6 quickinfo-title">Készpénz</span>
+                            <span class="h5 quickinfo-highlight">{{ keszpenz|money }}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-lg-6 col-6 mb-2 mb-lg-3">
+            <div class="col-xl-3 col-lg-6 col-6 mb-20px">
                 <div class="card tilebox-one h-100 mb-0">
                     <div class="card-body d-flex flex-column">
                         <div class="card--infoCard">
                             <div class="float-right">
                                 <i class="far fa-credit-card"></i>
                             </div>
-                            <h6 class="card-title">Bankkártya</h6>
-                            <h4 class="">{{ bankkartya|number_format(0, ',', ' ') }}<span class="h4 font-weight-normal"> Ft</span></h4>
+                            <span class="h6 quickinfo-title">Bankkártya</span>
+                            <span class="h5 quickinfo-highlight">{{ bankkartya|money }}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-lg-6 col-6 mb-2 mb-lg-3">
+            <div class="col-xl-3 col-lg-6 col-6 mb-20px">
                 <div class="card tilebox-one bg-successX text-whitXe h-100 mb-0">
                     <div class="card-body d-flex flex-column">
                         <div class="card--infoCard">
                             <div class="float-right">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <h6 class="card-title">Bolt összesen</h6>
-                            <h4 class="text-success ">{{ (keszpenz + bankkartya)|number_format(0, ',', ' ') }}<span class="h4 font-weight-normal"> Ft</span></h4>
-                            <span class="text-sm font-weight-normal">Mr. Feka: {{ (keszpenz + bankkartya - kassza)|number_format(0, ',', ' ') }} Ft</span>
+                            <span class="h6 quickinfo-title">Bolt összesen</span>
+                            <span class="h5 quickinfo-highlight text-success">{{ (keszpenz + bankkartya)|money }}</span>
+                            <span class="text-muted">Mr. Feka: {{ (keszpenz + bankkartya - kassza)|money }}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-lg-6 col-6 mb-2 mb-lg-3">
+            <div class="col-xl-3 col-lg-6 col-6 mb-20px">
                 <div class="card tilebox-one bg-infoX text-whiteX h-100 mb-0">
                     <div class="card-body d-flex flex-column">
                         <div class="card--infoCard">
                             <div class="float-right">
                                 <i class="fas fa-shopping-cart"></i>
                             </div>
-                            <h6 class="card-title">Webshop</h6>
-                            <h4 class="text-info ">{{ webshop|number_format(0, ',', ' ') }}<span class="h4 font-weight-normal"> Ft</span></h4>
+                            <span class="h6 quickinfo-title">Webshop</span>
+                            <span class="h5 quickinfo-highlight text-primary">{{ webshop|money }}</span>
                             <span class="text-sm font-weight-normal">*csak 2018 adatok</span>
                         </div>
                     </div>
@@ -115,89 +84,245 @@
             </div>
 
         </div>
-        {% endif %}
-
-        <!-- header of default page content widget -->
-        {{ include('/admin/_header_of_default_page_content.html.twig') }}
-
-        <div class="row mb-3">
-            <div class="col-sm-6 col-lg-8">
-                <div class="d-inline-block my-1 my-lg-0">
-
-                    <!-- dateRange Widget -->
-                    {{ include('/admin/dateRange-picker-widget.html.twig') }}
-                </div>
-                <div class="d-inline-block">
-                    <a href="{{  path('boltzaras_list') }}" class="btn-link ml-1">Teljes lista</a>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="text-sm-right my-1 my-lg-0">
-
-                </div>
-            </div>
-        </div>
-
-
-
-
-        <div class="table-responsive mb-3">
-            <table class="table table-sm table-centered table-striped table-bordered table-hover mb-0" id="boltzaras-list">
-                <thead class="thead-light">
-				<tr>
-                    <th scope="col">Dátum</th>
-                    <th scope="col">Kassza</th>
-				    <th scope="col">Bankkártya</th>
-				    <th scope="col">Készpénz</th>
-				    <th scope="col">Összbevétel</th>
-                    <th scope="col">Mr. Feka</th>
-				    {#<th scope="col">ID</th>#}
-                    <th scope="col" class="text-center">Módosítás időpontja</th>
-                    <th scope="col">Munkatárs</th>
-                    <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
-				  </tr>
-			  </thead>
-			  <tbody>
-				{% if jelentesek is defined %}
-				{% for jelentes in jelentesek %}
-				<tr>
-                    <td class="align-middle font-weight-bold text-sm">
-                        {{ jelentes.idopont|date('M d,') }} <span class="font-weight-normal text-sm">{{ jelentes.idopont|date('Y')}}</span></td>
-				    <td class="align-middle text-right text-nowrap">{{ jelentes.kassza|number_format(0, ',', ' ') }}</td>
-				    <td class="align-middle text-right text-nowrap">{{ jelentes.bankkartya|number_format(0, ',', ' ') }}</td>
-				    <td class="align-middle text-right text-nowrap">{{ jelentes.keszpenz|number_format(0, ',', ' ') }}</td>
-				    <td class="align-middle text-right font-weight-bold text-nowrap">{{ (jelentes.bankkartya + jelentes.keszpenz)|number_format(0, ',', ' ') }}</td>
-                    <td class="align-middle text-right text-nowrap">{{ (jelentes.bankkartya + jelentes.keszpenz - jelentes.kassza)|number_format(0, ',', ' ') }}</td>
-  				    {#<td class="align-middle text-muted"><small>{{ jelentes.id }}</small></td>#}
-                    <td class="align-middle text-center text-muted"><small>{{ jelentes.modositasIdopontja|date('Y-m-d, H:i')}}</small></td>
-                    <td class="text-muted"><small><img class="img-thumbnail rounded-circle mr-2" src="{{ asset('/uploads/images/termekek/' ~ jelentes.munkatars.avatar) }}" width="20px;" />{{ jelentes.munkatars }} </small></td>
-                    <td>
-                        {#{% if is_granted('ROLE_POWER_ADMIN') %}#}
-                            <a href="{{ path('boltzaras-edit', {'id': jelentes.id}) }}" class="btn-smX">
-                                <i class="fas fa-edit"></i></a>
-                        {#{% endif %}#}
-				  	</td>
-				</tr>
-				{% endfor %}
-				{% else %}
-				<tr>
-			        <td><li><em>nincs user found</em></li></td>
-			    </tr>
-				{% endif %}
-			  </tbody>
-			</table>
-		</div>
-		<div class="pagerfanta">
-                {% if paginator is defined %}
-					{{ pagerfanta(paginator, 'twitter_bootstrap4') }}
-                {% endif %}
-		</div>
-
-        <!-- footer of default page content widget -->
-        {{ include('/admin/_footer_of_default_page_content.html.twig') }}
-
-	{% endblock %}
+    {% endif %}
 {% endblock %}
+
+{% block contentFilter %}
+    {{ include('/admin/dateRange-picker-widget.html.twig') }}
+{% endblock %}
+
+{% block tableHeader %}
+    <tr>
+        <th scope="col">Dátum</th>
+        <th scope="col">Kassza</th>
+        <th scope="col">Bankkártya</th>
+        <th scope="col">Készpénz</th>
+        <th scope="col">Összbevétel</th>
+        <th scope="col">Mr. Feka</th>
+        {#<th scope="col">ID</th>#}
+        <th scope="col" class="text-center">Módosítás időpontja</th>
+        <th scope="col">Munkatárs</th>
+        <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+    </tr>
+{% endblock %}
+
+{% block tableBody %}
+    {% if jelentesek is defined %}
+        {% for jelentes in jelentesek %}
+            <tr>
+                <td class="align-middle font-weight-bold text-sm">
+                    {{ jelentes.idopont|date('M d,') }} <span class="font-weight-normal text-sm">{{ jelentes.idopont|date('Y')}}</span></td>
+                <td class="align-middle text-right text-nowrap">{{ jelentes.kassza|number_format(0, ',', ' ') }}</td>
+                <td class="align-middle text-right text-nowrap">{{ jelentes.bankkartya|number_format(0, ',', ' ') }}</td>
+                <td class="align-middle text-right text-nowrap">{{ jelentes.keszpenz|number_format(0, ',', ' ') }}</td>
+                <td class="align-middle text-right font-weight-bold text-nowrap">{{ (jelentes.bankkartya + jelentes.keszpenz)|number_format(0, ',', ' ') }}</td>
+                <td class="align-middle text-right text-nowrap">{{ (jelentes.bankkartya + jelentes.keszpenz - jelentes.kassza)|number_format(0, ',', ' ') }}</td>
+                {#<td class="align-middle text-muted"><small>{{ jelentes.id }}</small></td>#}
+                <td class="align-middle text-center text-muted"><small>{{ jelentes.modositasIdopontja|date('Y-m-d, H:i')}}</small></td>
+                <td class="text-muted"><small><img class="img-thumbnail rounded-circle mr-2" src="{{ asset('/uploads/images/termekek/' ~ jelentes.munkatars.avatar) }}" width="20px;" />{{ jelentes.munkatars }} </small></td>
+                <td>
+                    {#{% if is_granted('ROLE_POWER_ADMIN') %}#}
+                    <a href="{{ path('boltzaras-edit', {'id': jelentes.id}) }}" class="btn-smX">
+                        <i class="fas fa-edit"></i></a>
+                    {#{% endif %}#}
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td><li><em>nincs user found</em></li></td>
+        </tr>
+    {% endif %}
+{% endblock %}
+
+
+{#{% block page_content %}#}
+{#		#}
+{#	{% block LISTA %}#}
+
+{#        <!-- Modal -->#}
+{#        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">#}
+{#            <div class="modal-dialog" role="document">#}
+{#                <div class="modal-content">#}
+{#                    <div class="modal-header">#}
+{#                        <!-- insert plain title -->#}
+{#                        {{ include('/admin/_title_insert.html.twig') }}#}
+{#                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                            <span aria-hidden="true">&times;</span>#}
+{#                        </button>#}
+{#                    </div>#}
+{#                    <div class="modal-body">#}
+{#                        {{ render(controller('App\\Controller\\Boltzaras\\BoltzarasController::addBoltzarasForm')) }}#}
+{#                    </div>#}
+{#                    #}{#<div class="modal-footer">#}
+{#                        #}{#<button type="button" class="btn btn-secondary" data-dismiss="modal">Mégse</button>#}
+{#                        #}{#<button type="button" class="btn btn-primary">M</button>#}
+{#                    #}{#</div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+
+{#        <!-- page title -->#}
+{#        #}{#{{ include('/admin/_title_widget.html.twig') }}#}
+
+{#        <div class="row mt-3 mb-2">#}
+{#            <div class="col-lg-12">#}
+{#                <div class="page-title h1 d-inline mr-md-2 mr-1">{{ title }}</div>#}
+{#                <div class="d-inline float-rightX">#}
+{#                    <a href="{{ path('boltzaras-edit') }}" class="btn btn-outline-primary mb-2"><i class="fas fa-plus-circle mr-1"></i> Új jelentés</a>#}
+{#                    <a href="{{ path('boltzaras-webshop-edit') }}" class="btn btn-outline-primary mb-2 ml-1"><i class="fas fa-shopping-cart mr-1"></i> Új web forgalom</a>#}
+{#                    #}{#<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModal">#}
+{#                    #}{#<i class="fas fa-plus mr-1"></i> Új ablak</button>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+
+{#        {{ include('/admin/_alert_widget.html.twig') }}#}
+
+{#        {% if is_granted('ROLE_BOLTZARAS_STAT') %}#}
+{#        <div class="row row-5">#}
+{#            <div class="col-xl-3 col-lg-6 col-6 mb-20px">#}
+{#                <div class="card tilebox-one h-100 mb-0">#}
+{#                    <div class="card-body d-flex flex-column">#}
+{#                        <div class="card--infoCard">#}
+{#                            <div class="float-right">#}
+{#                                <i class="fas fa-shopping-basket"></i>#}
+{#                            </div>#}
+{#                            <span class="h6 quickinfo-title">Készpénz</span>#}
+{#                            <span class="h5 quickinfo-highlight">{{ keszpenz|money }}</span>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+
+{#            <div class="col-xl-3 col-lg-6 col-6 mb-20px">#}
+{#                <div class="card tilebox-one h-100 mb-0">#}
+{#                    <div class="card-body d-flex flex-column">#}
+{#                        <div class="card--infoCard">#}
+{#                            <div class="float-right">#}
+{#                                <i class="far fa-credit-card"></i>#}
+{#                            </div>#}
+{#                            <span class="h6 quickinfo-title">Bankkártya</span>#}
+{#                            <span class="h5 quickinfo-highlight">{{ bankkartya|money }}</span>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+
+{#            <div class="col-xl-3 col-lg-6 col-6 mb-20px">#}
+{#                <div class="card tilebox-one bg-successX text-whitXe h-100 mb-0">#}
+{#                    <div class="card-body d-flex flex-column">#}
+{#                        <div class="card--infoCard">#}
+{#                            <div class="float-right">#}
+{#                                <i class="fas fa-dollar-sign"></i>#}
+{#                            </div>#}
+{#                            <span class="h6 quickinfo-title">Bolt összesen</span>#}
+{#                            <span class="h5 quickinfo-highlight text-success">{{ (keszpenz + bankkartya)|money }}</span>#}
+{#                            <span class="text-muted">Mr. Feka: {{ (keszpenz + bankkartya - kassza)|money }}</span>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+
+{#            <div class="col-xl-3 col-lg-6 col-6 mb-20px">#}
+{#                <div class="card tilebox-one bg-infoX text-whiteX h-100 mb-0">#}
+{#                    <div class="card-body d-flex flex-column">#}
+{#                        <div class="card--infoCard">#}
+{#                            <div class="float-right">#}
+{#                                <i class="fas fa-shopping-cart"></i>#}
+{#                            </div>#}
+{#                            <span class="h6 quickinfo-title">Webshop</span>#}
+{#                            <span class="h5 quickinfo-highlight text-primary">{{ webshop|money }}</span>#}
+{#                            <span class="text-sm font-weight-normal">*csak 2018 adatok</span>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+
+{#        </div>#}
+{#        {% endif %}#}
+
+{#        <!-- header of default page content widget -->#}
+{#        {{ include('/admin/_header_of_default_page_content.html.twig') }}#}
+
+{#        <div class="row mb-3">#}
+{#            <div class="col-sm-6 col-lg-8">#}
+{#                <div class="d-inline-block my-1 my-lg-0">#}
+
+{#                    <!-- dateRange Widget -->#}
+{#                    {{ include('/admin/dateRange-picker-widget.html.twig') }}#}
+{#                </div>#}
+{#                <div class="d-inline-block">#}
+{#                    <a href="{{  path('boltzaras_list') }}" class="btn-link ml-1">Teljes lista</a>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="col-sm-6 col-lg-4">#}
+{#                <div class="text-sm-right my-1 my-lg-0">#}
+
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+
+
+
+
+{#        <div class="table-responsive mb-3">#}
+{#            <table class="table table-sm table-centered table-striped table-bordered table-hover mb-0" id="boltzaras-list">#}
+{#                <thead class="thead-light">#}
+{#				<tr>#}
+{#                    <th scope="col">Dátum</th>#}
+{#                    <th scope="col">Kassza</th>#}
+{#				    <th scope="col">Bankkártya</th>#}
+{#				    <th scope="col">Készpénz</th>#}
+{#				    <th scope="col">Összbevétel</th>#}
+{#                    <th scope="col">Mr. Feka</th>#}
+{#				    #}{#<th scope="col">ID</th>#}
+{#                    <th scope="col" class="text-center">Módosítás időpontja</th>#}
+{#                    <th scope="col">Munkatárs</th>#}
+{#                    <th scope="col"><i class="fas fa-ellipsis-h"></i></th>#}
+{#				  </tr>#}
+{#			  </thead>#}
+{#			  <tbody>#}
+{#				{% if jelentesek is defined %}#}
+{#				{% for jelentes in jelentesek %}#}
+{#				<tr>#}
+{#                    <td class="align-middle font-weight-bold text-sm">#}
+{#                        {{ jelentes.idopont|date('M d,') }} <span class="font-weight-normal text-sm">{{ jelentes.idopont|date('Y')}}</span></td>#}
+{#				    <td class="align-middle text-right text-nowrap">{{ jelentes.kassza|number_format(0, ',', ' ') }}</td>#}
+{#				    <td class="align-middle text-right text-nowrap">{{ jelentes.bankkartya|number_format(0, ',', ' ') }}</td>#}
+{#				    <td class="align-middle text-right text-nowrap">{{ jelentes.keszpenz|number_format(0, ',', ' ') }}</td>#}
+{#				    <td class="align-middle text-right font-weight-bold text-nowrap">{{ (jelentes.bankkartya + jelentes.keszpenz)|number_format(0, ',', ' ') }}</td>#}
+{#                    <td class="align-middle text-right text-nowrap">{{ (jelentes.bankkartya + jelentes.keszpenz - jelentes.kassza)|number_format(0, ',', ' ') }}</td>#}
+{#  				    #}{#<td class="align-middle text-muted"><small>{{ jelentes.id }}</small></td>#}
+{#                    <td class="align-middle text-center text-muted"><small>{{ jelentes.modositasIdopontja|date('Y-m-d, H:i')}}</small></td>#}
+{#                    <td class="text-muted"><small><img class="img-thumbnail rounded-circle mr-2" src="{{ asset('/uploads/images/termekek/' ~ jelentes.munkatars.avatar) }}" width="20px;" />{{ jelentes.munkatars }} </small></td>#}
+{#                    <td>#}
+{#                        #}{#{% if is_granted('ROLE_POWER_ADMIN') %}#}
+{#                            <a href="{{ path('boltzaras-edit', {'id': jelentes.id}) }}" class="btn-smX">#}
+{#                                <i class="fas fa-edit"></i></a>#}
+{#                        #}{#{% endif %}#}
+{#				  	</td>#}
+{#				</tr>#}
+{#				{% endfor %}#}
+{#				{% else %}#}
+{#				<tr>#}
+{#			        <td><li><em>nincs user found</em></li></td>#}
+{#			    </tr>#}
+{#				{% endif %}#}
+{#			  </tbody>#}
+{#			</table>#}
+{#		</div>#}
+{#		<div class="pagerfanta">#}
+{#                {% if paginator is defined %}#}
+{#					{{ pagerfanta(paginator, 'twitter_bootstrap4') }}#}
+{#                {% endif %}#}
+{#		</div>#}
+
+{#        <!-- footer of default page content widget -->#}
+{#        {{ include('/admin/_footer_of_default_page_content.html.twig') }}#}
+
+{#	{% endblock %}#}
+{#{% endblock %}#}
 
 
 

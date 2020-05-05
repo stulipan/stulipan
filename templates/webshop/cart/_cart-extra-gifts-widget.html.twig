@@ -1,0 +1,25 @@
+					<div class="row row-narrow no-gutters">
+                        {% if products is defined %}
+                        {% for product in products %}
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-4 col-narrow mb-20px">
+                                <div class="product position-relative">
+                                    <div class="product-image">
+                                        <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ product.productName}}" class="img-fluid">
+                                        <a href="{{ path('site-product-show', {'id': product.id}) }}" class="tile-link product-hover-overlay-link">
+                                        </a>
+                                    </div>
+                                    <div class="py-2 text-center">
+                                        <p class="productList--name mb-1"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-dark">{{ product.productName }}</a></p>
+                                        <span class="productList--price-gross">{{ product.price.numericValue|money }}</span>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="loadingWrapper loadingWrapper-secondary">
+                                            <a href="#" data-url="{{ path('cart-addGift', {'slug': product.slug}) }}" title="Kiválaszt" class="JS--Button-selectGift btn btn-sm btn-secondary">Kiválaszt</a>
+                                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+					</div>

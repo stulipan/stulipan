@@ -1,0 +1,89 @@
+{% extends 'admin/template-editing.html.twig' %}
+
+{% set pageTitle = title %}
+{% set breadcrumb = {
+    0: {
+        'url': path('settings-home'),
+        'text': 'settings.settings'|trans,
+    },
+    1: {
+        'url': path('occasion-list'),
+        'text': 'Kiemelt napok',
+    }
+} %}
+
+{% set moduleTitle = '' %}
+{% set cancelUrl = path('occasion-list') %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block moduleTitle %}
+    Kiemelt nap
+{% endblock %}
+
+{% block moduleDescription %}
+    Itt tudod meghatározni, mely nap legyen kiemelt nap. A kiemelt naphoz a megszokottól eltérő szállítási idősávok tartoznak.
+{% endblock %}
+
+
+{% block contentInner %}
+    {%  include '/admin/occasion-form.html.twig' with {'cancelUrl': cancelUrl} %}
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+        $(function() {
+            $('#JS--datum input').daterangepicker({
+                opens: 'right',
+                autoApply: true,
+                autoUpdateInput: false,
+                singleDatePicker: true,
+                minDate: moment().add(4, 'hours'),
+                maxDate: moment().add(10, 'months'),
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    separator: ' / ',
+                    applyLabel: 'Alkalmaz',
+                    cancelLabel: 'Mégse',
+                    daysOfWeek: [
+                        'V',
+                        'H',
+                        'K',
+                        'Sz',
+                        'Cs',
+                        'P',
+                        'Sz'
+                    ],
+                    monthNames: [
+                        'Január',
+                        'Február',
+                        'Március',
+                        'Április',
+                        'Május',
+                        'Június',
+                        'Július',
+                        'Augusztus',
+                        'Szeptember',
+                        'Október',
+                        'November',
+                        'December'
+                    ],
+                    firstDay: 1,
+                }
+            });
+
+            $('#JS--datum input').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            });
+
+            $('#JS--datum input').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+        });
+	</script>
+{% endblock %}
+

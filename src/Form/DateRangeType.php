@@ -28,7 +28,7 @@ class DateRangeType extends AbstractType
         $builder
             ->add('dateRange', TextType::class, [
                     'label' => 'Dátum',
-                    'attr' => ['placeholder' => 'Szűrés időre', 'autocomplete' => 'off'],
+                    'attr' => ['placeholder' => 'Szűrés időre...', 'autocomplete' => 'off'],
                 ]
             )
             //            ->add('start', DateType::class, [

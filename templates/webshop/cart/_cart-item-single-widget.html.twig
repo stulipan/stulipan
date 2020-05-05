@@ -1,0 +1,15 @@
+        <!-- Cart single item-->
+        <div class="">
+            <div class="d-flex align-items-center">
+                <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}">
+                    <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid navbar-cart-product-image">
+                </a>
+                <div class="d-flex w-100 justify-content-between">
+                    <div class="pl-3">
+                        <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="cart-item-link">{{ item.product.name }}</a>
+                        <small class="d-block text-muted">Mennyiség: {{ item.quantity }} </small>
+                        <strong class="d-block text-sm">{{ (item.price * item.quantity) |money }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>

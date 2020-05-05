@@ -5,12 +5,13 @@ namespace App\Repository;
 use App\Entity\Keszlet;
 //use Doctrine\ORM\EntityRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\Query;
+use Doctrine\Persistence\ManagerRegistry;
 
 
 class KeszletRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Keszlet::class);
     }
@@ -18,7 +19,7 @@ class KeszletRepository extends ServiceEntityRepository
 
     /**
      * @param $id
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */	
     public function findAllQueryBuilder()
     {

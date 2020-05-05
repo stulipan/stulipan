@@ -56,7 +56,7 @@ class ProductCategoryFormType extends AbstractType
                 'choice_label' => 'name',
                 'choice_value' => 'id',
                 'placeholder' => ' - nincs - ',
-                'attr' => ['class' => 'custom-select'],
+                'attr' => ['class' => 'form-control'],
 //                'multiple' => false,
 //                'expanded' => true,
             ])

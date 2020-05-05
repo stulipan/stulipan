@@ -1,0 +1,29 @@
+{% extends 'webshop/site/template-general.html.twig' %}
+
+{% set pageTitle = page.name %}
+{% set breadcrumb = {
+    0: {
+        'url': path('homepage'),
+        'text': 'Home',
+    },
+    1: {
+        'url': path('site-page-show', { 'slug': page.slug }),
+        'text': page.name,
+    },
+} %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-8 col-lg-10 mx-auto">
+            <div class="hero-content pb-5 text-center">
+                <h1 class="mb-0">{{ page.name }}</h1>
+            </div>
+            {{ page.content|raw }}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block footerHighlights %}
+{% endblock %}
+

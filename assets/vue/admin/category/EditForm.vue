@@ -171,7 +171,7 @@
     const initialData = () => {
         return {
             options: {
-                url: '/admin/api/images/category/',
+                url: '/hu/admin/api/images/category/',
                 headers: {
 //                        credentials: 'same-origin',
 //                        type: 'multipart/form-data',  // ??
@@ -189,7 +189,7 @@
                 },
             },
         }
-    }
+    };
     
     export default {
         components: {
@@ -226,11 +226,11 @@
         },
         methods: {
             submitFile () {
-                this.isImageUploading = true
+                this.isImageUploading = true;
                 setTimeout(() => this.savedImage(), 1000)
             },
             savedImage () {
-                this.isImageUploading = false
+                this.isImageUploading = false;
                 this.isImageSaved = true
             },
             onSubmit (e) {

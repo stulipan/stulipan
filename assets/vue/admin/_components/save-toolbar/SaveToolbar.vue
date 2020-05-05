@@ -1,16 +1,17 @@
 <template>
-    <div class="py-2 fixed-bottom bg-admin--saveToolbar">
-        <div class="container d-flex justify-content-end">
+    <div class="py-2X fixed-bottomX bg-admin--saveToolbarX">
+        <div class="containerX d-flex justify-content-start">
             <div class="mr-2">
-                <!--@click.prevent="onCancel" -->
-                <a :href="entityToWatch.backToList" v-if="entityToWatch" class="btn" :class="[options.buttonCancelCss]">{{ options.cancelText }}</a>
                 <button @click.prevent="onSubmit"
-                
-                        type="submit" class="btn" :class="[options.buttonSubmitCss]" formnovalidate="">
+
+                        type="submit" class="btn mr-2" :class="[options.buttonSubmitCss]" formnovalidate="">
                     {{ entityToWatch ? options.updateText : options.createText }} <i v-if="formIsPosting" class="fas fa-lg fa-spinner fa-spin ml-1"></i>
                 </button>
+
+                <!--@click.prevent="onCancel" -->
+                <a :href="entityToWatch.backToList" v-if="entityToWatch" class="btn" :class="[options.buttonCancelCss]">{{ options.cancelText }}</a>
             </div>
-        
+
         </div>
     </div>
 </template>
@@ -26,7 +27,7 @@
                 buttonCancelCss: 'btn-secondary',
             }
         }
-    }
+    };
     
     export default {
         props: [

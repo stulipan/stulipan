@@ -7,6 +7,8 @@ namespace App\Entity;
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\Model\CustomerBasic;
 use App\Entity\Model\CartCard;
+use App\Event\OrderEvent;
+use DateTime;
 use Symfony\Component\Security\Core\Security;
 use App\Entity\User;
 use App\Entity\Order;
@@ -16,7 +18,7 @@ use App\Entity\Payment;
 use App\Entity\Shipping;
 use App\Entity\Discount;
 use App\Entity\Product\Product;
-use App\Entity\Summary;
+use App\Model\Summary;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,12 +44,12 @@ class OrderBuilder
      * @var Order
      */
     private $order;
-    
+
     /**
      * @var EntityManagerInterface
      */
     private $entityManager;
-    
+
     /**
      * @var EventDispatcherInterface
      */
@@ -88,11 +90,9 @@ class OrderBuilder
 
         // Run events
         if ($orderBeforeId === null) {
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
+            $this->runEvent(OrderEvent::ORDER_CREATED, OrderStatus::STATUS_CREATED);
         } else {
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
         }
     }
 
@@ -102,11 +102,11 @@ class OrderBuilder
     public function setCustomerBasic(CustomerBasic $customerBasic): void
     {
         $orderBeforeId = $this->order->getId();
-        
+
         $this->order->setEmail($customerBasic->getEmail());
         $this->order->setFirstname($customerBasic->getFirstname());
         $this->order->setLastname($customerBasic->getLastname());
-        
+
         $this->order->setBillingName($customerBasic->getLastname().' '.$customerBasic->getFirstname());
         $this->order->setBillingPhone($customerBasic->getPhone());
         $this->storage->add('email', $customerBasic->getEmail());
@@ -118,11 +118,9 @@ class OrderBuilder
 
         // Run events
         if ($orderBeforeId === null) {
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
+            $this->runEvent(OrderEvent::ORDER_CREATED, OrderStatus::STATUS_CREATED);
         } else {
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
         }
     }
 
@@ -152,7 +150,7 @@ class OrderBuilder
         $newOrder = new Order;
         return $newOrder;
     }
-    
+
     /**
      * @param Order $order
      */
@@ -160,7 +158,7 @@ class OrderBuilder
     {
         $this->storage->set($order->getId());
         $this->order = $order;
-    
+
     }
 
     /**
@@ -179,13 +177,7 @@ class OrderBuilder
             $orderItem->setOrder($this->order);
             $orderItem->setProduct($product);
             $orderItem->setQuantity($quantity);
-            if ($product->hasSubproducts()) {
-                $price = $product->getSelectedSubproduct()->getPrice();
-                $orderItem->setPrice($price);
-                $orderItem->setSubproductAttribute($product->getSelectedSubproduct()->getName());
-            } else {
-                $orderItem->setPrice($product->getPrice()->getValue());
-            }
+            $orderItem->setPrice($product->getPrice()->getNumericValue());
 
             $orderItem->setPriceTotal($orderItem->getPrice() * $orderItem->getQuantity());
             $this->order->addItem($orderItem);
@@ -193,38 +185,24 @@ class OrderBuilder
             $key = $this->indexOfProduct($product);
             $item = $this->order->getItems()->get($key);
             $quantity = $this->order->getItems()->get($key)->getQuantity() + 1;
-            if ($product->hasSubproducts()) {
-                $price = $product->getSelectedSubproduct()->getPrice();
-                $this->setItemAttribute($item, $product->getSelectedSubproduct()->getName());
-            } else {
-                $price = $product->getPrice()->getValue();
-            }
+            $price = $product->getPrice()->getNumericValue();
             $this->setItemPrice($item, $price);
             $this->setItemQuantity($item, $quantity);
         }
-//        if ($this->order->getCustomer()->getId() === null) {
-//            $this->order->setCustomer(null);
-//        } else {
-//            $this->order->setCustomer($this->customer);
-//        }
-//        dd($this);
+//        $this->order->setPriceTotal($this->order->getSummary());
 
         if ($this->customer === null) {
             $this->setCustomer($this->order->getCustomer());
         }
-
-//        dd($this);
 
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
 
         // Run events
         if ($orderBeforeId === null) {
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
+            $this->runEvent(OrderEvent::ORDER_CREATED, OrderStatus::STATUS_CREATED);
         } else {
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
         }
 
     }
@@ -252,13 +230,10 @@ class OrderBuilder
 
         // Run events
         if ($orderBeforeId === null) {
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_CREATED, $event);
+            $this->runEvent(OrderEvent::ORDER_CREATED, OrderStatus::STATUS_CREATED);
         } else {
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
         }
-
     }
 
     /**
@@ -268,7 +243,7 @@ class OrderBuilder
     public function setDeliveryDate(string $deliveryDate = null, string $deliveryInterval = null): void
     {
         if ($deliveryDate) {
-            $deliveryDate = \DateTime::createFromFormat('!Y-m-d', $deliveryDate);
+            $deliveryDate = DateTime::createFromFormat('!Y-m-d', $deliveryDate);
             /**
              * If $deliveryDate equals date in database
              */
@@ -291,21 +266,21 @@ class OrderBuilder
         }
 
         // Run events
-        $event = new GenericEvent($this->order);
-        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//        $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
     }
-    
+
     /**
      * @param float $deliveryFee
      */
     public function setDeliveryFee(?float $deliveryFee) {
         $this->order->setDeliveryFee($deliveryFee);
-    
+
         // Run events
-        $event = new GenericEvent($this->order);
-        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//        $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
     }
@@ -329,12 +304,12 @@ class OrderBuilder
 
         $this->order->setShippingAddress($shippingAddress);
         // Run events
-        $event = new GenericEvent($this->order);
-        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//        $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
     }
-    
+
     /**
      * Remove Recipient from Order
      */
@@ -345,11 +320,10 @@ class OrderBuilder
         $this->order->setShippingName(null);
         $this->order->setShippingPhone(null);
         $this->order->setShippingAddress(null);
-        
+
         // Run events
-        $event = new GenericEvent($this->order);
-        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
-        
+//        $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
         $this->entityManager->persist($this->order);
         if ($prevShippingAddress) {
             $this->entityManager->remove($prevShippingAddress);
@@ -377,12 +351,12 @@ class OrderBuilder
 
         $this->order->setBillingAddress($billingAddress);
         // Run events
-        $event = new GenericEvent($this->order);
-        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//        $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
     }
-    
+
     /**
      * Remove Sender from Order
      */
@@ -394,13 +368,12 @@ class OrderBuilder
         $this->order->setBillingCompany(null);
         $this->order->setBillingPhone($this->storage->fetch('phone'));
         $this->order->setBillingAddress(null);
-        
+
         // Run events
-        $event = new GenericEvent($this->order);
-        $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
-        
+//        $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
         $this->entityManager->persist($this->order);
-        
+
         if ($prevBillingAddress) {
             $this->entityManager->remove($prevBillingAddress);
         }
@@ -473,8 +446,8 @@ class OrderBuilder
             $item->setPriceTotal($item->getQuantity()*$item->getPrice());
             $this->order->getItems()->set($key, $item);
             // Run events
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
         }
@@ -482,7 +455,6 @@ class OrderBuilder
 
     /**
      * Update the price for an existing product.
-     * A product may have several prices because of its subproducts.
      *
      * @param OrderItem $item
      * @param integer $price
@@ -492,12 +464,11 @@ class OrderBuilder
     {
         if ($this->order && $this->order->getItems()->contains($item)) {
             $key = $this->order->getItems()->indexOf($item);
-//            dump($price);die;
             $item->setPrice($price);
             $this->order->getItems()->set($key, $item);
             // Run events
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
         }
@@ -517,34 +488,33 @@ class OrderBuilder
             $item->setPriceTotal($price);
             $this->order->getItems()->set($key, $item);
             // Run events
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
         }
     }
 
-    /**
-     * Update the price for an existing product.
-     * A product may have several prices because of its subproducts.
-     *
-     * @param OrderItem $item
-     * @param string $name
-     * @throws Exception
-     */
-    public function setItemAttribute(OrderItem $item, string $name): void
-    {
-        if ($this->order && $this->order->getItems()->contains($item)) {
-            $key = $this->order->getItems()->indexOf($item);
-            $item->setSubproductAttribute($name);
-            $this->order->getItems()->set($key, $item);
-            // Run events
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
-            $this->entityManager->persist($this->order);
-            $this->entityManager->flush();
-        }
-    }
+//    /**
+//     * Update the price for an existing product.
+//     * A product may have several prices because of its subproducts.
+//     *
+//     * @param OrderItem $item
+//     * @param string $name
+//     * @throws Exception
+//     */
+//    public function setItemAttribute(OrderItem $item, string $name): void
+//    {
+//        if ($this->order && $this->order->getItems()->contains($item)) {
+//            $key = $this->order->getItems()->indexOf($item);
+//            $this->order->getItems()->set($key, $item);
+//            // Run events
+////            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+//
+//            $this->entityManager->persist($this->order);
+//            $this->entityManager->flush();
+//        }
+//    }
 
     /**
      * Removing the product from the basket.
@@ -557,8 +527,8 @@ class OrderBuilder
         if ($this->order && $this->order->getItems()->contains($item)) {
             $this->order->removeItem($item);
             // Run events
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
         }
@@ -586,14 +556,14 @@ class OrderBuilder
                 $this->order->setMessage($card->getMessage());
                 $this->order->setMessageAuthor($card->getAuthor());
                 // Run events
-                $event = new GenericEvent($this->order);
-                $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+//                $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
                 $this->entityManager->persist($this->order);
                 $this->entityManager->flush();
             }
         }
     }
-    
+
     /**
      * Set order status
      *
@@ -604,8 +574,25 @@ class OrderBuilder
         if ($this->order) {
             $this->order->setStatus($status);
             // Run events
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+            $this->runEvent(OrderEvent::ORDER_UPDATED, $status->getShortcode());
+
+            $this->entityManager->persist($this->order);
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * Set payment status
+     *
+     * @param PaymentStatus $paymentStatus
+     */
+    public function setPaymentStatus(PaymentStatus $paymentStatus): void
+    {
+        if ($this->order) {
+            $this->order->setPaymentStatus($paymentStatus);
+            // Run events
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
         }
@@ -622,8 +609,8 @@ class OrderBuilder
         if ($this->order) {
             $this->order->setPayment($payment);
             // Run events
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
         }
@@ -639,8 +626,8 @@ class OrderBuilder
         if ($this->order) {
             $this->order->setShipping($shipping);
             // Run events
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
         }
@@ -656,8 +643,23 @@ class OrderBuilder
         if ($this->order) {
             $this->order->setDiscount($discount);
             // Run events
-            $event = new GenericEvent($this->order);
-            $this->eventDispatcher->dispatch(Events::ORDER_UPDATED, $event);
+            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
+            $this->entityManager->persist($this->order);
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * @param ClientDetails|null $clientDetails
+     */
+    public function setClientDetails(?ClientDetails $clientDetails): void
+    {
+        if ($this->order) {
+            $this->order->setClientDetails($clientDetails);
+            // Run events
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
         }
@@ -744,7 +746,7 @@ class OrderBuilder
              * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
              * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
              */
-            $diff = (new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
+            $diff = (new DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
             if ($diff->days >= 0 && $diff->invert == 0) {
                 return false;
             } elseif ($diff->invert == 1) {
@@ -805,6 +807,16 @@ class OrderBuilder
     public function summary(): Summary
     {
         return new Summary($this->order);
+    }
+
+    private function runEvent($event, $orderStatus = null) {
+        $channel = OrderLog::CHANNEL_CHECKOUT;
+
+        $eventName = new OrderEvent($this->order, [
+            'channel' => $channel,
+            'orderStatus' => $orderStatus,
+        ]);
+        $this->eventDispatcher->dispatch($event, $eventName);
     }
 
 }

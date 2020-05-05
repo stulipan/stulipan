@@ -2,12 +2,21 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Order;
+use App\Entity\OrderStatus;
+use App\Entity\PaymentStatus;
 use App\Entity\Product\Product;
 use App\Entity\Price;
+use App\Entity\Product\ProductStatus;
 use App\Entity\VatRate;
+use App\Form\OrderFilterType;
+use App\Form\ProductFilterType;
 use App\Form\ProductFormType;
 use App\Form\ProductQuantityFormType;
 use App\Services\FileUploader;
+use App\Services\Settings;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,36 +35,188 @@ class ProductController extends AbstractController
     //////////////////////////////////////////////////////////////////////////////////////
     
     /**
-     * @Route("/termek/", name="product-list")
+     * @ Route("/termek/", name="product-list")
+     * @Route("/products", name="product-list",
+     *     requirements={"page"="\d+"},
+     *     )
      */
-    public function listActionOld()
+    public function listProducts(Request $request, $page = 1, Settings $settings)
     {
-        $termek = $this->getDoctrine()
-            ->getRepository(Product::class)
-            ->findAll();
+        $searchTerm = $request->query->get('searchTerm');
+        $status = $request->query->get('status');
+        $page = $request->query->get('page') ? $request->query->get('page') : $page;
+//        dd($request->attributes->get('_route_params'));
+//        dd($request->query->all());
 
-        if (!$termek) {
-            //throw $this->createNotFoundException('Nem talált egy terméket sem!');
+        $filterTags = [];
+        $urlParams = [];
+        $data = $filterTags;
+        $itemCounts = [];
+        $em = $this->getDoctrine();
+        if ($searchTerm) {
+            $filterTags['searchTerm'] = 'Keresés: '.$searchTerm;
+            $data['searchTerm'] = $searchTerm;
+            $urlParams['searchTerm'] = $searchTerm;
+        }
+        if ($status) {
+            $filterTags['status'] = $em->getRepository(ProductStatus::class)->findOneBy(['shortcode' => $status])->getName();
+            $urlParams['status'] = $status;
+            $data['status'] = $em->getRepository(ProductStatus::class)->findOneBy(['shortcode' => $status]);
+        }
+        $filterForm = $this->createForm(ProductFilterType::class, $data);
 
-            $this->addFlash('success', 'Nem talált egy terméket sem! ');
-            return $this->redirectToRoute('product-list');
+        $filterUrls = [];
+        foreach ($filterTags as $key => $value) {
+            // remove the current filter from the urlParams
+            $shortlist = array_diff_key($urlParams,[$key => '']);
+
+            // generate the URL with the remaining filters
+            $filterUrls[$key] = $this->generateUrl('product-list',[
+                'searchTerm' => isset($shortlist['searchTerm']) ? $shortlist['searchTerm'] : null,
+                'status' => isset($shortlist['status']) ? $shortlist['status'] : null,
+            ]);
         }
-        // render a template, then in the template, print things with {{ termek.munkatars }}
-        foreach($termek as $i => $item) {
-            // $termek[$i] is same as $item
-            $termek[$i]->getCreatedAt()->format('Y-m-d H:i:s');
-            $termek[$i]->getUpdatedAt()->format('Y-m-d H:i:s');
+
+        $filterQuickLinks['all'] = [
+            'name' => 'Összes termék',
+            'url' => $this->generateUrl('product-list'),
+            'active' => false,
+            'itemCount' => $em->getRepository(Product::class)->count(['status' => !null]),
+        ];
+        $filterQuickLinks['enabled'] = [
+            'name' => 'Engedélyezett',
+            'url' => $this->generateUrl('product-list', ['status' => ProductStatus::STATUS_ENABLED]),
+            'active' => false,
+            'itemCount' => $em->getRepository(Product::class)->count(['status' => $em->getRepository(ProductStatus::class)->findOneBy(['shortcode' => ProductStatus::STATUS_ENABLED])]),
+        ];
+        $filterQuickLinks['unavailable'] = [
+            'name' => 'Kifutott',
+            'url' => $this->generateUrl('product-list', ['status' => ProductStatus::STATUS_UNAVAILABLE]),
+            'active' => false,
+            'itemCount' => $em->getRepository(Product::class)->count(['status' => $em->getRepository(ProductStatus::class)->findOneBy(['shortcode' => ProductStatus::STATUS_UNAVAILABLE])]),
+        ];
+        $filterQuickLinks['removed'] = [
+            'name' => 'Törölt',
+            'url' => $this->generateUrl('product-list', ['status' => ProductStatus::STATUS_REMOVED]),
+            'active' => false,
+            'itemCount' => $em->getRepository(Product::class)->count(['status' => $em->getRepository(ProductStatus::class)->findOneBy(['shortcode' => ProductStatus::STATUS_REMOVED])]),
+        ];
+
+        // Generate the quicklinks which are placed above the filter
+        $hasCustomFilter = false;
+        if (!$searchTerm && !$status) {
+            $filterQuickLinks['all']['active'] = true;
+            $hasCustomFilter = true;
         }
+        if (!$searchTerm && $status && $status == ProductStatus::STATUS_ENABLED) {
+            $filterQuickLinks['enabled']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$searchTerm && $status && $status == ProductStatus::STATUS_UNAVAILABLE) {
+            $filterQuickLinks['unavailable']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$searchTerm && $status && $status == ProductStatus::STATUS_REMOVED) {
+            $filterQuickLinks['removed']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$hasCustomFilter) {
+            $filterQuickLinks['custom'] = [
+                'name' => 'Egyedi szűrés',
+                'url' => $this->generateUrl('product-list',$request->query->all()),
+                'active' => true,
+                'itemCount' => $em->getRepository(Product::class)->countAll([
+                    'searchTerm' => $searchTerm,
+                    'status' => $status,
+                    ]),
+            ];
+        }
+
+
+        $queryBuilder = $em->getRepository(Product::class)->findAllQuery([
+            'searchTerm' => $searchTerm,
+            'status' => $status,
+        ]);
+
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
+        //$pagerfanta->setCurrentPage($page);
+
+        try {
+            $pagerfanta->setCurrentPage($page);
+        } catch(NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        $products = [];
+        foreach ($pagerfanta->getCurrentPageResults() as $result) {
+            $products[] = $result;
+        }
+
+        if (!$products) {
+//            $this->addFlash('danger', 'Nem talált termékeket! Próbáld módosítani a szűrőket.');
+        }
+
+//        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+//
+//        if (!$products) {
+//            //throw $this->createNotFoundException('Nem talált egy terméket sem!');
+//
+//            $this->addFlash('success', 'Nem talált egy terméket sem! ');
+//            return $this->redirectToRoute('product-list');
+//        }
+//        // render a template, then in the template, print things with {{ termek.munkatars }}
+//        foreach($products as $i => $item) {
+//            // $products[$i] is same as $item
+//            $products[$i]->getCreatedAt()->format('Y-m-d H:i:s');
+//            $products[$i]->getUpdatedAt()->format('Y-m-d H:i:s');
+//        }
 
         return $this->render('admin/product/product_list.html.twig', [
-            'products' => $termek,
+            'products' => $products,
             'title' => 'Termékek',
+            'paginator' => $pagerfanta,
+            'total' => $pagerfanta->getNbResults(),
+//            'count' => count($orders),
+//            'orderCount' => empty($orders) ? 'Nincsenek rendelések' : count($orders),
+            'filterQuickLinks' => $filterQuickLinks,
+            'filterForm' => $filterForm->createView(),
+            'filterTags' => $filterTags,
+            'filterUrls' => $filterUrls,
             ]);
+    }
+
+    /**
+     * @Route("/products/filter", name="product-list-filter")
+     */
+    public function handleFilterForm(Request $request)
+    {
+        $form = $this->createForm(ProductFilterType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $filters = $form->getData();
+            $searchTerm = null;
+            $status = null;
+
+            if ($filters['searchTerm']) {
+                $searchTerm = $filters['searchTerm'];
+            }
+            if ($filters['status']) {
+                $status = $this->getDoctrine()->getRepository(ProductStatus::class)->find($filters['status'])->getShortcode();
+            }
+            return $this->redirectToRoute('product-list',[
+                'searchTerm' => $searchTerm,
+                'status' => $status,
+            ]);
+        }
+        return $this->redirectToRoute('product-list');
     }
 
 
     /**
-     * @Route("/product/newProduct", name="product-new")
+     * @Route("/product/new", name="product-new")
      */
     public function newProduct(Request $request, FileUploader $fileUploader)
     {
@@ -106,7 +267,7 @@ class ProductController extends AbstractController
 
 
     /**
-     * @Route("/product/editProduct/{id}", name="product-edit")
+     * @Route("/product/edit/{id}", name="product-edit")
      */
     public function editProduct(Request $request, Product $product, FileUploader $fileUploader)
     {
@@ -123,21 +284,6 @@ class ProductController extends AbstractController
                 $newFilename = $fileUploader->uploadFile($file, null); //2nd param = null, else deletes prev image
                 $product->setImage($newFilename);
             }
-            foreach ($product->getSubproducts() as $i => $subproduct) {
-                if ($subproduct->getPrice() === null) {
-                    $product->removeSubproduct($subproduct);
-                } else {
-                    if ($subproduct->getPrice()->getGrossPrice() === null || $subproduct->getPrice()->getGrossPrice() == 0) {
-                        $product->removeSubproduct($subproduct);
-                    } else {
-//                        $subproduct->setProduct($product);
-                        if (!$subproduct->getSku() || $subproduct->getSku() === null) {
-                            $subproduct->setSku($product->getSku() . $i);
-                        }
-                    }
-                }
-            }
-
 //            dd($product);
 
             $entityManager = $this->getDoctrine()->getManager();

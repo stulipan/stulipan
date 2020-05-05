@@ -3,6 +3,9 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
 
-    form_themes: ['form/my-field-label.html.twig']
+    form_themes: ['form/bootstrap_4_withNoErrors.twig']
+
+    globals:
+        settings: '@App\Services\Settings'
 
 #    form_themes: ['bootstrap_4_layout.html.twig']

@@ -8,9 +8,9 @@
 {% block page_content %}
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">{{ 'Dashboard'|trans }}</h1>
+        <h1 class="h4">{{ 'dashboard.dashboard'|trans }}</h1>
         <small class="dsd">
-            {{ 'Welcome to Stulipan admin'|trans }}
+            {{ 'dashboard.welcome-message'|trans }}
         </small>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
@@ -23,5 +23,192 @@
             </button>
         </div>
     </div>
+
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="row mt-1 mb-3">
+                <div class="col-lg-12">
+                </div>
+            </div>
+            <div class="row row-5">
+                <div class="col-lg-12">
+                    <div class="mb-20px">
+                        <a href="{{ path('order-list-table') }}" class="btn btn-secondary mb-2 mr-2"><i class="fas fa-shopping-cart"></i>{{ 'dashboard.orders'|trans }}</a>
+                        <a href="{{ path('customer-list') }}" class="btn btn-secondary mb-2 mr-2"><i class="fas fa-user-friends"></i>{{ 'dashboard.customers'|trans }}</a>
+                        <a href="{{ path('product-list') }}" class="btn btn-secondary mb-2"><i class="fas fa-boxes"></i>{{ 'dashboard.products'|trans }}</a>
+                    </div>
+                </div>
+
+                <div class="col-md-12 overflow-x-scroll overflow-x-md-hidden">
+                    <div class="position-relative">
+                        <div class="w-lg mx-auto">
+                            <div class="row">
+                                <div class="col-4 col-sm-6 col-md-4">
+                                    <div class="card mb-20px">
+                                        <div class="card-wrapper">
+                                            <div class="card-body">
+                                                <div class="float-right text-muted">
+                                                    <i class="fas fa-shopping-basket"></i>
+                                                </div>
+                                                <span class="h6 quickinfo-title">{{ 'dashboard.sales-last-day'|trans }}</span>
+                                                <span class="h4 quickinfo-highlight">{{ lastDay ? lastDay.totalRevenue|money : '' }} <span class=""></span></span>
+                                                <div class="d-inline-block w-100 border-top pt-3">
+                                                    <div class="d-inline-block text-muted">{{ 'dashboard.orders'|trans }}: {{ lastDay ? lastDay.orderCount : '' }}</div>
+                                                    <div class="admin-card-right">
+                                                        <a href="{{ path('order-list-table', {'dateRange': lastDay.dateRange}) }}" class="">{{ 'dashboard.details'|trans }}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-4 col-sm-6 col-md-4">
+                                    <div class="card mb-20px">
+                                        <div class="card-wrapper">
+                                            <div class="card-body">
+                                                <div class="float-right text-muted">
+                                                    <i class="fas fa-shopping-basket"></i>
+                                                </div>
+                                                <span class="h6 quickinfo-title">{{ 'dashboard.sales-last-week'|trans }}</span>
+                                                <span class="h4 quickinfo-highlight">{{ lastWeek ? lastWeek.totalRevenue|money : '' }} <span class=""></span></span>
+                                                <div class="d-inline-block w-100 border-top pt-3">
+                                                    <div class="d-inline-block text-muted">{{ 'dashboard.orders'|trans }}: {{ lastWeek ? lastWeek.orderCount : '' }}</div>
+                                                    <div class="admin-card-right">
+                                                        <a href="{{ path('order-list-table', {'dateRange': lastWeek.dateRange}) }}" class="">{{ 'dashboard.details'|trans }}</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-4 col-sm-6 col-md-4">
+                                    <div class="card mb-20px">
+                                        <div class="card-wrapper">
+                                            <div class="card-body">
+                                                <div class="float-right text-muted">
+                                                    <i class="fas fa-shopping-basket"></i>
+                                                </div>
+                                                <span class="h6 quickinfo-title">{{ 'dashboard.sales-last-month'|trans }}</span>
+                                                <span class="h4 quickinfo-highlight">{{ lastMonth ? lastMonth.totalRevenue|money : '' }} <span class=""></span></span>
+                                                <div class="d-inline-block w-100 border-top pt-3">
+                                                    <div class="d-inline-block text-muted">{{ 'dashboard.orders'|trans }}: {{ lastMonth ? lastMonth.orderCount : '' }}</div>
+                                                    <div class="admin-card-right">
+                                                        <a href="{{ path('order-list-table', {'dateRange': lastMonth.dateRange}) }}" class="">{{ 'dashboard.details'|trans }}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="card mb-20px">
+                        <div class="card-wrapper">
+                            <div class="card-body">
+                                <div class="border-bottom pb-3">
+                                    <a href="{{ path('order-list-table', {'paymentStatus': 'pending'}) }}" class="text-dark">
+                                        <div class="d-inline-block align-items-center">
+                                            <span class="font-24 text-primary">
+{#                                                <i class="fas fa-cart-plus"></i>#}
+                                                <i class="fas fa-clipboard-list"></i>
+                                            </span>
+                                            <span class="h6X">
+                                                <span class="font-weight-bold">
+                                                    {% if lifetime is defined %}
+                                                        {{ lifetime.unpaidCount == 1 ? 'dashboard.order-count'|trans({ '{{ count }}': lifetime.unpaidCount }) : 'dashboard.orders-count'|trans({ '{{ count }}': lifetime.unpaidCount }) }}
+                                                    {% endif %}
+                                                </span>
+                                                {{ 'dashboard.to-capture-payment'|trans }}
+                                            </span>
+                                        </div>
+                                        <div class="admin-card-right text-muted">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="pt-3">
+                                    <a href="{{ path('order-list-table', {'orderStatus': 'created'}) }}" class="text-dark">
+                                        <div class="d-inline-block align-items-center">
+                                            <span class="font-24 text-primary">
+{#                                                <i class="fas fa-cart-arrow-down"></i>#}
+                                                <i class="fas fa-clipboard-list"></i>
+                                            </span>
+                                            <span class="h6X">
+                                                <span class="font-weight-bold">
+                                                    {% if lifetime is defined %}
+                                                        {{ lifetime.unfulfilledCount == 1 ? 'dashboard.order-count'|trans({ '{{ count }}': lifetime.unfulfilledCount }) : 'dashboard.orders-count'|trans({ '{{ count }}': lifetime.unfulfilledCount }) }}
+                                                    {% endif %}
+                                                </span>
+                                                {{ 'dashboard.to-fulfill'|trans }}
+                                            </span>
+                                        </div>
+                                        <div class="admin-card-right text-muted">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="card mb-20px">
+                        <div class="card-wrapper">
+                            <div class="card-body">
+                                <span class="h5 admin-card-title mb-3">{{ 'dashboard.settings'|trans }}</span>
+                                <div class="">
+                                    {{ 'dashboard.setup-your-store-general-settings'|trans }}
+                                </div>
+                                <a href="{{ path('settings-home') }}" class="btn btn-secondary mt-4"><i class="fas fa-cog"></i>{{ 'dashboard.edit-general-settings'|trans }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+{#                <div class="col-lg-12">#}
+{#                    <div class="row">#}
+                        <div class="col-lg-12">
+                            <div class="card mb-20px">
+                                <div class="card-wrapper">
+                                    <div class="card-body">
+                                        <span class="h5 admin-card-title mb-3">{{ 'dashboard.your-store-and-company-details'|trans }}</span>
+                                        <div class="row text-mutedX">
+                                            <div class="col-lg-6 pb-2 pb-md-0">
+                                                {{ 'settings.general-settings.store-name'|trans }}: <span class="text-muted">{{ settings.get('store.name') }}</span> <br>
+                                                {{ 'settings.general-settings.store-url'|trans }}: <span class="text-muted">{{ settings.get('store.url') }}</span> <br>
+                                                {{ 'settings.general-settings.customer-support'|trans }}: <span class="text-muted">{{ settings.get('store.email') }}, {{ settings.get('store.phone') }}</span>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                {{ 'settings.general-settings.business-name'|trans }}: <span class="text-muted">{{ settings.get('company.name') }}</span> <br>
+                                                {{ 'settings.general-settings.business-address'|trans }}: <span class="text-muted">{{ settings.get('company.address') }}, {{ settings.get('company.city') }} {{ settings.get('company.zip') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <a href="{{ path('settings-configuration') }}" class="btn btn-secondary mr-2"><i class="fas fa-store"></i>{{ 'dashboard.edit-store-details'|trans }}</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+{#                    </div>#}
+{#                </div>#}
+
+
+            </div>
+        </div>
+    </div>
+
+
 
 {% endblock %}

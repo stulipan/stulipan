@@ -42,7 +42,7 @@ class UserAccountController extends AbstractController
         }
     
         $totalRevenue = 0;
-        foreach ($user->getRealOrders() as $o => $order) {
+        foreach ($user->getOrdersPlaced() as $o => $order) {
             $totalRevenue += $order->getSummary()->getTotalAmountToPay();
         }
 
@@ -50,7 +50,7 @@ class UserAccountController extends AbstractController
             'user' => $user,
             'inheritedRoles' => $this->roles,
             'title' => 'Felhasználó adatlapja',
-            'orders' => $user->getRealOrders(),
+            'orders' => $user->getOrdersPlaced(),
             'orderCount' => 'Nincs rendelés',
             'totalRevenue' => $totalRevenue,
         ]);

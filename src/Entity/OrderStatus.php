@@ -1,18 +1,30 @@
 <?php
 
 namespace App\Entity;
-use ApiPlatform\Core\Annotation\ApiResource;
+//use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ *
  *
  * @ORM\Entity
  * @ORM\Table(name="cart_order_status")
  */
-class OrderStatus implements \JsonSerializable
+class OrderStatus implements JsonSerializable
 {
+    public const STATUS_CREATED = 'created'; // rendelés létrehozva
+    public const STATUS_PAYMENT_PENDING = 'pending'; // fizetésre vár
+    public const STATUS_PAYMENT_FAILED = 'failed'; // fizetésre sikertelen
+    public const STATUS_PAYMENT_REFUNDED = 'refunded'; // összeg visszafizetve
+
+    public const STATUS_SENT = 'sent'; // elküldve, azaz szállítás alatt
+    public const STATUS_FULFILLED = 'fulfilled'; // teljesítve
+    public const STATUS_RETURNED = 'returned'; // visszaküldve
+
+    public const STATUS_REJECTED = 'rejected'; // elutasítva - ezt még nem tudom mikor kell használni
+    public const STATUS_DELETED = 'deleted'; // törölve
 
     /**
      * @var int
@@ -36,7 +48,7 @@ class OrderStatus implements \JsonSerializable
      * @var string
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="short_code", type="string", length=20, nullable=false)
+     * @ORM\Column(name="shortcode", type="string", length=20, nullable=false)
      */
     private $shortcode;
     

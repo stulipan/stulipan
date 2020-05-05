@@ -55,7 +55,7 @@
                     <td>{{ tetel.stock}}</td>
                     <td class="align-middle text-right">{{ tetel.cog|number_format(0, ',', ' ') }}</td>
                     <td>{{ tetel.szorzo}}</td>
-                    <td class="align-middle text-right">{{ tetel.grossPrice|number_format(0, ',', ' ') }} Ft</td>
+                    <td class="align-middle text-right">{{ tetel.grossPrice|money }}</td>
 				    <td>
 				  	    <a href="{{ path('keszlet_show', {'id': tetel.id}) }}" class="btn-sm">
 				  		    <i class="fas fa-eye"></i></a>
@@ -73,7 +73,7 @@
                         <td>{{ tetel.stock}}</td>
                         <td class="align-middle text-right">{{ tetel.cog|number_format(0, ',', ' ') }}</td>
                         <td>{{ tetel.szorzo}}</td>
-                        <td class="align-middle text-right">{{ tetel.grossPrice|number_format(0, ',', ' ') }} Ft</td>
+                        <td class="align-middle text-right">{{ tetel.grossPrice|money }}</td>
                         <td>
                             <a href="{{ path('keszlet_show', {'id': tetel.id}) }}" class="btn-sm">
                                 <i class="fas fa-eye"></i></a>

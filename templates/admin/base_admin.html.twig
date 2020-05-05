@@ -6,10 +6,33 @@
 {% endblock %}
 
 {% block body %}
+{#    <div class="modal fade" id="modal--Settings" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">#}
+    <div class="sidebar sidebar-right sidebar-lg fade" id="slider--Settings" tabindex="-1" role="dialog" aria-labelledby="sidebarLabel" aria-hidden="true">
+        <div class="sidebar-dialog sidebar-dialog-scrollable sidebar-dialog-centered" role="document">
+            <div class="sidebar-content">
+                <div class="sidebar-header">
+                    <h3 class="sidebar-title" id="sidebarLabel">{{ 'settings.settings'|trans }}</h3>
+                    <button type="button" class="close" data-dismiss="sidebar" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="sidebar-body pb-0">
+                    {% include '/admin/settings/_settings-dashboard-widget.html.twig' %}
+                </div>
+                <div class="sidebar-footer">
+                    <div class="loadingWrapper loadingWrapper-secondary">
+                        <a href="" class="btn btn-secondary" data-dismiss="sidebar">{{ 'generic.close'|trans }}</a>
+                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <!-- Begin page -->
 <div class="wrapper">
     <div class="topnav navbar-sticky sticky-top">
-        <div class="container-fluid">
+        <div class="container-fluid px-0">
             <nav class="navbar navbar-dark navbar-expand-lg topnav-menu">
 
                     <a href="/" class="navbar-brand order-lg-1 order-2 mr-4" target="_blank">
@@ -17,7 +40,7 @@
                     </a>
                     <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#burgerMenuContent" aria-controls="burgerMenuContent" aria-expanded="false" aria-label="Toggle navigation">
                         {#<span class="navbar-toggler-icon"></span>#}
-                        <i class="fas fa-bars"></i>
+                        <i class="fas fa-bars mr-0"></i>
                     </button>
                     <div class="collapse navbar-collapse active coll justify-content-center order-lg-2 order-5" id="burgerMenuContent">
                         <ul class="navbar-nav">
@@ -32,7 +55,7 @@
 
 
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnavTermekek" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnavTermekek" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-boxes"></i> Termékek
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnavTermekek">
@@ -69,14 +92,13 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnav-apps" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {#<i class="fas fa-lgX fa-file-invoice-dollar mr-1"></i>#}
-                                    <i class="fas fa-clipboard-list mr-1X"></i>
+                                    <i class="fas fa-shopping-cart"></i>
                                     Rendelések 
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-apps">
-                                    <a href="{{ path('order-list-table') }}" class="dropdown-item"><i class="fas fa-clipboard-list mr-1"></i> Rendelések</a>
-                                    <a href="{{ path('order-list') }}" class="dropdown-item"><i class="fas fa-clipboard-list mr-1"></i> Rendelések #2</a>
+                                    <a href="{{ path('order-list-table') }}" class="dropdown-item"><i class="fas fa-shopping-cart"></i> Rendelések</a>
 
-                                    <a href="{{ path('invoice-list') }}" class="dropdown-item"><i class="fas fa-user-friends mr-1"></i> Vásárlók</a>
+                                    <a href="{{ path('customer-list') }}" class="dropdown-item"><i class="fas fa-user-friends mr-1"></i> Vásárlók</a>
                                 </div>
                             </li>
 
@@ -100,55 +122,32 @@
                             </li>
 
                             <li class="nav-item dropdown">
-
                                 <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnav-apps" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {#<i class="mdi mdi-apps mr-1"></i>#}
-                                    <i class="fas fa-cog mr-1X"></i>
-                                    Beállítások 
+                                    <i class="fas fa-columns"></i>
+                                    CMS
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-apps">
-                                    {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
-                                        <a href="{{ path('settings-edit') }}" class="dropdown-item">
-                                            <i class="fas fa-cog"></i>
-                                            <span> Webshop beállítások</span>
-                                        </a>
-                                        <a href="{{ path('delivery-special-date-list') }}" class="dropdown-item">
-                                            <i class="far fa-calendar-alt"></i>
-                                            <span> Kiemelt szállítási napok</span>
-                                        </a>
-                                        <a href="{{ path('delivery-date-type-list') }}" class="dropdown-item">
-                                            <i class="far fa-clock"></i>
-                                            <span> Szállítási idősávok</span>
-                                        </a>
-                                        <a href="{{ path('shipping-list') }}" class="dropdown-item">
-                                            <i class="fas fa-shipping-fast"></i>
-                                            <span> Szállítás és fizetési módok</span>
-                                        </a>
-                                        <a href="{{ path('geo-price') }}" class="dropdown-item">
-                                            <i class="fas fa-shipping-fast"></i>
-                                            <span> Szállítási díjak</span>
-                                        </a>
-                                    {% endif %}
-
-                                    {% if is_granted('ROLE_MANAGE_VAT') %}
-                                        <div class="dropdown">
-                                            <a class="dropdown-item dropdown-toggle arrow-noneX" href="javascript: void(0);" id="vatRates" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-hand-holding-usd mr-1"></i>
-                                                ÁFA 
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="vatRates">
-                                                <a href="{{ path('vat-rate-list') }}" class="dropdown-item">ÁFA típusok</a>
-                                                <a href="{{ path('vat-value-list') }}" class="dropdown-item">ÁFA értékek</a>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-
-
+                                    <a href="{{ path('cms-page-list') }}" class="dropdown-item">
+                                        <i class="far fa-file-code"></i>
+                                        Oldalak
+                                    </a>
+                                    <a href="{{ path('about') }}" class="dropdown-item">
+                                        <i class="far fa-trash-alt mr-1"></i>
+                                        HTML modulok
+                                    </a>
                                 </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
+{#                                <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnav-apps" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#                                <a class="nav-link" href="" data-toggle="modal" data-target="#modal--Settings">#}
+                                <a class="nav-link" hrefX="" data-toggle="sidebar" data-target="#slider--Settings">
+                                    <i class="fas fa-cog"></i>
+                                </a>
                             </li>
                         </ul>
                     </div>
-                    <div class="order-lg-3 order-3">
+                    <div class="order-lg-3 order-3 d-flex">
                         {{ include('/admin/navbar-widget.html.twig') }}
                     </div>
                     {#<button class="button-menu-mobile open-left disable-btn">#}
@@ -257,7 +256,7 @@
                     {#{% if is_granted('ROLE_DELIVERY_SETTINGS') %}#}
                     {#<li class="side-nav-title side-nav-item mt-2">Szállítási beállítások</li>#}
                     {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('delivery-special-date-list') }}" class="side-nav-link">#}
+                        {#<a href="{{ path('occasion-list') }}" class="side-nav-link">#}
                             {#<i class="far fa-calendar-alt"></i>#}
                             {#<span> Szállítási napok</span>#}
                         {#</a>#}
@@ -318,59 +317,73 @@
         <div class="content">
             {#{{ include('/admin/navbar-widget.html.twig') }}#}
             <div class="container">
-                {% block page_content %}{% endblock %}
+{#                <div class="row">#}
+{#                    <div class="col-lg-12">#}
+                        {% block page_content %}
+                        {% endblock %}
+{#                    </div>#}
+{#                </div>#}
             </div>
         </div>
-        <div class="position-relative">
-            <img class="bill-footer__illustration" src="//cdn.shopify.com/s/assets/admin-fresh/shared/leaf-15be1ea3a9e77954b44dbf7debab51e77c557305c02195b08afc4774cde379b0.svg">
-        </div>
+
     </div>
 
-    <footer class="main-footer">
-        <div class="bg-gray-300 text-muted">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 mb-5X mb-lg-0">
-                        <div class="text-dark text-center py-3">
-                            {#{% set route = app.request.attributes.get('_route') %}#}
-                            {#{% set route_params = app.request.attributes.get('_route_params') %}#}
-                            {#{% set params = route_params|merge(app.request.query.all) %}#}
-                            {#{{  dump(app.request.locale) }}#}
-                            {#{% for locale in locales %}#}
-                                {#if locale != app.request.locale#}
-                            {#<a href="{{ path(route, params|merge({ _locale: locale })) }}" class="btn-link-secondary btn-sm">locale</a>#}
-                            {#{% endfor %}#}
-
-
-                            {#<a href="" class="btn-link-secondary btn-sm">English</a>#}
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
 </div>
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
-	<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 	<script>
-        jQuery(document).ready(function() {
-            $('.input-group.date').datepicker({
-                format: 'yyyy-mm-dd',
-                endDate: '0d',
-                todayHighlight: true,
-                autoclose: true,
-                language: 'hu-HU',
-                weekStart: 1
+        $(function() {
+            // Catch all the `[data-toggle-sidebar]` elements on the document.
+            document.querySelectorAll("[data-toggle='slider']").forEach(el => {
+                // Add an event listener on those elements "click" event
+                el.addEventListener('click', e => {
+                    // get the sidebar ID from the current element data attribute
+                    const sliderId = el.dataset.target;
+
+                    console.log(sliderId);
+                    // check if there is an element on the doc with the id
+                    const sidebarElement = sliderId ? document.getElementById(sliderId.replace('#','')) : undefined;
+                    console.log(sidebarElement);
+                    // if there is a sidebar with the passed id (data-toggle-sidebar)
+                    if (sidebarElement) {
+                        // toggle the aria-hidden state of the given sidebar
+                        let sidebarState = sidebarElement.getAttribute('aria-hidden');
+                        sidebarElement.setAttribute('aria-hidden', sidebarState == 'true' ? false : true);
+                    }
+                });
+            });
+
+
+
+            $('.JS--inputDate').daterangepicker({
+                singleDatePicker: true,
+                opens: 'right',
+                autoApply: true,
+                autoUpdateInput: false,
+                alwaysShowCalendars: true,
+                maxDate: moment(),
+                locale: {
+                    // format: 'YYYY/MM/DD',
+                    // format: 'MMM DD, [<span class="text-muted">]YYYY[</span>]',
+                    format: 'MMM DD, YYYY',
+                    separator: ' - ',
+                    cancelLabel: 'Mégse',
+                    daysOfWeek: ['V', 'H', 'K', 'Sz', 'Cs', 'P', 'Sz'],
+                    monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
+                    firstDay: 1,
+                },
+                buttonClasses: 'btn',
+                cancelClass: 'btn-secondary',
+            });
+            $('.JS--inputDate').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                $(this).focus();
+                picker.hide();
             });
         });
-	</script>
-    <script src="https://sciactive.com/pnotify/lib/iife/PNotify.js"></script>
-    <script src="https://sciactive.com/pnotify/lib/iife/PNotifyButtons.js"></script>
-    <script>
+
         $(document).ready(function () {
 //            const stackBottomModal = {
 //                dir1: 'up', // With a dir1 of 'up', the stacks will start appearing at the bottom.

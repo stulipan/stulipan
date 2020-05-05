@@ -6,19 +6,19 @@ namespace App\Repository;
 
 use App\Entity\Boltzaras\Boltzaras;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
+use Doctrine\ORM\Query;
+use Doctrine\Persistence\ManagerRegistry;
 
 class BoltzarasRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Boltzaras::class);
     }
 
     /**
      * @param $kassza
-	 * @return \Doctrine\ORM\Query
+	 * @return Query
      */
     public function findAllGreaterThanKassza($kassza)
     {
@@ -37,7 +37,7 @@ class BoltzarasRepository extends ServiceEntityRepository
     /**
      * @param $start
      * @param $end
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
 	public function findAllBetweenDates($start, $end)
     {
@@ -55,7 +55,7 @@ class BoltzarasRepository extends ServiceEntityRepository
     /**
      * @param $start
      * @param $end
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function sumAllBetweenDates($start, $end)
     {
@@ -72,7 +72,7 @@ class BoltzarasRepository extends ServiceEntityRepository
     }
 	
     /**
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */	
     public function findAllQueryBuilder()
     {
@@ -83,7 +83,7 @@ class BoltzarasRepository extends ServiceEntityRepository
 	}
 
     /**
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function sumAllQueryBuilder()
     {

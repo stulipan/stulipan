@@ -14,15 +14,14 @@
 
 .uploader {
     border-radius: 6px;
-    background-color: #fff;
+    /*background-color: #f4f4f5;*/
+    border: 2px dashed #adb5bc;
 }
-.uploader * {
+.uploader *:not(i) {
     box-sizing: border-box;
     font-weight: normal;
 }
-.uploader-action:hover {
-    background: #f3f3f3;
-}
+
 .uploader-action {
     padding: 10px 10px;
     /*background: #eeeeee;*/
@@ -33,20 +32,36 @@
     /*box-shadow: 1px 2px 19px rgba(195,195,195,0.43);*/
 }
 .uploader-action .dz-message {
-    color: #7d8285;
+    color: #495057;
     text-align: center;
-    padding: 10px 20px;
-    border: 2px dashed #adb5bc;
-    border-radius: 3px;
+    padding: 15px 20px;
+    /*border: 2px dashed #adb5bc;*/
+    border-radius: 4px;
     font-size: 16px;
 }
+.uploader-action:hover .dz-message,
+.uploader-action:active .dz-message,
+.uploader-action.dragging .dz-message {
+    /*color: #008cde;*/
+    /*border: 2px dashed #88c5ef;*/
+}
+.uploader:focus,
+.uploader:hover,
+.uploader:active,
+.uploader.dragging {
+    /*color: #008cde;*/
+    border: 2px dashed #008cde;
+    background-color: #f0f3f5;
+    outline: none;
+}
 .uploader-action.dragging {
-    background: #f7f7f7;
+
 }
 .uploader-files {
     flex: 1;
+    padding: 10px;
 }
-.uploader-file {
+.uploader-file:not(:first-of-type) {
     margin-top: 20px;
 }
 .file-progress {
@@ -63,7 +78,7 @@
 }
 .file-size {
     font-weight: bold;
-    color: #bebfc1;
+    color: #86949e;
 }
 @keyframes slideUpIn {
     0% {
@@ -147,7 +162,7 @@
 .v--modal {
     background-color: white;
     text-align: left;
-    border-radius: 3px;
+    border-radius: 4px;
     box-shadow: 0 20px 60px -2px rgba(27, 33, 58, 0.4);
     padding: 0;
 }
@@ -233,7 +248,7 @@
     cursor: pointer;
     box-sizing: border-box;
     line-height: 1.5;
-    border-radius: 3px;
+    border-radius: 4px;
     /*height: 40px;*/
     outline: none;
 }
@@ -312,10 +327,11 @@ fieldset[disabled] .multiselect {
     display: block;
     position: relative;
     width: 100%;
-    min-height: 40px;
+    /*min-height: 36px;*/
+    min-height: calc(2*.3125rem + 1.5rem + 2px);
     text-align: left;
     color: #40484c;
-    box-shadow: rgba(22, 29, 37, 0.05) 0px 1px 0px 0px;
+    /*box-shadow: .multiselect__tag-iconrgba(22, 29, 37, 0.05) 0px 1px 0px 0px;*/
 }
 
 .multiselect * {
@@ -359,24 +375,31 @@ fieldset[disabled] .multiselect {
     position: relative;
     display: inline-block;
     min-height: 20px;
-    line-height: 20px;
+    line-height: 1;
     border: none;
-    border-radius: 5px;
-    background: #fff;
+    border-radius: 4px;
+    background: transparent;
     padding: 0 0 0 5px;
     width: 100%;
     transition: border .1s ease;
     box-sizing: border-box;
     margin-bottom: 8px;
-    /*vertical-align: top*/
+    vertical-align: top;
+    padding-left: 0;
 }
 
 .multiselect__input:-ms-input-placeholder {
-    color: #40484c
+    color: #adb5bd
 }
 
 .multiselect__input::placeholder {
-    color: #40484c
+    color: #adb5bd
+}
+
+.multiselect--active:hover .multiselect__tags,
+.multiselect--active:focus .multiselect__tags,
+.multiselect--active:active .multiselect__tags {
+    border-color: #008CDE;
 }
 
 .multiselect__tag~.multiselect__input,
@@ -389,10 +412,14 @@ fieldset[disabled] .multiselect {
     border-color: #cfcfcf
 }
 
+
 .multiselect__input:focus,
 .multiselect__single:focus {
-    border-color: #a8a8a8;
-    outline: none
+    /*border-color: #a8a8a8;*/
+    outline: none;
+
+    border-color: #008CDE;
+
 }
 
 .multiselect__single {
@@ -401,33 +428,44 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__tags-wrap {
-    display: inline
+    display: inline;
+
+    box-sizing: border-box;
 }
 
 .multiselect__tags {
-    min-height: 40px;
+    min-height: calc(2*.3125rem + 1.5rem + 2px);
     display: block;
-    padding: 8px 40px 0 8px;
-    border-radius: 5px;
-    border: 1px solid #c4cdd5;
+
+    padding: 6px 40px 0 8px;
+    border-radius: 4px;
+    border: 1px solid #b9bcbe;
     background: #fff;
-    font-size: 14px
+    font-size: inherit;
+    /*line-height: 1.5rem;*/
+    line-height: inherit;
+    vertical-align: middle;
+
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .multiselect__tag {
     position: relative;
     display: inline-block;
-    padding: 4px 26px 4px 10px;
-    border-radius: 5px;
+    padding: 3px 26px 3px 10px;
+    border-radius: 4px;
     margin-right: 10px;
     color: #fff;
-    line-height: 1;
-    background: #008CDE;
-    margin-bottom: 5px;
+    line-height: 1rem;
+    /*background: #008CDE;*/
+    background-color: #869196;
+    /*margin-bottom: 5px;*/
     white-space: nowrap;
     overflow: hidden;
     max-width: 100%;
-    text-overflow: ellipsis
+    text-overflow: ellipsis;
+    height: auto;
 }
 
 .multiselect__tag-icon {
@@ -437,24 +475,24 @@ fieldset[disabled] .multiselect {
     right: 0;
     top: 0;
     bottom: 0;
-    font-weight: 700;
+    font-weight: normal;
     font-style: normal;
     width: 22px;
     text-align: center;
-    line-height: 22px;
+    line-height: 16px;
     transition: all .2s ease;
-    border-radius: 5px
+    border-radius: 4px;
 }
 
 .multiselect__tag-icon:after {
     content: "\D7";
-    color: #266d4d;
-    font-size: 14px
+    /*color: #637381;*/
+    font-size: 1.5rem;
 }
 
 .multiselect__tag-icon:focus,
 .multiselect__tag-icon:hover {
-    background: #369a6e
+    background: #adb5bd;
 }
 
 .multiselect__tag-icon:focus:after,
@@ -463,11 +501,11 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__current {
-    min-height: 40px;
+    min-height: 34px;
     overflow: hidden;
     padding: 8px 30px 0 12px;
     white-space: nowrap;
-    border-radius: 5px;
+    border-radius: 4px;
     border: 1px solid #e8e8e8
 }
 
@@ -484,31 +522,33 @@ fieldset[disabled] .multiselect {
 .multiselect__select {
     position: absolute;
     width: 40px;
-    height: 38px;
-    right: 1px;
-    top: 1px;
-    padding: 4px 8px;
+    /*height: 36px;*/
+    height: calc(2*.3125rem + 1.5rem + 2px);  /* az input mezovel van osszekotve */
+    /*right: 1px;*/
+    /*top: 1px;*/
+    right: 0;
+    top: 0;
+    padding: 3px 8px;
     text-align: center;
-    transition: transform .2s ease
+    transition: transform .2s ease;
 }
 
 .multiselect__select:before {
     position: relative;
     right: 0;
-    top: 65%;
-    color: #000;
+    top: calc(50% + 5px);
+    color: #637381;
     margin-top: 4px;
-    border-color: #000 transparent transparent;
+    border-color: #637381 transparent transparent;
     border-style: solid;
     border-width: 5px 5px 0;
     content: ""
 }
 
 .multiselect__placeholder {
-    color: #adadad;
+    color: #adb5bd;
     display: inline-block;
-    margin-bottom: 10px;
-    padding-top: 2px
+    line-height: 1;
 }
 
 .multiselect--active .multiselect__placeholder {
@@ -518,16 +558,19 @@ fieldset[disabled] .multiselect {
 .multiselect__content-wrapper {
     position: absolute;
     display: block;
-    background: #f3f3f3;
+    background: #fff;
     width: 100%;
     max-height: 240px;
     overflow: auto;
-    border: 1px solid #c4cdd5;
+    border: 1px solid #b9bcbe;
     border-top: none;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
     z-index: 50;
-    -webkit-overflow-scrolling: touch
+    -webkit-overflow-scrolling: touch;
+
+    -webkit-box-shadow: 0 0 0 1px rgba(39,44,48,0.05), 0 2px 7px 1px rgba(39,44,48,0.16);
+    box-shadow: 0 0 0 1px rgba(39,44,48,0.05), 0 2px 7px 1px rgba(39,44,48,0.16);
 }
 
 .multiselect__content {
@@ -536,21 +579,20 @@ fieldset[disabled] .multiselect {
     padding: 0;
     margin: 0;
     min-width: 100%;
-    vertical-align: top
+    vertical-align: top;
 }
 
 .multiselect--above .multiselect__content-wrapper {
     bottom: 100%;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
     border-bottom: none;
-    border-top: 1px solid #c4cdd5
 }
 
 .multiselect__content::webkit-scrollbar {
-    display: none
+    /*display: none*/
 }
 
 .multiselect__element {
@@ -560,8 +602,9 @@ fieldset[disabled] .multiselect {
 .multiselect__option {
     display: block;
     padding: 12px;
-    min-height: 40px;
-    line-height: 16px;
+    min-height: 34px;
+    /*line-height: 16px;*/
+    line-height: 1.5rem;
     text-decoration: none;
     text-transform: none;
     vertical-align: middle;
@@ -574,16 +617,18 @@ fieldset[disabled] .multiselect {
     top: 0;
     right: 0;
     position: absolute;
-    line-height: 40px;
+    line-height: 34px;
     padding-right: 12px;
     padding-left: 20px;
     font-size: 13px
 }
 
 .multiselect__option--highlight {
-    background: #008CDE;
+    /*background: #008CDE;*/
+    /*color: #fff;*/
     outline: none;
-    color: #fff
+    background: #f4f4f5;
+    color: inherit;
 }
 
 .multiselect__option--highlight:after {
@@ -593,9 +638,11 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__option--selected {
-    background: #f3f3f3;
-    color: #40484c;
-    font-weight: 700
+    /*background: #f3f3f3;*/
+    /*color: #40484c;*/
+    /*font-weight: 700*/
+    background: #fff;
+    color: inherit;
 }
 
 .multiselect__option--selected:after {
@@ -604,8 +651,10 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__option--selected.multiselect__option--highlight {
-    background: #40484c;
-    color: #fff
+    /*background: #40484c;*/
+    /*color: #fff*/
+    background: #f4f4f5;
+    color: inherit;
 }
 
 .multiselect__option--selected.multiselect__option--highlight:after {
@@ -616,7 +665,7 @@ fieldset[disabled] .multiselect {
 
 .multiselect--disabled .multiselect__current,
 .multiselect--disabled .multiselect__select {
-    background: #ededed;
+    /*background: #ededed;*/
     color: #a6a6a6
 }
 
@@ -628,13 +677,15 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__option--group {
-    background: #ededed;
+    /*background: #ededed;*/
     color: #40484c
 }
 
 .multiselect__option--group.multiselect__option--highlight {
-    background: #40484c;
-    color: #fff
+    /*background: #40484c;*/
+    /*color: #fff*/
+    background: #f4f4f5;
+    color: inherit;
 }
 
 .multiselect__option--group.multiselect__option--highlight:after {
@@ -646,8 +697,10 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__option--group-selected.multiselect__option--highlight {
-    background: #40484c;
-    color: #fff
+    /*background: #40484c;*/
+    /*color: #fff*/
+    background: #f4f4f5;
+    color: inherit;
 }
 
 .multiselect__option--group-selected.multiselect__option--highlight:after {
@@ -715,11 +768,51 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect:not(.multiselect--active) .multiselect__tags {
-    /*background: #f4f4f5;*/
-    background: linear-gradient(to bottom, #f9fafb, #f4f4f5);
+    background: linear-gradient(to bottom, #fefefe, #f9fbfb);
 }
 
 .multiselect:not(.multiselect--active) .multiselect__input,
 .multiselect:not(.multiselect--active) .multiselect__single {
     background: inherit;
+}
+
+.multiselect.taggable .multiselect__select {
+    display: none;
+}
+
+.multiselect.taggable:not(.multiselect--active) .multiselect__tags {
+    background: #fff;
+    cursor: text;
+}
+
+.multiselect.taggable .multiselect__tags {
+    min-height: calc(2* (2*.3125rem + 1.5rem + 2px) - 8px);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.multiselect.taggable .multiselect__content-wrapper {
+    border: none;
+}
+
+
+
+
+.multiselect.detached .multiselect__content-wrapper {
+    margin-top: .5rem;
+    border-radius: 4px;
+    border: none;
+}
+.multiselect.detached.multiselect--above .multiselect__content-wrapper {
+    margin-bottom: .5rem;
+}
+.multiselect.detached.multiselect--above.multiselect--active .multiselect__current,
+.multiselect.detached.multiselect--above.multiselect--active .multiselect__input,
+.multiselect.detached.multiselect--above.multiselect--active .multiselect__tags {
+    border-radius: 4px;
+}
+
+.multiselect.detached.multiselect--active:not(.multiselect--above) .multiselect__current,
+.multiselect.detached.multiselect--active:not(.multiselect--above) .multiselect__input,
+.multiselect.detached.multiselect--active:not(.multiselect--above) .multiselect__tags {
+    border-radius: 4px;
 }

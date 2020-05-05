@@ -17,7 +17,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 
-
+/**
+ * ShipAndPayFormType is used in Step3 of checkout process
+ */
 class ShipAndPayFormType extends AbstractType
 {
     private $urlGenerator;

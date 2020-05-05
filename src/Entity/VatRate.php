@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+//use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -14,9 +16,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="vat_rate")
  * @ORM\HasLifecycleCallbacks()
  *
- * @ApiResource()
+ *
  */
-class VatRate implements \JsonSerializable
+class VatRate implements JsonSerializable
 {
     const DEFAULT_VAT_RATE = 1; //id=1 a VatRate db tablaban
     
@@ -145,7 +147,7 @@ class VatRate implements \JsonSerializable
                 $higherDateValue = $notNullDateValues->filter(
                     function ($entry) {
                         /** @var VatValue $entry */
-                        return ($entry->getExpiresAt()->diff(new \DateTime())->days <= 1) ? $entry : null;
+                        return ($entry->getExpiresAt()->diff(new DateTime())->days <= 1) ? $entry : null;
                     }
                 );
                 if (!$higherDateValue->isEmpty()) {

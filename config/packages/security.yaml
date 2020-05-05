@@ -151,7 +151,9 @@ security:
             ROLE_DELIVERY_SETTINGS,
             ROLE_MANAGE_SHIPPING,
             ROLE_MANAGE_VAT,
-            ROLE_MANAGE_SETTINGS
+            ROLE_MANAGE_SETTINGS,
+            ROLE_MANAGE_CMS,
+            ROLE_MANAGE_TRANSLATION
             ] # pl: Mariann
         ROLE_POWER_ADMIN: [
             ROLE_ADMIN,

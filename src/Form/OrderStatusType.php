@@ -55,7 +55,6 @@ class OrderStatusType extends AbstractType
             'class' => OrderStatus::class,
             'label' => 'Állapot',
             'placeholder' => 'Válassz...',
-            'attr' => ['class' => 'custom-select'],
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('c')
                     ->orderBy('c.name', 'ASC');

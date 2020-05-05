@@ -47,6 +47,21 @@ class ImageSetFullPath implements ServiceSubscriberInterface
             );
         }
     }
+
+    /**
+     * @param LifeCycleEventArgs $args
+     */
+    public function postUpdate(LifeCycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+
+        if ($entity instanceof ProductImage || $entity instanceof ProductCategory) {
+            $publicPath = $this->container->get(FileUploader::class)->getPublicPath($entity->getImagePath());
+            $entity->setImageUrl(
+                $this->cacheManager->getBrowserPath($publicPath, 'product_image')
+            );
+        }
+    }
     
     public static function getSubscribedServices()
     {

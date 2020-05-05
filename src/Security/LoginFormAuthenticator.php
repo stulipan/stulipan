@@ -148,6 +148,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 //        dd($request->getPathInfo() === $this->router->generate('admin-login'));
 
         $this->getItemsFromPreviousOrder();
+        $request->getSession()->set('_locale', $request->getLocale());
 
 //        dd($request->request->get('_target_path'));
 //        dd($this->getTargetPath($request->getSession(), $providerKey));

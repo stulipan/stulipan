@@ -1,0 +1,65 @@
+{% extends 'webshop/site/template-account.html.twig' %}
+
+{% set pageTitle = 'Rendeléseim' %}
+{% set breadcrumb = {
+    0: {
+        'url': path('homepage'),
+        'text': 'Home',
+    },
+    1: {
+        'url': path('site-user-myAccount'),
+        'text': 'Fiókom',
+    },
+    2: {
+        'url': path('site-user-myAccount'),
+        'text': 'Rendeléseim',
+    },
+} %}
+
+{% block content %}
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="block-body">
+                <span class="h4 myaccount-card-title">Rendelés #{{ order.number }}</span>
+                {% if order.isUnpaid %}
+                    <div class="text-sm text-danger mt-2">Fizetésre vár</div>
+                {% endif %}
+                {% if order.isFulfilled %}
+                    <div class="text-sm text-success mt-2">It's delivered!</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-body">
+                {% include 'webshop/cart/_order-items-widget.html.twig' %}
+                {% include 'webshop/cart/_order-summary-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-body">
+                {% include 'webshop/cart/_order-sender-recipient-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-body">
+                {% include 'webshop/cart/_order-delivery-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-body">
+                {% include 'webshop/cart/_order-payment-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

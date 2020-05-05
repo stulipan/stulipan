@@ -1,0 +1,129 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set pageTitle = 'customer.customers'|trans %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+} %}
+
+{% block title %}
+	{{ pageTitle }}
+{% endblock %}
+
+
+{% block headerTopright %}
+	<a href="#" class="btn btn-outline-primary"><i class="fas fa-plus-circle mr-1"></i> {{ 'customer.new-customer'|trans }}</a>
+{% endblock %}
+
+{% block contentFilter %}
+	<div class="row mb-2">
+		<div class="col-lg-12 mb-3">
+			<div class="no-margins">
+				<ul class="nav nav-tabs">
+					{% for quickLink in filterQuickLinks %}
+						<li class="nav-item">
+							<a href="{{ quickLink['url'] }}" class="nav-link {% if quickLink['active'] is defined and quickLink['active'] %}active{% endif %}">{{ quickLink['name'] }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="col-lg-12">
+			{{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
+			<div class="w-100 d-flex justify-content-between">
+				<div class="field-group align-middle flex-column flex-md-row mr-2">
+					<div class="field-item mb-2 mb-md-0 flex-lg-grow-2">
+						<div class="field-prepend">
+							<div class="field-addon-prepend w-addon-sm">
+								<i class="fas fa-search"></i>
+							</div>
+						</div>
+						{{ form_widget(filterForm.searchTerm, {'attr': {'class': 'pl-addon-sm'} }) }}
+					</div>
+					<div class="field-item mb-2 mb-md-0 flex-lg-grow-1">
+						{{ form_widget(filterForm.status, {'attr': {'class': 'form-control' }}) }}
+					</div>
+				</div>
+				<div class="">
+					<input type="submit" value="{{ 'customer.search-button'|trans }}" class="btn btn-secondary px-4" formnovalidate>
+				</div>
+			</div>
+			<div style="display:none">
+				{{ form_rest(filterForm) }}
+			</div>
+			{{ form_end(filterForm) }}
+		</div>
+
+		{% if filterTags is defined and filterTags is not null %}
+			<div class="col-lg-12 mt-2">
+				{% for filterKey,value in filterTags %}
+					{% if value is defined and value is not null %}
+						<div class="filter-tag">
+							{{ value }}
+							<a href="{{ filterUrls[filterKey] }}" class="btn-link-secondary ml-2"><i class="fas fa-times mr-0"></i></a>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}
+
+{% block tableHeader %}
+	{% if customers is defined and customers is not empty %}
+{#		<tr>#}
+{#			<th scope="col" class="text-center">Név</th>#}
+{#			<th scope="col">Rendelései</th>#}
+{#			<th scope="col">Költés</th>#}
+{#		</tr>#}
+	{% endif %}
+{% endblock %}
+
+{% block tableBody %}
+	{% if customers is defined and customers is not empty %}
+		{% for customer in customers %}
+			<tr>
+				<td class="align-middle text-left py-4X">
+
+						{% if customer.fullname is defined and customer.fullname is not null %}
+						<a href="{{ path('customer-show', {'id': customer.id}) }}" class="btn-link-darkX">
+							{{ customer.fullname }}
+						</a>
+						(<em class="text-muted">{{ customer.email }}</em>)
+{#							{{ dump(customer.fullname) }}#}
+						{% else %}
+						<a href="{{ path('customer-show', {'id': customer.id}) }}" class="btn-link-darkX">
+							{{ customer.email }}
+						</a>
+						{% endif %}
+				</td>
+				<td class="align-middle text-right text-nowrap">
+					{{ customer.orders.count == 1 ? 'customer.order-count'|trans({ '{{ count }}': customer.ordersPlaced.count }) : 'customer.orders-count'|trans({ '{{ count }}': customer.ordersPlaced.count }) }}
+				</td>
+				<td class="align-middle text-right">
+							<span class="JS--result">{{ customer.spentAmount|money }} </span>
+{#					<span class="">költés</span>#}
+				</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+{% endblock %}
+
+{% block tableEmpty %}
+	{% if customers is defined and customers is empty %}
+		<div class="h-100 text-center p-4">
+			<div class="h1 text-muted-extra">
+				<i class="fas fa-user-friends"></i>
+			</div>
+			<div class="font-18 mt-3 mb-2">{{ 'customer.filter.not-found'|trans }}</div>
+			<div class="text-muted-extra">{{ 'customer.filter.not-found-suggestion'|trans }}</div>
+		</div>
+	{% endif %}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

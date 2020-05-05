@@ -1,6 +1,6 @@
 body {
-    background-color: #eeeeee;
-    /*background-color: #f4f6f8;*/
+    /*background-color: #eeeeee;*/
+    background-color: #f0f3f5;
 }
 
 .checkout-block-header h4 {
@@ -35,7 +35,6 @@ body {
     padding: 0 1rem;
 }
 
-.cart-item,
 .order-summary-item {
     border-bottom: 1px solid #d8dee0;
 }

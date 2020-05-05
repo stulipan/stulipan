@@ -1,13 +1,15 @@
 <template>
     <div class="row mb-1">
-        <div v-if="dataIsLoading" class="col-lg-6" style="width: 400px;">
-            <list-loader
-                            :speed="2"
-                            :animate="true"
-                            :width="400"
-                            :height="460"
-                            :preserveAspectRatio="'xMidYMid meet'"
-            ></list-loader>
+        <div v-if="isDataLoading" class="d-flex justify-content-center w-100 h-100" style="z-index: 15000; opacity: 1;">
+            <div class="d-flex justify-content-center h-100 mt-5 align-items-center">
+                <div>
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-2">Tartalom betöltése...</div>
+                </div>
+
+            </div>
         </div>
         <template v-else>
             <div class="col-12">
@@ -33,15 +35,15 @@
                         <label class="col-form-label required">Mozgasd át a településeket balról jobbra, majd add meg a szállítási díjat:</label>
                     </div>
                     <div class="col-12">
-                        <div class="d-flex flex-row flex-grow-1X justify-content-between align-items-start w-100">
+                        <div class="d-flex flex-row flex-grow-1X justify-content-between align-items-stretch">
                             <div class="col-6X w-100 d-flex justify-content-lg-start mb-2">
                                 <select
                                         v-model="selectedCities"
                                         id="whereTo" name="whereTo"
-                                        class="form-control d-inline-flex text-sm pt-1X"
+                                        class="form-control form-control-sm"
                                         required="required"
                                         multiple
-                                        size="18"
+                                        size="11"
                                 >
                                     <template v-for="item in cities" track-by="id">
                                         <option :value="item.id">{{item.city}} - {{item.zip}} {{item.district ? ' - ' + item.district + ' kerület' : ''}} {{ item.price ? ' - ' + item.price.price.value + ' Ft' : ''}}</option>
@@ -49,24 +51,22 @@
                                 </select>
                             </div>
                             <div class="d-flex justify-content-lg-center align-self-center px-2">
-                                <button @click.prevent="addCities(selectedCities)" class="btn btn-primary" formnovalidate="">
+                                <button @click.prevent="addCities(selectedCities)" class="btn btn-dark" formnovalidate="">
                                     <!--type="submit" -->
-                                    <i class="fas fa-long-arrow-alt-right"></i>
+                                    <i class="fas fa-long-arrow-alt-right mr-0"></i>
                                 </button>
                             </div>
-                            <div class="col-6X w-100 d-flex justify-content-end flex-column mb-2">
+                            <div class="col-6X w-100 d-flex flex-column mb-2">
                                 <form>
                                     <div class="w-100 mb-2">
                                         <!--<input v-model="citiesWithPrice" type="hidden">-->
                                         <select
                                                 id="whereTo" name="whereTo"
-                                                class="form-control d-inline-flex text-sm pt-1X"
+                                                class="form-control form-control-sm"
                                                 required="required"
                                                 multiple
-                                                size="5"
+                                                size="6"
                                         >
-                                            <!--<option value=""> - Település: Budakalász, vagy Irányítószám: 2011 - </option>-->
-                                            <option disabled value="">Please select one</option>
                                             <template v-for="item in addedCities" track-by="id">
                                                 <option :value="item.id">{{item.city}} - {{item.zip}}</option>
                                             </template>
@@ -81,10 +81,11 @@
                                         </div>
                                     </div>
                                     <div class="mb-2X">
-                                        <div class="form-group row">
+                                        <div class="form-group row mb-0">
                                             <div class="col-sm-12">
-                                                <button @click.prevent="saveForm(addedCities, price, $event)" class="btn btn-primary mr-1" formnovalidate="">{{ price ? 'Mentés' : 'Hozzáadás' }}</button>
-                                                <a href="#" v-if="addedCities" @click.prevent="onCancelClicked" class="btn btn-outline-secondary">Mégse</a>
+                                                <button @click.prevent="saveForm(addedCities, price, $event)" class="btn btn-info mr-1" formnovalidate="">{{ price ? 'Mentés' : 'Hozzáadás' }}</button>
+<!--                                                @click.prevent="onCancelClicked"-->
+                                                <a v-if="addedCities" :href="backUrl" class="btn btn-secondary">Mégse</a>
                                             </div>
                                         </div>
                                     </div>
@@ -100,7 +101,6 @@
 
 <script>
     import Multiselect from 'vue-multiselect'
-    import { ListLoader } from 'vue-content-loader'
 
     const initialData = () => {
         return {
@@ -119,13 +119,15 @@
             provinces: [],
             i: 0,
         }
-    }
+    };
 
     export default {
         components: {
             Multiselect,
-            ListLoader,
         },
+        props: [
+            'backUrl',
+        ],
         data: initialData,
         watch: {
             provinceInForm: {
@@ -158,7 +160,7 @@
                 const citiesWithPrice = {};
                 citiesWithPrice.cities = addedCities;
                 citiesWithPrice.price = price;
-                this.$http.post('/admin/api/geoplace/price/', citiesWithPrice)
+                this.$http.post('/hu/admin/api/geoplace/price/', citiesWithPrice)
                             .then(
                                 response => {
                                     this.resetDataInForm();
@@ -187,7 +189,7 @@
                 this.resetForm = true;  // azert vettem ki, mert ugyis a kategoria valtozast figyeli
             },
             getCityList (province) {
-                this.$http.get(`/admin/api/geoplace/cities/?province=${province}`)
+                this.$http.get(`/hu/admin/api/geoplace/cities/?province=${province}`)
                     .then(response => {
                         this.cities = response.data.cities;
                         this.dataIsLoading = false;
@@ -199,6 +201,9 @@
                             }
                         }
                     });
+            },
+            onCancelClicked () {
+                this.$emit('click');
             },
             showToast (message, type) {
                 let title = '';
@@ -225,7 +230,7 @@
                 });
             },
             getProvinceList () {
-                this.$http.get(`/admin/api/geoplace/provinces/`)
+                this.$http.get(`/hu/admin/api/geoplace/provinces/`)
                     .then(response => {
                         this.provinces = response.data.provinces;
                         this.dataIsLoading = false;

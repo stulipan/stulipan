@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="vat_rate_value")
  */
-class VatValue implements \JsonSerializable
+class VatValue implements JsonSerializable
 {
     /**
      * @var int
@@ -39,7 +41,7 @@ class VatValue implements \JsonSerializable
     private $value;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="expires_at", type="datetime", nullable=true)
      */
@@ -60,7 +62,7 @@ class VatValue implements \JsonSerializable
     {
         return [
             'id'        => $this->getId(),
-            'value'     => $this->getValue(),
+            'value'     => $this->getNumericValue(),
             'expiresAt' => $this->getExpiresAt(),
         ];
     }
@@ -107,17 +109,17 @@ class VatValue implements \JsonSerializable
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getExpiresAt(): ?\DateTime
+    public function getExpiresAt(): ?DateTime
     {
         return $this->expiresAt;
     }
 
     /**
-     * @param \DateTime $expiresAt
+     * @param DateTime $expiresAt
      */
-    public function setExpiresAt(?\DateTime $expiresAt)
+    public function setExpiresAt(?DateTime $expiresAt)
     {
         $this->expiresAt = $expiresAt;
     }

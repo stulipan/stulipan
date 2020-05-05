@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Entity\Product;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+//use ApiPlatform\Core\Annotation\ApiResource;
+
 use App\Entity\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
+ * (
  *     normalizationContext={"groups"={"productView"}}
  * )
  *
@@ -57,14 +57,14 @@ class ProductKind //implements \JsonSerializable
     private $products;
 
     /**
-     * @ApiSubresource()
+     * ()
      *
      * @var ProductAttribute[]|ArrayCollection
      * @Groups({"productView"})
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Product\ProductAttribute", mappedBy="kind", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"ordering" = "ASC"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="type_id")
+     * @ORM\JoinColumn(name="id", referencedColumnName="kind_id")
      */
     private $attributes;
 

@@ -1,0 +1,204 @@
+{% extends 'admin/template-editing.html.twig' %}
+
+{% set pageTitle = 'settings.translation.translation-title'|trans %}
+{% if interface is defined and interface is not null %}
+    {% if interface == 'store' %}
+        {% set pageTitle = 'settings.translation.translation-title'|trans ~ ' (' ~ 'settings.translation.store-texts'|trans ~ ')' %}
+    {% elseif interface == 'admin' %}
+        {% set pageTitle = 'settings.translation.translation-title'|trans ~ ' (' ~ 'settings.translation.admin-texts'|trans ~ ')' %}
+    {% endif %}
+{% endif %}
+
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+    1: {
+        'url': path('settings-home'),
+        'text': 'settings.settings'|trans,
+    },
+} %}
+
+{% set cancelUrl = path('settings-home') %}
+
+{% block alertBlock %}
+    {% if incompleteCount is defined and incompleteCount > 0 %}
+    <div class="alert alert-warning shadow mb-3">
+        <i class="fas fa-exclamation-circle mr-1"></i>
+        {% if incompleteCount == 1 %}
+            {{ 'settings.translation.translation-is-missing'|trans({ '{{ count }}': incompleteCount }) }}
+        {% else %}
+            {{ 'settings.translation.translations-are-missing'|trans({ '{{ count }}': incompleteCount }) }}
+        {% endif %}
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block headerTopright %}
+<div class="admin-card-topright d-sm-inline-block d-block">
+    <div class="navbar justify-content-start">
+        <div class="nav-item dropdown">
+            <a class="btn btn-link-secondary dropdown-toggle mr-1" href="javascript: void(0);" id="chooseInterface" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                {{ 'settings.translation.interface'|trans }}
+                {% if interface == 'store' %}
+                    {{ 'settings.translation.store-texts'|trans }}
+                {% else %}
+                    {{ 'settings.translation.admin-texts'|trans }}
+                {% endif %}
+
+            </a>
+            <div class="dropdown-menu dropdown-transition dropdown-menu-left dropdown-menu-sm-right mt-2" aria-labelledby="chooseInterface">
+                <a class="dropdown-item" href="{{ path('translation-edit-byCategory', {'interface': 'store'}) }}">
+                    <i class="fas fa-store mr-2"></i>
+                    {{ 'settings.translation.store-texts'|trans }}
+                </a>
+                <a class="dropdown-item" href="{{ path('translation-edit-byCategory', {'interface': 'admin'}) }}">
+                    <i class="fas fa-tachometer-alt mr-2"></i>
+                    {{ 'settings.translation.admin-texts'|trans }}
+                </a>
+            </div>
+        </div>
+
+        <div class="nav-item dropdown">
+            <a class="btn btn-link-secondary dropdown-toggle" id="langsDropdown" href="#" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                {% set myLocale = 'hu' %}
+                <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="topbar-flag topbar-flag-selected rounded-circleX">
+            </a>
+            <div class="dropdown-menu dropdown-transition dropdown-menu-left dropdown-menu-sm-right mt-2" aria-labelledby="langsDropdown">
+                <a href="/hu" class="dropdown-item text-smX">
+                    <img src="{{ asset('/webshop/site/flags/4x3/hu.svg') }}" alt="magyar" class="topbar-flag">Magyar
+                </a>
+{#                <a href="/en" class="dropdown-item text-sXm">#}
+{#                    <img src="{{ asset('/webshop/site/flags/4x3/gb.svg') }}" alt="english" class="topbar-flag">English#}
+{#                </a>#}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12 px-0 px-md-10px">
+            <div class="card mb-30px">
+                <div class="card-body">
+                    <div class="no-margins">
+                        <ul class="nav nav-tabs mb-3">
+{#                            {{ dump(app.request.attributes.get('category')) }}#}
+                            {% for category, url in navigationTabs %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% if app.request.attributes.get('category') == category %}active{% endif %}" href="{{ url }}">{{ category|capitalize }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                        {% for key, form in forms %}
+                                {{ form_start(form, { 'attr': {'class': '' }}) }}
+                                    <div class="row">
+                                        <div class="col-md-12 ml-auto">
+                                            {% for child in form.children %}
+{#                                                {{ dump(child.vars) }}#}
+
+                                                {% if "this_is_a_title" in child.vars.block_prefixes %}
+                                                <div class="form-group">
+{#                                                    <div class="row no-margins pt-3 border-top"></div>#}
+                                                    <div class="row">
+                                                        <div class="col-md-12 mb-2X">
+                                                            <h4>{{ sourceText[key][child.vars.label]|capitalize }}</h4>
+                                                            {% do child.setRendered() %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {% else %}
+                                                    {% if child.vars.id != 'form__token' %}
+                                                        <div class="form-group row">
+                                                            <div class="col-md-12">
+                                                                <label>{{ sourceLabel[key][child.vars.label] }}</label>
+                                                            </div>
+                                                            <div class="col-md-6 mb-lg-0 mb-2">
+                                                                <div class="translation">
+                                                                    <div class="position-relative">{{ sourceText[key][child.vars.label] }}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                {{ form_widget(child, {'attr': {'placeholder': sourceText[key][child.vars.label], 'class': 'JS--autoExpand' }}) }}
+                                                                {{ form_errors(child) }}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="form-group row">
+                                                <div class="col-md-12 text-right">
+{#                                                    <a href="{{ cancelUrl }}" class="btn btn-secondary mr-1">{{ 'generic.cancel'|trans }}</a>#}
+                                                    <input type="submit" value="{{ 'generic.save'|trans }}" class="btn btn-primary" formnovalidate>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{ form_rest(form) }}
+                                {{ form_end(form) }}
+                                {% do form.setRendered() %}
+                        {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function() {
+            function autoheight(o) {
+                $.each(o, function (i, el) {
+                    el.style.height = "";
+                    el.style.height = el.scrollHeight + 3 + "px";
+                });
+
+            }
+            autoheight($('.JS--autoExpand'));
+            $('.JS--autoExpand').on('input', function() {
+                autoheight($(this));
+            })
+
+
+            // $(document)
+            //     .one('focus.autoExpand', 'textarea.autoExpand', function(){
+            //         var savedValue = this.value;
+            //         this.value = '';
+            //         this.baseScrollHeight = this.scrollHeight;
+            //         this.value = savedValue;
+            //     })
+            //     .on('input.autoExpand', 'textarea.autoExpand', function(){
+            //         var minRows = this.getAttribute('data-min-rows')|0, rows;
+            //         this.rows = minRows;
+            //         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
+            //         this.rows = minRows + rows;
+            //     });
+            //
+            // $("textarea").keyup(function (e) {
+            //     autoheight(this);
+            // });
+            //
+            // function autoheight(a) {
+            //     if (!$(a).prop('scrollTop')) {
+            //         do {
+            //             var b = $(a).prop('scrollHeight');
+            //             var h = $(a).height();
+            //             $(a).height(h - 5);
+            //         }
+            //         while (b && (b != $(a).prop('scrollHeight')));
+            //     };
+            //     $(a).height($(a).prop('scrollHeight'));
+            // }
+            //
+            // autoheight($("textarea"));
+        });
+    </script>
+{% endblock %}
+
+

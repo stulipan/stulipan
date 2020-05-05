@@ -1,0 +1,112 @@
+
+<div class="mb-2">
+    <label class="detail-option-heading">1. Válassz méretet</label>
+</div>
+<div class="form-group row">
+        {% if form.options is defined and form.options is not empty %}
+            {% for item in form.options %}
+{#                <div class="mt-2 mb-2">#}
+{#                    <span class="detail-option-heading">{{ item.optionId.vars.value }}</span>#}
+{#                </div>#}
+                    {% for choice in item.selectedOptionValue %}
+                        <div class="col-sm-4 col-4">
+                            {% include 'webshop/site/choiceItem-onProductPage.html.twig' %}
+                        </div>
+                    {% endfor %}
+                    {% do item.selectedOptionValue.setRendered() %}
+            {% endfor %}
+            {{ form_errors(form.options) }}
+        {% else %}
+            <div class="col-sm-12">
+                <div class="visual-picker visual-picker-md align-top mr-2">
+                    <div class="visual-picker-figure required">
+                        <div class="visual-picker-content">
+                            <div class="tile tile-lg">
+                                <div class="font-weight-bold my-0">Egy méret</div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <ul class="list-inline mb-0">
+                                        <li class="list-inline-item price price-sm">
+                                            <del>{{ (product.price.numericValue*4)|money }}</del>
+                                        </li>
+                                        <li class="list-inline-item price price-sm price-sale">{{ product.price.numericValue|money }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% do form.options.setRendered() %}
+</div>
+
+<div class="mt-2 mb-2">
+    <span class="detail-option-heading">2. Hova kéred?</span>
+</div>
+<div class="form-group mb-4">
+    <div id="v--whereTo-XXXXX">
+        {#{{ form_widget(form.whereTo.whereTo, {'attr': {'class': 'form-control', 'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011' }}) }}#}
+        {#{{ form_widget(form.whereTo.whereTo, {'attr': {#}
+        {#'class': 'form-control select2 select2-multiple select2-hidden-accessible',#}
+        {#'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011',#}
+        {#'data-toggle' : 'select2',#}
+        {#'aria-hidden' : 'true',#}
+        {#}}) }}#}
+        {#{{ form_errors(form.whereTo) }}#}
+
+        {#                                        // EZ OKOZTA A "Error: Allowed memory size of... exhausted"#}
+        {#                                        {% do form.whereTo.setRendered() %}#}
+    </div>
+</div>
+
+
+<div class="mt-2 mb-2">
+    <span class="detail-option-heading">3. Mikorra kéred?</span>
+</div>
+<div class="row order-delivery-date mb-4 JS--deliveryDateContainer">
+    <div class="col-md-12 col-lg-12 JS--dateWrapper">
+        <div class="form-row">
+
+            {% for choice in form.deliveryDate.deliveryDate|slice(0,3) %}
+                <div class="col-sm-3 col-3 JS--generatedDate-{{ choice.vars.value }}">
+                    {% include('webshop/site/choiceItem.html.twig') %}
+                </div>
+            {% endfor %}
+            <div class="col-sm-3 col-3 JS--Button-clickDate">
+                <div class="row">
+                    {% for choice in form.deliveryDate.deliveryDate|slice(3) %}
+                        <div class="col-sm-12 col-12 JS--generatedDate-{{ choice.vars.value }} d-none">
+                            {% include('webshop/site/choiceItem.html.twig') %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="col-sm-12 col-12 JS--showCalendarIcon">
+                        <div class="visual-picker visual-picker-md align-top mr-2">
+                            <div class="visual-picker-figure justify-content-lg-center justify-content-center required px-2">
+                                                                        <span class="visual-picker-content">
+                                                                            <span class="tile tile-lg">
+                                                                                <i class="far fa-calendar-alt fa-2x text-gray-700"></i>
+                                                                            </span>
+                                                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% do form.deliveryDate.deliveryDate.setRendered() %}
+            {{ form_errors(form.deliveryDate.deliveryDate) }}
+        </div>
+        <div class="text-sm text-muted">
+            Kosárba rakás után megadható a napszakasz is.
+        </div>
+    </div>
+</div>
+
+<div class="row d-none">
+    <div class="col-12 detail-option mb-4">
+        <label class="detail-option-heading">Items <span>(required)</span></label>
+        {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
+
+    </div>
+</div>

@@ -1,0 +1,51 @@
+{{ form_start(paymentStatusForm, { 'attr': {'class': 'JS--paymentStatusForm' }}) }}
+    <div class="row">
+        <div class="col-lg-12">
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-4">
+                        {{ form_label(paymentStatusForm.paymentStatus, '', {'label_attr': {'class': 'col-form-label'}}) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-8">
+                        {{ form_widget(paymentStatusForm.paymentStatus, {'attr': {'class': '' }}) }}
+                        {{ form_errors(paymentStatusForm.paymentStatus) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-8 col-sm-4">
+                        <label class="">Értesítés az ügyfélnek</label>
+                    </div>
+                    <div class="col-4 col-sm-8 d-flex justify-content-sm-start justify-content-end">
+                        <input type="checkbox" id="{{ paymentStatusForm.sendNotification.vars.id }}" name="{{ paymentStatusForm.sendNotification.vars.full_name }}" required="required" class="form-check-input" value="{{ paymentStatusForm.sendNotification.vars.value }}" {{ paymentStatusForm.sendNotification.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">
+                        <label class="form-check-label required" for="{{ paymentStatusForm.sendNotification.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+
+                        {#{{ form_widget(form.enabled) }}#}
+                        {{ form_errors(paymentStatusForm.sendNotification) }}
+                        {% do paymentStatusForm.sendNotification.setRendered() %}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-8 col-sm-4">
+                        <label class="">Megjegyzés hozzáadása</label>
+                    </div>
+                    <div class="col-4 col-sm-8 d-flex justify-content-sm-start justify-content-end">
+                        <input type="checkbox" id="{{ paymentStatusForm.addNote.vars.id }}" name="{{ paymentStatusForm.addNote.vars.full_name }}" required="required" class="form-check-input" value="{{ paymentStatusForm.addNote.vars.value }}" {{ paymentStatusForm.addNote.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">
+                        <label class="form-check-label required" for="{{ paymentStatusForm.addNote.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+
+                        {#{{ form_widget(form.enabled) }}#}
+                        {{ form_errors(paymentStatusForm.addNote) }}
+                        {% do paymentStatusForm.addNote.setRendered() %}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-4 col-lg-4">
+                        {{ form_label(paymentStatusForm.note, '', {'label_attr': {'class': 'col-form-label'}}) }}
+                    </div>
+                    <div class="col-sm-8 col-lg-8">
+                        {{ form_widget(paymentStatusForm.note) }}
+                        {{ form_errors(paymentStatusForm.note) }}
+                    </div>
+                </div>
+        </div>
+    </div>
+{{ form_end(paymentStatusForm) }}
+{% do paymentStatusForm.setRendered() %}

@@ -1,520 +1,546 @@
-{% extends 'admin/base_admin.html.twig' %}
+{% extends 'admin/template-with-sidebar.html.twig' %}
 
+{% set pageTitle = 'Rendelés #' ~ order.number %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+    1: {
+        'url': path('order-list-table'),
+        'text': 'order.orders'|trans,
+    }
+} %}
+
+{% if order.isClosed is defined and order.isClosed == false %}
+    {% set isEditEnabled = true %}
+{% else %}
+    {% set isEditEnabled = false %}
+{% endif %}
 
 {% block title %}
-	{{ 'Order'|trans }}
+    {{ pageTitle }}
 {% endblock %}
 
+{% block bodyClass %}order orderDetail{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-{% endblock %}
 
-{% block bodyClass %}orderDetail{% endblock %}
-
-{% block page_content %}
-
-    <div class="modal fade" id="modal--Recipient" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-            <div class="modal-content JS--recipientWrapper">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modalLabel">Címzett módosítása</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body JS--recipientContentBlock pb-0">
-                    {% include('admin/order/shippingInfo-form.html.twig') %}
-                </div>
-                <div class="modal-footer">
-                    <div class="loadingWrapper loadingWrapper-secondary">
-                        <a href="" class="btn btn-secondary" data-dismiss="modal">Mégse</a>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+    {% block modal %}
+        <div class="modal fade" id="modal--Recipient" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content JS--recipientWrapper">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalLabel">{{ 'order.edit-recipient'|trans }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="loadingWrapper">
-                        <button type="submit" class="JS--editForm-submitRecipient btn btn-success">Módosítások mentése</button>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                    <div class="modal-body JS--recipientContentBlock">
+                        {% include('admin/order/shippingInfo-form.html.twig') %}
+                    </div>
+                    <div class="modal-footer">
+                        <div class="loadingWrapper loadingWrapper-secondary">
+                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        </div>
+                        <div class="loadingWrapper">
+                            <button type="submit" class="JS--btn-submitRecipient btn btn-primary">{{ 'generic.save-changes'|trans }}</button>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="modal--Sender" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-            <div class="modal-content JS--senderWrapper">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modalLabel">Feladó módosítása</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body JS--senderContentBlock pb-0">
-                    {% include('admin/order/billingInfo-form.html.twig') %}
-                </div>
-                <div class="modal-footer">
-                    <div class="loadingWrapper loadingWrapper-secondary">
-                        <a href="" class="btn btn-secondary" data-dismiss="modal">Mégse</a>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+        <div class="modal fade" id="modal--Sender" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content JS--senderWrapper">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalLabel">{{ 'order.edit-sender'|trans }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="loadingWrapper">
-                        <button type="submit" class="JS--editForm-submitSender btn btn-success">Módosítások mentése</button>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                    <div class="modal-body JS--senderContentBlock">
+                        {% include('admin/order/billingInfo-form.html.twig') %}
+                    </div>
+                    <div class="modal-footer">
+                        <div class="loadingWrapper loadingWrapper-secondary">
+                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        </div>
+                        <div class="loadingWrapper">
+                            <button type="submit" class="JS--btn-submitSender btn btn-primary">{{ 'generic.save-changes'|trans }}</button>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="modal--DeliveryDate" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-            <div class="modal-content JS--deliveryDateContainer">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modalLabel">Szállítás ideje</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body JS--deliveryContentBlockXXX">
-                    {#{% include('webshop/cart/deliveryDate-form.html.twig') %}#}
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="mb-2 mt-2">
-                                <span class="form-label text-body">Válaszd ki mikor szállítsuk ki!</span>
-                                {#<span class="detail-option-heading font-weight-bold"><span>(Melyik napon szállítsuk ki?)</span></span>#}
-                            </div>
-                            <div class="row order-delivery-date">
-                                <div class="col-md-12 col-lg-12 JS--dateWrapper">
-                                    <div class="flex-grow-1X form-row">
+        <div class="modal fade" id="modal--DeliveryDate" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content JS--deliveryDateContainer">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalLabel">{{ 'order.time-of-delivery'|trans }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body JS--deliveryContentBlockXXX">
+                        {#{% include('webshop/cart/deliveryDate-form.html.twig') %}#}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="mb-2 mt-2">
+                                    <span class="form-label text-body">{{ 'order.pick-delivery-date'|trans }}</span>
+                                    {#<span class="detail-option-heading font-weight-bold"><span>(Melyik napon szállítsuk ki?)</span></span>#}
+                                </div>
+                                <div class="row order-delivery-date">
+                                    <div class="col-md-12 col-lg-12 JS--dateWrapper">
+                                        <div class="flex-grow-1X form-row">
 
-                                        {% for date in generatedDates.dates %}
-                                            <div class="col-sm-3 col-3 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} {% if loop.index > 3 %}JS--Button-clickDate d-none {% endif %}" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
-                                                <div class="visual-picker visual-picker-fluid visual-picker-sm mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}visual-picker-checked{% endif %}">
-                                                    <div class="visual-picker-figure justify-content-lg-center justify-content-center required px-2">
-                                                                                    <span class="visual-picker-content">
-                                                                                        <span class="tile tile-lg">
-                                                                                            <span class="font-weight-bold my-0">{{ date.deliveryDate|date('M. j') }}</span><br>
-                                                                                            <span class="price--gross text-nowrap">{{ date.deliveryDate|date('D') }}</span>
-                                                                                        </span>
-                                                                                    </span>
+                                            {% for date in generatedDates.dates|slice(0,3) %}
+                                                <div class="col-sm-3 col-3 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }}" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
+                                                    <div class="vp vp-md mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}">
+                                                        <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
+                                                            <span class="vp-content">
+                                                                <span class="tile tile-lg">
+                                                                    {% include('/webshop/cart/choiceItem-label-deliveryDate.html.twig') with {
+                                                                        'item1': date.deliveryDate,
+                                                                        'item2': date.deliveryDate
+                                                                    } %}
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                            <div class="col-sm-3 col-3 JS--Button-clickDate">
+                                                <div class="row">
+                                                    {% for date in generatedDates.dates|slice(3) %}
+                                                        <div class="col-sm-12 col-12 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} d-none" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
+                                                            <div class="vp vp-md mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}">
+                                                                <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
+                                                                    <span class="vp-content">
+                                                                        <span class="tile tile-lg">
+                                                                            {% include('/webshop/cart/choiceItem-label-deliveryDate.html.twig') with {
+                                                                                'item1': date.deliveryDate,
+                                                                                'item2': date.deliveryDate
+                                                                            } %}
+                                                                        </span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+
+                                                    <div class="col-sm-12 col-12 JS--showCalendarIcon">
+                                                        <div class="vp vp-md align-top mr-2">
+                                                            <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
+                                                                <span class="vp-content">
+                                                                    <span class="tile tile-lg JS--showCalendarIconX">
+                                                                        <i class="far fa-calendar-alt fa-2x text-gray-700"></i>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        {% endfor %}
 
-                                        <div class="col-sm-3 col-3 JS--showCalendarIcon JS--Button-clickDate">
-                                            <div class="visual-picker visual-picker-fluid visual-picker-sm align-top has-peekX mr-2">
-                                                <div class="visual-picker-figure justify-content-lg-center justify-content-center required px-2">
-                                                                                    <span class="visual-picker-content">
-                                                                                        <span class="tile tile-lg JS--showCalendarIconX">
-                                                                                            <i class="far fa-calendar-alt fa-2x text-gray-700"></i>
-                                                                                        </span>
-                                                                                    </span>
-                                                </div>
-                                            </div>
+
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="JS--intervalsWrapper mt-4">
-                        {#{% if date.intervals is defined %}#}
-                        <div class="row">
-                            <div class="col-lg-12 mb-3X">
-                                <span class="form-label text-body mb-0">A kézbesítés az általad kért időpontban történik:</span> <br>
+                        <div class="JS--intervalsWrapper mt-4">
+                            {#{% if date.intervals is defined %}#}
+                            <div class="row">
+                                <div class="col-lg-12 mb-3X">
+                                    <span class="form-label text-body mb-0">{{ 'order.pick-delivery-interval'|trans }}</span> <br>
 
-                            </div>
-                        </div>
-                        <div class="form-row order-delivery-date">
-                            {% for date in generatedDates.dates %}
-                                <div class="col-md-12 col-12 JS--generatedInterval-{{ date.deliveryDate|date('Y-m-d') }} d-none">
-                                    <form>
-                                        {% set index = loop.index %}
-
-                                        <div class="row">
-                                            <div class="col-lg-8 col-12">
-                                                <div class="custom-control custom-radio py-1 px-0">
-                                                    <select id="dateForm_deliveryInterval" name="dateForm_deliveryInterval" required="required" class="JS--intervalDropdown form-control form-control-dropdown">
-                                                        <option value="">Válassz idősávot...</option>
-                                                        {% for interval in date.intervals %}
-                                                            <option value="{{ interval }}" data-fee="{% if interval.price %}{{ interval.price }}{% else %}0{% endif %}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}selected="selected"{% endif %}>
-                                                                {{ interval }} óra között: {% if interval.price %} +{{ interval.price|number_format(0, ',', ' ') }} Ft {% else %} Ingyenes szállítás {% endif %}
-                                                            </option>
-                                                        {% endfor %}
-                                                    </select>
-                                                    {#<i class="fas fa-chevron-down form-control-dropdown"></i>#}
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-12">
-                                                <div class="text-sm text-muted-extra alertX alert-warningX py-3X mt-lg-0 mt-1">
-                                                                                    <span class="text-info-lighten mr-1">
-                                                                                        <i class="fas fa-info-circle"></i>
-                                                                                    </span>
-                                                    Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                    </form>
                                 </div>
-                            {% endfor %}
-                            <div class="col-md-12 col-12 mb-1 d-noneX">
-                                {% include('/webshop/cart/hiddenDeliveryDate-form.html.twig') %}
+                            </div>
+                            <div class="form-row order-delivery-date">
+                                {% for date in generatedDates.dates %}
+                                    <div class="col-md-12 col-12 JS--generatedInterval-{{ date.deliveryDate|localizedDate('Y-m-d') }} d-none">
+                                        <form>
+                                            {% set index = loop.index %}
+
+                                            <div class="row">
+                                                <div class="col-lg-8 col-12">
+                                                    <div class="form-control--Background my-1 px-0">
+                                                        <select id="dateForm_deliveryInterval" name="dateForm_deliveryInterval" required="required" class="JS--intervalDropdown form-control form-control-dropdown">
+                                                            <option value="">{{ 'order.choose-time-frame'|trans }}</option>
+                                                            {% for interval in date.intervals %}
+                                                                <option value="{{ interval }}" data-fee="{% if interval.price %}{{ interval.price }}{% else %}0{% endif %}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}selected="selected"{% endif %}>
+                                                                    {{ interval }} óra között: {% if interval.price %} +{{ interval.price|money }} {% else %} {{ 'order.free-delivery'|trans }} {% endif %}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        {#<i class="fas fa-chevron-down form-control-dropdown"></i>#}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-12">
+                                                    <div class="text-sm text-muted-extra alertX alert-warningX py-3X mt-lg-0 mt-1">
+                                                                                        <span class="text-primary-lighten mr-1">
+                                                                                            <i class="fas fa-info-circle"></i>
+                                                                                        </span>
+                                                        {{ 'order.choose-the-timeframe-when-the-recipient-will-available-at-delivery-address'|trans }}
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                {% endfor %}
+                                <div class="col-md-12 col-12 mb-1 d-noneX">
+                                    {% include('/webshop/cart/hiddenDeliveryDate-form.html.twig') %}
+                                </div>
                             </div>
                         </div>
 
-
-                        {#<div class="form-row order-delivery-date mb-1">#}
-                        {#{% for date in generatedDates.dates %}#}
-                        {#<div class="col-md-12 col-12 JS--generatedInterval-{{ date.deliveryDate|date('Y-m-d') }} d-none">#}
-                        {#<form>#}
-                        {#{% set index = loop.index %}#}
-
-                        {#{% for interval in date.intervals %}#}
-                        {#<div class="custom-control custom-radio py-3 ">#}
-                        {#<input class="JS--intervalDropdown custom-control-input" type="radio" id="dateForm_deliveryInterval_{{ index }}_{{ loop.index }}" name="dateForm[deliveryInterval]" required="required" value="{{ interval }}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}checked="checked"{% endif %}>#}
-                        {#<label class="custom-control-label font-weight-bold" for="dateForm_deliveryInterval_{{ index }}_{{ loop.index }}">#}
-
-
-                        {#<div class="">#}
-
-                        {#<div class="d-inline-block font-weight-bold my-1X">{{ interval }}</div>#}
-                        {#<div class="d-inline-block text-sm text-muted">óra között:</div>#}
-                        {#<div class="d-inline price--gross text-nowrapX font-weight-bold text-sm">#}
-                        {#<em>#}
-                        {#{% if interval.price %}#}
-                        {#<span class="text-nowrap"> +{{ interval.price|number_format(0, ',', ' ') }} Ft</span>#}
-                        {#{% else %}#}
-                        {#<span class="text-sm text-success font-weight-normal">Ingyenes szállítás</span>#}
-                        {#<span class="badge badge-success pt-1 font-weight-bold px-2">Ingyenes szállítás</span>#}
-                        {#{% endif %}#}
-                        {#</em>#}
-                        {#</div>#}
-
-                        {#</div>#}
-
-                        {#</label>#}
-                        {#</div>#}
-                        {#{% endfor %}#}
-                        {#</form>#}
-                        {#</div>#}
-                        {#{% endfor %}#}
-                        {#</div>#}
-
-
-
-                        {#{% endif %}#}
                     </div>
-
-                </div>
-                <div class="modal-footer">
-                    <div class="loadingWrapper loadingWrapper-secondary">
-                        <a href="" class="btn btn-secondary" data-dismiss="modal">Mégse</a>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                    </div>
-                    <div class="loadingWrapper">
-                        <button type="submit" class="JS--Button-submitDeliveryDate btn btn-success" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}">Szállítás időpont mentése</button>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                    <div class="modal-footer">
+                        <div class="loadingWrapper loadingWrapper-secondary">
+                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        </div>
+                        <div class="loadingWrapper">
+                            <button type="submit" class="JS--btn-submitDeliveryDate btn btn-primary" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}">{{ 'order.save-delivery-time'|trans }}</button>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="modal fade" id="modal--Status" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-            <div class="modal-content JS--statusWrapper">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="modalLabel">Rendelés állapota</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body JS--statusContentBlock pb-0">
-                    {% include('admin/order/status-form.html.twig') %}
-                </div>
-                <div class="modal-footer">
-                    <div class="loadingWrapper loadingWrapper-secondary">
-                        <a href="" class="btn btn-secondary" data-dismiss="modal">Mégse</a>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+        <div class="modal fade" id="modal--Status" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-sliderX modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content JS--statusWrapper">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalLabel">{{ 'order.order-status'|trans }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="loadingWrapper">
-                        <button type="submit" class="JS--editForm-submitStatus btn btn-success">Mentés</button>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                    <div class="modal-body JS--statusContentBlock">
+                        {% include('admin/order/status-form.html.twig') %}
+                    </div>
+                    <div class="modal-footer">
+                        <div class="loadingWrapper loadingWrapper-secondary">
+                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        </div>
+                        <div class="loadingWrapper">
+                            <button type="submit" class="JS--btn-submitStatus btn btn-primary">{{ 'generic.save'|trans }}</button>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-		
-	{% block LISTA %}
 
-		<!-- page title -->
-        {#{{ include('/admin/_title_widget.html.twig') }}#}
-
-
-        <div class="row">
-            <div class="col-lg-10 mx-auto">
-                {#{{ include('/admin/_alert_widget.html.twig') }}#}
-
-                <div class="row mt-3 mb-3">
-                    <div class="col-lg-12 mb-3">
-                        <i class="fas fa-angle-left btn-link-secondary"></i> <a href="{{ path('order-list-table') }}" class="btn-link-secondary">{{ 'admin.orderDetail.Orders'|trans }}</a>
+        <div class="modal fade" id="modal--paymentStatus" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-sliderX modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content JS--paymentStatusWrapper">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalLabel">{{ 'order.payment-status'|trans }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="page-title h3 d-inline mr-md-2 mr-1">{{ 'admin.orderDetail.Order:'|trans }} <span class="text-infoX font-weight-bold">#{{ order.number }}</span>
-                            {#{% if order.status.shortcode is constant('App\\Entity\\Order::STATUS_FULFILLED') %}#}
-                            {#<div class="float-right mr-2 badge badge-{{ order.status.css }}">{{ order.status }}</div>#}
-                            {#{% endif %}#}
+                    <div class="modal-body JS--paymentStatusContentBlock">
+                        {% include('admin/order/paymentStatus-form.html.twig') %}
+                    </div>
+                    <div class="modal-footer">
+                        <div class="loadingWrapper loadingWrapper-secondary">
+                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
                         </div>
-                        <div class="d-inline float-rightX">
-                            {#<a href="{{ path('delivery-date-type-edit') }}" class="btn btn-outline-info mb-2"><i class="fas fa-plus-circle mr-2"></i>Új rendelés</a>#}
+                        <div class="loadingWrapper">
+                            <button type="submit" class="JS--btn-submitPaymentStatus btn btn-primary">{{ 'generic.save'|trans }}</button>
+                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    {% endblock %}
 
-                <div class="row">
-                    <div class="col-sm-12 mb-4">
-                        <span class="mr-2">{{ order.createdAt|date('Y-m-d') }}, {{ order.createdAt|date('H:i')}}</span>
-                        <span class="text-muted mr-2"><span class="text-muted">{{ 'admin.orderDetail.Order ID:'|trans }}</span> {{ order.id }}</span>
-                        {% if order.status %}
-                            <span class="mr-2 badge badge-{{ order.status.css }}">{{ order.status }}</span>
-                        {% endif %}
-                        {% if isDeliveryOverdue is defined and isDeliveryOverdue == true %}
-                            <span class="badge badge-danger">{{ 'admin.orderDetail.Delivery date overdue!'|trans }}</span>
-                        {% endif %}
+    {% block headerTitle %}
+        <div class="page-title h1 d-inline mr-md-2 mr-1">
+            {{ 'order.order'|trans }} <span class="text-primaryX font-weight-bold">#{{ order.number }}</span>
+        </div>
+    {% endblock %}
 
-                        <div class="mt-1">
-                            <a class="btn-link-secondary mr-3" href="#"><i class="fas fa-print mr-2"></i>{{ 'admin.orderDetail.Print'|trans }}</a>
-                            <a class="btn-link-secondary mr-3" href="#"><i class="far fa-file-alt mr-2"></i>{{ 'admin.orderDetail.Shipping letter'|trans }}</a>
-                            <a class="btn-link-secondary mr-1" href="#" data-toggle="modal" data-target="#modal--Status" data-backdrop="static"><i class="far fa-edit"></i>{{ 'admin.orderDetail.Order status'|trans }}</a>
+    {% block headerMoreActions %}
+        {% include 'admin/order/_order-quickInfo-widget.html.twig' %}
 
+        <div class="navbar--toolbar justify-content-start mt-2">
+            <div class="nav-item">
+                <a class="btn btn-link-secondary mr-2X" href="#" onclick="window.print()"><i class="fas fa-print mr-2"></i>{{ 'order.print'|trans }}</a>
+            </div>
+            <div class="nav-item">
+                <a class="btn btn-link-secondary mr-2X" href="#"><i class="far fa-file-alt mr-2"></i>{{ 'order.shipping-letter'|trans }}</a>
+            </div>
+            <div class="nav-item">
+                <a class="btn btn-link-secondary mr-2X" href="#" data-toggle="modal" data-target="#modal--Status" data-backdrop="static"><i class="far fa-edit"></i>{{ 'order.order-status'|trans }}</a>
+            </div>
+
+            <div class="nav-item dropdown">
+                <a class="btn btn-link-secondary nav-linkX dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnavTermekek" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-stream"></i> {{ 'generic.more-actions'|trans }}
+                </a>
+                <div class="dropdown-menu dropdown-transition mt-2" aria-labelledby="topnavTermekek">
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal--Status" data-backdrop="static">
+                        <i class="far fa-edit mr-2"></i>
+                        {{ 'order.order-status'|trans }}
+                    </a>
+
+                    {% if isEditEnabled is defined and isEditEnabled == true %}
+                        <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal--Sender" data-backdrop="static" data-url="{{ path('order-editBillingInfo', {id: order.id}) }}">
+                        <i class="fas fa-sign-out-alt"></i>
+                        {{ 'order.edit-sender'|trans }}
+                    </a>
+                        <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal--Recipient" data-backdrop="static" data-url="{{ path('order-editShippingInfo', {id: order.id}) }}">
+                        <i class="fas fa-sign-in-alt"></i>
+                        {{ 'order.edit-recipient'|trans }}
+                    </a>
+                        <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static">
+                        <i class="far fa-clock"></i>
+                        {{ 'order.new-delivery-date'|trans }}
+                    </a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block content %}
+        <div class="card mb-20px">
+            <div class="card-wrapper">
+                <div class="card-body">
+                    {% include 'admin/order/_order-items-widget.html.twig' %}
+                    {% include 'admin/order/_order-summary-widget.html.twig' %}
+                </div>
+                {% if isEditEnabled is defined and isEditEnabled == true %}
+                    <div class="card-footer text-right">
+                        <a href="" class="btn btn-smX btn-secondary" data-dismiss="modal"><i class="far fa-edit"></i>{{ 'generic.edit'|trans }}</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card mb-20px">
+            <div class="card-wrapper">
+                <div class="card-body">
+                    {% include 'admin/order/_order-sender-recipient-widget.html.twig' %}
+                </div>
+                {% if isEditEnabled is defined and isEditEnabled == true %}
+                    <div class="card-footer text-right">
                             <span class="nav-item dropdown">
-                                <a class="btn btn-link-secondary nav-linkX dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnavTermekek" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-stream"></i> {{ 'admin.orderDetail.More actions'|trans }}
+                                <a class="btn btn-secondary dropdown-toggle" href="javascript: void(0);" id="navSzerkesztes" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                {#                    <i class="far fa-edit"></i>#}
+                                    {{ 'generic.modify'|trans }}
                                 </a>
-                                <div class="dropdown-menu mt-2" aria-labelledby="topnavTermekek">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal--Status" data-backdrop="static">
-                                        <i class="far fa-edit mr-2"></i>
-                                        {{ 'admin.orderDetail.Order status'|trans }}
-                                    </a>
+                                <div class="dropdown-menu dropdown-transition dropdown-menu-right dropdown-menu-md-left mt-20px" aria-labelledby="navSzerkesztes">
                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal--Sender" data-backdrop="static" data-url="{{ path('order-editBillingInfo', {id: order.id}) }}">
                                         <i class="fas fa-sign-out-alt"></i>
-                                        {{ 'admin.orderDetail.Sender edit'|trans }}
+                                        {{ 'order.edit-sender'|trans }}
                                     </a>
                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal--Recipient" data-backdrop="static" data-url="{{ path('order-editShippingInfo', {id: order.id}) }}">
                                         <i class="fas fa-sign-in-alt"></i>
-                                        {{ 'admin.orderDetail.Recipient edit'|trans }}
+                                        {{ 'order.edit-recipient'|trans }}
                                     </a>
-                                    <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static">
-                                        <i class="far fa-clock"></i>
-                                        {{ 'admin.orderDetail.New delivery date'|trans }}
-                                    </a>
-
                                 </div>
                             </span>
-                        </div>
                     </div>
-                </div>
-
-                <div class="row row-5">
-                    <div class="col-md-8 col-15">
-                        <div class="card">
-                                    <div class="cart-wrapper">
-                                        <div class="block-body">
-                                        <span class="h5 checkout--sidebar-title">{{ 'admin.orderDetail.cart.Products'|trans }}
-                                            {#Rendelés száma: <span class="text-success font-weight-bold">#{{ order.id }}</span>#}
-                                        </span>
-                                        </div>
-                                        <div name="products_in_basket" class="cart-body bg-white">
-                                            <div class="">
-                                                <div class="cart-itemX">
-                                                    <div class="row d-flex align-items-center">
-                                                        <div class="col-12">
-                                                            {% for item in order.items %}
-                                                                {% include('webshop/cart/cart-item-single-widget.html.twig') %}
-                                                            {% endfor %}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div name="written_message" class="cart-body text-sm bg-white mt-2">
-                                            <div class="row d-flex align-items-center text-center">
-
-                                                <div class="col-12 pr-0">
-                                                    {% include 'webshop/cart/cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div name="sender_recipient" class="block-body">
-                                            <div class="row row-narrow">
-
-                                                <div class="col-md-6 col-lg-6 col-narrow mt-4 mt-md-0">
-                                                    <div class="">
-                                                        <span class="h5 checkout--sidebar-title">{{ 'admin.orderDetail.Sender'|trans }}</span>
-                                                        {#<a href="">MÓDOSÍT</a>#}
-                                                        <a href="" data-toggle="modal" data-target="#modal--Sender" data-backdrop="static" data-url="{{ path('order-editBillingInfo', {id: order.id}) }}"><i class="far fa-edit"></i></a>
-                                                    </div>
-                                                    <div class="minicard bg-light card--choice h-100X mt-1">
-                                                        <div class="minicard--body h-100">
-                                                            <div class="minicard--title mb-1">
-                                                                {{ order.billingName }} {{ order.billingCompany is defined and order.billingCompany ? ' / ' ~ order.billingCompany : ''}}
-                                                            </div>
-                                                            <div class="">
-                                                                <span class="minicard--address">{{ 'admin.orderDetail.Phone number'|trans }} <em>{{ order.billingPhone }}</em></span> <br>
-                                                                <span class="minicard--address">{{ order.billingAddress.zip }} {{ order.billingAddress.city }}, {{ order.billingAddress.street }}</span> <br>
-                                                                <span class="minicard--address">{{ order.billingAddress.province }}, {{ order.billingAddress.country }}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-6 col-narrow">
-                                                    <div class="">
-                                                        <span class="h5 checkout--sidebar-title">Címzett:</span>
-                                                        <a href="" data-toggle="modal" data-target="#modal--Recipient" data-backdrop="static" data-url="{{ path('order-editShippingInfo', {id: order.id}) }}"><i class="far fa-edit"></i></a>
-                                                    </div>
-                                                    <div class="minicard bg-light recipient card--choice h-100X mt-1">
-                                                        <div class="minicard--body h-100">
-                                                            <div class="minicard--title mb-1">{{ order.shippingName }}</div>
-                                                            <div class="">
-                                                                <span class="minicard--address">{{ 'admin.orderDetail.Phone number'|trans }}: <em>{{ order.shippingPhone }}</em></span> <br>
-                                                                <span class="minicard--address">{{ order.shippingAddress.zip }} {{ order.shippingAddress.city }}, {{ order.shippingAddress.street }}</span> <br>
-                                                                <span class="minicard--address">{{ order.shippingAddress.province }}, {{ order.shippingAddress.country }}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div name="delivery_date" class="block-body">
-                                            <div class="row row-narrow">
-
-                                                <div class="col-lg-12 col-narrow">
-                                                    <div class="">
-                                                        <span class="h5 checkout--sidebar-title">{{ 'admin.orderDetail.Delivery date'|trans }}</span><br>
-                                                        <span class="text-smX text-muted">
-                                                            {{ order.deliveryDate|date('Y F j')|lower }}, {{ order.deliveryInterval }} óra között.
-                                                        </span>
-                                                    </div>
-                                                    <a href="" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static"><i class="far fa-edit"></i></a>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        {% if isBankTransfer is defined and isBankTransfer == true %}
-                                            <div name="payment_bank_transfer" class="block-body">
-                                                <div class="row row-narrow">
-
-                                                    <div class="col-lg-12 col-narrow">
-                                                        <div class="">
-                                                            <span class="h5 checkout--sidebar-title">{{ 'admin.orderDetail.payment.Instructions for bank transfer'|trans }}</span>
-                                                        </div>
-                                                        <div class="text-smX text-muted mt-1">
-                                                            {{ order.payment.description|raw }}
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                    </div>
-
-                    <div name="__SIDEBAR" class="col-md-4 col-15 orderDetail--sidebarX">
-
-                        <div class="card text-whiteX bg-lightX overflow-hidden mb-2 mb-md-3">
-                            <div class="card-body">
-                                <div class="text-center toll-free-box">
-                                    <i class="far fa-clock"></i>
-                                    <div class="">
-                                        {% if isDeliveryOverdue is defined and isDeliveryOverdue == true %}
-                                            <div class="alert alert-danger p-2 mb-3"><i class="fas fa-exclamation-circle mr-1"></i> {{ 'admin.orderDetail.Delivery date overdue!'|trans }}</div>
-                                        {% endif %}
-                                        <span class="h4">{{ 'admin.orderDetail.Delivery date'|trans }}</span>
-                                            {% if order.deliveryDate %}
-                                                <div class="font-weight-bold">{{ order.deliveryDate|date('Y M j.')|lower }}</div>
-                                                <span class="text-mutedZ">{{ order.deliveryInterval is defined and order.deliveryInterval ? order.deliveryInterval ~ ' óra között': '' }}</span> <br>
-                                            {% else %}
-                                                {% include('admin/_notAvailable-insert.html.twig') %}
-                                            {% endif %}
-                                        <em class="text-mutedZ text-sm">{{ order.shipping ? order.shipping.getName() : '' }}</em>
-                                        <div>
-                                            <a href="" class="text-whiteX" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card card-sidebar mb-2 mb-md-3">
-                            <div class="card-body card-sidebar">
-                                {% include 'admin/customer-card.html.twig' with {'customer': order.customer} %}
-                            </div>
-                            <div class="card-body card-sidebar">
-                                <h4 class="mt-0 mb-3">{{ 'admin.orderDetail.payment.Payment'|trans }}</h4>
-                                <div class="toll-free-box">
-                                    {#<h4> <i class="mdi mdi-deskphone"></i> Toll Free : 1-234-567-8901</h4>#}
-                                    {% if order.payment is defined and order.payment %}
-                                        <span class="">{{ order.payment.getName() }} </span> <br>
-                                        {% if order.payment.image %}
-                                            <img class="border-0 h-20px d-none d-md-inline" src="{{ asset('/uploads/images/termekek/' ~ order.payment.image) }}" />
-                                        {% endif %}
-                                        {% if isBankTransfer is defined and isBankTransfer == true %}
-                                            {#<div name="payment_bank_transfer" class="block-body">#}
-                                            {#<div class="row row-narrow">#}
-
-                                            {#<div class="col-lg-12 col-narrow">#}
-                                            <div class="text-sm text-muted mt-1">
-                                                {{ order.payment.description|raw }}
-                                            </div>
-                                            {#</div>#}
-                                            {#</div>#}
-                                            {#</div>#}
-                                        {% endif %}
-                                    {% else %}
-                                        {{ include('admin/_notAvailable-insert.html.twig') }}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-
-                        {#<div class="card card-sidebar mb-2 mb-md-3">#}
-
-                        {#</div>#}
-
-
-
-                        {#<div class="card text-white bg-info">#}
-                            {#<div class="card-body card-airy">#}
-                                {#<div class="toll-free-box text-center">#}
-                                    {#<h4> <i class="mdi mdi-deskphone"></i> Toll Free : 1-234-567-8901</h4>#}
-                                {#</div>#}
-                            {#</div>#}
-                        {#</div>#}
-                    </div>
-
-                    <div class="col-md-12 mb-4">
-                    </div>
-                </div>
-
+                {% endif %}
             </div>
         </div>
+        <div class="card mb-20px">
+            <div class="card-wrapper">
+                <div class="card-body">
+                    {% include 'admin/order/_order-payment-widget.html.twig' %}
+                </div>
+                {% if isEditEnabled is defined and isEditEnabled == true and order.isBankTransfer is defined and order.isBankTransfer == true %}
+                    <div class="card-footer text-right">
+                        {#                                    <a href="" class="btn btn-smX btn-primary" data-toggle="modal" data-target="#modal--Status"  data-dismiss="modal">Megjelöli, hogy a banki utalás teljesült</a>#}
 
+                        {% if order.paymentStatus is defined and order.paymentStatus.shortcode == constant('App\\Entity\\PaymentStatus::STATUS_PENDING') %}
+                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal--paymentStatus" data-backdrop="static">{{ 'order.mark-as-paid'|trans }}</a>
+                        {% else %}
+                            <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#modal--paymentStatus" data-backdrop="static">{{ 'order.payment-status'|trans }}</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card shadow-none bg-transparent">
+            <div class="card-wrapper mb-20px">
+                <div class="card-body border-bottom">
+                    <div class="">
+                        <span class="h5 admin-card-title mt-0 mb-0">{{ 'order.history.history-timeline'|trans }}</span>
+                        {#                                        <div class="admin-card-topright float-sm-right">#}
+                        {#                                            <a class="btnX btn-link-secondaryX" data-toggleZ="collapse" href="#collapseOrderHistory" role="button" aria-expandedZ="false" aria-controlsZ="collapseOrderHistory">Részletek <i class="fas fa-angle-down ml-1"></i></a>#}
+                        {#                                        </div>#}
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="collapseZ" id="collapseOrderHistoryZ">
+                        <div class="timeline-alt pb-0X">
+                            <div class="">
+                                <div class="timeline-item timeline-input">
+                                    <i class="bg-info-lighten text-primary timeline-icon">
+                                        <img class="img-thumbnail rounded-circle mr-2" src="{{ asset('/uploads/images/termekek/' ~ app.user.image) }}" />
+                                    </i>
+                                    <div class="timeline-item-info d-flex justify-content-between JS--commentWrapper">
+                                        <div class="w-100 JS--commentContentBlock">
+                                            {% include 'admin/order/_form-order-comment.html.twig' %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if order.logs is defined and order.logs is not null %}
+                                    {% for log in order.logs %}
+                                        <div class="timeline-item {% if log.isComment is defined and log.isComment == true %}timeline-comment{% endif %}">
+                                            <i class="bg-info-lighten text-primary timeline-icon">
+                                                {% if log.channel is defined and log.channel.shortcode == constant('App\\Entity\\OrderLog::CHANNEL_ADMIN') %}
+                                                    <img class="img-thumbnail rounded-circle mr-2" src="{{ asset('/uploads/images/termekek/' ~ app.user.image) }}" />
+                                                {% endif %}
+                                            </i>
+                                            <div class="timeline-item-info d-flex justify-content-between">
+                                                {#                                                        <a href="/" class="text-primary font-weight-bold mb-1 d-block">You sold an item</a>#}
+                                                <div>
+                                                    {% if log.description is defined and log.description is not null %}
+                                                        <a class="btn-link-timeline" data-toggle="collapse" href="#collapseLog_{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapseLog_{{ loop.index }}">
+                                                            {{ log.message }} <i class="fas fa-angle-down ml-1"></i>
+                                                        </a>
+                                                        <div class="collapse" id="collapseLog_{{ loop.index }}">
+                                                            {{ log.description|raw }}
+                                                        </div>
+                                                    {% else %}
+                                                        {{ log.message }}
+                                                    {% endif %}
 
-	{% endblock %}
-{% endblock %}
+                                                    {% if log.channel is defined and log.channel.shortcode is not null %}
+                                                        {#                                                                == constant('App\\Entity\\OrderLog::CHANNEL_ADMIN')#}
+                                                        <br> <small class="text-muted">{{ log.channel }}</small>
+                                                    {% endif %}
+                                                    {#                                                            {% if log.description is defined and log.description is not null %}#}
+                                                    {#                                                                <br>{{ log.description|raw }}#}
+                                                    {#                                                            {% endif %}#}
+                                                </div>
+                                                <div class="text-nowrap ml-3">
+                                                    {#                                                            {{ dump(log.createdAt.timestamp) }}#}
+                                                    <span class="text-muted">{{ log.createdAt|timeAgo }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block sidebar %}
+        <div class="card text-whiteX bg-lightX overflow-hidden mb-20px">
+            <div class="card-body">
+                <div class="text-centerX toll-free-boxX">
+                    {#                                    <i class="far fa-clock"></i>#}
+                    <div class="">
+                        {% include 'admin/order/_order-delivery-widget.html.twig' %}
+                    </div>
+                </div>
+            </div>
+            {% if isEditEnabled is defined and isEditEnabled == true %}
+                <div class="card-footer text-right">
+                    <a href="" class="btn btn-smX btn-secondary" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit"></i>{{ 'generic.modify'|trans }}</a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="card card-sidebar mb-20px">
+            <div class="card-body card-sidebar">
+                {% include 'admin/customer-card.html.twig' with {'customer': order.customer} %}
+            </div>
+            {#                            <div class="card-body card-sidebar">#}
+            {#                                {% include 'admin/order/_order-payment-widget.html.twig' %}#}
+            {#                            </div>#}
+            <div class="card-body">
+                <span class="h5 admin-card-title mt-0 mb-0">{{ 'order.user-agent.user-agent-details'|trans }}</span>
+                <div class="admin-card-topright float-sm-right">
+                    <a class="btnX btn-link-secondaryX" data-toggle="collapse" href="#collapseClientDetails" role="button" aria-expanded="false" aria-controls="collapseClientDetails">{{ 'order.user-agent.see-more'|trans }} <i class="fas fa-angle-down ml-1"></i></a>
+                </div>
+                <div class="collapse" id="collapseClientDetails">
+                    <div class="mt-3">
+                        {% if order.clientDetails is defined and order.clientDetails is not null %}
+                            {% set cd = order.clientDetails %}
+                            <p class="mt-3">
+                                <span>{{ 'order.user-agent.ip-address'|trans }}</span><br>
+                                <span class="text-muted">
+                                        {% if cd.browserIp is defined and cd.browserIp is not null %}
+                                            {{  cd.browserIp }}
+                                        {% else %}
+                                            {% include 'admin/_notAvailable-insert.html.twig' %}
+                                        {% endif %}
+                                        </span>
+                            </p>
+                            <p class="mt-3">
+                                <span>{{ 'order.user-agent.browser'|trans }}</span><br>
+                                <span class="text-muted">
+                                        {% if cd.userAgent is defined and cd.userAgent is not null %}
+                                            {{  cd.userAgent|browser('name') }} v{{  cd.userAgent|browser('version') }}
+                                        {% else %}
+                                            {% include 'admin/_notAvailable-insert.html.twig' %}
+                                        {% endif %}
+                                        </span>
+                            </p>
+                            <p class="mt-3">
+                                <span>{{ 'order.user-agent.platform'|trans }}</span><br>
+                                <span class="text-muted">
+                                        {% if cd.userAgent is defined and cd.userAgent is not null %}
+                                            {{  cd.userAgent|browser('platform') }}
+                                        {% else %}
+                                            {% include 'admin/_notAvailable-insert.html.twig' %}
+                                        {% endif %}
+                                        </span>
+                            </p>
+                            <p class="mt-3">
+                                <span>{{ 'order.user-agent.user-agent'|trans }}</span><br>
+                                <span class="text-muted">
+                                        {% if cd.userAgent is defined and cd.userAgent is not null %}
+                                            {{  cd.userAgent }}
+                                        {% else %}
+                                            {% include 'admin/_notAvailable-insert.html.twig' %}
+                                        {% endif %}
+                                        </span>
+                            </p>
+                            <p class="mt-3">
+                                <span>{{ 'order.user-agent.browser-language'|trans }}</span><br>
+                                <span class="text-muted">
+                                        {% if cd.acceptLanguage is defined and cd.acceptLanguage is not null %}
+                                            {{  cd.acceptLanguage }}
+                                        {% else %}
+                                            {% include 'admin/_notAvailable-insert.html.twig' %}
+                                        {% endif %}
+                                        </span>
+                            </p>
+                        {% else %}
+                            {% include 'admin/_notAvailable-insert.html.twig' %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
 
 
 {% block javascripts %}
@@ -531,17 +557,23 @@
             let ddEdit = new OrderDetail($ddWrapper);
 
             let $statusWrapper = $('.JS--statusWrapper');
-            new OrderDetail($statusWrapper);
+            let st = new OrderDetail($statusWrapper);
+
+            let $paymentStatusWrapper = $('.JS--paymentStatusWrapper');
+            let pay = new OrderDetail($paymentStatusWrapper);
+
+            let $commentWrapper = $('.JS--commentWrapper');
+            let comment = new OrderDetail($commentWrapper);
 
 //            Order.submitShippingInfoForm({
 //                wrapper: '.JS--recipientWrapper',
-//                selector: '.JS--editForm-submitRecipient',
+//                selector: '.JS--btn-submitRecipient',
 //                handle: 'click',
 //            });
 //
 //            Order.submitBillingInfoForm({
 //                wrapper: '.JS--senderWrapper',
-//                selector: '.JS--editForm-submitSender',
+//                selector: '.JS--btn-submitSender',
 //                handle: 'click',
 //            });
 //            Order.submitDeliveryDate({
@@ -551,15 +583,13 @@
 //            });
 //            Order.submitStatusForm({
 //                wrapper: '.JS--statusWrapper',
-//                selector: '.JS--editForm-submitStatus',
+//                selector: '.JS--btn-submitStatus',
 //                event: 'click',
 //            });
         });
-    </script>
-    <script>
         $(function() {
             $('.JS--Button-clickDate').daterangepicker({
-                opens: 'right',
+                opens: 'left',
                 autoApply: true,
                 autoUpdateInput: false,
                 singleDatePicker: true,
@@ -622,11 +652,9 @@
 //                $wrapper.find('.JS--alertMessage').hide();
 //            });
         });
-    </script>
-    <script>
         $(function() {
             let $wrapper = $('.JS--deliveryDateContainer');
-            let $vp = $wrapper.find('.visual-picker-checked');
+            let $vp = $wrapper.find('.vp-checked');
             let hiddenForm = {
                 date: {
                     element: $wrapper.find('#hidden_deliveryDate'),
@@ -704,8 +732,8 @@
                 $dateWrapper = $(this).closest('.JS--dateWrapper');
                 $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
 
-                $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
-                $(this).find('.visual-picker').addClass('visual-picker-checked');
+                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
+                $(this).find('.vp').addClass('vp-checked');
                 $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $(this).data('date-value'));
 
 //                $wrapper.find('#hidden_deliveryDate').val($(this).data('date-value'));
@@ -743,7 +771,7 @@
                 hiddenForm.date.setDateValue($pickerDate);
 
                 $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
+                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
                 $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
 
                 $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
@@ -753,7 +781,7 @@
                     $wrapper.find('.JS--showCalendarIcon').hide();
                     $dateModule.removeClass('d-none').addClass('d-temporary');
                 }
-                $dateModule.find('.visual-picker').addClass('visual-picker-checked');
+                $dateModule.find('.vp').addClass('vp-checked');
                 $intervalModule.removeClass('d-none').addClass('d-temporary');
 
                 if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {

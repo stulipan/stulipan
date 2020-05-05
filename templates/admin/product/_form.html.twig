@@ -22,7 +22,7 @@
 						<div class="form-row">
 							{% for choice in form.kind %}
 								<div class="col-md-4 col-6">
-									{{ include('admin/choiceItem.html.twig') }}
+									{{ include('admin/visualPicker.html.twig') }}
 								</div>
 							{% endfor %}
 							{% do form.kind.setRendered() %}
@@ -191,7 +191,7 @@
                         <div class="form-row">
                             {% for choice in form.status %}
                                 <div class="col-md-4 col-6">
-                                    {{ include('admin/choiceItem.html.twig') }}
+                                    {{ include('admin/visualPicker.html.twig') }}
                                 </div>
                             {% endfor %}
                             {% do form.status.setRendered() %}

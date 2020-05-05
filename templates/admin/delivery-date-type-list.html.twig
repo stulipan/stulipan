@@ -1,209 +1,78 @@
-{% extends 'admin/base_admin.html.twig' %}
+{% extends 'admin/template-listing.html.twig' %}
 
+{% set pageTitle = title %}
+{% set backToText = 'Beállítások' %}
+{% set backToUrl = path('settings-home') %}
+{% set breadcrumb = {
+	0: {
+		'url': path('settings-home'),
+		'text': 'settings.settings'|trans,
+	},
+	1: {
+		'url': path('occasion-list'),
+		'text': 'Kiemelt napok',
+	}
+} %}
 
 {% block title %}
 	{{ title }}
 {% endblock %}
 
-
-{% block stylesheets %}
-    {{ parent() }}
+{% block headerTopright %}
+	<a href="{{ path('delivery-date-type-edit') }}" class="btn btn-outline-primary ml-1 mr-1"><i class="far fa-clock mr-1"></i> Új idősáv csoport</a>
+	<a href="{{ path('occasion-list') }}" class="btn btn-outline-secondary"><i class="far fa-calendar-alt mr-1"></i> Kiemelt napok</a>
 {% endblock %}
 
+{% block contentInner %}
+	{% if items is defined %}
+	 {% for item in items %}
+		 <div class="col-md-12 mb-sm-2 mb-1">
+			 <div class="border-bottomX p-2X py-1">
+				 <div class="row">
+					 <div class="col-md-6 border-md-right mb-md-0 mb-1 pr-md-4">
+						 <div class="">
+							 <a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btnX btn-successX">
+								 <span class="entry-lg mb-1">{{ item.name }} </span>
+							 </a>
+						 </div>
+						 <div class="text-mutedX mb-0">
+							 {{ item.description|raw  }}
+						 </div>
+					 </div>
+					 <div class="col-md-3 col-6 mb-1 pl-md-2">
+						 <div class="text-mutedX">
+							 {% for interval in item.getIntervals %}
+								 <div class="row">
+									 <div class="col-auto text-nowrap">
+										 {{ interval.name }} között
+										 <span class="badge badge-{% if interval.price == 0 %}success{% else %}warning{% endif %} text-nowrap ml-1"> {{ interval.price|money }}</span>
+									 </div>
+									 <div class="col-3">
+										 {{ interval.deliveryLimit }}
+									 </div>
+								 </div>
+							 {% endfor %}
+						 </div>
+					 </div>
+					 <div class="col-md-3 col-6 pl-md-2">
+						 <a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btn btn-sm btn-secondary mb-2">
+							 {#<i class="fas fa-edit mr-1"></i>#}
+							 Módosít</a> <br>
+						 <p class="text-xs text-muted-extra">
+							 <em>Létrehozva: {{ item.createdAt|date('Y M j')|lower }}, {{ item.createdAt|date('H:i')}}</em><br>
+							 <em>Utolsó módosítás: {{ item.updatedAt|date('Y M j')|lower }}, {{ item.updatedAt|date('H:i')}}</em><br>
+						 </p>
+					 </div>
 
-{% block page_content %}
-		
-	{% block LISTA %}
+				 </div>
+			 </div>
+			 <div class="border-bottom pb-1 text-centerX">
 
-		<!-- page title -->
-        {#{{ include('/admin/_title_widget.html.twig') }}#}
+			 </div>
+		 </div>
 
-		<!-- header of default page content widget -->
-        {#{{ include('/admin/_header_of_default_page_content.html.twig') }}#}
-
-		<div class="row mt-3 mb-2">
-			<div class="col-lg-12">
-				<div class="page-title h3 d-inline mr-md-2 mr-1">{{ title }}</div>
-				<div class="d-inline float-rightX">
-                    <a href="{{ path('delivery-date-type-edit') }}" class="btn btn-outline-info mb-2 ml-1 mr-1"><i class="far fa-clock mr-1"></i> Új idősáv csoport</a>
-					<a href="{{ path('delivery-special-date-list') }}" class="btn btn-outline-secondary mb-2"><i class="far fa-calendar-alt mr-1"></i> Szállítási napok</a>
-				</div>
-			</div>
-		</div>
-
-        {% include('/admin/_alert_widget.html.twig') %}
-
-        {{ include('/admin/_header_of_default_page_content.html.twig') }}
-        {% if items is defined %}
-            {% for item in items %}
-				<div class="col-md-12 mb-sm-2 mb-1">
-					<div class="border-bottomX p-2X py-1">
-						<div class="row">
-							<div class="col-md-6 border-md-right mb-md-0 mb-1 pr-md-4">
-								<div class="">
-									<a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btnX btn-successX">
-										<span class="entry-lg mb-1">{{ item.name }} </span>
-									</a>
-								</div>
-								<div class="text-mutedX mb-0">
-                                    {{ item.description|raw  }}
-								</div>
-							</div>
-							<div class="col-md-3 col-6 mb-1 pl-md-2">
-								<div class="text-mutedX">
-                                    {% for interval in item.getIntervals %}
-                                        <div class="row">
-                                            <div class="col-auto text-nowrap">
-                                                {{ interval.name }} között
-                                                <span class="badge badge-{% if interval.price == 0 %}success{% else %}warning{% endif %} text-nowrap ml-1"> {{ interval.price|number_format(0, ',', ' ') }} Ft</span>
-                                            </div>
-                                            <div class="col-3">
-                                                {{ interval.deliveryLimit }}
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-								</div>
-							</div>
-                            <div class="col-md-3 col-6 pl-md-2">
-                                <a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btn btn-sm btn-secondary mb-2">
-                                {#<i class="fas fa-edit mr-1"></i>#}
-                                    Módosít</a> <br>
-                                <p class="text-xs text-muted-extra">
-									<em>Létrehozva: {{ item.createdAt|date('Y M j')|lower }}, {{ item.createdAt|date('H:i')}}</em><br>
-                                    <em>Utolsó módosítás: {{ item.updatedAt|date('Y M j')|lower }}, {{ item.updatedAt|date('H:i')}}</em><br>
-                                </p>
-                            </div>
-
-						</div>
-					</div>
-                    <div class="border-bottom pb-1 text-centerX">
-
-                    </div>
-				</div>
-
-            {% endfor %}
-        {% else %}
-			<li><em>{{ noResult }}</em></li>
-        {% endif %}
-        {{ include('/admin/_footer_of_default_page_content.html.twig') }}
-
-		{#<div class="row mb-2X">#}
-			{#<div class="col-lg-8">#}
-                {#valami content#}
-			{#</div>#}
-			{#<div class="col-lg-4">#}
-				{#<div class="text-right">#}
-					{#<a href="{{ path('delivery-date-type-edit') }}" class="btn btn-primary mb-2 ml-1"><i class="far fa-calendar-plus mr-1"></i> Új dátumtípus</a>#}
-				{#</div>#}
-			{#</div><!-- end col-->#}
-		{#</div>#}
-
-        {#{% if items is defined %}#}
-		{#{% for item in items %}#}
-        {#<div class="row {% if loop.index is even %}bg-light{% else %}bg-info{% endif %} if }}">#}
-            {#<div class="col-md-4 card-body">#}
-                {#{{ item.name }}#}
-            {#</div>#}
-            {#<div class="col-md-4">#}
-                {#{% for interval in item.getIntervals %}#}
-                    {#<div class="row">#}
-                        {#<div class="col-6">#}
-                            {#{{ interval.name }}#}
-                            {#<span class="text-muted">{{ interval.price }} Ft</span>#}
-                        {#</div>#}
-                        {#<div class="col-3">#}
-
-                        {#</div>#}
-                        {#<div class="col-3">#}
-                            {#{{ interval.deliveryLimit }}#}
-                        {#</div>#}
-                    {#</div>#}
-
-
-                {#{% endfor %}#}
-            {#</div>#}
-            {#<div class="col-md-4">#}
-                {#<a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btn-smX">#}
-                    {#<i class="fas fa-edit"></i></a>#}
-                {#<a href="" class="js--button-delete" data-url="{{ path('invoice-delete', {id: item.id}) }}"><i class="fas fa-trash"></i></a>#}
-                {#<small class="text-muted">{{ item.updatedAt|date('Y-m-d, H:i')}}</small>#}
-            {#</div>#}
-        {#</div>#}
-        {#{% endfor %}#}
-        {#{% else %}#}
-            {#<div>#}
-                {#<li><em>nincs user found</em></li>#}
-            {#</div>#}
-        {#{% endif %}#}
-
-        {#<div class="table-responsive mb-3">#}
-            {#<table class="table table-sm table-centeredX table-striped table-hover mb-0 js--wrapper-table">#}
-                {#<thead class="thead-light">#}
-				{#<tr>#}
-                    {#<th scope="col">#</th>#}
-                    {#<th scope="col">Megnevezés</th>#}
-					{#<th scope="col">Idősávok</th>#}
-				    {#<th scope="col"><i class="fas fa-ellipsis-h"></i></th>#}
-                    {#<th scope="col">Módosítás időpontja</th>#}
-                {#</tr>#}
-			  {#</thead>#}
-			  {#<tbody>#}
-				{#{% if items is defined %}#}
-				{#{% for item in items %}#}
-				{#<tr>#}
-                    {#<td class="">{{ item.id }}</td>#}
-                    {#<td class="">#}
-                        {#<a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="">{{ item.name }}</a> <br>#}
-                        {#<span class="text-sm text-muted">{{ item.description }}</span>#}
-                    {#</td>#}
-                    {#<td class="text-nowrap">#}
-                        {#{% for interval in item.getIntervals %}#}
-                            {#<div class="row">#}
-                                {#<div class="col-auto text-nowrap">#}
-                                    {#{{ interval.name }} között <span class="text-muted text-nowrap"> {{ interval.price|number_format(0, ',', '') }} Ft</span>#}
-                                {#</div>#}
-                                {#<div class="col-3">#}
-                                    {#{{ interval.deliveryLimit }}#}
-                                {#</div>#}
-                            {#</div>#}
-
-
-                        {#{% endfor %}#}
-                    {#</td>#}
-				    {#<td class="">#}
-				  	    {#<a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btn-smX">#}
-				  		    {#<i class="fas fa-edit"></i></a>#}
-							{#<a href="" class="js--button-delete" data-url="{{ path('invoice-delete', {id: item.id}) }}"><i class="fas fa-trash"></i></a>#}
-				    {#</td>#}
-                    {#<td class="text-muted"><small>{{ item.updatedAt|date('Y-m-d, H:i')}}</small></td>#}
-				{#</tr>#}
-				{#{% endfor %}#}
-				{#{% else %}#}
-				{#<tr>#}
-			        {#<td><li><em>nincs user found</em></li></td>#}
-			    {#</tr>#}
-				{#{% endif %}#}
-			  {#</tbody>#}
-			{#</table>#}
-		{#</div>#}
-		{#<div class="pagerfanta">#}
-            {#{% if paginator is defined %}#}
-                {#{{ pagerfanta(paginator, 'twitter_bootstrap4') }}#}
-            {#{% endif %}#}
-		{#</div>#}
-        {#<!-- footer of default page content widget -->#}
-        {#{{ include('/admin/_footer_of_default_page_content.html.twig') }}#}
-
-	{% endblock %}
+	 {% endfor %}
+ {% else %}
+	 <li><em>{{ noResult }}</em></li>
+ {% endif %}
 {% endblock %}
-
-
-
-
-
-{% block javascripts %}
-    {{ parent() }}
-
-{% endblock %}
-        
-

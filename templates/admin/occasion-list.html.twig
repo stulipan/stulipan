@@ -1,0 +1,76 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set pageTitle = title %}
+{% set breadcrumb = {
+    0: {
+        'url': path('settings-home'),
+        'text': 'settings.settings'|trans,
+    },
+} %}
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block headerTopright %}
+    <a href="{{ path('occasion-edit') }}" class="btn btn-outline-primary"><i class="far fa-calendar-plus"></i> Új szállítási nap</a>
+    <a href="{{ path('delivery-date-type-list') }}" class="btn btn-outline-secondary ml-1"><i class="far fa-clock"></i> Idősávok</a>
+{% endblock %}
+
+
+{% block tableHeader %}
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Szállítási nap</th>
+        <th scope="col">Típus</th>
+        <th scope="col">Idősávok</th>
+        <th scope="col">Módosítás időpontja</th>
+        <th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+    </tr>
+{% endblock %}
+
+{% block tableBody %}
+    {% if items is defined %}
+        {% for item in items %}
+            <tr>
+                <td class="">{{ item.id }}</td>
+                <td class="">
+                    <a href="{{ path('occasion-edit', {'id': item.id}) }}" class="btn-smX">{{ item.specialDate|date('Y-m-d')}}, {{ item.specialDate|localizedDate('l')|lower }}</a>
+                </td>
+                <td>{{ item.dateType }}
+                    <a href="{{ path('delivery-date-type-edit', {'id': item.dateType.id }) }}" class="btn-link-secondary-editTools ml-1"><i class="fas fa-edit"></i></a>
+                </td>
+                <td class="text-nowrap">
+                    {% if item.dateType.intervals is not empty %}
+                    <a class="btnX btn-link-secondary" data-toggle="collapse" href="#collapseReszletek_{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapseReszletek_{{ loop.index }}">Megtekint <i class="fas fa-angle-down ml-1"></i></a>
+                    <div class="mt-1 collapse" id="collapseReszletek_{{ loop.index }}">
+                        {% for interval in item.dateType.intervals %}
+                            <div class="row">
+                                <div class="col-auto text-nowrap">
+                                    {{ interval.name }} között
+                                    <span class="badge badge-{% if interval.price == 0 %}success{% else %}warning{% endif %} text-nowrap ml-1"> {{ interval.price|money }}</span>
+                                </div>
+                                <div class="col-3">
+                                    {{ interval.deliveryLimit }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        <span class="text-muted"><em>nincs medadva</em></span>
+                    {% endif %}
+                </td>
+                <td class="text-xs text-muted-extra">
+                    <em>{{ item.updatedAt|date('Y M j')|lower }}, {{ item.updatedAt|date('H:i')}}</em>
+                </td>
+                <td>
+                    <a href="{{ path('occasion-edit', {'id': item.id}) }}" class="btn-link-secondary-editTools"><i class="fas fa-edit"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td><li><em>nincs user found</em></li></td>
+        </tr>
+    {% endif %}
+{% endblock %}

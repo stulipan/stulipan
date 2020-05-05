@@ -1,4 +1,4 @@
-{% extends 'webshop/site/base_site.html.twig' %}
+{% extends 'webshop/site/base-site.html.twig' %}
 
 
 {# this tag only applies to the forms defined in this template #}
@@ -66,7 +66,7 @@
                                                     {#<input type="hidden" name="_target_path" value="{{ app.session.get('_security.main.target_path') }}" />#}
                                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                                                     <div class="mt-2 text-center mb-1">
-                                                        <button type="submit" value="Mentés" class="btn btn-info" formnovalidate>Bejelentkezek</button>
+                                                        <button type="submit" value="Mentés" class="btn btn-primary" formnovalidate>Bejelentkezek</button>
                                                     </div>
                                                 </form>
                                             </div>

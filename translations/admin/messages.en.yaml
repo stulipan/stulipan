@@ -1,0 +1,182 @@
+# Localization file for EN language.
+
+# This file is loaded into the Translation page in admin. The English file is the base
+# for all future translations, meaning all new resources must be put here and they will be
+# shown automatically in the Translation page.
+
+
+# Level 0 is used to separate Admin resources from Site resources.
+# Their names are fixed and MUST NOT be changed!
+# There are only two resources: 'admin', 'site'
+
+
+# Level 1 is the category or admin module. It is used in URLs: /admin/translation/{category}
+# Examples:
+#           'order'
+#           'generic'
+
+# Level 2 is the subcategory and is used to group certain resources within a category.
+# Examples:
+#           order > 'history'
+#           order > 'customer'
+#           etc
+
+
+order:
+    orders: Orders
+    order: Order
+    order-id: Order ID
+    delivery-date-overdue: Delivery date overdue!
+    print: Print
+    shipping-letter: Shipping letter
+    order-status: Order status
+    more-actions: More actions
+    subtotal: Subtotal
+    shipping: Shipping
+    discount: Discount
+    total-amount-to-pay: Total amount to pay
+    edit-sender: Edit sender
+    recipient: Recipient
+    edit-recipient: Edit recipient
+    new-delivery-date: New delivery date
+    cart-products: Products
+    message: Message
+    sender: Sender:
+    phone-number: Phone:
+    delivery-date: Delivery date:
+    time-of-delivery: Time of delivery
+    pick-delivery-date: Válaszd ki mikor szállítsuk ki!
+    pick-delivery-interval: A kézbesítés az általad kért időpontban történik
+    choose-time-frame: Choose time frame...
+    free-delivery: Ingyenes szállítás
+    choose-the-timeframe-when-the-recipient-will-available-at-delivery-address: Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.
+    save-delivery-time: Szállítás időpont mentése
+
+    payment: Payment
+    instructions-for-bank-transfer: Instructions for bank transfer
+    payment-status: Fizetés állapota
+    mark-as-paid: Jelöld meg fizetettként
+
+    history:
+        history-timeline: Timeline
+        order-id: Order ID
+        amount: Amount:
+        payment-method: Payment:
+
+    user-agent:
+        user-agent-details: Rendelés helye
+        see-more: See details
+        ip-address: IP address:
+        browser: Browser
+        platform: Platform (OS)
+        user-agent: User agent
+        browser-language: Browser language
+
+    customer:
+        customer: Customer
+        view-profile: View profile
+        email: Email
+        count-orders: '{{ count }} orders'
+        account-created-at: Registered at
+        no-account:
+        last-order: Last order
+    filter:
+        filters: Filter orders
+        more-filters: More filtering
+        filter-by-date: Filter by date
+        search: Search
+        search-button: Search
+        search-placeholder: Search...
+        search-result: 'Search:'
+        filter-by-order-status: Order status
+        choose-order-status: Order status
+        filter-by-payment-status: Payment status
+        choose-payment-status: Payment status
+
+
+dashboard:
+    dashboard: Dashboard
+    settings: Settings
+    welcome-message: Welcome to Stulipan admin and work with great care!
+    orders: Orders
+    customers: Customers
+    products: Products
+    sales-last-day: Sales in the last 24 hours
+    sales-last-week: Sales in the 7 days week
+    sales-last-month: Sales in the last 30 days
+    details: Details
+    view-more: View more
+    order-count: '{{ count }} order'
+    orders-count: '{{ count }} orders'
+    to-capture-payment: awaiting payment
+    to-fulfill: awaiting to be fulfilled
+    setup-your-store-general-settings: 'Set up your online store: name and contact details for your online store, business information, SEO, social media links, other settings.'
+    edit-general-settings: Edit general settings
+    your-store-and-company-details: Store and company details
+    edit-store-details: Edit store details
+
+settings:
+    settings: Settings
+    dashboard:
+        general-settings-title: General settings
+        general-settings-description: View and update your store details
+        translation-title: Store languages
+        translation-description: Manage the languages your customers can view on your store
+    translation:
+        translation-title: Translation
+        translation-is-missing: '{{ count }} translation is missing.'
+        translations-are-missing: '{{ count }} translations are missing.'
+        interface: Interface:
+        store-texts: Online store
+        admin-texts: Admin
+    general-settings:
+        store-name: Store name
+        store-url: Store URL
+        customer-support: Customer support
+        business-name: Business name
+        business-address: Business address
+
+customer:
+    customer: Customer
+    customers: Customers
+    new-customer: Add customer
+    all-customers: All customers
+    search: Search
+    search-button: Search
+    search-placeholder: Search...
+    search-result: 'Search:'
+    choose-status: Status...
+    filter:
+        all-customers: All customers
+        active-customers: Active
+        custom-filter: Custom filter
+        not-found: No customers found
+        not-found-suggestion: Try changing the filters or search term
+    send-account-invite: Send account invite
+    previous-orders: Previous orders
+    view-profile: View profile
+    orders: Orders
+    spent-total: Spent total
+    average-cart-value: Average cart value
+    order-count: '{{ count }} order'
+    orders-count: '{{ count }} orders'
+
+generic:
+    not-available: n/a
+    prev: Previous
+    next: Next
+    edit: Edit
+    modify: Modify
+    preview: Preview
+    save: Save
+    save-changes: Save changes
+    cancel: Cancel
+    close: Close
+    more-actions: More actions
+    ok: OK
+    apply: Apply
+    delete: Delete
+    search-button: Search
+    search-title: Search
+    search-placeholder: Search...
+

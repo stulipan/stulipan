@@ -59,6 +59,7 @@ select.form-control {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  padding: $input-padding-y $input-select-padding-x;
 
   &:focus::-ms-value {
     // Suppress the nested default white text on blue background highlight given to

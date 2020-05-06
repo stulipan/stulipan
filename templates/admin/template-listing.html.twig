@@ -45,17 +45,19 @@
                         {% block contentFilter %}
                         {% endblock %}
                         {% block contentInner %}
-                            <div class="table-responsive mb-3">
-                                <table class="table table-hover mb-0">
-                                    <thead class="thead-light">
-                                        {% block tableHeader %}
-                                        {% endblock %}
-                                    </thead>
-                                    <tbody>
-                                        {% block tableBody %}
-                                        {% endblock %}
-                                    </tbody>
-                                </table>
+                            <div class="no-margins">
+                                <div class="table-responsive mb-3">
+                                    <table class="table table-hover mb-0">
+                                        <thead class="thead-light">
+                                            {% block tableHeader %}
+                                            {% endblock %}
+                                        </thead>
+                                        <tbody>
+                                            {% block tableBody %}
+                                            {% endblock %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             {% block tableEmpty %}
                             {% endblock %}

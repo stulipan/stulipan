@@ -391,7 +391,8 @@
 }
 
 .daterangepicker .left .calendar-table table thead tr:first-of-type th:first-of-type:not(.prev) {
-    display: none;
+    /*display: none;*/
+    cursor: auto;
 }
 
 .daterangepicker .calendar-table table tbody td {
@@ -431,6 +432,7 @@
 .daterangepicker .calendar-table table thead tr th.month {
     width: auto;
     font-weight: bold;
+    cursor: auto;
 }
 
 .daterangepicker td.disabled, .daterangepicker option.disabled {

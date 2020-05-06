@@ -114,6 +114,6 @@ parameters:
             content: 1
             type: ProductCategory
         product-variant-view:
-            content: dropdown
+            content: variant-picker
             type: Text
             choices: { Dropdown: dropdown, 'Variant picker': variant-picker }

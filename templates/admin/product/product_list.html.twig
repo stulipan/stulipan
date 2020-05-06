@@ -180,7 +180,7 @@
 {% block tableHeader %}
 	{% if products is defined and products is not empty %}
 		<tr>
-			<th scope="col" class="text-center">Kép</th>
+			<th scope="col" class="">Kép</th>
 			<th scope="col">Terméknév</th>
 			<th scope="col">Ár</th>
 			<th scope="col">Készlet</th>
@@ -194,9 +194,9 @@
 	{% if products is defined and products is not empty %}
 		{% for product in products %}
 			<tr {% if product.isRemoved == true %}class="disabled"{% endif %}>
-				<td class="align-middle text-center">
+				<td class="align-middle">
 					{% if product.coverImage is defined and product.coverImage %}
-						<a class="d-block btn-link-secondary text-lg mt-1" href="#" data-toggle="modal" data-target="#modal--productImages-{{ loop.index }}">
+						<a class="d-block btn-link-secondary text-lg mt-1 p-0" href="#" data-toggle="modal" data-target="#modal--productImages-{{ loop.index }}">
 {#						<a href="{{ uploaded_asset(product.coverImage) }}" target="_blank">#}
 {#							#}{#<img class="img-thumbnail" src="{{ asset('/uploads/images/termekek/' ~ category.image) }}" style="max-height: 50px; width: 250px;" />#}
 							<img class="img-thumbnail" src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_thumbnail') }}" style="width: 50px; width: 50px;" />

@@ -86,7 +86,6 @@
 		{% for customer in customers %}
 			<tr>
 				<td class="align-middle text-left py-4X">
-
 						{% if customer.fullname is defined and customer.fullname is not null %}
 						<a href="{{ path('customer-show', {'id': customer.id}) }}" class="btn-link-darkX">
 							{{ customer.fullname }}

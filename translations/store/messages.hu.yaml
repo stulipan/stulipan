@@ -1,3 +1,131 @@
+navbar:
+    search: Keresés
+    login: Bejelentkezés
+    my-account: Fiókom
+    cart: Kosár
+registration:
+    login-title: Bejelentkezés
+    login-button: Bejelentkezek
+    create-account: 'Új fiók'
+    create-account-title: 'Fiók létrehozása'
+    register-button: Regisztrálok
+    email-address: 'Email cím'
+    password: Jelszó
+    confirm-password: 'Jelszó újra'
+    firstname: Keresztnév
+    lastname: Vezetéknév
+    remember-me: 'Maradjak bejelentkezve'
+    newsletter-sign-up: 'Feliratkozom a hírlevélre, hogy elsőként értesüljek az akciókról, újdonságokról.'
+    accept-terms-and-conditions: 'Kijelentem, hogy az Általános Szerződési Feltételeket és az Adatvédelmi nyilatkozatot megismertem és elfogadom, az abban szereplő adatkezelésekhez hozzájárulok.'
+account:
+    my-account: 'Saját fiókom'
+    logout: Kijelentkezés
+    my-orders: Rendeléseim
+    welcome: 'Helló, {{ user }}'
+    account-information: Adataim
+    change-password: 'Jelszó módosítás'
+    last-orders: 'Utolsó rendeléseid'
+cart:
+    cart-content: 'Kosár tartalma'
+    continue-to-checkout: Fizetés
+    edit-cart-content: 'Kosár módosítása'
+    your-cart: 'A kosarad'
+    your-cart-is-empty: 'A kosarad jelenleg üres'
+    but-not-for-long: '...de nem sokáig! Válogass a több mint 100 gyönyörű <a href="{{ link }}">csokor és virágdoboz</a> közül.'
+    quantity: Mennyiség
+    pieces: db
+    remove-item: Eltávolítás
+    shipping-fee-calculated: 'A szállítási díj a megadott adataid szerint került kiszámításra.'
+    shipping-fee: 'Szállítási díj'
+    discount: Kedvezmény
+    total: Összesen
+    subtotal: Részösszeg
+    total-amount-to-pay: Fizentendő
+    total-amount-paid: Összesen
+    show-order-summary: 'Rendelés összesítés megtekintése'
+    gift:
+        choose-gift-title: 'A virág mellé válassz ajándékot'
+        choose-gift: Kiválaszt
+        gift-added-successfully: 'Az ajándékot sikeresen hozzáadtad a kosárhoz!'
+    not-enough-stock: 'Nincs elegendő készlet.'
+    greeting-card:
+        send-message-title: 'Üzenet a címzettnek'
+        free-card-good-to-know: 'Jó tudni!'
+        free-card-info: 'A virág mellé INGYEN igényelhetsz egy üdvözlőkártyát a saját üzeneteddel.'
+        write-your-message: 'Ide írd az üzenetet'
+        enter-greeting-author: 'Kinek a részéről (neved)'
+        error-missing-greeting-message: 'Az üzenet lemaradt...'
+        error-missing-greeting-author: 'Nem írtad alá az üzenetet.'
+checkout:
+    recipient-page-title: 'A címzet adatai'
+    shipping-method-page-title: Szállítás
+    payment-method-page-title: Fizetés
+    cart-progress-bar: Kosár
+    recipient-progress-bar: Címzet
+    shipping-progress-bar: Szállítás
+    payment-progress-bar: Fizetés
+    already-registered: 'Jártál már nálunk? Ha már van fiókod, <a href="{{ link }}" class="">itt tudsz bejelentkezni.</a>'
+    recipient:
+        recipient-title: 'Kinek küldöd?'
+        recipient-description: 'A sikeres kézbesítéshez add meg a címzett személy nevét, címét, telefonszámát.'
+        new-recipient: 'Új címzett hozáadása'
+        previously-saved-recipients: 'Előzőleg megadott címzettek'
+        previously-saved-recipients-modal-title: 'Előzőleg megadott címzettek'
+        previously-saved-recipients-modal-description: 'Előzőleg megadott címzettek'
+        select-recipient: 'Szállítás erre a címre'
+        firstname: Keresztnév
+        lastname: Vezetéknév
+        address: Címe
+        address-placeholder: 'Cím: Utca, házszám, emelet, ajtó...'
+        city: Város
+        city-placeholder: 'Város, település'
+        province: Megye
+        zip: Irányítószám
+        country: Ország
+        phone: Telefonszám
+        phone-placeholder: 'Telefonszám, pl: +36... vagy 06...'
+        missing-firstname: 'Add meg a keresztnevet!'
+        missing-lastname: 'Add meg a vezetéknevet!'
+        missing-address: 'Add meg a címet.'
+        missing-city: 'Add meg a települést.'
+        missing-province: 'Add meg a megyét.'
+        missing-zip: 'Add meg az irányítószámot.'
+        invalid-zip: 'Hibás irányítószám.'
+        missing-country: 'Válasszd ki az országot.'
+        missing-phone: 'Add meg a telefonszámot.'
+        invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
+    customer:
+        customer-information-title: 'Aki küldi'
+        customer-information-description: 'Email címeden és telefonszámodon fogunk értesíteni a rendelés teljesítéséről.'
+        firstname: Keresztnév
+        lastname: Vezetéknév
+        email-address: 'Email címed'
+        phone: Telefonszámod
+        phone-placeholder: 'Telefonszámod, pl: +36... vagy 06...'
+        missing-email-address: 'Add meg az email címedet!'
+        invalid-email-address: 'Ellenőrizd, hogy helyesen írtad be az email címet!'
+        missing-firstname: 'Add meg a keresztnevedet!'
+        missing-lastname: 'Add meg a nevedet!'
+        missing-phone: 'Add meg a telefonszámot.'
+        invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
+        newsletter-optin: 'Pipáld be és értesíteni fogunk akcióinkról. Kizárólag vásárlóink részére!'
+    continue-to-shipping-address-button: 'Tovább a szállítási címhez'
+    continue-to-recipient-address-button: 'Tovább a címzett megadásához'
+    continue-to-shipping-method-button: 'Tovább a szállítási módhoz'
+    continue-to-payment-method-button: 'Tovább a címzett megadásához'
+    back-to-cart-button: 'Vissza a kosárhoz'
+    back-to-recipient-button: 'Vissza a címzett megadásához'
+    back-to-shipping-address-button: 'Vissza a szállítási címhez'
+    back-to-shipping-method-button: 'Vissza a szállítási módhoz'
+    phone-number-tooltip: 'A telefonszámot így írd be: +36... vagy 06... és ne használj szóközt illetve egyéb karaktereket.'
+    missing-recipient-information: 'Töltsd ki a hiányzó mezőket.'
+    missing-sender-information: 'Töltsd ki a hiányzó mezőket.'
+    missing-customer-information: 'Töltsd ki a hiányzó mezőket.'
+    missing-delivery-date: 'Válassz egy szállítási napot.'
+    missing-shipping-method: 'Válassz szállítási módot!'
+    missing-payment-method: 'Válassz fizetési módot!'
+    unknown-error: 'Ismeretlen hiba.'
+    ajax-failed: 'Hiba történt. kérjük frissítsd az oldalt és próbáld újra.'
 datetime:
     january: Január
     february: Február
@@ -62,13 +190,13 @@ datetime:
         year: éve
         years: éve
         and: és
-        prefix: null
-        postfix: null
+        prefix: ''
+        postfix: ''
 currency:
     short: Ft
     code: HUF
 generic:
-    not-available: 'nincs @````~""'''''
+    not-available: nincs
     prev: Előző
     next: Kővetkező
     save: Mentés
@@ -76,60 +204,7 @@ generic:
     cancel: Mégse
     edit: Szerkesztés
     modify: Módosít
+    remove: Törlés
+    delete: Törlés
     close: Bezár
-admin:
-    datetime:
-        january: Január
-        february: Február
-        march: Március
-        april: Április
-        mayy: Május
-        june: Június
-        july: Július
-        august: Augusztus
-        september: Szeptember
-        october: Október
-        november: November
-        december: December
-        jan: Jan
-        feb: Feb
-        mar: Már
-        apr: Ápr
-        may: Máj
-        jun: Jún
-        jul: Júl
-        aug: Aug
-        sep: Szep
-        oct: Okt
-        nov: Nov
-        dec: Dec
-        monday: Hétfő
-        tuesday: Kedd
-        wednesday: Szerda
-        thursday: Csütörtök
-        friday: Péntek
-        saturday: Szombat
-        sunday: Vasárnap
-        mon: Hé
-        tue: Ke
-        wed: Sze
-        thu: Csü
-        fri: Pé
-        sat: Szo
-        sun: Va
-        timeAgo:
-            second: másodperce
-            seconds: másodperce
-            minute: perce
-            minutes: perce
-            hour: órája
-            hours: órája
-            day: napja
-            days: napja
-            month: hónapja
-            months: hónapja
-            year: éve
-            years: éve
-            and: és
-            prefix: null
-            postfix: null
+    home: Főoldal

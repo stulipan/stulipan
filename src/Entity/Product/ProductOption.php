@@ -257,7 +257,7 @@ class ProductOption implements JsonSerializable
     {
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('option', $option))
-            ->andWhere(Criteria::expr()->eq('value', $optionValue))
+            ->andWhere(Criteria::expr()->eq('optionValue', $optionValue))
 //            ->orderBy(['position' => Criteria::ASC])
         ;
         return $this->selectedOptions->matching($criteria)->first();

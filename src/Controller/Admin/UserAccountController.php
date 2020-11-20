@@ -2,8 +2,8 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Payment;
-use App\Entity\Shipping;
+use App\Entity\PaymentMethod;
+use App\Entity\ShippingMethod;
 use App\Entity\User;
 use App\Form\ShippingFormType;
 use Symfony\Component\Routing\Annotation\Route;

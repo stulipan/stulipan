@@ -1,5 +1,6 @@
 {% extends 'admin/template-with-sidebar.html.twig' %}
 
+{% set activeMenu = 'orders' %}
 {% set pageTitle = user.fullname %}
 {% set breadcrumb = {
     0: {
@@ -26,6 +27,9 @@
     <div class="mt-2">
         <a class="btn-link-secondary mr-3" href="#"><i class="far fa-envelope"></i>{{ 'customer.send-account-invite'|trans }}</a>
     </div>
+{% endblock %}
+
+{% block beforeContent %}
 {% endblock %}
 
 {% block content %}
@@ -70,7 +74,7 @@
                         <th>Címzett</th>
                         <th>Termékek</th>
                         <th>Összesen</th>
-                        <th>Állapot</th>
+{#                        <th>Állapot</th>#}
                     </tr>
                     </thead>
                     <tbody>
@@ -80,7 +84,7 @@
                                 <td><a href="{{ path('order-detail', {'id': order.id}) }}" class="font-weight-boldX">#{{ order.number|number_format(0, '', '') }}</a></td>
                                 <td class="text-nowrap">{{ order.createdAt|date('Y-m-d')}}</td>
 
-                                <td class="text-nowrap">{{ order.shippingName ? order.shippingName : '' }}</td>
+                                <td class="text-nowrap">{{ order.shippingFullname ? order.shippingFullname : '' }}</td>
                                 <td>
                                     {% for item in order.items %}
                                         <a class="mr-1" href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
@@ -88,8 +92,11 @@
                                         </a>
                                     {% endfor %}
                                 </td>
-                                <td class="text-nowrap text-right">{{ order.summary.totalAmountToPay|number_format(0, ',', '.') }} Ft</td>
-                                <td><span class="badge badge-sm badge-{{ order.status.css }}">{{ order.status }}</span></td>
+                                <td class="text-nowrap text-right">
+                                    <div>{{ order.summary.totalAmountToPay|money }}</div>
+                                    <div class="badge badge-sm badge-{{ order.status.css }}">{{ order.status }}</div>
+                                </td>
+{#                                <td><span class="badge badge-sm badge-{{ order.status.css }}">{{ order.status }}</span></td>#}
                             </tr>
                         {% endfor %}
                     {% endif %}

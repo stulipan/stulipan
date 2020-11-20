@@ -12,8 +12,8 @@ use App\Entity\TimestampableTrait;
 use App\Entity\User;
 use App\Entity\Recipient;
 use App\Entity\Sender;
-use App\Entity\Payment;
-use App\Entity\Shipping;
+use App\Entity\PaymentMethod;
+use App\Entity\ShippingMethod;
 use App\Entity\Discount;
 
 use App\Model\Summary;
@@ -170,28 +170,28 @@ class Order
     private $items;
 
     /**
-     * @var Shipping|null
+     * @var ShippingMethod|null
      * @Groups({"orderView", "orderList"})
      *
      * ==== Many Orders have one Shipping => Egy rendeléshez egy Szállítás tartozik ====
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Shipping")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ShippingMethod")
      * @ORM\JoinColumn(name="shipping_id", referencedColumnName="id", nullable=true)
      * @Assert\NotBlank(message="Válassz szállítási módot!")
      */
-    private $shipping;
+    private $shippingMethod;
 
     /**
-     * @var Payment|null
+     * @var PaymentMethod|null
      * @Groups({"orderView", "orderList"})
      *
      * ==== Many Orders have one Payment => Egy rendeléshez egy Fizetés tartozik ====
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Payment")
+     * @ORM\ManyToOne(targetEntity="App\Entity\PaymentMethod")
      * @ORM\JoinColumn(name="payment_id", referencedColumnName="id", nullable=true)
      * @Assert\NotBlank(message="Válassz fizetési módot!")
      */
-    private $payment;
+    private $paymentMethod;
 
 
     /**
@@ -227,15 +227,24 @@ class Order
      * @ORM\Column(name="delivery_fee", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
      */
     private $deliveryFee = 0;
-    
+
     /**
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="shipping_name", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="Add meg a címzett nevét.")
+     * @ORM\Column(name="shipping_firstname", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a keresztnevet.")
      */
-    private $shippingName;
+    private $shippingFirstname;
+
+    /**
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="shipping_lastname", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a vezetéknevet.")
+     */
+    private $shippingLastname;
 
     /**
      * @var int|null
@@ -263,10 +272,19 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="billing_name", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="Add meg a címzett nevét.")
+     * @ORM\Column(name="billing_firstname", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a keresztnevet.")
      */
-    private $billingName;
+    private $billingFirstname;
+
+    /**
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="billing_lastname", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a vezetéknevet.")
+     */
+    private $billingLastname;
 
     /**
      * @var string|null
@@ -286,7 +304,7 @@ class Order
     private $billingPhone;
 
     /**
-     * @var float|null
+     * @var string|null
      *
      * @ORM\Column(name="billing_vat_number", type="string", length=255, nullable=true)
      */
@@ -336,6 +354,20 @@ class Order
     private $clientDetails;
 
     /**
+     * @var Transaction[]|ArrayCollection|null;
+     * @Groups({"orderView"})
+     *
+     * ==== One Order has several Transactions ====
+     * ==== mappedBy="order" => a Transaction entitásban definiált 'order' attribútumról van szó ====
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="order", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="order_id", nullable=true)
+     * @ORM\OrderBy({"createdAt"="ASC", "id"="ASC"})
+     * @Assert\NotBlank(message="Egy rendelésnek több tranzakciója lehet.")
+     */
+    private $transactions;
+
+    /**
      * @var OrderLog[]|ArrayCollection|null
      * @Groups({"orderView"})
      *
@@ -353,6 +385,7 @@ class Order
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
         $this->logs = new ArrayCollection();
     }
 
@@ -551,6 +584,15 @@ class Order
         $fullname = $this->firstname.' '.$this->lastname;
         return ucwords($fullname);
     }
+
+    /**
+     * @return null|string
+     */
+    public function getInitials(): ?string
+    {
+        $fullnameInitial = $this->firstname[0].$this->lastname[0];
+        return ucwords($fullnameInitial);
+    }
     
     
     /**
@@ -583,6 +625,14 @@ class Order
     public function setRecipient(?Recipient $recipient): void
     {
         $this->recipient = $recipient;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasRecipient(): bool
+    {
+        return null === $this->getRecipient() ? false : true;
     }
 
     /**
@@ -634,35 +684,43 @@ class Order
     }
 
     /**
-     * @return Payment|null
+     * @return bool
      */
-    public function getPayment(): ?Payment
+    public function hasSender(): bool
     {
-        return $this->payment;
+        return null === $this->getSender() ? false : true;
     }
 
     /**
-     * @ param Payment $payment
+     * @return PaymentMethod|null
      */
-    public function setPayment(?Payment $payment): void
+    public function getPaymentMethod(): ?PaymentMethod
     {
-        $this->payment = $payment;
+        return $this->paymentMethod;
     }
 
     /**
-     * @return Shipping|null
+     * @param PaymentMethod|null $paymentMethod
      */
-    public function getShipping(): ?Shipping
+    public function setPaymentMethod(?PaymentMethod $paymentMethod): void
     {
-        return $this->shipping;
+        $this->paymentMethod = $paymentMethod;
     }
 
     /**
-     * @param Shipping $shipping
+     * @return ShippingMethod|null
      */
-    public function setShipping(?Shipping $shipping): void
+    public function getShippingMethod(): ?ShippingMethod
     {
-        $this->shipping = $shipping;
+        return $this->shippingMethod;
+    }
+
+    /**
+     * @param ShippingMethod $shippingMethod
+     */
+    public function setShippingMethod(?ShippingMethod $shippingMethod): void
+    {
+        $this->shippingMethod = $shippingMethod;
     }
 
     /**
@@ -749,21 +807,47 @@ class Order
 //        return $this->itemsTotal;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getShippingFirstname(): ?string
+    {
+        return $this->shippingFirstname;
+    }
+
+    /**
+     * @var null|string $name
+     */
+    public function setShippingFirstname(?string $name): void
+    {
+        $this->shippingFirstname = $name ? ucwords($name) : $name;
+    }
 
     /**
      * @return string|null
      */
-    public function getShippingName(): ?string
+    public function getShippingLastname(): ?string
     {
-        return $this->shippingName;
+        return $this->shippingLastname;
     }
 
     /**
-     * @var string $name
+     * @var null|string $name
      */
-    public function setShippingName(?string $name): void
+    public function setShippingLastname(?string $name): void
     {
-        $this->shippingName = ucwords($name);
+        $this->shippingLastname = $name ? ucwords($name) : $name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getShippingFullname(): ?string
+    {
+        if ($this->shippingLastname && $this->shippingFirstname) {
+            return $this->shippingLastname.' '.$this->shippingFirstname;
+        }
+        return null;
     }
 
     /**
@@ -775,7 +859,7 @@ class Order
     }
 
     /**
-     * @var string $phone
+     * @var null|string $phone
      */
     public function setShippingPhone(?string $phone)
     {
@@ -801,17 +885,44 @@ class Order
     /**
      * @return string|null
      */
-    public function getBillingName(): ?string
+    public function getBillingFirstname(): ?string
     {
-        return $this->billingName;
+        return $this->billingFirstname;
     }
 
     /**
-     * @var string $name
+     * @var null|string $name
      */
-    public function setBillingName(?string $name): void
+    public function setBillingFirstname(?string $name): void
     {
-        $this->billingName = ucwords($name);
+        $this->billingFirstname = ucwords($name);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBillingLastname(): ?string
+    {
+        return $this->billingLastname;
+    }
+
+    /**
+     * @var null|string $name
+     */
+    public function setBillingLastname(?string $name): void
+    {
+        $this->billingLastname = ucwords($name);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBillingFullname(): ?string
+    {
+        if ($this->billingLastname && $this->billingFirstname) {
+            return $this->billingLastname.' '.$this->billingFirstname;
+        }
+        return null;
     }
 
     /**
@@ -823,7 +934,7 @@ class Order
     }
 
     /**
-     * @var string $company
+     * @var null|string $company
      */
     public function setBillingCompany(?string $company): void
     {
@@ -831,17 +942,17 @@ class Order
     }
 
     /**
-     * @return float|null
+     * @return string|null
      */
-    public function getBillingVatNumber(): ?float
+    public function getBillingVatNumber(): ?string
     {
-        return (float) $this->billingVatNumber;
+        return $this->billingVatNumber;
     }
 
     /**
-     * @var float $vat
+     * @var string|null $vat
      */
-    public function setBillingVatNumber(?float $vat): void
+    public function setBillingVatNumber(?string $vat): void
     {
         $this->billingVatNumber = $vat;
     }
@@ -913,7 +1024,7 @@ class Order
     /**
      * @return ClientDetails
      */
-    public function getClientDetails(): ClientDetails
+    public function getClientDetails(): ?ClientDetails
     {
         return $this->clientDetails;
     }
@@ -969,17 +1080,17 @@ class Order
      */
     public function isDeliveryDateInPast(): bool
     {
-        $date = $this->getDeliveryDate();
+        $date = clone $this->getDeliveryDate();
 //        dd((new \DateTime('now +'. GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours')));
 //        dd((new \DateTime('now +4 hours'))->diff($date)->format('%r%h'));
 //        dd((new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day')));
-        
         if ($date) {
             /** A '+1 day' azert kell mert az adott datum 00:00 orajat veszi.
              * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
              * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
              */
-            $diff = (new DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
+//            $diff = (new DateTime('today +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+0 day'));
+            $diff = (new DateTime('today'))->diff($date->modify('+0 day'));
             if ($diff->days >= 0 && $diff->invert == 0) {
                 return false;
             } elseif ($diff->invert == 1) {
@@ -987,6 +1098,28 @@ class Order
             }
         }
         return true;
+    }
+
+    public function getDeliveryOverdueDays(): ?int
+    {
+        $date = clone $this->getDeliveryDate();
+        /** DeliveryOverdueDays are calculated only for 'Open' and 'Paid' orders */
+        if (!$this->isClosed() && $this->isPaid()) {
+            if ($date) {
+                /** A '+1 day' azert kell mert az adott datum 00:00 orajat veszi.
+                 * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
+                 * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
+                 */
+//            $diff = (new DateTime('today +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+0 day'));
+                $diff = (new DateTime('today'))->diff($date->modify('+0 day'));
+                if ($diff->days >= 0 && $diff->invert == 0) {
+                    return $diff->days;
+                } elseif ($diff->invert == 1) {
+                    return -$diff->days;
+                }
+            }
+        }
+        return null;
     }
 
     public function isDeliveryOverdue(): bool
@@ -1041,9 +1174,17 @@ class Order
         }
     }
 
+    public function isPaid(): bool
+    {
+        if ($this->getPaymentStatus()->getShortcode() === PaymentStatus::STATUS_PAID) {
+            return true;
+        }
+        return false;
+    }
+
     public function isBankTransfer(): bool
     {
-        if ($this->getPayment() && $this->getPayment()->isBankTransfer()) {
+        if ($this->getPaymentMethod() && $this->getPaymentMethod()->isBankTransfer()) {
             return true;
         } else {
             return false;
@@ -1059,4 +1200,40 @@ class Order
         }
         return false;
     }
+
+    /**
+     * @return Transaction[]|Collection|null
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * @param Transaction $transaction
+     */
+    public function addTransaction(Transaction $transaction): void
+    {
+        if (!$this->transactions->contains($transaction)) {
+            $transaction->setOrder($this);
+            $this->transactions->add($transaction);
+        }
+    }
+
+    /**
+     * @param Transaction $transaction
+     */
+    public function removeTransaction(Transaction $transaction): void
+    {
+        $this->transactions->removeElement($transaction);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTransactions(): bool
+    {
+        return !$this->transactions->isEmpty();
+    }
+
 }

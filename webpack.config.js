@@ -17,14 +17,23 @@ Encore
     .addEntry('v-admin', './assets/vue/admin/v-admin.js')
     .addEntry('ProductEdit', './assets/vue/admin/product/ProductEdit.js')
     .addEntry('CmsImageUpload', './assets/vue/admin/_components/CmsImageUpload.js')
+    .addEntry('SmartLabelEdit', './assets/vue/admin/smart-label/SmartLabelEdit.js')
 
 
     .addEntry('v-shop', './assets/vue/shop/v-shop.js')
+    .addEntry('sidebar', './assets/js/sidebar.js')
+    .addEntry('loading-overlay', './assets/js/loading-overlay.js')
+    .addEntry('floating-input', './assets/js/floating-input.js')
 
-    // .addStyleEntry('v-bootstrap', './assets/css/bootstrap/bootstrap.scss')
+    .addEntry('checkout', './assets/js/checkout.js')
+    .addEntry('webshop', './assets/js/webshop.js')
 
-    .addEntry('v-boostrap-js', './assets/js/sidebar.js')
-    .addStyleEntry('v-bootstrap', './assets/css/admin-theme.scss')
+    .addStyleEntry('daterangepicker', './assets/css/admin/daterangepicker.scss')
+
+    .addStyleEntry('admin-theme', './assets/css/admin/admin-theme.scss')
+    .addStyleEntry('store-theme', './assets/css/store/store-theme.scss')
+
+
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
 

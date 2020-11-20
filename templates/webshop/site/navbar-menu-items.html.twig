@@ -1,9 +1,7 @@
-
-    <li class="nav-item"><a href="/" class="nav-link pl-0X">Home</a>
+    <li class="nav-item"><a href="/" class="nav-link">Home</a>
     </li>
-    <li class="nav-item"><a href="{{ path('site-product-listall') }}" class="nav-link active">Virágok</a>
+    <li class="nav-item"><a href="{{ path('site-product-listall') }}" class="nav-link">Virágok</a>
     </li>
-    <!-- Megamenu-->
     <li class="nav-item dropdown position-static"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Template</a>
         <div class="dropdown-menu megamenu py-lg-0">
             <div class="row">
@@ -139,21 +137,14 @@
             </div>
         </div>
     </li>
-    <!-- /Megamenu end-->
-    <!-- Multi level dropdown    -->
-    <li class="nav-item dropdown">
+    <div class="nav-item dropdown">
         <a id="navbarDropdownMenuLink" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle nav-link">Webshop</a>
-        <ul aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-left mt-0">
-{#            <div class="p-2">#}
-{#                <div class="dropdown">#}
+        <div aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-left mt-0">
 
                     {{ render(controller('App\\Controller\\Shop\\CartUtilsController::listProductCategoriesInMenu')) }}
 
-{#                </div>#}
-{#            </div>#}
-        </ul>
-    </li>
-    <!-- Multi level dropdown end-->
+        </div>
+    </div>
     <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a>
     </li>
     <li class="nav-item"><a href="{{ path('about') }}" class="nav-link ">Rólunk</a>

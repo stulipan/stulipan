@@ -1,28 +1,26 @@
 {% extends 'webshop/site/template-account.html.twig' %}
 
-{% set pageTitle = 'Rendeléseim' %}
+{% set pageTitle = 'account.my-orders'|trans %}
 {% set breadcrumb = {
     0: {
         'url': path('homepage'),
-        'text': 'Home',
+        'text': 'generic.home'|trans,
     },
     1: {
         'url': path('site-user-myAccount'),
-        'text': 'Fiókom',
+        'text': 'account.my-account'|trans
     },
     2: {
         'url': path('site-user-myOrders'),
-        'text': 'Rendeléseim',
+        'text': 'account.my-orders'|trans,
     },
 } %}
 
 {% block content %}
     <div class="card mb-20px">
-        <div class="card-wrapper">
-            <div class="card-header">
-                <span class="h4 myaccount-card-title">Előző rendeléseid</span>
-            </div>
+        <div class="">
             <div class="card-body">
+                <div class="card-title h3">Előző rendeléseid</div>
                 <div class="list-group">
                     {% if orders is defined and orders is not empty %}
                         {% for order in orders %}
@@ -30,7 +28,7 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-                <div class="pagerfanta">
+                <div class="pagerfanta mt-3">
                     {% if paginator is defined and paginator is not empty %}
                         {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
                     {% endif %}

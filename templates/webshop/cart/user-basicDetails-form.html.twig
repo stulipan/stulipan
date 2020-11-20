@@ -1,41 +1,75 @@
-            {#{{ form_start(customerForm) }}#}
+{% import _self as myOwnMacro %}
+
+{% macro firstname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.firstname.vars.value is defined and item.firstname.vars.value %}active{% endif %}">
+        <label for="{{ item.firstname.vars.full_name }}" class="form-label">{{ 'checkout.customer.firstname'|trans }}</label>
+        {{ form_widget(item.firstname, {'attr': {'class': '', 'placeholder': 'checkout.customer.firstname'|trans}}) }}
+        {{ form_errors(item.firstname) }}
+    </div>
+{% endmacro %}
+
+{% macro lastname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.lastname.vars.value is defined and item.lastname.vars.value %}active{% endif %}">
+        <label for="{{ item.lastname.vars.full_name }}" class="form-label">{{ 'checkout.customer.lastname'|trans }}</label>
+        {{ form_widget(item.lastname, {'attr': {'class': '', 'placeholder': 'checkout.customer.lastname'|trans}}) }}
+        {{ form_errors(item.lastname) }}
+    </div>
+{% endmacro %}
+
+
+            {{ form_start(customerForm, { 'attr': {'class': '',
+                'data-wrapper-customer-form': '',
+            }}) }}
                     <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label for="{{ customerForm.email.vars.full_name }}" class="form-label">{{ customerForm.email.vars.label }}
-                            </label>
-                            {{ form_widget(customerForm.email, {'attr': {'class': ''}}) }}
+                        <div class="form-group input-float col-sm-12 {% if customerForm.email.vars.value is defined and customerForm.email.vars.value is not empty %}active{% endif %}">
+                            <label for="{{ customerForm.email.vars.full_name }}" class="form-label">{{ 'checkout.customer.email-address'|trans }}</label>
+                            {{ form_widget(customerForm.email, {'attr': {'placeholder': 'checkout.customer.email-address'|trans}}) }}
                             {{ form_errors(customerForm.email) }}
                         </div>
-                        <div class="form-group col-sm-6">
-                            <label for="{{ customerForm.phone.vars.full_name }}" class="form-label">{{ customerForm.phone.vars.label }}</label>
-                            {{ form_widget(customerForm.phone, {'attr': {'class': 'form-controlX'}}) }}
+                        <div class="form-group input-float input-float-block-spaces col-sm-12 {% if customerForm.phone.vars.value is defined and customerForm.phone.vars.value is not empty %}active{% endif %}">
+                            <div class="field-item field-append">
+                                <div class="field-addon-append">
+                                    <div class="btn" data-toggle="tooltip" data-placement="top" title="{{ 'checkout.phone-number-tooltip'|trans }}">
+                                        <i class="fas fa-question-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <label for="{{ customerForm.phone.vars.full_name }}" class="form-label">{{ 'checkout.customer.phone'|trans }}</label>
+                            {{ form_widget(customerForm.phone, {'attr': {'placeholder': 'checkout.customer.phone-placeholder'|trans }}) }}
                             {{ form_errors(customerForm.phone) }}
+
                         </div>
-                        <div class="form-group col-sm-6">
-                            <label for="{{ customerForm.lastname.vars.full_name }}" class="form-label">{{ customerForm.lastname.vars.label }}
-                            </label>
-                            {{ form_widget(customerForm.lastname, {'attr': {'class': ''}}) }}
-                            {{ form_errors(customerForm.lastname) }}
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="{{ customerForm.firstname.vars.full_name }}" class="form-label">{{ customerForm.firstname.vars.label }}
-                            </label>
-                            {{ form_widget(customerForm.firstname, {'attr': {'class': ''}}) }}
-                            {{ form_errors(customerForm.firstname) }}
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <div class="custom-control custom-checkbox mb-2 text-sm text-muted">
+                        {% if app.request.locale == 'hu' %}
+                            {{ myOwnMacro.lastname(customerForm) }}
+                            {{ myOwnMacro.firstname(customerForm) }}
+                        {% endif %}
+                        {% if app.request.locale == 'en' %}
+                            {{ myOwnMacro.firstname(customerForm) }}
+                            {{ myOwnMacro.lastname(customerForm) }}
+                        {% endif %}
+
+{#                        <div class="form-group input-float col-sm-6 {% if customerForm.lastname.vars.value is defined and customerForm.lastname.vars.value is not empty %}active{% endif %}">#}
+{#                            <label for="{{ customerForm.lastname.vars.full_name }}" class="form-label">Vezetéknév</label>#}
+{#                            {{ form_widget(customerForm.lastname, {'attr': {'placeholder': 'Vezetéknév'}}) }}#}
+{#                            {{ form_errors(customerForm.lastname) }}#}
+{#                        </div>#}
+{#                        <div class="form-group input-float col-sm-6 {% if customerForm.firstname.vars.value is defined and customerForm.firstname.vars.value is not empty %}active{% endif %}">#}
+{#                            <label for="{{ customerForm.firstname.vars.full_name }}" class="form-label">Keresztnév</label>#}
+{#                            {{ form_widget(customerForm.firstname, {'attr': {'placeholder': 'Keresztnév'}}) }}#}
+{#                            {{ form_errors(customerForm.firstname) }}#}
+{#                        </div>#}
+                        <div class="form-group col-lg-12 mb-0">
+                            <div class="custom-control custom-checkbox mb-2">
                                 <input id="{{ customerForm.optin.vars.id }}" type="checkbox" name="{{ customerForm.optin.vars.full_name }}" class="custom-control-input" {{ customerForm.optin.vars.checked == true ? 'checked=\"checked\"' : '' }}>
-                                <label for="{{ customerForm.optin.vars.id }}" class="custom-control-label align-middle">{{  customerForm.optin.vars.label }}</label>
+                                <label for="{{ customerForm.optin.vars.id }}" class="custom-control-label align-middle">{{ 'checkout.customer.newsletter-optin'|trans }}</label>
                                 {{ form_errors(customerForm.optin) }}
                                 {% do customerForm.optin.setRendered() %}
                             </div>
                         </div>
-                        {# Render CSRF token etc .#}
-                        {#<div style="display:none">#}
-                            {#{{ form_rest(customerForm) }}#}
-                        {#</div>#}
 
+                        <div style="display:none">
+                            {{ form_rest(customerForm) }}
+                        </div>
                     </div>
-            {#{{ form_end(customerForm) }}#}
+            {{ form_end(customerForm) }}
             {% do customerForm.setRendered() %}

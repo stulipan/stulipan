@@ -3,7 +3,7 @@
 namespace App\Controller\Shop;
 
 use App\Entity\User;
-use App\Form\UserRegistrationFormType;
+use App\Form\UserRegistration\UserRegistrationFormType;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

@@ -1,0 +1,21 @@
+// Progress bar in the Checkout pages
+
+.progress--bar {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.progress--bar-item {
+  align-items: center;
+  display: flex;
+  font-size: .875rem;
+  margin-right: .5rem;
+}
+
+.progress--bar-tick {
+  color: #008CDE;
+  margin-right: 5px;
+}

@@ -209,9 +209,7 @@ var Order = {
             $element.prop('disabled', true);
 
             let $wrapper = $element.closest('.JS--deliveryDateContainer');
-            let $form = $wrapper.find('.JS--hiddenDeliveryDateForm');
-
-            console.log($form.serialize());
+            let $form = $wrapper.find('[data-wrapper-delivery-date-form]');
 
             $.ajax({
                 url: url,
@@ -221,7 +219,7 @@ var Order = {
                     // To display the Symfony Profiler page:
                     $form.after(data);
 
-                    console.log($form.serialize());
+                    // console.log($form.serialize());
                     $form.after(jqXHR.responseText);
 
                     $wrapper.closest('.modal').modal('hide');

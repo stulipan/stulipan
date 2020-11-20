@@ -2,7 +2,7 @@
 
 namespace App\Serializer;
 
-use App\Entity\Shipping;
+use App\Entity\ShippingMethod;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -27,7 +27,7 @@ class ShippingDenormalizer implements DenormalizerInterface, DenormalizerAwareIn
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         if (isset($data['id'])) {
-            $object = $this->em->find(Shipping::class, $data['id']);
+            $object = $this->em->find(ShippingMethod::class, $data['id']);
             return $object;
         }
         return;
@@ -38,7 +38,7 @@ class ShippingDenormalizer implements DenormalizerInterface, DenormalizerAwareIn
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        if ($type != Shipping::class) {
+        if ($type != ShippingMethod::class) {
             return false;
         }
         return true;

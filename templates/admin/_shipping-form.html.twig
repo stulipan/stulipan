@@ -35,11 +35,11 @@
                         <label for="{{ form.price.vars.full_name }}" class="col-form-label">Szállítási díj</label>
                     </div>
                     <div class="col-sm-8 col-lg-6 ">
-                        <div class="input-group">
-                            {{ form_widget(form.price) }}
-                            <div class="input-group-append">
-                                <span class="input-group-text">Ft</span>
+                        <div class="field-group">
+                            <div class="field-item field-prepend">
+                                <div class="field-addon-prepend w-addon-smX">HUF</div>
                             </div>
+                            {{ form_widget(form.price) }}
                         </div>
                         {{ form_errors(form.price) }}
                     </div>
@@ -63,7 +63,7 @@
                         <label for="{{ form.enabled.vars.full_name }}" class="col-form-labelX">Engedélyezve</label>
                     </div>
                     <div class="col-sm-8 col-lg-10 ">
-                        <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="info">
+                        <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">
                         <label class="form-check-label required" for="{{ form.enabled.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
 
                         {{ form_errors(form.enabled) }}

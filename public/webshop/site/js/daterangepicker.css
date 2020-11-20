@@ -23,15 +23,17 @@
 /*</div>                                                                        */
 /********************************************************************************/
 
+.show-ranges-dropdown {}
+
 .daterangepicker {
     position: absolute;
     color: inherit;
     background-color: #fff;
     border-radius: 4px;
     border: 1px solid #ddd;
-    width: calc(100% - 2*.75rem);
     /*max-width: 320px;*/
-    max-width: calc(320px - 2*.75rem);
+    width: calc(100% - 2*15px);
+    /*max-width: calc(320px - 2*.75rem);*/
     padding: 0;
     margin-top: 7px;
     top: 100px;
@@ -63,7 +65,7 @@
     flex-direction: column;
     width: 100%;
     pointer-events: auto;
-    background-color: #fff;
+    /*background-color: #fff;*/
     background-clip: padding-box;
     border: 0 solid rgba(0, 0, 0, 0.2);
     border-radius: 6px;
@@ -73,6 +75,7 @@
 @media (max-width: 575.98px) {
     .drp-content {
         /*max-height: calc(100vh - 1.75rem * 2);*/
+        background-color: #f0f3f5;
     }
 }
 
@@ -107,10 +110,17 @@
     align-items: center;
     -ms-flex-pack: end;
     justify-content: flex-end;
-    padding: 1rem;
-    border-top: 1px solid #e9ecef;
+    padding: 0 1rem 1rem 1rem;
+    /*border-top: 1px solid #e9ecef;*/
     flex-shrink: 0;
-    /*margin-top: -1rem;*/
+    /*background-color: #f0f3f5;*/
+}
+
+@media (max-width: 575.98px) {
+    .drp-body,
+    .drp-footer {
+        padding: .75rem;
+    }
 }
 
 .single .drp-header {
@@ -132,8 +142,8 @@
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin-right: -5px;
-    margin-left: -5px;
+    margin-right: -10px;
+    margin-left: -10px;
 }
 
 .daterangepicker .drp-col {
@@ -142,8 +152,8 @@
     max-width: 100%;
     position: relative;
     width: 100%;
-    padding-right: 5px;
-    padding-left: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 .daterangepicker .drp-col.left:not(.single),
 .daterangepicker .drp-col.right {
@@ -171,6 +181,28 @@
     -webkit-transform: scale(1);
     transform: scale(1);
     visibility: visible;
+}
+
+.daterangepicker .ranges ul {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+}
+
+.daterangepicker .ranges li {
+    font-size: 12px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.daterangepicker .ranges li:hover {
+    background-color: #eee;
+}
+
+.daterangepicker .ranges li.active {
+    background-color: #08c;
+    color: #fff;
 }
 
 /*.daterangepicker:before, .daterangepicker:after {*/
@@ -261,7 +293,9 @@
 }
 
 .daterangepicker.show-calendar .drp-buttons {
-    display: block;
+    /*display: block;*/
+    display: flex;
+    justify-content: space-between;
 }
 
 .daterangepicker.auto-apply .drp-buttons {
@@ -282,15 +316,15 @@
 }
 
 .daterangepicker .drp-body {
-    /*display: flex;*/
+    display: flex;
     /*flex-direction: column;*/
-    /*justify-content: space-between;*/
+    justify-content: space-between;
 }
 .daterangepicker .drp-calendars {
     /*padding: 1.25rem;*/
     display: flex;
     justify-content: space-between;
-    flex: 1 1 auto;
+    /*flex: 1 1 auto;*/
 }
 
 .daterangepicker.ltr .drp-calendar {
@@ -298,7 +332,9 @@
 }
 
 .daterangepicker.auto-apply .drp-buttons {
-    display: block;
+    /*display: block;*/
+    display: flex;
+    justify-content: space-between;
 }
 
 .daterangepicker.auto-apply .drp-buttons .drp-selected {
@@ -363,9 +399,15 @@
     cursor: pointer;
 }
 
+.daterangepicker .calendar-table thead .next,
+.daterangepicker .calendar-table thead .prev {
+    background-color: #f0f3f5;
+    border-radius: .25rem;
+}
+
 .daterangepicker .calendar-table {
-    border: 1px solid #fff;
-    background-color: #fff;
+    /*border: 1px solid #fff;*/
+    /*background-color: #fff;*/
     width: 100%;
 }
 
@@ -393,6 +435,9 @@
 .daterangepicker .left .calendar-table table thead tr:first-of-type th:first-of-type:not(.prev) {
     /*display: none;*/
     cursor: auto;
+}
+.daterangepicker .calendar-table table tbody {
+    background-color: #fff;
 }
 
 .daterangepicker .calendar-table table tbody td {
@@ -442,35 +487,38 @@
 }
 
 .daterangepicker select.monthselect, .daterangepicker select.yearselect {
-    height: 30px;
-    background: #f3f3f4;
-    border: 1px solid #b9bcbe;
-    padding: 1px;
-    margin: 0;
-    cursor: default;
-    color: inherit;
+    /*height: 30px;*/
+    /*background: #f3f3f4;*/
+    /*border: 1px solid #b9bcbe;*/
+    /*padding: 1px;*/
+    /*margin: 0;*/
+    /*cursor: default;*/
+    /*color: inherit;*/
 }
 
 .daterangepicker select.monthselect {
     margin-right: .25rem;
     width: 56%;
+    display: inline-block;
 }
 
 .daterangepicker select.yearselect {
     width: 40%;
+    display: inline-block;
 }
 
 /*.daterangepicker select.monthselect, .daterangepicker select.yearselect,*/
 .daterangepicker select.hourselect, .daterangepicker select.minuteselect, .daterangepicker select.secondselect, .daterangepicker select.ampmselect {
+    display: inline-block;
     width: 50px;
-    height: 30px;
-    margin: 0 auto;
-    background: #eee;
-    border: 1px solid #eee;
-    padding: 2px;
-    outline: 0;
-    font-size: 90%;
-    color: inherit;
+    /*height: 30px;*/
+    /*margin: 0 auto;*/
+    /*background: #eee;*/
+    /*border: 1px solid #eee;*/
+    /*padding: 2px;*/
+    /*outline: 0;*/
+    /*font-size: 90%;*/
+    /*color: inherit;*/
 }
 
 .daterangepicker .calendar-time {
@@ -495,9 +543,10 @@
 }
 
 .daterangepicker .drp-selected {
-    display: inline-block;
-    font-size: 90%;
-    padding-right: .75rem;
+    font-size: 86%;
+    display: flex;
+    align-items: center;
+
 }
 
 .daterangepicker .drp-buttons .btn {
@@ -509,9 +558,11 @@
     .daterangepicker-overflow-hidden {
         overflow: hidden;
     }
-    .daterangepicker:not(.single) {
-        z-index: 1021;
-    }
+    /*.daterangepicker:not(.single) {*/
+    /*    z-index: 1021;*/
+    /*}*/
+
+
     /*.daterangepicker:not(.single).opensleft,*/
     /*.daterangepicker:not(.single).openscenter,*/
     /*.daterangepicker:not(.single).opensright {*/
@@ -531,7 +582,7 @@
     .daterangepicker .drp-calendars {
         /*flex-direction: column;*/
     }
-    .daterangepicker .drp-calendars .drp-calendar.left {
+    .daterangepicker:not(.single) .drp-calendars .drp-calendar.left {
         margin-bottom: 1.25rem;
     }
 }

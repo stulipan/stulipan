@@ -43,9 +43,9 @@
             </template>
         </multiselect>
         <div class="">
-            <div v-for="v in selectedOptions" class="filter-tag mb-1">
-                {{v}}
-                <a href="#" role="button" @click.prevent="removeOption" class="btn-link-secondary ml-2"><i class="fas fa-times mr-0"></i></a>
+            <div v-for="v in selectedOptions" class="filter-tag">
+                <div class="filter-tag-content">{{v}}</div>
+                <a href="#" role="button" @click.prevent="removeOption" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
             </div>
         </div>
     </div>

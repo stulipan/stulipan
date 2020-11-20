@@ -36,8 +36,8 @@
 {% endblock %}
 
 {% block headerTopright %}
-<div class="admin-card-topright d-sm-inline-block d-block">
-    <div class="navbar justify-content-start">
+<div class="">
+    <div class="navbar--toolbar justify-content-startX">
         <div class="nav-item dropdown">
             <a class="btn btn-link-secondary dropdown-toggle mr-1" href="javascript: void(0);" id="chooseInterface" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                 {{ 'settings.translation.interface'|trans }}
@@ -63,14 +63,14 @@
         <div class="nav-item dropdown">
             <a class="btn btn-link-secondary dropdown-toggle" id="langsDropdown" href="#" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                 {% set myLocale = 'hu' %}
-                <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="topbar-flag topbar-flag-selected rounded-circleX">
+                <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="translation-flag translation-flag-selected">
             </a>
             <div class="dropdown-menu dropdown-transition dropdown-menu-left dropdown-menu-sm-right mt-2" aria-labelledby="langsDropdown">
                 <a href="/hu" class="dropdown-item text-smX">
-                    <img src="{{ asset('/webshop/site/flags/4x3/hu.svg') }}" alt="magyar" class="topbar-flag">Magyar
+                    <img src="{{ asset('/webshop/site/flags/4x3/hu.svg') }}" alt="magyar" class="translation-flag">Magyar
                 </a>
 {#                <a href="/en" class="dropdown-item text-sXm">#}
-{#                    <img src="{{ asset('/webshop/site/flags/4x3/gb.svg') }}" alt="english" class="topbar-flag">English#}
+{#                    <img src="{{ asset('/webshop/site/flags/4x3/gb.svg') }}" alt="english" class="translation-flag">English#}
 {#                </a>#}
             </div>
         </div>
@@ -80,7 +80,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-12 px-0 px-md-10px">
+        <div class="col-md-12 correction-no-padding">
             <div class="card mb-30px">
                 <div class="card-body">
                     <div class="no-margins">

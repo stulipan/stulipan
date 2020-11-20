@@ -6,7 +6,7 @@ namespace App\Entity;
 
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\Model\CustomerBasic;
-use App\Entity\Model\CartCard;
+use App\Model\CartGreetingCard;
 use App\Event\OrderEvent;
 use DateTime;
 use Symfony\Component\Security\Core\Security;
@@ -14,8 +14,8 @@ use App\Entity\User;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\OrderSessionStorage;
-use App\Entity\Payment;
-use App\Entity\Shipping;
+use App\Entity\PaymentMethod;
+use App\Entity\ShippingMethod;
 use App\Entity\Discount;
 use App\Entity\Product\Product;
 use App\Model\Summary;
@@ -27,6 +27,8 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OrderBuilder
 {
@@ -55,15 +57,19 @@ class OrderBuilder
      */
     private $eventDispatcher;
 
+    private $translator;
+
     public function __construct(OrderSessionStorage $storage, EntityManagerInterface $entityManager,
-                                EventDispatcherInterface $eventDispatcher)
+                                EventDispatcherInterface $eventDispatcher, Security $security, TranslatorInterface $translator)
     {
         $this->storage = $storage;
         $this->entityManager = $entityManager;
         $this->eventDispatcher = $eventDispatcher;
 
-        $this->customer = new User();
+//        $this->customer = new User();
+        $this->customer = $security->getUser();
         $this->order = $this->getCurrentOrder();
+        $this->translator = $translator;
     }
 
     public function getId(): ?int
@@ -107,11 +113,13 @@ class OrderBuilder
         $this->order->setFirstname($customerBasic->getFirstname());
         $this->order->setLastname($customerBasic->getLastname());
 
-        $this->order->setBillingName($customerBasic->getLastname().' '.$customerBasic->getFirstname());
+        $this->order->setBillingFirstname($customerBasic->getFirstname());
+        $this->order->setBillingLastname($customerBasic->getLastname());
         $this->order->setBillingPhone($customerBasic->getPhone());
         $this->storage->add('email', $customerBasic->getEmail());
         $this->storage->add('firstname', $customerBasic->getFirstname());
         $this->storage->add('lastname', $customerBasic->getLastname());
+        $this->storage->add('phone', $customerBasic->getPhone());
 
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
@@ -158,15 +166,14 @@ class OrderBuilder
     {
         $this->storage->set($order->getId());
         $this->order = $order;
-
     }
 
     /**
-     * Adding a product to the basket.
-     * If the product exists, its quantity is increased.
+     * Adds a new item (product) to the basket.
+     * If the product already in the cart, then increases its quantity.
      *
      * @param Product $product
-     * @param integer $quantity
+     * @param int $quantity
      * @return void
      */
     public function addItem(Product $product, int $quantity): void
@@ -191,9 +198,9 @@ class OrderBuilder
         }
 //        $this->order->setPriceTotal($this->order->getSummary());
 
-        if ($this->customer === null) {
-            $this->setCustomer($this->order->getCustomer());
-        }
+//        if ($this->customer === null) {
+//            $this->setCustomer($this->order->getCustomer());
+//        }
 
         $this->entityManager->persist($this->order);
         $this->entityManager->flush();
@@ -204,7 +211,32 @@ class OrderBuilder
         } else {
 //            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
         }
+    }
 
+    /**
+     * Update the quantity for an existing product.
+     *
+     * @param OrderItem $item
+     * @param integer $quantity
+     * @throws Exception
+     */
+    public function setItemQuantity(OrderItem $item, int $quantity): void
+    {
+        if ($this->order && $this->order->getItems()->contains($item)) {
+            if ($item->getProduct()->hasEnoughStock($quantity)) {
+                $key = $this->order->getItems()->indexOf($item);
+                $item->setQuantity($quantity);
+                $item->setPriceTotal($item->getQuantity()*$item->getPrice());
+                $this->order->getItems()->set($key, $item);
+                // Run events
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+
+                $this->entityManager->persist($this->order);
+                $this->entityManager->flush();
+            } else {
+                throw new Exception($this->translator->trans('cart.not-enough-stock'));
+            }
+        }
     }
 
     /**
@@ -291,7 +323,8 @@ class OrderBuilder
     public function setRecipient(Recipient $recipient): void
     {
         $this->order->setRecipient($recipient);
-        $this->order->setShippingName($recipient->getName());
+        $this->order->setShippingFirstname($recipient->getFirstname());
+        $this->order->setShippingLastname($recipient->getLastname());
         $this->order->setShippingPhone($recipient->getPhone());
 
         $shippingAddress = new OrderAddress();
@@ -310,6 +343,24 @@ class OrderBuilder
         $this->entityManager->flush();
     }
 
+    public function setFallbackRecipient(): void
+    {
+        $customer = $this->order->getCustomer();
+        if ($customer) {
+            if ($customer->hasRecipients()) {
+                if ($customer->getLastOrder()) {
+                    $recipient = $customer->getLastOrder()->getRecipient();
+                } else {
+                    $recipient = $customer->getRecipients()->last();
+                }
+                $this->order->setRecipient($recipient);
+                $this->entityManager->persist($this->order);
+                $this->entityManager->flush();
+            }
+        }
+        return;
+    }
+
     /**
      * Remove Recipient from Order
      */
@@ -317,7 +368,8 @@ class OrderBuilder
     {
         $prevShippingAddress = $this->order->getShippingAddress();
         $this->order->setRecipient(null);
-        $this->order->setShippingName(null);
+        $this->order->setShippingFirstname(null);
+        $this->order->setShippingLastname(null);
         $this->order->setShippingPhone(null);
         $this->order->setShippingAddress(null);
 
@@ -337,9 +389,11 @@ class OrderBuilder
     public function setSender(Sender $sender): void
     {
         $this->order->setSender($sender);
-        $this->order->setBillingName($sender->getName());
+        $this->order->setBillingFirstname($sender->getFirstname());
+        $this->order->setBillingLastname($sender->getLastname());
         $this->order->setBillingCompany($sender->getCompany());
-        $this->order->setBillingPhone($sender->getPhone());
+        $this->order->setBillingVatNumber($sender->getCompanyVatNumber());
+//        $this->order->setBillingPhone($sender->getPhone());
 
         $billingAddress = new OrderAddress();
         $billingAddress->setStreet($sender->getAddress()->getStreet());
@@ -357,6 +411,24 @@ class OrderBuilder
         $this->entityManager->flush();
     }
 
+    public function setFallbackSender(): void
+    {
+        $customer = $this->order->getCustomer();
+        if ($customer) {
+            if ($customer->hasSenders()) {
+                if ($customer->getLastOrder()) {
+                    $sender = $customer->getLastOrder()->getSender();
+                } else {
+                    $sender = $customer->getSenders()->last();
+                }
+                $this->order->setSender($sender);
+                $this->entityManager->persist($this->order);
+                $this->entityManager->flush();
+            }
+        }
+        return;
+    }
+
     /**
      * Remove Sender from Order
      */
@@ -364,8 +436,10 @@ class OrderBuilder
     {
         $prevBillingAddress = $this->order->getBillingAddress();
         $this->order->setSender(null);
-        $this->order->setBillingName($this->storage->fetch('firstname').' '.$this->storage->fetch('lastname'));
+        $this->order->setBillingFirstname($this->storage->fetch('firstname'));
+        $this->order->setBillingLastname($this->storage->fetch('lastname'));
         $this->order->setBillingCompany(null);
+        $this->order->setBillingVatNumber(null);
         $this->order->setBillingPhone($this->storage->fetch('phone'));
         $this->order->setBillingAddress(null);
 
@@ -429,28 +503,6 @@ class OrderBuilder
         }
 //        return count($count);
         return $c;
-    }
-
-    /**
-     * Update the quantity for an existing product.
-     *
-     * @param OrderItem $item
-     * @param integer $quantity
-     * @throws Exception
-     */
-    public function setItemQuantity(OrderItem $item, int $quantity): void
-    {
-        if ($this->order && $this->order->getItems()->contains($item)) {
-            $key = $this->order->getItems()->indexOf($item);
-            $item->setQuantity($quantity);
-            $item->setPriceTotal($item->getQuantity()*$item->getPrice());
-            $this->order->getItems()->set($key, $item);
-            // Run events
-//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
-
-            $this->entityManager->persist($this->order);
-            $this->entityManager->flush();
-        }
     }
 
     /**
@@ -547,14 +599,14 @@ class OrderBuilder
     /**
      * Set message method
      *
-     * @param CartCard $card
+     * @param CartGreetingCard $greetingCard
      */
-    public function setMessage(?CartCard $card): void
+    public function setMessage(?CartGreetingCard $greetingCard): void
     {
         if ($this->order) {
-            if ($card) {
-                $this->order->setMessage($card->getMessage());
-                $this->order->setMessageAuthor($card->getAuthor());
+            if ($greetingCard) {
+                $this->order->setMessage($greetingCard->getMessage());
+                $this->order->setMessageAuthor($greetingCard->getAuthor());
                 // Run events
 //                $this->runEvent(OrderEvent::ORDER_UPDATED, '');
 
@@ -602,14 +654,14 @@ class OrderBuilder
     /**
      * Set payment method
      *
-     * @param Payment $payment
+     * @param PaymentMethod $payment
      */
-    public function setPayment(Payment $payment): void
+    public function setPaymentMethod(PaymentMethod $payment): void
     {
         if ($this->order) {
-            $this->order->setPayment($payment);
+            $this->order->setPaymentMethod($payment);
             // Run events
-            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
 
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
@@ -619,14 +671,14 @@ class OrderBuilder
     /**
      * Set shipping method
      *
-     * @param Shipping $shipping
+     * @param ShippingMethod $shippingMethod
      */
-    public function setShipping(Shipping $shipping): void
+    public function setShippingMethod(ShippingMethod $shippingMethod): void
     {
         if ($this->order) {
-            $this->order->setShipping($shipping);
+            $this->order->setShippingMethod($shippingMethod);
             // Run events
-            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
+//            $this->runEvent(OrderEvent::ORDER_UPDATED, '');
 
             $this->entityManager->persist($this->order);
             $this->entityManager->flush();
@@ -728,42 +780,42 @@ class OrderBuilder
         }
     }
 
-    /**
-     * Checking if delivery date is in the past.
-     * Returns 'true' if in the past.
-     *
-     * @return bool
-     */
-    public function isDeliveryDateInPast(): bool
-    {
-        $date = $this->order->getDeliveryDate();
-//        dd((new \DateTime('now +'. GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours')));
-//        dd((new \DateTime('now +4 hours'))->diff($date)->format('%r%h'));
-//        dd((new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day')));
-    
-        if ($date) {
-            /** A '+1 day' azert kell mert az adott datum 00:00 orajat veszi.
-             * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
-             * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
-             */
-            $diff = (new DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
-            if ($diff->days >= 0 && $diff->invert == 0) {
-                return false;
-            } elseif ($diff->invert == 1) {
-                return true;
-            }
-        }
-        return true;
-    }
+//    /**
+//     * Checking if delivery date is in the past.
+//     * Returns 'true' if in the past.
+//     *
+//     * @return bool
+//     */
+//    public function isDeliveryDateInPast(): bool
+//    {
+//        $date = $this->order->getDeliveryDate();
+////        dd((new \DateTime('now +'. GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours')));
+////        dd((new \DateTime('now +4 hours'))->diff($date)->format('%r%h'));
+////        dd((new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day')));
+//
+//        if ($date) {
+//            /** A '+1 day' azert kell mert az adott datum 00:00 orajat veszi.
+//             * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
+//             * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
+//             */
+//            $diff = (new DateTime('today +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+0 day'));
+//            if ($diff->days >= 0 && $diff->invert == 0) {
+//                return false;
+//            } elseif ($diff->invert == 1) {
+//                return true;
+//            }
+//        }
+//        return true;
+//    }
 
     /**
      * Checking if the order has a payment method.
      *
      * @return bool
      */
-    public function hasPayment(): bool
+    public function hasPaymentMethod(): bool
     {
-        return null === $this->order->getPayment() ? false : true;
+        return null === $this->order->getPaymentMethod() ? false : true;
     }
 
     /**
@@ -771,9 +823,9 @@ class OrderBuilder
      *
      * @return bool
      */
-    public function hasShipping(): bool
+    public function hasShippingMethod(): bool
     {
-        return null === $this->order->getShipping() ? false : true;
+        return null === $this->order->getShippingMethod() ? false : true;
     }
 
     /**
@@ -784,18 +836,26 @@ class OrderBuilder
     public function hasCustomer(): bool
     {
         $valid = true;
-        if (null === $this->storage->fetch('email') || '' === $this->storage->fetch('email')) {
-            $valid = false;
+        if ($this->customer) {
+            // We check only for Phone because 'email', 'firstname' and 'lastname' are mandatory for a User/Customer
+            if (!$this->customer->getPhone()) {
+                $valid = false;
+            }
+        } else {
+            if (null === $this->storage->fetch('email') || '' === $this->storage->fetch('email')) {
+                $valid = false;
+            }
+            if (null === $this->storage->fetch('firstname') || '' === $this->storage->fetch('firstname')) {
+                $valid = false;
+            }
+            if (null === $this->storage->fetch('lastname') || '' === $this->storage->fetch('lastname')) {
+                $valid = false;
+            }
+            if (null === $this->order->getBillingPhone() || '' === $this->order->getBillingPhone()) {
+                $valid = false;
+            }
         }
-        if (null === $this->storage->fetch('firstname') || '' === $this->storage->fetch('firstname')) {
-            $valid = false;
-        }
-        if (null === $this->storage->fetch('lastname') || '' === $this->storage->fetch('lastname')) {
-            $valid = false;
-        }
-        if (null === $this->order->getBillingPhone() || '' === $this->order->getBillingPhone()) {
-            $valid = false;
-        }
+
         return true === $valid ? true : false;
     }
 

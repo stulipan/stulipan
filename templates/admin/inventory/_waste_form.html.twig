@@ -33,7 +33,7 @@
                     <a class="nav-link py-2 text-nowrap {% if loop.first == 1 %} active {% endif %}" id="{{ category }}-tab" data-toggle="tab" href="#{{ category }}" role="tab" aria-controls="{{ category }}" aria-selected="true">
                         <span class="text-uppercase">{{ category }}
                             {#{% if wasteId is defined %}#}
-                                {#{{ render(controller('App\\Controller\\Boltzaras\\InventoryController::itemsPerCategory', {'waste' : wasteId, 'category' : category.id})) }}#}
+                                {#{{ render(controller('App\\Boltzaras\\Admin\\Controller\\InventoryController::itemsPerCategory', {'waste' : wasteId, 'category' : category.id})) }}#}
                             {#{% endif %}#}
                             {% if itemsPerCategory[category.id] is defined %}
                                 <span class="badge badge-number badge-warning ml-lg-1">{{ itemsPerCategory[category.id] }}</span>

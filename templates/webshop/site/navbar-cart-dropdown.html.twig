@@ -1,0 +1,15 @@
+    <a href="#" role="button" data-toggle="sidebar" data-target="#sidebar--Cart" class="login-cart-link dropdown-toggle">
+        <div class="position-relative">
+            <svg class="svg-icon">
+                <use xlink:href="#cart-1"> </use>
+            </svg>
+            <div class="login-cart-badge">
+                {% if order.countItems is defined %}
+                    {{  order.countItems }}
+                {% else %}
+                    0
+                {% endif %}
+            </div>
+        </div>
+        <span class="login-cart-text d-none d-lg-inline ml-1 ml-lg-2">{{ 'navbar.cart'|trans }}</span>
+    </a>

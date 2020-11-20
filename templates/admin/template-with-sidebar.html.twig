@@ -4,21 +4,27 @@
     {{ parent() }}
 {% endblock %}
 
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
 {% block page_content %}
 
     {% block modal %}
     {% endblock %}
 
     <div class="row">
-        <div class="col-lg-11 mx-auto">
+        <div class="col-lg-12 col-xl-11 mx-auto px-lg-4">
             {% block header %}
-                <div class="row mt-3">
-                    <div class="col-lg-12 mb-2">
+                <div class="row mt-1 mt-sm-3">
+                    {% block breadcrumb %}
+                    <div class="col-lg-12 d-print-none">
                         {% include 'admin/template-widget-breadcrumb.html.twig' %}
                     </div>
-                    <div class="col-lg-12">
+                    {% endblock %}
+                    <div class="col-lg-12 mt-2">
                         <div class="pb-2">
-                            <div class="page-title h1 d-inline mr-md-2 mr-1">{% block headerTitle %}{{ pageTitle }}{% endblock %}</div>
+                            <div class="page-title h3 d-inline mr-md-2 mr-1">{% block headerTitle %}{{ pageTitle }}{% endblock %}</div>
                         </div>
                     </div>
                 </div>
@@ -31,16 +37,24 @@
                 </div>
             </div>
 
+            {% block beforeContent %}
+            {% endblock %}
+
+            {% block mainContent %}
             <div class="row row-5">
-                <div class="col-md-8 px-0 px-md-10px">
+                <div class="col-md-8 correction-no-padding">
                     {% block content %}
                     {% endblock %}
                 </div>
-                <div name="__SIDEBAR" class="col-md-4 px-0 px-md-10px orderDetail--sidebarX">
+                <div id="__SIDEBAR" class="col-md-4 correction-no-padding orderDetail--sidebarX">
                     {% block sidebar %}
                     {% endblock %}
                 </div>
             </div>
+            {% endblock %}
+
+            {% block additionalContent %}
+            {% endblock %}
 
 
         </div>

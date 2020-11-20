@@ -1,0 +1,131 @@
+parameters:
+    store:
+        label:
+            content: 'Az online bolt neve és elérhetőségei'
+            type: Hidden
+            label: 'Ezek az információk fognak a weboldalon látszódni, illetve a vásárlók is ezeket az információkat fogják használni.'
+        name:
+            content: 'Tulipán futár'
+            type: Text
+            label: 'Bolt neve'
+        url:
+            content: Tulipanfutar.hu
+            type: Text
+            label: 'Webshop URL'
+        email:
+            content: info@tulipanfutar.hu
+            type: Text
+            label: 'Ügyfélszolgálati email'
+        phone:
+            content: '06 1 46 66 286'
+            type: Text
+            label: 'Ügyfélszolgálati telefonszám'
+    company:
+        label:
+            content: 'Vállalkozás neve és címe'
+            type: Hidden
+            label: 'Ez a cím fog megjelenni a számlákon és a egyéb helyeken a webolalon.'
+        name:
+            content: 'Maysa Car Kft.'
+            type: Text
+            label: 'Vállalkozás neve'
+        address:
+            content: 'Bartók Béka út 9.'
+            type: Text
+            label: Cím
+        city:
+            content: Budapest
+            type: Text
+            label: Város
+        zip:
+            content: 1114
+            type: Text
+            label: Irányítószám
+        country:
+            content: 4
+            type: GeoCountry
+            label: settings.company.country
+        vat-number:
+            content: ' '
+            type: Text
+            label: settings.company.vat-number
+    meta:
+        label:
+            content: 'Cím és meta adatok'
+            type: Hidden
+            label: 'A weboldal címe és a meta adatok segítenek meghatározni, hogy a webshopja miként jelenik meg a keresőmotorokban.'
+        name:
+            content: Tulipanfutar.hu
+            type: Text
+            label: 'Meta boltnév'
+        title:
+            content: 'Virágküldés Budapesten és környékén'
+            type: Text
+            label: 'Meta title'
+        description:
+            content: 'A legnépszerűbb virágfutár Budapesten és környékén. Virágküldés: rózsadobozok, csokrok, esküvő, rendezvénydekoráció.'
+            type: Text
+            label: 'Meta leírás'
+    social:
+        label:
+            content: 'Közösségi elérhetőségek'
+            type: Hidden
+            label: 'Növeld követői táborod és potenciális ügyfeleid számát közösségi oldalaidon.'
+        facebook:
+            content: 'https://www.facebook.com/DifioriViragszalon/'
+            type: Text
+        instagram:
+            content: 'https://www.instagram.com/difiori.virag/'
+            type: Text
+        pinterest:
+            content: ' '
+            type: Text
+        youtube:
+            content: ' '
+            type: Text
+        twitter:
+            content: ' '
+            type: Text
+        viber:
+            content: ' '
+            type: Text
+        whatsapp:
+            content: ' '
+            type: Text
+    general:
+        label:
+            content: 'Általános beállítások'
+            type: Hidden
+            label: 'A webshop műkődését meghatározó általános beállítások.'
+        launch-date:
+            content: '2018-07-25'
+            type: DateTime
+            label: 'Online bolt indulás dátuma'
+        itemsPerPage:
+            content: 10
+            type: Number
+        beallitas2:
+            content: 200
+            type: Text
+        default-vat-rate:
+            content: 1
+            type: VatRate
+        giftCategory:
+            content: 1
+            type: ProductCategory
+        product-variant-view:
+            content: dropdown
+            type: Text
+            choices: { Dropdown: dropdown, 'Variant picker': variant-picker }
+        date-format:
+            content: 'Y M j.'
+            type: Text
+            choices: { '1980 january 5': 'Y F j', '1980. january 5.': 'Y. F j.', '1980 jan 5.': 'Y M j.', '1980 jan 5': 'Y M j', '5 january 1980': 'j F Y', '5 jan 1980': 'j M Y', 'January 5, 1980': 'F j, Y', 'Jan. 5, 1980': 'M. j, Y', 1980/01/31: Y/m/d, '1980-01-31': Y-m-d, 1980.01.31: Y.m.d, 01/31/1980: d/m/Y, 31/01/1980: d/m/Y, 31.01.1980: d.m.Y, 31-01-1980: d-m-Y }
+        time-format:
+            content: 'H:i'
+            type: Text
+            choices: { '19:20': 'H:i', '19:20:35': 'H:i:s', '07:20 am': 'h:i a', '07:20:35 am': 'h:i:s a' }
+        test-mode:
+            content: false
+            type: Boolean
+            label: 'Test mode. If enabled, orders are not actually placed.'

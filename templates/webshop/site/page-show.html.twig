@@ -4,7 +4,7 @@
 {% set breadcrumb = {
     0: {
         'url': path('homepage'),
-        'text': 'Home',
+        'text': 'generic.home'|trans,
     },
     1: {
         'url': path('site-page-show', { 'slug': page.slug }),

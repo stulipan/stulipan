@@ -1,24 +1,22 @@
 {% extends 'webshop/site/template-account.html.twig' %}
 
-{% set pageTitle = 'Fiókom' %}
+{% set pageTitle = 'account.my-account'|trans %}
 {% set breadcrumb = {
     0: {
         'url': path('homepage'),
-        'text': 'Home',
+        'text': 'generic.home'|trans,
     },
     1: {
         'url': path('site-user-myAccount'),
-        'text': 'Fiókom',
+        'text': 'account.my-account'|trans
     },
 } %}
 
 {% block content %}
     <div class="card mb-20px">
-        <div class="card-wrapper">
-            <div class="card-header bg-transparent">
-                <span class="h4 myaccount-card-title">Utolsó rendeléseid</span>
-            </div>
+        <div class="">
             <div class="card-body">
+                <div class="card-title h3">{{ 'account.last-orders'|trans }}</div>
                 <div class="list-group">
                     {% if customer.ordersPlaced is defined and customer.ordersPlaced is not empty %}
                         {% for order in customer.ordersPlaced|slice(0,1) %}
@@ -26,7 +24,7 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-                <div class="">
+                <div class="mt-3">
                     <a href="{{ path('site-user-myOrders') }}" class="btn btn-secondary w-100"><svg class="svg-icon svg-icon-heavy"><use xlink:href="#retail-bag-2"></use></svg>Összes rendelésed</a>
                 </div>
             </div>

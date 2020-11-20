@@ -1,0 +1,8 @@
+<div class="vp choose-date">
+    <input type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
+    <label class="vp-figure" for="{{ choice.vars.id }}">
+        <span class="vp-content">
+            {{ choice.vars.label|raw }}
+        </span>
+    </label>
+</div>

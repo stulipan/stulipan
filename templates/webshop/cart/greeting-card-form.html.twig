@@ -1,0 +1,20 @@
+{{ form_start(greetingCardForm, { 'attr': {'class': '',
+    'data-wrapper-card-form': '',
+}}) }}
+    <div class="row">
+        <div class="form-group col-md-12">
+            {#<label for="{{ greetingCardForm.message.vars.full_name }}" class="form-label">Üzenetet</label>#}
+            {{ form_widget(greetingCardForm.message, {'attr': {'class': 'JS--cardForm-message', 'rows': 5, 'placeholder': 'cart.greeting-card.write-your-message'|trans }} ) }}
+            {{ form_errors(greetingCardForm.message) }}
+        </div>
+        <div class="form-group col-md-8">
+            {#<label for="{{ greetingCardForm.messageAuthor.vars.full_name }}" class="form-label">Aláírásnév</label>#}
+            {{ form_widget(greetingCardForm.author, {'attr': {'class': '', 'placeholder': 'cart.greeting-card.enter-greeting-author'|trans }}) }}
+            {{ form_errors(greetingCardForm.author) }}
+        </div>
+    </div>
+{{ form_end(greetingCardForm) }}
+{#{{ form_errors(greetingCardForm) }}#}
+{% do greetingCardForm.setRendered() %}
+
+

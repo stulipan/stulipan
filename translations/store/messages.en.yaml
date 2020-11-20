@@ -21,6 +21,148 @@
 #           order > 'customer'
 #           etc
 
+navbar:
+    search: Search
+    login: Login
+    my-account: My account
+    cart: Cart
+
+registration:
+    login-title: Returning customer
+    login-button: Login
+    create-account: Create account
+    create-account-title: New customer
+    register-button: Register
+    email-address: Email address
+    password: Password
+    confirm-password: Confirm password
+    firstname: Firstname
+    lastname: Lastname
+    remember-me: Remember me
+    newsletter-sign-up: I want to be informed first hand about promotions and news.
+    accept-terms-and-conditions: I have read and accept the Terms and Conditions and the Privacy Policy, and I consent to the data processing contained therein.
+
+
+account:
+    my-account: My account
+    logout: Logout
+    my-orders: My orders
+    welcome: 'Welcome, {{ user }}'
+    account-information: Account information
+    change-password: Change password
+    last-orders: Your last orders
+
+cart:
+    cart-content: Your cart
+    continue-to-checkout: Continue to checkout
+    edit-cart-content: Edit cart content
+    your-cart: Your cart
+    your-cart-is-empty: Your cart is empty
+    but-not-for-long: '...but not for long! Pick a flower arrangement from more than 100 beautiful <a href="{{ link }}">bouquets and flower boxes</a>.'
+    quantity: Quantity
+    pieces: ''
+    remove-item: Remove from cart
+    shipping-fee-calculated: The shipping fee has been calculated according to your information.
+    shipping-fee: Shipping fee
+    discount: Discount
+    total: Total
+    subtotal: Subtotal
+    total-amount-to-pay: Total amount to pay
+    total-amount-paid: Total
+    show-order-summary: Show order summary
+
+    gift:
+        choose-gift-title: Choose a gift to send along with the flowers
+        choose-gift: Choose gift
+        gift-added-successfully: You have successfully added the gift to your cart!
+    not-enough-stock: 'Not enough stock is available.'
+
+    greeting-card:
+        send-message-title: Send a message
+        free-card-good-to-know: Good to know!
+        free-card-info: Send a FREE greeting card along with the flowers.
+        write-your-message: 'Please enter a gift message'
+        enter-greeting-author: 'Sign the message (your name)'
+        error-missing-greeting-message: 'You forgot to write the message...'
+        error-missing-greeting-author: 'Please sign your message.'
+checkout:
+    recipient-page-title: Information
+    shipping-method-page-title: Shipping
+    payment-method-page-title: Payment
+    cart-progress-bar: Cart
+    recipient-progress-bar: Information
+    shipping-progress-bar: Shipping
+    payment-progress-bar: Payment
+    already-registered: 'Already registered? If you have an account, please <a href="{{ link }}" class="">login.</a>'
+
+
+    recipient:
+        recipient-title: Recipient details
+        recipient-description: For successful delivery, enter recipient's name, address, and phone number.
+        new-recipient: Add new recipient
+        previously-saved-recipients: Previously saved recipients
+        previously-saved-recipients-modal-title: Previously saved recipients
+        previously-saved-recipients-modal-description: Select one these recipients
+        select-recipient: Deliver to this address
+        firstname: First name
+        lastname: Last name
+        address: Address
+        address-placeholder: 'Address: Street, number, door...'
+        city: City
+        city-placeholder: City
+        province: County
+        zip: Postal code
+        country: Country
+        phone: Phone number
+        phone-placeholder: 'Phone number, eg.: +36... or 06...'
+        missing-firstname: Please enter the first name!
+        missing-lastname: Please enter the last name!
+        missing-address: Please enter the address.
+        missing-city: Please enter the city.
+        missing-province: Please enter the county.
+        missing-zip: Please enter the postal code.
+        invalid-zip: Invalid postal code!
+        missing-country: Please select a country.
+        missing-phone: Please enter recipient's phone number.
+        invalid-phone: 'A valid phone number is required. Valid format: +36... or 06...'
+
+    customer:
+        customer-information-title: Customer details
+        customer-information-description: Your email and phone number are used to keep you updated of the order delivery status.
+        firstname: First name
+        lastname: Last name
+        email-address: Email
+        phone: Phone number
+        phone-placeholder: 'Phone number, eg.: +36... or 06...'
+        missing-email-address: Please enter your email address.
+        invalid-email-address: Invalid email address!
+        missing-firstname: Please enter your first name!
+        missing-lastname: Please enter your last name!
+        missing-phone: Please enter your phone number!
+        invalid-phone: 'A valid phone number is required. Valid format: +36... or 06...'
+        newsletter-optin: Keep me up to date on special offers. Solely for customers!
+
+    continue-to-shipping-address-button: 'Continue to shipping address'
+    continue-to-recipient-address-button: 'Continue to recipient''s address'
+    continue-to-shipping-method-button: Continue to shipping method
+    continue-to-payment-method-button: 'Continue to payment method'
+    back-to-cart-button: Back to cart
+    back-to-recipient-button: Back to recipient's address
+    back-to-shipping-address-button: Back to shipping address
+    back-to-shipping-method-button: Back to shipping method
+
+    phone-number-tooltip: 'Enter phone number in either of this formats: +36... or 06... and do not use blank spaces or any other characters.'
+
+    missing-recipient-information: 'Fill in the missing information.'
+    missing-sender-information: 'Fill in the missing information.'
+    missing-customer-information: 'Fill in the missing information.'
+    missing-delivery-date: 'Please select a delivery date!'
+
+    missing-shipping-method: Please select a shipping method!
+    missing-payment-method: Please select a payment method!
+
+    unknown-error: 'Unknown error.'
+    ajax-failed: 'Something went wrong. Please refresh the page and try again.'
 
 datetime:
     january: January
@@ -108,4 +250,7 @@ generic:
     cancel: Cancel
     edit: Edit
     modify: Modify
+    remove: Remove
+    delete: Delete
     close: Close
+    home: Home

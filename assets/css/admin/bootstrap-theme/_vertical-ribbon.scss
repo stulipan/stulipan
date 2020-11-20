@@ -1,0 +1,116 @@
+// Vertical ribbon
+// It is used in Order Detail page for delivery date warnings
+
+$vertical-ribbon-font-size:           90% !default;
+$vertical-ribbon-text-h2-font-size:        1.215rem !default;
+$vertical-ribbon-text-h1-font-size:        1.62rem !default;
+
+$vertical-ribbon-padding-x:           .45rem !default;
+$vertical-ribbon-padding-y:           .45rem !default;
+$vertical-ribbon-margin-x:            .8rem !default;
+
+$vertical-ribbon-border-radius:       $border-radius !default;
+$vertical-ribbon-min-width:           3.25rem !default;
+$vertical-ribbon-max-width:           5rem !default;
+
+$vertical-ribbon-min-height:          4.25rem !default;
+$vertical-ribbon-max-height:          6rem !default;
+
+// Size: sm
+$vertical-ribbon-sm-font-size:           80% !default;
+$vertical-ribbon-sm-text-h2-font-size:   .8rem !default;
+$vertical-ribbon-sm-text-h1-font-size:   .9rem !default;
+
+$vertical-ribbon-sm-padding-x:           .25rem !default;
+$vertical-ribbon-sm-padding-y:           .25rem !default;
+
+$vertical-ribbon-sm-min-width:           2.25rem !default;
+$vertical-ribbon-sm-max-width:           4rem !default;
+
+$vertical-ribbon-sm-min-height:          3.25rem !default;
+$vertical-ribbon-sm-max-height:          4rem !default;
+
+
+@mixin vertical-ribbon-variant($bg) {
+  color: color-yiq($bg);
+  background-color: $bg;
+
+  &::before {
+    border-right-color: darken($bg, 10%);
+  }
+}
+
+.vertical-ribbon {
+  position: absolute;
+  top: -12px;
+  //top: -8px;
+  right: $vertical-ribbon-margin-x;
+  z-index: 999;
+  //display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $vertical-ribbon-font-size;
+  padding: $vertical-ribbon-padding-y $vertical-ribbon-padding-x;
+  text-align: center;
+  border-bottom-left-radius: $vertical-ribbon-border-radius;
+  border-bottom-right-radius: $vertical-ribbon-border-radius;
+  border-top-right-radius: $vertical-ribbon-border-radius;
+  min-width: $vertical-ribbon-min-width;
+  max-width: $vertical-ribbon-max-width;
+  min-height: $vertical-ribbon-min-height;
+
+  & .ribbon-text-h1 {
+    font-size: $vertical-ribbon-text-h1-font-size;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  & .ribbon-text-h2 {
+    font-size: $vertical-ribbon-text-h2-font-size;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  &.vertical-ribbon-sm {
+    font-size: $vertical-ribbon-sm-font-size;
+    padding: $vertical-ribbon-sm-padding-y $vertical-ribbon-sm-padding-x;
+    min-width: $vertical-ribbon-sm-min-width;
+    max-width: $vertical-ribbon-sm-max-width;
+    min-height: $vertical-ribbon-sm-min-height;
+    width: 45px !important;
+    letter-spacing: -0.02rem;
+
+    & .ribbon-text-h1 {
+      font-size: $vertical-ribbon-sm-text-h1-font-size;
+    }
+    & .ribbon-text-h2 {
+      font-size: $vertical-ribbon-sm-text-h2-font-size;
+    }
+
+    &::before {
+      border-top: 8px solid transparent;
+      border-left: 0 solid transparent;
+      border-right-width: 10px;
+      left: -10px;
+    }
+  }
+
+  &::before {
+    content: '';
+    border-top: 12px solid transparent;
+    border-left: 0 solid transparent;
+    border-right: 14px solid #612f54;
+    position: absolute;
+    left: -14px;
+    top: 0;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .vertical-ribbon-#{$color} {
+    @include vertical-ribbon-variant($value);
+  }
+}
+
+
+

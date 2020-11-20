@@ -15,10 +15,10 @@
                         <label class="">Értesítés az ügyfélnek</label>
                     </div>
                     <div class="col-4 col-sm-8 d-flex justify-content-sm-start justify-content-end">
-                        <input type="checkbox" id="{{ paymentStatusForm.sendNotification.vars.id }}" name="{{ paymentStatusForm.sendNotification.vars.full_name }}" required="required" class="form-check-input" value="{{ paymentStatusForm.sendNotification.vars.value }}" {{ paymentStatusForm.sendNotification.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">
-                        <label class="form-check-label required" for="{{ paymentStatusForm.sendNotification.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+                        {{ form_widget(paymentStatusForm.sendNotification, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
+{#                        <input type="checkbox" id="{{ paymentStatusForm.sendNotification.vars.id }}" name="{{ paymentStatusForm.sendNotification.vars.full_name }}" required="required" class="form-check-input" value="{{ paymentStatusForm.sendNotification.vars.value }}" {{ paymentStatusForm.sendNotification.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">#}
+{#                        <label class="form-check-label required" for="{{ paymentStatusForm.sendNotification.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>#}
 
-                        {#{{ form_widget(form.enabled) }}#}
                         {{ form_errors(paymentStatusForm.sendNotification) }}
                         {% do paymentStatusForm.sendNotification.setRendered() %}
                     </div>
@@ -28,10 +28,10 @@
                         <label class="">Megjegyzés hozzáadása</label>
                     </div>
                     <div class="col-4 col-sm-8 d-flex justify-content-sm-start justify-content-end">
-                        <input type="checkbox" id="{{ paymentStatusForm.addNote.vars.id }}" name="{{ paymentStatusForm.addNote.vars.full_name }}" required="required" class="form-check-input" value="{{ paymentStatusForm.addNote.vars.value }}" {{ paymentStatusForm.addNote.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">
-                        <label class="form-check-label required" for="{{ paymentStatusForm.addNote.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+                        {{ form_widget(paymentStatusForm.addNote, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
+{#                        <input type="checkbox" id="{{ paymentStatusForm.addNote.vars.id }}" name="{{ paymentStatusForm.addNote.vars.full_name }}" required="required" class="form-check-input" value="{{ paymentStatusForm.addNote.vars.value }}" {{ paymentStatusForm.addNote.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">#}
+{#                        <label class="form-check-label required" for="{{ paymentStatusForm.addNote.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>#}
 
-                        {#{{ form_widget(form.enabled) }}#}
                         {{ form_errors(paymentStatusForm.addNote) }}
                         {% do paymentStatusForm.addNote.setRendered() %}
                     </div>

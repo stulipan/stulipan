@@ -4,6 +4,15 @@
  * @version     0.1
  * @author      Difiori
  *
+ *
+ * !!! NINCS HASZNALATBAN !!!
+ * * !!! NINCS HASZNALATBAN !!!
+ * * !!! NINCS HASZNALATBAN !!!
+ * * !!! NINCS HASZNALATBAN !!!
+ * * !!! NINCS HASZNALATBAN !!!
+ * * !!! NINCS HASZNALATBAN !!!
+ * * !!! NINCS HASZNALATBAN !!!
+ *
  */
 
 /**
@@ -30,6 +39,16 @@
 // },
 
 'use strict';
+const AlertHtml = {
+    pre: {
+        success: `<div class="JS--alertMessage alert alert-success mt-4 px-3 px-md-4" role="alert" data-alert-message>
+                        <i class="fas fa-exclamation-circle mr-1 text-muted"></i>`,
+        danger: `<div class="JS--alertMessage alert alert-danger mt-4 px-3 px-md-4" role="alert" data-alert-message>
+                        <i class="fas fa-exclamation-circle mr-1 text-muted"></i>`,
+    },
+    post: `</div>`
+};
+
 let proceedX = false;
 let formIsDisplayed = false;
 let alert = {
@@ -39,58 +58,62 @@ let alert = {
             // position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
         }
     },
-    cart: {
-        hasSuccess: false,
-        hasError: false,
-        fetchInitialValue: function () {
-            this.hasError = $('.JS--cartWrapper').find('.JS--alertMessage').length > 0 ? true : false;
-        },
-        showSuccessAt: function (position) {
-            if (this.hasError) {
-                this.hideError();
-            }
-            if (!this.hasSuccess) {
-                position.after(`<div class="JS--alertMessage alert alert-success mt-4 px-3 px-md-4 rounded-0" role="alert">
-                        <i class="fas fa-exclamation-circle mr-1 text-muted"></i> Az ajándékot sikeresen hozzáadtad a kosárhoz! 
-                    </div>`);
-                this.hasSuccess = true;
-            }
-            position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
-        },
-        hideSuccess: function () {
-            if (this.hasSuccess) {
-                $('.JS--cartWrapper').find('.JS--alertMessage').replaceWith('');
-                this.hasSuccess = false;
-            }
-        },
-        hideError: function () {
-            if (this.hasError) {
-                $('.JS--cartWrapper').find('.JS--alertMessage').replaceWith('');
-                this.hasError = false;
-            }
-        },
-    },
-    recipient: {
-        hasError: false,
-        fetchInitialValue: function () {
-            this.hasError = $('.JS--recipientWrapper').find('.JS--alertMessage').length > 0 ? true : false;
-        },
-        showErrorAt: function (position) {
-            if (!this.hasError) {
-                position.after(`<div class="JS--alertMessage alert alert-danger mt-4 px-3 px-md-4 rounded-0" role="alert">
-                        <i class="fas fa-exclamation-circle mr-1 text-muted"></i> Nem mentetted el címzett adatait! 
-                    </div>`);
-                this.hasError = true;
-            }
-            position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
-        },
-        hideError: function () {
-            if (this.hasError) {
-                $('.JS--recipientWrapper').find('.JS--alertMessage').replaceWith('');
-                this.hasError = false;
-            }
-        },
-    },
+    // cart: {
+    //     hasSuccess: false,
+    //     hasError: false,
+    //     fetchInitialValue: function () {
+    //         this.hasError = $('.JS--cartWrapper').find('.JS--alertMessage').length > 0 ? true : false;
+    //     },
+    //     showSuccessAt: function (position) {
+    //         if (this.hasError) {
+    //             this.hideError();
+    //         }
+    //         if (!this.hasSuccess) {
+    //             position.after(AlertHtml.pre.success + 'Az ajándékot sikeresen hozzáadtad a kosárhoz!' + AlertHtml.post);
+    //             this.hasSuccess = true;
+    //         }
+    //         position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
+    //     },
+    //     showAlertAt: function (position, msg) {
+    //         if (this.hasError) {
+    //             this.hideError();
+    //         }
+    //         this.hideSuccess();
+    //         position.after(AlertHtml.pre.danger + msg + AlertHtml.post);
+    //         position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
+    //     },
+    //     hideSuccess: function () {
+    //         if (this.hasSuccess) {
+    //             $('.JS--cartWrapper').find('.JS--alertMessage').replaceWith('');
+    //             this.hasSuccess = false;
+    //         }
+    //     },
+    //     hideError: function () {
+    //         if (this.hasError) {
+    //             $('.JS--cartWrapper').find('.JS--alertMessage').replaceWith('');
+    //             this.hasError = false;
+    //         }
+    //     },
+    // },
+    // recipient: {
+    //     hasError: false,
+    //     fetchInitialValue: function () {
+    //         this.hasError = $('.JS--recipientWrapper').find('.JS--alertMessage').length > 0 ? true : false;
+    //     },
+    //     showErrorAt: function (position) {
+    //         if (!this.hasError) {
+    //             position.after(AlertHtml.pre.danger + 'Nem mentetted el címzett adatait!' + AlertHtml.post);
+    //             this.hasError = true;
+    //         }
+    //         position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
+    //     },
+    //     hideError: function () {
+    //         if (this.hasError) {
+    //             $('.JS--recipientWrapper').find('.JS--alertMessage').replaceWith('');
+    //             this.hasError = false;
+    //         }
+    //     },
+    // },
     deliveryDate: {
         hasError: false,
         fetchInitialValue: function () {
@@ -98,9 +121,7 @@ let alert = {
         },
         showErrorAt: function (position) {
             if (!this.hasError) {
-                position.after(`<div class="JS--alertMessage alert alert-danger mt-4 px-3 px-md-4 rounded-0" role="alert">
-                        <i class="fas fa-exclamation-circle mr-1 text-muted"></i> Add meg a szállítás idejét! Bizonyosodj meg róla, hogy választottál szállítási idősávot is. !dlkjnsf
-                    </div>`);
+                position.after(AlertHtml.pre.danger + 'Add meg a szállítás idejét! Bizonyosodj meg róla, hogy választottál szállítási idősávot is. !dlkjnsf' + AlertHtml.post);
                 this.hasError = true;
             }
             position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
@@ -119,9 +140,7 @@ let alert = {
         },
         showErrorAt: function (position) {
             if (!this.hasError) {
-                position.after(`<div class="JS--alertMessage alert alert-danger mt-4 px-3 px-md-4 rounded-0" role="alert">
-                        <i class="fas fa-exclamation-circle mr-1 text-muted"></i> Nem mentetted el címzett adatait! 
-                    </div>`);
+                position.after(AlertHtml.pre.danger + 'Nem mentetted el címzett adatait!' + AlertHtml.post);
                 this.hasError = true;
             }
             position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
@@ -140,9 +159,7 @@ let alert = {
         },
         showErrorAt: function (position) {
             if (!this.hasError) {
-                position.after(`<div class="JS--alertMessage alert alert-danger mt-4 px-3 px-md-4 rounded-0" role="alert">
-                        <i class="fas fa-exclamation-circle mr-1 text-muted"></i> Nem mentetted el címzett adatait! 
-                    </div>`);
+                position.after(AlertHtml.pre.danger + 'Nem mentetted el címzett adatait!' + AlertHtml.post);
                 this.hasError = true;
             }
             position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
@@ -161,9 +178,7 @@ let alert = {
         },
         showErrorAt: function (position) {
             if (!this.hasError) {
-                position.after(`<div class="JS--alertMessage alert alert-danger mt-4 px-3 px-md-4 rounded-0" role="alert">
-                        <i class="fas fa-exclamation-circle mr-1 text-muted"></i> Nem mentetted el címzett adatait! 
-                    </div>`);
+                position.after(AlertHtml.pre.danger + 'Nem mentetted el címzett adatait!' + AlertHtml.post);
                 this.hasError = true;
             }
             position[0].scrollIntoView({ block: 'start', behavior: 'smooth'});
@@ -207,9 +222,9 @@ let alert = {
     },
 };
 
-alert.cart.fetchInitialValue();
-alert.recipient.fetchInitialValue();
-alert.deliveryDate.fetchInitialValue();
+// alert.cart.fetchInitialValue();
+// alert.recipient.fetchInitialValue();
+// alert.deliveryDate.fetchInitialValue();
 alert.sender.fetchInitialValue();
 alert.shipping.fetchInitialValue();
 alert.payment.fetchInitialValue();
@@ -220,46 +235,46 @@ alert.payment.fetchInitialValue();
  */
 let overlay = {
     button: {
-        showOverlay: function (event) {
+        showOverlay: function (e) {
             if (proceedX) {
                 proceedX = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-success-faded');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-success-faded');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceedX = true;
-            $element.trigger('click');
-            $element.prop('disabled', true);
+            $el.trigger('click');
+            $el.prop('disabled', true);
         },
-        hideOverlay: function (element) {
-            element.removeClass('text-success-faded');
-            element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-            element.prop('disabled', false);
+        hideOverlay: function (el) {
+            el.removeClass('text-success-faded');
+            el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+            el.prop('disabled', false);
             proceedX = false;
         }
     },
     link: {
-        showOverlay: function (event) {
+        showOverlay: function (e) {
             if (proceedX) {
                 proceedX = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceedX = true;
-            $element.trigger('click');
-            $element.addClass('disabled');
+            $el.trigger('click');
+            $el.addClass('disabled');
         },
-        hideOverlay: function (element) {
-            element.removeClass('text-faded');
-            element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-            element.removeClass('disabled');
+        hideOverlay: function (el) {
+            el.removeClass('text-faded');
+            el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+            el.removeClass('disabled');
             proceedX = false;
-            console.log(element);
+            console.log(el);
 
         }
     },
@@ -278,23 +293,23 @@ let overlay = {
 
     $.extend(window.handleOrder.prototype, {
 
-        submitMessageAndCustomerForm: function(event) {
+        submitMessageAndCustomerForm: function(e) {
             if (alert.hasNoErrors()) {
                 if (proceed) {
                     proceed = false;
                     return;
                 }
-                event.preventDefault();
-                let $element = $(event.currentTarget);
-                $element.addClass('text-success-faded');  // $element.html('');
-                $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+                e.preventDefault();
+                let $el = $(e.currentTarget);
+                $el.addClass('text-success-faded');  // $el.html('');
+                $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
                 proceed = true;
-                $element.trigger('click');
-                $element.prop('disabled', true);
+                $el.trigger('click');
+                $el.prop('disabled', true);
 
-                // let url = $element.attr('href');
-                let url = $element.data('url');
-                let $wrapper = $element.closest('.JS--globalWrapper');
+                // let url = $el.attr('href');
+                let url = $el.data('url');
+                let $wrapper = $el.closest('.JS--globalWrapper');
                 let $form = $wrapper.find('.JS--messageAndCustomerForm');
                 // console.log('URL: ' + $form.attr('action'));
 
@@ -311,34 +326,34 @@ let overlay = {
 
                         console.log($form.first('.JS--messageForm-message'));
                         alert.scroll.scrollIntoView($form.first('.JS--messageForm-message').find('.invalid-feedback'));
-                        overlay.button.hideOverlay($element);
+                        overlay.button.hideOverlay($el);
                     }
                 });
             }
-            // overlay.button.hideOverlay($element);
+            // overlay.button.hideOverlay($el);
 
             // alert.cart.hideSuccess(); // hide any success alert visible in the cart
             // alert.customer.hideError();
         },
-        submitDeliveryDateForm: function(event) {
+        submitDeliveryDateForm: function(e) {
             if (alert.hasNoErrors()) {
                 if (proceed) {
                     proceed = false;
                     return;
                 }
-                event.preventDefault();
-                // overlay.button.showOverlay(event);
+                e.preventDefault();
+                // overlay.button.showOverlay(e);
 
-                let $element = $(event.currentTarget);
-                $element.addClass('text-success-faded');  // $element.html('');
-                $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+                let $el = $(e.currentTarget);
+                $el.addClass('text-success-faded');  // $el.html('');
+                $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
                 proceed = true;
-                $element.trigger('click');
-                $element.prop('disabled', true);
+                $el.trigger('click');
+                $el.prop('disabled', true);
 
 
-                let url = $element.data('url');
-                let $wrapper = $element.closest('.JS--globalWrapper');
+                let url = $el.data('url');
+                let $wrapper = $el.closest('.JS--globalWrapper');
                 let $form = $wrapper.find('.JS--hiddenDeliveryDateForm');
                 // console.log('URL: ' + $form.attr('action'));
 
@@ -353,7 +368,7 @@ let overlay = {
                         alert.recipient.hasError = true;
                     }
                     // setTimeout(function () {
-                    overlay.button.hideOverlay($element);
+                    overlay.button.hideOverlay($el);
                     // }, 1000);
                     $wrapper.find('.JS--recipientWrapper')[0].scrollIntoView({block: 'start'});
                 } else {
@@ -371,7 +386,7 @@ let overlay = {
                         },
                         error: function (jqXHR) {
                             $form.replaceWith(jqXHR.responseText);
-                            overlay.button.hideOverlay($element);
+                            overlay.button.hideOverlay($el);
                         }
                     });
                 }
@@ -382,11 +397,11 @@ let overlay = {
         /**
          * Az alábbit akkor használtam amikor az első lépésben csak a Message form volt kint.
          */
-        handleSubmitMessageForm: function(event) {
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            let url = $element.attr('href');
-            let $wrapper = $element.closest('.JS--globalWrapper');
+        handleSubmitMessageForm: function(e) {
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            let url = $el.attr('href');
+            let $wrapper = $el.closest('.JS--globalWrapper');
             let $formWrapper = $wrapper.find('.JS--messageWrapper').find('.JS--formWrapper')
             let $messageForm = $formWrapper.find('form');
             alert('URL: ' + $messageForm.attr('action'));
@@ -412,23 +427,23 @@ let overlay = {
 
             });
         },
-        submitShippingAndPaymentForm: function(event) {
+        submitShippingAndPaymentForm: function(e) {
             if (alert.hasNoErrors()) {
                 if (proceed) {
                     proceed = false;
                     return;
                 }
-                event.preventDefault();
-                let $element = $(event.currentTarget);
-                $element.addClass('text-success-faded');  // $element.html('');
-                $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+                e.preventDefault();
+                let $el = $(e.currentTarget);
+                $el.addClass('text-success-faded');  // $el.html('');
+                $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
                 proceed = true;
-                $element.trigger('click');
-                $element.prop('disabled', true);
+                $el.trigger('click');
+                $el.prop('disabled', true);
 
-                let url = $element.data('url');
-                let $wrapper = $element.closest('.JS--globalWrapper');
-                let $shipAndPayForm = $element.find('.JS--shipAndPayForm');
+                let url = $el.data('url');
+                let $wrapper = $el.closest('.JS--globalWrapper');
+                let $shipAndPayForm = $el.find('.JS--shipAndPayForm');
                 let $registrationForm = $wrapper.find('.JS--registrationForm');
                 console.log($shipAndPayForm);
 
@@ -442,7 +457,7 @@ let overlay = {
                         alert.sender.hasError = true;
                     }
                     // setTimeout(function () {
-                    overlay.button.hideOverlay($element);
+                    overlay.button.hideOverlay($el);
                     // }, 1000);
                     $wrapper.find('.JS--senderWrapper')[0].scrollIntoView({block: 'start'});
                 } else {
@@ -467,13 +482,13 @@ let overlay = {
                                 },
                                 error: function (jqXHR) {
                                     $shipAndPayForm.replaceWith(jqXHR.responseText);
-                                    overlay.button.hideOverlay($element);
+                                    overlay.button.hideOverlay($el);
                                 }
                             });
                         },
                         error: function (jqXHR) {
                             $registrationForm.replaceWith(jqXHR.responseText);
-                            overlay.button.hideOverlay($element);
+                            overlay.button.hideOverlay($el);
                         }
                     });
                 }
@@ -524,14 +539,14 @@ let overlay = {
         /**
          * It is used both by Recipient and Sender forms
          */
-        handleSubmitZipAndGetCity: function(event) {
-            let $element = $(event.currentTarget);
-            let $form = $element.closest('form');
+        handleSubmitZipAndGetCity: function(e) {
+            let $el = $(e.currentTarget);
+            let $form = $el.closest('form');
 
             $.ajax({
-                url: $element.data('url'),
+                url: $el.data('url'),
                 type: 'GET',
-                data: { zip: $element.val() },
+                data: { zip: $el.val() },
                 dataType: 'json',
                 success: function (data) {
                     console.log(data.success);
@@ -550,11 +565,11 @@ let overlay = {
 
         },
 
-        handleEdit: function(event) {
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            let url = $element.data('url');
-            let $enclosing = $element.closest('span');
+        handleEdit: function(e) {
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            let url = $el.data('url');
+            let $enclosing = $el.closest('span');
             let $next = $enclosing.next();
 
             $.ajax({
@@ -572,12 +587,12 @@ let overlay = {
             });
         },
 
-        handleFormSubmit: function(event) {
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            let $enclosing = $element.closest('span');
+        handleFormSubmit: function(e) {
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            let $enclosing = $el.closest('span');
             let $prev = $enclosing.prev();
-            let $form = $element;
+            let $form = $el;
 
             $.ajax({
                 url: $form.attr('action'),
@@ -597,42 +612,76 @@ let overlay = {
                 }
             });
         },
-        handleSetItemQuantity: function(event) {
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            let $wrapper = $element.closest('.JS--cartWrapper');
-            let $formWrapper = $element.closest('.JS--formWrapper');
-            let $form = $formWrapper.find('form');
-            console.log($form.attr('action'));
+        handleSetItemQuantity: function(e) {
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            let $wrapper = $el.closest('.JS--cartWrapper');
+            let $form = $el.closest('.JS--formWrapper').find('form');
+            let $formWrapper = $el.closest('.JS--formWrapper');
 
             $.ajax({
                 url: $form.attr('action'),
                 method: 'POST',
                 data: $form.serialize(),
-                success: function(data) {
-                    $formWrapper.html(data);
-                    alert.cart.hideSuccess();
-                },
-                error: function(jqXHR) {
-                    $form.replaceWith(jqXHR.responseText);
-                }
+            }).done(function(data) {
+                $formWrapper.html(data);
+                alert.cart.hideSuccess();
+                alert.cart.hideError();
+            }).fail(function(jqXHR) {
+                $form.replaceWith(jqXHR.responseText);
+                alert.cart.showAlertAt($wrapper.find('.JS--alertBlock'), 'Nincs elegendő készlet.');
+                alert.cart.hasError = true;
             });
+
+            // let $resultWrapper = $wrapper.find('.JS--resultWrapper');
+            // $.ajax({
+            //     url: $form.attr('action'),
+            //     method: 'POST',
+            //     data: $form.serialize(),
+            // }).done(function(data) {
+            //     $resultWrapper.html(data);
+            //     alert.cart.hideSuccess();
+            // }).fail(function(jqXHR, textStatus) {
+            //     alert.cart.showAlertAt($wrapper.find('.JS--alertBlock'), jqXHR.responseJSON);
+            //     alert.cart.hasError = true;
+            //     console.log(jqXHR)
+            //     $.get(window.location.origin+'/cart/getCart', function () {}).done(function (data) {
+            //         $resultWrapper.html(data);
+            //     })
+            // });
+
+            // let $formWrapper = $el.closest('.JS--formWrapper');
+            // let $form = $formWrapper.find('form');
+            // console.log($form.attr('action'));
+            //
+            // $.ajax({
+            //     url: $form.attr('action'),
+            //     method: 'POST',
+            //     data: $form.serialize(),
+            //     success: function(data) {
+            //         $formWrapper.html(data);
+            //         alert.cart.hideSuccess();
+            //     },
+            //     error: function(jqXHR) {
+            //         $form.replaceWith(jqXHR.responseText);
+            //     }
+            // });
         },
-        handleRemoveItemFromCart: function(event) {
+        handleRemoveItemFromCart: function(e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceed = true;
-            // $element.trigger('click');
-            $element.addClass('disabled');
+            // $el.trigger('click');
+            $el.addClass('disabled');
 
-            let url = $element.data('url');
-            let $wrapper = $element.closest('.JS--cartWrapper');
+            let url = $el.data('url');
+            let $wrapper = $el.closest('.JS--cartWrapper');
             let $resultWrapper = $wrapper.find('.JS--resultWrapper');
             console.dir($resultWrapper);
             console.log(url);
@@ -644,25 +693,26 @@ let overlay = {
                     $resultWrapper.html(data);
                     proceed = false;
                     alert.cart.hideSuccess();
+                    alert.cart.hideError();
                 }
             });
         },
-        handleAddGiftToCart: function (event) {
+        handleAddGiftToCart: function (e) {
             console.log(proceed);
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            console.log($element[0]);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            console.log($el[0]);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceed = true;
-            $element.addClass('disabled');
+            $el.addClass('disabled');
 
-            let url = $element.data('url');
-            let $wrapper = $element.closest('.JS--globalWrapper').find('.JS--cartWrapper');
+            let url = $el.data('url');
+            let $wrapper = $el.closest('.JS--globalWrapper').find('.JS--cartWrapper');
             let $resultWrapper = $wrapper.find('.JS--resultWrapper');
             console.log($resultWrapper[0]);
 
@@ -673,42 +723,42 @@ let overlay = {
                 method: 'POST',
                 success: function(data) {
                     $resultWrapper.html(data);
-                    overlay.link.hideOverlay($element);
+                    overlay.link.hideOverlay($el);
                     proceed = false;
                     alert.cart.showSuccessAt($wrapper.find('.JS--alertBlock'));
                 }
             });
 
         },
-        handlePickCardMessage: function (event) {
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            console.log($element);
-            let $message = $element.closest('.JS--messageWrapper').find('.JS--messageForm-message');
+        handlePickCardMessage: function (e) {
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            console.log($el);
+            let $message = $el.closest('.JS--messageWrapper').find('.JS--messageForm-message');
             console.log($message);
 
-            $message.val($element.text());
-            $element.closest('.JS--globalWrapper').closest('.JS--messageWrapper').find('.JS--cardMessageDropdown').removeClass('show');
-            console.log($element.closest('.JS--globalWrapper').closest('.JS--messageWrapper').find('.JS--cardMessageDropdown'));
+            $message.val($el.text());
+            $el.closest('.JS--globalWrapper').closest('.JS--messageWrapper').find('.JS--cardMessageDropdown').removeClass('show');
+            console.log($el.closest('.JS--globalWrapper').closest('.JS--messageWrapper').find('.JS--cardMessageDropdown'));
 
         },
 
 
-        showRecipientForm: function(event) {
+        showRecipientForm: function(e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceed = true;
-            $element.trigger('click');
-            $element.addClass('disabled');
+            $el.trigger('click');
+            $el.addClass('disabled');
 
-            let url = $element.data('url');
-            let $wrapper = $element.closest('.JS--recipientWrapper');
+            let url = $el.data('url');
+            let $wrapper = $el.closest('.JS--recipientWrapper');
             let $contentBlock = $wrapper.find('.JS--recipientContentBlock');
 
             $.post(url, function (data) {
@@ -718,32 +768,32 @@ let overlay = {
                 proceed = false;
             });
         },
-        pickRecipient: function(event) {
+        pickRecipient: function(e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceed = true;
-            $element.trigger('click');
-            $element.addClass('disabled');
+            $el.trigger('click');
+            $el.addClass('disabled');
 
-            let $wrapper = $element.closest('.JS--recipientWrapper');
-            let url = $element.attr('href');
+            let $wrapper = $el.closest('.JS--recipientWrapper');
+            let url = $el.attr('href');
 
             $.post(url, function (data) {
-                $element.closest('.row').find('.selected').removeClass('selected');
-                $element.closest('.JS--item').addClass('selected');
-                overlay.link.hideOverlay($element);
+                $el.closest('.row').find('.selected').removeClass('selected');
+                $el.closest('.JS--item').addClass('selected');
+                overlay.link.hideOverlay($el);
                 alert.recipient.hideError();
                 proceed = false;
             }).fail(function (jqXHR) {
-                $element.removeClass('text-success-faded');
-                $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-                $element.prop('disabled', false);
+                $el.removeClass('text-success-faded');
+                $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                $el.prop('disabled', false);
                 alert.recipient.showErrorAt($wrapper.find('.JS--alertBlock'));
                 alert.recipient.hasError = true;
                 proceed = false;
@@ -754,38 +804,38 @@ let overlay = {
             //     method: 'POST',
             //     success: function() {
             //         $.get(url, function (data) {
-            //             $element.closest('.row').find('.selected').removeClass('selected');
-            //             $element.closest('.JS--item').addClass('selected');
-            //             overlay.link.hideOverlay($element);
+            //             $el.closest('.row').find('.selected').removeClass('selected');
+            //             $el.closest('.JS--item').addClass('selected');
+            //             overlay.link.hideOverlay($el);
             //             alert.recipient.hideError();
             //             proceed = false;
             //         });
             //     },
             //     error: function(jqXHR) {
-            //         $element.removeClass('text-success-faded');
-            //         $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-            //         $element.prop('disabled', false);
+            //         $el.removeClass('text-success-faded');
+            //         $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+            //         $el.prop('disabled', false);
             //         alert.recipient.showErrorAt($wrapper.find('.JS--alertBlock'));
             //         alert.recipient.hasError = true;
             //         proceed = false;
             //     }
             // });
         },
-        getRecipients: function(event) {
+        getRecipients: function(e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceed = true;
-            $element.trigger('click');
-            $element.addClass('disabled');
+            $el.trigger('click');
+            $el.addClass('disabled');
 
-            let url = $element.data('url');
-            let $wrapper = $element.closest('.JS--recipientWrapper');
+            let url = $el.data('url');
+            let $wrapper = $el.closest('.JS--recipientWrapper');
             let $contentBlock = $wrapper.find('.JS--recipientContentBlock');
             console.log(url);
 
@@ -800,31 +850,31 @@ let overlay = {
                     proceed = false;
                 },
                 error: function(jqXHR) {
-                    $element.removeClass('text-success-faded');
-                    $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-                    $element.prop('disabled', false);
+                    $el.removeClass('text-success-faded');
+                    $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                    $el.prop('disabled', false);
                     alert.recipient.showErrorAt($wrapper.find('.JS--alertBlock'));
                     alert.recipient.hasError = true;
                     proceed = false;
                 }
             });
         },
-        submitRecipientForm: function(event) {
+        submitRecipientForm: function(e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $form = $(event.currentTarget);
-            let $element = $form.find('.JS--Button-submit');
-            console.log($element);
-            $element.addClass('text-success-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $form = $(e.currentTarget);
+            let $el = $form.find('.JS--Button-submit');
+            console.log($el);
+            $el.addClass('text-success-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceed = true;
-            $element.trigger('click');
-            $element.prop('disabled', true);
+            $el.trigger('click');
+            $el.prop('disabled', true);
 
-            let $wrapper = $element.closest('.JS--recipientWrapper');
+            let $wrapper = $el.closest('.JS--recipientWrapper');
             let $contentBlock = $form.closest('.JS--recipientContentBlock');
             let $url = $form.attr('action');
             console.log('form action url:' + $url);
@@ -842,30 +892,30 @@ let overlay = {
                 },
                 error: function(jqXHR) {
                     $form.replaceWith(jqXHR.responseText);
-                    $element.removeClass('text-success-faded');  // $element.html('');
-                    $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-                    $element.prop('disabled', false);
+                    $el.removeClass('text-success-faded');  // $el.html('');
+                    $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                    $el.prop('disabled', false);
                     proceed = false;
                 }
             });
         },
-        deleteRecipient: function (event) {
+        deleteRecipient: function (e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             // setTimeout(function () {
             proceed = true;
-            $element.trigger('click');
-            $element.addClass('disabled');
+            $el.trigger('click');
+            $el.addClass('disabled');
             // }, 600);
 
-            let url = $element.data('url');
-            let $wrapper = $element.closest('.JS--recipientWrapper');
+            let url = $el.data('url');
+            let $wrapper = $el.closest('.JS--recipientWrapper');
             let $contentBlock = $wrapper.find('.JS--recipientContentBlock');
 
             let confirm = window.confirm('Biztosan szeretnéd törölni?');
@@ -878,29 +928,29 @@ let overlay = {
                         proceed = false;
                     },
                     error: function(jqXHR) {
-                        $element.removeClass('text-faded');
-                        $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-                        $element.prop('disabled', false);
+                        $el.removeClass('text-faded');
+                        $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                        $el.prop('disabled', false);
                         alert.recipient.showErrorAt($wrapper.find('.JS--alertBlock'));
                         alert.recipient.hasError = true;
                         proceed = false;
                     }
                 });
             } else {
-                $element.removeClass('text-faded');
-                $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-                $element.prop('disabled', false);
+                $el.removeClass('text-faded');
+                $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                $el.prop('disabled', false);
                 proceed = false;
             }
         },
 
 
-        pickShipping: function(event) {
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            let $wrapper = $element.closest('.JS--shippingWrapper');
-            let $choiceWrapper = $element.closest('.JS--choiceContainer');
-            let url = $element.data('url');
+        pickShipping: function(e) {
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            let $wrapper = $el.closest('.JS--shippingWrapper');
+            let $choiceWrapper = $el.closest('.JS--choiceContainer');
+            let url = $el.data('url');
             // $choiceWrapper.find('input').removeAttr("checked");  // NEM MUKODOTT JOL!
             $choiceWrapper.find('input').prop('checked', false);   // Leveszi a pipát
             $choiceWrapper.find('.JS--loadingOverlay').addClass('loading-overlay loading');
@@ -923,12 +973,12 @@ let overlay = {
                 }
             });
         },
-        pickPayment: function(event) {
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            let $wrapper = $element.closest('.JS--paymentWrapper');
-            let $choiceWrapper = $element.closest('.JS--choiceContainer');
-            let url = $element.data('url');
+        pickPayment: function(e) {
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            let $wrapper = $el.closest('.JS--paymentWrapper');
+            let $choiceWrapper = $el.closest('.JS--choiceContainer');
+            let url = $el.data('url');
             $choiceWrapper.find('input').prop('checked', false);   // Leveszi a pipát
             $choiceWrapper.find('.JS--loadingOverlay').addClass('loading-overlay loading');
 
@@ -949,21 +999,21 @@ let overlay = {
                 }
             });
         },
-        showSenderForm: function(event) {
+        showSenderForm: function(e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceed = true;
-            $element.trigger('click');
-            $element.addClass('disabled');
+            $el.trigger('click');
+            $el.addClass('disabled');
 
-            let url = $element.data('url');
-            let $wrapper = $element.closest('.JS--senderWrapper');
+            let url = $el.data('url');
+            let $wrapper = $el.closest('.JS--senderWrapper');
             let $contentBlock = $wrapper.find('.JS--senderContentBlock');
 
             $.ajax({
@@ -977,61 +1027,61 @@ let overlay = {
                 }
             });
         },
-        pickSender: function(event) {
+        pickSender: function(e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             setTimeout(function () {
                 proceed = true;
-                $element.trigger('click');
-                $element.addClass('disabled');
+                $el.trigger('click');
+                $el.addClass('disabled');
             }, 600);
 
 
-            let $wrapper = $element.closest('.JS--senderWrapper');
-            let url = $element.attr('href');
+            let $wrapper = $el.closest('.JS--senderWrapper');
+            let url = $el.attr('href');
 
             $.ajax({
                 url: url,
                 method: 'POST',
                 success: function(data) {
-                    $element.closest('.row').find('.selected').removeClass('selected');
-                    $element.closest('.JS--item').addClass('selected');
+                    $el.closest('.row').find('.selected').removeClass('selected');
+                    $el.closest('.JS--item').addClass('selected');
 
-                    overlay.link.hideOverlay($element);
+                    overlay.link.hideOverlay($el);
                     alert.sender.hideError();
                     proceed = false;
                 },
                 error: function(jqXHR) {
-                    $element.removeClass('text-success-faded');
-                    $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-                    $element.prop('disabled', false);
+                    $el.removeClass('text-success-faded');
+                    $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                    $el.prop('disabled', false);
                     alert.recipient.showErrorAt($wrapper.find('.JS--alertBlock'));
                     alert.recipient.hasError = true;
                     proceed = false;
                 }
             });
         },
-        getSenders: function(event) {
+        getSenders: function(e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceed = true;
-            $element.trigger('click');
-            $element.addClass('disabled');
+            $el.trigger('click');
+            $el.addClass('disabled');
 
-            let url = $element.data('url');
-            let $wrapper = $element.closest('.JS--senderWrapper');
+            let url = $el.data('url');
+            let $wrapper = $el.closest('.JS--senderWrapper');
             let $contentBlock = $wrapper.find('.JS--senderContentBlock');
             console.log(url);
 
@@ -1046,31 +1096,31 @@ let overlay = {
                     proceed = false;
                 },
                 error: function(jqXHR) {
-                    $element.removeClass('text-success-faded');
-                    $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-                    $element.prop('disabled', false);
+                    $el.removeClass('text-success-faded');
+                    $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                    $el.prop('disabled', false);
                     alert.sender.showErrorAt($wrapper.find('.JS--alertBlock'));
                     alert.sender.hasError = true;
                     proceed = false;
                 }
             });
         },
-        submitSenderForm: function(event) {
+        submitSenderForm: function(e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $form = $(event.currentTarget);
-            let $element = $form.find('.JS--Button-submit');
-            $element.addClass('text-success-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $form = $(e.currentTarget);
+            let $el = $form.find('.JS--Button-submit');
+            $el.addClass('text-success-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             proceed = true;
-            $element.trigger('click');
-            $element.prop('disabled', true);
+            $el.trigger('click');
+            $el.prop('disabled', true);
 
-            let $wrapper = $element.closest('.JS--senderWrapper');
-            let $contentBlock = $element.closest('.JS--senderContentBlock');
+            let $wrapper = $el.closest('.JS--senderWrapper');
+            let $contentBlock = $el.closest('.JS--senderContentBlock');
             let $url = $form.attr('action');
             console.log('form action url:' + $url);
 
@@ -1089,28 +1139,28 @@ let overlay = {
                 },
                 error: function(jqXHR) {
                     $form.replaceWith(jqXHR.responseText);
-                    overlay.button.hideOverlay($element);
+                    overlay.button.hideOverlay($el);
                     proceed = false;
                 }
             });
         },
-        deleteSender: function (event) {
+        deleteSender: function (e) {
             if (proceed) {
                 proceed = false;
                 return;
             }
-            event.preventDefault();
-            let $element = $(event.currentTarget);
-            $element.addClass('text-faded');  // $element.html('');
-            $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+            e.preventDefault();
+            let $el = $(e.currentTarget);
+            $el.addClass('text-faded');  // $el.html('');
+            $el.next('.JS--loadingOverlay').addClass('loading-overlay loading');
             // setTimeout(function () {
                 proceed = true;
-                $element.trigger('click');
-                $element.addClass('disabled');
+                $el.trigger('click');
+                $el.addClass('disabled');
             // }, 600);
 
-            let url = $element.data('url');
-            let $wrapper = $element.closest('.JS--senderWrapper');
+            let url = $el.data('url');
+            let $wrapper = $el.closest('.JS--senderWrapper');
             let $contentBlock = $wrapper.find('.JS--senderContentBlock');
 
             let confirm = window.confirm('Biztosan szeretnéd törölni?');
@@ -1123,18 +1173,18 @@ let overlay = {
                         proceed = false;
                     },
                     error: function(jqXHR) {
-                        $element.removeClass('text-faded');
-                        $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-                        $element.prop('disabled', false);
+                        $el.removeClass('text-faded');
+                        $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                        $el.prop('disabled', false);
                         alert.sender.showErrorAt($wrapper.find('.JS--alertBlock'));
                         alert.sender.hasError = true;
                         proceed = false;
                     }
                 });
             } else {
-                $element.removeClass('text-faded');
-                $element.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
-                $element.prop('disabled', false);
+                $el.removeClass('text-faded');
+                $el.next('.JS--loadingOverlay').removeClass('loading-overlay loading');
+                $el.prop('disabled', false);
                 proceed = false;
             }
         },
@@ -1143,3 +1193,9 @@ let overlay = {
 })(window, jQuery);
 
 
+// jQuery.fn.extend({
+//     gotoStep2: function() {
+//         console.log(this);
+//         const instance = new handleOrder(this);
+//     }
+// });

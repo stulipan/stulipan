@@ -31,7 +31,7 @@
                         {% for choice in dateForm.deliveryDate %}
                             <div class="col-sm-3 col-3">
                                 {% if not loop.last %}
-                                    {{ include('webshop/site/choiceItem.html.twig') }}
+                                    {{ include('webshop/site/vp-choice-date.html.twig') }}
                                 {% else %}
                                     <div class="visual-picker visual-picker-md align-top mr-2">
                                         <input class="JS--Button-clickDate" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="" {{ choice.vars.checked ? 'checked' : '' }}/>

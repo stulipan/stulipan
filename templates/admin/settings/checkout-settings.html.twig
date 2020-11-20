@@ -1,0 +1,16 @@
+{% extends 'admin/template-editing.html.twig' %}
+
+{% set activeMenu = 'settings' %}
+{% set pageTitle = 'Pénztár' %}
+{% set breadcrumb = {
+    0: {
+        'url': path('settings-home'),
+        'text': 'settings.settings'|trans,
+    },
+} %}
+
+{% set cancelUrl = path('settings-home') %}
+
+{% block content %}
+    {% include 'admin/settings/_form.html.twig' %}
+{% endblock %}

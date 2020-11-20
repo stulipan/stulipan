@@ -2,10 +2,10 @@
         <div class="cart-item">
         <div class="">
             <div class="d-flex align-items-center">
-                <div class="badge--quantity-wrapper">
-                    <span class="badge--quantity badge-dark">{{ item.quantity }}</span>
+                <div class="badge-quantity-wrapper">
+                    <span class="badge-quantity badge-dark">{{ item.quantity }}</span>
                     <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
-                        <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid navbar-cart-product-image">
+                        <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
                     </a>
                 </div>
 

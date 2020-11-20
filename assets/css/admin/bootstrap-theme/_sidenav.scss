@@ -1,0 +1,160 @@
+// Sidenav menu
+
+.sidenav-sticky {
+  position: fixed;
+  left: 0;
+  top: 50px;
+  min-height: calc(100% - 50px);
+  height: 100%;
+  width: 240px;
+  background-color: $gray-50;
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.content-page {
+  margin-left: 240px;
+  padding: 0 1rem;
+}
+
+// Hides sidenav on smaller viewports
+@include media-breakpoint-down(md) {
+  .sidenav-sticky {
+    display: none;
+  }
+  .content-page {
+    margin-left: 0;
+    padding: 0;
+  }
+}
+
+.left-side-menu {
+  width: 100%;
+  height: calc(100vh - 50px);
+  border-right: 1px solid $gray-400;
+  padding: .5rem;
+  overflow-y: scroll;
+}
+
+.left-side-menu-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.sidenav {
+  margin: 0;
+  padding-inline-start: 0;
+  padding-top: .5rem;
+  font-size: .9rem;
+
+  &:last-of-type {
+    padding-bottom: .5rem;
+  }
+
+  & .sidenav-item {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2px;
+
+    & .sidenav-icon {
+      width: 1.25rem;
+      margin-right: .75rem;
+      color: $gray-600;
+      font-size: 1rem;
+      line-height: 1rem;
+    }
+
+    .sidenav-dropdown-menu {
+      position: relative;
+      display: none;
+      width: 100%;
+      box-shadow: none;
+      background-color: transparent;
+      padding: 0;
+      margin: 0 0 0 calc(1.25rem + .75rem);
+      list-style: none;
+      background-clip: padding-box;
+
+      & .sidenav-dropdown-item {
+        display: block;
+        width: 100%;
+        padding: .3125rem .5rem;
+        border-radius: .25rem;
+        color: $gray-700;
+        font-weight: $font-weight-base;
+        text-align: inherit;
+        white-space: nowrap;
+        background-color: transparent;
+        margin-top: 2px;
+
+        &.nav-subitem-selected {
+          color: $primary;
+          font-weight: 500;
+          background-color: darken($blue-lighten, 5%);
+        }
+
+        &:focus,
+        &:hover {
+          outline: none;
+          background-color: $gray-200;
+        }
+      }
+      & .sidenav-icon {
+        display: none;
+      }
+    }
+
+    & .sidenav-link {
+      color: initial;
+      width: 100%;
+      display: flex;
+      padding: .3125rem .5rem;
+      border-radius: $border-radius;
+      padding: .4rem .5rem;
+
+      &:focus,
+      &:hover {
+        outline: none;
+        background-color: $gray-200 !important;
+
+        & .sidenav-icon {
+          color: $gray-700;
+        }
+      }
+    }
+
+    & .sidenav-item-content {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+.sidenav .sidenav-item.sidenav-item-show {
+  & .sidenav-dropdown-menu {
+    display: block;
+  }
+
+  & .sidenav-link {
+    background-color: $gray-300;
+    //background-color: $white;
+
+    & .sidenav-icon {
+      color: $primary;
+    }
+
+    & .sidenav-item-content {
+      color: $primary;
+    }
+  }
+}
+
+// Correction for when the left menu is placed in a sidebar dialog
+.sidebar .left-side-menu {
+  border-right: none;
+}

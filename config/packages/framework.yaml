@@ -31,3 +31,6 @@ framework:
 
     validation:
         auto_mapping: {'App\\': {}}
+        # Ez a sor azert kell, hogy a 'messages' domain alatt (messages.en.yaml fileba) keresse es nem
+        # a validators.en.yaml-ba
+        translation_domain: messages

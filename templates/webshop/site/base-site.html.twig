@@ -3,7 +3,7 @@
 {% block title %}
     {% if pageTitle is defined and pageTitle is not empty %}
     {{ pageTitle }} |
-    {% endif %} {{ settings.get('meta.name') }}
+    {% endif %} {{ settings_general.get('meta.name') }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -12,12 +12,33 @@
 
 {% block body %}
 
-    {{ render(controller('App\\Controller\\Shop\\CartUtilsController::cartSliderSidebar')) }}
+    {{ render(controller('App\\Controller\\Shop\\CartUtilsController::showSidebarCart')) }}
+    <div class="sidebar sidebar-left sidebar-sm mobileMenu fade d-block d-lg-none" id="sidebar--mobileMenu" tabindex="-1" role="dialog" data-backdrop-css="mobileMenu-backdrop" aria-labelledby="mobileMenuLabel" aria-hidden="true">
+        <div class="sidebar-dialog sidebar-dialog-scrollable sidebar-dialog-centered" role="document">
+            <div class="sidebar-content">
+                <div class="sidebar-header bg-secondary p-2">
+                    <h3 class="sidebar-title" id="mobileMenuLabel">Rendelés: <span class="font-weight-bold">#21043523</span></h4>
+                        <button type="button" class="close modal-close" data-dismiss="sidebar" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="sidebar-body sidebar-header-none p-0">
+                    <ul class="navbar-nav mx-auto px-3 px-lg-0 flex-grow-1X justify-content-center">
+                        {% include 'webshop/site/navbar-menu-items.html.twig' %}
+                        <li class="nav-item dropdown">
+                            <a href="#" id="langsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Nyelvek</a>
+                            <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right">
+                                {% include 'webshop/site/navbar-language-dropdown.html.twig' %}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="body__fade"></div>
 	<header class="header">
         {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
-		<!-- Top Bar-->
 		<div class="top-bar text-sm d-none d-lg-block">
 			<div class="container-fluid">
 				<div class="row d-flex align-items-center">
@@ -32,162 +53,110 @@
 								<a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></li>
 						</ul>
 					</div>
-{#					<div class="col-sm-5 d-flex justify-content-end">#}
-						<!-- Language Dropdown-->
-{#						<div class="dropdown border-right px-3"><a id="langsDropdown" href="https://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle topbar-link"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/united-kingdom.svg" alt="english" class="topbar-flag">English</a>#}
-{#							<div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right"><a href="#" class="dropdown-item text-sm"><img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/germany.svg" alt="german" class="topbar-flag">German</a><a href="#" class="dropdown-item text-sm"> <img src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/img/france.svg" alt="french" class="topbar-flag">French</a></div>#}
-{#						</div>#}
-						{#<!-- Currency Dropdown-->#}
-						{#<div class="dropdown pl-3 ml-0">#}
-                            {#<a id="currencyDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle topbar-link">USD</a>#}
-							{#<div aria-labelledby="currencyDropdown" class="dropdown-menu dropdown-menu-right">#}
-                                {#<a href="#" class="dropdown-item text-sm">EUR</a>#}
-                                {#<a href="#" class="dropdown-item text-sm"> GBP</a>#}
-                            {#</div>#}
-						{#</div>#}
-{#					</div>#}
 				</div>
 			</div>
 		</div>
-		<!-- Navbar-->
-		<nav class="navbar navbar-expand-lg flex-lg-wrap navbar-stickyX navbar-darkX navbar--bg-white">
-			<div class="container">
-                <div class="w-100 d-flex justify-content-between align-items-center my-lg-2 mt-1">
+
+        {% block navbar %}
+		<nav class="navbar px-0 navbar-expand-lg navbar-stickyX navbar-dark navbar-stulipan flex-column">
+			<div class="container h-100">
+                <div class="d-flex justify-content-between align-items-center w-100 h-100 px-2 px-lg-0 py-0">
                         <!-- Navbar Ted -->
-                        <div class="col-md-3X col-lg-4X navbar--ted d-none d-md-flex justify-content-md-center mr-md-3 mt-1 mb-2 my-lg-0 order-md-3 order-2">
-                            <div class="nav-item">
-                                <svg class="svg-icon login-cart--color mr-1">
+                        <div class="navbar--ted d-none d-md-flex justify-content-md-center mr-md-3 mt-1 mb-2 my-lg-0 order-md-3 order-2">
+                            <div class="nav-item login-cart-link">
+                                <svg class="svg-icon">
                                     <use xlink:href="#calls-1"> </use>
                                 </svg>
-                                <span class="login-cart--text d-lg-inline">{{ settings.get('store.phone')}}</span>
+                                <span class="login-cart-text d-lg-inline ml-1">{{ settings_general.get('store.phone')}}</span>
                             </div>
                         </div>
 
+                        <a href="#" role="button" data-toggle="sidebar" data-target="#sidebar--mobileMenu" class="navbar-toggler navbar-toggler-right d-lg-none text-left order-lg-10 order-1 mr-2"><i class="fas fa-bars"></i></a>
+
                         <!-- Navbar Logo -->
-                        <div class="col-md-4X col-lg-4X navbar--logo d-flex justify-content-md-start flex-grow-1 order-md-2 order-3 ml-2X ml-md-0">
+                        <div class="navbar--logo d-flex justify-content-md-start flex-grow-1 order-md-2 order-3 ml-2X ml-md-0">
                             <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
                                 <span class="h3 font-weight-bold text-uppercase text-info">tulipan<span class="text-danger">.</span>futar  </span>
                             </a>
                         </div>
 
                         <!-- Navbar Login Cart -->
-                        <div class="col-md-4X col-lg-4X navbar--login-cart d-flex justify-content-end mt-1 mb-1 my-lg-0 pl-0 order-md-4 order-4">
-                            <!-- Language Selector -->
-                            <div class="nav-item navbar-icon-link login-cart--color dropdown border-right px-3 d-none d-md-flex">
-                                <a id="langsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle topbar-link">
-{#                                    {{ dump(app.request.locale) }}#}
-                                    {% if app.request.locale == 'en' %}
-                                        {% set myLocale = 'gb' %}
-                                    {% else %}
-                                        {% set myLocale = app.request.locale %}
-                                    {% endif %}
-                                    <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="topbar-flag topbar-flag-selected rounded-circleX">
-                                </a>
-                                <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right dropdown--flown mt-0">
-                                    <div class="dropdown--flown-b1">
-                                        <div class="dropdown--flown-b2">
-{#                                            <a href="/hu" class="dropdown-item text-smX">#}
-{#                                                <img src="{{ asset('/webshop/site/flags/4x3/hu.svg') }}" alt="magyar" class="topbar-flag">Magyar#}
-{#                                            </a>#}
-{#                                            <a href="/en" class="dropdown-item text-sXm">#}
-{#                                                <img src="{{ asset('/webshop/site/flags/4x3/gb.svg') }}" alt="english" class="topbar-flag">English#}
-{#                                            </a>#}
-                                            {% include 'webshop/site/navbar-language-dropdown.html.twig' %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Search Button-->
-                            <div data-toggle="search" class="nav-item navbar-icon-link">
-                                <svg class="svg-icon login-cart--color">
-                                    <use xlink:href="#search-1"> </use>
-                                </svg>
-                            </div>
+                        <div class="navbar-custom d-flex justify-content-end pl-0 order-md-4 order-4">
+                            <ul class="navbar-nav mb-0 flex-row">
 
-                            <div class="nav-item">
-                                {% if not is_granted('ROLE_USER') %}
-                                    <a href="{{ path('site-login') }}" class="dropdown-toggle navbar-icon-link">
-                                        <svg class="svg-icon login-cart--color">
-                                            <use xlink:href="#male-user-1"> </use>
-                                        </svg>
-                                        <span class="login-cart--text d-none d-lg-inline ml-1 ml-lg-2 ">Bejelentkezés</span>
+                                <li class="nav-item dropdown h-100 pr-3 border-right d-none d-md-flex">
+                                    <a id="langsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle login-cart-link">
+                                        <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="topbar-flag topbar-flag-selected">
                                     </a>
-                                {% endif %}
-                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                    <a id="myaccountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle navbar-icon-link">
-                                        <svg class="svg-icon login-cart--color">
-                                            <use xlink:href="#male-user-1"> </use>
-                                        </svg>
-                                        <span class="login-cart--text d-none d-lg-inline ml-1 ml-lg-2">Fiókom</span>
-                                    </a>
-                                    <div aria-labelledby="myaccountDropdown" class="dropdown-menu dropdown-menu-right dropdown--flown mt-0">
-                                        <div class="dropdown--flown-b1">
-                                            <div class="dropdown--flown-b2">
-                                                <span class="dropdown-item text-dark disabled font-weight-bold border-bottom">Helló, {{ app.user.firstname }}</span>
-                                                <a href="{{ path('site-user-myAccount') }}" class="dropdown-item">
-                                                    <svg class="svg-icon svg-icon-heavy">
-                                                        <use xlink:href="#male-user-1"> </use>
-                                                    </svg>
-                                                    Saját fiókom</a>
-                                                <a href="{{ path('site-user-myOrders') }}" class="dropdown-item">
-                                                    <svg class="svg-icon svg-icon-heavy"><use xlink:href="#retail-bag-2"></use></svg> Rendeléseim</a>
-                                                <a href="{{ path('logout') }}" class="dropdown-item">
-                                                    <svg class="svg-icon svg-icon-heavy"><use xlink:href="#exit-1"></use></svg>
-                                                    Kijelentkezés</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Cart Dropdown-->
-                            {{ render(controller('App\\Controller\\Shop\\CartUtilsController::cartDetailsDropdown')) }}
-                            <!-- /Cart Dropdown-->
-                        </div>
-{#                        <button type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right d-lg-none text-left order-lg-10 order-1 mr-2"><i class="fas fa-bars"></i></button>#}
-                        <button type="button" data-toggle="modal" data-target="#modal--mobileMenu" class="navbar-toggler navbar-toggler-right d-lg-none text-left order-lg-10 order-1 mr-2"><i class="fas fa-bars"></i></button>
-                </div>
-
-			</div>
-            <div class="modal fade mobileMenu" id="modal--mobileMenu" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                <div class="modal-slider modal-slider-left modal-dialog modal-dialog-scrollable" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header bg-secondary p-2">
-{#                            <h3 class="modal-title" id="modalLabel">Rendelés: <span class="text-infoX font-weight-bold">#21043523</span></h4>#}
-                            <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-                                <svg class="svg-icon w-100 h-100 svg-icon-light align-middle">
-                                    <use xlink:href="#close-1"> </use>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="modal-body modal-header-none p-0">
-                            <ul class="navbar-nav mx-auto px-3 px-lg-0 flex-grow-1X justify-content-center">
-                                {% include 'webshop/site/navbar-menu-items.html.twig' %}
-                                <li class="nav-item dropdown">
-                                    <a href="#" id="langsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Nyelvek</a>
-                                    <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right">
+                                    <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown--flownX mt-0">
                                         {% include 'webshop/site/navbar-language-dropdown.html.twig' %}
                                     </div>
                                 </li>
+
+                                <li class="nav-item pl-0 pl-md-2">
+                                    <div class="login-cart-link">
+                                        <svg class="svg-icon">
+                                            <use xlink:href="#search-1"> </use>
+                                        </svg>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    {% if not is_granted('ROLE_USER') %}
+                                        <a href="{{ path('site-login') }}" class="dropdown-toggle login-cart-link">
+                                            <svg class="svg-icon">
+                                                <use xlink:href="#male-user-1"> </use>
+                                            </svg>
+                                            <span class="login-cart-text d-none d-lg-inline ml-1 ml-lg-2 ">{{ 'navbar.login'|trans }}</span>
+                                        </a>
+                                    {% endif %}
+                                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        <a href="#" id="myaccountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle login-cart-link">
+                                            <svg class="svg-icon">
+                                                <use xlink:href="#male-user-1"> </use>
+                                            </svg>
+                                            <span class="login-cart-text d-none d-lg-inline ml-1 ml-lg-2">{{ 'navbar.my-account'|trans }}</span>
+                                        </a>
+                                        <div aria-labelledby="myaccountDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown--flownX mt-0">
+                                            {#                                        <div class="dropdown--flown-b1">#}
+                                            {#                                            <div class="dropdown--flown-b2">#}
+                                            <span class="dropdown-item text-dark disabled font-weight-bold border-bottom">{{ 'account.welcome'|trans({'{{ user }}': app.user.firstname}) }}</span>
+                                            <a href="{{ path('site-user-myAccount') }}" class="dropdown-item">
+                                                <svg class="svg-icon svg-icon-heavy">
+                                                    <use xlink:href="#male-user-1"> </use>
+                                                </svg>
+                                                {{ 'account.my-account'|trans }}</a>
+                                            <a href="{{ path('site-user-myOrders') }}" class="dropdown-item">
+                                                <svg class="svg-icon svg-icon-heavy"><use xlink:href="#retail-bag-2"></use></svg> {{ 'account.my-orders'|trans }}</a>
+                                            <a href="{{ path('logout') }}" class="dropdown-item">
+                                                <svg class="svg-icon svg-icon-heavy"><use xlink:href="#exit-1"></use></svg>
+                                                {{ 'account.logout'|trans }}</a>
+                                            {#                                            </div>#}
+                                            {#                                        </div>#}
+                                        </div>
+                                    {% endif %}
+                                </li>
+                                <li class="nav-item">
+                                    {{ render(controller('App\\Controller\\Shop\\CartUtilsController::cartDetailsDropdown')) }}
+                                </li>
                             </ul>
 
-
-
                         </div>
-                    </div>
+
                 </div>
-            </div>
-            <div id="navbarCollapse" class="collapse navbar-collapse bg-menu order-lg-2 order-1 py-2X">
+			</div>
+
+            <div id="navbarCollapse" class="collapse navbar-collapse w-100 bg-menu order-lg-2 order-1">
                 <div class="flex-grow-1">
                     <div class="container">
-                        <ul class="navbar-nav mx-auto px-3 px-lg-0 flex-grow-1X justify-content-center">
+                        <ul class="navbar-nav mx-auto px-3 px-lg-0 justify-content-center">
                             {% include 'webshop/site/navbar-menu-items.html.twig' %}
                         </ul>
                     </div>
                 </div>
             </div>
-
 		</nav>
+        {% endblock %}
+        {% block underNavbar %}
         <div class="info--underMenu info-lightenX warning-lighten d-noneX">
             <div class="container">
                 <div class="row">
@@ -197,28 +166,28 @@
                 </div>
             </div>
         </div>
-		<!-- /Navbar -->
+        {% endblock %}
 
 		<!-- Fullscreen search area-->
-		<div class="search-area-wrapper">
-			<div class="search-area d-flex align-items-center justify-content-center">
-				<div class="close-btn">
-					<svg class="svg-icon svg-icon-light w-3rem h-3rem">
-						<use xlink:href="#close-1"> </use>
-					</svg>
-				</div>
-				<form action="#" class="search-area-form">
-					<div class="form-group position-relative">
-						<input type="search" name="search" id="search" placeholder="What are you looking for?" class="search-area-input">
-						<button type="submit" class="search-area-button">
-							<svg class="svg-icon">
-								<use xlink:href="#search-1"> </use>
-							</svg>
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
+{#		<div class="search-area-wrapper">#}
+{#			<div class="search-area d-flex align-items-center justify-content-center">#}
+{#				<div class="close-btn">#}
+{#					<svg class="svg-icon svg-icon-light w-3rem h-3rem">#}
+{#						<use xlink:href="#close-1"> </use>#}
+{#					</svg>#}
+{#				</div>#}
+{#				<form action="#" class="search-area-form">#}
+{#					<div class="form-group position-relative">#}
+{#						<input type="search" name="search" id="search" placeholder="What are you looking for?" class="search-area-input">#}
+{#						<button type="submit" class="search-area-button">#}
+{#							<svg class="svg-icon">#}
+{#								<use xlink:href="#search-1"> </use>#}
+{#							</svg>#}
+{#						</button>#}
+{#					</div>#}
+{#				</form>#}
+{#			</div>#}
+{#		</div>#}
 		<!-- /Fullscreen search area-->
 
 	</header>
@@ -234,9 +203,10 @@
 
     {% block page_footer %}
     {% endblock %}
+
 	<footer class="main-footer">
         {% block footerHighlights %}
-		<div class="bg-custom-blueX py-6">
+		<div class="bg-secondary py-4 py-md-5">
 			<div class="container">
 				<div class="miert-dobozok">
 					<div class="row">
@@ -305,31 +275,31 @@
 			</div>
 		</div>
         {% endblock %}
-		<div class="py-6 bg-gray-300 text-muted">
+		<div class="bg-custom-gray py-4 py-md-5 text-muted">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-4 mb-5 mb-lg-0">
+					<div class="col-sm-6 col-md-4 col-lg-4 mb-3 mb-lg-0">
 						<div class="font-weight-bold text-uppercase text-lg text-dark mb-3">Tulipán<span class="text-primary">.</span>Futár</div>
-						<p>{{ settings.get('company.zip') }} {{ settings.get('company.city') }}, {{ settings.get('company.address') }}</p>
+						<p>{{ settings_general.get('company.zip') }} {{ settings_general.get('company.city') }}, {{ settings_general.get('company.address') }}</p>
 						<ul class="list-inline">
-                            {% if settings.get('social.facebook') and settings.get('social.facebook') is not null %}
-							<li class="list-inline-item"><a href="{{ settings.get('social.facebook') }}" target="_blank" title="facebook" class="text-muted text-hover-primary"><i class="fab fa-facebook"></i></a></li>
+                            {% if settings_general.get('social.facebook') and settings_general.get('social.facebook') is not null %}
+							<li class="list-inline-item"><a href="{{ settings_general.get('social.facebook') }}" target="_blank" title="facebook" class="text-muted text-hover-primary"><i class="fab fa-facebook"></i></a></li>
                             {% endif %}
-                            {% if settings.get('social.instagram') and settings.get('social.instagram') is not null %}
-							<li class="list-inline-item"><a href="{{ settings.get('social.instagram') }}" target="_blank" title="instagram" class="text-muted text-hover-primary"><i class="fab fa-instagram"></i></a></li>
+                            {% if settings_general.get('social.instagram') and settings_general.get('social.instagram') is not null %}
+							<li class="list-inline-item"><a href="{{ settings_general.get('social.instagram') }}" target="_blank" title="instagram" class="text-muted text-hover-primary"><i class="fab fa-instagram"></i></a></li>
                             {% endif %}
-                            {% if settings.get('social.pinterest') and settings.get('social.pinterest') is not null %}
-							<li class="list-inline-item"><a href="{{ settings.get('social.pinterest') }}" target="_blank" title="pinterest" class="text-muted text-hover-primary"><i class="fab fa-pinterest"></i></a></li>
+                            {% if settings_general.get('social.pinterest') and settings_general.get('social.pinterest') is not null %}
+							<li class="list-inline-item"><a href="{{ settings_general.get('social.pinterest') }}" target="_blank" title="pinterest" class="text-muted text-hover-primary"><i class="fab fa-pinterest"></i></a></li>
                             {% endif %}
-                            {% if settings.get('social.twitter') and settings.get('social.twitter') is not null %}
-							<li class="list-inline-item"><a href="{{ settings.get('social.twitter') }}" target="_blank" title="vimeo" class="text-muted text-hover-primary"><i class="fab fa-twitter"></i></a></li>
+                            {% if settings_general.get('social.twitter') and settings_general.get('social.twitter') is not null %}
+							<li class="list-inline-item"><a href="{{ settings_general.get('social.twitter') }}" target="_blank" title="vimeo" class="text-muted text-hover-primary"><i class="fab fa-twitter"></i></a></li>
                             {% endif %}
-                            {% if settings.get('social.youtube') and settings.get('social.youtube') is not null %}
-                            <li class="list-inline-item"><a href="{{ settings.get('social.youtube') }}" target="_blank" title="vimeo" class="text-muted text-hover-primary"><i class="fab fa-youtube"></i></a></li>
+                            {% if settings_general.get('social.youtube') and settings_general.get('social.youtube') is not null %}
+                            <li class="list-inline-item"><a href="{{ settings_general.get('social.youtube') }}" target="_blank" title="vimeo" class="text-muted text-hover-primary"><i class="fab fa-youtube"></i></a></li>
                             {% endif %}
 						</ul>
 					</div>
-					<div class="col-lg-2 col-md-6 mb-5 mb-lg-0">
+					<div class="col-sm-6 col-md-4 col-lg-2 mb-3 mb-lg-0">
 						<h6 class="text-uppercase text-dark mb-3">Virágküldés</h6>
 						<ul class="list-unstyled">
 							<li> <a href="/termekek/csokrok" class="text-muted" title="Virágcsokrok">Csokrok</a></li>
@@ -339,7 +309,7 @@
 							{#<li> <a href="#" class="text-muted">Shop</a></li>#}
 						</ul>
 					</div>
-					<div class="col-lg-2 col-md-6 mb-5 mb-lg-0">
+					<div class="col-sm-6 col-md-4 col-lg-2 mb-3 mb-lg-0">
 						<h6 class="text-uppercase text-dark mb-3">Információk</h6>
 						<ul class="list-unstyled">
 							<li> <a href="{{ path('about') }}" class="text-muted">Rólunk                    </a></li>
@@ -349,7 +319,7 @@
 							{#<li> <a href="#" class="text-muted">Checkouts                    </a></li>#}
 						</ul>
 					</div>
-					<div class="col-lg-4">
+					<div class="col-sm-6 col-md-12 col-lg-4">
 						<h6 class="text-uppercase text-dark mb-3">Daily Offers &amp; Discounts</h6>
 						<p class="mb-3"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.</p>
 						<form action="#" id="newsletter-form">
@@ -364,11 +334,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="py-4 font-weight-light bg-gray-400 bg-info-lightenX text-whiteX">
+		<div class="bg-dark text-white py-4 font-weight-light">
 			<div class="container">
 				<div class="row align-items-center">
 					<div class="col-md-8 text-center text-md-left">
-						<p class="mb-md-0 text-sm">©2014 - {{ "now"|date('Y') }} {{ settings.get('store.url')}}. Virágküldés Budapesten és környékén, rózsadobozok, csokrok, esküvő, rendezvénydekoráció</p>
+						<p class="mb-md-0 text-sm">©2014 - {{ "now"|date('Y') }} {{ settings_general.get('store.url')}}. Virágküldés Budapesten és környékén, rózsadobozok, csokrok, esküvő, rendezvénydekoráció</p>
 					</div>
 					<div class="col-md-4">
 						<ul class="list-inline mb-0 mt-2 mt-md-0 text-center text-md-right">
@@ -384,108 +354,16 @@
 
 {% block javascripts %}
 	{{ parent() }}
+    {{ encore_entry_script_tags('webshop') }}
     <script>
-        var limitFunc = function(){
-            if (window.innerWidth>991.98){
-                /*your functions for big screen*/
-                $('#modal--mobileMenu').modal('hide');
-                // console.log('bigScreen')
-            }
-        };
-        window.addEventListener("resize", limitFunc);
-    </script>
-    <script>
-        $(function() {
-            var $bag = $('.JS--cartDetails');
-            var $html = $('html');
-            var $header = $('header');
-            var $main = $('main');
-            var $footer = $('footer');
-
-//            var $section = $('body-content');
-            var $summary = $('#JS--slideCheckout');
-            $bag.on('click', function (e) {
-                e.preventDefault();
-                $header[0].scrollIntoView({ block: 'start'});
-                if (!$bag.hasClass('slideOpen')) {
-                    if ($main.hasClass('main-left')) {
-                        $header.removeClass('main-left');
-                        $main.removeClass('main-left');
-                        $footer.removeClass('main-left');
-                        $html.addClass('nav-hidden');
-                        setTimeout(function () {
-                            $bag.addClass('slideOpen');
-                            $summary.addClass('slideOpen');
-                            $header.addClass('main-right');
-                            $main.addClass('main-right');
-                            $footer.addClass('main-right');
-//                            $section.addClass('main-right');
-                            $('body').addClass('body-right');
-                        }, 600);
-                    } else {
-                        $bag.addClass('slideOpen');
-                        $summary.addClass('slideOpen');
-                        $header.addClass('main-right');
-                        $main.addClass('main-right');
-                        $footer.addClass('main-right');
-//                        $section.addClass('main-right');
-                        $html.addClass('nav-hidden');
-                        $('body').addClass('body-right');
-                    }
-                } else {
-                    $bag.removeClass('slideOpen');
-                    $summary.removeClass('slideOpen');
-                    $header.removeClass('main-right');
-                    $main.removeClass('main-right');
-                    $footer.removeClass('main-right');
-//                    $section.removeClass('main-right');
-                    $html.removeClass('nav-hidden');
-                    $('body').removeClass('body-right');
+        $(document).ready(function () {
+            $.fn.webshop();
+            var limitFunc = function(){
+                if (window.innerWidth>991.98){
+                    $('#sidebar--mobileMenu').sidebar('hide');
                 }
-            });
-            function triggerSummaryClose() {
-                $bag.removeClass('slideOpen');
-                $summary.removeClass('slideOpen');
-                $header.removeClass('main-right');
-                $main.removeClass('main-right');
-                $footer.removeClass('main-right');
-//                $section.removeClass('main-right');
-                $html.removeClass('nav-hidden');
-                $('body').removeClass('body-right');
-            }
-            $('#JS--checkoutClose').on('click', function() {
-                triggerSummaryClose();
-            });
-//            var $grey = $('section');
-//            $grey.on('click', function() {
-//                triggerSummaryClose();
-//            });
-            $(document).on('click', '.body__fade', function(e) {
-                if (e.pageX < $('.slide-checkout').position().left) {
-                    triggerSummaryClose();
-                }
-            });
-
-            // Displays the loading circle
-            var proceed = false;
-            $(document).on('click', '.JS--Button-gotoCheckout', function (event) {
-//                if (!$(event.currentTarget).hasClass('disabled')) {
-                    if (proceed) {
-                        proceed = false;
-                        return;
-                    }
-                    event.preventDefault();
-                    var $element = $(event.currentTarget);
-                    $element.addClass('text-warning-faded');
-                    $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
-                    proceed = true;
-                    $element.trigger('click');
-//                    $element.addClass('disabled');
-                    var url = $element.attr('href');
-                    window.location.href = url;
-//                }
-
-            });
+            };
+            window.addEventListener("resize", limitFunc);
         });
     </script>
 {% endblock %}

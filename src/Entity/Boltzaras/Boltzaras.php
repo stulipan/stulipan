@@ -2,12 +2,13 @@
 
 namespace App\Entity\Boltzaras;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="boltzaras")
- * @ORM\Entity(repositoryClass="App\Repository\BoltzarasRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Boltzaras\BoltzarasRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Boltzaras
@@ -106,7 +107,7 @@ class Boltzaras
 
     // setter methods
 
-    public function setIdopont(\DateTime $datum = null)
+    public function setIdopont(DateTime $datum = null)
     {
         $this->idopont = $datum;
     }
@@ -114,7 +115,7 @@ class Boltzaras
 
     public function setModositasIdopontja()
     {
-        $datum = new \DateTime();
+        $datum = new DateTime();
         $datum->format('Y-m-d H:i:s');
         $this->modositasIdopontja = $datum;
     }

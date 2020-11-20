@@ -13,9 +13,11 @@
                         <template v-for="(option, index) in productOptions">
                             <div class="form-group form-row">
                                 <div class="col-md-12 mb-2">
-                                    <div class="admin-card-title">Option {{index + 1}}</div>
-                                    <div v-if="!option.values.length" class="admin-card-topright">
-                                        <a @click.prevent="removeProductOption(index)" role="button" href="" class="">Remove</a>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="">Option {{index + 1}}</div>
+                                        <div v-if="!option.values.length" class="admin-card-topright">
+                                            <a @click.prevent="removeProductOption(index)" role="button" href="" class="">Remove</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -58,7 +60,7 @@
                             <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
                         </div>
                         <div class="loadingWrapper">
-                            <button type="submit" class="JS--btn-submitStatus btn btn-info">Done</button>
+                            <button type="submit" class="JS--btn-submitStatus btn btn-primary">Done</button>
                             <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
                         </div>
                     </div>
@@ -104,8 +106,9 @@
                         <div class="card mb-20px">
                             <div class="card-wrapper">
                                 <div class="card-body">
-                                    <div class="h5 admin-card-title mb-4">Termékvariációk</div>
-                                    <div v-if="product.hasVariants" class="admin-card-topright">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="h5 mb-4">Termékvariációk</div>
+                                        <div v-if="product.hasVariants" class="admin-card-topright">
                                         <div class="dropdown">
                                             <a class="dropdown-toggle" href="javascript: void(0);" id="moreOptions" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                                                 <!--                                        <i class="fas fa-ellipsis-h"></i> -->
@@ -121,6 +124,7 @@
                                                 </a>
                                             </div>
                                         </div>
+                                    </div>
                                     </div>
                                     <div id="---KIND ---TERMEK_OPTION">
                                         <!--  If hasVariants checkbox is checked and the Product has variants  -->
@@ -165,11 +169,11 @@
                                                                                             </template>
 
                                                                                             <div class="grid-cell mr-2">
-                                                                                                <div class="input--area-group">
-                                                                                                    <div class="input--area-addon input--area-prepend">
-                                                                                                        HUF
+                                                                                                <div class="field-item">
+                                                                                                    <div class="field-prepend">
+                                                                                                        <div class="field-addon-prepend w-addon-sm">HUF</div>
                                                                                                     </div>
-                                                                                                    <input v-model="variant.price.numericValue" type="number" required="required" placeholder="0.00" class="form-control">
+                                                                                                    <input v-model="variant.price.numericValue" type="number" required="required" placeholder="0.00" class="pl-addon-sm form-control">
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="grid-cell mr-2">
@@ -209,9 +213,11 @@
                                                         <template v-for="(option, index) in productOptions">
                                                             <div class="form-group form-row">
                                                                 <div class="col-md-12 mb-2">
-                                                                    <div class="admin-card-title">Option {{index + 1}}</div>
-                                                                    <div v-if="!option.values.length" class="admin-card-topright">
-                                                                        <a @click.prevent="removeProductOption(index)" role="button" href="" class="">Remove</a>
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <div class="">Option {{index + 1}}</div>
+                                                                        <div v-if="!option.values.length" class="admin-card-topright">
+                                                                            <a @click.prevent="removeProductOption(index)" role="button" href="" class="">Remove</a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
@@ -277,11 +283,11 @@
                                                                                                         </template>
 
                                                                                                         <div class="grid-cell mr-2">
-                                                                                                            <div class="input--area-group">
-                                                                                                                <div class="input--area-addon input--area-prepend">
-                                                                                                                    HUF
+                                                                                                            <div class="field-item">
+                                                                                                                <div class="field-prepend">
+                                                                                                                    <div class="field-addon-prepend w-addon-sm">HUF</div>
                                                                                                                 </div>
-                                                                                                                <input v-model="variant.price.numericValue" :id="`${variant.name}_price_${i}`" type="number" required="required" placeholder="0.00" class="form-control">
+                                                                                                                <input v-model="variant.price.numericValue" :id="`${variant.name}_price_${i}`" type="number" required="required" placeholder="0.00" class="pl-addon-sm form-control">
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="grid-cell mr-2">
@@ -307,11 +313,11 @@
                                                         <div class="form-group row" id="---termekAr">
                                                             <div class="col-sm-12">
                                                                 <label class="required" for="price_grossPrice">Termék ár</label>
-                                                                <div class="input--area-group">
-                                                                    <div class="input--area-addon input--area-prepend">
-                                                                        HUF
+                                                                <div class="field-item">
+                                                                    <div class="field-prepend">
+                                                                        <div class="field-addon-prepend w-addon-sm">HUF</div>
                                                                     </div>
-                                                                    <input v-model="product.price.numericValue" type="number" id="price_grossPrice" required="required" placeholder="0.00" class="form-control">
+                                                                    <input v-model="product.price.numericValue" type="number" id="price_grossPrice" required="required" placeholder="0.00" class="form-control pl-addon-sm">
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-12 text-muted mt-2">
@@ -388,11 +394,15 @@
                                                             tabindex="0"
                                                     >
                                                         <template v-slot:clip-uploader-action="props">
-                                                            <div class="uploader-action" v-bind:class="{dragging: props.dragging}">
+                                                            <div class="uploader-action" v-bind:class="{dragging: props.dragging}" tabindex="0">
                                                                 <div class="dz-message">
-                                                                    <i class="fas fa-upload"></i>
-                                                                    <span class="mb-0 btn-link">Képfeltöltés... </span> <br>
-                                                                    <span>vagy húzd be ide a fájlokat a feltöltéshez.</span>
+                                                                    <div class="d-flex">
+                                                                        <i class="fas fa-arrow-circle-up fa-2x"></i>
+                                                                    </div>
+                                                                    <a class="btn btn-secondary mt-3">Kép hozzáadása</a>
+                                                                    <div class="d-flex text-muted mt-2">
+                                                                        vagy húzd be ide a fájlt a feltöltéshez
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </template>
@@ -458,38 +468,52 @@
                     </div>
                     <div name="__SIDEBAR" class="col-md-4 px-0 px-md-10px orderDetail--sidebarX">
                         <div class="card mb-20px">
-                            <div class="card-wrapper">
+                            <div class="">
                                 <div class="card-body">
-                                    <div class="h5 admin-card-title mb-4">Kategorizálás</div>
-                                    <div id="---STATUS ---CATEGORIES ---BADGES">
+                                    <div class="h5">Kategorizálás</div>
+<!--                                    <div id="-&#45;&#45;STATUS -&#45;&#45;CATEGORIES -&#45;&#45;BADGES">-->
                                         <div class="form-group row">
                                             <div class="col-sm-12 order-1">
                                                 <legend class="col-form-label required">Állapot</legend>
                                             </div>
                                             <div class="col-sm-12 order-3 order-md-2">
-                                                <div class="form-row">
+<!--                                                <div class="form-row">-->
+                                                <ul class="list-group list-group-flush list-group--status">
                                                     <template v-for="status in statuses">
-                                                        <div class="col-12">
-                                                            <div class="visual-picker visual-picker-with-checkbox align-top mr-2 mb-2" :class="product.status.id == status.id ? 'visual-picker-checked' : ''">
-                                                                <input type="radio" v-model="product.status" :value="status" :id="`status_${status.id}`" required="required">
-                                                                <label class="visual-picker-figure required justify-content-start" :for="`status_${status.id}`">
-                                                                <span class="visual-picker-content">
-                                                                    <span class="tile tile-lg">
-                                                                        <span>
-                                                                            <span class="text-nowrap"><span v-html="status.icon"></span>{{ status.name }}</span>
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
+<!--                                                        <div class="col-12 ">-->
+
+                                                            <li class="list-group-item">
+                                                                <div class="custom-control custom-radio">
+                                                                    <input type="radio" v-model="product.status.id" :value="status.id" :id="`status_${status.id}`" required="required" class="custom-control-input">
+                                                                    <label class="custom-control-label" :for="`status_${status.id}`">
+                                                                        {{ status.name }}
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+
+<!--                                                            <div class="vp vp-with-checkbox align-top mr-2 mb-2" :class="product.status.id == status.id ? 'vp-checked' : ''">-->
+<!--                                                                <input type="radio" v-model="product.status.id" :value="status.id" :id="`status_${status.id}`" required="required">-->
+<!--                                                                <label class="vp-figure required justify-content-start" :for="`status_${status.id}`">-->
+<!--                                                                <span class="vp-content">-->
+<!--                                                                    <span class="tile tile-lg">-->
+<!--                                                                        <span>-->
+<!--                                                                            <span class="text-nowrap"><span v-html="status.icon"></span>{{ status.name }}</span>-->
+<!--                                                                        </span>-->
+<!--                                                                    </span>-->
+<!--                                                                </span>-->
+<!--                                                                </label>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
                                                     </template>
-                                                    <div class="col-sm-12 text-muted">
+                                                </ul>
+                                                    <div class="col-sm-12X text-muted">
                                                         <em>Kifutott</em> állapotban a termék továbbra is látszik a weboldalon, csupán nem lesz neki <em>Kosárba rakom</em> gomb.
                                                     </div>
-                                                </div>
+<!--                                                </div>-->
                                             </div>
                                         </div>
+                                </div>
+                                <div class="card-footer">
 
                                         <div class="form-group row">
                                             <div class="col-sm-12">
@@ -511,6 +535,9 @@
                                             </div>
                                         </div>
 
+                                </div>
+                                <div class="card-footer">
+
                                         <div class="form-group row">
                                             <div class="col-sm-12">
                                                 <label class="required" for="badge">Matricák</label>
@@ -530,7 +557,7 @@
                                                 </multiselect-bellow>
                                             </div>
                                         </div>
-                                    </div>
+<!--                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -950,7 +977,4 @@
 </script>
 
 <style scoped="">
-    ul {
-        margin-bottom: 0;
-    }
 </style>

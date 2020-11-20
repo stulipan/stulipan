@@ -43,26 +43,22 @@ class RecipientType extends AbstractType
         $builder->add('id', HiddenType::class,[
                 'mapped' => false, // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
             ]);
-        $builder->add('name', TextType::class,[
-                'label' => 'Címzett',
-                'required' => true,
-                'attr' => [
-                    'placeholder' => '',
-                    'autocomplete' => 'name'
-                ]
-            ]);
+        $builder->add('firstname',TextType::class, [
+            'required' => true,
+        ]);
+        $builder->add('lastname',TextType::class, [
+            'required' => true,
+        ]);
         $builder->add('address',AddressType::class,[
             'label' => false,
             'addressType' => Address::DELIVERY_ADDRESS,  // this option is defined in AddressType, so that it can receive a value
         ]);
         $builder->add('phone',TelType::class,[
-                'label' => 'Telefonszám',
-                'required' => false,
-                'constraints' => [
-                    new PhoneNumber(['regionCode' => 'HU']),
-                ],
-            ]);
-//        $builder->get('phone')->addModelTransformer($this->stringToNumberTransformer);  //ez akkor kellett amikor a telszmot int -kent taroltam db-ben
+            'required' => false,
+            'constraints' => [
+                new PhoneNumber(['regionCode' => 'HU', 'message' => 'checkout.recipient.invalid-phone']),
+            ],
+        ]);
         $builder->add('customer',HiddenType::class,[
                 'mapped' => false,
             ]);
@@ -80,10 +76,4 @@ class RecipientType extends AbstractType
             ],
         ]);
     }
-//    public function getBlockPrefix()
-//    {
-//        return '';
-//    }
-
-
 }

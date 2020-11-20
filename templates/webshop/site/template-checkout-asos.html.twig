@@ -1,0 +1,147 @@
+{% extends 'webshop/site/base-checkout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block bodyClass %}{{ parent() }}checkout-page checkout-asos{% endblock %}
+
+{% block page_content %}
+
+    {% block modal %}
+    {% endblock %}
+
+    <div class="JS--globalWrapper" data-wrapper-global>
+
+        <div class="cart-collapse">
+            <div class="d-flex d-lg-none col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center my-lg-0 order-lg-1 order-1 my-2 px-0 px-md-10px">
+                <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
+                    <span class="h3 font-weight-bold text-uppercase text-primary ml-0">tulipan<span class="text-danger">.</span>futar  </span>
+                </a>
+            </div>
+            <div class="cart-collapse-header">
+                <div class="container">
+                    <div class="d-flex justify-content-between align-items-center py-3">
+                        <a href="#" class="btn-btn-link" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <svg class="svg-icon svg-icon-heavy addtocart">
+                                <use xlink:href="#cart-1"> </use>
+                            </svg>
+                            {{ 'cart.show-order-summary'|trans }}
+                        </a>
+                        <span class="JS--summaryTotal">{{ order.summary.totalAmountToPay|money }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-collapse-body collapse" id="collapseExample">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 mb-3 pt-4">
+                            {% block cartCollapse %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="asos-content">
+            <div class="pt-3 d-none d-lg-flex">
+                <div class="container flex-lg-wrap">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 mx-lg-auto">
+                            <div class="w-100 d-flex justify-content-between align-items-center">
+                                <!-- Navbar Logo -->
+                                <div class="col-sm-4 col-lg-4 navbar--logo-checkout d-flex justify-content-lg-start my-lg-0 order-lg-1 order-1 px-0 px-md-10px">
+                                    <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
+                                        <span class="h3 font-weight-bold text-uppercase text-primary ml-0">tulipan<span class="text-danger">.</span>futar  </span>
+                                    </a>
+                                </div>
+
+                                <!-- Navbar Title -->
+{#                                <div class="col-sm-3 col-lg-4 navbar--logo d-none d-md-flex text-center justify-content-lg-center order-lg-2 order-2">#}
+{#                                    <span class="h3 text-muted-extraX font-weight-bold text-uppercase ml-0">fgdgdggd</span>#}
+{#                                </div>#}
+
+                                <!-- Navbar Login Cart -->
+                                <div class="col-sm-4 col-lg-4 navbar--login-cartX d-flex justify-content-end my-lg-0 order-lg-3 order-3 pl-0 pl-md-10px">
+                                    <div class="nav-item">
+                                        <svg class="svg-icon mr-1">
+                                            <use xlink:href="#calls-1"> </use>
+                                        </svg>
+                                        <span class="h6 font-weight-bold text-uppercase d-none d-md-inline">{{ settings_general.get('store.phone') }}</span>
+                                        <span class="text-sm font-weight-bold text-uppercase letter-spacing-0 d-md-none d-inline">{{ settings_general.get('store.phone') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 mx-lg-auto">
+                        <div class="row">
+                            <div id="left_column" class="asos-left col-md-12 col-lg-7 px-0 px-md-10px">
+                                <div class="row no-gutters">
+                                    <div class="col-lg-12">
+                                        <div id="progress_bar" class="mt-4">
+                                            {% include('webshop/cart/progress-bar-3step-checkout.html.twig') %}
+                                        </div>
+                                        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                                            {% include('webshop/cart/already-registered-widget.html.twig') %}
+                                        {% endif %}
+
+                                        {% block leftColumn %}
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="right_column" class="asos-right col-md-5X col-lg-5 px-0 px-md-10px d-none d-lg-flex">
+                                <div class="">
+                                    <div class="sticky-top pt-4">
+                                        {% block rightColumn %}
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="goto_payment" class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {% block gotoNext %}
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block contentWide %}
+    {% endblock %}
+
+    {% block contentSecondary %}
+    {% endblock %}
+
+{#    <footer class="main-footer">#}
+{#        <div class="bg-gray-300 text-muted">#}
+{#            <div class="container">#}
+{#                <div class="row">#}
+{#                    <div class="col-lg-12 mb-5X mb-lg-0">#}
+{#                        <div class="font-weight-bold text-uppercase text-dark text-center py-3">#}
+{#                            <svg class="svg-icon mr-1">#}
+{#                                <use xlink:href="#calls-1"> </use>#}
+{#                            </svg>#}
+{#                            <span class="login-cart--text d-lg-inline">{{ settings_general.get('store.phone') }}</span>#}
+{#                        </div>#}
+
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </footer>#}
+
+{% endblock %}

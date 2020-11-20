@@ -1,0 +1,160 @@
+// Switch
+// To be used instead of standard checkbox
+
+$switch-height:               1.5rem !default;  //24px
+$switch-width:                60px !default; //original value: 60px
+$switch-border-width:         $border-width !default;
+$switch-border-color:         $border-color !default;
+$switch-bullet-margin:        2px !default;
+$switch-bullet-size:          calc(#{$switch-height} - 2 * #{$switch-bullet-margin} - 2 * #{$switch-border-width}) !default; //18px
+$switch-bullet-color:         $gray-100;
+
+$switch-bg:                   $secondary !default;
+$switch-text-color:           $yiq-text-dark !default;
+$switch-text-weight:          $font-weight-normal !default;
+$switch-text-size:            .75rem !default;
+$switch-text-line-height:     $switch-height !default;
+
+$switch-checked-background:   $primary !default;
+$switch-checked-border-color: darken($switch-checked-background, 5%) !default;
+$switch-focus-width:          $input-btn-focus-width !default;
+$switch-focus-color:          $switch-checked-background !default;
+$switch-focus-shadow:         0 0 0 $switch-focus-width $switch-focus-color !default;
+//$switch-checked-border-color: darken($primary, 5%) !default;
+
+input[data-switch] {
+  z-index: -1;
+  opacity: 0;
+
+  &:focus+label,
+  &.focus+label {
+    //box-shadow: $switch-focus-shadow;
+    border-color: $switch-focus-color;
+  }
+}
+
+input[data-switch]+label {
+  width: $switch-width;
+  height: $switch-height;
+  background-color: $switch-bg;
+  background-image: none;
+  @include gradient-bg($switch-bg);
+  border: $switch-border-width solid $switch-border-color;
+  border-radius: 2rem;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  position: relative;
+  -webkit-transition: all .1s ease-in-out;
+  transition: all .1s ease-in-out;
+
+  &:before {
+    color: $switch-text-color;
+    content: attr(data-off-label);
+    display: block;
+    font-family: inherit;
+    font-weight: $switch-text-weight;
+    font-size: $switch-text-size;
+    line-height: calc(#{$switch-text-line-height} - 2px);
+    position: absolute;
+    right: calc(2 * #{$switch-bullet-margin});
+    margin: 0 .21667rem;
+    top: 0;
+    text-align: center;
+    min-width: 1.66667rem;
+    overflow: hidden;
+    -webkit-transition: all .1s ease-in-out;
+    transition: all .1s ease-in-out
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    left: $switch-bullet-margin;
+    background-color: #adb5bd;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 2rem;
+    height: $switch-bullet-size;
+    width: $switch-bullet-size;
+    top: $switch-bullet-margin;
+    -webkit-transition: all .1s ease-in-out;
+    transition: all .1s ease-in-out
+  }
+}
+
+//input[data-switch]+label:before {
+//
+//}
+//
+//input[data-switch]+label:after {
+//
+//}
+
+input[data-switch]:checked+label {
+  background: $switch-checked-background;
+  border-color: $switch-checked-border-color;
+
+  &:before {
+    color: #fff;
+    content: attr(data-on-label);
+    right: auto;
+    left: calc(2 * #{$switch-bullet-margin});
+  }
+  &:after {
+    left: auto;
+    right: $switch-bullet-margin;
+    background-color: $switch-bullet-color;
+  }
+}
+
+//input[data-switch]:checked+label:before {
+//
+//}
+//
+//input[data-switch]:checked+label:after {
+//
+//}
+
+//input[data-switch=bool]+label {
+//  background-color: #dc3545
+//}
+//
+//input[data-switch=bool]+label:before,
+//input[data-switch=bool]:checked+label:before {
+//  color: #fff!important
+//}
+//
+//input[data-switch=bool]+label:after {
+//  background-color: $switch-bullet-color;
+//}
+
+// Color variations
+@each $color, $value in $theme-colors {
+  input[data-switch=#{$color}]:checked+label {
+    background: $value;
+    border-color: darken($value, 5%);
+
+    &:before {
+      color: color-yiq($value);
+    }
+    &:after {
+      background-color: color-yiq($value);
+    }
+  }
+
+  input[data-switch=#{$color}] {
+    &:focus+label,
+    &.focus+label {
+      // Avoid using mixin so we can pass custom focus shadow properly
+      @if $enable-shadows {
+        // Ez tőlem:
+        //box-shadow: 0 0 0 $switch-focus-width darken($value, 10%);
+        border-color: darken($value, 10%);
+      } @else {
+        // Ez tőlem:
+        border-color: darken($value, 10%);
+      }
+    }
+  }
+}

@@ -9,10 +9,15 @@
             ref="vueclip"
     >
         <template v-slot:clip-uploader-action="props">
-            <div class="uploader-action" v-bind:class="{dragging: props.dragging}">
+            <div class="uploader-action" v-bind:class="{dragging: props.dragging}" tabindex="0">
                 <div class="dz-message">
-                    <i class="fas fa-upload mb-2"></i>
-                    <p class="mb-0">Képfeltöltés... </p>
+                    <div class="d-flex">
+                        <i class="fas fa-arrow-circle-up fa-2x"></i>
+                    </div>
+                    <a class="btn btn-secondary mt-3">Kép hozzáadása</a>
+                    <div class="d-flex text-muted mt-2">
+                        vagy húzd be ide a fájlt a feltöltéshez
+                    </div>
                 </div>
             </div>
         </template>

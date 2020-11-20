@@ -1,0 +1,25 @@
+<div class="">
+    <h4 class="checkout-block-title">Címzett adatai</h4>
+</div>
+<div class="mt-2">
+    <div class="">
+        {% if order.shippingFullname is defined and order.shippingFullname is not null %}
+            {{ order.shippingFullname }}
+        {% else %}
+            {% include 'admin/_missing-data-insert.html.twig' %}
+        {% endif %}
+    </div>
+    <div class="">
+        {% if order.shippingPhone is defined and order.shippingPhone %}
+            {{ order.shippingPhone }}
+        {% else %}
+            {% include 'admin/_missing-data-insert.html.twig' %}
+        {% endif %}
+        <br>
+        {% if order.shippingAddress is defined and order.shippingAddress %}
+            {{ order.shippingAddress.zip }} {{ order.shippingAddress.city }}, {{ order.shippingAddress.street }}, {{ order.shippingAddress.province }}, {{ order.shippingAddress.country }}
+        {% else %}
+            {% include 'admin/_missing-data-insert.html.twig' %}
+        {% endif %}
+    </div>
+</div>

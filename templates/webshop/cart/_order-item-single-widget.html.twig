@@ -2,9 +2,12 @@
         <div class="cart-item py-1">
         <div class="slide-checkout--item">
             <div class="d-flex align-items-center">
-                <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
-                    <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid navbar-cart-product-image">
-                </a>
+                <div class="badge-quantity-wrapper">
+                    <span class="badge-quantity badge-dark">{{ item.quantity }}</span>
+                    <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
+                        <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid navbar-cart-product-image">
+                    </a>
+                </div>
                 <div class="d-flex w-100 justify-content-between">
                     <div class="pl-3 flex-grow-1">
                         <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="cart-item-link" target="_blank">{{ item.product.name }}</a>

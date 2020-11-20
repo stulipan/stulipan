@@ -1,0 +1,26 @@
+<div class="">
+    <h5 class="checkout-block-title">Vásárló adatai</h5>
+</div>
+<div class="mt-2">
+    <div class="h-100">
+        <div class="">
+            {{ order.fullname }} <br>
+            {{ order.billingPhone }}, {{ order.email }} <br>
+            <div class="mt-2 text-muted">
+                Számlázási adatok: <br>
+                {% if order.billingFullname is defined and order.billingFullname is not null %}
+                    {{ order.billingFullname }} {{ order.billingCompany is defined and order.billingCompany ? ' / ' ~ order.billingCompany : ''}}
+                {% else %}
+                    {% include 'admin/_missing-data-insert.html.twig' %}
+                {% endif %}
+                <span class="">
+                {% if order.billingAddress is defined and order.billingAddress %} <br>
+                    {{ order.billingAddress.zip }} {{ order.billingAddress.city }}, {{ order.billingAddress.street }}, {{ order.billingAddress.province }}, {{ order.billingAddress.country }}
+                {% else %}
+                    {% include 'admin/_missing-data-insert.html.twig' %}
+                {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

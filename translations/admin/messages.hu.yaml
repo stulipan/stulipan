@@ -55,15 +55,15 @@ order:
     filter:
         filters: 'Rendelések szűrése'
         more-filters: 'Rendelések szűrése'
-        filter-by-date: 'Szűrés dátumra'
+        filter-by-date: 'Szűrés dátumra...'
         search: Keresés
         search-button: OK
         search-placeholder: Keresés...
         search-result: 'Keresés:'
         filter-by-order-status: 'Rendelés állapota'
-        choose-order-status: 'Rendelés státusza'
+        choose-order-status: 'Rendelés státusza...'
         filter-by-payment-status: 'Fizetés állapota'
-        choose-payment-status: 'Fizetés állapota'
+        choose-payment-status: 'Fizetés állapota...'
 dashboard:
     dashboard: Kezelőpult
     settings: Beállítások
@@ -135,6 +135,7 @@ generic:
     edit: Szerkesztés
     modify: Módosít
     preview: Előnézet
+    open: Megnyit
     save: Mentés
     save-changes: 'Módosítások mentése'
     cancel: Mégse

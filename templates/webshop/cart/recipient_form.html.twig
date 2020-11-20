@@ -1,160 +1,101 @@
-{#{% extends 'webshop/site/base-checkout.html.twig' %}#}
-{##}
-{#{% block page_content %}#}
+{% import _self as myOwnMacro %}
 
-{{ form_start(recipientForm, { 'attr': {'class': 'JS--recipientForm JS--editForm-recipient' }}) }}
-<div class="row">
-    <div class="col-lg-12 mb-3">
-        <span class="detail-option-heading font-weight-bold"></span>
-        <span class="text-mutedX">A sikeres kézbesítéshez add meg a címzett személy nevét, címét, telefonszámát.</span>
+{% macro firstname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.firstname.vars.value is defined and item.firstname.vars.value %}active{% endif %}">
+        <label for="{{ item.firstname.vars.full_name }}" class="form-label">{{ 'checkout.recipient.firstname'|trans }}</label>
+        {{ form_widget(item.firstname, {'attr': {'class': '', 'placeholder': 'checkout.recipient.firstname'|trans }}) }}
+        {{ form_errors(item.firstname) }}
     </div>
-    <div class="col-lg-12">
+{% endmacro %}
+
+{% macro lastname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.lastname.vars.value is defined and item.lastname.vars.value %}active{% endif %}">
+        <label for="{{ item.lastname.vars.full_name }}" class="form-label">{{ 'checkout.recipient.lastname'|trans }}</label>
+        {{ form_widget(item.lastname, {'attr': {'class': '', 'placeholder': 'checkout.recipient.lastname'|trans }}) }}
+        {{ form_errors(item.lastname) }}
+    </div>
+{% endmacro %}
+
+{{ form_start(recipientForm, { 'attr': {'class': '',
+    'data-wrapper-recipient-form': '',
+    'data-selector' : 'form',
+}}) }}
+{#<div class="row">#}
+{#    <div class="col-lg-12">#}
         <div class="form-row">
-            <div class="form-group col-lg-6 pr-lg-2">
-                <label for="{{ recipientForm.name.vars.full_name }}" class="form-label">Címzett neve</label>
-                {#<input type="text" name="fullname_shipping" placeholder="Szabó Lajos" id="{{ recipientForm.name.vars.id }}" class="form-controlX">#}
-                {{ form_widget(recipientForm.name, {'attr': {'class': 'form-controlX'}}) }}
-                {{ form_errors(recipientForm.name) }}
-            </div>
-            <div class="form-group col-lg-6 pl-lg-2">
-                <label for="{{ recipientForm.address.street.vars.full_name }}" class="form-label">Címe</label>
-                {{ form_widget(recipientForm.address.street, {'attr': {'class': 'form-controlX'}}) }}
+            {% if app.request.locale == 'hu' %}
+                {{ myOwnMacro.lastname(recipientForm) }}
+                {{ myOwnMacro.firstname(recipientForm) }}
+            {% endif %}
+            {% if app.request.locale == 'en' %}
+                {{ myOwnMacro.firstname(recipientForm) }}
+                {{ myOwnMacro.lastname(recipientForm) }}
+            {% endif %}
+        </div>
+        <div class="form-row">
+            <div class="form-group input-float col-lg-12 {% if recipientForm.address.street.vars.value is defined and recipientForm.address.street.vars.value %}active{% endif %}">
+                <label for="{{ recipientForm.address.street.vars.full_name }}" class="form-label">{{ 'checkout.recipient.address'|trans }}</label>
+                {{ form_widget(recipientForm.address.street, {'attr': {'class': '', 'placeholder': 'checkout.recipient.address-placeholder'|trans}}) }}
                 {{ form_errors(recipientForm.address.street) }}
             </div>
-            <div class="form-group col-lg-6 col-8 pr-lg-2">
-                <label for="{{ recipientForm.address.city.vars.full_name }}" class="form-label">Város</label>
-                {{ form_widget(recipientForm.address.city, {'attr': {'class': 'JS--recipientForm-city'}}) }}
+        </div>
+        <div class="form-row">
+            <div class="form-group input-float col-lg-12 {% if recipientForm.address.city.vars.value is defined and recipientForm.address.city.vars.value %}active{% endif %}">
+                <label for="{{ recipientForm.address.city.vars.full_name }}" class="form-label">{{ 'checkout.recipient.city'|trans }}</label>
+                {{ form_widget(recipientForm.address.city, {'attr': {'class': 'JS--recipientForm-city', 'placeholder': 'checkout.recipient.city-placeholder'|trans }}) }}
                 {{ form_errors(recipientForm.address.city) }}
             </div>
-            <div class="form-group col-lg-6 col-4 pl-lg-2">
-                <label for="{{ recipientForm.address.zip.vars.full_name }}" class="form-label">Irányítószám</label>
-                {{ form_widget(recipientForm.address.zip, {'attr': {'class': 'JS--recipientForm-zip', 'data-url' : path('cart-getPlaceByZip') }}) }}
-                {{ form_errors(recipientForm.address.zip) }}
+        </div>
+        <div class="form-row">
+            <div class="col-sm-5">
+                <div class="form-group input-float input-float-select {% if recipientForm.address.country.vars.value is defined and recipientForm.address.country.vars.value %}active{% endif %}">
+                    <label for="{{ recipientForm.address.country.vars.full_name }}" class="form-label">{{ 'checkout.recipient.country'|trans }}</label>
+                    {{ form_widget(recipientForm.address.country, {'attr': {'class': '', 'placeholder': 'checkout.recipient.country'|trans }}) }}
+                    {{ form_errors(recipientForm.address.country) }}
+                </div>
             </div>
-            <div class="form-group col-lg-6 pr-lg-2">
-                <label for="{{ recipientForm.address.province.vars.full_name }}" class="form-label">Megye</label>
-                {{ form_widget(recipientForm.address.province, {'attr': {'class': 'JS--recipientForm-province'}}) }}
+            <div class="form-group input-float col-sm-4 {% if recipientForm.address.province.vars.value is defined and recipientForm.address.province.vars.value %}active{% endif %}">
+                <label for="{{ recipientForm.address.province.vars.full_name }}" class="form-label">{{ 'checkout.recipient.province'|trans }}</label>
+                {{ form_widget(recipientForm.address.province, {'attr': {'class': 'JS--recipientForm-province', 'placeholder': 'checkout.recipient.province'|trans }}) }}
                 {{ form_errors(recipientForm.address.province) }}
             </div>
-            <div class="form-group col-lg-6 pl-lg-2">
-                <label for="{{ recipientForm.address.country.vars.full_name }}" class="form-label">Ország</label>
-                {{ form_widget(recipientForm.address.country, {'attr': {'class': 'form-control Xform-control-dropdown'}}) }}
-                {#<i class="fas fa-chevron-down form-control-dropdown"></i>#}
-                {{ form_errors(recipientForm.address.country) }}
+            <div class="form-group input-float col-sm-3 {% if recipientForm.address.zip.vars.value is defined and recipientForm.address.zip.vars.value %}active{% endif %}">
+                <label for="{{ recipientForm.address.zip.vars.full_name }}" class="form-label">{{ 'checkout.recipient.zip'|trans }}</label>
+                {{ form_widget(recipientForm.address.zip, {'attr': {'class': 'JS--recipientForm-zip', 'placeholder': 'checkout.recipient.zip'|trans , 'data-url' : path('cart-getPlaceByZip') }}) }}
+                {{ form_errors(recipientForm.address.zip) }}
             </div>
-            <div class="form-group col-lg-6 pr-lg-2">
-                <label for="{{ recipientForm.phone.vars.full_name }}" class="form-label">Telefonszám</label>
-                {{ form_widget(recipientForm.phone, {'attr': {'class': '' }}) }}
+        </div>
+        <div class="form-row">
+            <div class="form-group mb-0 input-float input-float-block-spaces col-lg-12 {% if recipientForm.phone.vars.value is defined and recipientForm.phone.vars.value %}active{% endif %}">
+                <div class="field-item field-append">
+                    <div class="field-addon-append">
+                        <div class="btn" data-toggle="tooltip" data-placement="top" title="{{ 'checkout.phone-number-tooltip'|trans }}">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                    </div>
+                </div>
+                <label for="{{ recipientForm.phone.vars.full_name }}" class="form-label">{{ 'checkout.recipient.phone'|trans }}</label>
+                {{ form_widget(recipientForm.phone, {'attr': {'class': '', 'placeholder': 'checkout.recipient.phone-placeholder'|trans }}) }}
                 {{ form_errors(recipientForm.phone|raw) }}
             </div>
-
-            <div class="form-group col-lg-12">
-                <div class="loadingWrapper">
-                    <button type="submit" class="JS--Button-submit btn btn-success mr-2">Szállítás erre a címre</button>
-                    <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                </div>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') and order.currentOrder.customer.hasRecipients %}
-                <div class="loadingWrapper loadingWrapper-secondary">
-                    <a href="" class="JS--Button-getRecipients text-secondary text-sm" data-url="{{ path('cart-getRecipients') }}">Mégse</a>
-                    <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                </div>
-                {% endif %}
-            </div>
-
         </div>
-    </div>
-</div>
+
+{#            <div class="form-group col-lg-12">#}
+{#                <button type="submit" class="JS--Button-submit btn btn-dark mr-1">#}
+{#                    <span class="btn-loading-invisible">Szállítás erre a címre</span>#}
+{#                    <span class="btn-loading-invisible">Adatok mentése</span>#}
+{#                    <div class="loading-spinner" role="status"></div>#}
+{#                </button>#}
+{#                {% if is_granted('IS_AUTHENTICATED_FULLY') and order.customer.hasRecipients %}#}
+{#                {% if order.hasRecipient %}#}
+{#                <button class="btn btn-secondary" data-selector="button" data-eval="getRecipient" data-url="{{ path('cart-getRecipient') }}">#}
+{#                    <span class="btn-loading-invisible">Mégse</span>#}
+{#                    <div class="loading-spinner" role="status"></div>#}
+{#                </button>#}
+{#                {% endif %}#}
+{#            </div>#}
 
 
+{#    </div>#}
+{#</div>#}
 {{ form_end(recipientForm) }}
-{#{% do recipientForm.setRendered() %}#}
-
-{#{% endblock %}#}
-
-{#{% block javascripts %}#}
-	{#{{ parent() }}#}
-    {#<script>#}
-        {#$(function() {#}
-            {#var $option1 = $('.JS--recipientForm-zip');#}
-
-            {#$option1.focusout(function () {#}
-                {#var $form = $(this).closest('form');#}
-                {#// Simulate form data, but only include the selected Kind value.#}
-                {#var data = {};#}
-{#//                console.log('Action URL: ' + $form.attr('action'));#}
-                {#data[$option1.attr('name')] = $option1.val();#}
-                {#data[$('.JS--recipientForm-city').attr('name')] = $('.JS--recipientForm-city').val();#}
-                {#data[$('.JS--recipientForm-province').attr('name')] = $('.JS--recipientForm-province').val();#}
-
-                {#$.ajax({#}
-                    {#url: $form.attr('action'),#}
-                    {#type: 'POST',#}
-{#//                    data: $form.serialize(),#}
-                    {#data: data,#}
-                    {#success: function (response) {#}
-                        {#console.log($(response).find('.JS--recipientForm-province'));#}
-{#//                        console.dir($(response).find('.JS--intervalsWrapper'));#}
-                        {#// Replace within current form only the input field#}
-{#//                        $('.JS--recipientForm-city').replaceWith($(response).find('.JS--recipientForm-city'));#}
-{#//                        $('.JS--recipientForm-province').replaceWith($(response).find('.JS--recipientForm-province'));#}
-                        {#if ($(response).find('.JS--recipientForm-province').val()) {#}
-                            {#$('.JS--recipientForm-province').val($(response).find('.JS--recipientForm-province').val());#}
-                        {#}#}
-                        {#if ($(response).find('.JS--recipientForm-city').val()) {#}
-                            {#$('.JS--recipientForm-city').val($(response).find('.JS--recipientForm-city').val());#}
-                        {#}#}
-
-
-                    {#},#}
-{#//                    error: function (err) {#}
-                    {#error: function(jqXHR) {#}
-                        {#alert(jqXHR.responseText);#}
-                        {#$form.replaceWith(jqXHR.responseText);#}
-                    {#}#}
-                {#});#}
-            {#});#}
-{#//            $option2.click(function () {#}
-{#//                var $form = $(this).closest('form'); // ...retrieve the corresponding form.#}
-{#//                $('.JS--intervalsWrapper').empty();#}
-{#//            });#}
-        {#});#}
-
-    {#</script>#}
-    {#<script>#}
-        {#$(function() {#}
-                {#var options = {#}
-                    {#url: function(phrase) {#}
-                        {#console.log(phrase);#}
-                        {#return "http://www.stulipan.dfr/search/?query=" + phrase;#}
-                    {#},#}
-
-                    {#getValue: function(element) {#}
-                        {#return element.city;#}
-                    {#},#}
-
-                    {#ajaxSettings: {#}
-                        {#dataType: "json",#}
-                        {#method: "GET",#}
-                        {#data: {#}
-                            {#dataType: "json"#}
-                        {#}#}
-                    {#},#}
-
-                    {#preparePostData: function(data) {#}
-                        {#data.phrase = $(".JS--recipientForm-city").val();#}
-                        {#return data;#}
-                    {#},#}
-
-    {#//                theme: "square",#}
-
-                    {#requestDelay: 400#}
-                {#};#}
-
-    {#//        var options = {#}
-    {#//            data: ["blue", "green", "pink", "red", "yellow"]#}
-    {#//        };#}
-
-            {#$(".JS--recipientForm-city").easyAutocomplete(options);#}
-        {#});#}
-    {#</script>#}
-{#{% endblock %}#}

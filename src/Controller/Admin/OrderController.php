@@ -18,7 +18,7 @@ use App\Entity\OrderLogChannel;
 use App\Entity\OrderStatus;
 use App\Event\OrderEvent;
 use App\Entity\PaymentStatus;
-use App\Form\CartHiddenDeliveryDateFormType;
+use App\Form\DeliveryDate\CartHiddenDeliveryDateFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
 
@@ -28,7 +28,7 @@ use App\Form\OrderFilterType;
 use App\Form\OrderShippingAddressType;
 use App\Form\OrderStatusType;
 use App\Form\PaymentStatusType;
-use App\Services\Settings;
+use App\Services\StoreSettings;
 use BarionClient;
 use BarionEnvironment;
 use DateTime;
@@ -83,7 +83,7 @@ class OrderController extends AbstractController
      *     requirements={"page"="\d+"},
      *     )
      */
-    public function listOrders(Request $request, $page = 1, Settings $settings) //, $dateRange = null, $paymentStatus = null, $orderStatus = null
+    public function listOrders(Request $request, $page = 1, StoreSettings $settings) //, $dateRange = null, $paymentStatus = null, $orderStatus = null
     {
         $dateRange = $request->query->get('dateRange');
         $searchTerm = $request->query->get('searchTerm');
@@ -118,6 +118,7 @@ class OrderController extends AbstractController
             $data['paymentStatus'] = $em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus]);
         }
         $filterForm = $this->createForm(OrderFilterType::class, $data);
+        $filterFormSidebar = $this->createForm(OrderFilterType::class, $data);
 
         $filterUrls = [];
         foreach ($filterTags as $key => $value) {
@@ -208,7 +209,7 @@ class OrderController extends AbstractController
             'filterForm' => $filterForm->createView(),
             'filterTags' => $filterTags,
             'filterUrls' => $filterUrls,
-            'filterFormModal' => $filterForm->createView(),
+            'filterFormSidebar' => $filterFormSidebar->createView(),
         ]);
     }
 
@@ -217,7 +218,13 @@ class OrderController extends AbstractController
      */
     public function handleFilterForm(Request $request)
     {
-        $form = $this->createForm(OrderFilterType::class);
+        $dataFromRequest = $request->request->all();
+        $formName = array_keys($dataFromRequest)[0];
+
+        // Since there are two Filter forms on the page with randomly created unique names (blockPrefixes -> see OrderFilterType)
+        // the form name must be extracted from the Request data and used to recreate the very same form.
+        $form = $this->get('form.factory')->createNamed($formName, OrderFilterType::class);
+//        $form = $this->createForm(OrderFilterType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -347,6 +354,82 @@ class OrderController extends AbstractController
             
         ]);
     }
+
+    /**
+     * @Route("/orders/print/{id}", name="order-detail-print")
+     */
+    public function showOrderDetailPrint(Request $request, ?Order $order, $id = null, \App\Services\Localization $localization)
+    {
+        if (!$order) {
+            throw $this->createNotFoundException('STUPID: Nincs ilyen rendelés!' );
+        }
+
+        $shippingForm = $this->createForm(OrderShippingAddressType::class, $order);
+        $billingForm = $this->createForm(OrderBillingAddressType::class, $order);
+
+        $offset = GeneralUtils::DELIVERY_DATE_HOUR_OFFSET;
+        $days = (new DateTime('+2 months'))->diff(new DateTime('now'))->days;
+        for ($i = 0; $i <= $days; $i++) {
+            /**
+             * ($i*24 + offset) = 0x24+4 = 4 órával későbbi dátum lesz
+             * Ez a '4' megegyezik azzal, amit a javascriptben adtunk meg, magyarán 4 órával
+             * későbbi időpont az első lehetséges szállítási nap.
+             */
+            $dates[] = (new DateTime('+'. ($i*24 + $offset).' hours'));
+        }
+
+        $generatedDates = new GeneratedDates();
+        foreach ($dates as $date) {
+
+            $specialDate = $this->getDoctrine()->getRepository(DeliverySpecialDate::class)
+                ->findOneBy(['specialDate' => $date]);
+
+            if (!$specialDate) {
+                $dateType = $this->getDoctrine()->getRepository(DeliveryDateType::class)
+                    ->findOneBy(['default' => DeliveryDateType::IS_DEFAULT]);
+            } else {
+                $dateType = $specialDate->getDateType();
+            }
+            $intervals = null === $dateType ? null : $dateType->getIntervals();
+
+            $dateWithIntervals = new DeliveryDateWithIntervals();
+            $dateWithIntervals->setDeliveryDate($date);
+            $dateWithIntervals->setIntervals($intervals);
+
+            $generatedDates->addItem($dateWithIntervals);
+        }
+
+        $selectedDate = null === $order->getDeliveryDate() ? null : $order->getDeliveryDate();
+        $selectedInterval = null === $order->getDeliveryInterval() ? null : $order->getDeliveryInterval();
+        $selectedIntervalFee = null === $order->getDeliveryFee() ? null : $order->getDeliveryFee();
+
+        $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
+        $hiddenDateForm = $this->createForm(CartHiddenDeliveryDateFormType::class, $hiddenDates);
+
+        $statusForm = $this->createForm(OrderStatusType::class, $order);
+        $paymentStatusForm = $this->createForm(PaymentStatusType::class, $order);
+
+        $log = new OrderLog();
+
+        $log->setChannel($this->getDoctrine()->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => OrderLog::CHANNEL_ADMIN]));
+        $log->setOrder($order);
+        $log->setComment(true);
+//        $orderLog->setMessage('');
+        $commentForm = $this->createForm(OrderCommentType::class, $log);
+
+        return $this->render('admin/order/order-detail-print.html.twig', [
+            'order' => $order,
+            'shippingForm' => $shippingForm->createView(),
+            'billingForm' => $billingForm->createView(),
+            'generatedDates' => $generatedDates,
+            'hiddenDateForm' => $hiddenDateForm->createView(),
+            'selectedDate' => $selectedDate,
+            'selectedInterval' => $selectedInterval,
+            'statusForm' => $statusForm->createView(),
+            'paymentStatusForm' => $paymentStatusForm->createView(),
+            'commentForm' => $commentForm->createView(),
+        ]);
+    }
     
     /**
      * Edit the shipping address information in an Order.
@@ -365,7 +448,8 @@ class OrderController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $order->setShippingName($data->getShippingName());
+            $order->setShippingFirstname($data->getShippingFirstname());
+            $order->setShippingLastname($data->getShippingLastname());
             $order->setShippingAddress($data->getShippingAddress());
             $order->setShippingPhone($data->getShippingPhone());
             
@@ -423,7 +507,8 @@ class OrderController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $order->setBillingName($data->getBillingName());
+            $order->setBillingFirstname($data->getBillingFirstname());
+            $order->setBillingLastname($data->getBillingLastname());
             $order->setBillingCompany($data->getBillingCompany());
             $order->setBillingAddress($data->getBillingAddress());
             $order->setBillingPhone($data->getBillingPhone());
@@ -473,14 +558,14 @@ class OrderController extends AbstractController
      */
     public function editDeliveryDate(Request $request, ?Order $order, $id = null, HiddenDeliveryDate $date)
     {
+        $date = $request->request->get('date');
         if (!$order) {
             throw $this->createNotFoundException("STUPID: Nincs ilyen rendelés!");
         } else {
             $form = $this->createForm(CartHiddenDeliveryDateFormType::class, $date);
         }
         $form->handleRequest($request);
-//        dd($form->getData());
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $order->setDeliveryDate(DateTime::createFromFormat('!Y-m-d', $data->getDeliveryDate()));
@@ -495,7 +580,7 @@ class OrderController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($order);
             $entityManager->flush();
-        
+
             /**
              * If AJAX request, and because at this point the form data is processed, it returns Success (code 200)
              */
@@ -512,11 +597,17 @@ class OrderController extends AbstractController
          * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
          */
         if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
-            $html = $this->renderView('webshop/cart/hiddenDeliveryDate-form.html.twig', [
+            $html = $this->renderView('webshop/cart/hidden-delivery-date-form.html.twig', [
                 'hiddenDateForm' => $form->createView(),
             ]);
             return new Response($html,400);
         }
+
+        $this->addFlash('success', 'Szállítási idő sikeresen módosítva!');
+        $html = $this->render('admin/item.html.twig', [
+            'item' => 'Szállítási idő sikeresen módosítva!',
+        ]);
+        return new Response($html, 200);//        return $this->redirectToRoute('order-detail', ['id' => $order->getId(),]);
     }
     
     /**

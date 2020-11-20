@@ -1,5 +1,6 @@
 {% extends 'admin/template-listing.html.twig' %}
 
+{% set activeMenu = 'cms' %}
 {% set pageTitle = title %}
 {% set breadcrumb = {
 	0: {
@@ -13,7 +14,7 @@
 {% endblock %}
 
 {% block headerTopright %}
-	<a href="{{ path('cms-page-new') }}" class="btn btn-outline-primary mb-2"><i class="fas fa-plus-circle"></i>Új oldal</a>
+	<a href="{{ path('cms-page-new') }}" class="btn btn-primary mb-2"><i class="fas fa-plus-circle"></i>Új oldal</a>
 {% endblock %}
 
 {% block tableHeader %}
@@ -53,9 +54,9 @@
 				</td>
 				<td class="align-middle">
 					{% if page.image|default %}
-						<div class="d-flexX w-100X img-thumbnail" style="background: url('{{ uploaded_asset(page.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
+						<div class="img-thumbnail" style="background: url('{{ uploaded_asset(page.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
 					{% else %}
-						<span class="text-muted">{{ 'generic.Not available'|trans }}</span>
+						{% include 'admin/_missing-image-insert.html.twig' %}
 					{% endif %}
 				</td>
 				<td class="align-middle">

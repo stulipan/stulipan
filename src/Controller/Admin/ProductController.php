@@ -14,7 +14,7 @@ use App\Form\ProductFilterType;
 use App\Form\ProductFormType;
 use App\Form\ProductQuantityFormType;
 use App\Services\FileUploader;
-use App\Services\Settings;
+use App\Services\StoreSettings;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,7 +40,7 @@ class ProductController extends AbstractController
      *     requirements={"page"="\d+"},
      *     )
      */
-    public function listProducts(Request $request, $page = 1, Settings $settings)
+    public function listProducts(Request $request, $page = 1, StoreSettings $settings)
     {
         $searchTerm = $request->query->get('searchTerm');
         $status = $request->query->get('status');
@@ -259,9 +259,8 @@ class ProductController extends AbstractController
         }
 
         return $this->render('admin/product/product_edit.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Új termék hozzáadása',
-            
+//            'form' => $form->createView(),
+
         ]);
     }
 
@@ -296,9 +295,8 @@ class ProductController extends AbstractController
         }
 
         return $this->render('admin/product/product_edit.html.twig', [
-            'form' => $form->createView(),
+//            'form' => $form->createView(),
             'product' => $product,
-            'title' => 'Termék módosítása', 
         ]);
     }
     

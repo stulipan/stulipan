@@ -1,0 +1,129 @@
+@import "bootstrap/bootstrap.scss";
+@import "_field-group";
+@import "_input-float";
+@import "_switch";
+@import "_variant-picker";
+@import "_sidebar";
+
+iframe {
+  border: 0;
+}
+
+$nm-x:          1.25rem !default;
+
+.no-margins {
+  margin-left: -1 * $nm-x !important;
+  margin-right: -1 * $nm-x !important;
+
+  &>*:not(.table-responsive) {
+    padding-left: $nm-x;
+  }
+
+  & td:first-of-type,
+  & th:first-of-type {
+    padding-left: $nm-x + $table-cell-padding;
+  }
+  & td:last-of-type,
+  & th:last-of-type {
+    padding-right: $nm-x + $table-cell-padding;
+  }
+}
+.navbar--toolbar {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: justify;
+  justify-content: flex-start;
+
+  & .nav-item:first-of-type,
+  & button:first-of-type,
+  & a:first-of-type {
+    margin-left: -.75rem;
+  }
+}
+
+.my-account {
+  background-color: #f0f3f5;
+}
+
+.pagination {
+  margin-bottom: 0;
+}
+
+//.navbar--toolbar .nav-item:first-of-type {
+//  margin-left: -.7rem;
+//}
+//.navbar--toolbar .nav-item {
+//  margin-right: .5rem;
+//}
+
+//.loading-overlay {
+//  position: absolute;
+//  cursor: pointer;
+//  width: 100%;
+//  height: 100%;
+//  left: 0;
+//  top: 0;
+//  z-index: 3;
+//  background: rgba(255, 255, 255, 0.5);
+//  align-items: center;
+//  display: flex;
+//
+//  &:before {
+//    content: '';
+//    margin: auto;
+//    height: 24px;
+//    width: 24px;
+//    animation: rotate 1s infinite linear;
+//    border: 5px solid #f4f4f5;
+//    border-right-color: transparent;
+//
+//    border-top-color: #869196 !important;
+//    border-left-color: #869196 !important;
+//    border-bottom-color: #869196 !important;
+//    border-right-color: transparent !important;
+//    border-radius: 50%;
+//    right: 0;
+//    left: 0;
+//    z-index: 4;
+//    display: block;
+//  }
+//}
+//
+//@-webkit-keyframes rotate {
+//  0% {
+//    transform: rotate(0deg)
+//  }
+//  100% {
+//    transform: rotate(360deg)
+//  }
+//}
+//
+//@keyframes rotate {
+//  0% {
+//    transform: rotate(0deg)
+//  }
+//  100% {
+//    transform: rotate(360deg)
+//  }
+//}
+
+.tile-link {
+  position: absolute;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 30
+}
+
+@include media-breakpoint-down(xs) {
+  .card-body {
+    padding: .75rem;
+  }
+}

@@ -3,9 +3,11 @@
                     <span class="h5 mt-0 mb-3 admin-card-title">{{ 'order.customer.customer'|trans }}</span>
                     <div class="d-inline-block float-right">
                         {% if customer is defined and customer is not null %}
+                        <div class="edit-block">
                             <a href="{{ path('customer-show', {'id': customer.id}) }}">
                                 {{ 'order.customer.view-profile'|trans }}
                             </a>
+                        </div>
                         {% endif %}
                     </div>
                 {#</div>#}
@@ -15,10 +17,10 @@
                             <a href="{{ path('customer-show', {'id': customer.id}) }}">
                                 {{  customer.fullname }}
                             </a>
-                        {% elseif order.billingName is defined and order.billingName is not null %}
-                            {{ order.billingName }}
+                        {% elseif order.billingFullname is defined and order.billingFullname is not null %}
+                            {{ order.billingFullname }}
                         {% else %}
-                            {% include 'admin/_notAvailable-insert.html.twig' %}
+                            {% include 'admin/_missing-data-insert.html.twig' %}
                         {% endif %}
                     </p>
                     {% if customer is defined and customer is not null %}
@@ -41,7 +43,7 @@
                             {% elseif order.email is defined and order.email is not null %}
                                 {{  order.email }}
                             {% else %}
-                                {% include 'admin/_notAvailable-insert.html.twig' %}
+                                {% include 'admin/_missing-data-insert.html.twig' %}
                             {% endif %}
                         </span>
                     </p>

@@ -1,5 +1,6 @@
 {% extends 'admin/template-listing.html.twig' %}
 
+{% set activeMenu = 'orders' %}
 {% set pageTitle = 'Rendelések' %}
 {% set breadcrumb = {
     0: {
@@ -18,7 +19,7 @@
     <div class="sidebar sidebar-right" id="sidebar--Filters" tabindex="-1" role="dialog" aria-labelledby="sidebarLabel" aria-hidden="true">
         <div class="sidebar-dialog sidebar-dialog-scrollable sidebar-dialog-centered" role="document">
             <div class="sidebar-content">
-{#                {{ form_start(filterFormModal, { 'attr': {'class': 'needs-validationX' }}) }}#}
+{#                {{ form_start(filterFormSidebar, { 'attr': {'class': 'needs-validationX' }}) }}#}
                 <div class="sidebar-header">
                     <h3 class="sidebar-title" id="sidebarLabel">{{ 'order.filter.filters'|trans }}</h3>
                     <button type="button" class="close" data-dismiss="sidebar" aria-label="Close">
@@ -26,46 +27,42 @@
                     </button>
                 </div>
                 <div class="sidebar-body pb-0">
-                    {{ form_start(filterFormModal, { 'attr': {'class': 'JS--orderFilters needs-validationX' }}) }}
+                    {{ form_start(filterFormSidebar, { 'attr': {'class': 'JS--orderFilters' }}) }}
                             <div class="form-group">
                                 <label>{{ 'order.filter.search'|trans }}</label>
-{#                                <div class="form-control--WrapperX input-group-prependX flex-grow-3X">#}
-                                    <div class="input--area">
-                                        <div class="input--area-addon input--area-prepend">
-                                            <i class="fas fa-search"></i>
-                                        </div>
-                                        {{ form_widget(filterFormModal.searchTerm, {'attr': {'class': 'form-control form-control-smX' }}) }}
+                                <div class="field-prepend">
+                                    <div class="field-addon-prepend w-addon-sm">
+                                        <i class="fas fa-search"></i>
                                     </div>
-{#                                </div>#}
+                                </div>
+                                {{ form_widget(filterFormSidebar.searchTerm, {'attr': {'class': 'form-control pl-addon-sm' }}) }}
                             </div>
                             <div class="form-group">
                                 <label>{{ 'order.filter.filter-by-date'|trans }}</label>
-{#                                <div class="form-control--Wrapper form-control--Wrapper-bg flex-grow-3">#}
-                                    <div class="input--area" id="JS--idosav1">
-                                        <div class="input--area-addon input--area-prepend">
+                                <div class="" id="JS--idosavS">
+                                    <div class="field-prepend field-append">
+                                        <div class="field-addon-prepend w-addon-sm">
                                             <i class="far fa-calendar-alt mr-0"></i>
                                         </div>
-                                        {{ form_widget(filterFormModal.dateRange, { 'attr': {
-                                            'class' : 'form-control form-control-smX bg-transparent custom-date JS--inputDate',
-                                            'id' : 'singledaterangeX',
-                                            'data-toggle' : 'date-pickerX',
-                                        }}) }}
-                                        <div class="input--area-addon input--area-append">
-                                            <a href="" class="btn btn-link-secondary JS--clearDate"><i class="far fa-times-circle"></i></a>
+                                        <div class="field-addon-append w-addon-sm">
+                                            <a href="" class="btn btn-link-secondary JS--clearDateS"><i class="far fa-times-circle"></i></a>
                                         </div>
                                     </div>
-{#                                </div>#}
+                                    {{ form_widget(filterFormSidebar.dateRange, { 'attr': {
+                                        'class' : 'pl-addon-sm pr-addon-sm bg-transparent custom-date JS--inputDateS',
+                                    }}) }}
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>{{ 'order.filter.filter-by-order-status'|trans }}</label>
                                 <div class="form-control--Wrapper form-control--Wrapper-bg flex-grow-1">
-                                    {{ form_widget(filterFormModal.orderStatus, {'attr': {'class': 'form-control' }}) }}
+                                    {{ form_widget(filterFormSidebar.orderStatus, {'attr': {'class': 'form-control' }}) }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>{{ 'order.filter.filter-by-payment-status'|trans }}</label>
                                 <div class="form-control--Wrapper form-control--Wrapper-bg flex-grow-1">
-                                    {{ form_widget(filterFormModal.paymentStatus, {'attr': {'class': 'form-control' }}) }}
+                                    {{ form_widget(filterFormSidebar.paymentStatus, {'attr': {'class': 'form-control' }}) }}
                                 </div>
                             </div>
 {#                            <div class="form-group">#}
@@ -75,9 +72,9 @@
 {#                            </div>#}
 
                     <div style="display:none">
-                        {{ form_rest(filterFormModal) }}
+                        {{ form_rest(filterFormSidebar) }}
                     </div>
-                    {{ form_end(filterFormModal) }}
+                    {{ form_end(filterFormSidebar) }}
                 </div>
                 <div class="sidebar-footer">
                     <div class="loadingWrapper">
@@ -89,7 +86,7 @@
                         <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
                     </div>
                 </div>
-{#                {{ form_end(filterFormModal) }}#}
+{#                {{ form_end(filterFormSidebar) }}#}
             </div>
         </div>
     </div>
@@ -97,10 +94,12 @@
     {% if orders is defined %}
         {% for order in orders %}
             <div class="modal fade" id="modal--orderDetail-{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                <div class="modal-sliderX modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-sliderX modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                     <div class="modal-content JS--orderWrapper">
-                        <div class="modal-header">
-                            <h3 class="modal-title" id="modalLabel">{{ 'order.order'|trans }} <span class="text-primaryX font-weight-bold">#{{ order.number }}</span></h3>
+                        <div class="modal-header bg-light">
+                            <h3 class="modal-title" id="modalLabel">{{ 'order.order'|trans }} <span class="text-primaryX font-weight-bold">#{{ order.number }}</span>
+                                <a href="{{ path('order-detail', {'id': order.id}) }}" class="btn-link-secondary" target="_blank"><i class="fas fa-external-link-alt mr-0"></i></a>
+                            </h3>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -119,8 +118,9 @@
                             </div>
                             <div class="mb-20px">
                                 <div class="card">
+                                    {% include 'admin/order/_order-delivery-overdue-widget.html.twig' %}
                                     <div class="card-body">
-                                {% include 'admin/order/_order-delivery-widget.html.twig' %}
+                                        {% include 'admin/order/_order-delivery-widget.html.twig' %}
                                     </div>
                                 </div>
                             </div>
@@ -138,17 +138,15 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="loadingWrapper loadingWrapper-secondary">
-                                <a href="" class="btn btn-secondary" data-dismiss="modal">Bezár</a>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                            </div>
-                            <div class="loadingWrapper">
-                                <a href="{{ path('order-detail', {'id': order.id}) }}" class="btn btn-primary"><i class="far fa-edit"></i> Rendelés módosítása</a>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            <div class="mb-20px">
+                                <div class="d-flex justify-content-end">
+                                    <a href="" class="btn btn-secondary" data-dismiss="modal">Bezár</a>
+                                    <a href="{{ path('order-detail', {'id': order.id}) }}" class="btn btn-primary ml-2">Rendelés módosítása</a>
+                                </div>
                             </div>
                         </div>
+{#                        <div class="modal-footer">#}
+{#                        </div>#}
                     </div>
                 </div>
             </div>
@@ -157,12 +155,12 @@
 {% endblock %}
 
 {% block headerTopright %}
-    <a href="{{ path('delivery-date-type-edit') }}" class="btn btn-outline-primary"><i class="fas fa-plus-circle mr-2"></i>Új rendelés</a>
+    <a href="{{ path('delivery-date-type-edit') }}" class="btn btn-primary">Új rendelés</a>
 {% endblock %}
 
 {% block contentFilter %}
-    <div class="row mb-2">
-        <div class="col-lg-12 mb-3">
+    <div class="row">
+        <div class="col-lg-12">
             <div class="no-margins">
                 <ul class="nav nav-tabs">
                     {% for quickLink in filterQuickLinks %}
@@ -173,11 +171,11 @@
                 </ul>
             </div>
         </div>
-        <div class="col-lg-12">
+        <div class="col-lg-12 mt-3">
             {{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
-            <div class="w-100 d-flex justify-content-between">
-                <div class="field-group align-middle flex-column flex-md-row mr-2">
-                    <div class="field-item mb-2 mb-md-0 flex-grow-3">
+            <div class="w-100 d-flex flex-columnX flex-md-row justify-content-between">
+                <div class="field-group align-middle flex-columnX flex-md-row mr-2">
+                    <div class="field-item flex-grow-3">
                         <div class="field-prepend">
                             <div class="field-addon-prepend w-addon-sm">
                                 <i class="fas fa-search"></i>
@@ -185,8 +183,7 @@
                         </div>
                         {{ form_widget(filterForm.searchTerm, {'attr': {'class' : 'pl-addon-sm'}}) }}
                     </div>
-{#                        <div class="d-flex flex-grow-3">#}
-                        <div class="field-item mb-2 mb-md-0 flex-grow-3" id="JS--idosav">
+                        <div class="field-item flex-grow-1 d-none d-md-flex" id="JS--idosav">
                             <div class="field-prepend field-append">
                                 <div class="field-addon-prepend w-addon-sm">
                                     <i class="far fa-calendar-alt mr-0"></i>
@@ -195,47 +192,43 @@
                                     <a href="" class="btn btn-link-secondary JS--clearDate"><i class="far fa-times-circle"></i></a>
                                 </div>
                             </div>
-{#                                <div class="field-addon field-prepend">#}
-{#                                    <i class="far fa-calendar-alt mr-0"></i>#}
-{#                                </div>#}
                             {{ form_widget(filterForm.dateRange, { 'attr': {
                                 'class' : 'pl-addon-sm pr-addon-sm bg-transparent custom-date JS--inputDate',
-                                'id' : 'singledaterangeX',
                                 'data-toggle' : 'date-pickerX',
                             }}) }}
-{#                                <div class="field-addon field-append">#}
-{#                                    <a href="" class="btn btn-link-secondary JS--clearDate"><i class="far fa-times-circle"></i></a>#}
-{#                                </div>#}
                         </div>
-{#                        </div>#}
-                    <div class="field-item mb-2 mb-md-0 form-control--Wrapper form-control--Wrapper-bg flex-grow-1">
+
+                    <div class="field-item form-control--WrapperX form-control--Wrapper-bgX d-none d-md-flex flex-grow-1">
                         {{ form_widget(filterForm.orderStatus, {'attr': {'class': 'form-control' }}) }}
                     </div>
-                    <div class="field-item mb-2 mb-md-0 form-control--Wrapper form-control--Wrapper-bg flex-grow-1">
+                    <div class="field-item form-control--WrapperX form-control--Wrapper-bgX d-none d-md-flex flex-grow-1">
                         {{ form_widget(filterForm.paymentStatus, {'attr': {'class': 'form-control' }}) }}
                     </div>
+                    <div class="field-item form-control--WrapperX form-control--Wrapper-bgX flex-grow-1">
+                        <a class="btn btn-secondary w-100 text-nowrap" href="#" data-toggle="sidebar" data-target="#sidebar--Filters">Több szűrő</a>
+                    </div>
                 </div>
-                <div class="form-control--WrapperX input-group-appendX flex-lg-grow-0X">
-                    <input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary px-4" formnovalidate>
-{#                        <button type="submit" role="button" class="btn btn-secondary px-4">{{ 'generic.ok'|trans }}</button>#}
+                <div class="form-control--WrapperX input-group-appendX flex-lg-grow-0X position-relative">
+                    <input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary w-100" formnovalidate data-toggle="loading-overlay" aria-hidden="true">
+{#                    <button onclick="return false" role="button" class="btn btn-secondary px-3" data-toggle="loading-overlay" aria-hidden="true">{{ 'generic.ok'|trans }}</button>#}
                 </div>
             </div>
             <div style="display:none">
                 {{ form_rest(filterForm) }}
             </div>
             {{ form_end(filterForm) }}
-            <div class="w-100 d-flex justify-content-start flex-row">
-                <a class="btnX btn-secondaryX" href="#" data-toggle="sidebar" data-target="#sidebar--Filters">{{ 'order.filter.more-filters'|trans }}</a>
-            </div>
+{#            <div class="w-100 d-flex justify-content-start flex-row mt-1">#}
+{#                <a class="" href="#" data-toggle="sidebar" data-target="#sidebar--Filters">{{ 'order.filter.more-filters'|trans }}</a>#}
+{#            </div>#}
         </div>
 
-        {% if filterTags is defined and filterTags is not null %}
-            <div class="col-lg-12 mt-2">
+        {% if filterTags is defined and filterTags is not empty %}
+            <div class="col-lg-12">
                 {% for filterKey,value in filterTags %}
                     {% if value is defined and value is not null %}
                         <div class="filter-tag">
-                            {{ value }}
-                            <a href="{{ filterUrls[filterKey] }}" class="btn-link-secondary ml-2"><i class="fas fa-times mr-0"></i></a>
+                            <div class="filter-tag-content">{{ value }}</div>
+                            <a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -282,27 +275,30 @@
                                 {% endif %}
     {#                            <a class="d-block btn-link-secondary text-lg mt-1" href="#" data-toggle="modal" data-target="#modal--orderDetail-{{ loop.index }}"><i class="far fa-eye"></i></a>#}
                             </div>
-                            <div class="mt-autoX align-self-start align-self-centerX">
-                                {#                                    {% if order.status %}#}
-                                {#                                    <span class="badge badge-{{ order.status.css }}">{{ order.status }}</span>#}
-                                {#                                    {% endif %}#}
-                            </div>
+{#                            <div class="mt-autoX align-self-start align-self-centerX mt-1">#}
+{#                                {% if order.status %}#}
+{#                                <span class="badge badge-{{ order.status.css }}">{{ order.status }}</span>#}
+{#                                {% endif %}#}
+{#                            </div>#}
                         </div>
 {#                    </div>#}
                 </td>
                 <td class="text-nowrap">
-{#                    <span class="">{{ order.createdAt|date('Y-m-d')}}</span>#}
-{#                    {{ dump(order.createdAt) }}#}
-                    <span class="">{{ order.createdAt|localizedDate }}</span>
+                    <span class="">{{ order.createdAt|localizedDate|lower }}</span> <br>
+                    <small class="text-muted">{{ order.createdAt|localizedDate('l') }}</small>
                 </td>
                 <td class="text-nowrapX">
-                        <span class="text-primaryX">
+                        <span class="">
                             {% if order.customer is defined and order.customer is not null %}
                                 <a href="{{ path('customer-show', {'id': order.customer.id}) }}">
-                                {{ order.billingName ? order.billingName : '' }} {{ order.billingCompany is defined and order.billingCompany ? '/ ' ~ order.billingCompany : '' }}
-                            </a>
+                                    {{ order.billingFullname ? order.billingFullname : '' }}
+                                    {% if order.billingCompany is defined and order.billingCompany %}
+                                        <br>
+                                        {{ order.billingCompany }}
+                                    {% endif %}
+                                </a>
                             {% else %}
-                                {{ order.billingName ? order.billingName : '' }} {{ order.billingCompany is defined and order.billingCompany ? '/ ' ~ order.billingCompany : '' }}
+                                {{ order.billingFullname ? order.billingFullname : '' }} {{ order.billingCompany is defined and order.billingCompany ? '/ ' ~ order.billingCompany : '' }}
                             {% endif %}
                         </span><br>
                     <div class="order-billingInfo">
@@ -315,16 +311,16 @@
                             {% set phone = firstSeg ~ ' ' ~ secondSeg ~ ' ' ~ thirdSeg ~ ' ' ~ fourthSeg %}
                         {% endif %}
                         <span class="text-nowrap">{{ phone is defined ? '+' ~ phone : ''}} </span><br>
-                        {% if order.billingAddress %}
-                            <span>
-                                    {{ order.billingAddress.street }} <br>
-                                    {{ order.billingAddress.zip }} {{ order.billingAddress.city }}
-                                </span>
-                        {% endif %}
+{#                        {% if order.billingAddress %}#}
+{#                            <span>#}
+{#                                    {{ order.billingAddress.street }} <br>#}
+{#                                    {{ order.billingAddress.zip }} {{ order.billingAddress.city }}#}
+{#                                </span>#}
+{#                        {% endif %}#}
                     </div>
                 </td>
                 <td class="text-nowrapX">
-                    <span class="text-success">{{ order.shippingName ? order.shippingName : '' }}</span> <br>
+                    <span class="text-success">{{ order.shippingFullname ? order.shippingFullname : '' }}</span> <br>
                     <div class="order-shippingInfo">
                         {% if order.shippingPhone %}
                             {% set firstSeg = order.shippingPhone|slice(0, 2) %}
@@ -344,6 +340,7 @@
                     </div>
                 </td>
                 <td class="text-nowrapX">
+                    {% include 'admin/order/_order-delivery-overdue-widget.html.twig' with {'isSizedSm': true, 'showFutureDatesOnly': true} %}
                     <div class="d-flex align-items-end flex-column h-100">
                         <div class="d-flex justify-content-start align-self-start">
                             {% if order.deliveryDate %}
@@ -357,46 +354,34 @@
                             {% endif %}
                         </div>
                         <div class="d-flex mt-auto align-self-start order-deliveryInfo">
-                            <em>{{ order.shipping ? order.shipping.getName() : '' }}</em>
+                            <em>{{ order.shippingMethod ? order.shippingMethod.getName() : '' }}</em>
                         </div>
                     </div>
                 </td>
                 <td class="text-center text-nowrap">
-                    {% if order.payment %}
-                        <small>{{ order.payment.shortCode }}</small>
+                    {% if order.paymentMethod %}
+                        <small>{{ order.paymentMethod.shortCode }}</small>
                     {% endif %}
                 </td>
                 <td class="text-right text-nowrap">
-                    {#                        <div class="overlay-cell">#}
-                    {#                            <div class="d-flex align-items-end flex-column h-100">#}
                     <span class="">{{ order.summary.totalAmountToPay|money }}</span>
-                    {#                            </div>#}
-                    {#                            <div class="card-img-overlay d-flex align-items-start p-0">#}
-                    {#                                <div class="text-center overlay-badge warning">#}
-                    {#                                </div>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
                 </td>
                 <td class="text-center">
                     <div class="overlay-container">
                         <div class="overlay-cell">
                             <div class="overlay-content">
-                                <div class="text-centerX w-100">
-                                    <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#modal--orderDetail-{{ loop.index }}"><i class="far fa-eye mr-1"></i> {{ 'generic.preview'|trans }}</a>
-                                </div>
+                                <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#modal--orderDetail-{{ loop.index }}"><i class="far fa-eye"></i> {{ 'generic.preview'|trans }}</a>
+                                <a href="{{ path('order-detail', {'id': order.id}) }}" class="btn btn-secondary mt-2" target="_blank"><i class="fas fa-external-link-alt"></i> {{ 'generic.open'|trans }}</a>
                             </div>
                         </div>
-                        <div class="d-flex align-items-end flex-column h-100">
-                            <div class="align-self-center">
+                        <div class="d-flex align-items-end flex-column h-100 flex-sm-column">
+                            <div class="align-self-center d-flex flex-column">
                                 {% if order.status %}
                                     <span class="badge badge-{{ order.status.css }}">{{ order.status }}</span>
                                 {% endif %}
-                                {% if order.isUnpaid %}
+{#                                {% if order.isUnpaid %}#}
                                     <span class="badge badge-{{ order.paymentStatus.css }}">{{ order.paymentStatus }}</span>
-                                {% endif %}
-    {#                            <div class="d-block mt-2">#}
-    {#                                <a class="d-block btn-link-secondary text-lg" href="{{ path('order-detail', {'id': order.id}) }}"><i class="far fa-edit"></i></a>#}
-    {#                            </div>#}
+{#                                {% endif %}#}
                             </div>
                         </div>
                     </div>
@@ -426,25 +411,57 @@
     <script>
         $(function() {
             let dateField = $('#JS--idosav .JS--inputDate');
-            dateField.daterangepicker({
-                parentEl: "#JS--idosavX",
+            let sidebarDateField = $('#JS--idosavS .JS--inputDateS');
+
+            // Innen: https://momentjs.com/docs/#/i18n/
+            moment.locale("{{ app.request.locale }}", {
+                monthsShort : [
+                    "{{ 'datetime.jan'|trans }}",
+                    "{{ 'datetime.feb'|trans }}",
+                    "{{ 'datetime.mar'|trans }}",
+                    "{{ 'datetime.apr'|trans }}",
+                    "{{ 'datetime.may'|trans }}",
+                    "{{ 'datetime.jun'|trans }}",
+                    "{{ 'datetime.jul'|trans }}",
+                    "{{ 'datetime.aug'|trans }}",
+                    "{{ 'datetime.sep'|trans }}",
+                    "{{ 'datetime.oct'|trans }}",
+                    "{{ 'datetime.nov'|trans }}",
+                    "{{ 'datetime.dec'|trans }}",
+                ]
+            });
+            let dateSettings = {
+                parentEl: "#JS--idosav",
                 opens: 'right',
-                autoApply: true,
+                autoApply: false,
                 autoUpdateInput: false,
+                // linkedCalendars: false,
+
                 ranges: {
                     "{{ 'datetime.today'|trans }}": [moment(), moment()],
                     "{{ 'datetime.yesterday'|trans }}": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    "{{ 'datetime.last-7-days'|trans }}": [moment().subtract(6, 'days'), moment()],
-                    "{{ 'datetime.last-30-days'|trans }}": [moment().subtract(29, 'days'), moment()],
                     "{{ 'datetime.this-month'|trans }}": [moment().startOf('month'), moment().endOf('month')],
                     "{{ 'datetime.previous-month'|trans }}": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    "{{ 'datetime.last-7-days'|trans }}": [moment().subtract(6, 'days'), moment()],
+                    "{{ 'datetime.last-30-days'|trans }}": [moment().subtract(29, 'days'), moment()],
                     "{{ 'datetime.this-year'|trans }}": [moment().startOf('year'), moment().endOf('year')],
                     "{{ 'datetime.previous-year'|trans }}": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-                    "{{ 'datetime.lifetime'|trans }}": [moment('{{ settings.get('general.launch-date') }}'), moment()],
+                    "{{ 'datetime.lifetime'|trans }}": [moment('{{ settings_general.get('general.launch-date') }}'), moment()],
                 },
-                alwaysShowCalendars: true,
+                alwaysShowCalendars: false,
                 showCustomRangeLabel: true,
-                maxDate: moment(),
+
+                // singleDatePicker: true,
+                // showWeekNumbers: true,
+
+                // showRangesAsDropdown: true,
+                // showDropdowns: true,
+                drops: "auto",
+                // timePicker: true,
+                // timePickerSeconds: true,
+                // timePicker24Hour: true,
+
+                // maxDate: moment(),
                 locale: {
                     // format: 'YYYY/MM/DD',
                     // format: 'MMM DD, [<span class="text-muted">]YYYY[</span>]',
@@ -455,13 +472,13 @@
                     applyLabel: "{{ 'generic.apply'|trans }}",
                     cancelLabel: "{{ 'generic.delete'|trans }}",
                     daysOfWeek: [
+                        "{{ 'datetime.sun'|trans }}",
                         "{{ 'datetime.mon'|trans }}",
                         "{{ 'datetime.tue'|trans }}",
                         "{{ 'datetime.wed'|trans }}",
                         "{{ 'datetime.thu'|trans }}",
                         "{{ 'datetime.fri'|trans }}",
                         "{{ 'datetime.sat'|trans }}",
-                        "{{ 'datetime.sun'|trans }}",
                     ],
                     monthNames: [
                         "{{ 'datetime.january'|trans }}",
@@ -479,10 +496,86 @@
                     ],
                     firstDay: 1,
                 },
+
                 buttonClasses: 'btn',
                 applyClass: 'btn-primary',
                 cancelClass: 'btn-secondary',
-            });
+            }
+            let sidebarDateSettings = {
+                parentEl: "#JS--idosavS",
+                opens: 'right',
+                // autoApply: true,
+                autoUpdateInput: false,
+                // linkedCalendars: false,
+
+                ranges: {
+                    "{{ 'datetime.today'|trans }}": [moment(), moment()],
+                    "{{ 'datetime.yesterday'|trans }}": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    "{{ 'datetime.this-month'|trans }}": [moment().startOf('month'), moment().endOf('month')],
+                    "{{ 'datetime.previous-month'|trans }}": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    "{{ 'datetime.last-7-days'|trans }}": [moment().subtract(6, 'days'), moment()],
+                    "{{ 'datetime.last-30-days'|trans }}": [moment().subtract(29, 'days'), moment()],
+                    "{{ 'datetime.this-year'|trans }}": [moment().startOf('year'), moment().endOf('year')],
+                    "{{ 'datetime.previous-year'|trans }}": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                    "{{ 'datetime.lifetime'|trans }}": [moment('{{ settings_general.get('general.launch-date') }}'), moment()],
+                },
+                alwaysShowCalendars: true,
+                showCustomRangeLabel: true,
+                autoWidth: true,
+
+                // singleDatePicker: true,
+                // displayInline: true,
+                // showWeekNumbers: true,
+
+                // showRangesAsDropdown: true,
+                // showDropdowns: true,
+                drops: "auto",
+                // timePicker: true,
+                // timePickerSeconds: true,
+                // timePicker24Hour: true,
+
+                // maxDate: moment(),
+                locale: {
+                    // format: 'YYYY/MM/DD',
+                    // format: 'MMM DD, [<span class="text-muted">]YYYY[</span>]',
+                    format: 'MMM DD, YYYY',
+                    separator: ' - ',
+                    dateRange: "{{ 'datetime.date-range'|trans }}",
+                    customRangeLabel: "{{ 'datetime.custom-range'|trans }}",
+                    applyLabel: "{{ 'generic.apply'|trans }}",
+                    cancelLabel: "{{ 'generic.delete'|trans }}",
+                    daysOfWeek: [
+                        "{{ 'datetime.sun'|trans }}",
+                        "{{ 'datetime.mon'|trans }}",
+                        "{{ 'datetime.tue'|trans }}",
+                        "{{ 'datetime.wed'|trans }}",
+                        "{{ 'datetime.thu'|trans }}",
+                        "{{ 'datetime.fri'|trans }}",
+                        "{{ 'datetime.sat'|trans }}",
+                    ],
+                    monthNames: [
+                        "{{ 'datetime.january'|trans }}",
+                        "{{ 'datetime.february'|trans }}",
+                        "{{ 'datetime.march'|trans }}",
+                        "{{ 'datetime.april'|trans }}",
+                        "{{ 'datetime.mayy'|trans }}",
+                        "{{ 'datetime.june'|trans }}",
+                        "{{ 'datetime.july'|trans }}",
+                        "{{ 'datetime.august'|trans }}",
+                        "{{ 'datetime.september'|trans }}",
+                        "{{ 'datetime.october'|trans }}",
+                        "{{ 'datetime.november'|trans }}",
+                        "{{ 'datetime.december'|trans }}",
+                    ],
+                    firstDay: 1,
+                },
+
+                buttonClasses: 'btn',
+                applyClass: 'btn-primary',
+                cancelClass: 'btn-secondary',
+            }
+            dateField.daterangepicker(dateSettings);
+            sidebarDateField.daterangepicker(sidebarDateSettings);
 
             // Ha van dateRange a query-ben, akkor a ketto datumot betoltom a datum valasztoba
             let string = "{{ app.request.query.get('dateRange') is defined ? app.request.query.get("dateRange") : false }}";
@@ -490,6 +583,10 @@
                 picker = dateField.data('daterangepicker');
                 picker.setStartDate(moment(string.split(picker.locale.separator)[0], 'YYYY-MM-DD'));
                 picker.setEndDate(moment(string.split(picker.locale.separator)[1], 'YYYY-MM-DD'));
+
+                pickerS = sidebarDateField.data('daterangepicker');
+                pickerS.setStartDate(moment(string.split(pickerS.locale.separator)[0], 'YYYY-MM-DD'));
+                pickerS.setEndDate(moment(string.split(pickerS.locale.separator)[1], 'YYYY-MM-DD'));
             }
 
 
@@ -517,8 +614,33 @@
                 dateField.data('daterangepicker').setStartDate(moment());
                 dateField.data('daterangepicker').setEndDate(moment());
             });
+
+
+            sidebarDateField.on('show.daterangepicker', function(ev, pickerS) {
+                pickerS.parentEl.addClass('daterangepicker-overflow-hiddenX');
+            });
+            // ujra gorgetheto a hatter
+            sidebarDateField.on('hide.daterangepicker', function(ev, pickerS) {
+                pickerS.parentEl.removeClass('daterangepicker-overflow-hiddenX');
+            });
+            sidebarDateField.on('apply.daterangepicker', function(ev, pickerS) {
+                $(this).val(pickerS.startDate.format('YYYY-MM-DD') + pickerS.locale.separator + pickerS.endDate.format('YYYY-MM-DD'));
+                $(this).focus();
+                pickerS.hide();
+            });
+            sidebarDateField.on('cancel.daterangepicker', function(ev, pickerS) {
+                pickerS.startDate = moment();
+                pickerS.endDate = moment();
+                $(this).val('');
+            });
+            $('#JS--idosavS .JS--clearDateS').on('click', function(ev) {
+                ev.preventDefault();
+                sidebarDateField.val('');
+                sidebarDateField.data('daterangepicker').setStartDate(moment());
+                sidebarDateField.data('daterangepicker').setEndDate(moment());
+            });
         });
     </script>
 {% endblock %}
-        
+
 

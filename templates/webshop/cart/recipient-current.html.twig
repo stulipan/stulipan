@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-column checkout-sender-current">
+            <div class="">
+                <div class="d-flex justify-content-start justify-content-sm-between">
+                    <div class="minicard--title mr-2 mr-sm-0">
+                        <div class="minicard--title">{{ recipient.name }}</div>
+                    </div>
+                    <div class="">
+                        <a href="#" class="text-sm btn-btn-outline-dark-btn-sm" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient', {id: recipient.id}) }}">
+                            <span class="btn-loading-invisible">Módosít</span>
+                            <div class="loading-spinner" role="status"></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="minicard--address">{{ recipient.address.street }}</div>
+                <div class="minicard--address">{{ recipient.address.zip }} {{ recipient.address.city }}</div>
+                <div class="minicard--address">{{ recipient.address.province }}, {{ recipient.address.country }}</div>
+                <div class="minicard--address">{{ recipient.phone }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="navbar--toolbar mt-1">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <button class="btn btn-link btn-sm Xbtn-outline-primary" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient') }}">
+                    <span class="btn-loading-invisible">Új címzett hozáadása</span>
+                    <div class="loading-spinner" role="status"></div>
+                </button>
+                <button class="btn btn-link btn-sm" data-toggle="modal" data-target="#modal--recipientList">
+                    <span class="btn-loading-invisible">Előzőleg megadott címzettek</span>
+                    <div class="loading-spinner" role="status"></div>
+                </button>
+            {% endif %}
+        </div>
+    </div>
+</div>

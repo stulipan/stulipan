@@ -4,7 +4,7 @@
 {% set breadcrumb = {
     0: {
         'url': path('homepage'),
-        'text': 'Home',
+        'text': 'generic.home'|trans,
     },
     1: {
         'url': path('site-product-list', { 'slug': product.categories[0].slug }),
@@ -21,7 +21,7 @@
 {% block stylesheets %}
     {{ parent() }}
     {#<link rel="stylesheet" href="{{ asset('build/v-shop.css') }}"/>#}
-    <link href="{{ asset('webshop/site/js/daterangepicker.css') }}" rel="stylesheet" />
+    {{ encore_entry_link_tags('daterangepicker') }}
 {% endblock %}
 
 {% block bodyClass %}
@@ -160,18 +160,18 @@
 
                                         {% if form.options is defined and form.options is not empty %}
                                             {% for item in form.options %}
-                                                <div class="form-group row">
+                                                <div class="row">
                                                     <div class="col-md-12">
                                                         <label class="detail-option-heading">{{ item.selectedOption.vars.value }}</label>
                                                         <div class="form-row">
-                                                            {% if settings.get('general.product-variant-view') == 'dropdown' %}
-                                                                <div class="col-8 col-sm-8 col-md-6">
+                                                            {% if settings_general.get('general.product-variant-view') == 'dropdown' %}
+                                                                <div class="form-group col-8 col-sm-8 col-md-6">
                                                                     {{ form_widget(item.selectedOptionValue) }}
                                                                 </div>
-                                                            {% elseif settings.get('general.product-variant-view') == 'variant-picker' %}
+                                                            {% elseif settings_general.get('general.product-variant-view') == 'variant-picker' %}
                                                                 {% for choice in item.selectedOptionValue %}
                                                                     <div class="col-sm-4 col-4">
-                                                                        {% include 'webshop/site/visual-picker-4-product-variant.html.twig' %}
+                                                                        {% include 'webshop/site/variant-picker-4-product-variant.html.twig' %}
                                                                     </div>
                                                                 {% endfor %}
                                                                 {% do item.selectedOptionValue.setRendered() %}
@@ -183,7 +183,6 @@
                                             {{ form_errors(form.options) }}
                                         {% endif %}
                                         {% do form.options.setRendered() %}
-
                                         {% do form.deliveryDate.deliveryDate.setRendered() %}
 
                                         <div class="row">
@@ -197,24 +196,26 @@
 
                                     <div class="row mb-3">
                                         <div class="col-lg-12">
-                                            <button type="submit" class="JS--Button-addToCart btn btn-success btn-lg mb-1 w-100">
-                                                <svg class="svg-icon svg-icon-heavy addtocart">
-                                                    <use xlink:href="#cart-1"> </use>
-                                                </svg>
-                                                Kosárba rakom
+                                            <button type="submit" class="JS--Button-addToCart btn btn-lg btn-success btn-uppercase w-100" data-toggle="loading-overlay" aria-hidden="true">
+                                                <span class="btn-loading-invisible">
+                                                    <svg class="svg-icon svg-icon-heavy addtocart">
+                                                        <use xlink:href="#cart-1"> </use>
+                                                    </svg>
+                                                    Kosárba rakom
+                                                </span>
+                                                <div class="loading-spinner" role="status"></div>
                                             </button>
-                                            <div class="JS--loadingOverlay d-flex align-items-stretch loading-lg"></div>
                                         </div>
                                     </div>
 
                                 {{ form_end(form) }}
 
-                                <div class="cardX border-0 mb-3">
-                                    <div class="card-bodyX bg-warning-lightenX text-center p-0 px-2">
+                                <div class="border-0 mb-3">
+                                    <div class="text-center p-0 px-2">
                                         <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
                                         <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/termekek/paypal.png">
-                                        <p class="card-text text-xs text-muted">
-                                            Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</p>
+                                        <div class="text-sm text-muted mt-2">
+                                            Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>
                                     </div>
                                 </div>
                             {% else %}
@@ -421,7 +422,7 @@
     <script>
         $(function() {
             let $wrapper = $('.JS--deliveryDateContainer');
-            let $vp = $wrapper.find('.visual-picker-checked');
+            let $vp = $wrapper.find('.vp-checked');
             // let $currentValue = $vp.find('input').val();
             // console.log($currentValue);
 
@@ -433,9 +434,9 @@
             $("[class*='JS--generatedDate-']").click(function () {
                 $dateWrapper = $wrapper.find('.JS--dateWrapper');
 
-                $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
-                $(this).find('.visual-picker').find('input').prop('checked', true);
-                $(this).find('.visual-picker').addClass('visual-picker-checked');
+                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
+                $(this).find('.vp').find('input').prop('checked', true);
+                $(this).find('.vp').addClass('vp-checked');
 
                 // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
                 // amugy visszallitja (ujra mutatja) a CalendarIcont
@@ -455,8 +456,8 @@
                 $dateWrapper = $(this).closest('.JS--dateWrapper');
 
                 $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                $dateWrapper.find('.visual-picker-checked').find('input').prop('checked', false);
-                $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
+                $dateWrapper.find('.vp-checked').find('input').prop('checked', false);
+                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
 
                 $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
 
@@ -464,8 +465,8 @@
                     $wrapper.find('.JS--showCalendarIcon').hide();
                     $dateModule.removeClass('d-none').addClass('d-temporary');
                 }
-                $dateModule.find('.visual-picker').find('input').prop('checked', true);
-                $dateModule.find('.visual-picker').addClass('visual-picker-checked');
+                $dateModule.find('.vp').find('input').prop('checked', true);
+                $dateModule.find('.vp').addClass('vp-checked');
 
                 if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
                     $wrapper.find('.JS--showCalendarIcon').show();

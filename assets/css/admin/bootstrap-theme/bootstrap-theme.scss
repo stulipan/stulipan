@@ -1,0 +1,129 @@
+@import "bootstrap/bootstrap.scss";
+@import "_field-group";
+@import "_filter-tag";
+@import "_input-float";
+@import "_sidebar";
+@import "_sidenav";
+@import "_switch";
+@import "_uploader";
+@import "_variant-picker";
+@import "_vertical-ribbon";
+
+
+iframe {
+  border: 0;
+}
+
+$nm-x:          1rem !default;
+
+.no-margins {
+  margin-left: -1 * $nm-x !important;
+  margin-right: -1 * $nm-x !important;
+
+  &>*:not(.table-responsive) {
+    padding-left: $nm-x;
+  }
+
+  & td:first-of-type,
+  & th:first-of-type {
+    padding-left: $nm-x + $table-cell-padding;
+  }
+  & td:last-of-type,
+  & th:last-of-type {
+    padding-right: $nm-x + $table-cell-padding;
+  }
+}
+
+.form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+// Mobile corrections
+// Card, Modal and Sidebar have smaller paddings on mobile devices
+@include media-breakpoint-down(xs) {
+  .card-body {
+    padding: .5rem;
+  }
+  .sidebar-header,
+  .modal-header {
+    padding-right: .75rem;
+    padding-left: .75rem;
+  }
+  .sidebar-body,
+  .sidebar-footer,
+  .modal-body,
+  .modal-footer {
+    padding: .75rem;
+  }
+}
+
+// Correction. Use class "correction-no-padding" instead of "px-0 px-md-10px"
+.correction-no-padding {
+  @include media-breakpoint-down(sm) {
+    padding-left: 0;
+    padding-right: 0;
+
+    & .card {
+      border-radius: 0;
+    }
+  }
+}
+
+.fa, .far, .fas {
+  //margin-right: .5rem;
+}
+.fa, .fab, .fal, .far, .fas {
+  line-height: initial;
+  margin-right: .5rem;
+}
+
+.loading-overlay {
+  position: absolute;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.5);
+  align-items: center;
+  display: flex;
+
+  &:before {
+    content: '';
+    margin: auto;
+    height: 24px;
+    width: 24px;
+    animation: rotate 1s infinite linear;
+    border: 5px solid #f4f4f5;
+    border-right-color: transparent;
+
+    border-top-color: #869196 !important;
+    border-left-color: #869196 !important;
+    border-bottom-color: #869196 !important;
+    border-right-color: transparent !important;
+    border-radius: 50%;
+    right: 0;
+    left: 0;
+    z-index: 4;
+    display: block;
+  }
+}
+
+@-webkit-keyframes rotate {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}

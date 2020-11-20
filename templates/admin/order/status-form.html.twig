@@ -16,8 +16,9 @@
                         <label class="">Értesítés az ügyfélnek</label>
                     </div>
                     <div class="col-4 col-sm-8 d-flex justify-content-sm-start justify-content-end">
-                        <input type="checkbox" id="{{ statusForm.sendNotification.vars.id }}" name="{{ statusForm.sendNotification.vars.full_name }}" required="required" class="form-check-input" value="{{ statusForm.sendNotification.vars.value }}" {{ statusForm.sendNotification.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">
-                        <label class="form-check-label" role="checkbox" tabindex="" for="{{ statusForm.sendNotification.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+                        {{ form_widget(statusForm.sendNotification, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
+{#                        <input type="checkbox" id="{{ statusForm.sendNotification.vars.id }}" name="{{ statusForm.sendNotification.vars.full_name }}" required="required" class="form-check-input" value="{{ statusForm.sendNotification.vars.value }}" {{ statusForm.sendNotification.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">#}
+{#                        <label class="form-check-label" role="checkbox" tabindex="" for="{{ statusForm.sendNotification.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>#}
                         {{ form_errors(statusForm.sendNotification) }}
                         {% do statusForm.sendNotification.setRendered() %}
                     </div>
@@ -27,8 +28,9 @@
                         <label class="">Megjegyzés hozzáadása</label>
                     </div>
                     <div class="col-4 col-sm-8 d-flex justify-content-sm-start justify-content-end">
-                        <input type="checkbox" id="{{ statusForm.addNote.vars.id }}" name="{{ statusForm.addNote.vars.full_name }}" required="required" class="form-check-input" value="{{ statusForm.addNote.vars.value }}" {{ statusForm.addNote.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">
-                        <label class="form-check-label" for="{{ statusForm.addNote.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
+                        {{ form_widget(statusForm.addNote, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
+{#                        <input type="checkbox" id="{{ statusForm.addNote.vars.id }}" name="{{ statusForm.addNote.vars.full_name }}" required="required" class="form-check-input" value="{{ statusForm.addNote.vars.value }}" {{ statusForm.addNote.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">#}
+{#                        <label class="form-check-label" for="{{ statusForm.addNote.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>#}
                         {{ form_errors(statusForm.addNote) }}
                         {% do statusForm.addNote.setRendered() %}
                     </div>

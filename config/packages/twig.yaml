@@ -6,6 +6,7 @@ twig:
     form_themes: ['form/bootstrap_4_withNoErrors.twig']
 
     globals:
-        settings: '@App\Services\Settings'
+        settings_general: '@App\Services\StoreSettings'
+        settings_checkout: '@App\Services\CheckoutSettings'
 
 #    form_themes: ['bootstrap_4_layout.html.twig']

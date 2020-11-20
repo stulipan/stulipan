@@ -1,0 +1,32 @@
+{% extends 'admin/template-editing.html.twig' %}
+
+{% set activeMenu = 'smartLabels' %}
+{% set pageTitle = label is defined and label is not null ? label.name : 'Új matrica' %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+	1: {
+		'url': path('smart-label-list'),
+		'text': 'Matricák',
+	},
+} %}
+{% set cancelUrl = path('smart-label-list') %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{{ encore_entry_link_tags('SmartLabelEdit') }}
+{% endblock %}
+
+{% block content %}
+	<div id="v--smartLabel" class="mb-6">
+		<smart-label :label-id="{{ label is defined ? label.id : 0}}">
+		</smart-label>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('SmartLabelEdit') }}
+{% endblock %}

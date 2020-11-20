@@ -16,8 +16,6 @@ class TranslationDumper implements DumperInterface
         $translationDir = $options['translationDir'];
         $resource = $options['resource'];
 
-
-
         $fileLocator = new FileLocator($translationDir);
         $locatedFiles = $fileLocator->locate($resource, null, false);
         try {

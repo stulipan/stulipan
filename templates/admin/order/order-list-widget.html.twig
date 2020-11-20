@@ -24,10 +24,10 @@
                                     <div class="text-sm text-mutedZ d-inline d-md-block">{{ order.createdAt|date('H:i')}}</div>
                                     <div class="mt-1 text-mutedZ d-inline d-md-block">
                                         {#Összesen: <strong>{{ order.priceTotalAfterDiscount }} Ft</strong> <br>#}
-                                        <span class="text-sm">{{ order.payment ? order.payment.getName() : '' }} </span> <br>
-                                        {% if order.payment %}
-                                            {% if order.payment.image %}
-                                            <img class="img-thumbnail img-grayscale border-0 h-15px d-none d-md-inline" src="{{ asset('/uploads/images/termekek/' ~ order.payment.image) }}" />
+                                        <span class="text-sm">{{ order.paymentMethod ? order.paymentMethod.getName() : '' }} </span> <br>
+                                        {% if order.paymentMethod %}
+                                            {% if order.paymentMethod.image %}
+                                            <img class="img-thumbnail img-grayscale border-0 h-15px d-none d-md-inline" src="{{ asset('/uploads/images/termekek/' ~ order.paymentMethod.image) }}" />
                                             {% endif %}
                                         {% endif %}
                                     </div>
@@ -39,9 +39,9 @@
                                 <div class="col-6 col-md-3 border-md-right mt-2 mt-md-0">
                                     <div class="row">
                                         <div class="col-12">
-                                            <span class="font-weight-bold text-lgX">{{ order.billingName ? order.billingName : '' }} {{ order.billingCompany is defined and order.billingCompany ? '/ ' ~ order.billingCompany : '' }}</span> <br>
+                                            <span class="font-weight-bold text-lgX">{{ order.billingFullname ? order.billingFullname : '' }} {{ order.billingCompany is defined and order.billingCompany ? '/ ' ~ order.billingCompany : '' }}</span> <br>
                                             <div class="text-mutedZ">
-                                                +{{ order.billingPhone ? order.billingPhone : ''}} <br>
+{#                                                +{{ order.billingPhone ? order.billingPhone : ''}} <br>#}
                                                 {% if order.billingAddress %}
                                                     {{ order.billingAddress.street }} <br>
                                                     <span class="text-sm">{{ order.billingAddress.zip }} {{ order.billingAddress.city }}</span> <br>
@@ -65,7 +65,7 @@
                                         <i class="far fa-clock mr-1 text-muted"></i> <strong>{{ order.deliveryDate|date('Y M j.')|lower }}</strong> <br>
                                         <span class="text-mutedZ">{{ order.deliveryInterval ? order.deliveryInterval ~ ' óra között': '' }}</span> <br>
                                         {% endif %}
-                                        <span class="text-mutedZ text-sm">{{ order.shipping ? order.shipping.getName() : '' }}</span>
+                                        <span class="text-mutedZ text-sm">{{ order.shippingMethod ? order.shippingMethod.getName() : '' }}</span>
                                     </div>
 
                                     {#<div class="mb-1">Címzett: <span class="font-weight-bold">{{ order.recipient ? order.recipient.name : '' }}</span></div>#}
@@ -140,7 +140,7 @@
                                         </div>
                                         <div class="mt-2 d-none d-sm-block">
                                             Összesen: <strong>{{ order.priceTotalAfterDiscount }} Ft</strong> <br>
-                                            <span class="text-sm">{{ order.payment ? order.payment.getName() : '' }}</span>
+                                            <span class="text-sm">{{ order.paymentMethod ? order.paymentMethod.getName() : '' }}</span>
                                         </div>
                                     </div>
                                 </div>

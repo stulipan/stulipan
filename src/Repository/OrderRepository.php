@@ -159,30 +159,6 @@ class OrderRepository extends EntityRepository
         ;
 
         if (is_array($filters)) {
-            if (array_key_exists('dateRange', $filters) && $filters['dateRange']) {
-                $splitPieces = explode(" - ", $filters['dateRange']);
-                $start = $splitPieces[0];
-                $end = $splitPieces[1];
-
-                $dateRange = new DateRange();
-                if (!isset($start) or $start === null or $start == "") {
-                } else {
-                    $dateRange->setStart(DateTime::createFromFormat('!Y-m-d',$start));
-                    $start = $dateRange->getStart();
-                }
-                if (!isset($end) or $end === null or $end == "") {
-                } else {
-                    $dateRange->setEnd(DateTime::createFromFormat('!Y-m-d',$end));
-                    $end = $dateRange->getEnd();
-                }
-
-                $end->modify('24 hours'); // Ez nelkül az $end mindig az adott nap 00:00:00 óráját veszi, ergó az aznapi rendelések kimaradnak
-                $qb->andWhere('o.createdAt >= :start')
-                    ->andWhere('o.createdAt <= :end')
-                    ->setParameter('start', $start)
-                    ->setParameter('end', $end)
-                ;
-            }
             if (array_key_exists('searchTerm', $filters) && $filters['searchTerm']) {
                 $searchTerm = strtolower($filters['searchTerm']);
 //                $qb->andWhere('o.id LIKE :id OR
@@ -220,8 +196,10 @@ class OrderRepository extends EntityRepository
                     $qb->expr()->like('LOWER(CONCAT(o.lastname,\' \',o.firstname))',':fullname2'),
                     $qb->expr()->like('o.billingPhone', ':billingPhone'),
                     $qb->expr()->like('o.shippingPhone', ':shippingPhone'),
-                    $qb->expr()->like('LOWER(o.shippingName)', ':shippingName'),
-                    $qb->expr()->like('LOWER(o.billingName)', ':billingName'),
+                    $qb->expr()->like('LOWER(CONCAT(o.shippingFirstname,\' \',o.shippingLastname))',':shippingName1'),
+                    $qb->expr()->like('LOWER(CONCAT(o.shippingLastname,\' \',o.shippingFirstname))',':shippingName2'),
+                    $qb->expr()->like('LOWER(CONCAT(o.billingFirstname,\' \',o.billingLastname))',':billingName1'),
+                    $qb->expr()->like('LOWER(CONCAT(o.billingLastname,\' \',o.billingFirstname))',':billingName2'),
                 ];
                 $paramsX = [
                     'id' => '%'.$searchTerm.'%',
@@ -233,8 +211,10 @@ class OrderRepository extends EntityRepository
                     'fullname2' => '%'.$searchTerm.'%',
                     'billingPhone' => '%'.$searchTerm.'%',
                     'shippingPhone' => '%'.$searchTerm.'%',
-                    'shippingName' => '%'.$searchTerm.'%',
-                    'billingName' => '%'.$searchTerm.'%',
+                    'shippingName1' => '%'.$searchTerm.'%',
+                    'shippingName2' => '%'.$searchTerm.'%',
+                    'billingName1' => '%'.$searchTerm.'%',
+                    'billingName2' => '%'.$searchTerm.'%',
                 ];
 
                 // If $searchTerms contains several words (Eg: renata jr fazekas)
@@ -243,17 +223,46 @@ class OrderRepository extends EntityRepository
                 $searchTermPermutations = $this->pc_permute($words);
 
                 foreach ($searchTermPermutations as $key => $item) {
-                    array_push($comparisonsX,
-                        $qb->expr()->like('LOWER(o.shippingName)', ':shippingName_'.$key),
-                        $qb->expr()->like('LOWER(o.billingName)', ':billingName_'.$key)
-                    );
+                    // MEGJEGYZÉS: Erre azóta nincs szükség, hogy a shippingName és billingName-ket különvettem first- és lastname-be
+                    // AMI HIÁNYZIK: A fordítotja, hogy ha valaki beírja 'renata jr fazekas' akkor
+                    // keresse first-/lastname illetve last-/firstname kombinációkba !!
+//                    array_push($comparisonsX,
+//                        $qb->expr()->like('LOWER(o.shippingName)', ':shippingName_'.$key),
+//                        $qb->expr()->like('LOWER(o.billingName)', ':billingName_'.$key)
+//                    );
+
                     // Execute $qb->expr()->orX() with arguments from the array $comparisonsX
                     $orX = call_user_func_array([$qb->expr(), 'orX'], $comparisonsX);
 
-                    $paramsX['shippingName_'.$key] = '%'.implode(' ', $item).'%';
-                    $paramsX['billingName_'.$key] = '%'.implode(' ', $item).'%';
+//                    $paramsX['shippingName_'.$key] = '%'.implode(' ', $item).'%';
+//                    $paramsX['billingName_'.$key] = '%'.implode(' ', $item).'%';
                 }
                 $qb->andWhere($orX)->setParameters($paramsX);
+            }
+
+            if (array_key_exists('dateRange', $filters) && $filters['dateRange']) {
+                $splitPieces = explode(" - ", $filters['dateRange']);
+                $start = $splitPieces[0];
+                $end = $splitPieces[1];
+
+                $dateRange = new DateRange();
+                if (!isset($start) or $start === null or $start == "") {
+                } else {
+                    $dateRange->setStart(DateTime::createFromFormat('!Y-m-d',$start));
+                    $start = $dateRange->getStart();
+                }
+                if (!isset($end) or $end === null or $end == "") {
+                } else {
+                    $dateRange->setEnd(DateTime::createFromFormat('!Y-m-d',$end));
+                    $end = $dateRange->getEnd();
+                }
+
+                $end->modify('24 hours'); // Ez nelkül az $end mindig az adott nap 00:00:00 óráját veszi, ergó az aznapi rendelések kimaradnak
+                $qb->andWhere('o.createdAt >= :start')
+                    ->andWhere('o.createdAt <= :end')
+                    ->setParameter('start', $start)
+                    ->setParameter('end', $end)
+                ;
             }
 
             if (array_key_exists('paymentStatus', $filters) && $filters['paymentStatus']) {

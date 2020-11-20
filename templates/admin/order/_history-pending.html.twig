@@ -10,8 +10,8 @@
 </span><br>
 <strong>{{ 'order.history.payment-method'|trans }}</strong><br>
 <span>
-    {%- if order.payment is defined and order.payment is not null -%}
-        {{  order.payment }}
+    {%- if order.paymentMethod is defined and order.paymentMethod is not null -%}
+        {{  order.paymentMethod }}
     {%- else -%}
         -
     {%- endif -%}

@@ -83,15 +83,15 @@ order:
     filter:
         filters: Filter orders
         more-filters: More filtering
-        filter-by-date: Filter by date
+        filter-by-date: Filter by date...
         search: Search
         search-button: Search
         search-placeholder: Search...
         search-result: 'Search:'
         filter-by-order-status: Order status
-        choose-order-status: Order status
+        choose-order-status: Order status...
         filter-by-payment-status: Payment status
-        choose-payment-status: Payment status
+        choose-payment-status: Payment status...
 
 
 dashboard:
@@ -168,6 +168,7 @@ generic:
     edit: Edit
     modify: Modify
     preview: Preview
+    open: Open
     save: Save
     save-changes: Save changes
     cancel: Cancel

@@ -2,15 +2,15 @@
 <div class="mb-2">
     <label class="detail-option-heading">1. Válassz méretet</label>
 </div>
-<div class="form-group row">
+<div class="form-row">
         {% if form.options is defined and form.options is not empty %}
-            {% for item in form.options %}
+            {% for item in form.options|slice(0,1) %}
 {#                <div class="mt-2 mb-2">#}
 {#                    <span class="detail-option-heading">{{ item.optionId.vars.value }}</span>#}
 {#                </div>#}
                     {% for choice in item.selectedOptionValue %}
                         <div class="col-sm-4 col-4">
-                            {% include 'webshop/site/choiceItem-onProductPage.html.twig' %}
+                            {% include 'webshop/site/vp-choice-product-variant.html.twig' %}
                         </div>
                     {% endfor %}
                     {% do item.selectedOptionValue.setRendered() %}
@@ -18,20 +18,23 @@
             {{ form_errors(form.options) }}
         {% else %}
             <div class="col-sm-12">
-                <div class="visual-picker visual-picker-md align-top mr-2">
-                    <div class="visual-picker-figure required">
-                        <div class="visual-picker-content">
-                            <div class="tile tile-lg">
-                                <div class="font-weight-bold my-0">Egy méret</div>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <ul class="list-inline mb-0">
-                                        <li class="list-inline-item price price-sm">
-                                            <del>{{ (product.price.numericValue*4)|money }}</del>
-                                        </li>
-                                        <li class="list-inline-item price price-sm price-sale">{{ product.price.numericValue|money }}</li>
-                                    </ul>
-                                </div>
-                            </div>
+                <div class="vp choose-one-size vp-checked">
+                    <div class="vp-figure">
+                        <div class="vp-content">
+                            {% include('webshop/site/vp-label-product-variant.html.twig') with {
+                                'name': 'Egy méret',
+                                'price': product.price.numericValue,
+                                'priceSale': (product.price.numericValue*4),
+                            } %}
+{#                            <div class="choice-label-title">Egy méret</div>#}
+{#                            <div class="choice-label-content">#}
+{#                                <ul class="list-inline mb-0">#}
+{#                                    <li class="list-inline-item price price-sm">#}
+{#                                        <del>{{ (product.price.numericValue*4)|money }}</del>#}
+{#                                    </li>#}
+{#                                    <li class="list-inline-item price price-sm price-sale">{{ product.price.numericValue|money }}</li>#}
+{#                                </ul>#}
+{#                            </div>#}
                         </div>
                     </div>
                 </div>
@@ -69,25 +72,25 @@
 
             {% for choice in form.deliveryDate.deliveryDate|slice(0,3) %}
                 <div class="col-sm-3 col-3 JS--generatedDate-{{ choice.vars.value }}">
-                    {% include('webshop/site/choiceItem.html.twig') %}
+                    {% include('webshop/site/vp-choice-date.html.twig') %}
                 </div>
             {% endfor %}
             <div class="col-sm-3 col-3 JS--Button-clickDate">
                 <div class="row">
                     {% for choice in form.deliveryDate.deliveryDate|slice(3) %}
                         <div class="col-sm-12 col-12 JS--generatedDate-{{ choice.vars.value }} d-none">
-                            {% include('webshop/site/choiceItem.html.twig') %}
+                            {% include('webshop/site/vp-choice-date.html.twig') %}
                         </div>
                     {% endfor %}
 
                     <div class="col-sm-12 col-12 JS--showCalendarIcon">
-                        <div class="visual-picker visual-picker-md align-top mr-2">
-                            <div class="visual-picker-figure justify-content-lg-center justify-content-center required px-2">
-                                                                        <span class="visual-picker-content">
-                                                                            <span class="tile tile-lg">
-                                                                                <i class="far fa-calendar-alt fa-2x text-gray-700"></i>
-                                                                            </span>
-                                                                        </span>
+                        <div class="vp choose-date">
+                            <div class="vp-figure">
+                                <span class="vp-content">
+                                    <span class="tile tile-lg">
+                                        <i class="far fa-calendar-alt fa-2x"></i>
+                                    </span>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -107,6 +110,5 @@
     <div class="col-12 detail-option mb-4">
         <label class="detail-option-heading">Items <span>(required)</span></label>
         {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
-
     </div>
 </div>

@@ -5,9 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\Order;
 use App\Entity\OrderStatus;
 use App\Model\OrdersSummary;
-use App\Entity\Payment;
+use App\Entity\PaymentMethod;
 use App\Entity\PaymentStatus;
-use App\Entity\Shipping;
+use App\Entity\ShippingMethod;
 use App\Form\ShippingFormType;
 use App\Services\HelperFunction;
 use DateTime;
@@ -100,10 +100,10 @@ class AdminController extends AbstractController
     public function listShippingMethods()
     {
         $shippings = $this->getDoctrine()
-            ->getRepository(Shipping::class)
+            ->getRepository(ShippingMethod::class)
             ->findAll();
         $payments = $this->getDoctrine()
-            ->getRepository(Payment::class)
+            ->getRepository(PaymentMethod::class)
             ->findAll();
 
         $noResult = '';
@@ -124,7 +124,7 @@ class AdminController extends AbstractController
      * @IsGranted("ROLE_MANAGE_SHIPPING")
      * @Route("/shipping/edit/{id}", name="shipping-edit")
      */
-    public function editShipping(Request $request, ?Shipping $shipping, $id = null)
+    public function editShipping(Request $request, ?ShippingMethod $shipping, $id = null)
     {
         if (!$shipping) {
             /**

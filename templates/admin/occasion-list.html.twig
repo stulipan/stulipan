@@ -1,5 +1,6 @@
 {% extends 'admin/template-listing.html.twig' %}
 
+{% set activeMenu = 'settings' %}
 {% set pageTitle = title %}
 {% set breadcrumb = {
     0: {
@@ -13,8 +14,8 @@
 {% endblock %}
 
 {% block headerTopright %}
-    <a href="{{ path('occasion-edit') }}" class="btn btn-outline-primary"><i class="far fa-calendar-plus"></i> Új szállítási nap</a>
-    <a href="{{ path('delivery-date-type-list') }}" class="btn btn-outline-secondary ml-1"><i class="far fa-clock"></i> Idősávok</a>
+    <a href="{{ path('occasion-edit') }}" class="btn btn-primary">Új szállítási nap</a>
+    <a href="{{ path('delivery-date-type-list') }}" class="btn btn-secondary ml-2">Idősávok</a>
 {% endblock %}
 
 

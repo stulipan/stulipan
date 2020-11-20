@@ -64,7 +64,7 @@
                         {% if vatValue.expiresAt is defined and vatValue.expiresAt %}
                             {{ vatValue.expiresAt|date('Y-M-d')}}
                         {% else %}
-                            {{ include('admin/_notAvailable-insert.html.twig') }}
+                            {{ include('admin/_missing-data-insert.html.twig') }}
                         {% endif %}
                     </td>
                     <td>

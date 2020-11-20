@@ -38,7 +38,6 @@ class TranslationLoader implements LoaderInterface
             throw new Error( sprintf('HIBA! Unable to parse the YAML string in file %s. Error message: %s', $locatedFiles[0], $e->getMessage()));
         }
 
-//        $translations = json_decode(json_encode($translations));  // decodes it to stdClass!
         return $translations;
     }
 

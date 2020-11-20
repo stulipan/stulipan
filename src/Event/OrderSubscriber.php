@@ -221,7 +221,7 @@ class OrderSubscriber implements EventSubscriberInterface
             case PaymentStatus::STATUS_PENDING:
                 $message = $this->translator->trans($messages[$shortcode], [
                     '{{amount}}' => $money($order->getSummary()->getTotalAmountToPay()),
-                    '{{payment}}' => $order->getPayment(),
+                    '{{payment}}' => $order->getPaymentMethod(),
                 ]);
                 $description = $descriptions[$shortcode];
                 break;

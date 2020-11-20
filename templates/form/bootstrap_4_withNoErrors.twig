@@ -8,15 +8,16 @@
 
 {# Ez azért kell, hogy az ERROR badge ne jelenjen meg a hibaüzenetben. #}
 {% block form_errors -%}
-    {%- if errors|length > 0 -%}
-        <span class="{% if form is not rootform %}invalid-feedback{% else %}alert alert-danger{% endif %} d-block">
+{#    {%- if errors|length > 0 -%}#}
+        <span class="{% if form is not rootform %}invalid-feedback{% else %}alert alert-danger{% endif %}">
             {%- for error in errors -%}
-                <span class="d-block">
-                    <span class="form-error-message">{{ error.message }}</span>
-                </span>
+{#                <span class="d-block">#}
+{#                    <span class="form-error-message">{{ error.message }}</span>#}
+{#                </span>#}
+                {{ error.message }}
             {%- endfor -%}
         </span>
-    {%- endif %}
+{#    {%- endif %}#}
 {%- endblock form_errors %}
 
 {# Ez azért kell, hogy ne rakja be automatikusan a form-control class-t #}

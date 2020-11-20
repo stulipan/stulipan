@@ -1,0 +1,183 @@
+<div class="left-side-menu">
+    <div class="left-side-menu-body">
+
+        <ul class="sidenav">
+
+            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'dashboard' %}sidenav-item-show{% endif %}">
+                <a href="{{ path('dashboard') }}" class="sidenav-link">
+                    <div class="sidenav-item-content">
+                        <div class="d-flex align-items-center">
+                            <div class="sidenav-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <span>Dashboard</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'products' %}sidenav-item-show{% endif %}">
+                <a class="sidenav-link" href="{{ path('product-list') }}" id="topnavTermekek_" role="button">
+                    <div class="sidenav-item-content">
+                        <div class="d-flex align-items-center">
+                            <div class="sidenav-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            Termékek
+                        </div>
+                        <div class="d-flex align-items-center">
+
+                        </div>
+                    </div>
+                </a>
+                <div class="sidenav-dropdown-menu" aria-labelledby="topnavTermekek_">
+                    <a href="{{ path('product-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'product-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        Termékek
+                    </a>
+                    <a href="{{ path('product-listCategories') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'product-listCategories' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-list-ul"></i>
+                        </div>
+                        Kategóriák
+                    </a>
+                    <a href="{{ path('smart-label-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'smart-label-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        Matricák
+                    </a>
+                </div>
+            </li>
+
+            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'orders' %}sidenav-item-show{% endif %}">
+                <a class="sidenav-link" href="{{ path('order-list-table') }}" id="topnavOrders_" role="button">
+                    <div class="sidenav-item-content">
+                        <div class="d-flex align-items-center">
+                            <div class="sidenav-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            Rendelések
+                        </div>
+                        <div class="d-flex align-items-center">
+                            {#                                    <span class="badge badge-warning float-right">NEW</span>#}
+                        </div>
+                    </div>
+                </a>
+                <div class="sidenav-dropdown-menu" aria-labelledby="topnavOrders_">
+                    <a href="{{ path('order-list-table') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'order-list-table' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        Rendelések
+                    </a>
+                    <a href="{{ path('customer-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'customer-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        Vásárlók
+                    </a>
+                </div>
+            </li>
+
+            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'boltzaras' %}sidenav-item-show{% endif %}">
+                <a class="sidenav-link" href="{{ path('boltzaras_list') }}" id="sidenavBoltzarasok" role="button">
+                    <div class="sidenav-item-content">
+                        <div class="d-flex align-items-center">
+                            <div class="sidenav-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            Bolt
+                        </div>
+                        <div class="d-flex align-items-center">
+                        </div>
+                    </div>
+                </a>
+                <div class="sidenav-dropdown-menu" aria-labelledby="sidenavBoltzarasok">
+                    <a href="{{ path('boltzaras_list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'boltzaras_list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        Boltzárások
+                    </a>
+                    <a href="{{ path('invoice-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'invoice-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        Számlák
+                    </a>
+                    <a href="{{ path('inventory-supply-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'inventory-supply-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-dolly"></i>
+                        </div>
+                        Szállítmányok
+                    </a>
+                    <a href="{{ path('inventory-waste-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'inventory-waste-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="far fa-trash-alt"></i>
+                        </div>
+                        Selejt
+                    </a>
+                    <a href="{{ path('inventory-product-list-all') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'inventory-product-list-all' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="far fa-list-alt"></i>
+                        </div>
+                        Terméklista
+                    </a>
+                </div>
+            </li>
+
+            <li class="sidenav-item mt-3X mt-md-5X {% if activeMenu is defined and activeMenu == 'cms' %}sidenav-item-show{% endif %}">
+                <a href="{{ path('cms-page-list') }}" class="sidenav-link">
+                    <div class="sidenav-item-content">
+                        <div class="d-flex align-items-center">
+                            <div class="sidenav-icon">
+{#                                <i class="far fa-file-code"></i>#}
+                                <i class="fas fa-columns"></i>
+                            </div>
+                            <span>CMS oldalak</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-warning float-right">NEW</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'smartLabels' %}sidenav-item-show{% endif %}">
+                <a href="{{ path('smart-label-list') }}" class="sidenav-link">
+                    <div class="sidenav-item-content">
+                        <div class="d-flex align-items-center">
+                            <div class="sidenav-icon">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            Matricák
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+
+
+        <ul class="sidenav text-center">
+            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'settings' %}sidenav-item-show{% endif %}">
+                <a href="{{ path('settings-home') }}" class="sidenav-link">
+                    <div class="sidenav-item-content">
+                        <div class="d-flex align-items-center">
+                            <div class="sidenav-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <span> Beállítások </span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-light">VIEW</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

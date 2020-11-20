@@ -1,12 +1,12 @@
 {% block AZUZENET %}
     {% for msg in app.session.flashBag.get('message-missing') %}
-        <div class="JS--alertMessage alert alert-danger mt-4 px-3 px-md-4 rounded-0" role="alert">
+        <div class="JS--alertMessage alert alert-danger mt-3" role="alert" data-alert-message>
             <i class="fas fa-exclamation-circle mr-1"></i>
             {{ include('webshop/cart/alert-msg.html.twig') }}
         </div>
     {% endfor %}
     {% for msg in app.session.flashBag.get('message-warning') %}
-        <div class="JS--alertMessage alert alert-warning mt-4 px-3 px-md-4 rounded-0" role="alert">
+        <div class="JS--alertMessage alert alert-warning mt-4 px-3 px-md-4" role="alert" data-alert-message>
             <i class="fas fa-exclamation-circle mr-1"></i>
             {{ include('webshop/cart/alert-msg.html.twig') }}
         </div>

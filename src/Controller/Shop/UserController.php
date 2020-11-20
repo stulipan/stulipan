@@ -4,8 +4,8 @@ namespace App\Controller\Shop;
 
 use App\Entity\Model\CustomerBasic;
 use App\Entity\Order;
-use App\Form\CustomerBasicsFormType;
-use App\Services\Settings;
+use App\Form\CustomerBasic\CustomerBasicsFormType;
+use App\Services\StoreSettings;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
@@ -32,7 +32,7 @@ class UserController extends AbstractController
      *     requirements={"page"="\d+"},
      *     )
      */
-    public function showMyOrders(Request $request, $page = 1, Settings $settings)
+    public function showMyOrders(Request $request, $page = 1, StoreSettings $settings)
     {
         $page = $request->query->get('page') ? $request->query->get('page') : $page;
 //        $queryBuilder = $em->getRepository(Order::class)->findAllQuery();

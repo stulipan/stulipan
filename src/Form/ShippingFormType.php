@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Shipping;
+use App\Entity\ShippingMethod;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -66,7 +66,7 @@ class ShippingFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Shipping::class,
+            'data_class' => ShippingMethod::class,
             'attr' => ['autocomplete' => 'off'],
 
         ]);

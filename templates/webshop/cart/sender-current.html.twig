@@ -1,0 +1,23 @@
+<div class="row mt-3">
+    <div class="col-md-12 ">
+        <div class="d-flex flex-column checkout-sender-current">
+            <div class="">
+                <div class="d-flex justify-content-start justify-content-sm-between">
+                    <div class="minicard--title mr-2 mr-sm-0">
+                        {{ sender.company is defined and sender.company ? sender.company ~ ' /' : ''}} {{ sender.fullname }}
+                    </div>
+                    <div class="">
+                        <a href="#" class="text-sm btn-btn-outline-dark-btn-sm" data-selector="button" data-eval="showSenderForm" data-url="{{ path('cart-editSender', {id: sender.id}) }}">
+                            <span class="btn-loading-invisible">Módosít</span>
+                            <div class="loading-spinner" role="status"></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="minicard--address">{{ sender.address.street }}</div>
+                <div class="minicard--address">{{ sender.address.zip }} {{ sender.address.city }}</div>
+                <div class="minicard--address">{{ sender.address.province }}, {{ sender.address.country }}</div>
+{#                <div class="minicard--address">{{ sender.phone }}</div>#}
+            </div>
+        </div>
+    </div>
+</div>

@@ -21,7 +21,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * )
  * @ORM\Entity
  * @ ORM\Entity(repositoryClass="App\Repository\CmsPageRepository")
- * @ORM\Table(name="cms_page")
+ * @ORM\Table(name="cms_html_block")
  * @UniqueEntity("slug", message="Ilyen slug már létezik!")
  */
 class CmsHtmlBlock implements JsonSerializable

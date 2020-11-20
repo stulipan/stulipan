@@ -5,6 +5,7 @@ namespace App\Twig;
 //use ApiPlatform\Core\Tests\Fixtures\TestBundle\Entity\ThirdLevel;
 use App\Services\FileUploader;
 use App\Services\Localization;
+use App\Services\StoreSettings;
 use DateTime;
 use Exception;
 use phpDocumentor\Reflection\Types\This;
@@ -26,12 +27,15 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     private $container;
     private $locale;
     private $translator;
+    private $settings;
 
-    public function __construct(ContainerInterface $container, SessionInterface $session, Localization $localization, TranslatorInterface $translator)
+    public function __construct(ContainerInterface $container, SessionInterface $session,
+                                Localization $localization, TranslatorInterface $translator, StoreSettings $settings)
     {
         $this->container = $container;
         $this->locale = $localization->getLocale($session->get('_locale', 'hu'));
         $this->translator = $translator;
+        $this->settings = $settings;
     }
 
     public function getFunctions(): array
@@ -61,6 +65,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFilter('browser', [$this, 'formatBrowserInfo']),
             new TwigFilter('timeAgo', [$this, 'formatTimeAgo']),
             new TwigFilter('localizedDate', [$this, 'formatLocalizedDate']),
+            new TwigFilter('localizedTime', [$this, 'formatLocalizedTime']),
             new TwigFilter('money', [$this, 'formatMoney']),
             new TwigFilter('number', [$this, 'formatNumber']),
         ];
@@ -94,6 +99,10 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function formatTimeAgo($datetime, $level=1)
     {
+//        For dates older than 2 days, date will not be displayed as timeAgo
+//        if ($datetime->diff(new DateTime())->days > 2) {
+//            return strtolower($this->formatLocalizedDate($datetime, 'Y M j. | H:i'));
+//        }
         return $this->calculateTimeElapsed($datetime, $level);
     }
 
@@ -164,7 +173,15 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $string;
     }
 
-    public function formatLocalizedDate($dateTime, string $format='Y-m-d') {
+    public function formatLocalizedDate($dateTime, string $format=null) {
+
+        if ($format == null || $format == '') {
+            if ($this->settings->get('general.date-format')) {
+                $format = $this->settings->get('general.date-format');
+            } else {
+                $format='Y-m-d';
+            }
+        }
         $shortMonths = [
             'jan' => $this->translator->trans('datetime.jan'),
             'feb' => $this->translator->trans('datetime.feb'),
@@ -184,7 +201,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'february' => $this->translator->trans('datetime.february'),
             'march' => $this->translator->trans('datetime.march'),
             'april' => $this->translator->trans('datetime.april'),
-            'may' => $this->translator->trans('datetime.mayy'),
+            'mayy' => $this->translator->trans('datetime.mayy'),
             'june' => $this->translator->trans('datetime.june'),
             'july' => $this->translator->trans('datetime.july'),
             'august' => $this->translator->trans('datetime.august'),
@@ -240,6 +257,20 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 //        }
 //        return $localizedDateTime;
 
+    }
+
+    public function formatLocalizedTime($dateTime, string $format=null)
+    {
+        if ($format == null || $format == '') {
+            if ($this->settings->get('general.time-format')) {
+                $format = $this->settings->get('general.time-format');
+            } else {
+                // Default format
+                $format='H:i';
+            }
+        }
+        $dateTime = $dateTime->format($format);  // eg: 19:20, 19:20:34    OR    07:20am
+        return $dateTime;
     }
 
     public function formatBrowserInfo(string $userAgent, string $filter)

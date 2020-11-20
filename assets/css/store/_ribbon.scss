@@ -1,0 +1,202 @@
+// Ribbon
+
+
+.ribbon {
+  position: absolute;
+  top: 10px;
+  left: -12px;
+  z-index: 999;
+  display: inline-block;
+  font-family: "HK Grotesk", sans-serif;
+  font-size: .8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: .05rem;
+  padding: 4px 15px;
+  color: #fff;
+  text-align: center;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.ribbon-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  display: inline-block;
+  font-family: "HK Grotesk", sans-serif;
+  font-size: .875rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: .1rem;
+  padding: .4rem .25rem .2rem .25rem;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+  opacity: .9;
+}
+.ribbon-bottom::before {
+  border: none;
+}
+.product-details .ribbon-bottom {
+  width: calc(100% - 20px) !important;
+}
+.ribbon+.ribbon {
+  top: 50px
+}
+
+.ribbon+.ribbon+.ribbon {
+  top: 90px
+}
+
+.ribbon+.ribbon+.ribbon+.ribbon {
+  top: 130px
+}
+
+.ribbon::before {
+  content: '';
+  border-left: 12px solid transparent;
+  border-right: 0 solid transparent;
+  border-top: 14px solid #612f54;
+  position: absolute;
+  bottom: -14px;
+  left: 0
+}
+
+.ribbon-primary {
+  background-color: #876EBD !important
+}
+
+.ribbon-primary::before {
+  border-top-color: #612f54
+}
+
+.ribbon-secondary {
+  background-color: #869196 !important
+}
+
+.ribbon-secondary::before {
+  border-top-color: #555b61
+}
+
+.ribbon-success {
+  background-color: #00aa5b !important
+}
+
+.ribbon-success::before {
+  border-top-color: #145523
+}
+
+.ribbon-info {
+  background-color: #008CDE !important
+}
+
+.ribbon-info::before {
+  border-top-color: #008CDE
+}
+
+.ribbon-warning {
+  color: initial;
+  background-color: #ffebcc !important
+}
+
+.ribbon-warning::before {
+  border-top-color: #a07800
+}
+
+.ribbon-danger {
+  background-color: #dc3545 !important
+}
+
+.ribbon-danger::before {
+  border-top-color: #AE2638
+}
+
+.ribbon-light {
+  background-color: #eee !important
+}
+
+.ribbon-light::before {
+  border-top-color: #bdc6d0
+}
+
+.ribbon-dark {
+  background-color: #343a40 !important
+}
+
+.ribbon-dark::before {
+  border-top-color: #060708
+}
+
+.ribbon-gray-100 {
+  background-color: #f8f9fa !important
+}
+
+.ribbon-gray-100::before {
+  border-top-color: #bdc6d0
+}
+
+.ribbon-gray-200 {
+  background-color: #e9ecef !important
+}
+
+.ribbon-gray-200::before {
+  border-top-color: #aeb9c4
+}
+
+.ribbon-gray-300 {
+  background-color: #dee2e6 !important
+}
+
+.ribbon-gray-300::before {
+  border-top-color: #a4afba
+}
+
+.ribbon-gray-400 {
+  background-color: #c4cdd5 !important
+}
+
+.ribbon-gray-400::before {
+  border-top-color: #94a1ae
+}
+
+.ribbon-gray-500 {
+  background-color: #adb5bd !important
+}
+
+.ribbon-gray-500::before {
+  border-top-color: #748290
+}
+
+.ribbon-gray-600 {
+  background-color: #869196 !important
+}
+
+.ribbon-gray-600::before {
+  border-top-color: #555b61
+}
+
+.ribbon-gray-700 {
+  background-color: #495057 !important
+}
+
+.ribbon-gray-700::before {
+  border-top-color: #1a1d20
+}
+
+.ribbon-gray-800 {
+  background-color: #343a40 !important
+}
+
+.ribbon-gray-800::before {
+  border-top-color: #060708
+}
+
+.ribbon-gray-900 {
+  background-color: #40484c !important
+}
+
+.ribbon-gray-900::before {
+  border-top-color: #000
+}

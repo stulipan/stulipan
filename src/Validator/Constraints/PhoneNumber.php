@@ -2,15 +2,15 @@
 
 namespace App\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Annotation
  */
 class PhoneNumber extends Constraint
 {
-//    public $message = 'A beírt telefonszám ("{{ string }}") hibás. A telefonszámot így írd be: +36xxxxxxxxx vagy 06xxxxxxxxx';
-    public $message = 'Hibás telefonszám! Ellenőrizd, hogy helyesen írtad be. Elfogadott formátum: +36... vagy 06...';
     public $regionCode;
+    public $message;
 
     /**
      * Define a parameter for this constraint. It then can be used like this:
@@ -28,5 +28,4 @@ class PhoneNumber extends Constraint
     {
 //        return array('regionCode');
     }
-
 }

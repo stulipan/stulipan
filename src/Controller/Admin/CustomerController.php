@@ -3,8 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use App\Form\CustomerFilterType;
-use App\Services\Settings;
+use App\Form\Customer\CustomerFilterType;
+use App\Services\StoreSettings;
 use Cassandra\Custom;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
@@ -26,7 +26,7 @@ class CustomerController extends AbstractController
      *     requirements={"page"="\d+"},
      *     )
      */
-    public function listOrders(Request $request, $page = 1, Settings $settings, TranslatorInterface $translator)
+    public function listOrders(Request $request, $page = 1, StoreSettings $settings, TranslatorInterface $translator)
     {
         $dateRange = $request->query->get('dateRange');
         $searchTerm = $request->query->get('searchTerm');

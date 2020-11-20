@@ -1,0 +1,176 @@
+
+$cart-item-padding-y:             1rem !default;
+$cart-item-border-width:          1px !default;
+$cart-item-border-color:          $gray-300 !default;
+
+$cart-item-image-width:           80px !default;
+
+$order-summary-padding-y:         .5rem !default;
+$order-summary-border-width:      1px !default;
+$order-summary-border-color:      $cart-item-border-color !default;
+$order-summary-total-font-size:   1.1rem !default;
+
+
+.cart-item {
+  padding-top: $cart-item-padding-y;
+  padding-bottom: $cart-item-padding-y;
+  border-bottom: $cart-item-border-width solid $cart-item-border-color;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  & .cart-item-img {
+    max-width: $cart-item-image-width;
+  }
+}
+
+.cart-message {
+  position: relative;
+  overflow: hidden;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  max-width: $cart-item-image-width;
+  min-width: $cart-item-image-width;
+  height: $cart-item-image-width;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  font-size: .7875rem;
+  line-height: 1rem;
+  padding: .5rem 0;
+  background-color: $gray-50;
+
+  & .svg-icon {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    left: 0px;
+    bottom: -2px;
+    margin-right: 0;
+    margin-bottom: 0;
+    opacity: .4;
+    -webkit-transform: rotate(30deg);
+    transform: rotate(30deg);
+    stroke: currentColor;
+    stroke-width: 3;
+    vertical-align: text-bottom;
+    --layer1: currentColor;
+    --layer2: currentColor;
+  }
+}
+.cart-message-title {
+  margin-left: 1rem;
+}
+
+.badge-quantity-wrapper {
+  position: relative;
+
+  & .badge-quantity {
+    position: absolute;
+    top: -.6rem;
+    right: -.6rem;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 85%;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    opacity: 1;
+    -webkit-transition: opacity .2s;
+    transition: opacity .2s;
+    border-radius: 2rem;
+    border: 1px solid #c4cdd5;
+    padding: .3rem .25rem .2rem .25rem;
+    min-width: 1.5rem;
+    text-align: center;
+    z-index: 2;
+  }
+}
+
+.order-summary-item {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding-top: $order-summary-padding-y;
+  padding-bottom: $order-summary-padding-y;
+  border-bottom: $order-summary-border-width solid $order-summary-border-color;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  & .order-summary-total {
+    font-weight: 700;
+    font-size: $order-summary-total-font-size;
+  }
+}
+
+.timeline-alt {
+  /*padding: 20px 0;*/
+  position: relative;
+}
+
+.timeline-alt:before {
+  background-color: #e1e1e1;
+  bottom: 10px;
+  content: "";
+  /*left: 9px;*/
+  left: calc(1.25rem + 9px);
+  position: absolute;
+  /*top: 0;*/
+  top: 1.25rem;
+  width: 2px;
+  z-index: 0
+}
+
+.timeline-alt .timeline-item {
+  position: relative;
+  padding: 1.25rem;
+  /*margin-bottom: .25rem;*/
+  border-radius: 4px;
+
+  @media (max-width: breakpoint-min(sm)) {
+    //padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+.timeline-alt .timeline-item.timeline-comment {
+  background-color: #ffffff;
+  -webkit-box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+  box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+}
+.timeline-alt .timeline-item:not(.timeline-comment):last-of-type {
+  padding-bottom: 0;
+}
+
+.timeline-alt .timeline-item .timeline-icon {
+  float: left;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  font-size: 12px;
+  text-align: center;
+  line-height: 16px;
+  background-color: #fff
+}
+.timeline-alt .timeline-item.timeline-comment .timeline-icon,
+.timeline-alt .timeline-item.timeline-input .timeline-icon {
+  height: 40px;
+  width: 40px;
+  margin-left: -10px;
+}
+
+.timeline-alt .timeline-item .timeline-item-info {
+  margin-left: 40px
+}
+
+.timeline-alt .timeline-item.timeline-input .timeline-item-info {
+  /*margin-top: 5px;*/
+}

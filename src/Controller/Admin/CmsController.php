@@ -7,7 +7,7 @@ use App\Entity\CmsPage;
 use App\Entity\ImageEntity;
 use App\Entity\Model\ErrorEntity;
 use App\Entity\Product\ProductCategory;
-use App\Form\CmsPageFormType;
+use App\Form\Cms\CmsPageFormType;
 use App\Form\ProductCategoryFormType;
 use App\Services\FileUploader;
 use Error;

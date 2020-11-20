@@ -6,7 +6,7 @@
         </div>
         <div class="">
             <div class="text-muted-extra font-weight-bold">Címzett: </div>
-            {{ order.shippingName }}
+            {{ order.shippingFullname }}
         </div>
         <div class="">
             <div class="text-muted-extra font-weight-bold">Kézbesítés napja: </div>
@@ -35,7 +35,7 @@
             {% if order.isFulfilled %}
                 <div class="text-sm text-success mb-2 mt-2 mt-md-0">It's delivered!</div>
             {% endif %}
-            <a href="{{ path('site-user-myOrder', {'id': order.id}) }}" class="btn btn-outline-secondary ">Rendelés részletei</a>
+            <a href="{{ path('site-user-myOrder', {'id': order.id}) }}" class="btn btn-secondaryX btn-outline-dark ">Rendelés részletei</a>
         </div>
     </div>
 </div>

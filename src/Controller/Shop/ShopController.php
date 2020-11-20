@@ -3,7 +3,7 @@
 namespace App\Controller\Shop;
 
 use App\Entity\Product\Product;
-use App\Services\Settings;
+use App\Services\StoreSettings;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -60,7 +60,7 @@ class ShopController extends AbstractController
     /**
      * @Route("/", name="homepage")
      */
-    public function showHomepage(Settings $settings)
+    public function showHomepage(StoreSettings $settings)
     {
 //        $metaTitle = $settings->get('meta-title');
 //        dd($metaTitle);

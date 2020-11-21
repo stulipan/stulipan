@@ -9,6 +9,7 @@
         "lexik/jwt-authentication-bundle": "^2.6",
         "liip/imagine-bundle": "^2.1",
         "sensio/framework-extra-bundle": "^5.2",
+        "symfony/apache-pack": "^1.0",
         "symfony/asset": "^4.1",
         "symfony/console": "^4.1",
         "symfony/dotenv": "^4.1",

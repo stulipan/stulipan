@@ -22,7 +22,6 @@ Encore
 
     .addEntry('v-shop', './assets/vue/shop/v-shop.js')
     .addEntry('sidebar', './assets/js/sidebar.js')
-    .addEntry('loading-overlay', './assets/js/loading-overlay.js')
     .addEntry('floating-input', './assets/js/floating-input.js')
 
     .addEntry('checkout', './assets/js/checkout.js')

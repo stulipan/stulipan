@@ -12,7 +12,6 @@ Encore
     // the public path you will use in Symfony's asset() function - e.g. asset('build/some_file.js')
     .setManifestKeyPrefix('build/')
 
-    // .addEntry('stulipan_react', './assets/js/my_react_app.js')
     // .addEntry('invoice', './assets/js/invoice-app.js')
     .addEntry('v-admin', './assets/vue/admin/v-admin.js')
     .addEntry('ProductEdit', './assets/vue/admin/product/ProductEdit.js')

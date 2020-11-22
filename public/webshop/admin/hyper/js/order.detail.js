@@ -1,5 +1,5 @@
 /**
- * @summary     Order detail scriptek
+ * @summary     Order detail hasznalt JS scriptek
  * @description Edit and handle Shipping, Billing, DeliveryDate info
  * @author      Difiori
  *

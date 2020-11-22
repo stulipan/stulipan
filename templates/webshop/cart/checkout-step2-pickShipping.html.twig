@@ -72,25 +72,21 @@
     </div>
 
     <div id="shipping_method" class="shipping-method">
-        <div class="row no-gutters">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="JS--shippingWrapper" data-wrapper-shipping>
+        <div class="card">
+            <div class="card-body">
+                <div class="JS--shippingWrapper" data-wrapper-shipping>
 
-                            <div class="" data-wrapper-alert>
-                                <div class="checkout-block-header">
-                                    <h4 class="checkout-block-title">Szállítási mód</h4>
-                                </div>
-                            </div>
-
-                            {% include('webshop/cart/alert-shipping-insert.html.twig') %}
-                            <div class="">
-                                {% include('webshop/cart/shipping-method-form.html.twig') %}
-                            </div>
-
+                    <div class="" data-wrapper-alert>
+                        <div class="checkout-block-header">
+                            <h4 class="checkout-block-title">Szállítási mód</h4>
                         </div>
                     </div>
+
+                    {% include('webshop/cart/alert-shipping-insert.html.twig') %}
+                    <div class="">
+                        {% include('webshop/cart/shipping-method-form.html.twig') %}
+                    </div>
+
                 </div>
             </div>
         </div>

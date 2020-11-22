@@ -234,6 +234,21 @@ h1, h2, h3, h4, h5, h6 {
     border-bottom: none;
   }
 }
+.text-link-checkout {
+  display: inline-block;
+  font-size: $font-size-base-secondary;
+  margin-bottom: map_get($spacers, 2);
+
+  &:not(:last-of-type) {
+    margin-right: map_get($spacers, 3);
+  }
+}
+.minicard--title {
+  font-weight: $font-weight-bold;
+}
+.minicard--address {
+  font-size: $font-size-base-secondary;
+}
 
 //
 // Shipping and Payment methods
@@ -270,13 +285,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .checkout-shipping-item-title,
 .checkout-payment-item-title {
-  font-weight: $font-weight-bold;
+  font-size: $font-size-base;
+  //font-weight: $font-weight-bold;
   color: $yiq-text-dark;
 }
 .checkout-shipping-item-description,
 .checkout-payment-item-description {
-  //color: $gray-600;
-  font-size: 90%;
+  color: $muted;
+  font-size: $font-size-base-secondary;
 }
 
 

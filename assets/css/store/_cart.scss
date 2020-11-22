@@ -137,6 +137,10 @@ $order-summary-total-font-size:             1.1rem !default;
     font-size: $order-summary-total-font-size;
   }
 }
+.order-summary-item,
+.order-summary-item-label {
+  font-size: $font-size-base-secondary;
+}
 
 .write-message {
   position: relative;
@@ -160,6 +164,6 @@ $order-summary-total-font-size:             1.1rem !default;
 }
 
 .checkout-block-text {
-  font-size: 95%;
+  font-size: $font-size-base-secondary;
   color: $muted;
 }

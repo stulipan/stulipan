@@ -39,7 +39,7 @@
                                     {#                                        <span aria-hidden="true">&times;</span>#}
                                 </button>
                                 <div class="modal-header">
-                                    <h3 class="modal-title" id="modalLabel">{{ 'checkout.recipient.previously-saved-recipients-modal-title'|trans}}</h3>
+                                    <p class="modal-title" id="modalLabel">{{ 'checkout.recipient.previously-saved-recipients-modal-title'|trans}}</p>
 {#                                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">#}
 {#                                        <svg class="svg-icon w-100 h-100 svg-icon-light align-middle">#}
 {#                                            <use xlink:href="#close-1"> </use>#}
@@ -68,11 +68,11 @@
                         <div class="col-md-12">
                             <div class="">
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                    <a href="#" class="d-inline-block mr-3 mb-2" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient') }}">
+                                    <a href="#" class="text-link-checkout" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient') }}">
                                         <span class="btn-loading-invisible">{{ 'checkout.recipient.new-recipient'|trans }}</span>
                                         <div class="loading-spinner" role="status"></div>
                                     </a>
-                                    <a href="#" class="d-inline-block mb-2" data-toggle="modal" data-target="#modal--recipientList">
+                                    <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--recipientList">
                                         <span class="btn-loading-invisible">{{ 'checkout.recipient.previously-saved-recipients'|trans }}</span>
                                         <div class="loading-spinner" role="status"></div>
                                     </a>

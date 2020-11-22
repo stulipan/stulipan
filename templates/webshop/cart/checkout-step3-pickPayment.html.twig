@@ -132,7 +132,7 @@
                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title" id="modalLabel">Számlázási címeid</h3>
+                                    <p class="modal-title" id="modalLabel">Számlázási címeid</p>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -158,11 +158,11 @@
                         <div class="col-md-12">
                             <div class="">
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                    <a href="#" class="d-inline-block mr-3 mb-2" data-selector="button" data-eval="showSenderForm" data-url="{{ path('cart-editSender') }}">
+                                    <a href="#" class="text-link-checkout" data-selector="button" data-eval="showSenderForm" data-url="{{ path('cart-editSender') }}">
                                         <span class="btn-loading-invisible">Új számlázási cím</span>
                                         <div class="loading-spinner" role="status"></div>
                                     </a>
-                                    <a href="#" class="d-inline-block mb-2" data-toggle="modal" data-target="#modal--senderList">
+                                    <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--senderList">
                                         <span class="btn-loading-invisible">Számlázási címeid</span>
                                         <div class="loading-spinner" role="status"></div>
                                     </a>

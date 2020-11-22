@@ -72,6 +72,7 @@
   vertical-align: top;
   cursor: pointer;
   padding: .0725rem 0; // Added by Stulipan
+  font-size: $font-size-base-secondary; // Added by Stulipan
 
   // Background-color and (when enabled) gradient
   &::before {

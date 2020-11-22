@@ -50,13 +50,13 @@
         {#{{ form_errors(registrationForm.username) }}#}
     {#</div>#}
     <div class="form-group col-lg-12">
-        <div class="custom-control custom-checkbox mb-2 text-sm text-muted">
+        <div class="custom-control custom-checkbox mb-2 text-muted">
             <input id="{{ registrationForm.optin.vars.id }}" type="checkbox" name="{{ registrationForm.optin.vars.full_name }}" class="custom-control-input" {{ registrationForm.optin.vars.checked == true ? 'checked=\"checked\"' : '' }}>
             <label for="{{ registrationForm.optin.vars.id }}" class="custom-control-label align-middle">{{ 'registration.newsletter-sign-up'|trans }}</label>
             {{ form_errors(registrationForm.optin) }}
             {% do registrationForm.optin.setRendered() %}
         </div>
-        <div class="custom-control custom-checkbox text-sm text-muted">
+        <div class="custom-control custom-checkbox text-muted">
             <input id="{{ registrationForm.terms.vars.id }}" type="checkbox" name="{{ registrationForm.terms.vars.full_name }}" class="custom-control-input" {{ registrationForm.terms.vars.checked == true ? 'checked=\"checked\"' : '' }}>
             <label for="{{ registrationForm.terms.vars.id }}" class="custom-control-label align-middle">{{ 'registration.accept-terms-and-conditions'|trans }}</label>
             {{ form_errors(registrationForm.terms) }}

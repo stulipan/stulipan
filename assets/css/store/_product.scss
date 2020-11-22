@@ -33,7 +33,15 @@
 }
 
 .product {
-  margin-bottom: 30px
+  margin-bottom: 30px;
+  font-size: $font-size-base-secondary;
+
+  & .productList--price-gross {
+  }
+}
+
+.product-name {
+  font-size: $font-size-base-secondary;
 }
 
 .product-image {

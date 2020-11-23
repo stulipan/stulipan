@@ -14,11 +14,13 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-xl-8 col-lg-10 mx-auto">
-            <div class="hero-content pb-5 text-center">
+        <div class="col-xl-7 col-lg-10 mx-auto">
+            <div class="cms-page-title hero-content pb-5 text-center">
                 <h1 class="mb-0">{{ page.name }}</h1>
             </div>
-            {{ page.content|raw }}
+            <div class="cms-page-body">
+                {{ page.content|raw }}
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -42,7 +42,8 @@ class CmsController extends AbstractController
             // $file stores the uploaded file which is an UploadedFile object
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
 
-            $file = $form['imageFile']->getData();
+//            dd($form);
+            if ($form['image']) {$file = $form['image']->getData();}
             if (!is_null($file)) {
                 $newFilename = $fileUploader->uploadFile($file, null, FileUploader::IMAGE_OF_CATEGORY_TYPE);
                 $img = new ImageEntity();

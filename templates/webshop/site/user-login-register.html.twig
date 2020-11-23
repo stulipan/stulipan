@@ -1,8 +1,6 @@
-{% extends 'webshop/site/base-site.html.twig' %}
+{#{% extends 'webshop/site/base-site.html.twig' %}#}
+{% extends 'webshop/site/template-general.html.twig' %}
 
-
-{# this tag only applies to the forms defined in this template #}
-{#{% form_theme form 'bootstrap_4_layout.html.twig' %}#}
 
 {% block title %}
     {{ title }}
@@ -116,13 +114,7 @@
             </div>
         </div>
     </section>
-
-
 {% endblock %}
 
-{% block javascripts %}
-	{{ parent() }}
-    <script>
-
-    </script>
+{% block footerHighlights %}
 {% endblock %}

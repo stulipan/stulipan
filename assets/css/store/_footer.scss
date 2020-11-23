@@ -1,0 +1,33 @@
+// Footer
+
+$footer-bg:                       $gray-700 !default;
+$footer-color:                    $gray-300 !default;
+$footer-font-size:                $font-size-base-secondary !default;
+$footer-body-padding-x:           1.25rem !default;
+
+$footer-nav-copyright-bg:         $gray-800 !default;
+$footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
+
+.main-footer {
+  font-size: $footer-font-size;
+  //color: $muted;
+  //background-color: #e4e8ea;
+  background-color: $footer-bg;
+  color: $footer-color;
+
+  & *,
+  & a {
+    color: $footer-color;
+  }
+
+  & .footer-body {
+    padding: $footer-body-padding-x;
+  }
+
+  & .footer-nav-copyright {
+    //color: $gray-300;
+    background-color: $footer-nav-copyright-bg;
+    padding-top: $footer-nav-copyright-padding-y;
+    padding-bottom: $footer-nav-copyright-padding-y;
+  }
+}

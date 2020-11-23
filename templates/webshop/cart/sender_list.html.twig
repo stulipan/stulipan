@@ -20,7 +20,7 @@
 {#                                <span class="minicard--address">{{ sender.phone }}</span>#}
                             </div>
 
-                            <div class="d-flex align-items-center h-100">
+                            <div class="d-flex align-items-center h-100 mt-2 mt-sm-0">
                                 <div class="d-flex flex-row flex-sm-column h-100">
                                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                         <a href="{{ path('cart-pickSender', {id: sender.id}) }}" class="JS--Button-pickSender btn btn-primary btn-sm mb-0 mb-sm-2" data-selector="button" data-eval="pickSender">

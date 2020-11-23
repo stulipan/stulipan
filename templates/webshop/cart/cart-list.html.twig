@@ -12,10 +12,10 @@
                         <div class="d-flex w-100 justify-content-between">
                             <div class="pl-3">
                                 <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="cart-item-link{% if hasProductLink is defined and not hasProductLink %} pointer-events-none{% endif %}">{{ item.product.name }}</a>
-                                <small class="d-block text-muted">{{ 'cart.quantity'|trans }}: {{ item.quantity }} </small>
-                                <strong class="d-block text-sm">{{ (item.price * item.quantity) |money }}</strong>
+                                <span class="d-block cart-item-quantity">{{ 'cart.quantity'|trans }}: {{ item.quantity }} </span>
+                                <span class="d-block cart-item-price">{{ (item.price * item.quantity) |money }}</span>
                                 {% if not item.product.isPubliclyAvailable %}
-                                    <em class="d-block text-danger text-sm">*A termék már nem áll forgalmazásban </em>
+                                    <em class="d-block cart-item-missing">*A termék már nem áll forgalmazásban </em>
                                 {% endif %}
                             </div>
                         </div>

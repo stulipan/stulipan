@@ -1,5 +1,5 @@
 @mixin box-shadow($shadow...) {
-  @if $enable-shadows {
+  //@if $enable-shadows {
     $result: ();
 
     @if (length($shadow) == 1) {
@@ -16,5 +16,5 @@
     @if (length($result) > 0) {
       box-shadow: $result;
     }
-  }
+  //}
 }

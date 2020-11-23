@@ -30,6 +30,9 @@ $text-sm-line-height: 1.125rem !default;
   font-size: $text-sm-font-size !important;
   line-height: $text-sm-line-height !important;
 }
+.text-size-secondary {
+  font-size: $font-size-base-secondary;
+}
 .custom-control.text-sm .custom-control-label {
   //padding-top: calc(.1875rem + .06rem);
   //padding-top: calc((#{$font-size-base} * (1 - #{$text-sm-font-size}))/2 + (#{$line-height-base} * 1rem - #{$text-sm-line-height})/2);

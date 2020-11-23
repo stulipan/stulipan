@@ -11,8 +11,12 @@
 .progress--bar-item {
   align-items: center;
   display: flex;
-  font-size: .875rem;
+  font-size: $font-size-sm;
   margin-right: .5rem;
+
+  &.active {
+    font-weight: $font-weight-bold;
+  }
 }
 
 .progress--bar-tick {

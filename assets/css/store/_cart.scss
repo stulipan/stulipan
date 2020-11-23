@@ -18,6 +18,7 @@ $order-summary-total-font-size:             1.1rem !default;
 
 .cart {
   & .cart-item {
+    font-size: $font-size-base-secondary;
     padding-top: $cart-item-padding-y;
     padding-bottom: $cart-item-padding-y;
     border-bottom: $cart-item-border-width solid $cart-item-border-color;
@@ -38,10 +39,21 @@ $order-summary-total-font-size:             1.1rem !default;
     }
 
     & .cart-item-link {
-      font-weight: $cart-item-link-font-weight;
+      font-weight: $font-weight-bold;
       text-decoration: none;
       color: $cart-item-link-color;
       padding: 0;
+    }
+    & .cart-item-price {
+      color: $cart-item-link-color;
+    }
+    & .cart-item-quantity {
+      font-size: $font-size-sm;
+      color: $muted;
+    }
+    & .cart-item-missing {
+      font-size: $font-size-sm;
+      color: $danger;
     }
   }
 }
@@ -157,9 +169,10 @@ $order-summary-total-font-size:             1.1rem !default;
     bottom: -2px;
     margin-right: 0;
     margin-bottom: 0;
-    opacity: 0.2;
+    //opacity: 0.2;
     -webkit-transform: rotate(30deg);
     transform: rotate(-30deg);
+    color: $gray-300;
   }
 }
 

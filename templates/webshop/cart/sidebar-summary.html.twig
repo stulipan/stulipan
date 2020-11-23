@@ -1,10 +1,10 @@
             <div class="JS--cartWrapper">
-                <div class="block-header">
+                <div class="">
                     <span class="h6 checkout--sidebar-title">{{ 'cart.cart-content'|trans }}</span>
-                    <a class="text--toolLink float-right" href="{{ path('site-checkout-step0-pickExtraGift') }}">{{ 'generic.edit'|trans }}</a>
+                    <a class="text-link-checkout float-right" href="{{ path('site-checkout-step0-pickExtraGift') }}">{{ 'generic.edit'|trans }}</a>
                 </div>
                 <div class="cart mt-3">
-                    <div class="JS--resultWrapper cart--scrollX">
+                    <div class="JS--resultWrapper">
                         {% include 'webshop/cart/cart.html.twig' with {
                             'showMessage': true,
                             'showQuantity': false,

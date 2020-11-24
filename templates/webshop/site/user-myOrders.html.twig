@@ -17,14 +17,21 @@
 } %}
 
 {% block content %}
-    <div class="card mb-20px">
+    <div class="card">
         <div class="">
             <div class="card-body">
-                <div class="card-title h4">Előző rendeléseid</div>
+                <div class="card-title h4 mb-0">Előző rendeléseid</div>
+            </div>
+        </div>
+    </div>
                 <div class="previous-orders list-group">
                     {% if orders is defined and orders is not empty %}
                         {% for order in orders %}
+                        <div class="card mt-20px">
+                            <div class="card-body">
                             {% include('webshop/site/user-myOrders-list-widget.html.twig') %}
+                            </div>
+                        </div>
                         {% endfor %}
                     {% endif %}
                 </div>
@@ -33,7 +40,4 @@
                         {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
                     {% endif %}
                 </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}

@@ -777,19 +777,6 @@
     background-color: #e4e8ea;
 }
 
-.product-details h1 {
-    font-size: 1.35rem;
-    font-weight: normal;
-    line-height: 1.5rem;
-    margin-bottom: 1.65rem;
-    color: #004e6e;
-}
-@media (min-width:576px) {
-    .product-details h1 {
-        font-size: 2.05rem;
-        line-height: 2.5rem;
-    }
-}
 
 .bg-custom-gray {
     background-color: #e4e8ea;

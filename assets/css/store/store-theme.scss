@@ -6,7 +6,8 @@
 @import "_checkout-progress-bar";
 @import "_mobile-menu";
 @import "_footer";
-@import "_checkout-progress-bar";
+@import "_cms-page";
+@import "_my-account";
 
 
 .svg-icon {
@@ -25,7 +26,7 @@
 }
 
 $text-sm-font-size:  $font-size-sm !default;
-$text-sm-line-height: 1.125rem !default;
+$text-sm-line-height: 1rem !default; //1.125rem !default;
 
 .text-sm {
   //font-size: .875rem !important;

@@ -16,6 +16,8 @@
   border: $btn-border-width solid transparent;
   @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $btn-border-radius);
   @include transition($btn-transition);
+  letter-spacing: $btn-letter-spacing; // Added by stulipan
+  text-transform: $btn-text-transform; // Added by stulipan
 
   @include hover {
     color: $body-color;

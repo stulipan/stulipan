@@ -20,8 +20,8 @@
     <div class="card mb-20px">
         <div class="">
             <div class="card-body">
-                <div class="card-title h3">Előző rendeléseid</div>
-                <div class="list-group">
+                <div class="card-title h4">Előző rendeléseid</div>
+                <div class="previous-orders list-group">
                     {% if orders is defined and orders is not empty %}
                         {% for order in orders %}
                             {% include('webshop/site/user-myOrders-list-widget.html.twig') %}

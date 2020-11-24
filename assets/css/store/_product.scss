@@ -48,6 +48,27 @@
   color: $gray-800;
 }
 
+
+
+
+.product-details h1 {
+  font-size: 1.35rem;
+  font-weight: $font-weight-bold;
+  text-transform: initial;
+  line-height: 1.5rem;
+  margin-bottom: 1rem;
+  //color: #004e6e;
+}
+@media (min-width:576px) {
+  .product-details h1 {
+    font-size: 2.05rem;
+    line-height: 2.5rem;
+  }
+}
+
+
+
+
 .product-image {
   position: relative;
   display: -ms-flexbox;

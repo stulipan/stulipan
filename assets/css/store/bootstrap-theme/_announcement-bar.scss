@@ -1,0 +1,45 @@
+// Announcement bar, usually displayed under the menu
+
+@mixin announcement-variant($background, $border, $color) {
+  color: $color;
+  //@include gradient-bg($background);
+  background-color: $background;
+  border-color: $border;
+
+  a,
+  .announcement-link {
+    color: darken($color, 0%);
+    text-decoration: underline;
+  }
+}
+
+
+.announcement-bar {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: .5rem 1rem;
+
+  letter-spacing: 0.02rem;
+  text-align: center;
+  font-size: $font-size-base-secondary;
+  line-height: 1rem;
+
+  @include media-breakpoint-down(md) {
+    min-height: 50px;
+  }
+}
+
+
+@each $color, $value in $theme-colors {
+  .announcement-bar-#{$color}-lighten {
+    //@include alert-variant(theme-color-level($color, $alert-bg-level), theme-color-level($color, $alert-border-level), theme-color-level($color, $alert-color-level));
+    @include announcement-variant(map-get($theme-colors-light,$color), $value, color-yiq(map-get($theme-colors-light,$color)));
+  }
+}
+@each $color, $value in $theme-colors {
+  .announcement-bar-#{$color} {
+    //@include alert-variant(theme-color-level($color, $alert-bg-level), theme-color-level($color, $alert-border-level), theme-color-level($color, $alert-color-level));
+    @include announcement-variant(map-get($theme-colors,$color), $value, color-yiq(map-get($theme-colors,$color)));
+  }
+}

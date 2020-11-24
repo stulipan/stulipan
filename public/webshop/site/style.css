@@ -347,68 +347,68 @@
 
 
 /* ============= Info boxes ============= */
-.info--underMenu {
-    color: #ffffff;
-    /*background-color: ;*/
-    /*text-transform: uppercase;*/
-    padding: 1rem .7rem;
-    letter-spacing: 0.05rem;
-    text-align: center;
-    font-size: .875rem;
-    line-height: 1rem;
-}
-.info--underMenu.primary {
-    background-color: #876EBD;
-    color: #ffffff;
-}
-.info--underMenu.success {
-    background-color: #00aa5b;
-    color: #ffffff;
-}
-.info--underMenu.danger {
-    background-color: #dc3545;
-    color: #ffffff;
-}
-.info--underMenu.danger-lighten {
-    background-color: #FFC8C9;
-    color: #343a40;
-}
-.info--underMenu.secondary {
-    background-color: #e7e8ea;
-    color: #343a40;
-}
-.info--underMenu.warning {
-    background-color: #f9d95f;
-    color: #343a40;
-    font-weight: bold;
-}
-.info--underMenu.warning-lighten {
-    background-color: #FAF1CB;
-    color: #343a40;
-}
-.info--underMenu.info {
-    background-color: #008CDE;
-    color: #ffffff;
-}
-.info--underMenu.info-lighten {
-    background-color: #ebf6fd;
-    color: #343a40;
-}
-.info--underMenu.light {
-    background-color: #f4f4f5;
-    color: #343a40;
-}
-.info--underMenu.dark {
-    background-color: #525050;
-    color: #ffffff;
-}
-.info--underMenu-text {
+/*.info--underMenu {*/
+/*    color: #ffffff;*/
+/*    !*background-color: ;*!*/
+/*    !*text-transform: uppercase;*!*/
+/*    padding: 1rem .7rem;*/
+/*    letter-spacing: 0.05rem;*/
+/*    text-align: center;*/
+/*    font-size: .875rem;*/
+/*    line-height: 1rem;*/
+/*}*/
+/*.info--underMenu.primary {*/
+/*    background-color: #876EBD;*/
+/*    color: #ffffff;*/
+/*}*/
+/*.info--underMenu.success {*/
+/*    background-color: #00aa5b;*/
+/*    color: #ffffff;*/
+/*}*/
+/*.info--underMenu.danger {*/
+/*    background-color: #dc3545;*/
+/*    color: #ffffff;*/
+/*}*/
+/*.info--underMenu.danger-lighten {*/
+/*    background-color: #FFC8C9;*/
+/*    color: #343a40;*/
+/*}*/
+/*.info--underMenu.secondary {*/
+/*    background-color: #e7e8ea;*/
+/*    color: #343a40;*/
+/*}*/
+/*.info--underMenu.warning {*/
+/*    background-color: #f9d95f;*/
+/*    color: #343a40;*/
+/*    font-weight: bold;*/
+/*}*/
+/*.info--underMenu.warning-lighten {*/
+/*    background-color: #FAF1CB;*/
+/*    color: #343a40;*/
+/*}*/
+/*.info--underMenu.info {*/
+/*    background-color: #008CDE;*/
+/*    color: #ffffff;*/
+/*}*/
+/*.info--underMenu.info-lighten {*/
+/*    background-color: #ebf6fd;*/
+/*    color: #343a40;*/
+/*}*/
+/*.info--underMenu.light {*/
+/*    background-color: #f4f4f5;*/
+/*    color: #343a40;*/
+/*}*/
+/*.info--underMenu.dark {*/
+/*    background-color: #525050;*/
+/*    color: #ffffff;*/
+/*}*/
+/*.info--underMenu-text {*/
 
-}
-.info--underMenu a {
-    color: inherit;
-    text-decoration: underline;
-}
+/*}*/
+/*.info--underMenu a {*/
+/*    color: inherit;*/
+/*    text-decoration: underline;*/
+/*}*/
 
 /*=====================================================*/
 /*=                                                   =*/

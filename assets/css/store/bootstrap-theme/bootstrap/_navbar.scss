@@ -131,6 +131,7 @@
   @include border-radius($navbar-toggler-border-radius);
 
   @include hover-focus {
+    outline: none;
     text-decoration: none;
   }
 

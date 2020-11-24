@@ -28,6 +28,19 @@ $nm-x:          1.25rem !default;
     padding-right: $nm-x + $table-cell-padding;
   }
 }
+
+// Correction. Use class "correction-no-padding" instead of "px-0 px-md-10px"
+.correction-no-padding {
+  @include media-breakpoint-down(sm) {
+    padding-left: 0;
+    padding-right: 0;
+
+    & .card {
+      border-radius: 0;
+    }
+  }
+}
+
 .navbar--toolbar {
   position: relative;
   display: -ms-flexbox;

@@ -13,7 +13,7 @@
 {% block body %}
 
     {{ render(controller('App\\Controller\\Shop\\CartUtilsController::showSidebarCart')) }}
-    <div class="sidebar sidebar-left sidebar-sm mobileMenu fade d-block d-lg-none" id="sidebar--mobileMenu" tabindex="-1" role="dialog" data-backdrop-css="mobileMenu-backdrop" aria-labelledby="mobileMenuLabel" aria-hidden="true">
+    <div class="sidebar sidebar-left sidebar-sm mobileMenu fade" id="sidebar--mobileMenu" tabindex="-1" role="dialog" data-backdrop-css="mobileMenu-backdrop" aria-labelledby="mobileMenuLabel" aria-hidden="true">
         <div class="sidebar-dialog sidebar-dialog-scrollable sidebar-dialog-centered" role="document">
             <div class="sidebar-content">
                 <div class="sidebar-header bg-secondary p-2">
@@ -146,8 +146,8 @@
 			</div>
 
             <div id="navbarCollapse" class="collapse navbar-collapse w-100 bg-menu order-lg-2 order-1">
-                <div class="flex-grow-1">
-                    <div class="container">
+                <div class="container">
+                    <div class="">
                         <ul class="navbar-nav mx-auto px-3 px-lg-0 justify-content-center">
                             {% include 'webshop/site/navbar-menu-items.html.twig' %}
                         </ul>

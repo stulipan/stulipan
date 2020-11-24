@@ -302,3 +302,56 @@ $price-font-size-sm:             calc(#{$price-font-size-default} * 0.75);
     font-size: $price-font-size-default;
   }
 }
+
+.general-info-section {
+  & .general-info-section-left,
+  & .general-info-section-right {
+    max-width: 500px;
+
+    @include media-breakpoint-down(md) {
+      max-width: 100%;
+    }
+  }
+
+}
+
+.general-info-title {
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing;
+}
+
+.general-info-group {
+  list-style: none;
+}
+.general-info-item {
+  padding-bottom: 1.5rem;
+  //position: relative;
+  //padding-left: 1.5rem;
+
+  //&:before {
+  //  position: absolute;
+  //  left: 0;
+  //  top: 5px;
+  //  font-size: 8px;
+  //  color: $gray-700;
+  //  content: "\f067";
+  //  margin-right: 5px;
+  //  font-family: Font Awesome\ 5 Free;
+  //  font-weight: 900;
+  //}
+
+  &:last-of-type {
+    padding-bottom: 0;
+  }
+}
+
+.general-info-item-title {
+  //font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing;
+  margin-bottom: .25rem;
+}
+.general-info-item-description {
+  font-size: $font-size-base-secondary;
+}

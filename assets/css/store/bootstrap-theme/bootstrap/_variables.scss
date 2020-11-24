@@ -798,7 +798,13 @@ $navbar-padding-y:                  0 !default; // $spacer / 2
 $navbar-padding-x:                  0 !default;
 
 $navbar-nav-link-padding-x:         1rem !default;
-$navbar-nav-link-padding-y:         .5rem !default; // Added by Stulipan
+$navbar-nav-link-padding-y:         0 !default; // Added by Stulipan
+// Added by Stulipan
+$navbar-nav-font-size:              $font-size-base-secondary !default;
+$navbar-nav-font-weight:            $font-weight-bold !default;
+$navbar-nav-letter-spacing:         $letter-spacing !default;
+$navbar-nav-text-transform:         uppercase !default;
+
 
 $navbar-brand-font-size:            $font-size-lg !default;
 // Compute the navbar-brand padding-y so the navbar-brand will have the same height as navbar-text and nav-link
@@ -813,7 +819,7 @@ $navbar-toggler-border-radius:      $btn-border-radius !default;
 
 $bg1: rgba($white, .5);
 
-$navbar-dark-color:                 rgba($white, .85) !default;
+$navbar-dark-color:                 $white !default;
 $navbar-dark-hover-color:           rgba($white, 1) !default;
 $navbar-dark-active-color:          $white !default;
 $navbar-dark-disabled-color:        rgba($white, .25) !default;

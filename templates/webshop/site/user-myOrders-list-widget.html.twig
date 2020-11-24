@@ -21,7 +21,7 @@
             <div class="d-flex flex-column justify-content-center align-items-center align-items-md-start">
                 <div class="">
                     {% for item in order.items %}
-                        <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
+                        <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}">
                             <img class="img-thumbnailX mb-1 mr-2" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" width="80px;" />
                         </a>
                     {% endfor %}

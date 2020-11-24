@@ -66,6 +66,8 @@
   list-style: none;
 
   .nav-item {
+    display: flex;
+    align-items: center;
     padding: $nav-item-padding-y $nav-item-padding-x;
 
     &.show .nav-link,
@@ -133,8 +135,9 @@
   }
 
   &:focus {
-    //outline: inherit;
+    outline: none;
   }
+  &:focus,
   &:hover {
     background-color: rgba($gray-400, .5);
   }
@@ -345,7 +348,7 @@ $navbar-login-cart-badge-bg-mobile:         $white !default;
   display: flex;
   align-items: stretch;
   padding: 0;
-  //margin-right: -15px;
+  height: 100%;
 
   .nav-user {
     padding-top: 0;
@@ -419,22 +422,34 @@ $navbar-login-cart-badge-bg-mobile:         $white !default;
 .login-cart-link {
   display: flex;
   align-items: center;
-  padding: 1.4rem .4rem;
+  padding: .45rem .45rem;
+  // Correction
+  //margin-bottom: calc((#{$navbar-stulipan-height} - 2 * .45rem)/2);
+  //margin-bottom: .45rem; // same as Y padding !!
   text-decoration: none !important;
   cursor: pointer;
-  height: 3.5rem;
   color: $navbar-login-cart-color;
+
+  // Correction padding because of the cart quantity badge
+  &.login-cart-badge {
+    padding-right: 12px;
+  }
 
   &:hover {
     color: $navbar-login-cart-color;
   }
 
   @media (max-width: breakpoint-max(md)) {
-    height: $navbar-stulipan-height;
+    //height: $navbar-stulipan-height;
     color: $navbar-login-cart-hover-color;
 
     &:hover {
       color: $navbar-login-cart-hover-color;
+    }
+    &:focus {
+      outline: none;
+      background-color: rgba(196,205,213,0.5);
+
     }
   }
 

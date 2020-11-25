@@ -166,10 +166,22 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
   }
 }
 
-//
+
+.minicard--title {
+  font-weight: $font-weight-bold;
+}
+.minicard--address {
+  font-size: $font-size-base-secondary;
+}
+
+
+
+///////////////////////////////////
 // Summary
-//
+
 .checkout-summary {
+  border: $border-width solid $border-color;
+  @include border-radius($border-radius);
   font-size: .88rem;
   line-height: 1.125rem;
   color: $gray-650;
@@ -196,64 +208,15 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
   }
 }
 
-// Correction
-.checkout-page.checkout-asos .checkout-summary {
-  & .checkout-summary-item {
-    padding: .75rem 0;
-  }
-}
-
-h1, h2, h3, h4, h5, h6 {
-  &.checkout-block-title {
-    font-weight: $font-weight-bold;
-    margin-bottom: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-}
-
-.checkout-recipient-current,
-.checkout-sender-current {
-  color: $label-color;
-  background-color: $secondary;
-  border: $border-width solid $border-color;
-  border-radius: $border-radius;
-  padding: .75rem;
-}
-
-.checkout-recipient-item,
-.checkout-sender-item {
-  padding-bottom: 1.25rem;
-  margin-bottom: 1.25rem;
-  border-bottom: $border-width solid $gray-300;
-  color: $label-color;
-
-  &:last-of-type {
-    padding-bottom: 0;
-    margin-bottom: 0;
-    border-bottom: none;
-  }
-}
-.text-link-checkout {
-  display: inline-block;
-  font-size: $font-size-base-secondary;
-  margin-bottom: map_get($spacers, 2);
-
-  &:not(:last-of-type) {
-    margin-right: map_get($spacers, 3);
-  }
-}
-
-.minicard--title {
-  font-weight: $font-weight-bold;
-}
-.minicard--address {
-  font-size: $font-size-base-secondary;
-}
-
-//
+///////////////////////////////////
 // Shipping and Payment methods
-//
+
+.checkout-method-selection {
+  border: $border-width solid $border-color;
+  @include border-radius($border-radius);
+  margin-top: map_get($spacers, 3);
+}
+
 .checkout-shipping-item,
 .checkout-payment-item {
   padding: .75rem .75rem;
@@ -287,12 +250,12 @@ h1, h2, h3, h4, h5, h6 {
 .checkout-shipping-item-title,
 .checkout-payment-item-title {
   font-size: $font-size-base;
-  //font-weight: $font-weight-bold;
+  font-weight: $font-weight-bold;
   color: $yiq-text-dark;
 }
 .checkout-shipping-item-description,
 .checkout-payment-item-description {
-  color: $muted;
+  color: $gray-700;
   font-size: $font-size-base-secondary;
 }
 
@@ -340,4 +303,60 @@ h1, h2, h3, h4, h5, h6 {
   & .user-registration {
     margin-top: 20px;
   }
+}
+
+///////////////////////////////////
+// Corrections
+
+.checkout-page.checkout-asos .checkout-summary {
+  & .checkout-summary-item {
+    padding: .75rem 0;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  &.checkout-block-title {
+    font-weight: $font-weight-bold;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+}
+
+.checkout-recipient-current,
+.checkout-sender-current {
+  color: $label-color;
+  background-color: $secondary;
+  border: $border-width solid $border-color;
+  border-radius: $border-radius;
+  padding: .75rem;
+}
+
+.checkout-recipient-item,
+.checkout-sender-item {
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: $border-width solid $gray-300;
+  color: $label-color;
+
+  &:last-of-type {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+}
+.text-link-checkout {
+  display: inline-block;
+  font-size: $font-size-base-secondary;
+  margin-bottom: map_get($spacers, 2);
+
+  &:not(:last-of-type) {
+    margin-right: map_get($spacers, 3);
+  }
+}
+
+
+.btn-goto {
+  text-transform: initial;
+  letter-spacing: 0;
 }

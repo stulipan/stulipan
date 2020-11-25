@@ -180,3 +180,10 @@ $order-summary-total-font-size:             1.1rem !default;
   font-size: $font-size-base-secondary;
   color: $muted;
 }
+
+.form-control-cart {
+  font-size: 1rem;
+  background-position: right 0.25rem !important;
+  padding: calc(.25rem *1.1) calc(.25rem + 20px) calc(.25rem * .9) .25rem !important;
+  line-height: 1.2;
+}

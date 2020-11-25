@@ -300,7 +300,7 @@
 
 {% block gotoNext %}
     <div class="mt-3 mt-md-4 mb-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
-        <button data-selector="button" data-eval="submitRecipientAndCustomer" data-url="{{ path('site-checkout-step2-pickShipping') }}" class="JS--Button-gotoStep3 btn btn-lg btn-success order-1 order-md-2">
+        <button data-selector="button" data-eval="submitRecipientAndCustomer" data-url="{{ path('site-checkout-step2-pickShipping') }}" class="JS--Button-gotoStep3 btn btn-lg btn-success btn-goto order-1 order-md-2">
             <span class="btn-loading-invisible">{{ 'checkout.continue-to-shipping-method-button'|trans }}</span>
             <div class="loading-spinner" role="status"></div>
         </button>

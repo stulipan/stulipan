@@ -12,8 +12,18 @@
                         <div class="d-flex w-100 justify-content-between">
                             <div class="pl-3">
                                 <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="cart-item-link{% if hasProductLink is defined and not hasProductLink %} pointer-events-none{% endif %}">{{ item.product.name }}</a>
-                                <span class="d-block cart-item-quantity">{{ 'cart.quantity'|trans }}: {{ item.quantity }} </span>
-                                <span class="d-block cart-item-price">{{ (item.price * item.quantity) |money }}</span>
+                                {% if showQuantity is defined and showQuantity %}
+                                    <div class="ml-2X mr-1X mr-md-6X mt-1">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex align-items-center JS--formWrapper text-center btn-loading-bg" data-wrapper-item-quantity>
+                                                {{ render(controller('App\\Controller\\Shop\\CartController::setItemQuantityForm', {'id' : item.id})) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <span class="d-block cart-item-quantity">{{ 'cart.quantity'|trans }}: {{ item.quantity }} </span>
+                                    <span class="d-block cart-item-price">{{ (item.price * item.quantity) |money }}</span>
+                                {% endif %}
                                 {% if not item.product.isPubliclyAvailable %}
                                     <em class="d-block cart-item-missing">*A termék már nem áll forgalmazásban </em>
                                 {% endif %}
@@ -25,14 +35,17 @@
 
             <div class="d-flex flex-column flex-sm-row justify-content-end justify-content-sm-between align-items-end align-items-sm-center">
                 {% if showQuantity is defined and showQuantity %}
-                    <div class="ml-2 mr-1 mr-md-6">
-                        <div class="d-flex align-items-center">
-                            <div class="d-flex align-items-center JS--formWrapper text-center btn-loading-bg" data-wrapper-item-quantity>
-                                {{ render(controller('App\\Controller\\Shop\\CartController::setItemQuantityForm', {'id' : item.id})) }}
-                            </div>
-                        </div>
-                    </div>
+                    <span class="d-block cart-item-price">{{ (item.price * item.quantity) |money }}</span>
                 {% endif %}
+{#                {% if showQuantity is defined and showQuantity %}#}
+{#                    <div class="ml-2 mr-1 mr-md-6">#}
+{#                        <div class="d-flex align-items-center">#}
+{#                            <div class="d-flex align-items-center JS--formWrapper text-center btn-loading-bg" data-wrapper-item-quantity>#}
+{#                                {{ render(controller('App\\Controller\\Shop\\CartController::setItemQuantityForm', {'id' : item.id})) }}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                {% endif %}#}
 
                 {% if showRemove is defined and showRemove %}
                     <div class="pl-1 pl-sm-4 d-flex justify-content-end mt-2 mt-sm-0">

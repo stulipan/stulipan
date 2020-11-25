@@ -20,8 +20,7 @@
                 <div class="card">
                     <div class="">
                         <div class="card-body">
-                            <div class="border rounded">
-                                <div class="checkout-summary">
+                            <div class="checkout-summary">
                                     <div class="">
                                         <div class="w-100 checkout-summary-item">
                                             <div class="row">
@@ -80,7 +79,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -196,7 +194,7 @@
 
 {% block gotoNext %}
     <div class="mt-4 d-flex justify-content-center justify-content-md-between flex-column">
-        <button data-selector="button" data-eval="submitPaymentMethod" data-url="{{ path('site-checkout-step4-thankyou') }}" class="JS--Button-gotoThankYou btn btn-lg btn-success order-1 order-md-2 px-2 px-md-4 py-3">
+        <button data-selector="button" data-eval="submitPaymentMethod" data-url="{{ path('site-checkout-step4-thankyou') }}" class="JS--Button-gotoThankYou btn btn-lg btn-success btn-goto order-1 order-md-2 px-2 px-md-4 py-3">
             <span class="btn-loading-invisible">A rendelést leadom</span>
             <div class="loading-spinner" role="status"></div>
         </button>

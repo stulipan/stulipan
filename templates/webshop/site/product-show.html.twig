@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                                 {% endif %}
-                                <div class="order-1 order-sm-2{% if isThumbnailsLeft == true %}col-12 col-sm-10{% else %}col-12{% endif %} detail-carousel pl-3XXX px-0 px-sm-2">
+                                <div class="order-1 order-sm-2{% if isThumbnailsLeft == true %}col-12 col-sm-10{% else %}col-12{% endif %} detail-carousel pl-3XXX px-0XXXpx-sm-2">
                                     {% set bestseller = false %}
                                     {% if product.isUnavailable %}
                                         <div class="ribbon ribbon-dark">MIND ELKELT</div>
@@ -194,9 +194,10 @@
 
                                         <div class="row">
                                             <div class="col-12 detail-option mb-4">
-                                                <div class="product-variant-selector-label">Items <span>(required)</span></div>
-                                                {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
-
+                                                <div class="product-variants">
+                                                    <div class="product-variant-selector-label">Items <span>(required)</span></div>
+                                                    {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
+                                                </div>
                                             </div>
                                         </div>
                                     {% endif %}

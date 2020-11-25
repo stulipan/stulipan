@@ -340,7 +340,7 @@ $sidebar-default:                     380px !default;
   @include border-top-radius($sidebar-content-border-radius);
 
   .close {
-    font-size: 2.5 * $font-size-base;
+    //font-size: 2.5 * $font-size-base;
     font-weight: $font-weight-light;
     opacity: 1;
     padding: $sidebar-header-padding-y $sidebar-header-padding-x;

@@ -206,17 +206,17 @@
 
 .detail-carousel .ribbon {
   position: absolute;
-  top: 20px;
-  left: 4px;
+  top: 10px;
+  left: 20px;
   z-index: 999
 }
 
 .detail-carousel .ribbon+.ribbon {
-  top: 80px
+  top: 40px
 }
 
 .detail-carousel .ribbon+.ribbon+.ribbon {
-  top: 145px
+  top: 70px
 }
 
 .product-variant-selector-label {

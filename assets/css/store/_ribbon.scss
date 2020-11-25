@@ -4,7 +4,8 @@
 .ribbon {
   position: absolute;
   top: 10px;
-  left: -12px;
+  //left: -12px;
+  left: 10px;
   z-index: 999;
   display: inline-block;
   font-family: "HK Grotesk", sans-serif;
@@ -15,8 +16,9 @@
   padding: 4px 15px;
   color: #fff;
   text-align: center;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  //border-top-right-radius: 3px;
+  //border-bottom-right-radius: 3px;
+  @include border-radius($border-radius);
 }
 
 .ribbon-bottom {
@@ -43,26 +45,26 @@
   width: calc(100% - 20px) !important;
 }
 .ribbon+.ribbon {
-  top: 50px
+  top: 40px
 }
 
 .ribbon+.ribbon+.ribbon {
-  top: 90px
+  top: 70px
 }
 
 .ribbon+.ribbon+.ribbon+.ribbon {
-  top: 130px
+  top: 100px
 }
 
-.ribbon::before {
-  content: '';
-  border-left: 12px solid transparent;
-  border-right: 0 solid transparent;
-  border-top: 14px solid #612f54;
-  position: absolute;
-  bottom: -14px;
-  left: 0
-}
+//.ribbon::before {
+//  content: '';
+//  border-left: 12px solid transparent;
+//  border-right: 0 solid transparent;
+//  border-top: 14px solid #612f54;
+//  position: absolute;
+//  bottom: -14px;
+//  left: 0
+//}
 
 .ribbon-primary {
   background-color: #876EBD !important

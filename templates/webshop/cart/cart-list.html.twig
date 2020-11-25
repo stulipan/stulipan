@@ -5,7 +5,7 @@
             <div class="flex-grow-1 pr-0">
                 {#                {% include('webshop/cart/cart-item.html.twig') %}#}
                 <div class="">
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center mr-2">
                         <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="{% if hasProductLink is defined and not hasProductLink %}pointer-events-none{% endif %}">
                             <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
                         </a>

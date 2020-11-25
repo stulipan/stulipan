@@ -1,70 +1,67 @@
 
 <div class="mb-2">
-    <label class="detail-option-heading">1. Válassz méretet</label>
+    <div class="product-variant-selector-label">Méret</div>
 </div>
-<div class="form-row">
-        {% if form.options is defined and form.options is not empty %}
-            {% for item in form.options|slice(0,1) %}
-{#                <div class="mt-2 mb-2">#}
-{#                    <span class="detail-option-heading">{{ item.optionId.vars.value }}</span>#}
-{#                </div>#}
-                    {% for choice in item.selectedOptionValue %}
-                        <div class="col-sm-4 col-4">
-                            {% include 'webshop/site/vp-choice-product-variant.html.twig' %}
-                        </div>
+
+{% if form.options is defined and form.options is not empty %}
+    <div class="overflow-x-scroll overflow-x-md-hid pb-3">
+        <div class="position-relative">
+            <div class="w-lg mx-auto">
+                <div class="form-row">
+                    {% for item in form.options|slice(0,1) %}
+                        {% for choice in item.selectedOptionValue %}
+                            <div class="col-sm-4 col-4">
+                                {% include 'webshop/site/vp-choice-product-variant.html.twig' %}
+                            </div>
+                        {% endfor %}
+                        {% do item.selectedOptionValue.setRendered() %}
                     {% endfor %}
-                    {% do item.selectedOptionValue.setRendered() %}
-            {% endfor %}
-            {{ form_errors(form.options) }}
-        {% else %}
-            <div class="col-sm-12">
-                <div class="vp choose-one-size vp-checked">
-                    <div class="vp-figure">
-                        <div class="vp-content">
-                            {% include('webshop/site/vp-label-product-variant.html.twig') with {
-                                'name': 'Egy méret',
-                                'price': product.price.numericValue,
-                                'priceSale': (product.price.numericValue*4),
-                            } %}
-{#                            <div class="choice-label-title">Egy méret</div>#}
-{#                            <div class="choice-label-content">#}
-{#                                <ul class="list-inline mb-0">#}
-{#                                    <li class="list-inline-item price price-sm">#}
-{#                                        <del>{{ (product.price.numericValue*4)|money }}</del>#}
-{#                                    </li>#}
-{#                                    <li class="list-inline-item price price-sm price-sale">{{ product.price.numericValue|money }}</li>#}
-{#                                </ul>#}
-{#                            </div>#}
-                        </div>
-                    </div>
+                    {{ form_errors(form.options) }}
                 </div>
             </div>
-        {% endif %}
-        {% do form.options.setRendered() %}
-</div>
-
-<div class="mt-2 mb-2">
-    <span class="detail-option-heading">2. Hova kéred?</span>
-</div>
-<div class="form-group mb-4">
-    <div id="v--whereTo-XXXXX">
-        {#{{ form_widget(form.whereTo.whereTo, {'attr': {'class': 'form-control', 'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011' }}) }}#}
-        {#{{ form_widget(form.whereTo.whereTo, {'attr': {#}
-        {#'class': 'form-control select2 select2-multiple select2-hidden-accessible',#}
-        {#'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011',#}
-        {#'data-toggle' : 'select2',#}
-        {#'aria-hidden' : 'true',#}
-        {#}}) }}#}
-        {#{{ form_errors(form.whereTo) }}#}
-
-        {#                                        // EZ OKOZTA A "Error: Allowed memory size of... exhausted"#}
-        {#                                        {% do form.whereTo.setRendered() %}#}
+        </div>
+    </div>
+{% else %}
+<div class="form-row">
+    <div class="col-sm-12">
+        <div class="vp choose-one-size vp-checked">
+            <div class="vp-figure">
+                <div class="vp-content">
+                    {% include('webshop/site/vp-label-product-variant.html.twig') with {
+                        'name': 'Egy méret',
+                        'price': product.price.numericValue,
+                        'priceSale': (product.price.numericValue*4),
+                    } %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endif %}
+{% do form.options.setRendered() %}
+
+{#<div class="mt-2 mb-2">#}
+{#    <span class="product-variant-selector-label">2. Hova kéred?</span>#}
+{#</div>#}
+{#<div class="form-group mb-4">#}
+{#    <div id="v--whereTo-XXXXX">#}
+{#        #}{#{{ form_widget(form.whereTo.whereTo, {'attr': {'class': 'form-control', 'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011' }}) }}#}
+{#        #}{#{{ form_widget(form.whereTo.whereTo, {'attr': #}{#}#}
+{#        #}{#'class': 'form-control select2 select2-multiple select2-hidden-accessible',#}
+{#        #}{#'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011',#}
+{#        #}{#'data-toggle' : 'select2',#}
+{#        #}{#'aria-hidden' : 'true',#}
+{#        #}{#}}) }}#}
+{#        #}{#{{ form_errors(form.whereTo) }}#}
+
+{#        #}{#                                        // EZ OKOZTA A "Error: Allowed memory size of... exhausted"#}
+{#        #}{#                                        {% do form.whereTo.setRendered() %}#}
+{#    </div>#}
+{#</div>#}
 
 
 <div class="mt-2 mb-2">
-    <span class="detail-option-heading">3. Mikorra kéred?</span>
+    <div class="product-variant-selector-label">Szállítás</div>
 </div>
 <div class="row order-delivery-date mb-4 JS--deliveryDateContainer">
     <div class="col-md-12 col-lg-12 JS--dateWrapper">
@@ -100,7 +97,7 @@
             {% do form.deliveryDate.deliveryDate.setRendered() %}
             {{ form_errors(form.deliveryDate.deliveryDate) }}
         </div>
-        <div class="text-sm text-muted">
+        <div class="text-sm mt-2">
             Kosárba rakás után megadható a napszakasz is.
         </div>
     </div>
@@ -108,7 +105,7 @@
 
 <div class="row d-none">
     <div class="col-12 detail-option mb-4">
-        <label class="detail-option-heading">Items <span>(required)</span></label>
+        <label class="product-variant-selector-label">Items <span>(required)</span></label>
         {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
     </div>
 </div>

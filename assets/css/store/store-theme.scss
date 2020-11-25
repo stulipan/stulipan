@@ -153,59 +153,6 @@ input[type=number] {
   }
 }
 
-// VP choices for one-size product and date variant pickers
-
-$vp-choose-font-size:         90% !default;
-$vp-choose-font-size-smaller: 87% !default;
-$vp-choose-font-weight:       $font-weight-bold !default;
-$vp-choose-color:             $gray-700 !default;
-
-.choose-date .vp-figure {
-  font-size: $vp-choose-font-size;
-  line-height: 1.1rem;
-  color: $vp-choose-color;
-  height: $input-height-lg;
-  align-items: center;
-
-  & .choice-label-date {
-    font-weight: $vp-choose-font-weight;
-    white-space: nowrap;
-    color: $yiq-text-dark;
-  }
-  & .choice-label-weekday {
-    white-space: nowrap;
-    font-size: $vp-choose-font-size-smaller;
-  }
-}
-
-.choose-one-size .vp-figure {
-  font-size: $vp-choose-font-size;
-  line-height: 1.25rem;
-  color: $vp-choose-color;
-  min-height: $input-height-lg;
-  align-items: center;
-
-  & .choice-label-title {
-    font-weight: $vp-choose-font-weight;
-  }
-  & .choice-label-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    & .choice-label-price-list {
-      padding-left: 0;
-      list-style: none;
-      margin-bottom: 0;
-
-      & .choice-label-price-item {
-        display: inline-block;
-        margin: 0 .25rem;
-      }
-    }
-  }
-}
-
 
 //
 //  Custom classes

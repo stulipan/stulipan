@@ -3,7 +3,9 @@
 $footer-bg:                       $gray-700 !default;
 $footer-color:                    $gray-300 !default;
 $footer-font-size:                $font-size-base-secondary !default;
+$footer-body-padding-y:           2rem !default;
 $footer-body-padding-x:           1.25rem !default;
+
 
 $footer-nav-copyright-bg:         $gray-800 !default;
 $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
@@ -20,8 +22,12 @@ $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
     color: $footer-color;
   }
 
+  & h5, h6 {
+    letter-spacing: $letter-spacing;
+  }
+
   & .footer-body {
-    padding: $footer-body-padding-x;
+    padding: $footer-body-padding-y $footer-body-padding-x;
   }
 
   & .footer-nav-copyright {

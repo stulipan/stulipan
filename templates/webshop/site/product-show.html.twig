@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="row">
-                        <div class="col-md-6 col-lg-7 order-1 mb-4">
+                        <div class="col-md-6 col-lg-7 order-1">
                             <div class="row">
                                 {% if isThumbnailsLeft == true %}
                                 <div class="d-none d-sm-flex col-sm-2 pr-0 order-2 order-sm-1">
@@ -64,7 +64,7 @@
                                     {% endif %}
                                     <div>
                                         {#<span class="delivery show-for-large mr-10px"></span>#}
-                                        <div data-slider-id="1" class="owl-carousel detail-slider product-image">
+                                        <div data-slider-id="1" class="owl-carousel detail-slider owl-theme ">
                                             {% if product.images is defined %}
                                                 {% for image in product.images %}
                                                     <div class="item"><a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
@@ -80,11 +80,6 @@
                                                     </div>
                                                 {% endfor %}
                                             {% endif %}
-{#                                            <div class="owl-dots">#}
-{#                                                <button role="button" class="owl-dot active"><span></span></button>#}
-{#                                                <button role="button" class="owl-dot"><span></span></button>#}
-{#                                                <button role="button" class="owl-dot"><span></span></button>#}
-{#                                            </div>#}
                                         </div>
                                     </div>
                                 </div>
@@ -114,37 +109,50 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-5 pl-lg-4 order-2 mb-4">
-                            <h1 class="">{{ product.name }}</h1>
+                        <div class="col-md-6 col-lg-5 pl-lg-4 order-2 mt-3 mt-md-0 mb-4">
+                            <div class="row">
+                                <div class="col-12 order-2X order-md-1">
+                                    <div class="product-reviews">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <div class="d-flex align-items-center">
+                                                <ul class="review-stars-group mr-2 mb-0">
+                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                                    <li class="review-stars-item"><i class="fa fa-star text-gray-300"></i></li>
+                                                </ul>
+                                            </div>
+                                            <div class="">
+                                                <a href="#" class="text-sm">25 értékelés <i class="fas fa-long-arrow-alt-right ml-1"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 order-1X order-md-2">
+                                    <div class="product-name">
+                                        <h1 class="">{{ product.name }}</h1>
+                                    </div>
+                                </div>
+                            </div>
+
                             {% if product.isPubliclyAvailable %}
                                 {% if product.isFlower %}
 
                                 {% else %}
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <ul class="list-inline mb-0">
-                                            <li class="list-inline-item price">
-                                                <del>{{ (product.price.numericValue*4)|money }}</del>
-                                            </li>
-                                            <li class="list-inline-item h4 price price-sale">{{ product.price.numericValue|money }}</li>
+                                    <div class="product-price">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <ul class="list-inline mb-0">
+                                                <li class="list-inline-item price">
+                                                    <del>{{ (product.price.numericValue*4)|money }}</del>
+                                                </li>
+                                                <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>
 
-                                        </ul>
+                                            </ul>
+                                        </div>
                                     </div>
                                 {% endif %}
                             {% endif %}
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <div class="d-flex align-items-center">
-                                    <ul class="list-inline mr-2 mb-0">
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-gray-300"></i></li>
-                                    </ul>
-                                    <a href="#" class="minicard--toolLink">25 értékelés</a>
-                                </div>
-                            </div>
-
-
 
                             {#<p class="mb-2">{{ product.description }}</p>#}
 
@@ -163,16 +171,16 @@
                                 {{ form_start(form) }}
 
                                     {% if product.isFlower %}
-
-                                        {% include 'webshop/site/product-widget-addToCartForm-isFlower.html.twig' %}
-
+                                        <div class="product-variants">
+                                            {% include 'webshop/site/product-widget-addToCartForm-isFlower.html.twig' %}
+                                        </div>
                                     {% else %}
 
                                         {% if form.options is defined and form.options is not empty %}
                                             {% for item in form.options %}
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <label class="detail-option-heading">{{ item.selectedOption.vars.value }}</label>
+                                                        <div class="product-variant-selector-label">{{ item.selectedOption.vars.value }}</div>
                                                         <div class="form-row">
                                                             {% if settings_general.get('general.product-variant-view') == 'dropdown' %}
                                                                 <div class="form-group col-8 col-sm-8 col-md-6">
@@ -197,7 +205,7 @@
 
                                         <div class="row">
                                             <div class="col-12 detail-option mb-4">
-                                                <label class="detail-option-heading">Items <span>(required)</span></label>
+                                                <div class="product-variant-selector-label">Items <span>(required)</span></div>
                                                 {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
 
                                             </div>
@@ -220,11 +228,11 @@
 
                                 {{ form_end(form) }}
 
-                                <div class="border-0 mb-3">
+                                <div class="product-credit-card">
                                     <div class="text-center p-0 px-2">
                                         <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
                                         <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/termekek/paypal.png">
-                                        <div class="text-sm mt-2">
+                                        <div class="text-sm">
                                             Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>
                                     </div>
                                 </div>
@@ -339,13 +347,35 @@
         // ------------------------------------------------------- //
         // Detail Carousel with thumbs
         // ------------------------------------------------------ //
+        // $('.detail-slider').owlCarousel({
+        //     loop: true,
+        //     items: 1,
+        //     thumbs: true,
+        //     thumbsPrerendered: true,
+        //     dots: true,
+        //     responsiveClass: false
+        // });
         $('.detail-slider').owlCarousel({
-            loop: true,
-            items: 1,
+            loop: false,
             thumbs: true,
             thumbsPrerendered: true,
-            dots: false,
-            responsiveClass: false
+            margin: 0,
+            nav: false,
+            dots: true,
+            navText: ['<img src="img/prev.svg" alt="" width="50">', '<img src="img/next.svg" alt="" width="50">'],
+            smartSpeed: 400,
+            responsiveClass: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 1
+                },
+                1000: {
+                    items: 1
+                }
+            }
         });
 
         // ------------------------------------------------------- //

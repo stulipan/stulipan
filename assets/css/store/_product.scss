@@ -95,7 +95,13 @@
 }
 
 .product-reviews {
+}
 
+@include media-breakpoint-down(xs) {
+  .correction-product-image-no-padding {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 
@@ -193,7 +199,7 @@
 .detail-thumb-item.active {
   opacity: 1;
   /*box-shadow: 0 0 0 1px #6cb8d5;*/
-  border-color: #008CDE;
+  border-color: $gray-900;
 }
 
 /*.detail-thumb-item.active img {*/
@@ -207,7 +213,7 @@
 .detail-carousel .ribbon {
   position: absolute;
   top: 10px;
-  left: 20px;
+  left: 10px;
   z-index: 999
 }
 

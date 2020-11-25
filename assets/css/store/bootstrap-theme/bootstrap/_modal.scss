@@ -36,7 +36,7 @@
 .modal-dialog {
   position: relative;
   width: auto;
-  margin: $modal-dialog-margin;
+  margin: $modal-dialog-margin auto;
   // allow clicks to pass through for custom click handling to close modal
   pointer-events: none;
 
@@ -95,6 +95,60 @@
       content: none;
     }
   }
+
+  // Added by Stulipan
+  @include media-breakpoint-down(sm) {
+    min-height: calc(100% - #{$modal-dialog-margin * 1});
+    margin: $modal-dialog-margin 0 0 0;
+
+    // Ensure `modal-dialog-centered` extends the full height of the view (IE10/11)
+    &::before {
+      display: block; // IE10
+      height: calc(100vh - #{$modal-dialog-margin * 1});
+      content: "";
+    }
+
+    // Ensure `.modal-body` shows scrollbar (IE10/11)
+    &.modal-dialog-scrollable {
+      flex-direction: row;
+
+      .modal-content {
+        max-height: calc(80% - #{$modal-dialog-margin * 1});
+        align-self: flex-end;
+      }
+    }
+  }
+}
+
+// Nincs HASZNALATBAN !!!!!!!!!!!!!
+.modal-dialog-bottom {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - #{$modal-dialog-margin * 1});
+  margin: $modal-dialog-margin 0 0 0;
+
+  // Ensure `modal-dialog-centered` extends the full height of the view (IE10/11)
+  &::before {
+    display: block; // IE10
+    height: calc(100vh - #{$modal-dialog-margin * 1});
+    content: "";
+  }
+
+  // Ensure `.modal-body` shows scrollbar (IE10/11)
+  &.modal-dialog-scrollable {
+    flex-direction: row;
+    justify-content: center;
+    height: 100%;
+
+    .modal-content {
+      max-height: calc(80% - #{$modal-dialog-margin * 1});
+      align-self: flex-end;
+    }
+
+    &::before {
+      content: none;
+    }
+  }
 }
 
 // Actual modal
@@ -141,11 +195,27 @@
   @include border-top-radius($modal-content-border-radius);
 
   .close {
-    font-size: 2 * $font-size-base;
+    font-size: $modal-close-font-size;
+    //line-height: $modal-close-line-height;
     opacity: 1;
-    padding: $modal-header-padding-y $modal-header-padding-x;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: $modal-close-bg;
+    color: $modal-close-color;
+    //border: 1px solid $modal-close-border-color;
+    //padding: $modal-header-padding-y $modal-header-padding-x;
     // auto on the left force icon to the right even when there is no .modal-title
-    margin: (-$modal-header-padding-y) (-$modal-header-padding-x) (-$modal-header-padding-y) auto;
+    //margin: (-$modal-header-padding-y) (-$modal-header-padding-x) (-$modal-header-padding-y) auto;
+    margin: calc(-#{$modal-header-padding-y} * 1.5) calc(-#{$modal-header-padding-x} * 1.5) (-$modal-header-padding-y) auto;
+
+    // Added by Stulipan
+    @include media-breakpoint-down(sm) {
+      margin-right: 0;
+    }
+
+    &:hover {
+      opacity: 1 !important;
+    }
   }
 }
 
@@ -189,26 +259,30 @@
 }
 
 // Scale up the modal
-@include media-breakpoint-up(sm) {
+@include media-breakpoint-down(sm) {
   // Automatically set modal's width for larger viewports
   .modal-dialog {
-    max-width: $modal-md;
-    margin: $modal-dialog-margin-y-sm-up auto;
+    //max-width: $modal-md;
+    max-width: $modal-sm-full-width;
+    //margin: $modal-dialog-margin-y-sm-up auto;
   }
 
   .modal-dialog-scrollable {
-    max-height: calc(100% - #{$modal-dialog-margin-y-sm-up * 2});
+    //max-height: calc(100% - #{$modal-dialog-margin-y-sm-up * 2});
+    //max-height: calc(100% - #{$modal-dialog-margin * 2});
 
     .modal-content {
-      max-height: calc(100vh - #{$modal-dialog-margin-y-sm-up * 2});
+      //max-height: calc(100vh - #{$modal-dialog-margin-y-sm-up * 2});
+      //max-height: calc(100vh - #{$modal-dialog-margin-y * 2});
     }
   }
 
   .modal-dialog-centered {
-    min-height: calc(100% - #{$modal-dialog-margin-y-sm-up * 2});
+    //min-height: calc(100% - #{$modal-dialog-margin-y-sm-up * 2});
+    //min-height: calc(100% - #{$modal-dialog-margin * 2});
 
     &::before {
-      height: calc(100vh - #{$modal-dialog-margin-y-sm-up * 2});
+      //height: calc(100vh - #{$modal-dialog-margin-y-sm-up * 2});
     }
   }
 

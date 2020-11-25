@@ -1,9 +1,9 @@
 // Sidebars
 
 // Padding applied to the sidebar body
-$sidebar-inner-padding:               1.25rem !default;
-$sidebar-inner-padding-y:             1.25rem !default;
-$sidebar-inner-padding-x:             1.25rem !default;
+$sidebar-inner-padding:               1rem !default;
+$sidebar-inner-padding-y:             1rem !default;
+$sidebar-inner-padding-x:             1rem !default;
 
 $sidebar-dialog-margin:               0 !default;
 $sidebar-dialog-margin-y-sm-up:       1.75rem !default;
@@ -25,7 +25,7 @@ $sidebar-footer-border-color:         $sidebar-header-border-color !default;
 $sidebar-header-border-width:         $sidebar-content-border-width !default;
 $sidebar-footer-border-width:         $sidebar-header-border-width !default;
 $sidebar-header-padding-y:            1rem !default;
-$sidebar-header-padding-x:            1.25rem !default;
+$sidebar-header-padding-x:            1rem !default;
 $sidebar-header-padding:              $sidebar-header-padding-y $sidebar-header-padding-x !default; // Keep this for backwards compatibility
 
 $sidebar-xl:                          1140px !default;
@@ -44,6 +44,10 @@ $sidebar-md:                          550px !default;
 $sidebar-sm:                          320px !default;
 $sidebar-default:                     380px !default;
 
+$sidebar-close-font-size:             2rem !default;
+$sidebar-close-line-height:            $line-height-base !default;
+$sidebar-close-bg:                    $gray-900 !default;
+$sidebar-close-color:                 $white !default;
 
 
 // .sidebar-open      - body class for killing the scroll
@@ -340,12 +344,21 @@ $sidebar-default:                     380px !default;
   @include border-top-radius($sidebar-content-border-radius);
 
   .close {
-    //font-size: 2.5 * $font-size-base;
-    font-weight: $font-weight-light;
+    font-size: $sidebar-close-font-size;
+    line-height: calc(#{$line-height-base} * 1rem + #{$sidebar-header-padding-y} * 2);
+    //font-weight: $font-weight-light;
     opacity: 1;
-    padding: $sidebar-header-padding-y $sidebar-header-padding-x;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    background-color: $sidebar-close-bg;
+    color: $sidebar-close-color;
+    //padding: $sidebar-header-padding-y $sidebar-header-padding-x;
     // auto on the left force icon to the right even when there is no .sidebar-title
     margin: (-$sidebar-header-padding-y) (-$sidebar-header-padding-x) (-$sidebar-header-padding-y) auto;
+
+    &:hover {
+      opacity: 1 !important;
+    }
   }
 }
 

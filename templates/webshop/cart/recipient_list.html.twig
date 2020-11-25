@@ -1,39 +1,33 @@
-{#<div class="row">#}
-{#    <div class="col-lg-12">#}
-{#        <div class="row no-margins">#}
-                <div class="col-lg-12X mb-4">
-                    <span class="text-muted">{{ 'checkout.recipient.previously-saved-recipients-modal-description'|trans }}</span>
-                </div>
-            {% for recipient in recipients %}
+    <div class="col-lg-12X mb-4">
+        <span class="text-muted">{{ 'checkout.recipient.previously-saved-recipients-modal-description'|trans }}</span>
+    </div>
+{% for recipient in recipients %}
 {#                {{ include('webshop/cart/recipient_widget.html.twig') }}#}
-                <div class="col-md-12X checkout-recipient-item">
-                    <div class="JS--item h-100">
-                        <div class="d-flex flex-column flex-sm-row justify-content-between h-100">
-                            <div class="">
-                                <span class="minicard--title">{{ recipient.fullname }}</span> {% if selectedRecipient is defined and selectedRecipient == recipient.id %}<span class="text-primary"><i class="far fa-check-circle"></i></span>{% endif %}<br>
-                                <span class="minicard--address">{{ recipient.address.street }}</span> <br>
-                                <span class="minicard--address">{{ recipient.address.zip }} {{ recipient.address.city }}</span> <br>
-                                <span class="minicard--address">{{ recipient.address.province }}, {{ recipient.address.country }}</span> <br>
-                                <span class="minicard--address">{{ recipient.phone }}</span> <br>
-                            </div>
-                            <div class="d-flex align-items-center h-100 mt-2 mt-sm-0">
-                                <div class="d-flex flex-row flex-sm-column h-100">
-                                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                        <a href="{{ path('cart-pickRecipient', {id: recipient.id}) }}" class="JS--Button-pickRecipient btn btn-primary btn-sm mb-0 mb-sm-2" data-selector="button" data-eval="pickRecipient">
-                                            <span class="btn-loading-invisible">{{ 'checkout.recipient.select-recipient'|trans }}</span>
-                                            <div class="loading-spinner" role="status"></div>
-                                        </a>
-                                    {% endif %}
-                                    <button class="JS--Button-deleteRecipient btn btn-sm btn-secondary ml-2 ml-sm-0" data-selector="button" data-eval="deleteRecipient" data-url="{{ path('cart-deleteRecipient', {id: recipient.id}) }}">
-                                        <span class="btn-loading-invisible">{{ 'generic.delete'|trans }}</span>
-                                        <div class="loading-spinner" role="status"></div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+    <div class="col-md-12X checkout-recipient-item">
+        <div class="JS--item h-100">
+            <div class="d-flex flex-column flex-sm-row justify-content-between h-100">
+                <div class="">
+                    <span class="minicard--title">{{ recipient.fullname }}</span> {% if selectedRecipient is defined and selectedRecipient == recipient.id %}<span class="text-primary"><i class="far fa-check-circle"></i></span>{% endif %}<br>
+                    <span class="minicard--address">{{ recipient.address.street }}</span> <br>
+                    <span class="minicard--address">{{ recipient.address.zip }} {{ recipient.address.city }}</span> <br>
+                    <span class="minicard--address">{{ recipient.address.province }}, {{ recipient.address.country }}</span> <br>
+                    <span class="minicard--address">{{ recipient.phone }}</span> <br>
+                </div>
+                <div class="d-flex align-items-center h-100 mt-2 mt-sm-0">
+                    <div class="d-flex flex-row flex-sm-column h-100">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <a href="{{ path('cart-pickRecipient', {id: recipient.id}) }}" class="JS--Button-pickRecipient btn btn-primary btn-sm mb-0 mb-sm-2" data-selector="button" data-eval="pickRecipient">
+                                <span class="btn-loading-invisible">{{ 'checkout.recipient.select-recipient'|trans }}</span>
+                                <div class="loading-spinner" role="status"></div>
+                            </a>
+                        {% endif %}
+                        <button class="JS--Button-deleteRecipient btn btn-sm btn-secondary ml-2 ml-sm-0" data-selector="button" data-eval="deleteRecipient" data-url="{{ path('cart-deleteRecipient', {id: recipient.id}) }}">
+                            <span class="btn-loading-invisible">{{ 'generic.delete'|trans }}</span>
+                            <div class="loading-spinner" role="status"></div>
+                        </button>
                     </div>
                 </div>
-            {% endfor %}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
+            </div>
+        </div>
+    </div>
+{% endfor %}

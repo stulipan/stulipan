@@ -32,20 +32,16 @@
                     <div class="modal fade" id="modal--recipientList" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                             <div class="modal-content">
-                                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-                                    <svg class="svg-icon w-100 h-100 svg-icon-light align-middle">
-                                        <use xlink:href="#close-1"> </use>
-                                    </svg>
-                                    {#                                        <span aria-hidden="true">&times;</span>#}
-                                </button>
+{#                                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">#}
+{#                                    <svg class="svg-icon w-100 h-100 svg-icon-light align-middle">#}
+{#                                        <use xlink:href="#close-1"> </use>#}
+{#                                    </svg>#}
+{#                                </button>#}
                                 <div class="modal-header">
                                     <p class="modal-title" id="modalLabel">{{ 'checkout.recipient.previously-saved-recipients-modal-title'|trans}}</p>
-{#                                    <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">#}
-{#                                        <svg class="svg-icon w-100 h-100 svg-icon-light align-middle">#}
-{#                                            <use xlink:href="#close-1"> </use>#}
-{#                                        </svg>#}
-{#                                        <span aria-hidden="true">&times;</span>#}
-{#                                    </button>#}
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 <div class="modal-body" data-wrapper-recipient-list>
                                     {% if recipients is defined %}

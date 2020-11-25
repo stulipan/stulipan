@@ -1033,9 +1033,9 @@ $badge-pill-border-radius:          10rem !default;
 // Modals
 
 // Padding applied to the modal body
-$modal-inner-padding:               1.25rem !default;
-$modal-inner-padding-y:             1.25rem !default;
-$modal-inner-padding-x:             1.25rem !default;
+$modal-inner-padding:               1rem !default;
+$modal-inner-padding-y:             1rem !default;
+$modal-inner-padding-x:             1rem !default;
 
 $modal-dialog-margin:               .5rem !default;
 $modal-dialog-margin-y-sm-up:       1.75rem !default;
@@ -1050,14 +1050,14 @@ $modal-content-border-radius:       $border-radius-lg !default;
 $modal-content-box-shadow-xs:       0 .25rem .5rem rgba($black, .5) !default;
 $modal-content-box-shadow-sm-up:    0 0 0 1px rgba($gray-800, .05), 0 1px 11px 0 rgba($gray-800, 0.15) !default; //0 .5rem 1rem rgba($black, .5) !default;
 
-$modal-backdrop-bg:                 $gray-900 !default;
-$modal-backdrop-opacity:            .3 !default;
+$modal-backdrop-bg:                 $black !default; //$gray-900 !default;
+$modal-backdrop-opacity:            .5 !default; //.3 !default;
 $modal-header-border-color:         $gray-300 !default;
 $modal-footer-border-color:         $modal-header-border-color !default;
 $modal-header-border-width:         $modal-content-border-width !default;
 $modal-footer-border-width:         $modal-header-border-width !default;
 $modal-header-padding-y:            1rem !default;
-$modal-header-padding-x:            1.25rem !default;
+$modal-header-padding-x:            1rem !default;
 $modal-header-padding:              $modal-header-padding-y $modal-header-padding-x !default; // Keep this for backwards compatibility
 
 $modal-xl:                          1140px !default;
@@ -1065,11 +1065,18 @@ $modal-lg:                          800px !default;
 $modal-md:                          550px !default;
 $modal-md-2:                        620px !default;
 $modal-sm:                          300px !default;
+$modal-sm-full-width:               100% !default;
 
 $modal-fade-transform:              scale(.8) !default; //translate(0, -50px) !default;
 $modal-show-transform:              none !default;
 $modal-transition:                  transform .2s ease-out !default;
 
+// Added by Stulipan
+$modal-close-font-size:             2rem !default;
+$modal-close-line-height:            $line-height-base !default;
+$modal-close-bg:                    $gray-900 !default;
+$modal-close-color:                 $white !default;
+$modal-close-border-color:          $gray-900 !default;
 
 // Alerts
 //

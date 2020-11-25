@@ -1,43 +1,37 @@
-{#<div class="row">#}
-{#    <div class="col-lg-12">#}
-{#        <div class="row no-margins">#}
-                <div class="col-lg-12X mb-4">
-                    <span class="text-muted">Válassz az elmentett számlázási címeid közűl</span>
-                </div>
-            {% for sender in senders %}
-                {#{{ include('webshop/cart/sender_widget.html.twig') }}#}
-                <div class="col-md-12X checkout-sender-item">
-                    <div class="JS--item h-100">
-                        <div class="selected-bodyX d-flex flex-column flex-sm-row justify-content-between h-100">
-                            <div class="">
-                                <span class="minicard--title mb-1">{{ sender.fullname }}</span> {% if selectedSender is defined and selectedSender == sender.id %}<span class="text-primary"><i class="far fa-check-circle"></i></span>{% endif %}<br>
-                                {% if sender.company is defined and sender.company %}
-                                    <span class="minicard--title mb-1">{{ sender.company }}</span> {{ sender.companyVatNumber is defined and sender.companyVatNumber ? '('~sender.companyVatNumber~')' : '' }} <br>
-                                {% endif %}
-                                <span class="minicard--address">{{ sender.address.street }}</span> <br>
-                                <span class="minicard--address">{{ sender.address.zip }} {{ sender.address.city }}</span> <br>
-                                <span class="minicard--address">{{ sender.address.province }}, {{ sender.address.country }}</span> <br>
+    <div class="col-lg-12X mb-4">
+        <span class="text-muted">Válassz az elmentett számlázási címeid közűl</span>
+    </div>
+{% for sender in senders %}
+    {#{{ include('webshop/cart/sender_widget.html.twig') }}#}
+    <div class="col-md-12X checkout-sender-item">
+        <div class="JS--item h-100">
+            <div class="selected-bodyX d-flex flex-column flex-sm-row justify-content-between h-100">
+                <div class="">
+                    <span class="minicard--title mb-1">{{ sender.fullname }}</span> {% if selectedSender is defined and selectedSender == sender.id %}<span class="text-primary"><i class="far fa-check-circle"></i></span>{% endif %}<br>
+                    {% if sender.company is defined and sender.company %}
+                        <span class="minicard--title mb-1">{{ sender.company }}</span> {{ sender.companyVatNumber is defined and sender.companyVatNumber ? '('~sender.companyVatNumber~')' : '' }} <br>
+                    {% endif %}
+                    <span class="minicard--address">{{ sender.address.street }}</span> <br>
+                    <span class="minicard--address">{{ sender.address.zip }} {{ sender.address.city }}</span> <br>
+                    <span class="minicard--address">{{ sender.address.province }}, {{ sender.address.country }}</span> <br>
 {#                                <span class="minicard--address">{{ sender.phone }}</span>#}
-                            </div>
+                </div>
 
-                            <div class="d-flex align-items-center h-100 mt-2 mt-sm-0">
-                                <div class="d-flex flex-row flex-sm-column h-100">
-                                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                        <a href="{{ path('cart-pickSender', {id: sender.id}) }}" class="JS--Button-pickSender btn btn-primary btn-sm mb-0 mb-sm-2" data-selector="button" data-eval="pickSender">
-                                            <span class="btn-loading-invisible">Kiválaszt</span>
-                                            <div class="loading-spinner" role="status"></div>
-                                        </a>
-                                    {% endif %}
-                                    <button class="JS--Button-deleteSender btn btn-sm btn-secondary btn-link-secondaryX ml-2 ml-sm-0" data-selector="button" data-eval="deleteSender" data-url="{{ path('cart-deleteSender', {id: sender.id}) }}">
-                                        <span class="btn-loading-invisible">Töröl</span>
-                                        <div class="loading-spinner" role="status"></div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                <div class="d-flex align-items-center h-100 mt-2 mt-sm-0">
+                    <div class="d-flex flex-row flex-sm-column h-100">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <a href="{{ path('cart-pickSender', {id: sender.id}) }}" class="JS--Button-pickSender btn btn-primary btn-sm mb-0 mb-sm-2" data-selector="button" data-eval="pickSender">
+                                <span class="btn-loading-invisible">Kiválaszt</span>
+                                <div class="loading-spinner" role="status"></div>
+                            </a>
+                        {% endif %}
+                        <button class="JS--Button-deleteSender btn btn-sm btn-secondary btn-link-secondaryX ml-2 ml-sm-0" data-selector="button" data-eval="deleteSender" data-url="{{ path('cart-deleteSender', {id: sender.id}) }}">
+                            <span class="btn-loading-invisible">Töröl</span>
+                            <div class="loading-spinner" role="status"></div>
+                        </button>
                     </div>
                 </div>
-            {% endfor %}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
+            </div>
+        </div>
+    </div>
+{% endfor %}

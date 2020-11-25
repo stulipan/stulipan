@@ -46,6 +46,7 @@ $order-summary-total-font-size:             1.1rem !default;
     }
     & .cart-item-price {
       color: $cart-item-link-color;
+      white-space: nowrap;
     }
     & .cart-item-quantity {
       font-size: $font-size-sm;

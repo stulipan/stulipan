@@ -122,8 +122,8 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script>
-        {{ parent() }}
         // $(document).ready(function() {
         //     $('#username').focus();
         // });

@@ -114,15 +114,18 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        $request->getSession()->set('_locale', $request->getLocale());
+
 //        dd($request->getPathInfo() === $this->router->generate('admin-login'));
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
         /**
-         * If login URL is admin-login URL, redirects to Boltzaras
+         * If login URL is admin-login URL, redirects to Dashboard
          */
+//        dd($this->router->generate('admin-login'));
         if ($request->getPathInfo() === $this->router->generate('admin-login')) {
-            return new RedirectResponse($this->router->generate('boltzaras_list'));
+            return new RedirectResponse($this->router->generate('dashboard'));
         }
         return new RedirectResponse($this->router->generate('site-cart'));
     }
@@ -134,6 +137,4 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         return $this->router->generate('admin-login');
     }
-
-
 }

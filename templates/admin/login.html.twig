@@ -23,7 +23,6 @@
                         <form class="form-signin text-center" action="{{ path('admin-login') }}" method="post">
                             <div class="text-center m-auto">
                                 <h4 class="text-dark-50 text-center mt-0 font-weight-bold">Bejelentkezés</h4>
-                                <p class="text-muted mb-4">Csak jogosultak részére :P</p>
                             </div>
                             {% if error %}
                                 <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -51,91 +50,9 @@
                     </div>
                 </div>
                 <div class="d-block text-center text-muted-extra mt-3">
-                    2018 © Tulipanfutar.hu
+                    2018-2020 © Tulipanfutar.hu
                 </div>
             </div>
         </div>
     </div>
-
-
-{#<div class="w-100 h-100 authentication-bg">#}
-{#<div class="py-5">#}
-    {#<div class="container">#}
-        {#<div class="row justify-content-center">#}
-            {#<div class="col-lg-5">#}
-                {#<div class="card">#}
-
-                    {#<!-- LOGO -->#}
-                    {#<div class="card-header py-3 text-center bg-primaryX">#}
-                        {#<a href="{{ path('index') }}" class="logo text-center my-1" target="_blank">#}
-                        {#<span class="logo-lg">#}
-                                {#<h3 class="font-weight-bold text-uppercase mb-0">tulipan<span class="text-danger">.</span>futar  </h3>#}
-                        {#</span>#}
-                        {#</a>#}
-                    {#</div>#}
-
-                    {#<div class="card-body p-4">#}
-
-                        {#<form class="form-signin text-center" action="{{ path('admin-login') }}" method="post">#}
-
-                            {#<div class="text-center w-75 m-auto">#}
-                                {#<h4 class="text-dark-50 text-center mt-0 font-weight-bold">Bejelentkezés</h4>#}
-                                {#<p class="text-muted mb-4">Csak jogosultak részére :P</p>#}
-                            {#</div>#}
-                            {#{% if error %}#}
-                                {#<div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
-                            {#{% endif %}#}
-
-
-                            {#<div class="form-group">#}
-                                {#<label for="username" class="sr-only">Email cím</label>#}
-                                {#<input type="text" id="username" name="_username" class="form-control" placeholder="Email cím" required {% if last_username is empty %}autofocus{% endif %} value="{{ last_username }}" />#}
-                            {#</div>#}
-
-                            {#<div class="form-group">#}
-                                {#<label for="inputPassword" class="sr-only">Jelszó</label>#}
-                                {#<input type="password" id="inputPassword" name="_password" class="form-control" placeholder="Jelszó" required />#}
-                            {#</div>#}
-
-                            {#<div class="form-group mb-3 text-left">#}
-                                {#<div class="custom-control custom-checkbox">#}
-                                    {#<input type="checkbox" id="checkbox-signin" name="_remember_me" class="custom-control-input">#}
-                                    {#<label class="custom-control-label font-weight-normal" for="checkbox-signin">Remember me</label>#}
-                                {#</div>#}
-                            {#</div>#}
-
-                            {#<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">#}
-
-                            {#<div class="form-group mb-0 text-center">#}
-                                {#<button class="btn btn-primary btn-lg btn-block" type="submit"> Belépés </button>#}
-                            {#</div>#}
-
-                        {#</form>#}
-                    {#</div> <!-- end card-body -->#}
-                {#</div>#}
-                {#<!-- end card -->#}
-
-                {#<div class="row mt-3">#}
-                    {#<div class="col-12 text-center">#}
-                        {#<p class="text-muted">&copy; 2018 Tulipanfutar.hu#}
-                            {#Don't have an account? <a href="pages-register.html" class="text-dark ml-1"><b>Sign Up</b></a>#}
-                        {#</p>#}
-                    {#</div> <!-- end col -->#}
-                {#</div>#}
-                {#<!-- end row -->#}
-            {#</div> <!-- end col -->#}
-            {#<footer class="footer footer-alt">#}
-                {#2018 © Tulipanfutar.hu#}
-            {#</footer>#}
-
-        {#</div>#}
-        {#<!-- end row -->#}
-
-    {#</div>#}
-
-
-{#</div>#}
-
-
-{#</div>#}
 {% endblock %}

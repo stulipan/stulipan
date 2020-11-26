@@ -9,6 +9,9 @@ admin:
 logout:
     path: /logout
 
+#admin-logout:
+#    path: "/{all}/admin/logout"
+
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.yaml"
 

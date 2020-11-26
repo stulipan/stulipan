@@ -62,12 +62,18 @@ security:
                     - App\Security\TokenAuthenticator
 #                    - lexik_jwt_authentication.jwt_token_authenticator # Hasznald ezt a sajat authenticatorod helyett.
         admin:
-            pattern: ^/{_locale}/admin/
+#            pattern: ^/(hu|en)/admin           # ez is mukodik, vagy altalanosabb az also sor
+            pattern: ^/%app_locales%/admin      #app_locales come from services.yaml
             provider: app_user_provider_from_sajat_db
             anonymous: true
             guard:
                 authenticators:
                     - App\Security\AdminLoginFormAuthenticator
+            form_login:
+                login_path: admin-login
+                check_path: admin-login
+                csrf_token_generator: security.csrf.token_manager
+                use_referer: true
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 2592000 # 30 days in seconds, if missing, default is one year.

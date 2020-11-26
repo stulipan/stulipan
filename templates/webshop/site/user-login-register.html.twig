@@ -123,8 +123,11 @@
 
 {% block javascripts %}
     <script>
-        $(document).ready(function() {
-            $('#username').focus();
-        });
+        // $(document).ready(function() {
+        //     $('#username').focus();
+        // });
+        window.onload = function() {
+            document.getElementById("username").focus();
+        };
     </script>
 {% endblock %}

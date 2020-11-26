@@ -190,7 +190,7 @@ a {
   }
 
   &:focus {
-    outline: var(--p-override-none,rgba($primary,.5) auto .45rem);  // Added by Stulipan
+    //outline: var(--p-override-none,rgba($primary,.5) auto .45rem);  // Added by Stulipan
   }
 }
 

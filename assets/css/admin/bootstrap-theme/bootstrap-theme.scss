@@ -110,6 +110,8 @@ $nm-x:          1rem !default;
   }
 }
 
+:focus:not(:focus-visible) { outline: none }
+
 @-webkit-keyframes rotate {
   0% {
     transform: rotate(0deg)

@@ -113,7 +113,7 @@
       flex-direction: row;
 
       .modal-content {
-        max-height: calc(80% - #{$modal-dialog-margin * 1});
+        max-height: calc(90% - #{$modal-dialog-margin * 1});
         align-self: flex-end;
       }
     }

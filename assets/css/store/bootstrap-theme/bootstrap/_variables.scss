@@ -1067,7 +1067,7 @@ $modal-md-2:                        620px !default;
 $modal-sm:                          300px !default;
 $modal-sm-full-width:               100% !default;
 
-$modal-fade-transform:              scale(.8) !default; //translate(0, -50px) !default;
+$modal-fade-transform:              translate(0, 50px) !default; //scale(.8) !default;
 $modal-show-transform:              none !default;
 $modal-transition:                  transform .2s ease-out !default;
 

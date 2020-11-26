@@ -120,3 +120,11 @@
 
 {% block footerHighlights %}
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('#username').focus();
+        });
+    </script>
+{% endblock %}

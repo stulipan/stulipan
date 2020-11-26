@@ -22,13 +22,13 @@
             <div class="cart-collapse-header">
                 <div class="container">
                     <div class="d-flex justify-content-between align-items-center py-3">
-                        <a href="#" class="btn-btn-link" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        <a href="#" class="cart-collapse-title" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                             <svg class="svg-icon svg-icon-heavy addtocart">
                                 <use xlink:href="#cart-1"> </use>
                             </svg>
                             {{ 'cart.show-order-summary'|trans }}
                         </a>
-                        <span class="JS--summaryTotal">{{ order.summary.totalAmountToPay|money }}</span>
+                        <span class="JS--summaryTotal text-nowrap">{{ order.summary.totalAmountToPay|money }}</span>
                     </div>
                 </div>
             </div>

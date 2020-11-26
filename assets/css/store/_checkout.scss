@@ -158,6 +158,11 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
       border-bottom: $checkout-shopi-collapse-header-border-width solid $checkout-shopi-collapse-header-border-color;
     }
   }
+
+  & .cart-collapse-total {
+    white-space: nowrap;
+    font-weight: $font-weight-bold;
+  }
 }
 
 .checkout-page.checkout-asos .cart-collapse {

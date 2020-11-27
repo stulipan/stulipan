@@ -20,7 +20,7 @@
     <div class="card">
         <div class="">
             <div class="card-body">
-                <div class="card-title h4 mb-0">Előző rendeléseid</div>
+                <div class="card-title h3 mb-0">Előző rendeléseid</div>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="pagerfanta mt-3">
                     {% if paginator is defined and paginator is not empty %}
-                        {{ pagerfanta(paginator, 'twitter_bootstrap4') }}
+                        {{ pagerfanta(paginator, 'twitter_bootstrap4', { 'prev_message': 'generic.prev'|trans, 'next_message': 'generic.next'|trans }) }}
                     {% endif %}
                 </div>
 {% endblock %}

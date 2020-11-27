@@ -65,9 +65,15 @@ $nm-x:          1.25rem !default;
   background-color: #f0f3f5;
 }
 
-.pagination {
-  margin-bottom: 0;
+.pagerfanta {
+  font-size: $font-size-base-secondary;
+  /* text-transform: uppercase; */
+
+  & .pagination {
+    margin-bottom: 0;
+  }
 }
+
 
 
 :focus:not(:focus-visible) { outline: none }

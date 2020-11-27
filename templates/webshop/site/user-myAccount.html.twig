@@ -18,7 +18,7 @@
     <div class="card mb-20px">
         <div class="">
             <div class="card-body">
-                <div class="card-title h4">{{ 'account.last-orders'|trans }}</div>
+                <div class="card-title h3">{{ 'account.last-orders'|trans }}</div>
                 <div class="previous-orders list-group">
                     {% if customer.ordersPlaced is defined and customer.ordersPlaced is not empty %}
                         {% for order in customer.ordersPlaced|slice(0,1) %}

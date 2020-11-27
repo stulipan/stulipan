@@ -221,7 +221,7 @@
                             <img class="center-block w-25 mb-4 service-icon" src="{{  asset('uploads/images/icons/futar-kezbesites-1.png') }}">
                             <h6 class="text-uppercase">Házhozszállítás akár aznap</h6>
 
-                            <p class="font-weight-light text-sm">A gyors kézbesítést saját futárokkal biztosítjuk, választható időpontban. A szállítási módokról és díjakról <a class="text-underlineX" href="{{ path('shipping_details') }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+                            <p class="font-weight-light text-sm">A gyors kézbesítést saját futárokkal biztosítjuk, választható időpontban. A szállítási módokról és díjakról <a class="text-underlineX" href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
                             </p>
                         </div>
 
@@ -310,8 +310,8 @@
 					<div class="col-sm-6 col-md-4 col-lg-2 mb-3 mb-lg-0">
 						<h6 class="text-uppercase  mb-2">Információk</h6>
 						<ul class="list-unstyled">
-							<li> <a href="{{ path('about') }}" class="">Rólunk                    </a></li>
-							<li> <a href="{{ path('shipping_details') }}" class="">Szállítási díjak                    </a></li>
+							<li> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="">Rólunk</a></li>
+							<li> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="">Szállítási díjak</a></li>
 						</ul>
 					</div>
 					<div class="col-sm-6 col-md-12 col-lg-4">
@@ -345,6 +345,7 @@
 			</div>
 		</div>
 	</footer>
+
 
 {% endblock %}
 

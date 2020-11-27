@@ -10,19 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ShopController extends AbstractController
 {
 
-    /**
-     * @Route("/szallitasi-dijak", name="shipping_details")
-     */
-    public function showShippingInfo()
-    {
-        return $this->render('webshop/site/shipping_details.html.twig');
-    }
-
-
-
-
-
-
 
 //    public function generateProductList($categoryId = NULL)
 //    {
@@ -66,15 +53,6 @@ class ShopController extends AbstractController
 //        dd($metaTitle);
         $products= $this->getDoctrine()->getRepository(Product::class)->findAll();
         return $this->render('webshop/site/homepage.html.twig', ['products' => $products]);
-    }
-
-    /**
-     * @Route("/rolunk", name="about")
-     */
-    public function showAbout()
-    {
-
-        return $this->render('webshop/site/about.html.twig');
     }
 
     /**

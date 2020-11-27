@@ -30,7 +30,7 @@ class CartRecipientController extends AbstractController
      */
     private $orderBuilder;
 
-    private $erroMessage = 'Unauthorized access: Request must come through XmlHttpRequest and user must be logged in!';
+    private $errorMessage = 'Unauthorized access: Request must come through XmlHttpRequest and user must be logged in!';
 
     public function __construct(OrderBuilder $orderBuilder)
     {
@@ -124,7 +124,7 @@ class CartRecipientController extends AbstractController
                 'recipientForm' => $form->createView(),
             ]);
         } else {
-            return new JsonResponse(['error' => $this->erroMessage], Response::HTTP_UNAUTHORIZED); // 401
+            return new JsonResponse(['error' => $this->errorMessage], Response::HTTP_UNAUTHORIZED); // 401
         }
       throw $this->createAccessDeniedException("You don't have access to this page!");
     }
@@ -212,7 +212,7 @@ class CartRecipientController extends AbstractController
                 'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
             ]);
         } else {
-            return new JsonResponse(['error' => $this->erroMessage], Response::HTTP_UNAUTHORIZED); // 401
+            return new JsonResponse(['error' => $this->errorMessage], Response::HTTP_UNAUTHORIZED); // 401
         }
 
         throw $this->createAccessDeniedException("You don't have access to this page!");
@@ -269,7 +269,7 @@ class CartRecipientController extends AbstractController
                 ]);
             }
         } else {
-            return new JsonResponse(['error' => $this->erroMessage], Response::HTTP_UNAUTHORIZED); // 401
+            return new JsonResponse(['error' => $this->errorMessage], Response::HTTP_UNAUTHORIZED); // 401
         }
         throw $this->createAccessDeniedException("You don't have access to this page!");
     }
@@ -294,7 +294,7 @@ class CartRecipientController extends AbstractController
                 return $this->redirectToRoute('cart-getRecipient');
             }
         } else {
-            return new JsonResponse(['error' => $this->erroMessage], Response::HTTP_UNAUTHORIZED); // 401
+            return new JsonResponse(['error' => $this->errorMessage], Response::HTTP_UNAUTHORIZED); // 401
         }
         throw $this->createAccessDeniedException("You don't have access to this page!");
     }

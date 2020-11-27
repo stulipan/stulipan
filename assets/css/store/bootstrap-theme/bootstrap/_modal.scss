@@ -186,11 +186,12 @@
 
 // Modal header
 // Top section of the modal w/ title and dismiss
+$zindex-modal-close         : $zindex-modal + 1 !default;
 .modal-header {
   display: flex;
   align-items: flex-start; // so the close btn always stays on the upper right corner
   justify-content: space-between; // Put modal header elements (title and dismiss) on opposite ends
-  padding: $modal-header-padding-y $modal-header-padding-x;
+  padding: $modal-header-padding-y $modal-header-padding-x 0 $modal-header-padding-x;
   //border-bottom: $modal-header-border-width solid $modal-header-border-color;
   @include border-top-radius($modal-content-border-radius);
 
@@ -198,15 +199,16 @@
     font-size: $modal-close-font-size;
     //line-height: $modal-close-line-height;
     opacity: 1;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
     background-color: $modal-close-bg;
     color: $modal-close-color;
     //border: 1px solid $modal-close-border-color;
     //padding: $modal-header-padding-y $modal-header-padding-x;
     // auto on the left force icon to the right even when there is no .modal-title
     //margin: (-$modal-header-padding-y) (-$modal-header-padding-x) (-$modal-header-padding-y) auto;
-    margin: calc(-#{$modal-header-padding-y} * 1.5) calc(-#{$modal-header-padding-x} * 1.5) (-$modal-header-padding-y) auto;
+    margin: calc(-#{$modal-header-padding-y} * 2) calc(-#{$modal-header-padding-x} * 2) (-$modal-header-padding-y) auto;
+    z-index: $zindex-modal-close;
 
     // Added by Stulipan
     @include media-breakpoint-down(sm) {
@@ -223,6 +225,11 @@
 .modal-title {
   margin-bottom: 0;
   line-height: $modal-title-line-height;
+  // Added by Stulipan
+  //margin-bottom: map_get($spacers, 5);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05rem;
 }
 
 // Modal body
@@ -232,7 +239,7 @@
   // Enable `flex-grow: 1` so that the body take up as much space as possible
   // when should there be a fixed height on `.modal-dialog`.
   flex: 1 1 auto;
-  padding: $modal-inner-padding;
+  padding: 0 $modal-inner-padding $modal-inner-padding $modal-inner-padding;
 }
 
 // Footer (for actions)

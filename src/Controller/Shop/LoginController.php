@@ -5,6 +5,7 @@ namespace App\Controller\Shop;
 use App\Entity\User;
 use App\Form\UserRegistration\UserRegistrationFormType;
 use App\Security\LoginFormAuthenticator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,7 +49,7 @@ class LoginController extends AbstractController
          *
          * Fontos, hogy sikeres login utan toroljem a session-bol!  >> legalabbis ez az elmelet. MOST NINCS TOROLVE!!
          */
-        $this->saveTargetPath($request->getSession(), 'main', $request->headers->get('referer'));
+        $this->saveTargetPath($request->getSession(), 'main', $request->headers->get('referer') ? $request->headers->get('referer') : '');
         
         return $this->render('webshop/site/user-login-register.html.twig', [
             'last_username' => $lastUsername,
@@ -116,4 +117,16 @@ class LoginController extends AbstractController
         ]);
     }
 
+    /**
+     * Used in AJAX calls, to check whether there is a logged in user.
+     *
+     * @Route("/authenticate", name="authenticate", methods={"POST", "GET"})
+     * @return JsonResponse
+     */
+    public function isCustomerAuthenticated() : JsonResponse
+    {
+        return new JsonResponse([
+            'isAuthenticated' => $this->getUser() !== null
+        ]);
+    }
 }

@@ -24,15 +24,12 @@
                         {#></checkout>#}
 
                         <div id="left_column" class="col-md-12 col-lg-10 mx-auto mt-4 mt-md-5">
-                            {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-                                {{ include('webshop/cart/already-registered-widget.html.twig') }}
-                            {% endif %}
                             <div id="basket_content" class="">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="JS--cartWrapper" data-wrapper-cart>
                                             <div class="JS--alertBlock text-center" data-wrapper-alert>
-                                                <h2>{{ 'cart.your-cart'|trans }}</h2>
+                                                <h2 class="cart-title">{{ 'cart.your-cart'|trans }}</h2>
                                             </div>
 
                                             {% include 'webshop/cart/alert-cartItems-insert.html.twig' %}
@@ -143,7 +140,7 @@
                                     <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
                                         <button data-selector="button" data-eval="submitGreetingCardForm" data-url="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="btn btn-lg btn-success btn-goto order-1 order-lg-2 px-2 px-md-4 py-3">
                                             <span class="btn-loading-invisible">{{ 'checkout.continue-to-recipient-address-button'|trans }}</span>
-                                            <div class="loading-spinner" role="status"></div>
+                                            <span class="loading-spinner" role="status"></span>
                                         </button>
                                         <div></div>
                                     </div>

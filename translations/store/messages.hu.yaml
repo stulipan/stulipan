@@ -124,8 +124,9 @@ checkout:
     missing-delivery-date: 'Válassz egy szállítási napot.'
     missing-shipping-method: 'Válassz szállítási módot!'
     missing-payment-method: 'Válassz fizetési módot!'
-    unknown-error: 'Ismeretlen hiba.'
-    ajax-failed: 'Hiba történt. kérjük frissítsd az oldalt és próbáld újra.'
+    unknown-error: 'Ismeretlen hiba. '
+    ajax-failed: 'Hiba történt. Kérjük frissítsd az oldalt és próbáld újra.'
+    user-logged-out: 'Nincs aktív felhasználói munkamenet. Kérjük frissítsd az oldalt és próbáld újra.'
 datetime:
     january: Január
     february: Február

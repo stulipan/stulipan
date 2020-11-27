@@ -163,6 +163,7 @@ checkout:
 
     unknown-error: 'Unknown error.'
     ajax-failed: 'Something went wrong. Please refresh the page and try again.'
+    user-logged-out: 'No active user session. Most likely user has logged out. Please refresh the page and try again.'
 
 datetime:
     january: January

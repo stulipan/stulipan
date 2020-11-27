@@ -14,7 +14,12 @@ $order-summary-border-width:                1px !default;
 $order-summary-border-color:                $cart-item-border-color !default;
 $order-summary-total-font-size:             1.1rem !default;
 
-
+.cart-title {
+  font-weight: $font-weight-bold;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing;
+}
 
 .cart {
   & .cart-item {
@@ -114,7 +119,7 @@ $order-summary-total-font-size:             1.1rem !default;
     position: absolute;
     width: 28px;
     height: 28px;
-    left: 0px;
+    left: 0;
     bottom: -2px;
     margin-right: 0;
     margin-bottom: 0;
@@ -166,7 +171,7 @@ $order-summary-total-font-size:             1.1rem !default;
     position: absolute;
     width: 6rem;
     height: 6rem;
-    right: 0px;
+    right: 0;
     bottom: -2px;
     margin-right: 0;
     margin-bottom: 0;

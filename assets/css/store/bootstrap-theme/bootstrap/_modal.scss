@@ -120,6 +120,7 @@
   }
 }
 
+
 // Nincs HASZNALATBAN !!!!!!!!!!!!!
 .modal-dialog-bottom {
   display: flex;
@@ -316,4 +317,16 @@ $zindex-modal-close         : $zindex-modal + 1 !default;
 
 @include media-breakpoint-up(xl) {
   .modal-xl { max-width: $modal-xl; }
+}
+
+// Added by Stulipan
+// Modal Quickinfo - on small mobile devices in doesn't expand the full width of the screen !!
+.modal-quickinfo {
+  @include media-breakpoint-down(sm) {
+    max-width: 90%;
+  }
+
+  & .modal-header .close {
+    margin-right: calc(-#{$modal-header-padding-x} * 2);
+  }
 }

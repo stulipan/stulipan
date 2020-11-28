@@ -2,23 +2,28 @@
 
 namespace App\Twig;
 
-//use ApiPlatform\Core\Tests\Fixtures\TestBundle\Entity\ThirdLevel;
+use App\Entity\CmsPage;
+use App\Entity\CmsPage4Twig;
 use App\Services\FileUploader;
 use App\Services\Localization;
 use App\Services\StoreSettings;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use phpDocumentor\Reflection\Types\This;
 use Psr\Container\ContainerInterface;
+use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class AppExtension extends AbstractExtension implements ServiceSubscriberInterface
+class AppExtension extends AbstractExtension implements ServiceSubscriberInterface, GlobalsInterface
 {
     private const UA_BROWSER_NAME = 'name';
     private const UA_BROWSER_VERSION = 'version';
@@ -28,20 +33,32 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     private $locale;
     private $translator;
     private $settings;
+    private $em;
 
     public function __construct(ContainerInterface $container, SessionInterface $session,
-                                Localization $localization, TranslatorInterface $translator, StoreSettings $settings)
+                                Localization $localization, TranslatorInterface $translator,
+                                StoreSettings $settings, EntityManagerInterface $em)
     {
         $this->container = $container;
         $this->locale = $localization->getLocale($session->get('_locale', 'hu'));
         $this->translator = $translator;
         $this->settings = $settings;
+        $this->em = $em;
     }
 
     public function getFunctions(): array
     {
         return [
-          new TwigFunction('uploaded_asset', [$this, 'getPathOfUploadedAsset'])
+            new TwigFunction('uploaded_asset', [$this, 'getPathOfUploadedAsset']),
+//            new TwigFunction('pages', [$this, 'getCmsPageContent']),
+        ];
+    }
+
+    public function getGlobals(): array
+    {
+        return [
+            'pages' => $this->getPages(),
+//            'pages' => 'pages',
         ];
     }
 
@@ -69,6 +86,32 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFilter('money', [$this, 'formatMoney']),
             new TwigFilter('number', [$this, 'formatNumber']),
         ];
+    }
+
+
+    public function getPages()
+    {
+        $cmsPages = $this->em->getRepository(CmsPage::class)->findAll();
+
+        $pages = [];
+        foreach ($cmsPages as $page => $value) {
+            $pages[$value->getSlug()] = $value;
+        }
+        $pages = $this->convertToObject($pages);
+        return $pages;
+    }
+
+    public function convertToObject($array)
+    {
+        $object = new stdClass();
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->convertToObject($value);
+            }
+            $camelCaseKey = lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $key))));
+            $object->$camelCaseKey = $value;
+        }
+        return $object;
     }
 
     public function formatMoney($amount)

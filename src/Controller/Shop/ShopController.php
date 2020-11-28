@@ -2,6 +2,8 @@
 
 namespace App\Controller\Shop;
 
+use App\Entity\CmsPage;
+use App\Entity\CmsPage4Twig;
 use App\Entity\Product\Product;
 use App\Services\StoreSettings;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,11 +51,10 @@ class ShopController extends AbstractController
      */
     public function showHomepage(StoreSettings $settings)
     {
-//        $metaTitle = $settings->get('meta-title');
-//        dd($metaTitle);
         $products= $this->getDoctrine()->getRepository(Product::class)->findAll();
         return $this->render('webshop/site/homepage.html.twig', ['products' => $products]);
     }
+
 
     /**
      * @Route("/404", name="404")

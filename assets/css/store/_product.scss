@@ -92,6 +92,17 @@
   & .product-credit-card {
     margin-top: map_get($spacers, 4);
   }
+  & .product-quickinfo-link {
+    margin-top: map_get($spacers, 4);
+
+    & .text-link-quickinfo {
+      //display: inline-block;
+      width: 100%;
+      font-size: $font-size-base-secondary;
+      color: $gray-900;
+      text-decoration: underline;
+    }
+  }
 }
 
 .product-reviews {

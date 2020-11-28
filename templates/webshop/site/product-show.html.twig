@@ -224,11 +224,41 @@
                                 {{ form_end(form) }}
 
                                 <div class="product-credit-card">
-                                    <div class="text-center p-0 px-2">
+                                    <div class="text-center">
                                         <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
                                         <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/termekek/paypal.png">
                                         <div class="text-sm">
                                             Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>
+                                    </div>
+                                </div>
+                                <div class="product-quickinfo-link">
+                                    <div class="">
+                                        <div>
+                                            <span class="text-sm mr-1"><i class="fas fa-shipping-fast"></i></span>
+                                            <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Szállítási díjak</a>
+                                            <div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
+                                                            <div class="mt-4">
+                                                                {{ pages.szallitasiDijak.content|raw }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div >
+                                            <span class="text-sm mr-1"><i class="far fa-credit-card"></i></span>
+                                            <a href="" class="text-link-quickinfo">Fizess online bankkártyáddal</a>
+                                        </div>
+
                                     </div>
                                 </div>
                             {% else %}

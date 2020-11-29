@@ -52,81 +52,78 @@ class CartRecipientController extends AbstractController
     }
 
     /**
-     * Handles the Sender form.
+     * Handles the Sender form. Only available for logged in users.
      * Create and submit the form from AJAX.
      *
      * @Route("/cart/editRecipient/{id}", name="cart-editRecipient", methods={"POST"})
      */
     public function editRecipientForm(Request $request, ?Recipient $recipient, $id = null, ValidatorInterface $validator)
     {
-        if ($request->isXmlHttpRequest() && $this->isGranted("IS_AUTHENTICATED_FULLY")) {
-            // If User from session is equal to User in Recipient
-            $orderBuilder = $this->orderBuilder;
-            $customer = $orderBuilder->getCurrentOrder()->getCustomer();
-            if (!$recipient) {
-                $orderBuilder->removeRecipient($orderBuilder->getCurrentOrder()->getRecipient());  // torli a mar elmentett Recipientet
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
-                $recipient = new Recipient();
-                $recipient->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
-                // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
-                $address = new Address();
-                $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
-                $recipient->setAddress($address);
-                $form = $this->createForm(RecipientType::class, $recipient);
-            } else {
-                $form = $this->createForm(RecipientType::class, $recipient);
+        // If User from session is equal to User in Recipient
+        $orderBuilder = $this->orderBuilder;
+        $customer = $orderBuilder->getCurrentOrder()->getCustomer();
+        if (!$recipient) {
+            $orderBuilder->removeRecipient($orderBuilder->getCurrentOrder()->getRecipient());  // torli a mar elmentett Recipientet
+
+            $recipient = new Recipient();
+            $recipient->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
+            // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
+            $address = new Address();
+            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
+            $recipient->setAddress($address);
+            $form = $this->createForm(RecipientType::class, $recipient);
+        } else {
+            $form = $this->createForm(RecipientType::class, $recipient);
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //elobb elmentem a recipient formadatokat a Recipient tablaba
+            $recipient = $form->getData();
+
+            $phone = $form->get('phone')->getData();
+
+            if ($customer) {
+                $recipient->setCustomer($customer); // a cimzettet egy Customerhez kotjuk
             }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($recipient);
+            $entityManager->flush();
 
-            $form->handleRequest($request);
+            $orderBuilder->setRecipient($recipient);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                //elobb elmentem a recipient formadatokat a Recipient tablaba
-                $recipient = $form->getData();
-
-                $phone = $form->get('phone')->getData();
-
-                if ($customer) {
-                    $recipient->setCustomer($customer); // a cimzettet egy Customerhez kotjuk
-                }
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($recipient);
-                $entityManager->flush();
-
-                $orderBuilder->setRecipient($recipient);
-
-                /** If AJAX request, returns the current Recipient */
-                if ($request->isXmlHttpRequest()) {
+            /** If AJAX request, returns the current Recipient */
+            if ($request->isXmlHttpRequest()) {
 //                    return $this->redirectToRoute('cart-getRecipient');
-                    return $this->render('webshop/cart/recipient_form.html.twig', [
-                        'order' => $orderBuilder->getCurrentOrder(),
-                        'recipientForm' => $form->createView(),
-                    ]);
-                }
-            }
-            /**
-             * Renders form with errors
-             * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
-             * (!?, there is a validation error)
-             */
-            if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
-                $html = $this->renderView('webshop/cart/recipient_form.html.twig', [
+                return $this->render('webshop/cart/recipient_form.html.twig', [
                     'order' => $orderBuilder->getCurrentOrder(),
                     'recipientForm' => $form->createView(),
                 ]);
-                return new Response($html, 400);
             }
-
-            /**
-             * Renders form initially with data
-             */
-            return $this->render('webshop/cart/recipient_form.html.twig', [
+        }
+        /**
+         * Renders form with errors
+         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
+         * (!?, there is a validation error)
+         */
+        if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('webshop/cart/recipient_form.html.twig', [
                 'order' => $orderBuilder->getCurrentOrder(),
                 'recipientForm' => $form->createView(),
             ]);
-        } else {
-            return new JsonResponse(['error' => $this->errorMessage], Response::HTTP_UNAUTHORIZED); // 401
+            return new Response($html, 400);
         }
-      throw $this->createAccessDeniedException("You don't have access to this page!");
+
+        /**
+         * Renders form initially with data
+         */
+        return $this->render('webshop/cart/recipient_form.html.twig', [
+            'order' => $orderBuilder->getCurrentOrder(),
+            'recipientForm' => $form->createView(),
+        ]);
     }
 
 
@@ -181,41 +178,37 @@ class CartRecipientController extends AbstractController
      */
     public function getRecipients(Request $request)
     {
-        if ($request->isXmlHttpRequest() && $this->isGranted("IS_AUTHENTICATED_FULLY")) {
-            $orderBuilder = $this->orderBuilder;
-            /** If the Order has a Customer, returns the list of the customer's Recipients */
-            if ($orderBuilder->getCurrentOrder()->getCustomer()) {
-                $recipients = $orderBuilder->getCurrentOrder()->getCustomer()->getRecipients();
-            } /** Else simply returns the Recipient from within the Order (Checkout whithout user registration) */
-            else {
-                $recipients = new ArrayCollection();
-                /** Verifies if a Recipient exists. If not return the Recipient form. */
-                if ($orderBuilder->hasRecipient()) {
-                    $recipients->add($orderBuilder->getCurrentOrder()->getRecipient());
-                }
-            }
-            if (!$recipients || $recipients->isEmpty()) {
-                $recipient = new Recipient();
-                // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
-                $address = new Address();
-                $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
-                $recipient->setAddress($address);
-                $form = $this->createForm(RecipientType::class, $recipient);
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
-                return $this->render('webshop/cart/recipient_form.html.twig', [
-                    'order' => $orderBuilder->getCurrentOrder(),
-                    'recipientForm' => $form->createView(),
-                ]);
+        $orderBuilder = $this->orderBuilder;
+        /** If the Order has a Customer, returns the list of the customer's Recipients */
+        if ($orderBuilder->getCurrentOrder()->getCustomer()) {
+            $recipients = $orderBuilder->getCurrentOrder()->getCustomer()->getRecipients();
+        } /** Else simply returns the Recipient from within the Order (Checkout whithout user registration) */
+        else {
+            $recipients = new ArrayCollection();
+            /** Verifies if a Recipient exists. If not return the Recipient form. */
+            if ($orderBuilder->hasRecipient()) {
+                $recipients->add($orderBuilder->getCurrentOrder()->getRecipient());
             }
-            return $this->render('webshop/cart/recipient_list.html.twig', [
-                'recipients' => $recipients,
-                'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
-            ]);
-        } else {
-            return new JsonResponse(['error' => $this->errorMessage], Response::HTTP_UNAUTHORIZED); // 401
         }
+        if (!$recipients || $recipients->isEmpty()) {
+            $recipient = new Recipient();
+            // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
+            $address = new Address();
+            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
+            $recipient->setAddress($address);
+            $form = $this->createForm(RecipientType::class, $recipient);
 
-        throw $this->createAccessDeniedException("You don't have access to this page!");
+            return $this->render('webshop/cart/recipient_form.html.twig', [
+                'order' => $orderBuilder->getCurrentOrder(),
+                'recipientForm' => $form->createView(),
+            ]);
+        }
+        return $this->render('webshop/cart/recipient_list.html.twig', [
+            'recipients' => $recipients,
+            'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
+        ]);
     }
 
     /**
@@ -257,21 +250,18 @@ class CartRecipientController extends AbstractController
      */
     public function pickRecipient(Request $request, Recipient $recipient)
     {
-        if ($request->isXmlHttpRequest() && $this->isGranted("IS_AUTHENTICATED_FULLY")) {
-            // If User from session is equal to User in Recipient
-            if ($this->getUser() === $recipient->getCustomer()) {
-                $orderBuilder = $this->orderBuilder;
-                $orderBuilder->setRecipient($recipient);
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
-                return $this->render('webshop/cart/recipient_form.html.twig', [
-                    'recipientForm' => $this->createForm(RecipientType::class, $recipient)->createView(),
-                    'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
-                ]);
-            }
-        } else {
-            return new JsonResponse(['error' => $this->errorMessage], Response::HTTP_UNAUTHORIZED); // 401
+        // If User from session is equal to User in Recipient
+        if ($this->getUser() === $recipient->getCustomer()) {
+            $orderBuilder = $this->orderBuilder;
+            $orderBuilder->setRecipient($recipient);
+
+            return $this->render('webshop/cart/recipient_form.html.twig', [
+                'recipientForm' => $this->createForm(RecipientType::class, $recipient)->createView(),
+                'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
+            ]);
         }
-        throw $this->createAccessDeniedException("You don't have access to this page!");
     }
     
     /**
@@ -281,21 +271,18 @@ class CartRecipientController extends AbstractController
      */
     public function deleteRecipient(Request $request, ?Recipient $recipient, $id = null)
     {
-        if ($request->isXmlHttpRequest() && $this->isGranted("IS_AUTHENTICATED_FULLY")) {
-            // If User from session is equal to User in Recipient
-            if ($this->getUser() === $recipient->getCustomer()) {
-                $this->orderBuilder->getCustomer()->removeRecipient($recipient);
-                if ($this->orderBuilder->getCurrentOrder()->getRecipient() == $recipient) {
-                    $this->orderBuilder->removeRecipient();
-                }
-                //            $this->orderBuilder->setFallbackRecipient();
-                $this->getDoctrine()->getManager()->remove($recipient);
-                $this->getDoctrine()->getManager()->flush();
-                return $this->redirectToRoute('cart-getRecipient');
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+
+        // If User from session is equal to User in Recipient
+        if ($this->getUser() === $recipient->getCustomer()) {
+            $this->orderBuilder->getCustomer()->removeRecipient($recipient);
+            if ($this->orderBuilder->getCurrentOrder()->getRecipient() == $recipient) {
+                $this->orderBuilder->removeRecipient();
             }
-        } else {
-            return new JsonResponse(['error' => $this->errorMessage], Response::HTTP_UNAUTHORIZED); // 401
+            //            $this->orderBuilder->setFallbackRecipient();
+            $this->getDoctrine()->getManager()->remove($recipient);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('cart-getRecipient');
         }
-        throw $this->createAccessDeniedException("You don't have access to this page!");
     }
 }

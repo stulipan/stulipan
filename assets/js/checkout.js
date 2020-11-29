@@ -675,25 +675,18 @@ class Checkout {
     let $wrapper = $el.closest(Wrapper.RECIPIENT);
     let $wrapperBody = $wrapper.find(Wrapper.RECIPIENT_BODY);
 
-    let success = function () {
-          $.post({
-            url: url,
-            context: this,
-          }).done(function (data) {
-            $wrapperBody.html(data);
-            this.hideOverlay($el);
-            this.recipient.hideAlert();
-            this._proceed = false;
-          }).fail(function () {
-            this.recipient.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
-            this.hideOverlay($el);
-          });
-    }
-    let fail = function () {
-          this.recipient.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_USER_LOGGED_OUT, 'danger');
-          this.hideOverlay($el);
-    }
-    this.verifyUserAuthentication(success.bind(this), fail.bind(this));
+    $.post({
+      url: url,
+      context: this,
+    }).done(function (data) {
+      $wrapperBody.html(data);
+      this.hideOverlay($el);
+      this.recipient.hideAlert();
+      this._proceed = false;
+    }).fail(function () {
+      this.recipient.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
+      this.hideOverlay($el);
+    });
   }
 
   // Picks a Recipient from the recipient list (modal) and updates the Recipient form with it.
@@ -708,27 +701,19 @@ class Checkout {
     let $wrapperBody = $wrapper.find(Wrapper.RECIPIENT_BODY);
     let url = $el.attr('href');
 
-    let success = function() {
-          $.post({
-            url: url,
-            context: this,
-          }).done(function (data) {
-            $('[data-eval="refreshRecipientList"]').trigger('click');
-            $wrapperBody.html(data);
-            this.recipient.hideAlert();
-          }).fail(function () {
-            this.recipient.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
-          }).always(function() {
-            $wrapper.find(Wrapper.RECIPIENT_MODAL).modal('hide');
-            this.hideOverlay($el);
-          });
-    };
-    let fail = function () {
-          $wrapper.find(Wrapper.RECIPIENT_MODAL).modal('hide');
-          this.hideOverlay($el);
-          this.recipient.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_USER_LOGGED_OUT, 'danger');
-    };
-    this.verifyUserAuthentication(success.bind(this), fail.bind(this));
+    $.post({
+      url: url,
+      context: this,
+    }).done(function (data) {
+      $('[data-eval="refreshRecipientList"]').trigger('click');
+      $wrapperBody.html(data);
+      this.recipient.hideAlert();
+    }).fail(function () {
+      this.recipient.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
+    }).always(function() {
+      $wrapper.find(Wrapper.RECIPIENT_MODAL).modal('hide');
+      this.hideOverlay($el);
+    });
   }
 
   // Triggered from JS code (deleteRecipient)
@@ -769,27 +754,21 @@ class Checkout {
     let confirm = window.confirm('Biztosan szeretnéd törölni?');
     if (confirm) {
 
-      let success = function() {
-            $.ajax({
-              url: url,
-              method: 'GET',
-              context: this,
-            }).done(function(data) {
-              $('[data-eval="refreshRecipientList"]').trigger('click');
+      $.ajax({
+        url: url,
+        method: 'GET',
+        context: this,
+      }).done(function(data) {
+        $('[data-eval="refreshRecipientList"]').trigger('click');
 
-              $wrapperBody.html(data);
-              $wrapper.find(Wrapper.RECIPIENT_MODAL).modal('hide');
-              this._proceed = false;
-            }).fail(function() {
-              this.hideOverlay($el);
-              this.recipient.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_UNKNOWN, 'danger');
-            });
-      }
-      let fail = function () {
-            this.hideOverlay($el);
-            this.recipient.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_USER_LOGGED_OUT, 'danger');
-      }
-      this.verifyUserAuthentication(success.bind(this), fail.bind(this));
+        $wrapperBody.html(data);
+        $wrapper.find(Wrapper.RECIPIENT_MODAL).modal('hide');
+        this._proceed = false;
+      }).fail(function() {
+        this.hideOverlay($el);
+        this.recipient.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_UNKNOWN, 'danger');
+      });
+
     } else {
       this.hideOverlay($el);
     }
@@ -806,26 +785,19 @@ class Checkout {
     let $wrapper = $el.closest('.JS--senderWrapper');
     let $wrapperBody = $wrapper.find('.JS--senderContentBlock');
 
-    let success = function() {
-          $.ajax({
-            url: url,
-            method: 'POST',
-            context: this
-          }).done(function(data) {
-            $wrapperBody.html(data);
-            this.hideOverlay($el);
-            this.sender.hideAlert();
-            this._proceed = false;
-          }).fail(function() {
-            this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
-            this.hideOverlay($el);
-          });
-    };
-    let fail = function() {
-          this.hideOverlay($el);
-          this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_USER_LOGGED_OUT, 'danger');
-    };
-    this.verifyUserAuthentication(success.bind(this), fail.bind(this));
+    $.ajax({
+      url: url,
+      method: 'POST',
+      context: this
+    }).done(function(data) {
+      $wrapperBody.html(data);
+      this.hideOverlay($el);
+      this.sender.hideAlert();
+      this._proceed = false;
+    }).fail(function() {
+      this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
+      this.hideOverlay($el);
+    });
   }
 
   // Picks a Sender from the recipient list (modal) and updates the Sender form with it.
@@ -840,29 +812,22 @@ class Checkout {
     let $wrapperBody = $wrapper.find(Wrapper.SENDER_BODY);
     let url = $el.attr('href');
 
-    let success = function() {
-      $.ajax({
-        url: url,
-        method: 'POST',
-        context: this
-      }).done(function(data) {
-        $('[data-eval="refreshSenderList"]').trigger('click');
-        $wrapperBody.html(data);
-        $wrapper.find(Wrapper.SENDER_MODAL).modal('hide');
-        // $el.closest('.modal-body').find('.selected').removeClass('selected');
-        // $el.closest('.JS--item').addClass('selected');
-        this.hideOverlay($el);
-        this.sender.hideAlert();
-      }).fail(function() {
-        this.hideOverlay($el);
-        this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_UNKNOWN, 'danger');
-      });
-    };
-    let fail = function() {
+    $.ajax({
+      url: url,
+      method: 'POST',
+      context: this
+    }).done(function(data) {
+      $('[data-eval="refreshSenderList"]').trigger('click');
+      $wrapperBody.html(data);
+      $wrapper.find(Wrapper.SENDER_MODAL).modal('hide');
+      // $el.closest('.modal-body').find('.selected').removeClass('selected');
+      // $el.closest('.JS--item').addClass('selected');
       this.hideOverlay($el);
-      this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_USER_LOGGED_OUT, 'danger');
-    };
-    this.verifyUserAuthentication(success.bind(this), fail.bind(this));
+      this.sender.hideAlert();
+    }).fail(function() {
+      this.hideOverlay($el);
+      this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
+    });
   }
 
   // Triggered from JS code (deleteSender)
@@ -886,7 +851,7 @@ class Checkout {
       this.sender.hideAlert();
     }).fail(function() {
       this.hideOverlay($el);
-      this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_UNKNOWN, 'danger');
+      this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
     });
   }
 
@@ -902,26 +867,19 @@ class Checkout {
 
     let confirm = window.confirm('Biztosan szeretnéd törölni?');
     if (confirm) {
-      let success = function() {
-        $.ajax({
-          url: url,
-          method: 'GET',
-          context: this
-        }).done(function(data) {
-          $('[data-eval="refreshSenderList"]').trigger('click');
-          $wrapperBody.html(data);
-          $wrapper.find(Wrapper.SENDER_MODAL).modal('hide');
-          this._proceed = false;
-        }).fail(function() {
-          this.hideOverlay($el);
-          this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_UNKNOWN, 'danger');
-        });
-      };
-      let fail = function() {
+      $.ajax({
+        url: url,
+        method: 'GET',
+        context: this
+      }).done(function(data) {
+        $('[data-eval="refreshSenderList"]').trigger('click');
+        $wrapperBody.html(data);
+        $wrapper.find(Wrapper.SENDER_MODAL).modal('hide');
+        this._proceed = false;
+      }).fail(function() {
         this.hideOverlay($el);
-        this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_USER_LOGGED_OUT, 'danger');
-      };
-      this.verifyUserAuthentication(success.bind(this), fail.bind(this));
+        this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
+      });
     } else {
       this.hideOverlay($el);
     }
@@ -961,24 +919,6 @@ class Checkout {
   }
 
   // Helpers
-  verifyUserAuthentication(successCallback, failCallback) {
-    let isAuthenticated = false;
-    let authCall = $.post({
-      url: '/authenticate',
-      context: this,
-    }).done(function(data) {
-      isAuthenticated = data.isAuthenticated;
-      console.log(isAuthenticated);
-    });
-
-    $.when(authCall).done(function () {
-      if (isAuthenticated) {
-        successCallback();
-      } else {
-        failCallback();
-      }
-    }.bind(this));
-  }
   showOverlay(el) {
     el.addClass('btn-loading');
     this._proceed = true;

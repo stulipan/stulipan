@@ -116,17 +116,4 @@ class LoginController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
-
-    /**
-     * Used in AJAX calls, to check whether there is a logged in user.
-     *
-     * @Route("/authenticate", name="authenticate", methods={"POST", "GET"})
-     * @return JsonResponse
-     */
-    public function isCustomerAuthenticated() : JsonResponse
-    {
-        return new JsonResponse([
-            'isAuthenticated' => $this->getUser() !== null
-        ]);
-    }
 }

@@ -58,7 +58,6 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     {
         return [
             'pages' => $this->getPages(),
-//            'pages' => 'pages',
         ];
     }
 
@@ -101,6 +100,11 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $pages;
     }
 
+    /**
+     * Converts an array to object (stdClass). Used in $this->getPages()
+     * @param $array
+     * @return stdClass
+     */
     public function convertToObject($array)
     {
         $object = new stdClass();

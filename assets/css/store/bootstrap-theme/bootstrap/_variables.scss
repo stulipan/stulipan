@@ -1074,7 +1074,8 @@ $modal-transition:                  transform .2s ease-out !default;
 // Added by Stulipan
 $modal-close-font-size:             2rem !default;
 $modal-close-line-height:            $line-height-base !default;
-$modal-close-bg:                    $gray-900 !default;
+$modal-close-bg:                    $gray-800 !default;
+$modal-close-hover-bg:              $gray-900 !default;
 $modal-close-color:                 $white !default;
 $modal-close-border-color:          $gray-900 !default;
 

@@ -45,8 +45,9 @@ $sidebar-sm:                          320px !default;
 $sidebar-default:                     380px !default;
 
 $sidebar-close-font-size:             2rem !default;
-$sidebar-close-line-height:            $line-height-base !default;
-$sidebar-close-bg:                    $gray-900 !default;
+$sidebar-close-line-height:           $line-height-base !default;
+$sidebar-close-bg:                    $gray-800 !default;
+$sidebar-close-hover-bg:              $gray-900 !default;
 $sidebar-close-color:                 $white !default;
 
 
@@ -356,8 +357,10 @@ $sidebar-close-color:                 $white !default;
     // auto on the left force icon to the right even when there is no .sidebar-title
     margin: (-$sidebar-header-padding-y) (-$sidebar-header-padding-x) (-$sidebar-header-padding-y) auto;
 
-    &:hover {
+    &:hover,
+    &:focus {
       opacity: 1 !important;
+      background-color: $sidebar-close-hover-bg;
     }
   }
 }

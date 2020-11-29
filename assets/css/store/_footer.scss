@@ -6,6 +6,7 @@ $footer-font-size:                $font-size-base-secondary !default;
 $footer-body-padding-y:           2rem !default;
 $footer-body-padding-x:           1.25rem !default;
 
+$footer-link-line-height:         1.5 !default;
 
 $footer-nav-copyright-bg:         $gray-800 !default;
 $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
@@ -17,9 +18,9 @@ $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
   background-color: $footer-bg;
   color: $footer-color;
 
-  & *,
   & a {
     color: $footer-color;
+    line-height: $footer-link-line-height;
   }
 
   & h5, h6 {

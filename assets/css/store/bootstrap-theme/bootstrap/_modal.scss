@@ -216,8 +216,10 @@ $zindex-modal-close         : $zindex-modal + 1 !default;
       margin-right: 0;
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
       opacity: 1 !important;
+      background-color: $gray-900;
     }
   }
 }

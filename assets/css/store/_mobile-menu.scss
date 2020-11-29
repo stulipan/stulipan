@@ -41,21 +41,21 @@
     height: 50px;
     border-bottom: none;
 
-    & .close {
-      color: initial;
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      top: 0;
-      right: -50px;
-      padding: 0;
-      margin: 0;
-      border-radius: 0;
-    }
-    & .close:hover {
-      opacity: 1;
-      background-color: #212b36;
-    }
+    //& .close {
+    //  color: initial;
+    //  position: absolute;
+    //  width: 50px;
+    //  height: 50px;
+    //  top: 0;
+    //  right: -50px;
+    //  padding: 0;
+    //  margin: 0;
+    //  border-radius: 0;
+    //}
+    //& .close:hover {
+    //  opacity: 1;
+    //  background-color: #212b36;
+    //}
   }
 }
 

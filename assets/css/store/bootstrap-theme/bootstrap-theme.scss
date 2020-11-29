@@ -78,6 +78,18 @@ $nm-x:          1.25rem !default;
 
 :focus:not(:focus-visible) { outline: none }
 
+//a:focus {
+//  outline: none !important;
+//  background-color: $gray-50 !important;
+//}
+//a:focus-visible {
+//  background-color: $gray-50 !important;
+//}
+//a:focus:not(:focus-visible) {
+//  background: none !important;
+//}
+
+
 //@-webkit-keyframes rotate {
 //  0% {
 //    transform: rotate(0deg)

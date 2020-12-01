@@ -139,7 +139,7 @@ $yiq-text-light:            $white !default;
 // Quickly modify global styling by enabling or disabling optional features.
 
 $enable-caret:                                true !default;
-$enable-rounded:                              false !default;  // border, btn, input, card
+$enable-rounded:                              true !default;  // border, btn, input, card
 $enable-shadows:                              false !default;
 $enable-gradients:                            false !default;
 $enable-transitions:                          true !default;

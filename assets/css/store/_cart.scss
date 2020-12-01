@@ -184,7 +184,7 @@ $order-summary-total-font-size:             1.1rem !default;
 
 .checkout-block-text {
   font-size: $font-size-base-secondary;
-  color: $muted;
+  //color: $muted;
 }
 
 @include media-breakpoint-down(sm) {

@@ -22,16 +22,8 @@
                         <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
                     </div>
 
-                    <div class="customer-basic-details">
-                        <div class="card">
-                            <div class="card-body">
-                                {% include 'webshop/cart/_order-sender-widget.html.twig' %}
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="shipping-address">
-                        <div class="card">
+                        <div class="card border">
                             <div class="card-body">
                                 {% include 'webshop/cart/_order-recipient-widget.html.twig' %}
                             </div>
@@ -39,15 +31,23 @@
                     </div>
 
                     <div class="shipping-method">
-                        <div class="card">
+                        <div class="card border">
                             <div class="card-body">
                                 {% include 'webshop/cart/_order-delivery-widget.html.twig' %}
                             </div>
                         </div>
                     </div>
 
+                    <div class="customer-basic-details">
+                        <div class="card border">
+                            <div class="card-body">
+                                {% include 'webshop/cart/_order-sender-widget.html.twig' %}
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="payment-method">
-                        <div class="card">
+                        <div class="card border">
                             <div class="card-body">
                                 {% include 'webshop/cart/_order-payment-widget.html.twig' %}
                             </div>
@@ -89,7 +89,7 @@
 
 {% block gotoNext %}
     <div class="mt-4 mb-5 mb-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
-        <a href="{{ path('homepage') }}" class="btn btn-lg btn-secondary order-1 order-md-2">Tovább a webáruházba</a>
+        <a href="{{ path('homepage') }}" class="btn btn-lgX btn-primary order-1 order-md-2">Tovább a webáruházba</a>
         <div class="order-2 order-md-1"></div>
     </div>
 {% endblock %}

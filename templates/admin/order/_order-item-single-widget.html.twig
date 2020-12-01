@@ -4,14 +4,14 @@
             <div class="d-flex align-items-center">
                 <div class="badge-quantity-wrapper">
                     <span class="badge-quantity badge-dark">{{ item.quantity }}</span>
-                    <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
+                    <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}">
                         <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
                     </a>
                 </div>
 
                 <div class="d-flex w-100 justify-content-between">
                     <div class="pl-3 flex-grow-1">
-                        <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="cart-item-link" target="_blank">{{ item.product.name }}</a>
+                        <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="cart-item-link">{{ item.product.name }}</a>
                         <span class="d-block text-mutedX">SKU: {{ item.product.sku }} </span>
 {#                        <strong class="d-block text-sm">{{ (item.price * item.quantity) |money }}</strong>#}
                     </div>

@@ -119,7 +119,7 @@ $nm-x:          1.25rem !default;
 }
 
 @include media-breakpoint-down(xs) {
-  .card-body {
-    padding: .75rem;
-  }
+  //.card-body {
+  //  padding: .75rem;
+  //}
 }

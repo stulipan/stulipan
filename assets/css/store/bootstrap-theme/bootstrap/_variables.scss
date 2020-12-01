@@ -279,9 +279,9 @@ $line-height-sm:              1.25 !default;
 $border-width:                1px !default;
 $border-color:                $gray-400 !default; // $gray-400
 
-$border-radius:               .25rem !default;
-$border-radius-lg:            .25rem !default; //.3rem !default;
-$border-radius-sm:            .25rem !default; //.2rem !default;
+$border-radius:               2px !default; //.25rem !default;
+$border-radius-lg:            $border-radius !default; //.3rem !default;
+$border-radius-sm:            $border-radius !default; //.2rem !default;
 
 $rounded-pill:                50rem !default;
 
@@ -447,7 +447,7 @@ $table-border-level:          -6 !default;
 $input-btn-padding-y:         .5rem !default;  //.375
 $input-btn-padding-x:         .75rem !default;
 $input-btn-font-family:       null !default;
-$input-btn-font-size:         $font-size-base !default;
+$input-btn-font-size:         1rem !default; //$font-size-base !default;
 $input-btn-line-height:       $line-height-base !default;
 
 $input-btn-focus-width:       1px !default; //.125rem !default;
@@ -477,7 +477,7 @@ $input-btn-secondary-padding-x: .5rem !default;
 $btn-padding-y:               $input-btn-padding-y + ($font-size-base - $font-size-base-secondary)*$line-height-base / 2 !default;
 $btn-padding-x:               $input-btn-padding-x !default;
 $btn-font-family:             $input-btn-font-family !default;
-$btn-font-size:               $font-size-base-secondary !default; //$input-btn-font-size !default;
+$btn-font-size:               $input-btn-font-size !default; //$font-size-base-secondary !default; //$input-btn-font-size !default;
 $btn-line-height:             $input-btn-line-height !default;
 
 $btn-padding-y-sm:            $input-btn-padding-y-sm !default;

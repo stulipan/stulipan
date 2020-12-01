@@ -561,19 +561,25 @@
     <script>
         // Displays the loading circle
         $(function() {
-            var proceed = false;
-            $(document).on('click', '.JS--Button-addToCart', function (event) {
-                if (proceed) {
-                    proceed = false;
+            let _proceed = false;
+            $(document).on('click', '.JS--Button-addToCart', function (e) {
+                if (_proceed) {
+                    _proceed = false;
                     return;
                 }
-                event.preventDefault();
-                var $element = $(event.currentTarget);
-                $element.addClass('text-success-faded');
-                $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
-                proceed = true;
-                $element.trigger('click');
-                $element.prop('disabled', true);
+                e.preventDefault();
+                var el = $(e.currentTarget);
+
+                el.addClass('btn-loading');
+                _proceed = true;
+                el.trigger('click');
+                // document.dispatchEvent(new Event('disposeTooltip'));
+
+                // $element.addClass('text-success-faded');
+                // $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
+                // proceed = true;
+                // $element.trigger('click');
+                // $element.prop('disabled', true);
             });
         });
     </script>

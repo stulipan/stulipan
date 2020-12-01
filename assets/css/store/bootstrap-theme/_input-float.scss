@@ -24,7 +24,7 @@ $input-float-select-indicator:            str-replace(url("data:image/svg+xml,%3
 
 $input-float-select-bg-size:              10px 10px !default; // In pixels because image dimensions
 $input-float-select-padding-x:            .55rem !default; // $input-select-padding-x !default;
-$input-float-select-background:           $input-float-select-indicator no-repeat right $input-float-select-padding-x center / $input-float-select-bg-size, linear-gradient(180deg, mix($body-bg, $secondary, 15%), $secondary) !default;
+$input-float-select-background:           $input-float-select-indicator no-repeat right $input-float-select-padding-x center / $input-float-select-bg-size, linear-gradient(180deg, mix($body-bg, $gray-100-select, 15%), $gray-100-select) !default;
 
 
 .input-float .form-control {

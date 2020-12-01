@@ -32,7 +32,7 @@
   background-clip: padding-box;
   //border: $dropdown-border-width solid $dropdown-border-color;
   @include border-radius($dropdown-border-radius);
-  @include box-shadow($dropdown-box-shadow);
+  @include dropdown-shadow($dropdown-box-shadow);
 
   &.dropdown-transition {
     display: block;

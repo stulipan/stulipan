@@ -7,9 +7,9 @@
 
 $white:    #fff !default;
 $gray-50:  #f0f3f5 !default;
-$gray-100: #fcfcfd !default;
+$gray-100: #f6f6f9 !default;
 $gray-200: #f6f6f9 !default; //e8eaec  //e9ecef  Javaslat: f6f6f9
-$gray-300: #dee2e6 !default;  // new border !
+$gray-300: #E1E5E9 !default;  // new border !
 $gray-400: #c4cdd5 !default;  // ex-border
 $gray-500: #adb5bd !default;
 $gray-600: #869196 !default;
@@ -18,6 +18,7 @@ $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212b36 !default;
 $black:    #000 !default;
+$gray-100-select:   #fcfcfd !default;
 
 $grays: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -74,7 +75,7 @@ $colors: map-merge(
   $colors
 );
 
-$primary:         $blue !default;
+$primary:         $blue-dark !default;
 $primary-lighten: $blue-lighten !default;
 $secondary:       $gray-100 !default;
 $success:         $green !default;
@@ -85,7 +86,7 @@ $warning:         $yellow !default;
 $warning-lighten: $yellow-lighten !default;
 $danger:          $red !default;
 $danger-lighten:$red-lighten !default;
-$light:           #eee !default;
+$light:           $gray-300 !default; //#eee !default;
 $dark:            $gray-800 !default;
 $dark-lighten:    $gray-600 !default;
 $muted:           $gray-650 !default;
@@ -151,6 +152,8 @@ $enable-responsive-font-sizes:                false !default;
 $enable-validation-icons:                     true !default;
 $enable-deprecation-messages:                 true !default;
 
+// Added by stulipan
+$enable-button-border:                        false !default;
 
 // Spacing
 //
@@ -274,7 +277,7 @@ $line-height-lg:              1.5 !default;
 $line-height-sm:              1.25 !default;
 
 $border-width:                1px !default;
-$border-color:                $gray-500 !default; // $gray-400
+$border-color:                $gray-400 !default; // $gray-400
 
 $border-radius:               .25rem !default;
 $border-radius-lg:            .25rem !default; //.3rem !default;
@@ -537,7 +540,7 @@ $input-bg:                              $white !default;
 $input-disabled-bg:                     $gray-200 !default;
 
 $input-color:                           $gray-900 !default;
-$input-border-color:                    $border-color !default; //$gray-400 !default;
+$input-border-color:                    $gray-500 !default; //$gray-400 !default;
 $input-border-width:                    $input-btn-border-width !default;
 $input-box-shadow:                      null !default; //inset 0 1px 1px rgba($black, .075) !default;
 
@@ -574,13 +577,13 @@ $input-select-bg-size-y:                20px !default; // In pixels because imag
 $input-select-bg-size-x:                20px !default; // In pixels because image dimensions
 $input-select-indicator-color:          $gray-700 !default;
 $input-select-indicator:                str-replace(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' %3E%3Cpath d='M5 8l5 5 5-5z' fill='#{$input-select-indicator-color}' %3E%3C/path%3E%3C/svg%3E"), "#", "%23") !default;
-$input-select-background:               $input-select-indicator no-repeat right $input-select-padding-x center / $input-select-bg-size-x $input-select-bg-size-y, linear-gradient(180deg, mix($body-bg, $secondary, 15%), $secondary) !default;
+$input-select-background:               $input-select-indicator no-repeat right $input-select-padding-x center / $input-select-bg-size-x $input-select-bg-size-y, linear-gradient(180deg, mix($body-bg, $gray-100-select, 15%), $gray-100-select) !default;
 
 $input-select-padding-y-sm:             $input-padding-y-sm !default;
 $input-select-padding-x-sm:             $input-padding-x-sm !default;
 $input-select-bg-size-y-sm:             18px !default; // In pixels because image dimensions
 $input-select-bg-size-x-sm:             16px !default; // In pixels because image dimensions
-$input-select-background-sm:            $input-select-indicator no-repeat right .25rem center / $input-select-bg-size-x-sm $input-select-bg-size-y-sm, linear-gradient(180deg, mix($body-bg, $secondary, 15%), $secondary) !default;
+$input-select-background-sm:            $input-select-indicator no-repeat right .25rem center / $input-select-bg-size-x-sm $input-select-bg-size-y-sm, linear-gradient(180deg, mix($body-bg, $gray-100-select, 15%), $gray-100-select) !default;
 // END Added by Stulipan
 
 $form-text-margin-top:                  .25rem !default;
@@ -661,7 +664,7 @@ $custom-select-disabled-bg:         $gray-200 !default;
 $custom-select-bg-size:             20px 20px !default; // In pixels because image dimensions
 $custom-select-indicator-color:     $gray-700 !default;
 $custom-select-indicator:                str-replace(url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -3 8 10'%3e%3cpath fill='#{$custom-select-indicator-color}' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e"), "#", "%23") !default;
-$custom-select-background:               $custom-select-indicator no-repeat right $custom-select-padding-x center / $custom-select-bg-size, linear-gradient(180deg, mix($body-bg, $secondary, 15%), $secondary) !default;
+$custom-select-background:               $custom-select-indicator no-repeat right $custom-select-padding-x center / $custom-select-bg-size, linear-gradient(180deg, mix($body-bg, $gray-100-select, 15%), $gray-100-select) !default;
 
 $custom-select-feedback-icon-padding-right: calc((1em + #{2 * $custom-select-padding-y}) * 3 / 4 + #{$custom-select-padding-x + $custom-select-indicator-padding}) !default;
 $custom-select-feedback-icon-position:      center right ($custom-select-padding-x + $custom-select-indicator-padding) !default;
@@ -892,14 +895,14 @@ $pagination-line-height:            1.25 !default;
 $pagination-color:                  $link-color !default;
 $pagination-bg:                     $white !default;
 $pagination-border-width:           $border-width !default;
-$pagination-border-color:           $gray-300 !default;
+$pagination-border-color:           $white !default; //$gray-300 !default;
 
 $pagination-focus-box-shadow:       $input-btn-focus-box-shadow !default;
 $pagination-focus-outline:          0 !default;
 
 $pagination-hover-color:            $link-hover-color !default;
 $pagination-hover-bg:               $gray-200 !default;
-$pagination-hover-border-color:     $gray-300 !default;
+$pagination-hover-border-color:     $pagination-hover-bg !default;
 
 $pagination-active-color:           $component-active-color !default;
 $pagination-active-bg:              $component-active-bg !default;
@@ -907,7 +910,7 @@ $pagination-active-border-color:    $pagination-active-bg !default;
 
 $pagination-disabled-color:         $gray-600 !default;
 $pagination-disabled-bg:            $white !default;
-$pagination-disabled-border-color:  $gray-300 !default;
+$pagination-disabled-border-color:  $pagination-disabled-bg !default;
 
 
 // Jumbotron

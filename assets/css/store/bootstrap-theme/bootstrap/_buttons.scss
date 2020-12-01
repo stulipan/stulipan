@@ -39,10 +39,10 @@
 
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active {
-    @include box-shadow($btn-active-box-shadow);
+    //@include box-shadow($btn-active-box-shadow);
 
     &:focus {
-      @include box-shadow($btn-focus-box-shadow, $btn-active-box-shadow);
+      //@include box-shadow($btn-focus-box-shadow, $btn-active-box-shadow);
     }
   }
 }
@@ -63,51 +63,7 @@ fieldset:disabled a.btn {
     @if $color == "primary" {
       @include button-variant($blue-dark, $blue-dark);
     } @else {
-      @if $color == "secondary" {
-        $background: $value;
-        $border: $border-color;
-        $hover-background: darken($background, 1.5%);
-        $hover-border: $border-color;
-        $active-background: darken($background, 1.5%);
-        $active-border: $border-color;
-
-        color: $yiq-text-dark;
-        @include gradient-bg($background);
-        border-color: $border;
-        @include box-shadow($btn-box-shadow);
-
-        @include hover {
-          color: $yiq-text-dark;
-          @include gradient-bg($hover-background);
-          border-color: $hover-border;
-        }
-
-        &:focus,
-        &.focus {
-          // Avoid using mixin so we can pass custom focus shadow properly
-          @if $enable-shadows {
-            box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(darken($border-color, 5%), 1);
-          } @else {
-            box-shadow: 0 0 0 $btn-focus-width rgba(darken($border-color, 5%), .5);
-          }
-        }
-
-        // Disabled comes first so active can properly restyle
-        &.disabled,
-        &:disabled {
-          color: $yiq-text-dark;
-          background-color: $background;
-          border-color: $border;
-          // Remove CSS gradients if they're enabled
-          @if $enable-gradients {
-            background-image: none;
-          }
-        }
-
-
-      } @else {
-        @include button-variant($value, $value);
-      }
+      @include button-variant($value, $value);
     }
   }
 }

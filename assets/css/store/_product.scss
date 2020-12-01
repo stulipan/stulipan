@@ -109,9 +109,21 @@
 }
 
 @include media-breakpoint-down(xs) {
+  // Place this on a "col-" element
   .correction-product-image-no-padding {
     padding-left: 0;
     padding-right: 0;
+
+    &>.row {
+      margin-right: 0;
+      margin-left: 0;
+
+      &> .col,
+      &> [class*="col-"] {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
   }
 }
 

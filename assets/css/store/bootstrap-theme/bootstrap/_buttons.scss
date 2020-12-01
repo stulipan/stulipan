@@ -174,12 +174,12 @@ input[type="button"] {
 .btn-uppercase {
   text-transform: $btn-text-transform;
   letter-spacing: $btn-letter-spacing;
-  padding: calc(#{$btn-padding-y} * 1.65) $btn-padding-x calc(#{$btn-padding-y} * 0.65);
+  //padding: calc(#{$btn-padding-y} * 1.65) $btn-padding-x calc(#{$btn-padding-y} * 0.65);
 
   &.btn-sm {
-    padding: calc(#{$btn-padding-y-sm} * 1.65) $btn-padding-x-sm calc(#{$btn-padding-y-sm} * 1.35);
+    //padding: calc(#{$btn-padding-y-sm} * 1.65) $btn-padding-x-sm calc(#{$btn-padding-y-sm} * 1.35);
   }
   &.btn-lg {
-    padding: calc(#{$btn-padding-y-lg} * 1.65) $btn-padding-x-lg calc(#{$btn-padding-y-lg} * 1.35);
+    //padding: calc(#{$btn-padding-y-lg} * 1.65) $btn-padding-x-lg calc(#{$btn-padding-y-lg} * 1.35);
   }
 }

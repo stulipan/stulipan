@@ -14,6 +14,9 @@ use Symfony\Component\Yaml\Yaml;
  */
 final class StoreSettings
 {
+    public const VARIANT_VIEW_AS_DROPDOWN = 'dropdown';
+    public const VARIANT_VIEW_AS_VARIANT_PICKER = 'variant-picker';
+
     private $parameters;
 
     public function __construct(string $settingsDirectory, string $generalSettingsFile)

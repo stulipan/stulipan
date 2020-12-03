@@ -210,6 +210,7 @@ $zindex-modal-close         : $zindex-modal + 1 !default;
     //margin: (-$modal-header-padding-y) (-$modal-header-padding-x) (-$modal-header-padding-y) auto;
     margin: calc(-#{$modal-header-padding-y} * 2) calc(-#{$modal-header-padding-x} * 2) (-$modal-header-padding-y) auto;
     z-index: $zindex-modal-close;
+    @if $enable-rounded { border-radius: $modal-content-border-radius; }
 
     // Added by Stulipan
     @include media-breakpoint-down(sm) {

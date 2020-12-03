@@ -105,7 +105,7 @@
                         </div>
                         <div class="col-md-6 col-lg-5 order-2 mt-3 mt-md-0">
                             <div class="row">
-                                <div class="col-12 order-2X order-md-1">
+                                <div class="col-12">
                                     <div class="product-reviews">
                                         <div class="d-flex align-items-center justify-content-between mb-1">
                                             <div class="d-flex align-items-center">
@@ -123,30 +123,96 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 order-1X order-md-2">
+                                <div class="col-12">
                                     <div class="product-name">
                                         <h1 class="">{{ product.name }}</h1>
                                     </div>
                                 </div>
-                            </div>
 
-                            {% if product.isPubliclyAvailable %}
-                                {% if product.isFlower %}
+                                <div class="col-12">
+                                    {% if product.isPubliclyAvailable %}
+                                        {% if product.isFlower %}
 
-                                {% else %}
-                                    <div class="product-price">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <ul class="list-inline mb-0">
-                                                <li class="list-inline-item price">
-                                                    <del>{{ (product.price.numericValue*4)|money }}</del>
-                                                </li>
-                                                <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>
+                                        {% else %}
+                                            <div class="product-price">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <ul class="list-inline mb-0">
+                                                        <li class="list-inline-item price">
+                                                            <del>{{ (product.price.numericValue*4)|money }}</del>
+                                                        </li>
+                                                        <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>
 
-                                            </ul>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    <!-- Add to cart form -->
+                                    {% if product.isPubliclyAvailable %}
+                                        <div data-section-id="addToCart-template" data-section-type="addToCart-template">
+                                            {% include 'webshop/site/product-show-addToCartForm-widget.html.twig' %}
+
+                                            <div class="row mb-3">
+                                                <div class="col-lg-12">
+                                                    <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-uppercase w-100">
+                                                    <span class="btn-loading-invisible">
+                                                        <svg class="svg-icon svg-icon-heavy addtocart">
+                                                            <use xlink:href="#cart-1"> </use>
+                                                        </svg>
+                                                        Kosárba rakom
+                                                    </span>
+                                                        <div class="loading-spinner" role="status"></div>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="product-credit-card">
+                                                <div class="text-center">
+                                                    <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
+                                                    <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/termekek/paypal.png">
+                                                    <div class="text-sm">
+                                                        Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>
+                                                </div>
+                                            </div>
+                                            <div class="product-quickinfo-link">
+                                                <div class="">
+                                                    <div>
+                                                        <span class="text-sm mr-1"><i class="fas fa-shipping-fast"></i></span>
+                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Szállítási díjak</a>
+                                                        <div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
+                                                                        <div class="mt-4">
+                                                                            {{ pages.szallitasiDijak.content|raw }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div >
+                                                        <span class="text-sm mr-1"><i class="far fa-credit-card"></i></span>
+                                                        <a href="" class="text-link-quickinfo">Fizess online bankkártyáddal</a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
                                         </div>
+                                    {% else %}
+                                        <span class="badge badge--unavailableProduct"><i class="fas fa-info-circle"></i>A termék már nem áll forgalmazásban</span>
+                                    {% endif %}
                                     </div>
-                                {% endif %}
-                            {% endif %}
+                                </div>
+                            </div>
 
                             {#<p class="mb-2">{{ product.description }}</p>#}
 
@@ -157,113 +223,6 @@
                             {#<li>Mindig friss virágból</li>#}
                             {#</ul>#}
 
-
-                            <!-- Add to cart form -->
-
-                            {% if product.isPubliclyAvailable %}
-{#                                {% form_theme form 'bootstrap_4_layout.html.twig' %}#}
-                                {{ form_start(form) }}
-
-                                    {% if product.isFlower %}
-                                        <div class="product-variants">
-                                            {% include 'webshop/site/product-widget-addToCartForm-isFlower.html.twig' %}
-                                        </div>
-                                    {% else %}
-
-                                        {% if form.options is defined and form.options is not empty %}
-                                            {% for item in form.options %}
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="product-variant-selector-label">{{ item.selectedOption.vars.value }}</div>
-                                                        <div class="form-row">
-                                                            {% if settings_general.get('general.product-variant-view') == 'dropdown' %}
-                                                                <div class="form-group col-8 col-sm-8 col-md-6">
-                                                                    {{ form_widget(item.selectedOptionValue) }}
-                                                                </div>
-                                                            {% elseif settings_general.get('general.product-variant-view') == 'variant-picker' %}
-                                                                {% for choice in item.selectedOptionValue %}
-                                                                    <div class="col-sm-4 col-4">
-                                                                        {% include 'webshop/site/variant-picker-4-product-variant.html.twig' %}
-                                                                    </div>
-                                                                {% endfor %}
-                                                                {% do item.selectedOptionValue.setRendered() %}
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                            {{ form_errors(form.options) }}
-                                        {% endif %}
-                                        {% do form.options.setRendered() %}
-                                        {% do form.deliveryDate.deliveryDate.setRendered() %}
-
-                                        <div class="row">
-                                            <div class="col-12 detail-option mb-4">
-                                                <div class="product-variants">
-                                                    <div class="product-variant-selector-label">Items <span>(required)</span></div>
-                                                    {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-
-                                    <div class="row mb-3">
-                                        <div class="col-lg-12">
-                                            <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-uppercase w-100" data-toggle="loading-overlay" aria-hidden="true">
-                                                <span class="btn-loading-invisible">
-                                                    <svg class="svg-icon svg-icon-heavy addtocart">
-                                                        <use xlink:href="#cart-1"> </use>
-                                                    </svg>
-                                                    Kosárba rakom
-                                                </span>
-                                                <div class="loading-spinner" role="status"></div>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                {{ form_end(form) }}
-
-                                <div class="product-credit-card">
-                                    <div class="text-center">
-                                        <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
-                                        <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/termekek/paypal.png">
-                                        <div class="text-sm">
-                                            Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>
-                                    </div>
-                                </div>
-                                <div class="product-quickinfo-link">
-                                    <div class="">
-                                        <div>
-                                            <span class="text-sm mr-1"><i class="fas fa-shipping-fast"></i></span>
-                                            <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Szállítási díjak</a>
-                                            <div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
-                                                            <div class="mt-4">
-                                                                {{ pages.szallitasiDijak.content|raw }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div >
-                                            <span class="text-sm mr-1"><i class="far fa-credit-card"></i></span>
-                                            <a href="" class="text-link-quickinfo">Fizess online bankkártyáddal</a>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            {% else %}
-                                <span class="badge badge--unavailableProduct"><i class="fas fa-info-circle"></i>A termék már nem áll forgalmazásban</span>
-                            {% endif %}
 
                         </div>
                     </div>
@@ -364,6 +323,8 @@
 {% block javascripts %}
 	{{ parent() }}
     <script src="{{ asset('build/v-shop.js') }}"></script>
+    <script src="{{ asset('webshop/lodash.core.min.js') }}"></script>
+    <script src="{{ asset('build/store.js') }}"></script>
 
 
     <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
@@ -561,26 +522,19 @@
     <script>
         // Displays the loading circle
         $(function() {
-            let _proceed = false;
-            $(document).on('click', '.JS--Button-addToCart', function (e) {
-                if (_proceed) {
-                    _proceed = false;
-                    return;
-                }
-                e.preventDefault();
-                var el = $(e.currentTarget);
-
-                el.addClass('btn-loading');
-                _proceed = true;
-                el.trigger('click');
-                // document.dispatchEvent(new Event('disposeTooltip'));
-
-                // $element.addClass('text-success-faded');
-                // $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
-                // proceed = true;
-                // $element.trigger('click');
-                // $element.prop('disabled', true);
-            });
+            // let _proceed = false;
+            // $(document).on('click', '.JS--Button-addToCart', function (e) {
+            //     if (_proceed) {
+            //         _proceed = false;
+            //         return;
+            //     }
+            //     e.preventDefault();
+            //     var el = $(e.currentTarget);
+            //
+            //     el.addClass('btn-loading');
+            //     _proceed = true;
+            //     el.trigger('click');
+            // });
         });
     </script>
 {% endblock %}

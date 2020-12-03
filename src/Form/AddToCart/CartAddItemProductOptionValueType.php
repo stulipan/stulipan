@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpKernel\HttpCache\Store;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
@@ -32,12 +33,12 @@ class CartAddItemProductOptionValueType extends AbstractType
     {
         $productOption = $builder->getOption('productOption');
 
-        if ($this->settings->get('general.product-variant-view') === 'dropdown') {
+        if ($this->settings->get('general.product-variant-view') === StoreSettings::VARIANT_VIEW_AS_DROPDOWN) {
             $isMultiple = false;
             $isExpanded = false;
         }
 
-        if ($this->settings->get('general.product-variant-view') === 'variant-picker') {
+        if ($this->settings->get('general.product-variant-view') === StoreSettings::VARIANT_VIEW_AS_VARIANT_PICKER) {
             $isMultiple = false;
             $isExpanded = true;
         }

@@ -10,6 +10,7 @@ use App\Entity\Product\ProductOption;
 use App\Entity\Product\ProductOptionValue;
 use App\Form\DeliveryDate\CartSelectDeliveryDateFormType;
 use App\Repository\ProductRepository;
+use App\Services\StoreSettings;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -36,12 +37,15 @@ class CartAddItemType extends AbstractType
     private $urlGenerator;
     private $em;
     private $twig;
+    private $settings;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em, Environment $twig)
+    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $em, Environment $twig,
+                                StoreSettings $settings)
     {
         $this->urlGenerator = $urlGenerator;
         $this->em = $em;
         $this->twig = $twig;
+        $this->settings = $settings;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -83,7 +87,10 @@ class CartAddItemType extends AbstractType
            'required' => false,
             'mapped' => false,
         ]);
-        $builder->add('quantity',IntegerType::class, [
+
+        // If product is flower, then set the 'quantity' input field as hidden.
+        $isFlower = $builder->getData()->isFlower();
+        $builder->add('quantity', $isFlower ? HiddenType::class : IntegerType::class, [
             'mapped' => false,
             'attr' => ['value' => '1'],
         ]);

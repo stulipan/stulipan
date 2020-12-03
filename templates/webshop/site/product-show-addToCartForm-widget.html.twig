@@ -1,0 +1,168 @@
+{{ form_start(form) }}
+    <div class="product-variants">
+    {% if product.isFlower %}
+{#            {% include 'webshop/site/product-widget-addToCartForm-isFlower.html.twig' %}#}
+        <div class="mb-2">
+            <div class="product-variant-selector-label">Méret</div>
+        </div>
+
+        {% if form.options is defined and form.options is not empty %}
+            <div class="overflow-x-scroll overflow-x-md-hid pb-3">
+                <div class="position-relative">
+                    <div class="w-lg mx-auto">
+                        <div class="form-row">
+                            {% for item in form.options|slice(0,1) %}
+                                {% for choice in item.selectedOptionValue %}
+                                    <div class="col-sm-4 col-4">
+                                        {% include 'webshop/site/vp-choice-product-variant.html.twig' %}
+                                    </div>
+                                {% endfor %}
+                                {% do item.selectedOptionValue.setRendered() %}
+                            {% endfor %}
+                            {{ form_errors(form.options) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="form-row">
+                <div class="col-sm-12">
+                    <div class="vp choose-one-size vp-checked">
+                        <div class="vp-figure">
+                            <div class="vp-content">
+                                {% include('webshop/site/vp-label-product-variant.html.twig') with {
+                                    'name': 'Egy méret',
+                                    'price': product.price.numericValue,
+                                    'priceSale': (product.price.numericValue*4),
+                                } %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% do form.options.setRendered() %}
+
+        <div class="mt-2 mb-2">
+            <div class="product-variant-selector-label">Szállítás</div>
+        </div>
+        <div class="row order-delivery-date mb-4 JS--deliveryDateContainer">
+            <div class="col-md-12 col-lg-12 JS--dateWrapper">
+                <div class="form-row">
+
+                    {% for choice in form.deliveryDate.deliveryDate|slice(0,3) %}
+                        <div class="col-sm-3 col-3 JS--generatedDate-{{ choice.vars.value }}">
+                            {% include('webshop/site/vp-choice-date.html.twig') %}
+                        </div>
+                    {% endfor %}
+                    <div class="col-sm-3 col-3 JS--Button-clickDate">
+                        <div class="row">
+                            {% for choice in form.deliveryDate.deliveryDate|slice(3) %}
+                                <div class="col-sm-12 col-12 JS--generatedDate-{{ choice.vars.value }} d-none">
+                                    {% include('webshop/site/vp-choice-date.html.twig') %}
+                                </div>
+                            {% endfor %}
+
+                            <div class="col-sm-12 col-12 JS--showCalendarIcon">
+                                <div class="vp choose-date">
+                                    <div class="vp-figure">
+                            <span class="vp-content">
+                                <span class="tile tile-lg">
+                                    <i class="far fa-calendar-alt fa-2x"></i>
+                                </span>
+                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% do form.deliveryDate.deliveryDate.setRendered() %}
+                    {{ form_errors(form.deliveryDate.deliveryDate) }}
+                </div>
+                <div class="text-sm mt-2">
+                    Kosárba rakás után megadható a napszakasz is.
+                </div>
+            </div>
+        </div>
+
+        {% if not form.vars.valid %}
+            <div class="JS--alertMessage alert alert-danger mt-3" role="alert" data-alert-message>
+                <i class="fas fa-exclamation-circle mr-1 text-muted"></i>
+                {% for error in form.vars.errors %}
+                    {{ error.message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% else %}
+
+        {% if form.options is defined and form.options is not empty %}
+            {% for item in form.options %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="product-variant-selector-label">{{ item.selectedOption.vars.value }}</div>
+                        <div class="form-row">
+                            {% if settings_general.get('general.product-variant-view') == 'dropdown' %}
+                                <div class="form-group col-8 col-sm-8 col-md-6">
+                                    {{ form_widget(item.selectedOptionValue) }}
+                                </div>
+                            {% elseif settings_general.get('general.product-variant-view') == 'variant-picker' %}
+                                {% for choice in item.selectedOptionValue %}
+                                    <div class="col-sm-4 col-4">
+                                        {% include 'webshop/site/variant-picker-4-product-variant.html.twig' %}
+                                    </div>
+                                {% endfor %}
+                                {% do item.selectedOptionValue.setRendered() %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {{ form_errors(form.options) }}
+        {% endif %}
+        {% do form.options.setRendered() %}
+        {% do form.deliveryDate.deliveryDate.setRendered() %}
+
+        <div class="row">
+            <div class="col-12 detail-option mb-4">
+                <div class="product-variant-selector-label">
+                    Items <span>(required)</span>
+                </div>
+                {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
+                {{ form_errors(form.quantity) }}
+            </div>
+        </div>
+
+    {% endif %}
+    </div>
+
+{{ form_end(form) }}
+
+
+
+
+{#<div class="row d-none">#}
+{#    <div class="col-12 detail-option mb-4">#}
+{#        <label class="product-variant-selector-label">Items <span>(required)</span></label>#}
+{#        {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}#}
+{#    </div>#}
+{#</div>#}
+
+{#<div class="mt-2 mb-2">#}
+        {#    <span class="product-variant-selector-label">2. Hova kéred?</span>#}
+        {#</div>#}
+        {#<div class="form-group mb-4">#}
+        {#    <div id="v--whereTo-XXXXX">#}
+        {#        #}{#{{ form_widget(form.whereTo.whereTo, {'attr': {'class': 'form-control', 'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011' }}) }}#}
+        {#        #}{#{{ form_widget(form.whereTo.whereTo, {'attr': #}{#}#}
+        {#        #}{#'class': 'form-control select2 select2-multiple select2-hidden-accessible',#}
+        {#        #}{#'placeholder': 'Település: Budakalász, vagy Irányítószám: 2011',#}
+        {#        #}{#'data-toggle' : 'select2',#}
+        {#        #}{#'aria-hidden' : 'true',#}
+        {#        #}{#}}) }}#}
+        {#        #}{#{{ form_errors(form.whereTo) }}#}
+
+        {#        #}{#                                        // EZ OKOZTA A "Error: Allowed memory size of... exhausted"#}
+        {#        #}{#                                        {% do form.whereTo.setRendered() %}#}
+        {#    </div>#}
+        {#</div>#}

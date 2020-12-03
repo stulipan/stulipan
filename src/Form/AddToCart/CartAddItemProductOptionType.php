@@ -27,6 +27,7 @@ class CartAddItemProductOptionType extends AbstractType
         $product = $builder->getOption('product');
 
         foreach ($product->getOptions() as $i => $productOption) {
+//            dd($productOption->getValues()->getValues());
             $builder->add('option_'.$i,CartAddItemProductOptionValueType::class,[
                 // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
                 'required' => false,

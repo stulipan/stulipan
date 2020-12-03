@@ -25,6 +25,7 @@ Encore
 
     .addEntry('checkout', './assets/js/checkout.js')
     .addEntry('webshop', './assets/js/webshop.js')
+    .addEntry('store', './assets/js/store.js')
 
     .addStyleEntry('daterangepicker', './assets/css/admin/daterangepicker.scss')
 

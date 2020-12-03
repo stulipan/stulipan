@@ -75,54 +75,6 @@ input[type=number] {
 //}
 
 
-
-.btn-loading {
-  position: relative;
-  pointer-events: none;
-  outline: none !important;
-  box-shadow: none !important;
-
-  &.btn-secondary,
-  &.btn-secondary:focus,
-  &.btn-link-secondary,
-  &.btn-link-secondary:focus {
-    //color: $border-color;
-    color: $gray-600;
-  }
-
-  &.btn:disabled {
-    opacity: 1 !important;
-  }
-  & .btn-loading-invisible {
-    opacity: 0;
-  }
-  &.btn-loading-bg {
-    background-color: $gray-200;
-    border-radius: $border-radius;
-    color: $muted;
-  }
-  & .loading-spinner {
-    display: inline-block;
-    width: #{$line-height-base}rem;  //1.5rem
-    height: #{$line-height-base}rem;
-    vertical-align: text-bottom;
-    border: .25rem solid currentColor;
-    border-right-color: transparent;
-    border-radius: 50%;
-    animation: spinner-border .75s linear infinite;
-    position: absolute;
-    top: calc(50% - #{$line-height-base}rem/2);
-    left: calc(50% - #{$line-height-base}rem/2);
-  }
-  &.btn-loading-has-bg .btn-content {
-    opacity: .5;
-  }
-  &.btn-loading-has-bg .loading-spinner {
-    border-color: lighten($gray-700, 10%);
-    border-right-color: transparent;
-  }
-}
-
 .pointer-events-none {
   pointer-events: none !important;
 }

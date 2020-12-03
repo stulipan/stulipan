@@ -3,7 +3,7 @@
             <svg class="svg-icon">
                 <use xlink:href="#cart-1"> </use>
             </svg>
-            <div class="login-cart-badge">
+            <div class="login-cart-badge" data-cart-item-count>
                 {% if order.countItems is defined %}
                     {{  order.countItems }}
                 {% else %}

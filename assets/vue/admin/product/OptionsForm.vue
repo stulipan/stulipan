@@ -16,10 +16,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 form-group">
                     <input v-model="options[index].name" type="text" :id="`option_modal_${index}`" required="required" placeholder="Eg.: Size" class="form-control" ref="optionFields">
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-8 form-group">
                     <multiselect
                             v-model="options[index].values"
                             :options="options[index].values"

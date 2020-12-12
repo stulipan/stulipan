@@ -301,8 +301,9 @@
                                                         track-by="id"
                                                         :showLabels="false"
                                                         myClass="detached"
-                                                        open-direction="auto"
-                                                        no-result-label="Upsz! Nincs ilyen kategória..."
+                                                        open-direction="bottom"
+                                                        no-result-label="Nincs ilyen opció..."
+                                                        :max-height="150"
                                                 >
                                                 </multiselect-bellow>
                                             </div>
@@ -324,8 +325,9 @@
                                                         track-by="id"
                                                         :showLabels="false"
                                                         myClass="detached"
-                                                        open-direction="auto"
-                                                        no-result-label="Upsz! Nincs ilyen kategória..."
+                                                        open-direction="bottom"
+                                                        no-result-label="Nincs ilyen opció..."
+                                                        :max-height="150"
                                                 >
                                                 </multiselect-bellow>
                                             </div>

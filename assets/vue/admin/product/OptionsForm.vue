@@ -130,9 +130,6 @@
                     this.options.splice(this.options.findIndex((el) => el.values.length === 0), 1)
                 }
             },
-            // focusOptionField (index) {
-            //     this.$refs.optionFields[index].focus();
-            // }
         },
         created () {
             !this.options.length && this.createOption();

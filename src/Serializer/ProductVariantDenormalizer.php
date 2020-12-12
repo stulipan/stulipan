@@ -6,6 +6,7 @@ use App\Entity\Price;
 use App\Entity\Product\ProductSelectedOption;
 use App\Entity\Product\ProductVariant;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\DocBlock\Serializer;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
@@ -36,6 +37,7 @@ class ProductVariantDenormalizer implements DenormalizerInterface, DenormalizerA
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         $product = $context['product'];  // this is passed on from ProductDenormalizer
+
         if (isset($data['id'])) {
             $object = $this->em->find(ProductVariant::class, $data['id']);
         } else {
@@ -44,10 +46,16 @@ class ProductVariantDenormalizer implements DenormalizerInterface, DenormalizerA
         }
 
         if (isset($data['selectedOptions'])) {
+            $initialSelectedOptions = $object->getSelectedOptions();
             $selectedOptions = $this->denormalizer->denormalize($data['selectedOptions'], ProductSelectedOption::class.'[]', $format, $context);
             foreach ($selectedOptions as $option) {
                 $option->setVariant($object);
                 $object->addSelectedOption($option);
+            }
+            foreach ($initialSelectedOptions as $item) {
+                if (!(new ArrayCollection($selectedOptions))->contains($item)) {
+                    $object->removeSelectedOption($item);
+                }
             }
         }
 

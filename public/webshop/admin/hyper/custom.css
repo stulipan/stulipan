@@ -39,8 +39,9 @@ body {
     overflow-x: scroll;
 }
 .grid-template-container {
+    --variant-columns: 1;
     display: grid;
-    grid-template-columns: 9.133rem repeat(1, minmax(9.133rem, auto)) repeat(1, 12.108rem) 9.133rem 12.108rem 9.133rem 2.445rem;
+    grid-template-columns: repeat(var(--variant-columns), 12.133rem) repeat(1, minmax(7.133rem, auto)) repeat(1, 7.133rem) 9.133rem 7.133rem 7.133rem;
     grid-gap: .4rem;
     -ms-flex-align: center;
     align-items: center;
@@ -101,7 +102,7 @@ body {
     position: relative;
     outline: none;
     border-top: 1px solid #e5e5e5;
-    background-color: #f4f4f5;
+    /*background-color: #f4f4f5;*/
 }
 
 .variant-item:hover {
@@ -490,8 +491,8 @@ body {
 
 .card .alert,
 .alert-card {
-    margin: 0 -1.25rem;
-    padding: 1rem 1.25rem;
+    margin: 0 -1rem;
+    padding: 1rem 1rem;
     border-radius: 0;
 }
 

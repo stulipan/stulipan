@@ -63,7 +63,7 @@ class ProductVariant //implements \JsonSerializable
      *
      * ==== One Variant belongs/is linked to many SelectedVariants ====
      *
-     * @ORM\OneToMany(targetEntity="ProductSelectedOption", mappedBy="variant", orphanRemoval=true, cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="ProductSelectedOption", mappedBy="variant", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="id", referencedColumnName="variant_id", nullable=false)
      * @ ORM\OrderBy({"ordering": "ASC"})
      * @ Assert\NotBlank(message="Egy terméknek legalább egy kép szükséges.")

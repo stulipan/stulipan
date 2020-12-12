@@ -4,9 +4,12 @@
 
             :on-complete="complete"
             :on-added-file="addedFile"
+            :onQueueComplete="resetUploader"
             class="uploader w-100"
             :key="componentKey"
             ref="vueclip"
+            role="button"
+            tabindex="0"
     >
         <template v-slot:clip-uploader-action="props">
             <div class="uploader-action" v-bind:class="{dragging: props.dragging}" tabindex="0">
@@ -30,7 +33,7 @@
                     </div>
                     <div class="file-details">
                         <div class="file-name">
-                            {{ file.name }}
+                            {{ file.name }} {{ file.customAttributes.id }}
                             <!--{{ file.status }}-->
                         </div>
                         <div class="file-progress" v-if="file.status !== 'error' && file.status !== 'success'">
@@ -59,7 +62,11 @@
 //                        type: 'multipart/form-data',  // ??
                 },
                 paramName: 'imageFile',
-                uploadMultiple: false, // Lásd a mounted() részt, ott van egy kötelező kódrész
+                maxFiles: {
+                    limit: 5,
+                    message: 'You can only upload a max of 5 files'
+                },
+                // uploadMultiple: false, // Lásd a mounted() részt, ott van egy kötelező kódrész
                 acceptedFiles: {
                     extensions: ['image/*'],
                     message: 'You are uploading an invalid file'
@@ -67,9 +74,10 @@
             },
         }
     };
-    
+
     export default {
         props: [
+            'images',
         ],
         data: function () {
             return {
@@ -91,37 +99,37 @@
             resetForm: 'resetUploader',
         },
         methods: {
-            submitFile () {
-                this.imageIsUploading = true;
-                setTimeout(() => this.savedImage(), 1000);
-            },
-            savedImage () {
-                this.imageIsUploading = false;
-                this.imageIsSaved = true;
-            },
+            // submitFile () {
+            //     this.imageIsUploading = true;
+            //     setTimeout(() => this.savedImage(), 1000);
+            // },
+            // savedImage () {
+            //     this.imageIsUploading = false;
+            //     this.imageIsSaved = true;
+            // },
             resetUploader () {
                 this.$refs.vueclip.removeAllFiles();
                 this.uploadedFiles = [];
                 this.componentKey += 1;
             },
             complete (file, status, xhr) {
+                // console.log(file);
                 // Adding server id to be used for deleting the file.
                 if (status === 'success') {
                     let data = JSON.parse(xhr.response);
                     let image = {};
                     image.image = data.images[0];
                     image.imageUrl = data.images[0].file;
+                    image.ordering = this.images.length;
+                    this.images.push(image);
 
-                    // FONTOS!!
-                    // A mező id azonosítóját kell az alábbi sorban megadni: 'cms_page_form_imageId'
-                    document.getElementsByClassName('V--imageId')[0].value = image.image.id;
                     file.addAttribute('id', image.image.id);
-
-                    // console.log(file.customAttributes.id);   ////////////
+                    console.log(file.customAttributes.id);   ////////////
                 } else {
                     let json = JSON.parse(xhr.response);
-                    this.errors.push(json.errors.imageFile);
-                    // console.log(json.errors.imageFile)
+                    console.log(json.errors.imageFile)
+
+                    this.$emit('error', json.errors.imageFile);
                 }
             },
             addedFile (file) {

@@ -1,5 +1,4 @@
 <?php
-// ebben tároljuk azon funkciókat, amivel kiolvasunk a boltzaras adatbázistáblából
 
 namespace App\Controller\Admin;
 

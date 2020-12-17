@@ -21,7 +21,7 @@
                     Adatlap
                 </a>
                 {% if is_granted('ROLE_IMPERSONATE_USER') %}
-                <a href="{{ path('admin', {'_switch_user': 'liviu.chioran+1@gmail.com'}) }}" class="dropdown-item notify-item">
+                <a href="{{ path('dashboard', {'_switch_user': 'liviu.chioran+1@gmail.com'}) }}" class="dropdown-item notify-item">
                     <i class="fas fa-user-secret"></i>
                     Impersonate user
                 </a>

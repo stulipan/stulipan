@@ -1,8 +1,6 @@
 {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-    <div class="alert alert-danger alert-dismissible bg-danger text-white text-center border-0 fade show py-0 px-1 mb-0 rounded-0" role="alert">
+    <div class="alert alert-danger text-center fade show mb-0 rounded-0" role="alert">
         <strong>FIGYELEM! </strong> Éppen egy másik felhasználóként használod az oldalt! <strong>Felhasználó:</strong> <em>{{ app.user.getFullname() }} ({{ app.user.email }})</em>
-        <a href="/admin/boltzaras/?_switch_user=_exit" class="text-dark btn btn-xs btn-warning ml-md-2 ml-sm-1 my-1">
-            <span class="text-sm" aria-hidden="true">Visszaállítás</span>
-        </a>
+        <a href="{{ path('dashboard', {'_switch_user': '_exit'}) }}" class="btn btn-warning ml-2">Visszaállítás</a>
     </div>
 {% endif %}

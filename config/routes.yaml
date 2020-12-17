@@ -3,7 +3,7 @@ index:
     controller: App\Controller\Shop\ShopController::index
 
 admin:
-    path: /admin
+    path: /{all}/admin   # {all} so that both /admin and /hu/admin work
     controller: App\Controller\Admin\AdminController::showAdmin
 
 logout:

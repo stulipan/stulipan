@@ -83,16 +83,28 @@
         <div class="col-md-12 correction-no-padding">
             <div class="card mb-30px">
                 <div class="card-body">
-                    <div class="no-margins">
-                        <ul class="nav nav-tabs mb-3">
-{#                            {{ dump(app.request.attributes.get('category')) }}#}
-                            {% for category, url in navigationTabs %}
-                                <li class="nav-item">
-                                    <a class="nav-link {% if app.request.attributes.get('category') == category %}active{% endif %}" href="{{ url }}">{{ category|capitalize }}</a>
+                    <div class="no-margins border-bottom">
+                        <nav class="adaptive-tabs">
+                            <ul class="nav nav-tabs adaptive-primary mb-3">
+                                {% for category, url in navigationTabs %}
+                                    <li class="nav-item adaptive-item">
+                                        <a class="nav-link {% if app.request.attributes.get('category') == category %}active{% endif %}" href="{{ url }}">{{ category|capitalize }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <ul class="adaptive-template">
+                                <li class="nav-item adaptive-item adaptive-more">
+                                    <button type="button" class="adaptive-button btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+{#											<i class="fas fa-ellipsis-h"></i>#}
+                                        {{ 'generic.more'|trans }}
+                                    </button>
+                                    <ul class="adaptive-secondary">
+                                    </ul>
                                 </li>
-                            {% endfor %}
-                        </ul>
+                            </ul>
+                        </nav>
                     </div>
+                    <div class="mt-3">
                         {% for key, form in forms %}
                                 {{ form_start(form, { 'attr': {'class': '' }}) }}
                                     <div class="row">
@@ -143,6 +155,7 @@
                                 {{ form_end(form) }}
                                 {% do form.setRendered() %}
                         {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

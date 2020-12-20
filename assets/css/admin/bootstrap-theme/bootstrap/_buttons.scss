@@ -27,8 +27,8 @@
     text-decoration: none;
   }
 
-  &:focus,
-  &.focus {
+  &:not(.btn-link):focus,   // :not(.btn-link) Added by Stulipan
+  &:not(.btn-link).focus {
     outline: 0;
     //box-shadow: $btn-focus-box-shadow;
   }
@@ -135,6 +135,8 @@ fieldset:disabled a.btn {
   font-weight: $font-weight-normal;
   color: $link-color;
   text-decoration: $link-decoration;
+  padding-left: 0;  // Added by Stulipan
+  padding-right: 0; // Added by Stulipan
 
   @include hover {
     color: $link-hover-color;

@@ -32,13 +32,17 @@
 //
 
 .nav-tabs {
-  border-bottom: $nav-tabs-border-width solid $nav-tabs-border-color;
-  padding-bottom: $nav-tabs-padding-y;
+  --nav-tabs-width: 100%;
+  //border-bottom: $nav-tabs-border-width solid $nav-tabs-border-color;
 
   .nav-item {
     margin-bottom: -$nav-tabs-border-width;
     margin-right: $nav-item-margin-x;
     padding: $nav-item-padding-y $nav-item-padding-x;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
   }
 
   .nav-link {

@@ -16,32 +16,47 @@
     <div class="row">
         <div class="col-lg-12 col-xl-11 mx-auto px-lg-4">
             {% block header %}
-                <div class="row mt-1 mt-sm-3">
-                    {% block breadcrumb %}
-                    <div class="col-lg-12 d-print-none">
-                        {% include 'admin/template-widget-breadcrumb.html.twig' %}
-                    </div>
-                    {% endblock %}
+                <div class="row mt-1 mt-md-3">
                     <div class="col-lg-12 mt-2">
-                        <div class="pb-2">
-                            <div class="page-title h3 d-inline mr-md-2 mr-1">{% block headerTitle %}{{ pageTitle }}{% endblock %}</div>
+                        <div class="header-wrapper">
+                            <div class="header-goback d-print-none">
+                                <div class="x">
+                                    {% if breadcrumb is defined and breadcrumb is not empty %}
+                                        {% for item in breadcrumb %}
+                                            {% if loop.last %}
+                                            <a href="{{ item.url }}" class="btn btn-secondary btn-goback"><i class="fas fa-arrow-left"></i></a>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="header-title">
+                                <div class="d-flex flex-md-row align-items-center flex-wrap">
+                                    <div class="d-flex">
+                                        {% block headerTitleWrapper %}
+                                        <div class="page-title h3 d-inline mr-md-2 mr-1">{% block headerTitle %}{{ pageTitle }}{% endblock %}</div>
+                                        {% endblock %}
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        {% block headerStatusWrapper %}
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="header-actions d-print-none">
+                                {% block headerActionsWrapper %}
+                                {% endblock %}
+                            </div>
                         </div>
                     </div>
                 </div>
             {% endblock %}
 
-            <div class="row">
-                <div class="col-sm-12 mb-3">
-                    {% block headerMoreActions %}
-                    {% endblock %}
-                </div>
-            </div>
-
             {% block beforeContent %}
             {% endblock %}
 
             {% block mainContent %}
-            <div class="row row-5">
+            <div class="row mt-3">
                 <div class="col-md-8 correction-no-padding">
                     {% block content %}
                     {% endblock %}

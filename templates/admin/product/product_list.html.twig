@@ -11,8 +11,6 @@
 
 {% block stylesheets %}
 	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('build/stulipan_react.css') }}" />
-	<!-- owl carousel-->
 	<link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css">
 {% endblock %}
 
@@ -22,7 +20,7 @@
 	<div class="modal fade" id="modal--productImages-{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
 			<div class="modal-content JS--recipientWrapper">
-				<div class="modal-header py-1X">
+				<div class="modal-header">
 					<h3 class="modal-title" id="modalLabel">{{ product.name }}</h3>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -117,60 +115,88 @@
 {% endblock %}
 
 {% block contentFilter %}
-	<div class="row mb-2">
-		<div class="col-lg-12 mb-3">
-			<div class="no-margins">
-				<ul class="nav nav-tabs">
+	<div class="no-margins">
+		<div class="overflow-x-scrollX">
+			<nav class="adaptive-tabs">
+				{% set len = 0 %}
+				{% for quickLink in filterQuickLinks %}
+					{% set len = len +  quickLink['name']|length %}
+				{% endfor %}
+				{% set len = len + 10 %}
+				<ul class="nav nav-tabs adaptive-primary form-row-verticalX" style="--nav-tabs-width: {{ len }}ch">
 					{% for quickLink in filterQuickLinks %}
-						<li class="nav-item badge--quantity-wrapper mr-3">
-							<span class="badge--quantity bg-white">{{ quickLink['itemCount'] }}</span>
-							<a href="{{ quickLink['url'] }}" class="nav-link {% if quickLink['active'] is defined and quickLink['active'] %}active{% endif %}">{{ quickLink['name'] }}</a>
-						</li>
-					{% endfor %}
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="col-lg-12">
-			{{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
-			<div class="align-middle">
-				<div class="w-100 d-flex justify-content-between">
-					<div class="field-group align-middle flex-columnX flex-md-row mr-2">
-						<div class="field-item flex-grow-3">
-							<div class="field-prepend">
-								<div class="field-addon-prepend w-addon-sm">
-									<i class="fas fa-search"></i>
+						<li class="nav-item adaptive-item">
+							<div class="col-verticalX">
+								<div class="">
+									{#												<span class="badge-quantity bg-white">{{ quickLink['itemCount'] }}</span>#}
+									<a href="{{ quickLink['url'] }}" class="nav-link {% if quickLink['active'] is defined and quickLink['active'] %}active{% endif %}">
+										<span class="d-flex justify-content-between align-items-center">
+											<span class="d-flex">{{ quickLink['name'] }}</span>
+											<span class="d-flex ml-2 badge badge-light">{{ quickLink['itemCount'] }}</span>
+										</span>
+									</a>
 								</div>
 							</div>
-							{{ form_widget(filterForm.searchTerm, {'attr': {'class': 'pl-addon-sm' }}) }}
+						</li>
+					{% endfor %}
+				</ul>
+				<ul class="adaptive-template">
+					<li class="nav-item adaptive-item adaptive-more">
+						<button type="button" class="adaptive-button btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+							{#											<i class="fas fa-ellipsis-h"></i>#}
+							{{ 'generic.more'|trans }}
+						</button>
+						<ul class="adaptive-secondary">
+						</ul>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<div class="no-margins mt-3 border-top pt-3">
+		{{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
+		<div class="align-middle">
+			<div class="w-100 d-flex justify-content-between">
+				<div class="field-group align-middle flex-columnX flex-md-row mr-2">
+					<div class="field-item flex-grow-3">
+						<div class="field-prepend">
+							<div class="field-addon-prepend w-addon-sm">
+								<i class="fas fa-search"></i>
+							</div>
 						</div>
-						<div class="field-item flex-grow-1">
-							{{ form_widget(filterForm.status, {'attr': {'class': 'form-control' }}) }}
-						</div>
+						{{ form_widget(filterForm.searchTerm, {'attr': {'class': 'pl-addon-sm' }}) }}
 					</div>
-					<div class="">
-						<input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary" formnovalidate>
+					<div class="field-item flex-grow-1">
+						{{ form_widget(filterForm.status, {'attr': {'class': 'form-control' }}) }}
 					</div>
 				</div>
+				<div class="">
+					<input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary" formnovalidate>
+				</div>
 			</div>
-			<div style="display:none">
-				{{ form_rest(filterForm) }}
-			</div>
-			{{ form_end(filterForm) }}
 		</div>
-
+		<div style="display:none">
+			{{ form_rest(filterForm) }}
+		</div>
+		{{ form_end(filterForm) }}
+	</div>
+	<div class="no-margins mt-2">
+		<div>
 		{% if filterTags is defined and filterTags is not null %}
-			<div class="col-lg-12">
+			<div class="form-row-vertical">
 				{% for filterKey,value in filterTags %}
 					{% if value is defined and value is not null %}
-						<div class="filter-tag">
-							<div class="filter-tag-content">{{ value }}</div>
-							<a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
+						<div class="col-vertical">
+							<div class="filter-tag">
+								<div class="filter-tag-content">{{ value }}</div>
+								<a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
+							</div>
 						</div>
 					{% endif %}
 				{% endfor %}
 			</div>
 		{% endif %}
+		</div>
 	</div>
 {% endblock %}
 
@@ -249,7 +275,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('build/stulipan_react.js') }}"></script>
 	<script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/owl.carousel.js"></script>
 	<script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>
 	<script>

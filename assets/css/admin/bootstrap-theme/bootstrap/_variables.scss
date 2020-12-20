@@ -105,6 +105,8 @@ $dark:            $gray-800 !default;
 $dark-lighten:    $gray-600 !default;
 $dark-darken:     $gray-900 !default;
 $muted:           $gray-650 !default;
+$hover-bg:        $gray-50 !default;
+
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -228,7 +230,7 @@ $sizes: map-merge(
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   $gray-50 !default;
+$body-bg:                   #f6f6f7 !default; // $gray-50 !default;
 $body-color:                $gray-900 !default;
 
 
@@ -320,9 +322,9 @@ $dropdown-shadow:             0 0 0 1px $gray-300, 0 .125rem .375rem 1px rgba($g
 $component-active-color:      $white !default;
 $component-active-bg:         theme-color("primary") !default;
 
-$caret-width:                 .3em !default;
-$caret-vertical-align:        $caret-width * .85 !default;
-$caret-spacing:               .5rem !default; //$caret-width * .85 !default;
+$caret-width:                 .3125em !default; //.3em !default;
+$caret-vertical-align:        $caret-width * .75 !default; //$caret-width * .85 !default;
+$caret-spacing:               .4rem !default; //$caret-width * .85 !default;
 
 $transition-base:             all .2s ease-in-out !default;
 $transition-fade:             opacity .05s linear !default;
@@ -795,20 +797,19 @@ $zindex-tooltip:                    1070 !default;
 
 $nav-item-padding-y:                0 !default;
 $nav-item-padding-x:                0 !default; //.3125rem !default;
-$nav-item-margin-x:                 .5rem !default;
+$nav-item-margin-x:                 .25rem !default;
 
-$nav-link-padding-y:               .3125rem !default;
+$nav-link-padding-y:               .4rem !default;
 $nav-link-padding-x:               .75rem !default;
-$nav-link-font-weight:              500 !default;
-$nav-link-color:                    $muted !default;
+$nav-link-font-weight:              $font-weight-base !default;
+$nav-link-color:                    $gray-900 !default;
 $nav-link-disabled-color:           $gray-600 !default;
 
 $nav-tabs-border-color:             $gray-200 !default;
 $nav-tabs-border-width:             $border-width !default;
 $nav-tabs-border-radius:            $border-radius !default;
-$nav-tabs-padding-y:                .75rem !default; // Added by Stulipan
 $nav-tabs-link-hover-border-color:  $gray-400 !default; //$gray-200 $gray-200 $nav-tabs-border-color !default;
-$nav-tabs-link-hover-bg:            $gray-50 !default; //$gray-200 $gray-200 $nav-tabs-border-color !default;
+$nav-tabs-link-hover-bg:            $hover-bg !default; //$gray-200 $gray-200 $nav-tabs-border-color !default;
 $nav-tabs-link-active-color:        $white !default;
 $nav-tabs-link-active-bg:           $primary-active !default;
 $nav-tabs-link-active-border-color: $primary !default; //$gray-300 $gray-300 $nav-tabs-link-active-bg !default;
@@ -881,15 +882,15 @@ $dropdown-box-shadow:               $dropdown-shadow !default; //0 .5rem 1rem rg
 
 $dropdown-link-color:               $gray-900 !default;
 $dropdown-link-hover-color:         darken($gray-900, 5%) !default;
-$dropdown-link-hover-bg:            $gray-300 !default;
+$dropdown-link-hover-bg:            $hover-bg !default; // $gray-300 !default;
 
 $dropdown-link-active-color:        $component-active-color !default;
 $dropdown-link-active-bg:           $component-active-bg !default;
 
 $dropdown-link-disabled-color:      $gray-600 !default;
 
-$dropdown-item-padding-y:           .7rem !default;
-$dropdown-item-padding-x:           1rem !default;
+$dropdown-item-padding-y:           .75rem !default;
+$dropdown-item-padding-x:           .75rem !default;
 
 $dropdown-header-color:             $gray-600 !default;
 
@@ -915,8 +916,8 @@ $pagination-focus-box-shadow:       $input-btn-focus-box-shadow !default;
 $pagination-focus-outline:          0 !default;
 
 $pagination-hover-color:            $link-hover-color !default;
-$pagination-hover-bg:               $gray-200 !default;
-$pagination-hover-border-color:     $gray-300 !default;
+$pagination-hover-bg:               $hover-bg !default;
+$pagination-hover-border-color:     $pagination-border-color !default;
 
 $pagination-active-color:           $component-active-color !default;
 $pagination-active-bg:              $component-active-bg !default;
@@ -924,7 +925,7 @@ $pagination-active-border-color:    $pagination-active-bg !default;
 
 $pagination-disabled-color:         $gray-600 !default;
 $pagination-disabled-bg:            $white !default;
-$pagination-disabled-border-color:  $gray-300 !default;
+$pagination-disabled-border-color:  $pagination-border-color !default;
 
 
 // Jumbotron
@@ -938,6 +939,7 @@ $jumbotron-bg:                      $gray-200 !default;
 
 $card-spacer-y:                     .75rem !default;
 $card-spacer-x:                     1rem !default;
+$card-spacer-x-sm:                  .75rem !default; // Added by Stulipan
 $card-border-width:                 $border-width !default;
 $card-border-radius:                $border-radius !default;
 $card-border-color:                 rgba($black, .125) !default;
@@ -1029,7 +1031,7 @@ $toast-header-border-color:         rgba(0, 0, 0, .05) !default;
 
 // Badges
 
-$badge-font-size:                   80% !default;
+$badge-font-size:                   85% !default;
 $badge-font-weight:                 $font-weight-normal !default;
 $badge-padding-y:                   .25rem !default;
 $badge-padding-x:                   .5rem !default;
@@ -1127,7 +1129,7 @@ $list-group-border-radius:          $border-radius !default;
 $list-group-item-padding-y:         .75rem !default;
 $list-group-item-padding-x:         1.25rem !default;
 
-$list-group-hover-bg:               $gray-100 !default;
+$list-group-hover-bg:               $hover-bg !default; // $gray-100 !default;
 $list-group-active-color:           $component-active-color !default;
 $list-group-active-bg:              $component-active-bg !default;
 $list-group-active-border-color:    $list-group-active-bg !default;
@@ -1160,13 +1162,13 @@ $figure-caption-color:              $gray-600 !default;
 
 // Breadcrumbs
 
-$breadcrumb-padding-y:              .75rem !default;
-$breadcrumb-padding-x:              1rem !default;
+$breadcrumb-padding-y:              0 !default; //.75rem !default;
+$breadcrumb-padding-x:              0 !default; //1rem !default;
 $breadcrumb-item-padding:           .5rem !default;
 
 $breadcrumb-margin-bottom:          1rem !default;
 
-$breadcrumb-bg:                     $gray-200 !default;
+$breadcrumb-bg:                     transparent !default; //$gray-200 !default;
 $breadcrumb-divider-color:          $gray-600 !default;
 $breadcrumb-active-color:           $gray-600 !default;
 $breadcrumb-divider:                quote("/") !default;

@@ -1,0 +1,97 @@
+// Adaptive tabs CSS
+// Works with adaptive-tabs.js
+
+$adaptive-tabs-dropdown-min-width:                    10rem !default;
+$adaptive-tabs-dropdown-bg:                           $white !default;
+$adaptive-tabs-dropdown-border-radius:                $border-radius !default;
+$adaptive-tabs-dropdown-box-shadow:                   $dropdown-shadow !default;
+$adaptive-tabs-dropdown-padding-x:                    $dropdown-padding-y !default;
+$adaptive-tabs-dropdown-margin-y:                     .5rem !default;
+
+$adaptive-tabs-dropdown-z-index:                      $zindex-dropdown - 2 !default;
+
+$adaptive-tabs-dropdown-item-padding-y:               $dropdown-item-padding-y !default;
+$adaptive-tabs-dropdown-item-padding-x:               $dropdown-item-padding-x !default;
+
+.adaptive-tabs {
+  position: relative;
+
+  &:not(.--active) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  & .adaptive-primary {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+
+    & .adaptive-item {
+      white-space: nowrap;
+    }
+  }
+
+  & .adaptive-secondary {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    list-style: none;
+    padding-inline-start: 0;
+
+    animation: nav-secondary 0.1s;
+    min-width: $adaptive-tabs-dropdown-min-width;
+    background-color: $adaptive-tabs-dropdown-bg;
+    background-clip: padding-box;
+    @include border-radius($adaptive-tabs-dropdown-border-radius);
+    @include box-shadow($adaptive-tabs-dropdown-box-shadow);
+    padding: $adaptive-tabs-dropdown-padding-x;
+
+    & .adaptive-item {
+      margin-right: 0;
+      
+      & .nav-link {
+        padding: $adaptive-tabs-dropdown-item-padding-y $adaptive-tabs-dropdown-item-padding-x;
+      }
+    }
+  }
+
+  &.--show-secondary .adaptive-secondary {
+    display: block;
+    z-index: $adaptive-tabs-dropdown-z-index;
+    margin-top: $adaptive-tabs-dropdown-margin-y;
+  }
+
+  & .adaptive-more {
+    margin-left: auto;
+  }
+
+  & .adaptive-template {
+    display: none;
+  }
+
+  & .adaptive-item.--hidden {
+    display: none;
+  }
+
+  &.adaptive-tabs-right {
+    & .adaptive-primary {
+      justify-content: flex-end;
+    }
+    & .adaptive-more {
+      margin-left: 0;
+    }
+  }
+}
+
+// Keyframes
+@keyframes nav-secondary {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -110,15 +110,7 @@ input[type=number] {
 
 
 .navbar--toolbar {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
-
   & .nav-item {
-    margin-right: .5rem;
-
     &:first-of-type {
       margin-left: -.7rem;
     }

@@ -14,18 +14,12 @@
 
         {{ encore_entry_link_tags('admin-theme') }}
         {{ encore_entry_link_tags('daterangepicker') }}
-
+        {{ encore_entry_link_tags('v-admin') }}
 
         <!-- HYPER CSS -->
         <link href="{{ asset('webshop/admin/hyper/custom.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('webshop/admin/v-style.css') }}" rel="stylesheet" type="text/css" />
-
-
-        {{ encore_entry_link_tags('v-admin') }}
-{#        <link href="{{ asset('build/v-admin.css') }}" rel="stylesheet" type="text/css"/>#}
-        <link rel="shortcut icon" href="{{ asset('webshop/site/favicon.png')}}">
-
-{#        <link href="{{ asset('webshop/site/js/daterangepicker.css') }}" rel="stylesheet" />#}
+        <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" />
 
     {% endblock %}
 </head>
@@ -49,9 +43,10 @@
     <script src="https://sciactive.com/pnotify/lib/iife/PNotifyButtons.js"></script>
 
     <script src="{{ asset('webshop/admin/hyper/js/order.detail.js') }}"></script>
-    <script src="{{ asset('build/v-admin.js') }}"></script>
+    {{ encore_entry_script_tags('v-admin') }}
     {{ encore_entry_script_tags('sidebar') }}
     {{ encore_entry_script_tags('floating-input') }}
+    {{ encore_entry_script_tags('adaptive-tabs') }}
 {% endblock %}
 </body>
 </html>

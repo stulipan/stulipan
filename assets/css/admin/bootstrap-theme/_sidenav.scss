@@ -47,11 +47,11 @@
   margin: 0;
   padding-inline-start: 0;
   padding-top: .5rem;
-  font-size: .9rem;
-  @include media-breakpoint-down(sm) {
-    font-size: 1rem;
-    line-height: 1.5;
-  }
+  @include font-size(.9rem);
+  //@include media-breakpoint-down(sm) {
+  //  font-size: 1rem;
+  //  line-height: 1.5;
+  //}
 
   &:last-of-type {
     padding-bottom: .5rem;

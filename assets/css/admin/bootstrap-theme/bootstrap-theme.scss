@@ -55,6 +55,10 @@ $nm-x-sm:          $card-spacer-x-sm !default;
   background-color: $blue;
 }
 
+@include media-breakpoint-down(sm) {
+  
+}
+
 // Mobile corrections
 // Card, Modal and Sidebar have smaller paddings on mobile devices
 //@include media-breakpoint-down(xs) {

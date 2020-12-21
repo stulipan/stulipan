@@ -115,6 +115,12 @@ body {
 
 
 
+/*.topnav {*/
+/*    background: linear-gradient(to right, #283b5d, #173463);*/
+
+/*    !*background: linear-gradient(to right, #008CDE, #005DA8);*!*/
+/*    background-color: #008CDE;*/
+/*}*/
 
 /*.navbar-custom {*/
 /*    !*padding: 0 0 0 30px;*!*/
@@ -1879,9 +1885,6 @@ body.boxed-layout .footer {
     margin: 0;
 }
 
-.dropdown .dropdown-menu i {
-    margin-right: .5rem;
-}
 
 /*.cart-item {*/
 /*    border-bottom: 1px solid #dee2e6;*/

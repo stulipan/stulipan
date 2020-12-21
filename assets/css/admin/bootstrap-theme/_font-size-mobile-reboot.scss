@@ -1,0 +1,23 @@
+
+// -lg and -sm size are not being corrected, simply wasn't implemented !!
+$font-size-multiplier:                              1.14 !default;
+
+$mobile-font-size-base:                             1rem !default; //calc(#{$font-size-base} * 1.14) !default;
+$mobile-line-height-base:                           1.5 !default;
+
+
+@include media-breakpoint-down(sm) {
+  body {
+  }
+
+  .sidenav,
+  .btn,
+  .form-control,
+  .col-form-label,
+
+  {
+    @include font-size($mobile-font-size-base);
+    line-height: $mobile-line-height-base;
+  }
+}
+

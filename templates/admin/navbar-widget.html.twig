@@ -1,5 +1,5 @@
 <div class="navbar-custom">
-    <ul class="navbar-nav mb-0 flex-row">
+    <ul class="navbar-nav flex-row">
 
         <li class="nav-item dropdown h-100">
             <a class="nav-link nav-user dropdown-toggle arrow-none" id="userDropdown" data-toggle="dropdown" data-display="static" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -17,17 +17,17 @@
                 </div>
 
                 <a href="{{ path('user-showProfile', {'id': app.user.id}) }}" class="dropdown-item notify-item">
-                    <i class="far fa-user"></i>
+                    <i class="far fa-user mr-2"></i>
                     Adatlap
                 </a>
                 {% if is_granted('ROLE_IMPERSONATE_USER') %}
                 <a href="{{ path('dashboard', {'_switch_user': 'liviu.chioran+1@gmail.com'}) }}" class="dropdown-item notify-item">
-                    <i class="fas fa-user-secret"></i>
+                    <i class="fas fa-user-secret mr-2"></i>
                     Impersonate user
                 </a>
                 {%  endif %}
                 <a href="{{ path('admin-logout') }}" class="dropdown-item notify-item">
-                    <i class="fas fa-sign-out-alt"></i>
+                    <i class="fas fa-sign-out-alt mr-2"></i>
                     <span>Kijelentkezés</span>
                 </a>
 
@@ -36,7 +36,7 @@
 
         <li class="nav-item dropdown">
             <a class="nav-link nav-user" href="#" data-toggle="sidebar" data-target="#slider--Settings">
-                <i class="fas fa-cog fa-lg mr-0"></i>
+                <span class="navbar-toggler-icon"><i class="fas fa-cog"></i></span>
             </a>
         </li>
     </ul>

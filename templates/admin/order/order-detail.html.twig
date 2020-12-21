@@ -300,24 +300,24 @@
                     <a class="nav-link" href="#"><i class="far fa-file-alt mr-2"></i>{{ 'order.shipping-letter'|trans }}</a>
                 </li>
                 <li class="nav-item adaptive-item">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#modal--Status" data-backdrop="static"><i class="far fa-edit"></i>{{ 'order.order-status'|trans }}</a>
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#modal--Status" data-backdrop="static"><i class="far fa-edit mr-2"></i>{{ 'order.order-status'|trans }}</a>
                 </li>
                 {% if isEditEnabled is defined and isEditEnabled == true %}
                     <li class="nav-item adaptive-item">
                         <a class="nav-link" href="" data-toggle="modal" data-target="#modal--Sender" data-backdrop="static" data-url="{{ path('order-editBillingInfo', {id: order.id}) }}">
-                            <i class="fas fa-sign-out-alt"></i>
+                            <i class="fas fa-sign-out-alt mr-2"></i>
                             {{ 'order.edit-sender'|trans }}
                         </a>
                     </li>
                     <li class="nav-item adaptive-item">
                         <a class="nav-link" href="" data-toggle="modal" data-target="#modal--Recipient" data-backdrop="static" data-url="{{ path('order-editShippingInfo', {id: order.id}) }}">
-                            <i class="fas fa-sign-in-alt"></i>
+                            <i class="fas fa-sign-in-alt mr-2"></i>
                             {{ 'order.edit-recipient'|trans }}
                         </a>
                     </li>
                     <li class="nav-item adaptive-item">
                         <a class="nav-link" href="" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static">
-                            <i class="far fa-clock"></i>
+                            <i class="far fa-clock mr-2"></i>
                             {{ 'order.new-delivery-date'|trans }}
                         </a>
                     </li>
@@ -325,7 +325,7 @@
             </ul>
             <ul class="adaptive-template">
                 <li class="nav-item adaptive-item adaptive-more">
-                    <a href="" type="button" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+                    <a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
                         <span>{{ 'generic.more-actions'|trans }}</span>
                     </a>
                     <ul class="adaptive-secondary">
@@ -353,7 +353,7 @@
                 {% if isEditEnabled is defined and isEditEnabled == true %}
                 <div class="edit-block d-print-none">
                     <div class="card-footer text-right">
-                        <a href="" class="btn btn-smX btn-secondary" data-dismiss="modal"><i class="far fa-edit"></i>{{ 'generic.edit'|trans }}</a>
+                        <a href="" class="btn btn-smX btn-secondary" data-dismiss="modal"><i class="far fa-edit mr-2"></i>{{ 'generic.edit'|trans }}</a>
                     </div>
                 </div>
                 {% endif %}
@@ -369,7 +369,7 @@
                     <div class="card-footer text-right">
                             <span class="nav-item dropdown">
                                 <a class="btn btn-secondary dropdown-toggle" href="javascript: void(0);" id="navSzerkesztes" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                {#                    <i class="far fa-edit"></i>#}
+                {#                    <i class="far fa-edit mr-2"></i>#}
                                     {{ 'generic.modify'|trans }}
                                 </a>
                                 <div class="dropdown-menu dropdown-transition dropdown-menu-right dropdown-menu-md-left mt-20px" aria-labelledby="navSzerkesztes">
@@ -423,7 +423,7 @@
             {% if isEditEnabled is defined and isEditEnabled == true %}
             <div class="edit-block d-print-none">
                 <div class="card-footer text-right">
-                    <a href="" class="btn btn-smX btn-secondary" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit"></i>{{ 'generic.modify'|trans }}</a>
+                    <a href="" class="btn btn-smX btn-secondary" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit mr-2"></i>{{ 'generic.modify'|trans }}</a>
                 </div>
             </div>
             {% endif %}

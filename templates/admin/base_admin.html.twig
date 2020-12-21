@@ -19,12 +19,12 @@
                 <div class="sidebar-body pb-0">
                     {% include '/admin/settings/_settings-dashboard-widget.html.twig' %}
                 </div>
-                <div class="sidebar-footer">
-                    <div class="loadingWrapper loadingWrapper-secondary">
-                        <a href="" class="btn btn-secondary" data-dismiss="sidebar">{{ 'generic.close'|trans }}</a>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                    </div>
-                </div>
+{#                <div class="sidebar-footer">#}
+{#                    <div class="loadingWrapper loadingWrapper-secondary">#}
+{#                        <a href="" class="btn btn-secondary" data-dismiss="sidebar">{{ 'generic.close'|trans }}</a>#}
+{#                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>#}
+{#                    </div>#}
+{#                </div>#}
             </div>
         </div>
     </div>
@@ -57,11 +57,21 @@
                     <a href="/" class="navbar-brand order-lg-1 order-2 mr-4" target="_blank">
                         <span class="h4 font-weight-bold text-uppercase text-white ml-0">tulipan<span class="text-danger">.</span>futar  </span>
                     </a>
-{#                    <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#burgerMenuContent" aria-controls="burgerMenuContent" aria-expanded="false" aria-label="Toggle navigation">#}
-                    <button class="navbar-toggler order-1" type="button" data-toggle="sidebar" data-target="#burgerMenuContent">
-                        {#<span class="navbar-toggler-icon"></span>#}
-                        <i class="fas fa-bars mr-0"></i>
-                    </button>
+{#                    <button class="navbar-toggler order-1" type="button" data-toggle="sidebar" data-target="#burgerMenuContent">#}
+{#                        #}{#<span class="navbar-toggler-icon"></span>#}
+{#                        <i class="fas fa-bars"></i>#}
+{#                    </button>#}
+
+                    <div class="navbar-custom order-1">
+                        <ul class="navbar-nav flex-row">
+                            <li class="nav-item">
+                                <button class="navbar-toggler" type="button" data-toggle="sidebar" data-target="#burgerMenuContent">
+                                    <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="collapse navbar-collapse active coll justify-content-center order-lg-2 order-5" id="burgerMenuContent_">
                         <ul class="navbar-nav" style="display: none;">
                             <li class="nav-item">

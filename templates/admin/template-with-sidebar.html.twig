@@ -24,7 +24,7 @@
                                     {% if breadcrumb is defined and breadcrumb is not empty %}
                                         {% for item in breadcrumb %}
                                             {% if loop.last %}
-                                            <a href="{{ item.url }}" class="btn btn-secondary btn-goback"><i class="fas fa-arrow-left"></i></a>
+                                            <a href="{{ item.url }}" class="btn btn-secondary btn-go-back"></a>
                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}

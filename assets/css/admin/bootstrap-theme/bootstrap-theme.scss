@@ -12,6 +12,8 @@
 @import "_vertical-ribbon";
 @import "_vue-multiselect";
 
+@import "_font-size-mobile-reboot";
+
 
 iframe {
   border: 0;
@@ -53,11 +55,16 @@ $nm-x-sm:          $card-spacer-x-sm !default;
 .topnav {
   background: linear-gradient(to right, darken($blue, 15), darken($blue, 20));
   background-color: $blue;
+  max-height: 50px;
+
+  & .navbar {
+    min-height: 50px;
+    max-height: 50px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
 
-@include media-breakpoint-down(sm) {
-  
-}
 
 // Mobile corrections
 // Card, Modal and Sidebar have smaller paddings on mobile devices
@@ -196,7 +203,7 @@ $nm-x-sm:          $card-spacer-x-sm !default;
 .btn:not(.btn-goback),
 .nav-link {
   & > .fa, .fab, .fal, .far, .fas {
-    margin-right: .5rem;
+    //margin-right: .5rem;
   }
 }
 
@@ -301,11 +308,99 @@ $header-action-width-sm:  $header-goback-width !default;
   //margin-left: 1rem;
 }
 
-// 'btn-goback' works together with btn-secondary !!
-.btn-goback {
-  font-size: 1rem;
-  padding: .5rem .75rem;
-  color: $gray-700;
+//// 'btn-goback' works together with btn-secondary !!
+//.btn-goback {
+//  display: inline-block;
+//  font-family: "Font Awesome 5 Free" !important;
+//  font-weight: 900 !important;
+//  text-align: center;
+//  vertical-align: middle;
+//  user-select: none;
+//
+//  @include button-size(.5rem, .75rem, $font-size-base, $btn-line-height, $btn-border-radius);
+//  color: $gray-700;
+//}
+
+
+
+@mixin button-navigational() {
+  display: inline-block;
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+
+  @include button-size(.3125rem, .5rem, $font-size-base, $btn-line-height, $btn-border-radius);
+  @include transition($btn-transition);
+
+  $background: $secondary;
+  $border: $input-border-color;
+  $hover-background: darken($background, 1.5%);
+  $hover-border: $border-color;
+  $active-background: darken($background, 1.5%);
+  $active-border: $border-color;
+
+  color: $gray-700 !important;
+  @include gradient-bg($background);
+  border: $btn-border-width solid $border;
+  @include box-shadow($btn-box-shadow);
+
+  display: inline-flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  align-items: center;
+
+  @include hover {
+    color: $yiq-text-dark;
+    @include gradient-bg($hover-background);
+    border-color: $hover-border;
+  }
+
+  &:focus,
+  &.focus {
+    // Avoid using mixin so we can pass custom focus shadow properly
+    @if $enable-shadows {
+      box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1);
+    } @else {
+      box-shadow: 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1)
+    }
+    border-color: $primary;
+  }
+
+  // Disabled comes first so active can properly restyle
+  &.disabled,
+  &:disabled {
+    color: $yiq-text-dark;
+    background-color: $background;
+    border-color: $border;
+    // Remove CSS gradients if they're enabled
+    @if $enable-gradients {
+      background-image: none;
+    }
+  }
+
+  // remove any content there was in the button
+  & * {
+    display: none;
+  }
+  // remove dropdown-toggle caret
+  &::after {
+    display: none;
+  }
+  &::before {
+    width: 20px;
+    display: inline-block;
+  }
+}
+
+// 'btn-goback'
+.btn-go-back {
+  @include button-navigational();
+  // display arrow-left
+  &::before {
+    content: "\f060";
+  }
 }
 
 // 'btn-more-actions' replaces the initial link/button with a button similar
@@ -315,79 +410,15 @@ $header-action-width-sm:  $header-goback-width !default;
 // Dependency: Font Awesome 5 Free
 .btn-more-actions {
   @include media-breakpoint-down(sm) {
-    display: inline-block;
-    font-family: "Font Awesome 5 Free" !important;
-    font-weight: 900 !important;
-    text-align: center;
-    vertical-align: middle;
-    user-select: none;
+    @include button-navigational();
 
-    @include button-size(.5rem, .75rem, $font-size-base, $btn-line-height, $btn-border-radius);
-    @include transition($btn-transition);
-
-    $background: $secondary;
-    $border: $input-border-color;
-    $hover-background: darken($background, 1.5%);
-    $hover-border: $border-color;
-    $active-background: darken($background, 1.5%);
-    $active-border: $border-color;
-
-    color: $gray-700;
-    @include gradient-bg($background);
-    border: $btn-border-width solid $border;
-    @include box-shadow($btn-box-shadow);
-
-    //display: inline-flex;
-    //flex: 0 0 auto;
-    //justify-content: center;
-    //align-items: center;
-
-
-    @include hover {
-      color: $yiq-text-dark;
-      @include gradient-bg($hover-background);
-      border-color: $hover-border;
-    }
-
-    &:focus,
-    &.focus {
-      // Avoid using mixin so we can pass custom focus shadow properly
-      @if $enable-shadows {
-        //box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(darken($primary, 5%), 1);
-        box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1);
-      } @else {
-        //box-shadow: 0 0 0 $btn-focus-width rgba(darken($primary, 5%), .5);
-        box-shadow: 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1)
-      }
-      border-color: $primary;
-    }
-
-    // Disabled comes first so active can properly restyle
-    &.disabled,
-    &:disabled {
-      color: $yiq-text-dark;
-      background-color: $background;
-      border-color: $border;
-      // Remove CSS gradients if they're enabled
-      @if $enable-gradients {
-        background-image: none;
-      }
-    }
-
-    // remove any content there was in the button
-    & * {
-      display: none;
-    }
-    // remove dropdown-toggle caret
-    &::after {
-      display: none;
-    }
-    // display 3 dots
+    // display ellipsis-h
     &::before {
       content: "\f141";
     }
   }
 }
+
 
 
 

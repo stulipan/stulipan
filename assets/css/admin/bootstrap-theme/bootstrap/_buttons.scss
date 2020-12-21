@@ -69,7 +69,7 @@ fieldset:disabled a.btn {
     } @else {
       @if $color == "secondary" {
         $background: $value;
-        $border: $border-color;
+        $border: $input-border-color;
         $hover-background: darken($background, 1.5%);
         $hover-border: $border-color;
         $active-background: darken($background, 1.5%);

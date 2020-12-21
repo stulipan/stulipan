@@ -3,7 +3,7 @@ $cart-item-padding-y:             1rem !default;
 $cart-item-border-width:          1px !default;
 $cart-item-border-color:          $gray-300 !default;
 
-$cart-item-image-width:           80px !default;
+$cart-item-image-width:           50px !default;
 
 $order-summary-padding-y:         .5rem !default;
 $order-summary-border-width:      1px !default;
@@ -40,7 +40,7 @@ $order-summary-total-font-size:   1.1rem !default;
   font-size: .7875rem;
   line-height: 1rem;
   padding: .5rem 0;
-  background-color: $gray-50;
+  background-color: $gray-100;
 
   & .svg-icon {
     position: absolute;

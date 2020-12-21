@@ -50,6 +50,11 @@ $nm-x-sm:          $card-spacer-x-sm !default;
   margin-bottom: 0;
 }
 
+.topnav {
+  background: linear-gradient(to right, darken($blue, 15), darken($blue, 20));
+  background-color: $blue;
+}
+
 // Mobile corrections
 // Card, Modal and Sidebar have smaller paddings on mobile devices
 //@include media-breakpoint-down(xs) {

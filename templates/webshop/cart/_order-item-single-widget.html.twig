@@ -3,7 +3,7 @@
         <div class="slide-checkout--item">
             <div class="d-flex align-items-center">
                 <div class="badge-quantity-wrapper">
-                    <span class="badge-quantity badge-dark">{{ item.quantity }}</span>
+                    <span class="badge-quantity">{{ item.quantity }}</span>
                     <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
                         <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid navbar-cart-product-image">
                     </a>

@@ -37,7 +37,7 @@ $drp-item-selected-color:               $white !default;
 $drp-item-disabled-color:               $gray-600 !default;
 $drp-item-hover-color:                  $white !default;
 $drp-item-hover-bg:                     $gray-300 !default;
-$drp-ranges-tag-bg:                     $gray-50 !default;
+$drp-ranges-tag-bg:                     $gray-100 !default;
 $drp-item-focus-bg:                     darken($primary, 5%) !default;
 $drp-font-size:                         .95 * $font-size-base !default;
 
@@ -60,7 +60,7 @@ $drp-single-ranges-dropdown-width:      250px !default;
 $drp-width-mobile:                      290px !default;
 
 $drp-content-max-height:                500px !default;
-$drp-content-bg:                        $gray-50 !default;
+$drp-content-bg:                        $gray-100 !default;
 
 // Ranges
 $drp-ranges-max-height:                 300px !default;
@@ -93,7 +93,7 @@ $drp-ranges-option-border-radius:       $drp-border-radius !default;
 
 
 // calendar-table
-$drp-calendar-prev-bg:                  $gray-50 !default;
+$drp-calendar-prev-bg:                  $gray-100 !default;
 $drp-calendar-prev-focus-bg:            $gray-200 !default;
 
 $drp-calendar-table-week-color:         $gray-400 !default;

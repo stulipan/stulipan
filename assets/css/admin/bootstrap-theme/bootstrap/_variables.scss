@@ -936,7 +936,7 @@ $jumbotron-bg:                      $gray-200 !default;
 
 // Cards
 
-$card-spacer-y:                     .75rem !default;
+$card-spacer-y:                     1rem !default;
 $card-spacer-x:                     1rem !default;
 $card-spacer-x-sm:                  .75rem !default; // Added by Stulipan
 $card-border-width:                 $border-width !default;
@@ -1125,8 +1125,8 @@ $list-group-border-color:           rgba($black, .125) !default;
 $list-group-border-width:           $border-width !default;
 $list-group-border-radius:          $border-radius !default;
 
-$list-group-item-padding-y:         .75rem !default;
-$list-group-item-padding-x:         1.25rem !default;
+$list-group-item-padding-y:         1rem !default;
+$list-group-item-padding-x:         1rem !default;
 
 $list-group-hover-bg:               $hover-bg !default; // $gray-100 !default;
 $list-group-active-color:           $component-active-color !default;

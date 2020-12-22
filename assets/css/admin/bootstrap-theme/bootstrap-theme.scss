@@ -52,19 +52,6 @@ $nm-x-sm:          $card-spacer-x-sm !default;
   margin-bottom: 0;
 }
 
-.topnav {
-  background: linear-gradient(to right, darken($blue, 15), darken($blue, 20));
-  background-color: $blue;
-  max-height: 50px;
-
-  & .navbar {
-    min-height: 50px;
-    max-height: 50px;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-}
-
 
 // Mobile corrections
 // Card, Modal and Sidebar have smaller paddings on mobile devices
@@ -136,8 +123,8 @@ $nm-x-sm:          $card-spacer-x-sm !default;
   width: 100%;
 }
 
-/*@media (max-width: 767.98px) {*/
-@media (max-width: 575.98px) {
+@media (max-width: 767.98px) {
+//@media (max-width: 575.98px) {
   .w-lg {
     width: calc(960px - 20px);
   }
@@ -177,6 +164,17 @@ $nm-x-sm:          $card-spacer-x-sm !default;
     -ms-overflow-x: hidden !important;
     overflow-x: hidden !important;
   }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.overflow-x-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.overflow-x-scroll {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 //$scrollbar-width:                       5px !default;

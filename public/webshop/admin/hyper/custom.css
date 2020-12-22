@@ -2089,47 +2089,47 @@ tr:hover .overlay-cell .overlay-content {
 
 /* ============= Utils ============= */
 
-.text-xs {
-    font-size: .7rem;
-}
+/*.text-xs {*/
+/*    font-size: .7rem;*/
+/*}*/
 
-.text-sm {
-    font-size: .7875rem;
-}
+/*.text-sm {*/
+/*    font-size: .7875rem;*/
+/*}*/
 
-.text-md {
-    font-size: .875rem;
-}
+/*.text-md {*/
+/*    font-size: .875rem;*/
+/*}*/
 
-.text-lg {
-    font-size: 1rem;
-}
+/*.text-lg {*/
+/*    font-size: 1rem;*/
+/*}*/
 
-.text-xl {
-    font-size: 1.125rem;
-}
+/*.text-xl {*/
+/*    font-size: 1.125rem;*/
+/*}*/
 
-@media (min-width:576px) {
-    .text-xs {
-        font-size: .7rem;
-    }
+/*@media (min-width:576px) {*/
+/*    .text-xs {*/
+/*        font-size: .7rem;*/
+/*    }*/
 
-    .text-sm {
-        font-size: .7875rem;
-    }
+/*    .text-sm {*/
+/*        font-size: .7875rem;*/
+/*    }*/
 
-    .text-md {
-        font-size: .9rem;
-    }
+/*    .text-md {*/
+/*        font-size: .9rem;*/
+/*    }*/
 
-    .text-lg {
-        font-size: 1.125rem;
-    }
+/*    .text-lg {*/
+/*        font-size: 1.125rem;*/
+/*    }*/
 
-    .text-xl {
-        font-size: 1.875rem;
-    }
-}
+/*    .text-xl {*/
+/*        font-size: 1.875rem;*/
+/*    }*/
+/*}*/
 
 .h-10px { max-height: 10px; }
 .h-15px { max-height: 15px; }

@@ -329,6 +329,19 @@
 // Added by Stulipan
 // ==================================================================
 
+.topnav {
+  background: linear-gradient(to right, darken($blue, 15), darken($blue, 20));
+  background-color: $blue;
+  max-height: 50px;
+
+  & .navbar {
+    min-height: 50px;
+    max-height: 50px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
 $navbar-custom-link-padding-y:        $navbar-toggler-padding-y;
 $navbar-custom-link-padding-x:        $navbar-toggler-padding-x;
 

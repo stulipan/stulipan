@@ -27,7 +27,7 @@
                                                     {% if key != 'label' %}
                                                         {% if value.type is defined and value.type == 'DateTime' %}
                                                             <div class="form-group row {% if loop.last %}mb-0{% endif %}">
-                                                                <div class="col-sm-12 text-muted">
+                                                                <div class="col-sm-12">
                                                                     {{ form_label(form.offsetGet(group ~ '_' ~ key)) }}
                                                                 </div>
                                                                 <div class="col-sm-12">
@@ -44,7 +44,7 @@
                                                             </div>
                                                         {% elseif value['type'] == 'Boolean' %}
                                                             <div class="form-group row {% if loop.last %}mb-0{% endif %}">
-                                                                <div class="col-sm-12 text-muted">
+                                                                <div class="col-sm-12">
                                                                     {{ form_label(form.offsetGet(group ~ '_' ~ key)) }}
                                                                 </div>
                                                                 <div class="col-sm-12">
@@ -59,7 +59,7 @@
                                                             </div>
                                                         {% else %}
                                                             <div class="form-group row {% if loop.last %}mb-0{% endif %}">
-                                                                <div class="col-sm-12 text-muted">
+                                                                <div class="col-sm-12">
                                                                     {{ form_label(form.offsetGet(group ~ '_' ~ key)) }}
                                                                 </div>
                                                                 <div class="col-sm-12">

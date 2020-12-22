@@ -94,7 +94,7 @@
                             </ul>
                             <ul class="adaptive-template">
                                 <li class="nav-item adaptive-item adaptive-more">
-                                    <button type="button" class="adaptive-button btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="adaptive-button nav-link btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
 {#											<i class="fas fa-ellipsis-h"></i>#}
                                         {{ 'generic.more'|trans }}
                                     </button>
@@ -116,7 +116,7 @@
                                                 <div class="form-group">
 {#                                                    <div class="row no-margins pt-3 border-top"></div>#}
                                                     <div class="row">
-                                                        <div class="col-md-12 mb-2X">
+                                                        <div class="col-md-12">
                                                             <h4>{{ sourceText[key][child.vars.label]|capitalize }}</h4>
                                                             {% do child.setRendered() %}
                                                         </div>
@@ -125,16 +125,16 @@
 
                                                 {% else %}
                                                     {% if child.vars.id != 'form__token' %}
-                                                        <div class="form-group row">
+                                                        <div class="form-group form-row">
                                                             <div class="col-md-12">
                                                                 <label>{{ sourceLabel[key][child.vars.label] }}</label>
                                                             </div>
-                                                            <div class="col-md-6 mb-lg-0 mb-2">
+                                                            <div class="col-6 mb-lg-0 mb-2">
                                                                 <div class="translation">
                                                                     <div class="position-relative">{{ sourceText[key][child.vars.label] }}</div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-6">
                                                                 {{ form_widget(child, {'attr': {'placeholder': sourceText[key][child.vars.label], 'class': 'JS--autoExpand' }}) }}
                                                                 {{ form_errors(child) }}
                                                             </div>

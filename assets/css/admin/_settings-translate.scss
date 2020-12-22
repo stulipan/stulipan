@@ -2,28 +2,29 @@
 $translation-padding-y:         $input-padding-y !default;
 $translation-padding-x:         $input-padding-x !default;
 
-$translation-border-width:      $border-width !default;
-$translation-border-color:      $gray-400 !default;
+$translation-border-width:      $input-border-width !default;
+$translation-border-color:      $input-border-color !default;
+$translation-border-radius:     $input-border-radius !default;
 
-$translation-line-height:       $line-height-base !default;
+$translation-line-height:       $input-line-height !default;
 $translation-color:             $yiq-text-dark !default;
 
 $translation-bg:                $gray-100 !default;
 $translation-height:            calc(#{$translation-padding-y * 2} + #{$translation-line-height * 1rem} + #{$translation-border-width * 2}) !default;
 
-$translation-icon-width:        1.325rem;
+$translation-icon-width:        30px;
 $translation-icon-color:        $gray-600;
 
 .translation {
   display: flex;
   position: relative;
   align-items: center;
-  width: calc(100% - #{2 * $translation-icon-width});
+  width: calc(100% - #{1 * $translation-icon-width});
   min-height: $translation-height;
   padding: $translation-padding-y $translation-padding-x;
   background-color: $translation-bg;
   border: $translation-border-width dashed $translation-border-color;
-  border-radius: $border-radius;
+  border-radius: $translation-border-radius;
   color: $translation-color;
   line-height: $translation-line-height;
   opacity: .7;
@@ -34,8 +35,8 @@ $translation-icon-color:        $gray-600;
     content: "\f054";
     width: $translation-icon-width;
     height: 100%;
-    top: 0.25rem;
-    right: -2.25rem;
+    top: 0;
+    right: -3rem;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     display: inline-block;
@@ -46,6 +47,7 @@ $translation-icon-color:        $gray-600;
     color: $translation-icon-color;
     text-rendering: auto;
     opacity: 1;
+    padding: $translation-padding-y 0;
   }
 }
 

@@ -72,10 +72,10 @@
 	<div class="no-margins mt-2">
 		<div>
 			{% if filterTags is defined and filterTags is not null %}
-				<div class="form-row-vertical">
+				<div class="vertical-form-row">
 					{% for filterKey,value in filterTags %}
 						{% if value is defined and value is not null %}
-							<div class="col-vertical">
+							<div class="vertical-col">
 								<div class="filter-tag">
 									<div class="filter-tag-content">{{ value }}</div>
 									<a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>

@@ -39,8 +39,6 @@
 
 @include media-breakpoint-down(sm) {
   .filter-tag {
-    font-size: 90%;
-    line-height: 90%;
 
     & .filter-tag-content {
       //padding: .25rem .5rem;

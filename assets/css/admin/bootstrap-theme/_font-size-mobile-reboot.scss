@@ -17,7 +17,7 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
   .col-form-label,
   .list-group-item,
   .dropdown-menu,
-  .adaptive-tabs .adaptive-button
+  .adaptive-tabs .adaptive-button,
   {
     @include font-size($mobile-font-size-base);
     line-height: $mobile-line-height-base;
@@ -25,12 +25,14 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
 
   .sidenav,
   .btn,
-  .form-control
+  .form-control,
+  .translation   // because .translation is a fake input field
   {
     @include font-size(1rem);
     line-height: $mobile-line-height-base;
   }
 
+  // Height correction based mobile-line-height-base
   .form-control {
     height: $mobile-input-height;
   }

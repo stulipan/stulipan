@@ -46,6 +46,9 @@ $adaptive-tabs-dropdown-item-padding-x:               $dropdown-item-padding-x !
     @include border-radius($adaptive-tabs-dropdown-border-radius);
     @include box-shadow($adaptive-tabs-dropdown-box-shadow);
     padding: $adaptive-tabs-dropdown-padding-x;
+    max-height: 195px;
+    overflow-y: scroll;
+
 
     & .adaptive-item {
       margin-right: 0;

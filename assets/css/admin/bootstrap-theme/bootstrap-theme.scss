@@ -191,26 +191,26 @@ $nm-x-sm:          $card-spacer-x-sm !default;
   scrollbar-width: none;  /* Firefox */
 }
 
-//$scrollbar-width:                       5px !default;
-//$scrollbar-border-radius:               10px !default;
-//
-//$scrollbar-thumb-bg:                    $gray-400 !default;
-//$scrollbar-track-bg:                    $gray-50 !default;
-//
-//
-//::-webkit-scrollbar {
-//  width: $scrollbar-width;
-//  height: $scrollbar-width;
-//}
-//::-webkit-scrollbar-thumb {
-//  background: $scrollbar-thumb-bg;
-//  border-radius: $scrollbar-border-radius;
-//}
-//
-//::-webkit-scrollbar-track {
-//  background: $scrollbar-track-bg;
-//  border-radius: $scrollbar-border-radius;
-//}
+$scrollbar-width:                       5px !default;
+$scrollbar-border-radius:               10px !default;
+
+$scrollbar-thumb-bg:                    $gray-400 !default;
+$scrollbar-track-bg:                    $gray-100 !default;
+
+
+*:not(body)::-webkit-scrollbar {
+  width: $scrollbar-width;
+  height: $scrollbar-width;
+}
+*:not(body)::-webkit-scrollbar-thumb {
+  background: $scrollbar-thumb-bg;
+  border-radius: $scrollbar-border-radius;
+}
+
+*:not(body)::-webkit-scrollbar-track {
+  background: $scrollbar-track-bg;
+  border-radius: $scrollbar-border-radius;
+}
 
 .btn:not(.btn-goback),
 .nav-link {

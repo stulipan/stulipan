@@ -3,29 +3,29 @@
 $font-size-multiplier:                              1.14 !default;
 
 $mobile-font-size-base:                             .9375rem !default; //calc(#{$font-size-base} * 1.14) !default;
-$mobile-line-height-base:                           1.5 !default;
+$mobile-line-height-base:                           1.4375 !default;
 
 
 @include media-breakpoint-down(sm) {
   body {
-    @include font-size(1rem);
+    @include font-size($mobile-font-size-base);
     line-height: $mobile-line-height-base;
   }
 
-  //body,
-  //.col-form-label,
-  //.list-group-item
-  //{
-  //  @include font-size($mobile-font-size-base);
-  //  line-height: $mobile-line-height-base;
-  //}
+  .col-form-label,
+  .list-group-item,
+  .dropdown-menu
+  {
+    @include font-size($mobile-font-size-base);
+    line-height: $mobile-line-height-base;
+  }
 
   .sidenav,
   .btn,
   .form-control
   {
-    //@include font-size(1rem);
-    @include font-size(95%);
+    @include font-size(1rem);
+    //@include font-size(95%);
     line-height: $mobile-line-height-base;
   }
 }

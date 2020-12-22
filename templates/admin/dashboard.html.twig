@@ -13,16 +13,24 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="mb-20px">
-                        <a href="{{ path('order-list-table') }}" class="btn btn-secondary mb-2 mr-2"><i class="fas fa-shopping-cart mr-2"></i>{{ 'dashboard.orders'|trans }}</a>
-                        <a href="{{ path('customer-list') }}" class="btn btn-secondary mb-2 mr-2"><i class="fas fa-user-friends mr-2"></i>{{ 'dashboard.customers'|trans }}</a>
-                        <a href="{{ path('product-list') }}" class="btn btn-secondary mb-2"><i class="fas fa-boxes mr-2"></i>{{ 'dashboard.products'|trans }}</a>
+                        <div class="vertical-row">
+                            <div class="vertical-col">
+                                <a href="{{ path('order-list-table') }}" class="btn btn-secondary mr-2"><i class="fas fa-shopping-cart mr-2"></i>{{ 'dashboard.orders'|trans }}</a>
+                            </div>
+                            <div class="vertical-col">
+                                <a href="{{ path('customer-list') }}" class="btn btn-secondary mr-2"><i class="fas fa-user-friends mr-2"></i>{{ 'dashboard.customers'|trans }}</a>
+                            </div>
+                            <div class="vertical-col">
+                                <a href="{{ path('product-list') }}" class="btn btn-secondary"><i class="fas fa-boxes mr-2"></i>{{ 'dashboard.products'|trans }}</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-md-12 overflow-x-scroll overflow-x-md-hidden">
                     <div class="position-relative">
                         <div class="w-lg mx-auto py-1">
-                            <div class="row">
+                            <div class="form-row">
                                 <div class="col-4 col-md-4">
                                     <div class="card">
                                         <div class="card-wrapper">

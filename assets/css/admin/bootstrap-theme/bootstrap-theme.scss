@@ -98,7 +98,7 @@ $nm-x-sm:          $card-spacer-x-sm !default;
   }
 }
 
-.vertical-row-vertical,
+.vertical-row,
 .vertical-form-row {
   display: flex;
   flex-wrap: wrap;
@@ -109,12 +109,12 @@ $nm-x-sm:          $card-spacer-x-sm !default;
 }
 
 .vertical-row {
-  margin-top: -10px;
-  margin-bottom: -10px;
+  margin-top: -.25rem;
+  margin-bottom: -.25rem;
 
   & .vertical-col {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
   }
 }
 
@@ -198,16 +198,16 @@ $scrollbar-thumb-bg:                    $gray-400 !default;
 $scrollbar-track-bg:                    $gray-100 !default;
 
 
-*:not(body)::-webkit-scrollbar {
+body *::-webkit-scrollbar {
   width: $scrollbar-width;
   height: $scrollbar-width;
 }
-*:not(body)::-webkit-scrollbar-thumb {
+body *::-webkit-scrollbar-thumb {
   background: $scrollbar-thumb-bg;
   border-radius: $scrollbar-border-radius;
 }
 
-*:not(body)::-webkit-scrollbar-track {
+body *::-webkit-scrollbar-track {
   background: $scrollbar-track-bg;
   border-radius: $scrollbar-border-radius;
 }

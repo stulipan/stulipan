@@ -39,7 +39,7 @@ $drp-item-hover-color:                  $white !default;
 $drp-item-hover-bg:                     $gray-300 !default;
 $drp-ranges-tag-bg:                     $gray-100 !default;
 $drp-item-focus-bg:                     darken($primary, 5%) !default;
-$drp-font-size:                         .95 * $font-size-base !default;
+$drp-font-size:                         $font-size-base !default;
 
 $drp-padding-y:                         .75rem !default;
 $drp-padding-x:                         $drp-padding-y !default;

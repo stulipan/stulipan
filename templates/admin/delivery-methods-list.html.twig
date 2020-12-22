@@ -22,13 +22,13 @@
                     <a href="{{ path('shipping-edit') }}" class="btn btn-primary mb-2">Új szállítási  mód</a>
                 </div>
             </div>
-            <div class="col-md-8 correction-no-padding">
+            <div class="col-md-8">
                 <div class="mb-20px">
                     <div class="">
                         <div class="row">
                             {% if shippings is defined %}
                                 {% for item in shippings %}
-                                    <div class="col-md-12 mb-3">
+                                    <div class="col-md-12 mb-3 correction-no-padding">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
@@ -42,7 +42,7 @@
                                                                 <div class="badge badge-{{ item.enabled ? 'success' : 'danger' }}">{{ item.enabled ? 'Engedélyezve' : 'Letiltva' }}</div>
                                                             </div>
                                                         </div>
-                                                        <div class="text-muted mt-1">
+                                                        <div class="mt-3">
                                                             {{ item.description|raw  }}
                                                         </div>
 
@@ -51,13 +51,13 @@
                                             </div>
                                             <div class="card-footer">
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="d-inline-block text-xs text-muted mr-2">
+                                                    <small class="d-inline-block text-muted mr-2">
                                                         <em>Létrehozva: {{ item.createdAt|date('Y-m-d')}}, {{ item.createdAt|date('H:i')}}</em> <br>
                                                         <em>Utolsó módosítás: {{ item.updatedAt|date('Y-m-d')}}, {{ item.updatedAt|date('H:i')}}</em>
-                                                    </div>
+                                                    </small>
                                                     <div class="d-flex">
                                                         <a href="{{ path('shipping-edit', {'id': item.id}) }}" class="btn btn-secondary">
-                                                            <i class="far fa-edit"></i> Módosít
+                                                            <i class="far fa-edit mr-2"></i> Módosít
                                                         </a>
                                                     </div>
                                                 </div>
@@ -93,13 +93,13 @@
                     <a href="{{ path('shipping-edit') }}" class="btn btn-primary mb-2">Új fizetési  mód</a>
                 </div>
             </div>
-            <div class="col-md-8 correction-no-padding">
+            <div class="col-md-8">
                 <div class="cardX mb-20px">
                     <div class="card-bodyX">
                         <div class="row">
                         {% if payments is defined %}
                             {% for item in payments %}
-                                <div class="col-md-12 mb-3">
+                                <div class="col-md-12 mb-3 correction-no-padding">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row">
@@ -117,7 +117,7 @@
                                                             <img class="img-fluid h-20px mr-0" src="{{ asset('/uploads/images/termekek/' ~ item.image) }}" alt="">
                                                         {% endif %}
                                                     </div>
-                                                    <div class="text-muted mt-1">
+                                                    <div class="mt-3">
                                                         {{ item.description|raw  }}
                                                     </div>
                                                 </div>
@@ -125,13 +125,13 @@
                                         </div>
                                         <div class="card-footer">
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <div class="d-inline-block text-xs text-muted mr-2">
+                                                <small class="d-inline-block text-muted mr-2">
                                                     <em>Létrehozva: {{ item.createdAt|date('Y-m-d')}}, {{ item.createdAt|date('H:i')}}</em> <br>
                                                     <em>Utolsó módosítás: {{ item.updatedAt|date('Y-m-d')}}, {{ item.updatedAt|date('H:i')}}</em>
-                                                </div>
+                                                </small>
                                                 <div class="d-flex">
                                                     <a href="{{ path('shipping-edit', {'id': item.id}) }}" class="btn btn-secondary">
-                                                        <i class="far fa-edit"></i>
+                                                        <i class="far fa-edit mr-2"></i>
                                                         Módosít
                                                     </a>
                                                 </div>

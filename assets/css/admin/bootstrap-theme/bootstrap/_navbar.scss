@@ -135,8 +135,8 @@
 // or image file as needed.
 .navbar-toggler-icon {
   //display: inline-block;
-  width: 1.5em;
-  height: 1.5em;
+  width: 30px; //1.5em;
+  height: 30px; //1.5em;
   vertical-align: middle;
   content: "";
   background: no-repeat center center;
@@ -329,11 +329,19 @@
 // Added by Stulipan
 // ==================================================================
 
+$navbar-custom-link-padding-y:        $navbar-toggler-padding-y;
+$navbar-custom-link-padding-x:        $navbar-toggler-padding-x;
+
 .navbar-custom {
   display: flex;
   align-items: stretch;
   padding: 0;
-  //margin-right: -15px;
+
+  & .nav-link {
+    padding: $navbar-custom-link-padding-y $navbar-custom-link-padding-x;
+    height: 40px;
+    overflow-y: hidden;
+  }
 
   .nav-user {
     padding-top: 0;
@@ -346,36 +354,43 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
+    //padding-right: .25rem;
+    //padding-left: .25rem;
 
     .account-user-avatar {
       display: inline-block;
+      font-size: $navbar-toggler-font-size;
+
+      @include media-breakpoint-up(sm) {
+        padding-right: .25rem;
+      }
     }
+
     .account-user-avatar img {
-      height: 32px;
-      width: 32px;
+      height: 30px;
+      width: 30px;
+      border: 3px solid transparent;
     }
     .account-user-detail {
       display: none;
     }
 
-    @media (min-width: 576px) {
+    @include media-breakpoint-up(sm) {
       .account-user-detail {
         display: inline-block;
-        //margin-right: .5rem;
-        margin-left: .5rem;
+        padding-left: .25rem;
+        padding-right: $navbar-custom-link-padding-x;
       }
     }
 
     .account-user-name {
       display: block;
       font-weight: $font-weight-normal;
-      //margin-top: 2px;
     }
     .account-position {
       display: block;
       font-size: 12px;
       margin-top: -2px;
     }
-
   }
 }

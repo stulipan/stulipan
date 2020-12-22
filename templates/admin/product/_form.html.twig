@@ -4,7 +4,7 @@
 			<div class="mb-2">
 				<div class="form-group row">
 					<div class="col-sm-12 col-md-2">
-						{{ form_label(form.name, form.name, { 'label_attr': {'class': 'col-form-label' }}) }}
+						{{ form_label(form.name, form.name, { 'label_attr': {'class': '' }}) }}
 					</div>
 					<div class="col-sm-12 col-md-6 col-xl-6 mr-auto">
                         {{ form_widget(form.name) }}
@@ -33,7 +33,7 @@
             <div class="mb-2">
                 <div class="form-group row">
                     <div class="col-sm-12 col-md-2">
-                        <div class="col-form-label">Termékkép</div>
+                        <div class="">Termékkép</div>
                     </div>
                     <div class="col-sm-12 col-md-6 col-xl-6 mr-auto input-group">
                         <div class="custom-file">
@@ -56,7 +56,7 @@
 			<div class="mb-2">
 				<div class="form-group row">
 					<div class="col-sm-12 col-md-2">
-                        {{ form_label(form.sku, form.sku, { 'label_attr': {'class': 'col-form-label' }}) }}
+                        {{ form_label(form.sku, form.sku, { 'label_attr': {'class': '' }}) }}
 					</div>
 					<div class="col-sm-12 col-md-6 col-xl-5 mr-auto">
                         {{ form_widget(form.sku) }}
@@ -68,7 +68,7 @@
 			<div class="mb-2">
 				<div class="form-group row">
 					<div class="col-sm-12 col-md-2">
-                        {{ form_label(form.description, form.description, { 'label_attr': {'class': 'col-form-label' }}) }}
+                        {{ form_label(form.description, form.description, { 'label_attr': {'class': '' }}) }}
 					</div>
 					<div class="col-sm-12 col-md-6 col-xl-6 mr-auto">
                         {{ form_widget(form.description) }}
@@ -87,7 +87,7 @@
 			{#<div class="mb-2">#}
 				{#<div class="form-group row">#}
 					{#<div class="col-sm-12 col-md-2">#}
-                        {#{{ form_label(form.grossPrice, form.grossPrice, { 'label_attr': {'class': 'col-form-label' }}) }}#}
+                        {#{{ form_label(form.grossPrice, form.grossPrice, { 'label_attr': {'class': '' }}) }}#}
 					{#</div>#}
 					{#<div class="col-md-9 col-lg-3 mr-auto input-group">#}
                         {#{{ form_widget(form.grossPrice) }}#}
@@ -102,7 +102,7 @@
 			<div class="mb-2">
 				<div class="row">
                     <div class="col-sm-12 col-md-2 order-1">
-                        {{ form_label(form.price.grossPrice, form.price.grossPrice, { 'label_attr': {'class': 'col-form-label' }}) }}
+                        {{ form_label(form.price.grossPrice, form.price.grossPrice, { 'label_attr': {'class': '' }}) }}
                     </div>
                     <div class="col-sm-12 col-md-6 col-xl-3 mr-auto form-group order-3 order-md-2">
                         <div class="input-group">
@@ -130,7 +130,7 @@
 			<div class="mb-2">
 				<div class="form-group row">
 					<div class="col-sm-12 col-md-2">
-                        {{ form_label(form.stock, form.stock, { 'label_attr': {'class': 'col-form-label' }}) }}
+                        {{ form_label(form.stock, form.stock, { 'label_attr': {'class': '' }}) }}
 					</div>
 					<div class="col-sm-12 col-md-6 col-xl-3 mr-auto input-group">
                         {{ form_widget(form.stock) }}
@@ -185,7 +185,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-2 order-1">
                         {{ form_label(form.status) }}
-                        {#{{ form_label(form.status, form.status, { 'label_attr': {'class': 'col-form-label' }}) }}#}
+                        {#{{ form_label(form.status, form.status, { 'label_attr': {'class': '' }}) }}#}
                     </div>
                     <div class="col-sm-12 col-md-6 col-xl-6 mr-auto order-3 order-md-2">
                         <div class="form-row">
@@ -223,7 +223,7 @@
             {#<div class="mb-2">#}
                 {#<div class="form-group row">#}
                     {#<div class="col-sm-12 col-md-2">#}
-                        {#{{ form_label(form.category, form.category, { 'label_attr': {'class': 'col-form-label' }}) }}#}
+                        {#{{ form_label(form.category, form.category, { 'label_attr': {'class': '' }}) }}#}
                     {#</div>#}
                     {#<div class="col-sm-12 col-md-5 col-xl-4 mr-auto">#}
                         {#{{ form_widget(form.category) }}#}

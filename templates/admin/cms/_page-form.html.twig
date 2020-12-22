@@ -6,14 +6,14 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            {{ form_label(form.name, form.name, { 'label_attr': {'class': 'col-form-label' }}) }}
+                            {{ form_label(form.name, form.name, { 'label_attr': {'class': '' }}) }}
                             {{ form_widget(form.name) }}
                             {{ form_errors(form.name) }}
                         </div>
                     </div>
                     <div class="form-group row mb-0">
                         <div class="col-sm-12">
-                            {{ form_label(form.content, form.content, { 'label_attr': {'class': 'col-form-label' }}) }}
+                            {{ form_label(form.content, form.content, { 'label_attr': {'class': '' }}) }}
                             {{ form_widget(form.content, {'attr': {'class': 'JS--cmsPageContent', rows: 6}}) }}
                             {{ form_errors(form.content) }}
                         </div>
@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <div class="form-group row mb-0">
                         <div class="col-sm-12">
-                            <div class="col-form-label">Kép</div>
+                            <div class="">Kép</div>
                             {{ form_widget(form.imageId, { 'attr': {'class': 'V--imageId' }}) }}
                             {{ form_errors(form.imageId) }}
                             <div id="v--imageUpload" class="d-flex justify-content-center align-items-center" style="border-radius: 6px; background-color: #f4f4f5; height:100px; width: 100%;">
@@ -40,7 +40,7 @@
                 <div class="card-body">
                     <div class="form-group row mb-0">
                         <div class="col-sm-12">
-                            {{ form_label(form.slug, form.slug, { 'label_attr': {'class': 'col-form-label' }}) }}
+                            {{ form_label(form.slug, form.slug, { 'label_attr': {'class': '' }}) }}
                             {{ form_widget(form.slug) }}
                             {{ form_errors(form.slug) }}
                         </div>
@@ -71,7 +71,7 @@
                     </div>
                     <div class="form-group row mb-0">
                         <div class="col-sm-12">
-                            {{ form_label(form.parent, form.parent, { 'label_attr': {'class': 'col-form-label' }}) }}
+                            {{ form_label(form.parent, form.parent, { 'label_attr': {'class': '' }}) }}
                             {{ form_widget(form.parent) }}
                             {{ form_errors(form.parent) }}
                         </div>

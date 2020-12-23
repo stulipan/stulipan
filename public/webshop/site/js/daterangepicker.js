@@ -532,7 +532,7 @@
                     }, this);
                 R(document)
                     .on("mousedown.daterangepicker", this._outsideClickProxy)
-                    .on("touchend.daterangepicker", this._outsideClickProxy)
+                    // .on("touchend.daterangepicker", this._outsideClickProxy) // ezert tunt el touch gorgeteskor
                     .on("click.daterangepicker", "[data-toggle=dropdown]", this._outsideClickProxy)
                     .on("focusin.daterangepicker", this._outsideClickProxy);
 
@@ -567,8 +567,7 @@
                     R(document).off(".daterangepicker"),
                     R(window).off(".daterangepicker"),
                     this.container.removeClass("show"),
-                    // this._desenforceFocus(),
-                    this._focusedItemBeforeModal.focus(),
+                    // this._focusedItemBeforeModal.focus(), // nem itt fokuszalunk ra, ajanlott a script hasznalatakor fokuszalni.
                     this.element.trigger("hide.daterangepicker", this),
                     this.isShowing = !1
             )

@@ -48,7 +48,7 @@ $addon-content-width-lg:          3.5rem !default;  // 56px
 
 .field-prepend,
 .field-append {
-  //position: absolute;
+  position: relative;
   display: flex;
   flex: 1;
   justify-content: space-between;

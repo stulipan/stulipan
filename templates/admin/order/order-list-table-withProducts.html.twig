@@ -448,7 +448,7 @@
             let dateSettings = {
                 parentEl: "#JS--idosav",
                 opens: 'right',
-                autoApply: false,
+                autoApply: true,
                 autoUpdateInput: false,
                 // linkedCalendars: false,
 
@@ -519,7 +519,7 @@
             let sidebarDateSettings = {
                 parentEl: "#JS--idosavS",
                 opens: 'right',
-                // autoApply: true,
+                autoApply: true,
                 autoUpdateInput: false,
                 // linkedCalendars: false,
 
@@ -615,7 +615,7 @@
             });
             dateField.on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('YYYY-MM-DD') + picker.locale.separator + picker.endDate.format('YYYY-MM-DD'));
-                $(this).focus();
+                // $(this).focus();
                 picker.hide();
             });
             dateField.on('cancel.daterangepicker', function(ev, picker) {
@@ -640,7 +640,7 @@
             });
             sidebarDateField.on('apply.daterangepicker', function(ev, pickerS) {
                 $(this).val(pickerS.startDate.format('YYYY-MM-DD') + pickerS.locale.separator + pickerS.endDate.format('YYYY-MM-DD'));
-                $(this).focus();
+                // $(this).focus();
                 pickerS.hide();
             });
             sidebarDateField.on('cancel.daterangepicker', function(ev, pickerS) {

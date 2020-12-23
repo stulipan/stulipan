@@ -1,4 +1,4 @@
-{% extends 'admin/template-editing.html.twig' %}
+{% extends 'admin/template-listing.html.twig' %}
 
 {% set pageTitle = 'settings.translation.translation-title'|trans %}
 {% if interface is defined and interface is not null %}
@@ -35,11 +35,11 @@
     {% endif %}
 {% endblock %}
 
-{% block headerTopright %}
+{% block headerActionsWrapper %}
 <div class="">
-    <div class="navbar-nav flex-row">
+    <div class="nav nav-tabs">
         <div class="nav-item dropdown">
-            <a class="btn btn-link-secondary dropdown-toggle mr-1" href="javascript: void(0);" id="chooseInterface" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle mr-1" href="javascript: void(0);" id="chooseInterface" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                 {{ 'settings.translation.interface'|trans }}
                 {% if interface == 'store' %}
                     {{ 'settings.translation.store-texts'|trans }}
@@ -61,7 +61,7 @@
         </div>
 
         <div class="nav-item dropdown">
-            <a class="btn btn-link-secondary dropdown-toggle" id="langsDropdown" href="#" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" id="langsDropdown" href="#" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                 {% set myLocale = 'hu' %}
                 <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="translation-flag translation-flag-selected">
             </a>
@@ -79,6 +79,20 @@
 {% endblock %}
 
 {% block content %}
+    <div class="row mt-2 mt-md-20px">
+        <div class="col-md-12 correction-no-padding">
+            {% if incompleteCount is defined and incompleteCount > 0 %}
+                <div class="alert alert-warning shadow mb-3">
+                    <i class="fas fa-exclamation-circle mr-1"></i>
+                    {% if incompleteCount == 1 %}
+                        {{ 'settings.translation.translation-is-missing'|trans({ '{{ count }}': incompleteCount }) }}
+                    {% else %}
+                        {{ 'settings.translation.translations-are-missing'|trans({ '{{ count }}': incompleteCount }) }}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12 correction-no-padding">
             <div class="card mb-30px">

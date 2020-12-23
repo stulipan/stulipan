@@ -88,7 +88,7 @@ $nm-x-sm:          $card-spacer-x-sm !default;
 
 // Correction. Use class "correction-no-padding" instead of "px-0 px-md-10px"
 .correction-no-padding {
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(xs) {
     padding-left: 0;
     padding-right: 0;
 

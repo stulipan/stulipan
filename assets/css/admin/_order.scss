@@ -71,14 +71,15 @@ $item-grid-gap:         .75rem !default;
   grid-template-columns: 6fr minmax(9rem,auto) minmax(7rem,auto);
   grid-template-areas: "col-2 col-3 col-4";
   column-gap: $item-grid-gap;
-  //row-gap: .5rem;
   flex-grow: 1;
+  margin-left: 1.5rem;
 
   @include media-breakpoint-down(sm) {
-    grid-template-columns: auto minmax(8.8rem,auto);
+    grid-template-columns: auto minmax(7rem,auto);
     grid-template-areas:
             "col-2 col-4"
             "col-3 .";
+    margin-left: 1rem;
   }
 }
 

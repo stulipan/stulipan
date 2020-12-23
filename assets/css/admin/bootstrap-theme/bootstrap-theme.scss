@@ -315,6 +315,7 @@ $header-action-width-sm:  $header-goback-width !default;
 .header-actions {
   grid-area: actions;
   align-self: start;
+  display: flex;
   align-items: flex-start;
   justify-content: flex-end;
   //margin-left: 1rem;

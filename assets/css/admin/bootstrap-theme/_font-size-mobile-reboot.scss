@@ -41,7 +41,9 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
   // Height correction based mobile-line-height-base
   .form-control,
   .field-addon-prepend,
-  .field-addon-append
+  .field-addon-append,
+  .btn-go-back,
+  .btn-more-actions
   {
     height: $mobile-input-height;
 

@@ -18,7 +18,7 @@ $sidebar-content-border-radius:       0 !default;
 $sidebar-content-box-shadow-xs:       0 .25rem .5rem rgba($black, .5) !default;
 $sidebar-content-box-shadow-sm-up:    0 0 0 1px rgba($gray-800, .05), 0 1px 11px 0 rgba($gray-800, 0.15) !default; //0 .5rem 1rem rgba($black, .5) !default;
 
-$sidebar-backdrop-bg:                 $gray-900 !default;
+$sidebar-backdrop-bg:                 $modal-backdrop-bg !default;
 $sidebar-backdrop-opacity:            .1 !default;
 $sidebar-header-border-color:         $gray-200 !default;
 $sidebar-footer-border-color:         $sidebar-header-border-color !default;

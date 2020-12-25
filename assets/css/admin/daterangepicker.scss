@@ -30,13 +30,16 @@
 @import "bootstrap-theme/bootstrap/_variables.scss";
 @import "bootstrap-theme/bootstrap/mixins";
 
+$zindex-drp-backdrop:                   1018 !default;
+$zindex-drp:                            1019 !default; // It is bellow $zindex-sticky
+
 // Color system
 $drp-item-selected-bg:                  lighten($primary, 5%) !default;
 $drp-item-selected-bg-secondary:        #72b9ea !default;
 $drp-item-selected-color:               $white !default;
 $drp-item-disabled-color:               $gray-600 !default;
 $drp-item-hover-color:                  $white !default;
-$drp-item-hover-bg:                     $gray-300 !default;
+$drp-item-hover-bg:                     $hover-bg !default;
 $drp-ranges-tag-bg:                     $gray-100 !default;
 $drp-item-focus-bg:                     darken($primary, 5%) !default;
 $drp-font-size:                         $font-size-base !default;
@@ -121,7 +124,7 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
     //padding: 0;
     //margin-top: 7px;
     //margin-bottom: 20px;
-    z-index: 1019;
+    z-index: $zindex-drp;
     display: none;
     font-size: $drp-font-size;
     line-height: inherit;
@@ -774,4 +777,25 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
         border-radius: 20px;       /* roundness of the scroll thumb */
         //border: 3px solid orange;  /* creates padding around scroll thumb */
     }
+}
+
+
+// DRP backdrop
+
+$drp-backdrop-zindex:                   $zindex-drp-backdrop !default;
+$drp-backdrop-bg:                       $modal-backdrop-bg !default;
+$drp-backdrop-opacity:                  0 !default; // so it is never darken // .1 !default;
+
+.drp-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $drp-backdrop-zindex;
+    width: 100vw;
+    height: 100vh;
+    background-color: $drp-backdrop-bg;
+
+    // Fade for backdrop
+    &.fade { opacity: 0; }
+    &.show { opacity: $drp-backdrop-opacity; }
 }

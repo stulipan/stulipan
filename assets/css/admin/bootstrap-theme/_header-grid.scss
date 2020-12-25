@@ -1,0 +1,152 @@
+// Header grid
+// Dependency: Font Awesome 5 Free
+
+// Content:
+// .header-wrapper
+// .btn-go-back
+// .btn-more-actions
+
+
+$header-grid-gap:         1rem !default;
+$header-goback-width:     40px !default;
+$header-action-width-sm:  $header-goback-width !default;
+
+
+$btn-go-back-content:           "\f060" !default; // arrow left
+$btn-more-actions-content:      "\f141" !default; // ellipsis-h
+
+.header-wrapper {
+  display: grid;
+  grid-template-columns: $header-goback-width 1fr minmax(35%,40%);
+  grid-template-areas: 'goback title actions';
+  column-gap: $header-grid-gap;
+  row-gap: .5rem;
+
+  @include media-breakpoint-down(lg) {
+    grid-template-columns: $header-goback-width 1fr minmax(30%,30%);
+    grid-template-areas: 'goback title actions';
+  }
+  @include media-breakpoint-down(sm) {
+    grid-template-columns: repeat(3, auto) $header-action-width-sm;
+    grid-template-areas:
+            'goback goback goback actions'
+            'title title title title';
+  }
+}
+
+.header-goback {
+  display: flex;
+  grid-area: goback;
+  align-self: start;
+  justify-content: flex-start;
+}
+.header-title {
+  grid-area: title;
+  align-self: start;
+}
+
+.header-actions {
+  grid-area: actions;
+  align-self: start;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+@mixin button-navigational() {
+  //display: inline-block;
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+
+  @include button-size(.3125rem, .5rem, $font-size-base, $btn-line-height, $btn-border-radius);
+  @include transition($btn-transition);
+
+  $background: $secondary;
+  $border: $input-border-color;
+  $hover-background: darken($background, 1.5%);
+  $hover-border: $border-color;
+  $active-background: darken($background, 1.5%);
+  $active-border: $border-color;
+
+  color: $gray-700 !important;
+  @include gradient-bg($background);
+  border: $btn-border-width solid $border;
+  @include box-shadow($btn-box-shadow);
+
+  display: inline-flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  align-items: center;
+
+  @include hover {
+    color: $yiq-text-dark;
+    @include gradient-bg($hover-background);
+    border-color: $hover-border;
+  }
+
+  &:focus,
+  &.focus {
+    // Avoid using mixin so we can pass custom focus shadow properly
+    @if $enable-shadows {
+      box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1);
+    } @else {
+      box-shadow: 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1)
+    }
+    border-color: $primary;
+  }
+
+  // Disabled comes first so active can properly restyle
+  &.disabled,
+  &:disabled {
+    color: $yiq-text-dark;
+    background-color: $background;
+    border-color: $border;
+    // Remove CSS gradients if they're enabled
+    @if $enable-gradients {
+      background-image: none;
+    }
+  }
+
+  // remove any content there was in the button
+  & * {
+    display: none;
+  }
+  // remove dropdown-toggle caret
+  &::after {
+    display: none;
+  }
+  &::before {
+    width: 20px;
+    display: inline-block;
+  }
+}
+
+
+// 'btn-goback'
+
+.btn-go-back {
+  @include button-navigational();
+
+  // display arrow-left
+  &::before {
+    content: $btn-go-back-content;
+  }
+}
+
+// 'btn-more-actions' replaces the initial link/button with a button similar
+// in look and design to 'btn-secondary'. It also replaces the content of the
+// button to 3 dots.
+
+.btn-more-actions {
+  @include media-breakpoint-down(sm) {
+    @include button-navigational();
+
+    // display ellipsis-h
+    &::before {
+      content: $btn-more-actions-content;
+    }
+  }
+}

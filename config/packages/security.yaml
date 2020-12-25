@@ -180,7 +180,7 @@ security:
 
 #        - { path: ^/admin/deliverydate/type, roles: ROLE_ADMIN }
         - { path: ^/(hu|en)/admin/user, roles: ROLE_MANAGER }
-#        - { path: ^/admin/, roles: ROLE_MANAGER }
+        - { path: ^/(hu|en)/admin/, roles: ROLE_MANAGER }
 #        - { path: ^/termekek/, roles: ROLE_USER }  # csak testeles miatt, ha azt akarom hogy logged in userek lassak
 
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }

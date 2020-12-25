@@ -159,16 +159,16 @@
 {% endblock %}
 
 {% block contentFilter %}
-    <div class="no-margins">
+    <div class="card-body">
         <nav class="adaptive-tabs">
             <ul class="nav nav-tabs adaptive-primary">
                 {% for quickLink in filterQuickLinks %}
                     <li class="nav-item adaptive-item">
                         <a href="{{ quickLink['url'] }}" class="nav-link {% if quickLink['active'] is defined and quickLink['active'] %}active{% endif %}">
-                                    <span class="d-flex justify-content-between align-items-center">
-                                        <span class="d-flex">{{ quickLink['name'] }}</span>
+                            <span class="d-flex justify-content-between align-items-center">
+                                <span class="d-flex">{{ quickLink['name'] }}</span>
 {#                                        <span class="d-flex ml-2 badge badge-light">{{ quickLink['itemCount'] }}</span>#}
-                                    </span>
+                            </span>
                         </a>
                     </li>
                 {% endfor %}
@@ -185,7 +185,9 @@
             </ul>
         </nav>
     </div>
-    <div class="no-margins mt-3 border-top pt-3">
+    <div class="border-top">
+    </div>
+    <div class="card-body pb-0">
         {{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
         <div class="w-100 d-flex flex-columnX flex-md-row justify-content-between">
             <div class="field-group align-middle flex-columnX flex-md-row mr-2">
@@ -232,23 +234,21 @@
         </div>
         {{ form_end(filterForm) }}
     </div>
-    <div class="no-margins mt-2">
-        <div>
-            {% if filterTags is defined and filterTags is not empty %}
-                <div class="vertical-form-row">
-                    {% for filterKey,value in filterTags %}
-                        {% if value is defined and value is not null %}
-                            <div class="vertical-col">
-                                <div class="filter-tag">
-                                    <div class="filter-tag-content">{{ value }}</div>
-                                    <a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
-                                </div>
+    <div class="card-body py-0">
+        {% if filterTags is defined and filterTags|length %}
+            <div class="vertical-form-row mt-2">
+                {% for filterKey,value in filterTags %}
+                    {% if value is defined and value is not null %}
+                        <div class="vertical-col">
+                            <div class="filter-tag">
+                                <div class="filter-tag-content">{{ value }}</div>
+                                <a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
                             </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 

@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block contentFilter %}
-	<div class="no-margins">
+	<div class="card-body">
 		<nav class="adaptive-tabs">
 			<ul class="nav nav-tabs adaptive-primary">
 				{% for quickLink in filterQuickLinks %}
@@ -44,7 +44,9 @@
 			</ul>
 		</nav>
 	</div>
-	<div class="no-margins mt-3 border-top pt-3">
+	<div class="border-top">
+	</div>
+	<div class="card-body pb-0">
 		{{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
 		<div class="w-100 d-flex justify-content-between">
 			<div class="field-group align-middle flex-columnX flex-md-row mr-2">
@@ -69,23 +71,21 @@
 		</div>
 		{{ form_end(filterForm) }}
 	</div>
-	<div class="no-margins mt-2">
-		<div>
-			{% if filterTags is defined and filterTags is not null %}
-				<div class="vertical-form-row">
-					{% for filterKey,value in filterTags %}
-						{% if value is defined and value is not null %}
-							<div class="vertical-col">
-								<div class="filter-tag">
-									<div class="filter-tag-content">{{ value }}</div>
-									<a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
-								</div>
+	<div class="card-body py-0">
+		{% if filterTags is defined and filterTags|length %}
+			<div class="vertical-form-row mt-2">
+				{% for filterKey,value in filterTags %}
+					{% if value is defined and value is not null %}
+						<div class="vertical-col">
+							<div class="filter-tag">
+								<div class="filter-tag-content">{{ value }}</div>
+								<a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
 							</div>
-						{% endif %}
-					{% endfor %}
-				</div>
-			{% endif %}
-		</div>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		{% endif %}
 	</div>
 {% endblock %}
 

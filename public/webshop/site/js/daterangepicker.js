@@ -17,6 +17,7 @@
 }(this, function(H, R) {
     var i = function(t, e, a) {
         this.parentEl = "body";
+        this.backdrop = ""; // Added by Stulipan
         this.element = R(t);
         this.startDate = H().startOf("day");
         this.endDate = H().endOf("day"); this.minDate = !1; this.maxDate = !1; this.maxSpan = !1; this.autoApply = !1; this.singleDatePicker = !1;
@@ -539,6 +540,11 @@
                 R(window).on("resize.daterangepicker", R.proxy(function (t) {
                         this.move(t)
                 }, this)),
+                this.backdrop = R(document.createElement('div')), // Added by Stulipan
+                this.backdrop.addClass('drp-backdrop'), // Added by Stulipan
+                this.backdrop.addClass('fade show'), // Added by Stulipan
+                this.backdrop.appendTo(R(document.body));
+
                 this.oldStartDate = this.startDate.clone(),
                 this.oldEndDate = this.endDate.clone(),
                 this.previousRightTime = this.endDate.clone(),
@@ -567,6 +573,7 @@
                     R(document).off(".daterangepicker"),
                     R(window).off(".daterangepicker"),
                     this.container.removeClass("show"),
+                    this.backdrop.remove(),  // Added by Stulipan
                     // this._focusedItemBeforeModal.focus(), // nem itt fokuszalunk ra, ajanlott a script hasznalatakor fokuszalni.
                     this.element.trigger("hide.daterangepicker", this),
                     this.isShowing = !1

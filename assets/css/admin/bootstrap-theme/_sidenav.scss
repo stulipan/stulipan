@@ -1,19 +1,29 @@
 // Sidenav menu
+// It is included 2 times: fixed on the left side (desktop) and in a sidebar component (mobile) too
+
+// Important! The sidenav's height depends on the '_topnav.scss' component's height
+
+$sidebav-top-offset:                $topnav-height !default;
+
+$sidenav-width:                     240px !default;
+$sidenav-bg:                        $body-bg !default;
+$sidenav-font-size:                 $font-size-base !default;
+
 
 .sidenav-sticky {
   position: fixed;
   left: 0;
   top: 50px;
-  min-height: calc(100% - 50px);
-  height: 100%;
-  width: 240px;
-  background-color: $body-bg;
+  min-height: calc(100% - #{$sidebav-top-offset});
+  height: calc(100% - #{$sidebav-top-offset});
+  width: $sidenav-width;
+  background-color: $sidenav-bg;
   display: flex;
   flex: 1 1 auto;
 }
 
 .content-page {
-  margin-left: 240px;
+  margin-left: $sidenav-width;
   padding: 0 1rem;
 }
 
@@ -47,7 +57,7 @@
   margin: 0;
   padding-inline-start: 0;
   padding-top: .5rem;
-  @include font-size($font-size-base);
+  @include font-size($sidenav-font-size);
   //@include media-breakpoint-down(sm) {
   //  font-size: 1rem;
   //  line-height: 1.5;

@@ -10,9 +10,14 @@
 
   th,
   td {
-    padding: $table-cell-padding;
+    //padding: $table-cell-padding;
+    padding: $table-cell-padding 0 $table-cell-padding $card-spacer-x; // Added by Stulipan
     vertical-align: top;
     border-top: $table-border-width solid $table-border-color;
+
+    &:last-of-type {
+      padding-right: $card-spacer-x;
+    }
   }
 
   thead th {

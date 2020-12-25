@@ -115,45 +115,45 @@
 {% endblock %}
 
 {% block contentFilter %}
-	<div class="no-margins">
-		<div class="overflow-x-scrollX">
-			<nav class="adaptive-tabs">
-				{% set len = 0 %}
+	<div class="card-body">
+		<nav class="adaptive-tabs">
+			{% set len = 0 %}
+			{% for quickLink in filterQuickLinks %}
+				{% set len = len +  quickLink['name']|length %}
+			{% endfor %}
+			{% set len = len + 10 %}
+			<ul class="nav nav-tabs adaptive-primary vertical-form-rowX" style="--nav-tabs-width: {{ len }}ch">
 				{% for quickLink in filterQuickLinks %}
-					{% set len = len +  quickLink['name']|length %}
-				{% endfor %}
-				{% set len = len + 10 %}
-				<ul class="nav nav-tabs adaptive-primary vertical-form-rowX" style="--nav-tabs-width: {{ len }}ch">
-					{% for quickLink in filterQuickLinks %}
-						<li class="nav-item adaptive-item">
-							<div class="vertical-colX">
-								<div class="">
-									{#												<span class="badge-quantity bg-white">{{ quickLink['itemCount'] }}</span>#}
-									<a href="{{ quickLink['url'] }}" class="nav-link {% if quickLink['active'] is defined and quickLink['active'] %}active{% endif %}">
-										<span class="d-flex justify-content-between align-items-center">
-											<span class="d-flex">{{ quickLink['name'] }}</span>
-											<span class="d-flex ml-2 badge badge-light">{{ quickLink['itemCount'] }}</span>
-										</span>
-									</a>
-								</div>
+					<li class="nav-item adaptive-item">
+						<div class="vertical-colX">
+							<div class="">
+								{#												<span class="badge-quantity bg-white">{{ quickLink['itemCount'] }}</span>#}
+								<a href="{{ quickLink['url'] }}" class="nav-link {% if quickLink['active'] is defined and quickLink['active'] %}active{% endif %}">
+									<span class="d-flex justify-content-between align-items-center">
+										<span class="d-flex">{{ quickLink['name'] }}</span>
+										<span class="d-flex ml-2 badge badge-light">{{ quickLink['itemCount'] }}</span>
+									</span>
+								</a>
 							</div>
-						</li>
-					{% endfor %}
-				</ul>
-				<ul class="adaptive-template">
-					<li class="nav-item adaptive-item adaptive-more">
-						<button type="button" class="adaptive-button nav-link btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-							{#											<i class="fas fa-ellipsis-h"></i>#}
-							{{ 'generic.more'|trans }}
-						</button>
-						<ul class="adaptive-secondary">
-						</ul>
+						</div>
 					</li>
-				</ul>
-			</nav>
-		</div>
+				{% endfor %}
+			</ul>
+			<ul class="adaptive-template">
+				<li class="nav-item adaptive-item adaptive-more">
+					<button type="button" class="adaptive-button nav-link btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+						{#											<i class="fas fa-ellipsis-h"></i>#}
+						{{ 'generic.more'|trans }}
+					</button>
+					<ul class="adaptive-secondary">
+					</ul>
+				</li>
+			</ul>
+		</nav>
 	</div>
-	<div class="no-margins mt-3 border-top pt-3">
+	<div class="border-top">
+	</div>
+	<div class="card-body pb-0">
 		{{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
 		<div class="align-middle">
 			<div class="w-100 d-flex justify-content-between">
@@ -180,10 +180,9 @@
 		</div>
 		{{ form_end(filterForm) }}
 	</div>
-	<div class="no-margins mt-2">
-		<div>
-		{% if filterTags is defined and filterTags is not null %}
-			<div class="vertical-form-row">
+	<div class="card-body py-0">
+		{% if filterTags is defined and filterTags|length %}
+			<div class="vertical-form-row mt-2">
 				{% for filterKey,value in filterTags %}
 					{% if value is defined and value is not null %}
 						<div class="vertical-col">
@@ -196,7 +195,6 @@
 				{% endfor %}
 			</div>
 		{% endif %}
-		</div>
 	</div>
 {% endblock %}
 

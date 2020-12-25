@@ -85,7 +85,7 @@ $multiselect-select-indicator-padding-x:          calc(#{$multiselect-padding-x}
 $multiselect-select-indicator-border-width:       5px !default;
 $multiselect-select-indicator-color:              $gray-700 !default;
 
-$multiselect-option-highlight-bg:                 $gray-300 !default;
+$multiselect-option-highlight-bg:                 $hover-bg !default;
 $multiselect-option-highlight-color:              inherit !default;
 $multiselect-option-selected-bg:                  $white !default;
 $multiselect-option-selected-color:               $multiselect-option-highlight-color !default;

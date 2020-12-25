@@ -20,12 +20,28 @@
 {% endblock %}
 
 {% block headerActionsWrapper %}
-	<a href="{{ path('delivery-date-type-edit') }}" class="btn btn-primary">Új idősáv csoport</a>
-	<a href="{{ path('occasion-list') }}" class="btn btn-secondary ml-2">Kiemelt napok</a>
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">
+		<ul class="nav nav-tabs adaptive-primary">
+			<li class="nav-item adaptive-item">
+				<a class="nav-link" href="{{ path('occasion-list') }}">Kiemelt napok</a>
+			</li>
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	<a class="btn btn-primary" href="{{ path('delivery-date-type-edit') }}">Új idősáv csoport</a>
 {% endblock %}
 
 {% block contentInner %}
-	{% if items is defined %}
+	{% if items is defined and items is not empty %}
+	<div class="card-body">
 	 {% for item in items %}
 		 <div class="mb-sm-2 mb-1">
 			 <div class="py-1X">
@@ -59,10 +75,10 @@
 						 <a href="{{ path('delivery-date-type-edit', {'id': item.id}) }}" class="btn btn-secondary mb-2">
 							 {#<i class="fas fa-edit mr-1"></i>#}
 							 Módosít</a> <br>
-						 <p class="text-xs text-muted-extra">
+						 <small class="text-muted">
 							 <em>Létrehozva: {{ item.createdAt|date('Y M j')|lower }}, {{ item.createdAt|date('H:i')}}</em><br>
 							 <em>Utolsó módosítás: {{ item.updatedAt|date('Y M j')|lower }}, {{ item.updatedAt|date('H:i')}}</em><br>
-						 </p>
+						 </small>
 					 </div>
 
 				 </div>
@@ -71,8 +87,8 @@
 
 			 </div>
 		 </div>
-
 	 {% endfor %}
+	</div>
  {% else %}
 	 <li><em>{{ noResult }}</em></li>
  {% endif %}

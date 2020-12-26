@@ -37,26 +37,18 @@
                         </button>
                     </div>
                     <div class="modal-body JS--recipientContentBlock">
-                        {% include('admin/order/shippingInfo-form.html.twig') %}
-{#                        <div class="modal-footer">#}
-{#                            <div class="loadingWrapper loadingWrapper-secondary">#}
-{#                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>#}
-{#                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>#}
-{#                            </div>#}
-{#                            <div class="loadingWrapper">#}
-{#                                <button type="submit" class="JS--btn-submitRecipient btn btn-primary">{{ 'generic.save-changes'|trans }}</button>#}
-{#                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>#}
-{#                            </div>#}
-{#                        </div>#}
-                    </div>
-                    <div class="modal-footer">
-                        <div class="loadingWrapper loadingWrapper-secondary">
-                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        <div class="modal-body-content">
+                            {% include('admin/order/shippingInfo-form.html.twig') %}
                         </div>
-                        <div class="loadingWrapper">
-                            <button type="submit" class="JS--btn-submitRecipient btn btn-primary">{{ 'generic.save-changes'|trans }}</button>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        <div class="modal-footer">
+                            <div class="loadingWrapper loadingWrapper-secondary">
+                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
+                            <div class="loadingWrapper">
+                                <button type="submit" class="JS--btn-submitRecipient btn btn-primary">{{ 'generic.save-changes'|trans }}</button>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,16 +65,18 @@
                         </button>
                     </div>
                     <div class="modal-body JS--senderContentBlock">
-                        {% include('admin/order/billingInfo-form.html.twig') %}
-                    </div>
-                    <div class="modal-footer">
-                        <div class="loadingWrapper loadingWrapper-secondary">
-                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        <div class="modal-body-content">
+                            {% include('admin/order/billingInfo-form.html.twig') %}
                         </div>
-                        <div class="loadingWrapper">
-                            <button type="submit" class="JS--btn-submitSender btn btn-primary">{{ 'generic.save-changes'|trans }}</button>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        <div class="modal-footer">
+                            <div class="loadingWrapper loadingWrapper-secondary">
+                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
+                            <div class="loadingWrapper">
+                                <button type="submit" class="JS--btn-submitSender btn btn-primary">{{ 'generic.save-changes'|trans }}</button>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,79 +93,80 @@
                         </button>
                     </div>
                     <div class="modal-body JS--deliveryContentBlockXXX">
-                        {#{% include('webshop/cart/deliveryDate-form.html.twig') %}#}
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="mb-2 mt-2">
-                                    <span class="form-label text-body">{{ 'order.pick-delivery-date'|trans }}</span>
-                                    {#<span class="product-variant-selector-label font-weight-bold"><span>(Melyik napon szállítsuk ki?)</span></span>#}
-                                </div>
-                                <div class="row order-delivery-date">
-                                    <div class="col-md-12 col-lg-12 JS--dateWrapper">
-                                        <div class="form-row">
+                        <div class="modal-body-content">
+                            {#{% include('webshop/cart/deliveryDate-form.html.twig') %}#}
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="mb-2 mt-2">
+                                        <span class="form-label text-body">{{ 'order.pick-delivery-date'|trans }}</span>
+                                        {#<span class="product-variant-selector-label font-weight-bold"><span>(Melyik napon szállítsuk ki?)</span></span>#}
+                                    </div>
+                                    <div class="row order-delivery-date">
+                                        <div class="col-md-12 col-lg-12 JS--dateWrapper">
+                                            <div class="form-row">
 
-                                            {% for date in generatedDates.dates|slice(0,3) %}
-                                                <div class="col-sm-3 col-4 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }}" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
-                                                    <div class="vp vp-md choose-date mr-2 mb-2 mb-md-0 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}" tabindex="0">
-                                                        <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
-                                                            <span class="vp-content">
-                                                                <span class="tile tile-lg">
-                                                                    {% include('/webshop/site/vp-label-date.html.twig') with {
-                                                                        'item1': date.deliveryDate,
-                                                                        'item2': date.deliveryDate
-                                                                    } %}
+                                                {% for date in generatedDates.dates|slice(0,3) %}
+                                                    <div class="col-sm-3 col-4 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }}" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
+                                                        <div class="vp vp-md choose-date mr-2 mb-2 mb-md-0 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}" tabindex="0">
+                                                            <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
+                                                                <span class="vp-content">
+                                                                    <span class="tile tile-lg">
+                                                                        {% include('/webshop/site/vp-label-date.html.twig') with {
+                                                                            'item1': date.deliveryDate,
+                                                                            'item2': date.deliveryDate
+                                                                        } %}
+                                                                    </span>
                                                                 </span>
-                                                            </span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            {% endfor %}
-                                            <div class="col-sm-3 col-12 JS--Button-clickDate">
-                                                <div class="row h-100">
-                                                    {% for date in generatedDates.dates|slice(3) %}
-                                                        <div class="col-sm-12 col-12 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} d-none" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
-                                                            <div class="vp vp-md choose-date mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}" tabindex="0">
-                                                                <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
-                                                                    <div class="wrapper-absolute">
-                                                                        <div class="icon-wrapper">
-                                                                            <i class="far fa-calendar-alt fa-2x icon-bg"></i>
+                                                {% endfor %}
+                                                <div class="col-sm-3 col-12 JS--Button-clickDate">
+                                                    <div class="row h-100">
+                                                        {% for date in generatedDates.dates|slice(3) %}
+                                                            <div class="col-sm-12 col-12 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} d-none" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
+                                                                <div class="vp vp-md choose-date mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}" tabindex="0">
+                                                                    <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
+                                                                        <div class="wrapper-absolute">
+                                                                            <div class="icon-wrapper">
+                                                                                <i class="far fa-calendar-alt fa-2x icon-bg"></i>
+                                                                            </div>
                                                                         </div>
+                                                                        <span class="vp-content">
+                                                                            <span class="tile tile-lg">
+                                                                                {% include('/webshop/site/vp-label-date.html.twig') with {
+                                                                                    'item1': date.deliveryDate,
+                                                                                    'item2': date.deliveryDate
+                                                                                } %}
+                                                                            </span>
+                                                                        </span>
                                                                     </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+
+                                                        <div class="col-sm-12 col-12 JS--showCalendarIcon">
+                                                            <div class="vp vp-md choose-date mr-2" tabindex="0">
+                                                                <div class="vp-figure justify-content-lg-center justify-content-center align-items-center required px-2">
                                                                     <span class="vp-content">
-                                                                        <span class="tile tile-lg">
-                                                                            {% include('/webshop/site/vp-label-date.html.twig') with {
-                                                                                'item1': date.deliveryDate,
-                                                                                'item2': date.deliveryDate
-                                                                            } %}
+                                                                        <span class="tile tile-lg JS--showCalendarIconX">
+                                                                            <i class="far fa-calendar-alt fa-2x text-gray-700 mr-0"></i>
                                                                         </span>
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    {% endfor %}
-
-                                                    <div class="col-sm-12 col-12 JS--showCalendarIcon">
-                                                        <div class="vp vp-md choose-date mr-2" tabindex="0">
-                                                            <div class="vp-figure justify-content-lg-center justify-content-center align-items-center required px-2">
-                                                                <span class="vp-content">
-                                                                    <span class="tile tile-lg JS--showCalendarIconX">
-                                                                        <i class="far fa-calendar-alt fa-2x text-gray-700 mr-0"></i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
+
+
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="JS--intervalsWrapper mt-4">
+                            <div class="JS--intervalsWrapper mt-4">
                             {#{% if date.intervals is defined %}#}
                             <div class="row">
                                 <div class="col-lg-12 mb-3X">
@@ -218,16 +213,16 @@
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <div class="loadingWrapper loadingWrapper-secondary">
-                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
                         </div>
-                        <div class="loadingWrapper">
-                            <button type="submit" class="JS--btn-submitDeliveryDate btn btn-primary" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}">{{ 'order.save-delivery-time'|trans }}</button>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        <div class="modal-footer">
+                            <div class="loadingWrapper loadingWrapper-secondary">
+                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
+                            <div class="loadingWrapper">
+                                <button type="submit" class="JS--btn-submitDeliveryDate btn btn-primary" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}">{{ 'order.save-delivery-time'|trans }}</button>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -244,16 +239,18 @@
                         </button>
                     </div>
                     <div class="modal-body JS--statusContentBlock">
-                        {% include('admin/order/status-form.html.twig') %}
-                    </div>
-                    <div class="modal-footer">
-                        <div class="loadingWrapper loadingWrapper-secondary">
-                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        <div class="modal-body-content">
+                            {% include('admin/order/status-form.html.twig') %}
                         </div>
-                        <div class="loadingWrapper">
-                            <button type="submit" class="JS--btn-submitStatus btn btn-primary">{{ 'generic.save'|trans }}</button>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        <div class="modal-footer">
+                            <div class="loadingWrapper loadingWrapper-secondary">
+                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
+                            <div class="loadingWrapper">
+                                <button type="submit" class="JS--btn-submitStatus btn btn-primary">{{ 'generic.save'|trans }}</button>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -270,16 +267,18 @@
                         </button>
                     </div>
                     <div class="modal-body JS--paymentStatusContentBlock">
-                        {% include('admin/order/paymentStatus-form.html.twig') %}
-                    </div>
-                    <div class="modal-footer">
-                        <div class="loadingWrapper loadingWrapper-secondary">
-                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        <div class="modal-body-content">
+                            {% include('admin/order/paymentStatus-form.html.twig') %}
                         </div>
-                        <div class="loadingWrapper">
-                            <button type="submit" class="JS--btn-submitPaymentStatus btn btn-primary">{{ 'generic.save'|trans }}</button>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                        <div class="modal-footer">
+                            <div class="loadingWrapper loadingWrapper-secondary">
+                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
+                            <div class="loadingWrapper">
+                                <button type="submit" class="JS--btn-submitPaymentStatus btn btn-primary">{{ 'generic.save'|trans }}</button>
+                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -415,7 +414,7 @@
     {% endblock %}
 
     {% block sidebar %}
-        <div class="card">
+        <div class="card mt-20px mt-md-0">
             {% include 'admin/order/_order-delivery-overdue-widget.html.twig' %}
             <div class="card-body">
                 <div class="">

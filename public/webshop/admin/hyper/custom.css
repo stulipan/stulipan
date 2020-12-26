@@ -1920,7 +1920,7 @@ body.boxed-layout .footer {
 }
 
 
-
+/*  Used in table list for hover elements */
 .overlay-container {
     position: relative;
     /*margin: -.75rem;*/

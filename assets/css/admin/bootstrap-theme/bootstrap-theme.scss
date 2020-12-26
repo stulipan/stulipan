@@ -24,31 +24,31 @@ iframe {
 $nm-x:             $card-spacer-x !default;
 $nm-x-sm:          $card-spacer-x-sm !default;
 
-.no-margins {
-  --nm-x: #{$nm-x};
-  @include media-breakpoint-down(xs) {
-    --nm-x: #{$nm-x-sm};
-  }
-
-  margin-left: calc(-1 * var(--nm-x)) !important;
-  margin-right: calc(-1 * var(--nm-x)) !important;
-
-  &>*:not(.table-responsive) {
-    padding-left: var(--nm-x);
-    padding-right: var(--nm-x);
-  }
-
-  & td:first-of-type,
-  & th:first-of-type {
-    padding-left: calc(var(--nm-x) + #{$table-cell-padding});
-    //padding-left: calc(var(--nm-x));
-  }
-  & td:last-of-type,
-  & th:last-of-type {
-    padding-right: calc(var(--nm-x) + #{$table-cell-padding});
-    //padding-left: calc(var(--nm-x));
-  }
-}
+//.no-margins {
+//  --nm-x: #{$nm-x};
+//  @include media-breakpoint-down(xs) {
+//    --nm-x: #{$nm-x-sm};
+//  }
+//
+//  margin-left: calc(-1 * var(--nm-x)) !important;
+//  margin-right: calc(-1 * var(--nm-x)) !important;
+//
+//  &>*:not(.table-responsive) {
+//    padding-left: var(--nm-x);
+//    padding-right: var(--nm-x);
+//  }
+//
+//  & td:first-of-type,
+//  & th:first-of-type {
+//    padding-left: calc(var(--nm-x) + #{$table-cell-padding});
+//    //padding-left: calc(var(--nm-x));
+//  }
+//  & td:last-of-type,
+//  & th:last-of-type {
+//    padding-right: calc(var(--nm-x) + #{$table-cell-padding});
+//    //padding-left: calc(var(--nm-x));
+//  }
+//}
 
 .form-group:last-of-type {
   margin-bottom: 0;
@@ -68,25 +68,6 @@ $nm-x-sm:          $card-spacer-x-sm !default;
     padding-left: $nm-x;
   }
 }
-
-// Mobile corrections
-// Card, Modal and Sidebar have smaller paddings on mobile devices
-//@include media-breakpoint-down(xs) {
-//  .card-body {
-//    padding: $card-spacer-x-sm;
-//  }
-//  .sidebar-header,
-//  .modal-header {
-//    padding-right: $card-spacer-x-sm;
-//    padding-left: $card-spacer-x-sm;
-//  }
-//  .sidebar-body,
-//  .sidebar-footer,
-//  .modal-body,
-//  .modal-footer {
-//    padding: $card-spacer-x-sm;
-//  }
-//}
 
 // Correction. Use class "correction-no-padding" instead of "px-0 px-md-10px"
 .correction-no-padding {
@@ -194,25 +175,27 @@ $nm-x-sm:          $card-spacer-x-sm !default;
 }
 
 $scrollbar-width:                       5px !default;
-$scrollbar-border-radius:               10px !default;
+$scrollbar-border-radius:               $border-radius !default;
 
 $scrollbar-thumb-bg:                    $gray-400 !default;
-$scrollbar-track-bg:                    $gray-100 !default;
+$scrollbar-track-bg:                    $white !default; //$gray-100 !default;
 
+.adaptive-secondary {
+  &::-webkit-scrollbar {
+    width: $scrollbar-width;
+    height: $scrollbar-width;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $scrollbar-thumb-bg;
+    border-radius: $scrollbar-border-radius;
+  }
 
-body *::-webkit-scrollbar {
-  width: $scrollbar-width;
-  height: $scrollbar-width;
-}
-body *::-webkit-scrollbar-thumb {
-  background: $scrollbar-thumb-bg;
-  border-radius: $scrollbar-border-radius;
+  &::-webkit-scrollbar-track {
+    background: $scrollbar-track-bg;
+    border-radius: $scrollbar-border-radius;
+  }  
 }
 
-body *::-webkit-scrollbar-track {
-  background: $scrollbar-track-bg;
-  border-radius: $scrollbar-border-radius;
-}
 
 .btn:not(.btn-goback),
 .nav-link {

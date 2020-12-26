@@ -120,7 +120,7 @@ customer:
         custom-filter: 'Egyedi keresés'
         not-found: 'Nem talált vásárlókat!'
         not-found-suggestion: 'Próbáld módosítani a szűrőket vagy a keresési kifejezést.'
-    send-account-invite: null
+    send-account-invite: Meghívó email küldése
     previous-orders: 'Előző rendelések'
     view-profile: 'Vásárlói részletek'
     orders: Rendelések

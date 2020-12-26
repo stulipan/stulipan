@@ -27,7 +27,7 @@
     <nav class="w-100 adaptive-tabs adaptive-tabs-right">
         <ul class="nav nav-tabs adaptive-primary">
             <li class="nav-item adaptive-item">
-                <a class="nav-link" href="#"><i class="far fa-envelope"></i>{{ 'customer.send-account-invite'|trans }}</a>
+                <a class="nav-link" href="#"><i class="far fa-envelope mr-2"></i>{{ 'customer.send-account-invite'|trans }}</a>
             </li>
         </ul>
         <ul class="adaptive-template">
@@ -45,38 +45,42 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-6">
-            <div class="card tilebox-one mb-20px">
-                <div class="card-body">
-                    <div class="float-right text-muted">
-                        <i class="fas fa-shopping-basket"></i>
+        <div class="col-12">
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="card tilebox-one mb-20px">
+                        <div class="card-body">
+                            <div class="float-right text-muted">
+                                <i class="fas fa-shopping-basket"></i>
+                            </div>
+                            <span class="h6 quickinfo-title">{{ 'customer.orders'|trans }}</span>
+                            <span class="h5 quickinfo-highlight">{{ user.ordersPlaced ? user.ordersPlaced.count : user.ordersPlaced.count }} </span>
+                            <span class="text-sm font-weight-normal">&nbsp;</span>
+                        </div>
                     </div>
-                    <span class="h6 quickinfo-title">{{ 'customer.orders'|trans }}</span>
-                    <span class="h5 quickinfo-highlight">{{ user.ordersPlaced ? user.ordersPlaced.count : user.ordersPlaced.count }} </span>
-                    <span class="text-sm font-weight-normal">&nbsp;</span>
                 </div>
+
+                <div class="col-6">
+                    <div class="card tilebox-one mb-20px">
+                        <div class="card-body">
+                            <div class="float-right text-muted">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <span class="h6 quickinfo-title">{{ 'customer.spent-total'|trans }}</span>
+                            <span class="h5 quickinfo-highlight">{{ totalRevenue|money }} </span>
+                            <div class="text-muted">{{ 'customer.average-cart-value'|trans }}:&nbsp;{{ user.ordersPlaced.count != 0 ? (totalRevenue/user.ordersPlaced.count)|money : 0|money }}</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-
-        <div class="col-md-6">
-            <div class="card tilebox-one mb-20px">
-                <div class="card-body">
-                    <div class="float-right text-muted">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <span class="h6 quickinfo-title">{{ 'customer.spent-total'|trans }}</span>
-                    <span class="h5 quickinfo-highlight">{{ totalRevenue|money }} </span>
-                    <div class="text-muted">{{ 'customer.average-cart-value'|trans }}:&nbsp;{{ user.ordersPlaced.count != 0 ? (totalRevenue/user.ordersPlaced.count)|money : 0|money }}</div>
-                </div>
-            </div>
-        </div>
-
     </div>
     <div class="card mb-20px">
         <div class="card-body">
-            <span class="h5 admin-card-title mb-3">{{ 'customer.previous-orders'|trans }}</span>
-            <div class="no-margins">
-                <div class="table-responsive">
+            <div class="h5 mb-0">{{ 'customer.previous-orders'|trans }}</div>
+        </div>
+        <div class="table-responsive">
                 <table class="table table-hover table-centered mb-0">
                     <thead>
                     <tr>
@@ -114,8 +118,6 @@
                     </tbody>
                 </table>
             </div>
-            </div>
-        </div>
     </div>
 {% endblock %}
 

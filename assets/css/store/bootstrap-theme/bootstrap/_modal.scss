@@ -36,7 +36,8 @@
 .modal-dialog {
   position: relative;
   width: auto;
-  margin: $modal-dialog-margin auto;
+  //margin: $modal-dialog-margin;
+  margin: $modal-dialog-margin auto;  // Added by Stulipan
   // allow clicks to pass through for custom click handling to close modal
   pointer-events: none;
 
@@ -56,7 +57,7 @@
 
   .modal-content {
     max-height: calc(100vh - #{$modal-dialog-margin * 2}); // IE10/11
-    //overflow: hidden;
+    //overflow: hidden;  // Hidden by Stulipan
   }
 
   .modal-header,

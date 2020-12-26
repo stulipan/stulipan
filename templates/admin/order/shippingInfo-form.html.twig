@@ -2,12 +2,12 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="form-row">
-            <div class="form-group col-md-6 pr-lg-2">
+            <div class="form-group col-sm-6 pr-lg-2">
                 <label for="{{ shippingForm.shippingFirstname.vars.full_name }}" class="form-label">Keresztnév</label>
                 {{ form_widget(shippingForm.shippingFirstname, {'attr': {'class': ''}}) }}
                 {{ form_errors(shippingForm.shippingFirstname) }}
             </div>
-            <div class="form-group col-md-6 pr-lg-2">
+            <div class="form-group col-sm-6 pr-lg-2">
                 <label for="{{ shippingForm.shippingLastname.vars.full_name }}" class="form-label">Vezetéknév</label>
                 {{ form_widget(shippingForm.shippingLastname, {'attr': {'class': ''}}) }}
                 {{ form_errors(shippingForm.shippingLastname) }}
@@ -22,18 +22,18 @@
                 {{ form_widget(shippingForm.shippingAddress.city, {'attr': {'class': 'JS--form-city'}}) }}
                 {{ form_errors(shippingForm.shippingAddress.city) }}
             </div>
-            <div class="form-group col-sm-5 pl-lg-2">
+            <div class="form-group col-sm-5 col-12 pl-lg-2">
                 <label for="{{ shippingForm.shippingAddress.country.vars.full_name }}" class="form-label">Ország</label>
                 {{ form_widget(shippingForm.shippingAddress.country, {'attr': {'class': 'form-control'}}) }}
                 {#<i class="fas fa-chevron-down form-control-dropdown"></i>#}
                 {{ form_errors(shippingForm.shippingAddress.country) }}
             </div>
-            <div class="form-group col-sm-4 pr-lg-2">
+            <div class="form-group col-sm-4 col-6 pr-lg-2">
                 <label for="{{ shippingForm.shippingAddress.province.vars.full_name }}" class="form-label">Megye</label>
                 {{ form_widget(shippingForm.shippingAddress.province, {'attr': {'class': 'JS--form-province'}}) }}
                 {{ form_errors(shippingForm.shippingAddress.province) }}
             </div>
-            <div class="form-group col-sm-3 col-4 pl-lg-2">
+            <div class="form-group col-sm-3 col-6 pl-lg-2">
                 <label for="{{ shippingForm.shippingAddress.zip.vars.full_name }}" class="form-label">Irányítószám</label>
                 {{ form_widget(shippingForm.shippingAddress.zip, {'attr': {'class': 'JS--form-zip', 'data-url' : path('cart-getPlaceByZip') }}) }}
                 {{ form_errors(shippingForm.shippingAddress.zip) }}

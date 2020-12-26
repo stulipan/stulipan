@@ -2,12 +2,12 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="form-row">
-            <div class="form-group col-md-6 pr-lg-2">
+            <div class="form-group col-sm-6 pr-lg-2">
                 <label for="{{ billingForm.billingFirstname.vars.full_name }}" class="form-label">Keresztnév</label>
                 {{ form_widget(billingForm.billingFirstname, {'attr': {'class': ''}}) }}
                 {{ form_errors(billingForm.billingFirstname) }}
             </div>
-            <div class="form-group col-md-6 pr-lg-2">
+            <div class="form-group col-sm-6 pr-lg-2">
                 <label for="{{ billingForm.billingLastname.vars.full_name }}" class="form-label">Vezetéknév</label>
                 {{ form_widget(billingForm.billingLastname, {'attr': {'class': ''}}) }}
                 {{ form_errors(billingForm.billingLastname) }}
@@ -32,18 +32,18 @@
                 {{ form_widget(billingForm.billingAddress.city, {'attr': {'class': 'JS--form-city'}}) }}
                 {{ form_errors(billingForm.billingAddress.city) }}
             </div>
-            <div class="form-group col-sm-5 pl-lg-2">
+            <div class="form-group col-sm-5 col-12 pl-lg-2">
                 <label for="{{ billingForm.billingAddress.country.vars.full_name }}" class="form-label">Ország</label>
                 {{ form_widget(billingForm.billingAddress.country, {'attr': {'class': 'form-control'}}) }}
                 {#<i class="fas fa-chevron-down form-control-dropdown"></i>#}
                 {{ form_errors(billingForm.billingAddress.country) }}
             </div>
-            <div class="form-group col-sm-4 pr-lg-2">
+            <div class="form-group col-sm-4 col-6 pr-lg-2">
                 <label for="{{ billingForm.billingAddress.province.vars.full_name }}" class="form-label">Megye</label>
                 {{ form_widget(billingForm.billingAddress.province, {'attr': {'class': 'JS--form-province'}}) }}
                 {{ form_errors(billingForm.billingAddress.province) }}
             </div>
-            <div class="form-group col-sm-3 col-4 pl-lg-2">
+            <div class="form-group col-sm-3 col-6 pl-lg-2">
                 <label for="{{ billingForm.billingAddress.zip.vars.full_name }}" class="form-label">Irányítószám</label>
                 {{ form_widget(billingForm.billingAddress.zip, {'attr': {'class': 'JS--form-zip', 'data-url' : path('cart-getPlaceByZip') }}) }}
                 {{ form_errors(billingForm.billingAddress.zip) }}

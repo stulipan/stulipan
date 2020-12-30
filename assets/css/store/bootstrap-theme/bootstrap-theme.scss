@@ -14,48 +14,6 @@ iframe {
   border: 0;
 }
 
-$nm-x:             $card-spacer-x !default;
-
-@include media-breakpoint-down(sm) {
-  .container {
-    padding-right: $nm-x;
-    padding-left: $nm-x;
-  }
-  .row {
-    margin-right: calc(-1 * #{$nm-x});
-    margin-left: calc(-1 * #{$nm-x});
-
-    & > .col,
-    & > [class*="col-"] {
-      padding-right: $nm-x;
-      padding-left: $nm-x;
-    }
-  }
-
-  .row-narrow {
-    margin-right: -$form-grid-gutter-width / 2;
-    margin-left: -$form-grid-gutter-width / 2;
-
-    > .col,
-    > [class*="col-"] {
-      padding-right: $form-grid-gutter-width / 2;
-      padding-left: $form-grid-gutter-width / 2;
-    }
-  }
-}
-
-// Correction. Use class "correction-no-padding" instead of "px-0 px-md-10px"
-.correction-no-padding {
-  @include media-breakpoint-down(xs) {
-    padding-left: 0;
-    padding-right: 0;
-
-    & .card {
-      border-radius: 0;
-    }
-  }
-}
-
 .vertical-row,
 .vertical-form-row {
   display: flex;

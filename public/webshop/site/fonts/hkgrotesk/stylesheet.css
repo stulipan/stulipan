@@ -34,18 +34,18 @@
 }
 
 
-/*@font-face {*/
-/*	font-family: 'HK Grotesk';*/
-/*	src: url('HKGrotesk-SemiBold.woff2') format('woff2'),*/
-/*         url('HKGrotesk-SemiBold.woff') format('woff');*/
-/*	font-weight: bold;*/
-/*	font-style: normal;*/
-/*}*/
-
 @font-face {
 	font-family: 'HK Grotesk';
-	src: url('HKGrotesk-Bold.woff2') format('woff2'),
-	url('HKGrotesk-Bold.woff') format('woff');
+	src: url('HKGrotesk-SemiBold.woff2') format('woff2'),
+         url('HKGrotesk-SemiBold.woff') format('woff');
 	font-weight: bold;
 	font-style: normal;
 }
+
+/*@font-face {*/
+/*	font-family: 'HK Grotesk';*/
+/*	src: url('HKGrotesk-Bold.woff2') format('woff2'),*/
+/*	url('HKGrotesk-Bold.woff') format('woff');*/
+/*	font-weight: bold;*/
+/*	font-style: normal;*/
+/*}*/

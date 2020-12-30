@@ -67,6 +67,53 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
   {
     border-color: $gray-600;
   }
-
 }
 
+$nm-x:             $card-spacer-x !default;
+
+@include media-breakpoint-down(sm) {
+  .container {
+    padding-right: $nm-x;
+    padding-left: $nm-x;
+  }
+  .row {
+    margin-right: calc(-1 * #{$nm-x});
+    margin-left: calc(-1 * #{$nm-x});
+
+    & > .col,
+    & > [class*="col-"] {
+      padding-right: $nm-x;
+      padding-left: $nm-x;
+    }
+  }
+
+  .row-narrow {
+    margin-right: -$nm-x / 2;
+    margin-left: -$nm-x / 2;
+
+    > .col,
+    > [class*="col-"] {
+      padding-right: $nm-x / 2;
+      padding-left: $nm-x / 2;
+    }
+  }
+}
+
+// Correction. Use class "correction-no-padding" instead of "px-0 px-md-10px"
+.correction-no-padding {
+  @include media-breakpoint-down(xs) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+
+    & .card {
+      border-radius: 0;
+    }
+  }
+}
+
+.correction-product-image-no-padding {
+  @include media-breakpoint-down(xs) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}

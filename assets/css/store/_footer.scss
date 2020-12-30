@@ -28,7 +28,8 @@ $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
   }
 
   & .footer-body {
-    padding: $footer-body-padding-y $footer-body-padding-x;
+    padding: $footer-body-padding-y 0;
+    text-align: center;
   }
 
   & .footer-nav-copyright {

@@ -20,10 +20,11 @@
   min-height: 40px;
   padding: .5rem 1rem;
 
-  letter-spacing: 0.02rem;
-  text-align: center;
   @include font-size($font-size-base);
   line-height: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.02rem;
+  text-align: center;
 
   @include media-breakpoint-down(md) {
     min-height: 50px;

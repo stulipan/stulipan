@@ -1,9 +1,9 @@
-					<div class="row row-narrowX mt-4">
+					<div class="row row-narrow mt-4">
                         {% if products is defined %}
                         {% for product in products %}
 
                             {% if product.isEnabled or product.isUnavailable %}
-                            <div class="col-lg-3 col-md-4 col-6 col-narrowX">
+                            <div class="col-lg-3 col-sm-4 col-6">
                                 <div class="product">
                                     <div class="product-image">
                                         {% set bestseller = false %}

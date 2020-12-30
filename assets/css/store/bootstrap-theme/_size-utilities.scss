@@ -12,6 +12,7 @@ $text-sm-line-height: 1rem !default; //1.125rem !default;
 .text-sm {
   font-size: $text-sm-font-size;
   line-height: $text-sm-line-height;
+  font-weight: 300;
 }
 .text-size-secondary {
   //font-size: $font-size-base-secondary;

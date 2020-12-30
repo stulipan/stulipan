@@ -3,8 +3,11 @@
 //
 // 1. Checkout ASOS style
 //
+
+$checkout-asos-bg:                     $body-bg-secondary !default;
+
 .checkout-page.checkout-asos {
-  background-color: $gray-50;
+  background-color: $checkout-asos-bg;
 
   & .asos-content {
     display: flex;
@@ -45,11 +48,11 @@
 
 $checkout-shopi-container-width:        600px !default;
 $checkout-shopi-left-bg:                $white !default;
-$checkout-shopi-right-bg:               $gray-50 !default;
+$checkout-shopi-right-bg:               $body-bg-secondary !default;
 $checkout-shopi-body-padding-x:         15px !default;
 $checkout-shopi-body-width:             $checkout-shopi-container-width !default;
 
-$checkout-shopi-collapse-header-bg:             $gray-50 !default;
+$checkout-shopi-collapse-header-bg:             $body-bg-secondary !default;
 $checkout-shopi-collapse-header-border-width:   $border-width !default;
 $checkout-shopi-collapse-header-border-color:   $gray-300 !default;
 $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !default;
@@ -63,8 +66,10 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
   &:not(.thank-you-page) .card {
     box-shadow: none;
 
-    & .card-body {
-      padding: 0;
+    @include media-breakpoint-up(sm) {
+      & .card-body {
+        padding: 0;
+      }
     }
   }
   // End corrections
@@ -85,8 +90,8 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
       & .shopi-left-body {
         width: 100%;
         max-width: $checkout-shopi-body-width;
-        padding-right: 10px;
-        padding-left: 10px;
+        //padding-right: 10px;
+        //padding-left: 10px;
         margin-left: auto;
         margin-right: auto;
       }
@@ -176,7 +181,7 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
   font-weight: $font-weight-bold;
 }
 .minicard--address {
-  font-size: $font-size-base-secondary;
+  //font-size: $font-size-base-secondary;
 }
 
 
@@ -187,9 +192,9 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 .checkout-summary {
   border: $border-width solid $border-color;
   @include border-radius($border-radius);
-  font-size: .88rem;
-  line-height: 1.125rem;
-  color: $gray-650;
+  @include font-size($font-size-sm);
+  line-height: $line-height-sm;
+  color: $gray-700;
 
   & .checkout-summary-item {
     padding: .75rem .75rem;
@@ -225,7 +230,6 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 .checkout-shipping-item,
 .checkout-payment-item {
   padding: .75rem .75rem;
-  //padding: .5rem 1rem;
   border-bottom: $border-width solid $border-color;
 
   @include media-breakpoint-up(lg) {
@@ -237,8 +241,6 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
     border-top-left-radius: $border-radius;
   }
   &:last-of-type {
-    //padding-bottom: 0;
-    //margin-bottom: 0;
     border-bottom-right-radius: $border-radius;
     border-bottom-left-radius: $border-radius;
     border-bottom: none;
@@ -254,14 +256,13 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 
 .checkout-shipping-item-title,
 .checkout-payment-item-title {
-  font-size: $font-size-base;
   font-weight: $font-weight-bold;
   color: $yiq-text-dark;
 }
 .checkout-shipping-item-description,
 .checkout-payment-item-description {
   color: $gray-700;
-  font-size: $font-size-base-secondary;
+  //font-size: $font-size-base-secondary;
 }
 
 
@@ -313,11 +314,16 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 ///////////////////////////////////
 // Corrections
 
-.checkout-page.checkout-asos .checkout-summary {
-  & .checkout-summary-item {
+.checkout-page.checkout-asos {
+  & .checkout-summary,
+  & .checkout-method-selection {
+    border: none;
+  }
+  & .checkout-summary .checkout-summary-item {
     padding: .75rem 0;
   }
 }
+
 
 h1, h2, h3, h4, h5, h6 {
   &.checkout-block-title {
@@ -352,7 +358,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .text-link-checkout {
   display: inline-block;
-  font-size: $font-size-base-secondary;
+  //font-size: $font-size-base-secondary;
 
   &:not(:last-of-type) {
     margin-right: map_get($spacers, 3);

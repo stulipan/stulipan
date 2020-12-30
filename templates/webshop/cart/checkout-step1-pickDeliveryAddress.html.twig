@@ -63,20 +63,24 @@
                             {% include('webshop/cart/recipient_form.html.twig') %}
                         {% endif %}
                     </div>
-                    <div class="row mt-3">
+                    <div class="row">
                         <div class="col-md-12">
-                            <div class="">
-                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                    <a href="#" class="text-link-checkout" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient') }}">
-                                        <span class="btn-loading-invisible">{{ 'checkout.recipient.new-recipient'|trans }}</span>
-                                        <div class="loading-spinner" role="status"></div>
-                                    </a>
-                                    <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--recipientList">
-                                        <span class="btn-loading-invisible">{{ 'checkout.recipient.previously-saved-recipients'|trans }}</span>
-                                        <div class="loading-spinner" role="status"></div>
-                                    </a>
-                                {% endif %}
-                            </div>
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <div class="vertical-form-row">
+                                    <div class="vertical-col mr-3">
+                                        <a href="#" class="text-link-checkout" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient') }}">
+                                            <span class="btn-loading-invisible">{{ 'checkout.recipient.new-recipient'|trans }}</span>
+                                            <div class="loading-spinner" role="status"></div>
+                                        </a>
+                                    </div>
+                                    <div class="vertical-col">
+                                        <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--recipientList">
+                                            <span class="btn-loading-invisible">{{ 'checkout.recipient.previously-saved-recipients'|trans }}</span>
+                                            <div class="loading-spinner" role="status"></div>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                     <button class="d-none" data-selector="button" data-eval="refreshRecipientList" data-url="{{ path('cart-getRecipients') }}"></button>
@@ -113,180 +117,6 @@
             </div>
         </div>
     </div>
-
-{#    <div name="shipping_deliveryDate" class="mt-3">#}
-{#    <div class="row no-gutters">#}
-{#        <div class="col-lg-12">#}
-{#            <div class="card bg-white">#}
-{#                <div class="JS--deliveryDateContainer">#}
-
-{#                    <div class="" data-wrapper-alert>#}
-{#                        <div class="checkout-block-header">#}
-{#                            <h4>Szállítás ideje</h4>#}
-{#                        </div>#}
-{#                        <div>#}
-{#                            <span class="">Válaszd ki mikor szállítsuk ki!</span>#}
-{#                        </div>#}
-{#                    </div>#}
-
-{#                    {% include('webshop/cart/alert-deliveryDate-insert.html.twig') %}#}
-{#                    <div class="card-body">#}
-{#                            #}{#<span class="product-variant-selector-label font-weight-bold"><span>(Melyik napon szállítsuk ki?)</span></span>#}
-{#                        <div class="row mt-3">#}
-{#                            <div class="col-lg-12">#}
-
-{#                                <div class="row order-delivery-date">#}
-{#                                    <div class="col-md-12 col-lg-12 JS--dateWrapper">#}
-{#                                        <div class="form-row">#}
-{#                                            {% for date in generatedDates.dates|slice(0,3) %}#}
-{#                                                <div class="col-sm-3 col-4 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }}" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">#}
-{#                                                    <div role="button" tabindex="-1" class="vp choose-date {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}">#}
-{#                                                        <div class="vp-figure">#}
-{#                                                            <span class="vp-content">#}
-{#                                                                {% include('webshop/site/vp-label-date.html.twig') with {#}
-{#                                                                    'item1': date.deliveryDate,#}
-{#                                                                    'item2': date.deliveryDate#}
-{#                                                                } %}#}
-{#                                                            </span>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                            {% endfor %}#}
-{#                                            <div class="col-sm-3 col-12 JS--Button-clickDate">#}
-{#                                                <div class="row">#}
-{#                                                    {% for date in generatedDates.dates|slice(3) %}#}
-{#                                                        <div class="col-sm-12 col-12 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} d-none" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">#}
-{#                                                            <div class="vp choose-date {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}">#}
-{#                                                                <div class="vp-figure">#}
-{#                                                                <span class="vp-content">#}
-{#                                                                    {% include('webshop/site/vp-label-date.html.twig') with {#}
-{#                                                                        'item1': date.deliveryDate,#}
-{#                                                                        'item2': date.deliveryDate#}
-{#                                                                    } %}#}
-{#                                                                </span>#}
-{#                                                                </div>#}
-{#                                                            </div>#}
-{#                                                        </div>#}
-{#                                                    {% endfor %}#}
-{#                                                    <div class="col-sm-12 col-12 JS--showCalendarIcon">#}
-{#                                                        <div class="vp choose-date">#}
-{#                                                            <div class="vp-figure">#}
-{#                                                            <span class="vp-content">#}
-{#                                                                <span class="tile tile-lg">#}
-{#                                                                    <i class="far fa-calendar-alt fa-2x"></i>#}
-{#                                                                </span>#}
-{#                                                            </span>#}
-{#                                                            </div>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-
-{#                        <div class="JS--intervalsWrapper mt-2X">#}
-{#                            #}{#{% if date.intervals is defined %}#}
-{#                                <div class="row">#}
-{#                                    <div class="col-lg-12">#}
-{#                                        <label class="form-label">A kézbesítés az általad kért időpontban történik:</label>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <div class="form-row order-delivery-date">#}
-{#                                    {% for date in generatedDates.dates %}#}
-{#                                    <div class="col-md-12 col-12 JS--generatedInterval-{{ date.deliveryDate|date('Y-m-d') }} d-none">#}
-{#                                        <form>#}
-{#                                            {% set index = loop.index %}#}
-
-{#                                            <div class="row">#}
-{#                                                <div class="col-lg-12">#}
-{#                                                    <div class="form-group">#}
-{#                                                        <select id="dateForm_deliveryInterval" name="dateForm_deliveryInterval" required="required" class="JS--intervalDropdown form-control">#}
-{#                                                            <option value="">Válassz idősávot...</option>#}
-{#                                                            {% for interval in date.intervals %}#}
-{#                                                                <option value="{{ interval }}" data-fee="{% if interval.price %}{{ interval.price }}{% else %}0{% endif %}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}selected="selected"{% endif %}>#}
-{#                                                                {{ interval }} óra között: {% if interval.price %} +{{ interval.price|money }} {% else %} Ingyenes szállítás {% endif %}#}
-{#                                                                </option>#}
-{#                                                            {% endfor %}#}
-{#                                                        </select>#}
-{#                                                        <div class="mt-2">#}
-{#                                                            <span class="form-text">#}
-{#                                                                <i class="fas fa-info-circle mr-1"></i>#}
-{#                                                                Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.#}
-{#                                                            </span>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                                <div class="col-lg-12">#}
-
-{#                                                </div>#}
-
-{#                                            </div>#}
-{#                                        </form>#}
-{#                                    </div>#}
-{#                                    {% endfor %}#}
-{#                                    <div class="col-md-12 col-12 mb-1">#}
-{#                                        {% include('/webshop/cart/hidden-delivery-date-form.html.twig') %}#}
-{#                                    </div>#}
-{#                                </div>#}
-
-
-{#                                #}{#<div class="form-row order-delivery-date mb-1">#}
-{#                                    #}{#{% for date in generatedDates.dates %}#}
-{#                                    #}{#<div class="col-md-12 col-12 JS--generatedInterval-{{ date.deliveryDate|date('Y-m-d') }} d-none">#}
-{#                                        #}{#<form>#}
-{#                                        #}{#{% set index = loop.index %}#}
-
-{#                                        #}{#{% for interval in date.intervals %}#}
-{#                                        #}{#<div class="custom-control custom-radio py-3 ">#}
-{#                                            #}{#<input class="JS--intervalDropdown custom-control-input" type="radio" id="dateForm_deliveryInterval_{{ index }}_{{ loop.index }}" name="dateForm[deliveryInterval]" required="required" value="{{ interval }}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}checked="checked"{% endif %}>#}
-{#                                            #}{#<label class="custom-control-label font-weight-bold" for="dateForm_deliveryInterval_{{ index }}_{{ loop.index }}">#}
-
-
-{#                                                #}{#<div class="">#}
-
-{#                                                    #}{#<div class="d-inline-block font-weight-bold my-1X">{{ interval }}</div>#}
-{#                                                    #}{#<div class="d-inline-block text-sm text-muted">óra között:</div>#}
-{#                                                    #}{#<div class="d-inline price--gross text-nowrapX font-weight-bold text-sm">#}
-{#                                                        #}{#<em>#}
-{#                                                            #}{#{% if interval.price %}#}
-{#                                                                #}{#<span class="text-nowrap"> +{{ interval.price|money }}</span>#}
-{#                                                            #}{#{% else %}#}
-{#                                                                #}{#<span class="text-sm text-success font-weight-normal">Ingyenes szállítás</span>#}
-{#                                                                #}{#<span class="badge badge-success pt-1 font-weight-bold px-2">Ingyenes szállítás</span>#}
-{#                                                            #}{#{% endif %}#}
-{#                                                        #}{#</em>#}
-{#                                                    #}{#</div>#}
-
-{#                                                #}{#</div>#}
-
-{#                                            #}{#</label>#}
-{#                                        #}{#</div>#}
-{#                                        #}{#{% endfor %}#}
-{#                                        #}{#</form>#}
-{#                                    #}{#</div>#}
-{#                                    #}{#{% endfor %}#}
-{#                                #}{#</div>#}
-
-
-
-{#                            #}{#{% endif %}#}
-{#                        </div>#}
-
-
-
-{#                        #}{#{% include('/webshop/cart/deliveryDate-form.html.twig') %}#}
-
-
-{#                    </div>#}
-
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
 {% endblock %}
 
 {%  block cartCollapse %}
@@ -298,7 +128,7 @@
 {% endblock %}
 
 {% block gotoNext %}
-    <div class="mt-3 mt-md-4 mb-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
+    <div class="mt-20px mt-md-4 mb-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
         <button data-selector="button" data-eval="submitRecipientAndCustomer" data-url="{{ path('site-checkout-step2-pickShipping') }}" class="JS--Button-gotoStep3 btn btn-lg btn-success btn-goto order-1 order-md-2">
             <span class="btn-loading-invisible">{{ 'checkout.continue-to-shipping-method-button'|trans }}</span>
             <span class="loading-spinner" role="status"></span>

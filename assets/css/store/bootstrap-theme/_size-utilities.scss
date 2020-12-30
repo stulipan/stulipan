@@ -1,0 +1,18 @@
+// Size utilities
+
+
+.text-xs {
+  font-size: .7875rem;
+  line-height: 1rem;
+}
+
+$text-sm-font-size:  $font-size-sm !default;
+$text-sm-line-height: 1rem !default; //1.125rem !default;
+
+.text-sm {
+  font-size: $text-sm-font-size;
+  line-height: $text-sm-line-height;
+}
+.text-size-secondary {
+  //font-size: $font-size-base-secondary;
+}

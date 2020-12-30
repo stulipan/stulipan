@@ -1,7 +1,7 @@
         {% if orders is defined and orders is not empty %}
             {% for order in orders %}
                 <div>
-                    <div class="col-md-12 mb-2X bg-order--header border-bottomX py-2">
+                    <div class="col-md-12 bg-order--header py-2">
                         <div class="d-flex justify-content-between">
                             <div class="">
                                 {#<span class="badge badge-number badge-primary text-sm">#{{ order.id }}</span>#}
@@ -52,8 +52,8 @@
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-3 border-md-right mt-2 mt-md-0">
-                                    <span class="font-weight-bold text-lgX">{{ order.shippingName ? order.shippingName : '' }}</span> <br>
-                                    <div class="text-mutedZ">
+                                    <span class="font-weight-bold">{{ order.shippingName ? order.shippingName : '' }}</span> <br>
+                                    <div class="">
                                         +{{ order.shippingPhone ? order.shippingPhone : '' }} <br>
                                         {% if order.shippingAddress %}
                                             {{ order.shippingAddress.street }} <br>
@@ -63,25 +63,10 @@
                                     <div class="mt-2">
                                         {% if order.deliveryDate %}
                                         <i class="far fa-clock mr-1 text-muted"></i> <strong>{{ order.deliveryDate|date('Y M j.')|lower }}</strong> <br>
-                                        <span class="text-mutedZ">{{ order.deliveryInterval ? order.deliveryInterval ~ ' óra között': '' }}</span> <br>
+                                        <span class="">{{ order.deliveryInterval ? order.deliveryInterval ~ ' óra között': '' }}</span> <br>
                                         {% endif %}
-                                        <span class="text-mutedZ text-sm">{{ order.shippingMethod ? order.shippingMethod.getName() : '' }}</span>
+                                        <span class="text-muted">{{ order.shippingMethod ? order.shippingMethod.getName() : '' }}</span>
                                     </div>
-
-                                    {#<div class="mb-1">Címzett: <span class="font-weight-bold">{{ order.recipient ? order.recipient.name : '' }}</span></div>#}
-                                    {#<div>#}
-                                        {#<div class="d-flex float-left order--gray mr-1"><i class="far fa-user font-weight-bold text-lg"></i></div>#}
-                                        {#<div class="pl-2 border--recipient d-inline-block ">#}
-                                            {#{% if order.recipient %}#}
-                                                {#<p class="text-mutedX text-smX">#}
-                                                {#Tel: {{ order.recipient ? order.recipient.phone : '' }} <br>#}
-                                                {#{{ order.recipient.address.street }} <br>#}
-                                                {#{{ order.recipient.address.city }}, {{ order.recipient.address.province }} <br>#}
-                                                {#{{ order.recipient.address.zip }} {{ order.recipient.address.country }}#}
-                                                {#</p>#}
-                                            {#{% endif %}#}
-                                        {#</div>#}
-                                    {#</div>#}
                                 </div>
                                 <div class="col-12 col-md-4 pl-md-2 mt-2 mt-md-0">
                                     <div class="text-mutedZ">
@@ -125,17 +110,6 @@
                                                     </div>
                                                 </div>
                                                 {% endif %}
-
-                                                {#<div class="d-flexX">#}
-                                                    {#{% if order.message %}#}
-                                                    {#<div class="order-message ml-1 mb-2">#}
-                                                        {#<p class="d-inline text-sm text-muted mb-0">#}
-                                                            {#<cite>{{ order.message }}</cite><br>#}
-                                                            {#{{ order.messageAuthor }} <br>#}
-                                                        {#</p>#}
-                                                    {#</div>#}
-                                                    {#{% endif %}#}
-                                                {#</div>#}
                                             </div>
                                         </div>
                                         <div class="mt-2 d-none d-sm-block">

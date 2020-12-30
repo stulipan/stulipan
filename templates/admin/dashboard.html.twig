@@ -40,9 +40,9 @@
                                                 </div>
                                                 <span class="h6 quickinfo-title">{{ 'dashboard.sales-last-day'|trans }}</span>
                                                 <span class="h4 quickinfo-highlight">{{ lastDay ? lastDay.totalRevenue|money : '' }} <span class=""></span></span>
-                                                <div class="d-inline-block w-100 border-top pt-3">
-                                                    <div class="d-inline-block text-muted">{{ 'dashboard.orders'|trans }}: {{ lastDay ? lastDay.orderCount : '' }}</div>
-                                                    <div class="admin-card-right">
+                                                <div class="d-flex justify-content-between align-items-start border-top pt-3">
+                                                    <div class="text-muted">{{ 'dashboard.orders'|trans }}: {{ lastDay ? lastDay.orderCount : '' }}</div>
+                                                    <div class="">
                                                         <a href="{{ path('order-list-table', {'dateRange': lastDay.dateRange}) }}" class="">{{ 'dashboard.details'|trans }}</a>
                                                     </div>
                                                 </div>
@@ -60,9 +60,9 @@
                                                 </div>
                                                 <span class="h6 quickinfo-title">{{ 'dashboard.sales-last-week'|trans }}</span>
                                                 <span class="h4 quickinfo-highlight">{{ lastWeek ? lastWeek.totalRevenue|money : '' }} <span class=""></span></span>
-                                                <div class="d-inline-block w-100 border-top pt-3">
-                                                    <div class="d-inline-block text-muted">{{ 'dashboard.orders'|trans }}: {{ lastWeek ? lastWeek.orderCount : '' }}</div>
-                                                    <div class="admin-card-right">
+                                                <div class="d-flex justify-content-between align-items-start border-top pt-3">
+                                                    <div class="text-muted">{{ 'dashboard.orders'|trans }}: {{ lastWeek ? lastWeek.orderCount : '' }}</div>
+                                                    <div class="">
                                                         <a href="{{ path('order-list-table', {'dateRange': lastWeek.dateRange}) }}" class="">{{ 'dashboard.details'|trans }}</a>
                                                     </div>
                                                 </div>
@@ -81,9 +81,9 @@
                                                 </div>
                                                 <span class="h6 quickinfo-title">{{ 'dashboard.sales-last-month'|trans }}</span>
                                                 <span class="h4 quickinfo-highlight">{{ lastMonth ? lastMonth.totalRevenue|money : '' }} <span class=""></span></span>
-                                                <div class="d-inline-block w-100 border-top pt-3">
-                                                    <div class="d-inline-block text-muted">{{ 'dashboard.orders'|trans }}: {{ lastMonth ? lastMonth.orderCount : '' }}</div>
-                                                    <div class="admin-card-right">
+                                                <div class="d-flex justify-content-between align-items-start border-top pt-3">
+                                                    <div class="text-muted">{{ 'dashboard.orders'|trans }}: {{ lastMonth ? lastMonth.orderCount : '' }}</div>
+                                                    <div class="">
                                                         <a href="{{ path('order-list-table', {'dateRange': lastMonth.dateRange}) }}" class="">{{ 'dashboard.details'|trans }}</a>
                                                     </div>
                                                 </div>

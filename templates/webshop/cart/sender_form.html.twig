@@ -75,7 +75,7 @@
                 {{ form_widget(senderForm.address.province, {'attr': {'class': 'JS--senderForm-province', 'placeholder': 'Megye' }}) }}
                 {{ form_errors(senderForm.address.province) }}
             </div>
-            <div class="form-group mb-0 input-float col-sm-3 {% if senderForm.address.zip.vars.value is defined and senderForm.address.zip.vars.value %}active{% endif %}">
+            <div class="form-group input-float col-sm-3 {% if senderForm.address.zip.vars.value is defined and senderForm.address.zip.vars.value %}active{% endif %}">
                 <label for="{{ senderForm.address.zip.vars.full_name }}" class="form-label">Irányítószám</label>
                 {{ form_widget(senderForm.address.zip, {'attr': {'class': 'JS--senderForm-zip', 'placeholder': 'Irányítószám', 'data-url' : path('cart-getPlaceByZip') }}) }}
                 {{ form_errors(senderForm.address.zip) }}

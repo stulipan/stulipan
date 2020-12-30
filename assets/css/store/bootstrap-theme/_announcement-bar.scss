@@ -22,7 +22,7 @@
 
   letter-spacing: 0.02rem;
   text-align: center;
-  font-size: $font-size-base-secondary;
+  @include font-size($font-size-base);
   line-height: 1rem;
 
   @include media-breakpoint-down(md) {

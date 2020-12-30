@@ -50,7 +50,7 @@
 								{% if product.images is defined %}
 									{% for image in product.images %}
 										<button class="owl-thumb-item detail-thumb-item mb-3">
-											<img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
+											<img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid">
 										</button>
 									{% endfor %}
 								{% endif %}

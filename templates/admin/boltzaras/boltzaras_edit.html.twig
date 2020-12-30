@@ -35,7 +35,11 @@
 
 {% block javascripts %}
     {{ parent() }}
+
     <script>
+        $(document).ready(function() {
+            $('.JS--munkatars').select2();
+        });
         $(function() {
             $('#JS--datum input').daterangepicker({
                 opens: 'right',

@@ -56,76 +56,74 @@
 
                             <div id="write_message" class="mt-4 mt-md-5">
                                 <div class="row">
-                                    <div class="col-lg-12 ">
-                                        <div class="write-message" data-wrapper-card-message>
-                                            <svg class="svg-icon svg-icon-heavyX"><use xlink:href="#mail-1"></use></svg>
-                                            <div class="checkout-block-header">
-                                                <h4 class="checkout-block-title">{{ 'cart.greeting-card.send-message-title'|trans }}</h4>
-                                            </div>
-                                            {% include('webshop/cart/alert-message-insert.html.twig') %}
-                                            <div class="mt-3">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="row">
-                                                            <div class="col-md-8 col-lg-7 order-2 order-md-1">
-                                                                <div class="" data-wrapper-card-body>
-                                                                    {% include('webshop/cart/greeting-card-form.html.twig') %}
-                                                                </div>
-                                                                <div class="text-sm mt-3">
-                                                                    <span class="checkout-block-text">Nem találod a szavakat?</span>
-                                                                    {#<i class="fas fa-info-circle mr-1"></i>#}
-                                                                    {#<a href="#" class="text-underline">Íme néhány üzenetötlet, amit használhatsz kedvedre.</a>#}
-
-                                                                    <a href="#GreetingCardDropdown" data-toggle="collapse" class="dropdown-toggle JS--dropdown-toggle text-underline"  aria-expanded="false" aria-controls="GreetingCardDropdown">Íme néhány üzenetötlet, amit kedvedre használhatsz.</a>
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="col-md-4 col-lg-5 order-1 order-md-2">
-                                                                <div class="ml-lg-2 ml-0 mb-3 mb-lg-0">
-                                                                    <div class="d-flex flex-column h-100">
-                                                                        <div class="checkout-block-text">
-                                                                            <span class="mr-1"><i class="fas fa-info-circle"></i></span>
-                                                                            <span class="">{{ 'cart.greeting-card.free-card-good-to-know'|trans }}</span>
-                                                                            {{ 'cart.greeting-card.free-card-info'|trans }}
-                                                                        </div>
-
+                                    <div class="col-lg-12 correction-no-padding">
+                                        <div class="card write-message" data-wrapper-card-message>
+                                            <div class="card-body">
+                                                <svg class="svg-icon svg-icon-heavyX"><use xlink:href="#mail-1"></use></svg>
+                                                <div class="checkout-block-header">
+                                                    <h4 class="checkout-block-title">{{ 'cart.greeting-card.send-message-title'|trans }}</h4>
+                                                </div>
+                                                {% include('webshop/cart/alert-message-insert.html.twig') %}
+                                                <div class="mt-3">
+                                                    <div class="row">
+                                                                <div class="col-md-8 col-lg-7 order-2 order-md-1">
+                                                                    <div class="" data-wrapper-card-body>
+                                                                        {% include('webshop/cart/greeting-card-form.html.twig') %}
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-12 order-3">
-                                                                <div class="collapse JS--greetingCardDropdown" id="GreetingCardDropdown">
-                                                                    <div class="mt-2">
-                                                                        <ul role="tablist" class="nav nav-pills cardMessage--nav" id="pills-tab">
-                                                                            {% for category in cardCategories %}
-                                                                                <li class="nav-item">
-                                                                                    <a id="tab-{{ category.name }}" data-toggle="pill" href="#pills-{{ category.name }}" role="tab" class="nav-link detail-nav-link {% if loop.first == 1 %}active{% endif %}" aria-controls="{{ category.name }}" aria-selected="true">{{ category.name }}</a>
-                                                                                </li>
-                                                                            {% endfor %}
-                                                                        </ul>
-                                                                        <div class="tab-content py-2 mt-1" id="pills-tabContent">
-                                                                            {% for category in cardCategories %}
-                                                                                <div id="pills-{{ category.name }}" role="tabpanel" class="cart--scroll card cardMessage--list-group list-group-striped tab-pane {% if loop.first == 1 %}active{% endif %}" aria-labelledby="tab-{{ category.name }}">
-                                                                                    {#<div class="cart--scroll">#}
-                                                                                    <ul class="list-group customer-nav JS--GreetingCards">
-                                                                                        {% for message in category.messages %}
-                                                                                            <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">{{ message }}</li>
-                                                                                        {% endfor %}
-                                                                                        <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
-                                                                                        <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
-                                                                                        <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
-                                                                                        <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
-                                                                                        <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
+                                                                    <div class="text-sm mt-3">
+                                                                        <span class="checkout-block-text">Nem találod a szavakat?</span>
+                                                                        {#<i class="fas fa-info-circle mr-1"></i>#}
+                                                                        {#<a href="#" class="text-underline">Íme néhány üzenetötlet, amit használhatsz kedvedre.</a>#}
 
-                                                                                    </ul>
-                                                                                    {#</div>#}
-                                                                                </div>
-                                                                            {% endfor %}
+                                                                        <a href="#GreetingCardDropdown" data-toggle="collapse" class="dropdown-toggle JS--dropdown-toggle text-underline"  aria-expanded="false" aria-controls="GreetingCardDropdown">Íme néhány üzenetötlet, amit kedvedre használhatsz.</a>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-md-4 col-lg-5 order-1 order-md-2">
+                                                                    <div class="ml-lg-2 ml-0 mb-3 mb-lg-0">
+                                                                        <div class="d-flex flex-column h-100">
+                                                                            <div class="checkout-block-text">
+                                                                                <span class="mr-1"><i class="fas fa-info-circle"></i></span>
+                                                                                <span class="">{{ 'cart.greeting-card.free-card-good-to-know'|trans }}</span>
+                                                                                {{ 'cart.greeting-card.free-card-info'|trans }}
+                                                                            </div>
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="col-md-12 order-3">
+                                                                    <div class="collapse JS--greetingCardDropdown" id="GreetingCardDropdown">
+                                                                        <div class="mt-2">
+                                                                            <ul role="tablist" class="nav nav-pills cardMessage--nav" id="pills-tab">
+                                                                                {% for category in cardCategories %}
+                                                                                    <li class="nav-item">
+                                                                                        <a id="tab-{{ category.name }}" data-toggle="pill" href="#pills-{{ category.name }}" role="tab" class="nav-link detail-nav-link {% if loop.first == 1 %}active{% endif %}" aria-controls="{{ category.name }}" aria-selected="true">{{ category.name }}</a>
+                                                                                    </li>
+                                                                                {% endfor %}
+                                                                            </ul>
+                                                                            <div class="tab-content py-2 mt-1" id="pills-tabContent">
+                                                                                {% for category in cardCategories %}
+                                                                                    <div id="pills-{{ category.name }}" role="tabpanel" class="cart--scroll card cardMessage--list-group list-group-striped tab-pane {% if loop.first == 1 %}active{% endif %}" aria-labelledby="tab-{{ category.name }}">
+                                                                                        {#<div class="cart--scroll">#}
+                                                                                        <ul class="list-group customer-nav JS--GreetingCards">
+                                                                                            {% for message in category.messages %}
+                                                                                                <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">{{ message }}</li>
+                                                                                            {% endfor %}
+                                                                                            <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
+                                                                                            <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
+                                                                                            <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
+                                                                                            <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
+                                                                                            <li class="list-group-item JS--GreetingCard" data-selector="button" data-eval="pickGreetingCardMessage">Ezen az email címen és telefonszámon fogunk értesíteni a rendelés állapotáról, illetve a sikeres kézbesítésről.</li>
+
+                                                                                        </ul>
+                                                                                        {#</div>#}
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

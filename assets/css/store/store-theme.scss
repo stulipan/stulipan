@@ -9,6 +9,8 @@
 @import "_cms-page";
 @import "_my-account";
 
+@import "_font-size-mobile-reboot";
+
 
 .svg-icon {
   width: 18px;
@@ -21,22 +23,7 @@
   margin-bottom: 5px;
 }
 
-.text-xs {
-  font-size: .7875rem !important;
-  line-height: 1rem !important;
-}
 
-$text-sm-font-size:  $font-size-sm !default;
-$text-sm-line-height: 1rem !default; //1.125rem !default;
-
-.text-sm {
-  //font-size: .875rem !important;
-  font-size: $text-sm-font-size !important;
-  line-height: $text-sm-line-height !important;
-}
-.text-size-secondary {
-  font-size: $font-size-base-secondary;
-}
 .custom-control.text-sm .custom-control-label {
   //padding-top: calc(.1875rem + .06rem);
   //padding-top: calc((#{$font-size-base} * (1 - #{$text-sm-font-size}))/2 + (#{$line-height-base} * 1rem - #{$text-sm-line-height})/2);

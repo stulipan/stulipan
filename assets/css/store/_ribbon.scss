@@ -9,7 +9,7 @@
   z-index: 999;
   display: inline-block;
   font-family: "HK Grotesk", sans-serif;
-  font-size: .8rem;
+  @include font-size($font-size-base);
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: .05rem;
@@ -28,7 +28,7 @@
   z-index: 999;
   display: inline-block;
   font-family: "HK Grotesk", sans-serif;
-  font-size: .875rem;
+  //font-size: .875rem;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: .1rem;

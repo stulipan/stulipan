@@ -59,7 +59,7 @@
 {#                            {{ form_errors(customerForm.firstname) }}#}
 {#                        </div>#}
                         <div class="form-group col-lg-12 mb-0">
-                            <div class="custom-control custom-checkbox mb-2">
+                            <div class="custom-control custom-checkbox">
                                 <input id="{{ customerForm.optin.vars.id }}" type="checkbox" name="{{ customerForm.optin.vars.full_name }}" class="custom-control-input" {{ customerForm.optin.vars.checked == true ? 'checked=\"checked\"' : '' }}>
                                 <label for="{{ customerForm.optin.vars.id }}" class="custom-control-label align-middle">{{ 'checkout.customer.newsletter-optin'|trans }}</label>
                                 {{ form_errors(customerForm.optin) }}

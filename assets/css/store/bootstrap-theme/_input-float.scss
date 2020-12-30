@@ -11,15 +11,15 @@ $input-float-padding-y:                   .65rem !default; // $input-padding-y-l
 $input-float-padding-x:                   $input-padding-x-lg !default;
 
 $input-float-font-size:                   $input-font-size-lg !default;
-$input-float-label-color:                 $gray-650 !default;
-$input-float-placeholder-color:           $gray-650 !default;
+$input-float-label-color:                 $gray-700 !default;
+$input-float-placeholder-color:           $gray-700 !default;
 $input-float-line-height:                 $input-line-height-lg !default;
 $input-float-border-width:                $input-border-width !default;
 $input-float-border-radius:               $input-border-radius-lg !default;
 
 $input-float-height:                      calc(#{$input-float-line-height * 1em} + #{$input-float-padding-y * 2} + #{$input-height-border})  !default;
 
-$input-float-select-indicator-color:      $gray-650 !default;
+$input-float-select-indicator-color:      $input-select-indicator-color !default; //$gray-700 !default;
 $input-float-select-indicator:            str-replace(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10.289 6.563'%3E%3Cpath fill='#{$input-float-select-indicator-color}' d='M5.212 6.563L0 1.423 1.404 0l3.788 3.735L8.865.01l1.424 1.404'%3E%3C/path%3E%3C/svg%3E"), "#", "%23") !default;
 
 $input-float-select-bg-size:              10px 10px !default; // In pixels because image dimensions

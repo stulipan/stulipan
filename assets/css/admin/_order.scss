@@ -69,7 +69,7 @@ $item-grid-gap:         .75rem !default;
 .cart-item-detail--wrapper {
   display: grid;
   grid-template-columns: 6fr minmax(9rem,auto) minmax(7rem,auto);
-  grid-template-areas: "col-2 col-3 col-4";
+  grid-template-areas: "title calculation total";
   column-gap: $item-grid-gap;
   flex-grow: 1;
   margin-left: 1.5rem;
@@ -77,18 +77,18 @@ $item-grid-gap:         .75rem !default;
   @include media-breakpoint-down(sm) {
     grid-template-columns: auto minmax(7rem,auto);
     grid-template-areas:
-            "col-2 col-4"
-            "col-3 .";
+            "title total"
+            "calculation .";
     margin-left: 1rem;
   }
 }
 
 .cart-item-detail--title {
-  grid-area: col-2;
+  grid-area: title;
   align-self: flex-start;
 }
 .cart-item-detail--calculation {
-  grid-area: col-3;
+  grid-area: calculation;
   align-self: flex-start;
 
   word-break: break-word;
@@ -100,7 +100,7 @@ $item-grid-gap:         .75rem !default;
   }
 }
 .cart-item-detail--total {
-  grid-area: col-4;
+  grid-area: total;
   align-self: flex-start;
   word-wrap: break-word;
   word-break: break-word;
@@ -129,61 +129,146 @@ $item-grid-gap:         .75rem !default;
   }
 }
 
+$timeline-path-color:                       $gray-300 !default;
+$timeline-path-width:                       4px !default;
+
+$timeline-item-padding:                     $card-spacer-x !default;
+
+$timeline-icon-size:                        28px !default;
+$timeline-icon-border-width:                3px !default;
+$timeline-icon-border-color:                $body-bg !default;
+$timeline-icon-color:                       $white !default;
+$timeline-icon-bg:                          darken($gray-500, 10%) !default;
+
+
 .timeline-alt {
-  /*padding: 20px 0;*/
   position: relative;
+
+  &:before {
+    background-color: $timeline-path-color;
+    bottom: 10px;
+    content: "";
+    left: calc(#{$timeline-item-padding} + (#{$timeline-icon-size} / 2) - (#{$timeline-path-width} / 2));
+    position: absolute;
+    top: $timeline-item-padding;
+    width: $timeline-path-width;
+    z-index: 0
+  }
+
+  & .timeline-item {
+    position: relative;
+    padding: $timeline-item-padding;
+
+    &:not(.timeline-comment):last-of-type {
+      padding-bottom: 0;
+    }
+
+    &.timeline-comment {
+      background-color: #ffffff;
+      -webkit-box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+      box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+    }
+
+    & .timeline-icon {
+      position: absolute;
+      //float: left;
+      height: $timeline-icon-size;
+      width: $timeline-icon-size;
+      border-radius: 50%;
+      border: $timeline-icon-border-width solid $timeline-icon-border-color;
+      //@include font-size($font-size-sm);
+      font-size: 70%;
+      text-align: center;
+      background-color: $timeline-icon-bg;
+      color: $timeline-icon-color;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &.timeline-comment .timeline-icon,
+    &.timeline-input .timeline-icon {
+      height: 40px;
+      width: 40px;
+      left: 12px;
+    }
+
+    & .timeline-item-info {
+      margin-left: 40px
+    }
+
+    //&.timeline-input .timeline-item-info {
+      /*margin-top: 5px;*/
+    //}
+  }
 }
 
-.timeline-alt:before {
-  background-color: #e1e1e1;
-  bottom: 10px;
-  content: "";
-  /*left: 9px;*/
-  left: calc(1.25rem + 9px);
+.btn-link-timeline {
+  color: inherit;
+}
+.btn-link-timeline:hover,
+.btn-link-timeline:focus,
+.btn-link-timeline:active {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.btn-link-timeline > .timeline-item {
+  background-color: #fff;
+}
+
+// timeline input textarea
+.btn-input-area {
   position: absolute;
-  /*top: 0;*/
-  top: 1.25rem;
-  width: 2px;
-  z-index: 0
+  right: calc(.45rem);
+  /*background: none;*/
+  border: none;
+  outline: none;
+  cursor: pointer;
+  top: calc(.45rem);
+}
+.btn-input-area i {
+  margin-right: 0;
+}
+.input-area {
+  padding-right: 3.25rem !important;
 }
 
-.timeline-alt .timeline-item {
+
+// List page
+.order.order-list .order-billingInfo,
+.order.order-list .order-shippingInfo,
+.order.order-list .order-deliveryInfo {
+  font-size: .7875rem;
+  line-height: 1.1rem;
+  /*color: #869196;*/
+}
+
+/*  Used in table list for hover elements !!! NOT IN USE !!!*/
+.overlay-container {
   position: relative;
-  padding: 1.25rem;
-  /*margin-bottom: .25rem;*/
-  border-radius: 4px;
+  /*margin: -.75rem;*/
+  /*padding: .75rem;*/
+  width: 100%;
+  height: 100%;
 }
-.timeline-alt .timeline-item.timeline-comment {
-  background-color: #ffffff;
-  -webkit-box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
-  box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+.overlay-container .overlay-cell {
+  position: absolute;
+  /*top: 50%;*/
+  width: 100%;
+  height: 100%;
+  color: #fff;
 }
-.timeline-alt .timeline-item:not(.timeline-comment):last-of-type {
-  padding-bottom: 0;
+.overlay-cell .overlay-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
-
-.timeline-alt .timeline-item .timeline-icon {
-  float: left;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  font-size: 12px;
-  text-align: center;
-  line-height: 16px;
-  background-color: #fff
+tr .overlay-cell .overlay-content {
+  display: none;
 }
-.timeline-alt .timeline-item.timeline-comment .timeline-icon,
-.timeline-alt .timeline-item.timeline-input .timeline-icon {
-  height: 40px;
-  width: 40px;
-  margin-left: -10px;
-}
-
-.timeline-alt .timeline-item .timeline-item-info {
-  margin-left: 40px
-}
-
-.timeline-alt .timeline-item.timeline-input .timeline-item-info {
-  /*margin-top: 5px;*/
+tr:hover .overlay-cell .overlay-content {
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch;
 }

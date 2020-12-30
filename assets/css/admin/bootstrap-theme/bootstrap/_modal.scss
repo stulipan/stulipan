@@ -4,6 +4,41 @@
 // .modal-content   - actual modal w/ bg and corners and stuff
 
 
+// Fixing Bootstrap’s known issue with iOS background scrolling
+//
+// The Bootstrap 4.x framework has a known issue with
+// iOS and modals: When a user “scrolls” on content within
+// a modal overlay, particularly text input fields,
+// background content may scroll (instead).
+//
+// Source: http://holdencreative.com/fixing-bootstraps-known-issue-with-ios-background-scrolling/
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */
+  body {
+    width: 100%;
+    max-width: 100%;
+    will-change: position;
+  }
+  .modal-open {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  .modal {
+    will-change: display;
+  }
+
+  .modal-dialog {
+    will-change: transform;
+  }
+  .modal-body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 .modal-open {
   // Kill the scroll on the body
   overflow: hidden;

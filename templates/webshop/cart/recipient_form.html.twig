@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group mb-0 input-float input-float-block-spaces col-lg-12 {% if recipientForm.phone.vars.value is defined and recipientForm.phone.vars.value %}active{% endif %}">
+            <div class="form-group input-float input-float-block-spaces col-lg-12 {% if recipientForm.phone.vars.value is defined and recipientForm.phone.vars.value %}active{% endif %}">
                 <div class="field-item field-append">
                     <div class="field-addon-append">
                         <div class="btn" data-toggle="tooltip" data-placement="top" title="{{ 'checkout.phone-number-tooltip'|trans }}">
@@ -79,23 +79,9 @@
                 {{ form_errors(recipientForm.phone|raw) }}
             </div>
         </div>
+        {# Render CSRF token etc .#}
+        <div style="display:none">
+            {{ form_rest(recipientForm) }}
+        </div>
 
-{#            <div class="form-group col-lg-12">#}
-{#                <button type="submit" class="JS--Button-submit btn btn-dark mr-1">#}
-{#                    <span class="btn-loading-invisible">Szállítás erre a címre</span>#}
-{#                    <span class="btn-loading-invisible">Adatok mentése</span>#}
-{#                    <div class="loading-spinner" role="status"></div>#}
-{#                </button>#}
-{#                {% if is_granted('IS_AUTHENTICATED_FULLY') and order.customer.hasRecipients %}#}
-{#                {% if order.hasRecipient %}#}
-{#                <button class="btn btn-secondary" data-selector="button" data-eval="getRecipient" data-url="{{ path('cart-getRecipient') }}">#}
-{#                    <span class="btn-loading-invisible">Mégse</span>#}
-{#                    <div class="loading-spinner" role="status"></div>#}
-{#                </button>#}
-{#                {% endif %}#}
-{#            </div>#}
-
-
-{#    </div>#}
-{#</div>#}
 {{ form_end(recipientForm) }}

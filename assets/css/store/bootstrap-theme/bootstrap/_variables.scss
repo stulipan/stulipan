@@ -6,17 +6,17 @@
 // Color system
 
 $white:    #fff !default;
-$gray-50:  #f0f3f5 !default;
-$gray-100: #f6f6f9 !default;
-$gray-200: #f6f6f9 !default; //e8eaec  //e9ecef  Javaslat: f6f6f9
+//$gray-50:  #f0f3f5 !default;
+$gray-100: #f0f3f5 !default;
+$gray-200: #e8eaec !default; //#f6f6f9 !default; //e8eaec  //e9ecef  Javaslat: f6f6f9
 $gray-300: #E1E5E9 !default;  // new border !
 $gray-400: #c4cdd5 !default;  // ex-border
 $gray-500: #adb5bd !default;
-$gray-600: #869196 !default;
-$gray-650: #637381 !default;  //muted 637381
+$gray-600: #6d7175 !default;
+//$gray-650: #637381 !default;  //muted 637381
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
-$gray-900: #212b36 !default;
+$gray-900: #121519 !default; //#212b36 !default;
 $black:    #000 !default;
 $gray-100-select:   #fcfcfd !default;
 
@@ -89,7 +89,7 @@ $danger-lighten:$red-lighten !default;
 $light:           $gray-300 !default; //#eee !default;
 $dark:            $gray-800 !default;
 $dark-lighten:    $gray-600 !default;
-$muted:           $gray-650 !default;
+$muted:           $gray-600 !default;
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -202,6 +202,7 @@ $sizes: map-merge(
 // Settings for the `<body>` element.
 
 $body-bg:                   $white !default;
+$body-bg-secondary:         #f6f6f7 !default;  // Added by Stulipan
 $body-color:                $gray-900 !default;
 
 
@@ -323,10 +324,10 @@ $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberati
 $font-family-base:            $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 
-$font-size-base:              1.0625rem !default; //=17px // Assumes the browser default, typically `16px`
-$font-size-base-secondary:    0.9375rem !default; //=15px
+$font-size-base:              .9375rem !default; //=15px // 1rem !default; // Assumes the browser default, typically `16px`
+//$font-size-base-secondary:    0.9375rem !default; //=15px
 $font-size-lg:                $font-size-base * 1.125 !default;  //$font-size-base * 1.25
-$font-size-sm:                0.8125rem !default; //=13px  // $font-size-base * .9 !default;  //$font-size-base * .875
+$font-size-sm:                .84375rem !default; //.8125rem !default; //=13px  // $font-size-base * .9 !default;  //$font-size-base * .875
 
 $font-weight-lighter:         lighter !default;
 $font-weight-light:           300 !default;
@@ -335,16 +336,16 @@ $font-weight-bold:            700 !default;
 $font-weight-bolder:          bolder !default;
 
 $font-weight-base:            $font-weight-normal !default;
-$line-height-base:            1.3125 !default; //1.5 !default;
+$line-height-base:            1.4375 !default; //1.3125 !default; //1.5 !default;
 
 $letter-spacing:              0.05rem !default;
 
 $h1-font-size:                $font-size-base * 2 !default;
 $h2-font-size:                $font-size-base * 1.8 !default;
-$h3-font-size:                $font-size-base * 1.35 !default;
-$h4-font-size:                $font-size-base * 1.125 !default;
-$h5-font-size:                $font-size-base !default; //$font-size-base * 1.125 !default;
-$h6-font-size:                $font-size-base-secondary !default; //$font-size-base * .9 !default;
+$h3-font-size:                $font-size-base * 1.5 !default;
+$h4-font-size:                $font-size-base * 1.35 !default;
+$h5-font-size:                $font-size-base * 1.125 !default; //$font-size-base * 1.125 !default;
+$h6-font-size:                $font-size-base !default; //$font-size-base * .9 !default;
 // Added by Stulipan
 $h1-font-size-mobile:         $font-size-base * 1.5 !default;
 $h2-font-size-mobile:         $font-size-base * 1.35 !default;
@@ -447,7 +448,7 @@ $table-border-level:          -6 !default;
 $input-btn-padding-y:         .5rem !default;  //.375
 $input-btn-padding-x:         .75rem !default;
 $input-btn-font-family:       null !default;
-$input-btn-font-size:         1rem !default; //$font-size-base !default;
+$input-btn-font-size:         $font-size-base !default;
 $input-btn-line-height:       $line-height-base !default;
 
 $input-btn-focus-width:       1px !default; //.125rem !default;
@@ -461,7 +462,7 @@ $input-btn-line-height-sm:    $line-height-sm !default;
 
 $input-btn-padding-y-lg:      .8rem !default;
 $input-btn-padding-x-lg:      1rem !default;
-$input-btn-font-size-lg:      $font-size-base !default; //$font-size-lg !default;
+$input-btn-font-size-lg:      $font-size-lg !default;
 $input-btn-line-height-lg:    $line-height-lg !default;
 
 $input-btn-border-width:      $border-width !default;
@@ -474,10 +475,10 @@ $input-btn-secondary-padding-x: .5rem !default;
 //
 // For each of Bootstrap's buttons, define text, background, and border color.
 
-$btn-padding-y:               $input-btn-padding-y + ($font-size-base - $font-size-base-secondary)*$line-height-base / 2 !default;
+$btn-padding-y:               $input-btn-padding-y !default;
 $btn-padding-x:               $input-btn-padding-x !default;
 $btn-font-family:             $input-btn-font-family !default;
-$btn-font-size:               $input-btn-font-size !default; //$font-size-base-secondary !default; //$input-btn-font-size !default;
+$btn-font-size:               $input-btn-font-size !default;
 $btn-line-height:             $input-btn-line-height !default;
 
 $btn-padding-y-sm:            $input-btn-padding-y-sm !default;
@@ -554,7 +555,7 @@ $input-focus-color:                     $input-color !default;
 $input-focus-width:                     $input-btn-focus-width !default;
 $input-focus-box-shadow:                $input-btn-focus-box-shadow !default;
 
-$input-placeholder-color:               $gray-600 !default;
+$input-placeholder-color:               $gray-700 !default;
 $input-plaintext-color:                 $body-color !default;
 
 $input-height-border:                   $input-border-width * 2 !default;
@@ -612,7 +613,7 @@ $custom-control-indicator-bg:           $input-bg !default;
 
 $custom-control-indicator-bg-size:      75% 75% !default;
 $custom-control-indicator-box-shadow:   $input-box-shadow !default;
-$custom-control-indicator-border-color: $gray-500 !default;
+$custom-control-indicator-border-color: $gray-600 !default;
 $custom-control-indicator-border-width: $input-border-width !default;
 
 $custom-control-indicator-disabled-bg:          $input-disabled-bg !default;
@@ -808,7 +809,7 @@ $navbar-padding-x:                  0 !default;
 $navbar-nav-link-padding-x:         1rem !default;
 $navbar-nav-link-padding-y:         0 !default; // Added by Stulipan
 // Added by Stulipan
-$navbar-nav-font-size:              $font-size-base-secondary !default;
+$navbar-nav-font-size:              $font-size-base !default;
 $navbar-nav-font-weight:            $font-weight-bold !default;
 $navbar-nav-letter-spacing:         $letter-spacing !default;
 $navbar-nav-text-transform:         uppercase !default;
@@ -947,7 +948,7 @@ $card-columns-margin:               $card-spacer-y !default;
 
 // Tooltips
 
-$tooltip-font-size:                 $font-size-base-secondary !default;
+$tooltip-font-size:                 $font-size-base !default;
 $tooltip-max-width:                 200px !default;
 $tooltip-color:                     $white !default;
 $tooltip-bg:                        $gray-900 !default; // $black !default;

@@ -15,11 +15,10 @@
 
 {% block leftColumn %}
     <div id="order_summary" class="order-summary">
-        <div class="row no-gutters">
+        <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="">
-                        <div class="card-body">
+                    <div class="card-body">
                             <div class="checkout-summary">
                                     <div class="">
                                         <div class="w-100 checkout-summary-item">
@@ -63,7 +62,6 @@
                                     </div>
                                 </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -91,7 +89,7 @@
     </div>
 
     <div id="shipping_deliveryDate" class="shipping-deliveryDate">
-        <div class="row no-gutters">
+        <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -306,7 +304,7 @@
 {% endblock %}
 
 {% block gotoNext %}
-    <div class="mt-3 mt-md-4 mb-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
+    <div class="mt-20px mt-md-4 mb-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
         <button data-selector="button" data-eval="submitShippingMethod" data-url="{{ path('site-checkout-step3-pickPayment') }}" class="JS--Button-gotoStep3 btn btn-lg btn-success btn-goto order-1 order-md-2">
             <span class="btn-loading-invisible">Tovább a fizetéshez</span>
             <div class="loading-spinner" role="status"></div>

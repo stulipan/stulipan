@@ -46,10 +46,10 @@
 
         <div class="shopi-content">
             <div id="left_column" class="shopi-left">
-                <div class="shopi-left-body">
+                <div class="container shopi-left-body">
 {#                    style="max-width: 500px;"#}
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-12 correction-no-padding">
                             <div class="d-none d-lg-flex col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center my-lg-0 order-lg-1 order-1 px-0 px-md-10px">
                                 <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
                                     <span class="h3 font-weight-bold text-uppercase text-primary ml-0">tulipan<span class="text-danger">.</span>futar  </span>
@@ -65,7 +65,10 @@
 
                             {% block leftColumn %}
                             {% endblock %}
-
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             {% block gotoNext %}
                             {% endblock %}
                         </div>
@@ -73,7 +76,7 @@
                 </div>
             </div>
             <div id="right_column" class="shopi-right">
-                <div class="shopi-right-body">
+                <div class="container shopi-right-body">
                     <div class="row navbar-stickyX sticky-topX">
                         <div class="col-md-12 pt-4">
 
@@ -85,47 +88,6 @@
                 </div>
             </div>
         </div>
-
-
-{#        <div class="container mb-4">#}
-{#            <div class="row">#}
-{#                <div class="col-md-12 col-lg-12 mx-lg-auto">#}
-{#                    <div class="row">#}
-{#                        <div id="left_column" class="col-md-7 col-lg-8 px-0 px-md-10px">#}
-{#                            <div class="row no-gutters">#}
-{#                                <div class="col-lg-12">#}
-{#                                    {% include('webshop/cart/progress-bar-3step-checkout.html.twig') %}#}
-{#                                    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}#}
-{#                                        {% include('webshop/cart/already-registered-widget.html.twig') %}#}
-{#                                    {% endif %}#}
-
-{#                                    {% block leftColumn %}#}
-{#                                    {% endblock %}#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <div id="right_column" class="col-md-5 col-lg-4 px-0 px-md-10px">#}
-{#                            <div class="row no-gutters navbar-sticky sticky-top">#}
-{#                                <div class="col-md-12">#}
-{#                                    {% block rightColumn %}#}
-{#                                    {% endblock %}#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-
-{#                <div id="goto_payment" class="col-lg-12 mt-3 mb-5">#}
-{#                    <div class="row">#}
-{#                        <div class="col-lg-12 mb-4 mt-3">#}
-{#                            {% block gotoNext %}#}
-{#                            {% endblock %}#}
-{#                        </div>#}
-{#                        <div class="col-lg-12 py-4"> </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
     </div>
 
     {% block contentWide %}

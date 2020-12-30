@@ -63,7 +63,7 @@ $nm-x-sm:          $card-spacer-x-sm !default;
     margin-right: calc(-1 * #{$nm-x});
     margin-left: calc(-1 * #{$nm-x});
   }
-  [class^="col-"] {
+  [class*="col-"] {
     padding-right: $nm-x;
     padding-left: $nm-x;
   }
@@ -182,17 +182,19 @@ $scrollbar-track-bg:                    $white !default; //$gray-100 !default;
 
 .adaptive-secondary {
   &::-webkit-scrollbar {
+    -webkit-appearance: none;
     width: $scrollbar-width;
     height: $scrollbar-width;
+    -webkit-overflow-scrolling: auto;
   }
   &::-webkit-scrollbar-thumb {
-    background: $scrollbar-thumb-bg;
     border-radius: $scrollbar-border-radius;
+    background: $scrollbar-thumb-bg;
   }
 
   &::-webkit-scrollbar-track {
-    background: $scrollbar-track-bg;
     border-radius: $scrollbar-border-radius;
+    background: $scrollbar-track-bg;
   }  
 }
 

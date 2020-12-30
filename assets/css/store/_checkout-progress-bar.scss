@@ -6,12 +6,12 @@
   justify-content: center;
   margin: 0;
   padding: 0;
+  @include font-size($font-size-sm);
 }
 
 .progress--bar-item {
   align-items: center;
   display: flex;
-  font-size: $font-size-sm;
   margin-right: .5rem;
 
   &.active {

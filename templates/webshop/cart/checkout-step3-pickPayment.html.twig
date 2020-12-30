@@ -15,7 +15,7 @@
 
 {% block leftColumn %}
     <div id="order_summary" class="order-summary">
-        <div class="row no-gutters">
+        <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="">
@@ -150,20 +150,24 @@
                             {% include('webshop/cart/sender_form.html.twig') %}
                         {% endif %}
                     </div>
-                    <div class="row mt-2">
+                    <div class="row">
                         <div class="col-md-12">
-                            <div class="">
-                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                    <a href="#" class="text-link-checkout" data-selector="button" data-eval="showSenderForm" data-url="{{ path('cart-editSender') }}">
-                                        <span class="btn-loading-invisible">Új számlázási cím</span>
-                                        <div class="loading-spinner" role="status"></div>
-                                    </a>
-                                    <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--senderList">
-                                        <span class="btn-loading-invisible">Számlázási címeid</span>
-                                        <div class="loading-spinner" role="status"></div>
-                                    </a>
-                                {% endif %}
-                            </div>
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <div class="vertical-form-row">
+                                    <div class="vertical-col mr-3">
+                                        <a href="#" class="text-link-checkout" data-selector="button" data-eval="showSenderForm" data-url="{{ path('cart-editSender') }}">
+                                            <span class="btn-loading-invisible">Új számlázási cím</span>
+                                            <div class="loading-spinner" role="status"></div>
+                                        </a>
+                                    </div>
+                                    <div class="vertical-col">
+                                        <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--senderList">
+                                            <span class="btn-loading-invisible">Számlázási címeid</span>
+                                            <div class="loading-spinner" role="status"></div>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                     <button class="d-none" data-selector="button" data-eval="refreshSenderList" data-url="{{ path('cart-getSenders') }}"></button>
@@ -195,7 +199,7 @@
 {% endblock %}
 
 {% block gotoNext %}
-    <div class="mt-4 d-flex justify-content-center justify-content-md-between flex-column">
+    <div class="mt-20px mt-md-4 d-flex justify-content-center justify-content-md-between flex-column">
         <button data-selector="button" data-eval="submitPaymentMethod" data-url="{{ path('site-checkout-step4-thankyou') }}" class="JS--Button-gotoThankYou btn btn-lg btn-success btn-goto order-1 order-md-2 px-2 px-md-4 py-3">
             <span class="btn-loading-invisible">A rendelést leadom</span>
             <span class="loading-spinner" role="status"></span>
@@ -203,7 +207,7 @@
     </div>
     <div class="mt-4 d-flex justify-content-center justify-content-md-end flex-column">
         <div class="px-4 px-md-0 text-center">
-            <span class="text-size-secondary">A 'Megrendelem' gombra kattintással rendelésed rögzítésre kerül, illetve elfogadod az ÁSZF-ben foglaltakat és hozzájárulsz, hogy némely itt megadott adatot a Difiori felhasználhassa, hogy számodra fokozott vásárlási élményt nyújtson a jövőben.</span>
+            <span class="text-sm">A 'Megrendelem' gombra kattintással rendelésed rögzítésre kerül, illetve elfogadod az ÁSZF-ben foglaltakat és hozzájárulsz, hogy némely itt megadott adatot a Difiori felhasználhassa, hogy számodra fokozott vásárlási élményt nyújtson a jövőben.</span>
         </div>
     </div>
     <div class="mt-2 mb-5 d-flex justify-content-center justify-content-md-end flex-column">

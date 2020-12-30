@@ -6,7 +6,7 @@ $cart-item-border-color:                    $gray-300 !default;
 
 $cart-item-image-width:                     80px !default;
 $cart-item-image-width-sm:                  60px !default;
-$cart-item-link-color:                      $gray-800 !default;
+$cart-item-link-color:                      $body-color !default;
 $cart-item-link-font-weight:                $font-weight-bold;
 
 $order-summary-padding-y:                   .5rem !default;
@@ -23,7 +23,7 @@ $order-summary-total-font-size:             1.1rem !default;
 
 .cart {
   & .cart-item {
-    font-size: $font-size-base-secondary;
+    //font-size: $font-size-base-secondary;
     padding-top: $cart-item-padding-y;
     padding-bottom: $cart-item-padding-y;
     border-bottom: $cart-item-border-width solid $cart-item-border-color;
@@ -128,16 +128,11 @@ $order-summary-total-font-size:             1.1rem !default;
     font-size: $order-summary-total-font-size;
   }
 }
-.order-summary-item,
-.order-summary-item-label {
-  font-size: $font-size-base-secondary;
-}
 
 .write-message {
   position: relative;
   overflow: hidden;
-  padding: 1rem;
-  background: $gray-200;
+  background: $body-bg-secondary;
   @include border-radius($card-border-radius);
 
   & svg {
@@ -156,15 +151,6 @@ $order-summary-total-font-size:             1.1rem !default;
 }
 
 .checkout-block-text {
-  font-size: $font-size-base-secondary;
+  //font-size: $font-size-base-secondary;
   //color: $muted;
-}
-
-@include media-breakpoint-down(sm) {
-  .form-control-sm.form-control-cart {
-    font-size: 1rem;
-    background-position: right 0.25rem !important;
-    padding: calc(.25rem * 1.1) calc(.25rem + 20px) calc(.25rem * .9) .25rem !important;
-    line-height: 1.2;
-  }
 }

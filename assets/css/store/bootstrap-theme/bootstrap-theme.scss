@@ -64,7 +64,7 @@ iframe {
 }
 
 .my-account {
-  background-color: #f0f3f5;
+  background-color: $body-bg-secondary;
 }
 
 .pagerfanta {
@@ -79,6 +79,10 @@ iframe {
 
 
 :focus:not(:focus-visible) { outline: none }
+
+.accordion .list-group-item:not(.collapsed) {
+  //border-bottom: 0;
+}
 
 //a:focus {
 //  outline: none !important;

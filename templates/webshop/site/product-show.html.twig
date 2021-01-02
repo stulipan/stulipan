@@ -242,40 +242,133 @@
                             <div class="col-sm-11 mx-sm-auto col-md-11 mr-md-auto ml-md-0 col-lg-11 mb-3">
                                 <div class="h3 general-info-title mb-5">Miért válaszd a Tulipánfutárt?</div>
                             </div>
-                            <div class="col-sm-11 mx-sm-auto col-md-10 mr-md-auto ml-md-0 col-lg-7">
-                                <div class="general-info-group">
-                                    <div class="general-info-item">
-                                        <div class="general-info-item-title">INGYENES szállítás Budapesten!</div>
-                                        <p class="general-info-item-description">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
-                                        </p>
-                                    </div>
-
-                                    <div class="general-info-item">
-                                        <div class="general-info-item-title">Virágküldés a nap 24 órájában</div>
-                                        <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;
-                                        </p>
-                                    </div>
-
-                                    <div class="general-info-item">
-                                        <div class="general-info-item-title">Magas vásárlói elégedettség</div>
-                                        <p class="general-info-item-description">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
-                                        </p>
-                                    </div>
-
-                                    <div class="general-info-item">
-                                        <div class="general-info-item-title">Egyedi terméket szeretnél?</div>
-                                        <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
-                                        </p>
-                                    </div>
-
-                                    <div class="general-info-item">
-                                        <div class="general-info-item-title">Ügyfélszolgálat</div>
-                                        <p class="general-info-item-description">
-                                            Telefon: 06 1 466 6286<br>
-                                            Email: info@difiori.hu
-                                        </p>
+                            <div class="col-sm-11 mx-sm-auto col-md-10 mr-md-auto ml-md-0 col-lg-7X">
+                                <div class="card accordion" id="accordionMiertDobozok">
+                                    <div class="list-group">
+                                        <div class="list-group-item p-0">
+                                            <div class="card-body position-relative">
+                                                <div class="position-relative d-flex justify-content-between align-items-center">
+                                                    <div class="d-inline-flex align-items-center">
+                                                        <div class="general-info-item-title mb-0">INGYENES szállítás Budapesten!</div>
+                                                    </div>
+                                                    <div class="d-flex text-sm">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </div>
+                                                </div>
+                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"></a>
+                                            </div>
+                                            <div id="collapseOne" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                                <p class="general-info-item-description">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item p-0">
+                                            <div class="card-body position-relative">
+                                                <div class="position-relative d-flex justify-content-between align-items-center">
+                                                    <div class="d-inline-flex align-items-center">
+                                                        <div class="general-info-item-title mb-0">Virágküldés a nap 24 órájában</div>
+                                                    </div>
+                                                    <div class="d-flex text-sm">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </div>
+                                                </div>
+                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne"></a>
+                                            </div>
+                                            <div id="collapseTwo" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                                <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item p-0">
+                                            <div class="card-body position-relative">
+                                                <div class="position-relative d-flex justify-content-between align-items-center">
+                                                    <div class="d-inline-flex align-items-center">
+                                                        <div class="general-info-item-title mb-0">Magas vásárlói elégedettség</div>
+                                                    </div>
+                                                    <div class="d-flex text-sm">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </div>
+                                                </div>
+                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne"></a>
+                                            </div>
+                                            <div id="collapseThree" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                                <p class="general-info-item-description">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item p-0">
+                                            <div class="card-body position-relative">
+                                                <div class="position-relative d-flex justify-content-between align-items-center">
+                                                    <div class="d-inline-flex align-items-center">
+                                                        <div class="general-info-item-title mb-0">Egyedi terméket szeretnél?</div>
+                                                    </div>
+                                                    <div class="d-flex text-sm">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </div>
+                                                </div>
+                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseOne"></a>
+                                            </div>
+                                            <div id="collapseFour" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                                <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item p-0">
+                                            <div class="card-body position-relative">
+                                                <div class="position-relative d-flex justify-content-between align-items-center">
+                                                    <div class="d-inline-flex align-items-center">
+                                                        <div class="general-info-item-title mb-0">Ügyfélszolgálat</div>
+                                                    </div>
+                                                    <div class="d-flex text-sm">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </div>
+                                                </div>
+                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseFive" aria-expanded="true" aria-controls="collapseOne"></a>
+                                            </div>
+                                            <div id="collapseFive" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                                <p class="general-info-item-description">
+                                                    Telefon: 06 1 466 6286<br>
+                                                    Email: info@difiori.hu
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+
+{#                                <div class="general-info-group">#}
+{#                                    <div class="general-info-item">#}
+{#                                        <div class="general-info-item-title">INGYENES szállítás Budapesten!</div>#}
+{#                                        <p class="general-info-item-description">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.#}
+{#                                        </p>#}
+{#                                    </div>#}
+
+{#                                    <div class="general-info-item">#}
+{#                                        <div class="general-info-item-title">Virágküldés a nap 24 órájában</div>#}
+{#                                        <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;#}
+{#                                        </p>#}
+{#                                    </div>#}
+
+{#                                    <div class="general-info-item">#}
+{#                                        <div class="general-info-item-title">Magas vásárlói elégedettség</div>#}
+{#                                        <p class="general-info-item-description">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.#}
+{#                                        </p>#}
+{#                                    </div>#}
+
+{#                                    <div class="general-info-item">#}
+{#                                        <div class="general-info-item-title">Egyedi terméket szeretnél?</div>#}
+{#                                        <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.#}
+{#                                        </p>#}
+{#                                    </div>#}
+
+{#                                    <div class="general-info-item">#}
+{#                                        <div class="general-info-item-title">Ügyfélszolgálat</div>#}
+{#                                        <p class="general-info-item-description">#}
+{#                                            Telefon: 06 1 466 6286<br>#}
+{#                                            Email: info@difiori.hu#}
+{#                                        </p>#}
+{#                                    </div>#}
+{#                                </div>#}
                             </div>
                         </div>
                     </div>

@@ -300,7 +300,7 @@ $caret-spacing:               $caret-width * .85 !default;
 
 $transition-base:             all .2s ease-in-out !default;
 $transition-fade:             opacity .05s linear !default;
-$transition-collapse:         height .35s ease !default;
+$transition-collapse:         height .25s ease !default;
 
 $embed-responsive-aspect-ratios: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default

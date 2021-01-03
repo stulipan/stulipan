@@ -324,7 +324,7 @@ $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberati
 $font-family-base:            $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 
-$font-size-base:              .9375rem !default; //=15px // 1rem !default; // Assumes the browser default, typically `16px`
+$font-size-base:              1rem !default; // Assumes the browser default, typically `16px`
 //$font-size-base-secondary:    0.9375rem !default; //=15px
 $font-size-lg:                $font-size-base * 1.125 !default;  //$font-size-base * 1.25
 $font-size-sm:                .84375rem !default; //.8125rem !default; //=13px  // $font-size-base * .9 !default;  //$font-size-base * .875
@@ -1017,7 +1017,7 @@ $toast-header-border-color:         rgba(0, 0, 0, .05) !default;
 
 // Badges
 
-$badge-font-size:                   80% !default;
+$badge-font-size:                   85% !default;
 $badge-font-weight:                 $font-weight-normal !default;
 $badge-padding-y:                   .25rem !default;
 $badge-padding-x:                   .5rem !default;

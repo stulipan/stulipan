@@ -550,116 +550,66 @@
     font-weight: bold;
     margin-bottom: 0;
 }
-/*.minicard {*/
-/*    !*border: 2px dashed #c4cdd5;*!*/
-/*    !*box-shadow: rgba(22, 29, 37, 0.05) 0px 1px 0px 0px;*!*/
-/*    border-radius: 4px;*/
-/*    box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);*/
-/*    border-left: 6px solid #ffcf88;*/
-/*    border-right: none;*/
-/*    border-top: none;*/
-/*    border-bottom: none;*/
+
+/*.minicard--body a {*/
+/*    font-size: .875rem;*/
+/*    line-height: 1.125rem;*/
 /*}*/
 
-/*.minicard.recipient {*/
-/*    border-left: 6px solid #00aa5b !important;*/
+/*.minicard--mainLink {*/
+/*    padding: .35em .5em;*/
+/*}*/
+/*.btn-tool:hover,*/
+/*.minicard--mainLink:hover {*/
+/*    color: #212529;*/
+/*    text-decoration: none;*/
+/*    !*background-color: #ffe0b1;*!*/
+/*    background: linear-gradient(180deg,#f4f4f5,#e8e8e8);*/
 /*}*/
 
-/*.minicard--body {*/
-/*    padding: 1rem;*/
-/*    text-align: left;*/
+/*.minicard--toolLink {*/
+/*    color: #868e96;*/
 /*}*/
-/*.minicard.selected {*/
-/*    background-color: #f4f4f4;*/
+
+/*.text--toolLink,*/
+/*.minicard--toolLink {*/
+/*    font-size: .7875rem;*/
+/*    text-decoration: underline;*/
+/*    letter-spacing: 0;*/
+/*    !*text-transform: capitalize;*!*/
 /*}*/
-/*.selected .minicard--body {*/
-/*    color: initial !important;*/
+/*.text--toolLink:hover,.text--toolLink:focus,*/
+/*.minicard--toolLink:hover, .minicard--toolLink:focus {*/
+/*    color: #212529;*/
+/*    text-decoration: underline;*/
 /*}*/
-/*.minicard--title {*/
-/*    !*color: #004d6e;*!*/
+
+
+
+/*.tile-sm {*/
+/*    font-size: .875rem;*/
+/*    line-height: 1.125rem;*/
+/*}*/
+
+
+
+/*.overlay--wrapper {*/
+/*    position: relative;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    border: 1px solid #f1f1f1;*/
+/*    -webkit-transform-style: preserve-3d;*/
+/*    transform-style: preserve-3d;*/
+/*}*/
+/*.overlay--bestseller {*/
+/*    background: #FAF1CB;*/
+/*    color: #7b6b47;*/
+/*    padding: .4rem .25rem .2rem .25rem;*/
+/*    text-transform: uppercase;*/
+/*    font-size: .875rem;*/
 /*    font-weight: bold;*/
+/*    letter-spacing: 0.1rem;*/
 /*}*/
-/*.minicard--address {*/
-/*    color: #495057;*/
-/*    line-height: 1.375rem;*/
-/*}*/
-
-.minicard--body a {
-    font-size: .875rem;
-    line-height: 1.125rem;
-}
-
-.btn-tool,
-.minicard--mainLink {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    text-decoration: none;
-    color: #212529;
-    /*background-color: #ffebcc;*/
-    background: linear-gradient(180deg,#ffffff,#f4f4f5);
-    border: 1px solid #c4cdd5;
-    border-radius: 3px;
-    text-transform: initial;
-    letter-spacing: 0;
-    box-shadow: rgba(22, 29, 37, 0.05) 0px 1px 0px 0px;
-}
-.minicard--mainLink {
-    padding: .35em .5em;
-}
-.btn-tool:hover,
-.minicard--mainLink:hover {
-    color: #212529;
-    text-decoration: none;
-    /*background-color: #ffe0b1;*/
-    background: linear-gradient(180deg,#f4f4f5,#e8e8e8);
-}
-
-.minicard--toolLink {
-    color: #868e96;
-}
-
-.text--toolLink,
-.minicard--toolLink {
-    font-size: .7875rem;
-    text-decoration: underline;
-    letter-spacing: 0;
-    /*text-transform: capitalize;*/
-}
-.text--toolLink:hover,.text--toolLink:focus,
-.minicard--toolLink:hover, .minicard--toolLink:focus {
-    color: #212529;
-    text-decoration: underline;
-}
-
-
-
-.tile-sm {
-    font-size: .875rem;
-    line-height: 1.125rem;
-}
-
-
-
-.overlay--wrapper {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    border: 1px solid #f1f1f1;
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-}
-.overlay--bestseller {
-    background: #FAF1CB;
-    color: #7b6b47;
-    padding: .4rem .25rem .2rem .25rem;
-    text-transform: uppercase;
-    font-size: .875rem;
-    font-weight: bold;
-    letter-spacing: 0.1rem;
-}
 
 
 

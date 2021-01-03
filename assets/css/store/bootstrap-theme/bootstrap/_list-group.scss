@@ -54,7 +54,7 @@
 
   &:first-child {
     @include border-top-radius($list-group-border-radius);
-    border-top: none;
+    //border-top: none;
   }
 
   &:last-child {

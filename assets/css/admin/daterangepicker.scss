@@ -163,7 +163,7 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
             flex: 1 1 auto;
             justify-content: space-between;
             flex-direction: column;
-            padding: .75rem;
+            //padding: .75rem;
         }
 
         & .drp-calendars {
@@ -172,6 +172,10 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
             align-items: center;
             height: 100%;
         }
+    }
+
+    &.show .drp-body .drp-something2 {
+        padding: .75rem;
     }
 
     & .drp-footer {

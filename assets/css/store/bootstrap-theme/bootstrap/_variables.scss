@@ -298,7 +298,7 @@ $caret-width:                 .3em !default;
 $caret-vertical-align:        $caret-width * .85 !default;
 $caret-spacing:               $caret-width * .85 !default;
 
-$transition-base:             all .2s ease-in-out !default;
+$transition-base:             all .2s ease-in !default; // all .2s ease-in-out !default;
 $transition-fade:             opacity .05s linear !default;
 $transition-collapse:         height .25s ease !default;
 

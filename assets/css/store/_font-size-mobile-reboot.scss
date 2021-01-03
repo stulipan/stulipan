@@ -108,6 +108,25 @@ $nm-x:             $card-spacer-x !default;
   }
 }
 
+.scroll-overflower {
+  overflow-x: scroll;
+  position: relative;
+
+  & .scroll-overflower-wrapper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include media-breakpoint-down(sm) {
+      width: calc(960px - 2 * #{$nm-x});
+    }
+    @include media-breakpoint-down(xs) {
+      width: calc(1060px - 2 * #{$nm-x});
+    }
+  }
+
+}
+
 // Correction. Use class "correction-no-padding" instead of "px-0 px-md-10px"
 .correction-no-padding {
   @include media-breakpoint-down(xs) {

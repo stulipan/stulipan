@@ -192,25 +192,6 @@
 /*border-color: #008CDE;*/
 /*}*/
 
-.detail-carousel {
-  position: relative
-}
-
-.detail-carousel .ribbon {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 999
-}
-
-.detail-carousel .ribbon+.ribbon {
-  top: 40px
-}
-
-.detail-carousel .ribbon+.ribbon+.ribbon {
-  top: 70px
-}
-
 .product-variant-selector-label {
   color: $label-color;
 }

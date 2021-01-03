@@ -1,204 +1,62 @@
 // Ribbon
+// Up to 4 ribbons can be displayed on top
 
+
+$zindex-ribbon:                   3 !default;  // must be bellow tile-link=30;
+$ribbon-padding-y:                4px !default;
+$ribbon-padding-x:                .75rem !default;
+
+$ribbon-color:                    $white !default;
+$ribbon-size:                     $font-size-sm !default;
+$ribbon-line-height:              $line-height-sm * 1rem !default;
+$ribbon-height:                   calc(#{$ribbon-line-height} + #{$ribbon-padding-y} * 2) !default;
+
+$ribbon-offset-y:                 7px !default;
 
 .ribbon {
   position: absolute;
-  top: 10px;
-  //left: -12px;
+  top: 0;
   left: 0;
-  z-index: 999;
+  z-index: $zindex-ribbon;
   display: inline-block;
-  font-family: "HK Grotesk", sans-serif;
-  @include font-size($font-size-base);
+  @include font-size($ribbon-size);
+  line-height: $ribbon-line-height;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: .05rem;
-  padding: 4px 15px;
-  color: #fff;
+  letter-spacing: .075rem;
+  padding: calc(#{$ribbon-padding-y} * 1.2) $ribbon-padding-x calc(#{$ribbon-padding-y} * .8) $ribbon-padding-x;
+  color: $ribbon-color;
   text-align: center;
-  //border-top-right-radius: 3px;
-  //border-bottom-right-radius: 3px;
   @include border-radius($border-radius);
+  height: $ribbon-height;
+
+  &.ribbon-bottom {
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    background-color: #FAF1CB;
+    color: #7b6b47;
+    opacity: .9;
+  }
 }
 
-.ribbon-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 999;
-  display: inline-block;
-  font-family: "HK Grotesk", sans-serif;
-  //font-size: .875rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: .1rem;
-  padding: .4rem .25rem .2rem .25rem;
-  color: #fff;
-  text-align: center;
-  width: 100%;
-  opacity: .9;
-}
-.ribbon-bottom::before {
-  border: none;
-}
-.product-details .ribbon-bottom {
-  width: calc(100% - 20px) !important;
-}
 .ribbon+.ribbon {
-  top: 40px
+  top: calc(#{$ribbon-height} + #{$ribbon-offset-y});
 }
-
 .ribbon+.ribbon+.ribbon {
-  top: 70px
+  top: calc(2 * (#{$ribbon-height} + #{$ribbon-offset-y}));
 }
-
 .ribbon+.ribbon+.ribbon+.ribbon {
-  top: 100px
+  top: calc(3 * (#{$ribbon-height} + #{$ribbon-offset-y}));
 }
 
-//.ribbon::before {
-//  content: '';
-//  border-left: 12px solid transparent;
-//  border-right: 0 solid transparent;
-//  border-top: 14px solid #612f54;
-//  position: absolute;
-//  bottom: -14px;
-//  left: 0
-//}
-
-.ribbon-primary {
-  background-color: #876EBD !important
+@mixin ribbon-variant($background, $color) {
+  color: $color;
+  background-color: $background;
 }
 
-.ribbon-primary::before {
-  border-top-color: #612f54
-}
-
-.ribbon-secondary {
-  background-color: #869196 !important
-}
-
-.ribbon-secondary::before {
-  border-top-color: #555b61
-}
-
-.ribbon-success {
-  background-color: #00aa5b !important
-}
-
-.ribbon-success::before {
-  border-top-color: #145523
-}
-
-.ribbon-info {
-  background-color: #008CDE !important
-}
-
-.ribbon-info::before {
-  border-top-color: #008CDE
-}
-
-.ribbon-warning {
-  color: initial;
-  background-color: #ffebcc !important
-}
-
-.ribbon-warning::before {
-  border-top-color: #a07800
-}
-
-.ribbon-danger {
-  background-color: #dc3545 !important
-}
-
-.ribbon-danger::before {
-  border-top-color: #AE2638
-}
-
-.ribbon-light {
-  background-color: #eee !important
-}
-
-.ribbon-light::before {
-  border-top-color: #bdc6d0
-}
-
-.ribbon-dark {
-  background-color: #343a40 !important
-}
-
-.ribbon-dark::before {
-  border-top-color: #060708
-}
-
-.ribbon-gray-100 {
-  background-color: #f8f9fa !important
-}
-
-.ribbon-gray-100::before {
-  border-top-color: #bdc6d0
-}
-
-.ribbon-gray-200 {
-  background-color: #e9ecef !important
-}
-
-.ribbon-gray-200::before {
-  border-top-color: #aeb9c4
-}
-
-.ribbon-gray-300 {
-  background-color: #dee2e6 !important
-}
-
-.ribbon-gray-300::before {
-  border-top-color: #a4afba
-}
-
-.ribbon-gray-400 {
-  background-color: #c4cdd5 !important
-}
-
-.ribbon-gray-400::before {
-  border-top-color: #94a1ae
-}
-
-.ribbon-gray-500 {
-  background-color: #adb5bd !important
-}
-
-.ribbon-gray-500::before {
-  border-top-color: #748290
-}
-
-.ribbon-gray-600 {
-  background-color: #869196 !important
-}
-
-.ribbon-gray-600::before {
-  border-top-color: #555b61
-}
-
-.ribbon-gray-700 {
-  background-color: #495057 !important
-}
-
-.ribbon-gray-700::before {
-  border-top-color: #1a1d20
-}
-
-.ribbon-gray-800 {
-  background-color: #343a40 !important
-}
-
-.ribbon-gray-800::before {
-  border-top-color: #060708
-}
-
-.ribbon-gray-900 {
-  background-color: #40484c !important
-}
-
-.ribbon-gray-900::before {
-  border-top-color: #000
+@each $color, $value in $theme-colors {
+  .ribbon.ribbon-#{$color} {
+    @include ribbon-variant(map-get($theme-colors,$color), color-yiq(map-get($theme-colors,$color)));
+  }
 }

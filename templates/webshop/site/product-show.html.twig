@@ -52,7 +52,7 @@
                                 {% endif %}
                                 <!-- MAIN IMAGE -->
                                 <div class="order-1 order-sm-2 {% if isThumbnailsLeft == true %}col-12 col-sm-10{% else %}col-12{% endif %}">
-                                    <div class="detail-carousel">
+                                    <div class="detail-carousel position-relative">
                                         {% set bestseller = false %}
                                         {% if product.isUnavailable %}
                                             <div class="ribbon ribbon-dark">MIND ELKELT</div>
@@ -66,29 +66,25 @@
                                             {% endfor %}
                                         {% endif %}
                                         <div class="">
-                                        {#<span class="delivery show-for-large mr-10px"></span>#}
-                                        <div data-slider-id="1" class="owl-carousel detail-slider owl-theme ">
-                                            {% if product.images is defined %}
-                                                {% for image in product.images %}
-                                                    <div class="item"><a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
-                                                            <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" alt="{{ product.name }} 1" class="img-fluid">
-                                                            {% if bestseller %}
-                                                                <div class="card-img-overlay d-flex align-items-end p-0">
-                                                                    <div class="text-center w-100 overlay--bestseller">
-                                                                        <i class="fas fa-trophy"></i> Bestseller
-                                                                    </div>
-                                                                </div>
-                                                            {% endif %}
-                                                        </a>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
+                                            <div data-slider-id="1" class="owl-carousel detail-slider owl-theme">
+                                                {% if product.images is defined %}
+                                                    {% for image in product.images %}
+                                                        <div class="item">
+                                                            <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
+                                                                <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" alt="{{ product.name }} 1" class="img-fluid">
+                                                            </a>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                    </div>
+                                        {% if bestseller %}
+                                            <div class="ribbon ribbon-bottom"><i class="fas fa-trophy"></i> Bestseller</div>
+                                        {% endif %}
                                     </div>
                                 </div>
-                                <!-- Thumbnails bellow Main Image -->
                                 {% if isThumbnailsLeft == false %}
+                                <!-- Thumbnails bellow Main Image -->
                                 <div class="col-12">
                                     <div data-slider-id="1" class="owl-thumbs row">
                                         {% if product.images is defined %}

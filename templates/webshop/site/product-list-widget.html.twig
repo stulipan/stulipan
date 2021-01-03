@@ -5,36 +5,33 @@
                             {% if product.isEnabled or product.isUnavailable %}
                             <div class="col-lg-3 col-sm-4 col-6">
                                 <div class="product">
-                                    <div class="product-image">
-                                        {% set bestseller = false %}
-                                        {% if product.isUnavailable() %}
-                                            <div class="ribbon ribbon-dark">MIND ELKELT</div>
-                                        {% elseif product.hasBadges %}
-                                            {% for badge in product.badges %}
-                                                {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
-                                                {% else %}
-                                                    {% set bestseller = true %}
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endif %}
-                                        <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_image') }}" alt="{{ product.name }}" class="img-fluid">
-                                        <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link">
-                                        </a>
-                                        {% if bestseller %}
-                                            <div class="card-img-overlay d-flex align-items-end p-0">
-                                                <div class="text-center w-100 overlay--bestseller">
+                                    <div class="product-image-wrapper">
+                                        <div class="product-image">
+                                            {% set bestseller = false %}
+                                            {% if product.isUnavailable() %}
+                                                <div class="ribbon ribbon-dark">MIND ELKELT</div>
+                                            {% elseif product.hasBadges %}
+                                                {% for badge in product.badges %}
+                                                    {% if badge.css is defined and badge.css != 'bestseller' %}
+                                                        <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                                    {% else %}
+                                                        {% set bestseller = true %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_image') }}" alt="{{ product.name }}" class="img-fluid">
+                                            {% if bestseller %}
+                                                <div class="ribbon ribbon-bottom">
                                                     <i class="fas fa-trophy"></i> Bestseller
                                                 </div>
-                                            </div>
-                                        {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link"></a>
                                     </div>
-                                    <div class="py-2 text-center">
-                                        {#<p class="text-muted text-sm mb-1">{{ product.category }}</p>#}
-                                        <p class="productList--name mb-1"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.name }}</a></p>
-                                        <span class="productList--price-gross">{{ product.price.grossPrice|money }}</span>
+                                    <div class="product-title-wrapper">
+                                        <p class="productList--name"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.name }}</a></p>
+                                        <div class="productList--price-gross mt-1">{{ product.price.grossPrice|money }}</div>
                                     </div>
-
                                 </div>
                             </div>
                             {% endif %}

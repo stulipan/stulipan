@@ -116,6 +116,7 @@ $nm-x:             $card-spacer-x !default;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    padding-right: $nm-x; //
 
     @include media-breakpoint-down(sm) {
       width: calc(960px - 2 * #{$nm-x});

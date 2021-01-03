@@ -34,5 +34,6 @@ $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
     background-color: $footer-nav-copyright-bg;
     padding-top: $footer-nav-copyright-padding-y;
     padding-bottom: $footer-nav-copyright-padding-y;
+    @include font-size($font-size-sm);
   }
 }

@@ -12,11 +12,10 @@ $footer-nav-copyright-bg:         $gray-800 !default;
 $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
 
 .main-footer {
-  font-size: $footer-font-size;
-  //color: $muted;
-  //background-color: #e4e8ea;
+  //font-size: $footer-font-size;
   background-color: $footer-bg;
   color: $footer-color;
+  font-weight: $font-weight-light;
 
   & a {
     color: $footer-color;
@@ -29,11 +28,9 @@ $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
 
   & .footer-body {
     padding: $footer-body-padding-y 0;
-    text-align: center;
   }
 
   & .footer-nav-copyright {
-    //color: $gray-300;
     background-color: $footer-nav-copyright-bg;
     padding-top: $footer-nav-copyright-padding-y;
     padding-bottom: $footer-nav-copyright-padding-y;

@@ -10,11 +10,11 @@ $ribbon-color:                    $white !default;
 $ribbon-size:                     $font-size-sm !default;
 $ribbon-line-height:              $line-height-sm * 1em !default;
 $ribbon-height:                   calc(#{$ribbon-line-height} + #{$ribbon-padding-y} * 2) !default;
+$ribbon-offset-y:                 0px !default; //7px !default;
 
 $ribbon-line-height-mobile:       1em !default;
 $ribbon-height-mobile:            calc(#{$ribbon-line-height-mobile} + #{$ribbon-padding-y} * 2) !default;
-
-$ribbon-offset-y:                 7px !default;
+$ribbon-offset-y-mobile:          0px !default; //4px !default;
 
 .ribbon {
   position: absolute;
@@ -71,12 +71,12 @@ $ribbon-offset-y:                 7px !default;
     height: $ribbon-height-mobile;
   }
   .ribbon+.ribbon {
-    top: calc(#{$ribbon-height-mobile} + #{$ribbon-offset-y});
+    top: calc(#{$ribbon-height-mobile} + #{$ribbon-offset-y-mobile});
   }
   .ribbon+.ribbon+.ribbon {
-    top: calc(2 * (#{$ribbon-height-mobile} + #{$ribbon-offset-y}));
+    top: calc(2 * (#{$ribbon-height-mobile} + #{$ribbon-offset-y-mobile}));
   }
   .ribbon+.ribbon+.ribbon+.ribbon {
-    top: calc(3 * (#{$ribbon-height-mobile} + #{$ribbon-offset-y}));
+    top: calc(3 * (#{$ribbon-height-mobile} + #{$ribbon-offset-y-mobile}));
   }
 }

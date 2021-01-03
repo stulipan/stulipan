@@ -245,56 +245,56 @@
             <div class="row">
                 <div class="col-sm-11 col-xl-12 mx-auto">
                     <div class="footer-body">
-                        <div class="row">
-                        <div class="col-sm-6 col-md-4 col-lg-4 mb-3 mb-lg-0">
-                            <h6 class="text-uppercase  mb-2">Elérhetőségek</h6>
-                            <p>{{ settings_general.get('company.zip') }} {{ settings_general.get('company.city') }}, {{ settings_general.get('company.address') }}</p>
-                            <ul class="list-inline">
-                                {% if settings_general.get('social.facebook') and settings_general.get('social.facebook') is not null %}
-                                <li class="list-inline-item"><a href="{{ settings_general.get('social.facebook') }}" target="_blank" title="facebook" class="text-muted text-hover-primary"><i class="fab fa-facebook"></i></a></li>
-                                {% endif %}
-                                {% if settings_general.get('social.instagram') and settings_general.get('social.instagram') is not null %}
-                                <li class="list-inline-item"><a href="{{ settings_general.get('social.instagram') }}" target="_blank" title="instagram" class="text-muted text-hover-primary"><i class="fab fa-instagram"></i></a></li>
-                                {% endif %}
-                                {% if settings_general.get('social.pinterest') and settings_general.get('social.pinterest') is not null %}
-                                <li class="list-inline-item"><a href="{{ settings_general.get('social.pinterest') }}" target="_blank" title="pinterest" class="text-muted text-hover-primary"><i class="fab fa-pinterest"></i></a></li>
-                                {% endif %}
-                                {% if settings_general.get('social.twitter') and settings_general.get('social.twitter') is not null %}
-                                <li class="list-inline-item"><a href="{{ settings_general.get('social.twitter') }}" target="_blank" title="vimeo" class="text-muted text-hover-primary"><i class="fab fa-twitter"></i></a></li>
-                                {% endif %}
-                                {% if settings_general.get('social.youtube') and settings_general.get('social.youtube') is not null %}
-                                <li class="list-inline-item"><a href="{{ settings_general.get('social.youtube') }}" target="_blank" title="vimeo" class="text-muted text-hover-primary"><i class="fab fa-youtube"></i></a></li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-md-4 col-lg-2 mb-3 mb-lg-0">
-                            <h6 class="text-uppercase  mb-2">Virágküldés</h6>
-                            <ul class="list-unstyled">
-                                <li> <a href="/termekek/csokrok" class="" title="Virágcsokrok">Csokrok</a></li>
-                                <li> <a href="/termekek/viragdobozok" class="" title="Virágboxok">Virágdobozok</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-md-4 col-lg-2 mb-3 mb-lg-0">
-                            <h6 class="text-uppercase  mb-2">Információk</h6>
-                            <ul class="list-unstyled">
-                                <li> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="">Rólunk</a></li>
-                                <li> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="">Szállítási díjak</a></li>
-                                <li> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="">ÁSZF</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-md-12 col-lg-4">
-                            <h6 class="text-uppercase  mb-2">Daily Offers &amp; Discounts</h6>
-                            <p class="mb-3"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.</p>
-                            <form action="#" id="newsletter-form">
-                                <div class="input-group">
-                                    <input type="email" placeholder="Your Email Address" aria-label="Your Email Address" class="form-control bg-transparent border-secondary border-right-0">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-outline-secondary border-left-0"> <i class="fa fa-paper-plane text-lg "></i></button>
+                        <div class="row text-center text-sm-left">
+                            <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
+                                <h6 class="text-uppercase  mb-2">Elérhetőségek</h6>
+                                <p>{{ settings_general.get('company.zip') }} {{ settings_general.get('company.city') }}, {{ settings_general.get('company.address') }}</p>
+                                <ul class="list-inline">
+                                    {% if settings_general.get('social.facebook') and settings_general.get('social.facebook') is not null %}
+                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.facebook') }}" target="_blank" title="facebook" class="h3"><i class="fab fa-facebook"></i></a></li>
+                                    {% endif %}
+                                    {% if settings_general.get('social.instagram') and settings_general.get('social.instagram') is not null %}
+                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.instagram') }}" target="_blank" title="instagram" class="h3"><i class="fab fa-instagram"></i></a></li>
+                                    {% endif %}
+                                    {% if settings_general.get('social.pinterest') and settings_general.get('social.pinterest') is not null %}
+                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.pinterest') }}" target="_blank" title="pinterest" class="h3"><i class="fab fa-pinterest"></i></a></li>
+                                    {% endif %}
+                                    {% if settings_general.get('social.twitter') and settings_general.get('social.twitter') is not null %}
+                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.twitter') }}" target="_blank" title="vimeo" class="h3"><i class="fab fa-twitter"></i></a></li>
+                                    {% endif %}
+                                    {% if settings_general.get('social.youtube') and settings_general.get('social.youtube') is not null %}
+                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.youtube') }}" target="_blank" title="vimeo" class="h3"><i class="fab fa-youtube"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
+                                <h6 class="text-uppercase  mb-2">Virágküldés</h6>
+                                <ul class="list-unstyled">
+                                    <li> <a href="/termekek/csokrok" class="" title="Virágcsokrok">Csokrok</a></li>
+                                    <li> <a href="/termekek/viragdobozok" class="" title="Virágboxok">Virágdobozok</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
+                                <h6 class="text-uppercase  mb-2">Információk</h6>
+                                <ul class="list-unstyled">
+                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="">Rólunk</a></li>
+                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="">Szállítási díjak</a></li>
+                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="">ÁSZF</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-md-12 col-lg-3">
+                                <h6 class="text-uppercase  mb-2">Daily Offers &amp; Discounts</h6>
+                                <p class="mb-3"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.</p>
+                                <form action="#" id="newsletter-form">
+                                    <div class="input-group">
+                                        <input type="email" placeholder="Your Email Address" aria-label="Your Email Address" class="form-control bg-transparent border-secondary border-right-0">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-outline-secondary border-left-0"> <i class="fa fa-paper-plane text-lg "></i></button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -303,14 +303,14 @@
 			<div class="container">
                 <div class="row">
                     <div class="col-sm-11 col-xl-12 mx-auto">
-                        <div class="row align-items-center">
-                            <div class="col-md-8 text-center text-md-left">
+                        <div class="row">
+                            <div class="col-md-8 text-center text-sm-left">
                                 <p class="mb-md-0">©2014 - {{ "now"|date('Y') }} {{ settings_general.get('store.url')}}. Virágküldés Budapesten és környékén, rózsadobozok, csokrok, esküvő, rendezvénydekoráció</p>
                             </div>
                             <div class="col-md-4">
-                                <ul class="list-inline mb-0 mt-2 mt-md-0 text-center text-md-right">
-                                    <li class="list-inline-item"><img src="{{  asset('uploads/images/icons/CIB_logo.png') }}" alt="..." class="w-50"></li>
-                                </ul>
+                                <div class="mt-2 mt-md-0 text-center text-sm-left text-md-right">
+                                    <div class=""><img src="{{  asset('uploads/images/icons/CIB_logo.png') }}" alt="..." class="w-50"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

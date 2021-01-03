@@ -139,7 +139,7 @@ $yiq-text-light:            $white !default;
 // Quickly modify global styling by enabling or disabling optional features.
 
 $enable-caret:                                true !default;
-$enable-rounded:                              true !default;  // border, btn, input, card
+$enable-rounded:                              false !default;  // border, btn, input, card
 $enable-shadows:                              false !default;
 $enable-gradients:                            false !default;
 $enable-transitions:                          true !default;
@@ -336,7 +336,7 @@ $font-weight-bold:            700 !default;
 $font-weight-bolder:          bolder !default;
 
 $font-weight-base:            $font-weight-normal !default;
-$line-height-base:            1.4375 !default; //1.3125 !default; //1.5 !default;
+$line-height-base:            1.35 !default; //1.5 !default;
 
 $letter-spacing:              0.05rem !default;
 

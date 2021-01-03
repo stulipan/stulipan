@@ -30,6 +30,9 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
     line-height: $mobile-line-height-base;
   }
 
+  ////////////////////////////////////
+  //  FORM INPUTS
+  ///////////////////////////////////
   .btn,
   .form-control,
   .input-float .form-control
@@ -37,12 +40,13 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
     @include font-size(1rem);
     line-height: $mobile-line-height-base;
   }
-  // Height correction based mobile-line-height-base
-  .form-control,
-  {
+  .form-control {
     height: $mobile-input-height;
   }
 
+  ////////////////////////////////////
+  //  SMALL
+  ////////////////////////////////////
   small,
   .text-sm,
   .btn-sm,
@@ -56,6 +60,9 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
     height: $mobile-input-height-sm;
   }
 
+  ////////////////////////////////////
+  //  LARGE
+  ////////////////////////////////////
   .btn-lg {
     @include font-size($mobile-font-size-base-lg);
     line-height: $mobile-line-height-base-lg;
@@ -68,6 +75,8 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
     border-color: $gray-600;
   }
 }
+
+
 
 $nm-x:             $card-spacer-x !default;
 

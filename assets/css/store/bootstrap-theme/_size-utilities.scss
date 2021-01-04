@@ -17,3 +17,13 @@ $text-sm-line-height: 1rem !default; //1.125rem !default;
 .text-size-secondary {
   //font-size: $font-size-base-secondary;
 }
+
+.h-10px { max-height: 10px; }
+.h-15px { max-height: 15px; }
+.h-17px { max-height: 17px; }
+.h-20px { max-height: 20px; }
+.h-25px { max-height: 25px; }
+.h-50px { max-height: 50px; }
+.h-25 { max-height: 25%; }
+.h-50 { max-height: 50%; }
+.h-75 { max-height: 75%; }

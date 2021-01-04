@@ -51,11 +51,11 @@
                 <div class="form-row">
 
                     {% for choice in form.deliveryDate.deliveryDate|slice(0,3) %}
-                        <div class="col-sm-3 col-3 JS--generatedDate-{{ choice.vars.value }}">
+                        <div class="col-sm-3 col-4 JS--generatedDate-{{ choice.vars.value }}">
                             {% include('webshop/site/vp-choice-date.html.twig') %}
                         </div>
                     {% endfor %}
-                    <div class="col-sm-3 col-3 JS--Button-clickDate">
+                    <div class="col-sm-3 col-12 JS--Button-clickDate">
                         <div class="row">
                             {% for choice in form.deliveryDate.deliveryDate|slice(3) %}
                                 <div class="col-sm-12 col-12 JS--generatedDate-{{ choice.vars.value }} d-none">
@@ -64,13 +64,13 @@
                             {% endfor %}
 
                             <div class="col-sm-12 col-12 JS--showCalendarIcon">
-                                <div class="vp choose-date">
+                                <div class="vp choose-date" tabindex="0">
                                     <div class="vp-figure">
-                            <span class="vp-content">
-                                <span class="tile tile-lg">
-                                    <i class="far fa-calendar-alt fa-2x"></i>
-                                </span>
-                            </span>
+                                        <span class="vp-content">
+                                            <span class="tile tile-lg">
+                                                <i class="far fa-calendar-alt fa-2x"></i>
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>

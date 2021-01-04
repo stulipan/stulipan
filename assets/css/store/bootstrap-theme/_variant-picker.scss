@@ -8,7 +8,7 @@
 
 //$vp-height:                   1.5rem !default;  //24px
 
-$vp-padding-y:                $input-padding-y !default;
+$vp-padding-y:                .25rem !default;//$input-padding-y !default;
 $vp-padding-x:                $input-padding-x !default;
 $vp-margin-y:                 0 !default;
 $vp-margin-x:                 .5rem !default;
@@ -286,7 +286,7 @@ $vp-choose-color:             $gray-700 !default;
   //font-size: $vp-choose-font-size;
   //line-height: 1.25rem;
   //color: $vp-choose-color;
-  min-height: $input-height-lg;
+  height: $input-height-lg;
   align-items: center;
 
   & .choice-label-title {
@@ -308,6 +308,13 @@ $vp-choose-color:             $gray-700 !default;
       }
     }
   }
+}
+
+.choice-label-title,
+.choice-label-content,
+.choice-label-date,
+.choice-label-weekday {
+  @include font-size(95%);
 }
 
 .JS--showCalendarIcon .vp .vp-figure {

@@ -5,7 +5,7 @@
     {#{{ include('webshop/cart/sender_widget.html.twig') }}#}
     <div class="checkout-sender-item mt-4">
         <div class="JS--item h-100">
-            <div class="selected-bodyX d-flex flex-column flex-sm-row justify-content-between h-100">
+            <div class="d-flex flex-column flex-sm-row justify-content-between h-100">
                 <div class="">
                     <span class="minicard--title mb-1">{{ sender.fullname }}</span> {% if selectedSender is defined and selectedSender == sender.id %}<span class="text-primary"><i class="far fa-check-circle"></i></span>{% endif %}<br>
                     {% if sender.company is defined and sender.company %}

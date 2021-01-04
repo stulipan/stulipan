@@ -73,33 +73,33 @@
 
     <div class="container pb-5">
         <div class="row">
-            <div class="col-md-12 sidebar-none mb-2">
+            <div class="col-md-12">
                 <div class="hero-content text-center">
                     <h2 class="">Vásárlóink mondták</h2>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 mt-5">
                     <div class="row">
 
                         {% for i in 0..9 %}
                         <div class="col-md-6">
                             <div class="reviewbox mb-4">
                                 <div class="details">
-                                    <span class="text-lg mr-2">Szabó Béla</span>
+                                    <span class="h6 mr-2">Szabó Béla</span>
                                     <a href="#" class="text-body text-underline"><span class="mr-2">Budaörs</span></a>
-                                    <time itemprop="dateCreated" class="date">11/09/2019</time>
+                                    <time itemprop="dateCreated" class="date text-muted mr-2">11/09/2019</time>
                                     <div class="d-inline-block">
-                                        <ul class="list-inline ml-2 mb-0 text-sm">
-                                            <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="list-inline-item mr-0"><i class="fa fa-star text-gray-300"></i></li>
+                                        <ul class="review-stars-group mr-2 mb-0">
+                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                            <li class="review-stars-item"><i class="fa fa-star"></i></li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="testimonial text-muted-extra mt-4 px-2">
-                                    {%  if loop.index in [1, 4, 6, 9] %}
+                                <div class="testimonial text-muted mt-4">
+                                    {%  if loop.index in [1, 5, 6, 9] %}
                                     <span>I have bought from you several times in the past and have recommended you to friends. This particular bouquet was sent as a surprise for a 90th birthday.
                                         <a data-expand="">Read More</a>
                                     </span>
@@ -113,7 +113,6 @@
                                     </span>
                                     {% endif %}
                                 </div>
-                                {#<div class="clear"></div>#}
                             </div>
                         </div>
                         {%  endfor %}

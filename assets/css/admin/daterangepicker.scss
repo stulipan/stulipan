@@ -168,7 +168,8 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
 
         & .drp-calendars {
             display: flex;
-            justify-content: space-between;
+            //justify-content: space-between;
+            justify-content: center;
             align-items: center;
             height: 100%;
         }
@@ -233,23 +234,26 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
         display: flex;
         //width: 100%;
         //-ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+        //flex-wrap: wrap;   /// BIG CHNAGE
         margin-right: -10px;
         margin-left: -10px;
     }
     & .drp-col {
-        //-ms-flex: 0 0 100%;
         position: relative;
-        width: 100%;
-        flex: 0 0 100%;
-        //max-width: 100%;
+        width: 50%;
+        flex: 0 0 auto;
         padding-right: 10px;
         padding-left: 10px;
+        //margin-left: auto;
+        //margin-right: auto;
+    }
+    & .drp-col.left.single {
+        width: 100%;
     }
     & .drp-col.left:not(.single),
     & .drp-col.right {
-        max-width: 100%;
-        flex: 0 0 100%;
+        width: 50%;
+        flex: 1 1 auto;
     }
     &.auto-apply {
         & .drp-buttons {
@@ -273,6 +277,7 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
 }
 
 @media (min-width: 576px) {
+    //.daterangepicker:not(.drp-inline),
     .daterangepicker:not(.drp-inline):not(.drp-auto-width),
     .daterangepicker:not(.drp-auto-width) {
         max-width: $drp-width;
@@ -302,28 +307,55 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
     }
 }
 
-.daterangepicker.drp-inline,
-.daterangepicker.drp-inline:not(.show) {
-    display: inline-block;
+.daterangepicker.drp-inline {
+    display: block;
     width: 100%;
-    max-width: 100%;
-    //position: relative;
-    //box-shadow: none;
-    //visibility: visible;
-    //-webkit-transform: scale(1);
-    //transform: scale(1);
+    max-width: 100% !important;
+    position: relative;
+    box-shadow: none;
+    right: auto !important;
     top: 0 !important;
+    margin-bottom: 0;
+
+    & .drp-something2 {
+        width: 100%;
+    }
 
     & .drp-body {
         flex-direction: column;
 
-        & .drp-calendars {
-            flex-direction: column;
+        @include media-breakpoint-down(xs) {
+            & .drp-calendars {
+                flex-direction: column;
+
+                & .drp-col.left:not(.single),
+                & .drp-col.right {
+                    width: 100%;
+                }
+            }
         }
     }
     &:not(.show) {
         display: none !important;
     }
+
+    &.show-ranges:not(.show-ranges-dropdown) {
+        & .drp-body {
+            flex-direction: row;
+
+            @include media-breakpoint-down(xs) {
+                flex-direction: column;
+            }
+        }
+        & .drp-something2 {
+            width: calc(100% - 140px);
+
+            @include media-breakpoint-down(xs) {
+                width: 100%;
+            }
+        }
+    }
+
 }
 
 @media (max-width: 575.98px) {
@@ -570,8 +602,8 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
     & td {
         text-align: center;
         vertical-align: middle;
-        min-width: 24px;
-        height: 20px;
+        min-width: 26px;
+        height: 24px;
         line-height: 16px;
         white-space: nowrap;
         cursor: pointer;

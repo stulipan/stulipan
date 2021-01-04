@@ -36,13 +36,13 @@
   & .product-name h1 {
     font-size: 1.35rem;
     font-weight: $font-weight-bold;
-    text-transform: initial;
-    line-height: 1.5rem;
+    //text-transform: initial;
+    line-height: 1.3em;
     margin-bottom: 0;
 
-    @include media-breakpoint-up(sm) {
+    @include media-breakpoint-up(md) {
       font-size: 2.05rem;
-      line-height: 2.5rem;
+      //line-height: 2.5rem;
     }
   }
 
@@ -166,31 +166,29 @@
 }
 
 .detail-images {
-  display: -ms-flexbox;
   display: flex;
-  margin-bottom: 3rem
+  margin-bottom: 3rem;
 }
 
 .detail-thumb-item {
   background: none;
-  /*border: none;*/
   border: 1px solid transparent;
   border-radius: 0;
   opacity: 1;
   cursor: pointer;
-  outline: none !important;
-  padding: 0
-}
+  //outline: none !important;
+  padding: 0;
 
-.detail-thumb-item.active {
-  opacity: 1;
-  /*box-shadow: 0 0 0 1px #6cb8d5;*/
-  border-color: $gray-900;
-}
+  &.active {
+    opacity: 1;
+    border-color: $gray-400;
+  }
 
-/*.detail-thumb-item.active img {*/
-/*border-color: #008CDE;*/
-/*}*/
+  &:focus {
+    outline: none;
+    border-color: $gray-500;
+  }
+}
 
 .product-variant-selector-label {
   color: $label-color;
@@ -253,18 +251,18 @@
   border-color: #fff #fff #343a40 !important
 }
 
-$price-font-size-default:        1.35rem;
-$price-font-weight:               $font-weight-bold !default;
+$price-font-size-default:        1.14rem;
+$price-font-weight:              $font-weight-bold !default;
 $price-font-size-mobile:         calc(#{$price-font-size-default} * 0.80);
 $price-font-size-sm:             $font-size-base; //$font-size-base-secondary;
 
 .price {
   color: inherit;
-  font-size: $price-font-size-mobile;
+  @include font-size($price-font-size-default);
   font-weight: $price-font-weight;
-  @include media-breakpoint-up(sm) {
-    font-size: $price-font-size-default;
-  }
+  //@include media-breakpoint-up(sm) {
+  //  font-size: $price-font-size-default;
+  //}
   &.price-sale {
     color: $danger;
   }
@@ -302,20 +300,6 @@ $price-font-size-sm:             $font-size-base; //$font-size-base-secondary;
 }
 .general-info-item {
   padding-bottom: 1.5rem;
-  //position: relative;
-  //padding-left: 1.5rem;
-
-  //&:before {
-  //  position: absolute;
-  //  left: 0;
-  //  top: 5px;
-  //  font-size: 8px;
-  //  color: $gray-700;
-  //  content: "\f067";
-  //  margin-right: 5px;
-  //  font-family: Font Awesome\ 5 Free;
-  //  font-weight: 900;
-  //}
 
   &:last-of-type {
     padding-bottom: 0;
@@ -323,7 +307,6 @@ $price-font-size-sm:             $font-size-base; //$font-size-base-secondary;
 }
 
 .general-info-item-title {
-  //font-weight: $font-weight-bold;
   text-transform: uppercase;
   letter-spacing: $letter-spacing;
   margin-bottom: .25rem;
@@ -397,4 +380,82 @@ $price-font-size-sm:             $font-size-base; //$font-size-base-secondary;
 .productList--name,
 .productList--price-gross {
   @include font-size($font-size-base);
+}
+
+.owl-theme .owl-dots {
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+
+  & .owl-dot {
+    display: inline-block;
+    zoom: 1;
+
+    & span {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin: 0 5px;
+      background: #fff;
+      border: 1px solid gray;
+      -webkit-backface-visibility: visible;
+      backface-visibility: visible;
+      transition: opacity 200ms ease;
+      border-radius: 30px;
+    }
+  }
+
+  & button:focus {
+    outline: none;
+  }
+
+  & .owl-dot.active span,
+  & button:focus .owl-dot span {
+    width: 16px;
+    height: 16px;
+  }
+
+}
+
+.owl-theme.owl-dots-modern .owl-dots {
+  position: absolute;
+  width: 100%;
+  bottom: 20px;
+  left: 0;
+}
+
+.owl-theme .owl-nav.disabled+.owl-dots {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 40px;
+}
+
+.reviewbox {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $border-color;
+
+  &:before {
+    font-family: Georgia, serif;
+    content: '\201C';
+    font-size: 7.5rem;
+    font-weight: 700;
+    opacity: .8;
+    position: absolute;
+    top: -.25rem;
+    left: -.5rem;
+    text-shadow: none;
+    z-index: -300;
+    color: $blue-lighten;
+  }
+  & .testimonial {
+    font-style: italic;
+    font-family: Georgia,serif;
+    line-height: 1.575em;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

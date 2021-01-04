@@ -125,7 +125,7 @@
                                                     <div class="row h-100">
                                                         {% for date in generatedDates.dates|slice(3) %}
                                                             <div class="col-sm-12 col-12 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} d-none" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
-                                                                <div class="vp vp-md choose-date mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}" tabindex="0">
+                                                                <div class="vp choose-date mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}" tabindex="0">
                                                                     <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
                                                                         <div class="wrapper-absolute">
                                                                             <div class="icon-wrapper">
@@ -150,7 +150,7 @@
                                                                 <div class="vp-figure justify-content-lg-center justify-content-center align-items-center required px-2">
                                                                     <span class="vp-content">
                                                                         <span class="tile tile-lg JS--showCalendarIconX">
-                                                                            <i class="far fa-calendar-alt fa-2x text-gray-700 mr-0"></i>
+                                                                            <i class="far fa-calendar-alt fa-2x"></i>
                                                                         </span>
                                                                     </span>
                                                                 </div>
@@ -636,12 +636,13 @@
         });
         $(function() {
             $('.JS--Button-clickDate').daterangepicker({
-                // parentEl: '.JS--Button-clickDate',
                 opens: 'left',
                 autoApply: true,
-                autoUpdateInput: false,
+                autoUpdateInput: true,
                 singleDatePicker: true,
-                //            alwaysShowCalendars: true,
+                parentEl: ".JS--dateWrapper",
+                displayInline: true,
+
                 minDate: moment().add(4, 'hours'),
                 maxDate: moment().add(2, 'months'),
                 locale: {

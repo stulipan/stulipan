@@ -64,6 +64,53 @@ iframe {
   }
 }
 
+.svg-icon.svg-icon-heavy {
+  stroke-width: 5
+}
+
+.top-bar {
+  color: #495057;
+  background: #f8f9fa;
+  padding: 0.25rem;
+  font-weight: 300
+}
+
+.topbar-flag {
+  margin-right: 10px;
+  height: 20px;
+
+  &.topbar-flag-selected {
+    margin-right: 0;
+    height: 15px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .navbar--logo .h3 {
+    font-size: 1.125rem;
+    letter-spacing: 0.03rem;
+    color: #ffffff !important;
+  }
+}
+
+@-webkit-keyframes rotate {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
 .my-account {
   background-color: $body-bg-secondary;
 }
@@ -77,43 +124,11 @@ iframe {
   }
 }
 
-
-
 :focus:not(:focus-visible) { outline: none }
 
 .accordion .list-group-item:not(.collapsed) {
   //border-bottom: 0;
 }
-
-//a:focus {
-//  outline: none !important;
-//  background-color: $gray-50 !important;
-//}
-//a:focus-visible {
-//  background-color: $gray-50 !important;
-//}
-//a:focus:not(:focus-visible) {
-//  background: none !important;
-//}
-
-
-//@-webkit-keyframes rotate {
-//  0% {
-//    transform: rotate(0deg)
-//  }
-//  100% {
-//    transform: rotate(360deg)
-//  }
-//}
-//
-//@keyframes rotate {
-//  0% {
-//    transform: rotate(0deg)
-//  }
-//  100% {
-//    transform: rotate(360deg)
-//  }
-//}
 
 .tile-link {
   position: absolute;
@@ -123,6 +138,14 @@ iframe {
   left: 0;
   top: 0;
   z-index: 30
+}
+
+.bg-custom-gray {
+  background-color: #e4e8ea;
+}
+
+.bg-custom-yellow {
+  background-color: #F3EED9;
 }
 
 $service-icon-width:                  75px;

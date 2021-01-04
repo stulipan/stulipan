@@ -26,7 +26,7 @@ order:
     choose-time-frame: 'Válassz idősávot...'
     free-delivery: 'Ingyenes szállítás'
     choose-the-timeframe-when-the-recipient-will-available-at-delivery-address: 'Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.'
-    save-delivery-time: 'Szállítási időpont mentése'
+    save-delivery-time: 'Időpont mentése'
     payment: Fizetés
     instructions-for-bank-transfer: 'Banki utaláshoz szükséges adatok'
     payment-status: 'Fizetés állapota'

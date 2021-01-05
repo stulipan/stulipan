@@ -89,7 +89,9 @@ $danger-lighten:$red-lighten !default;
 $light:           $gray-300 !default; //#eee !default;
 $dark:            $gray-800 !default;
 $dark-lighten:    $gray-600 !default;
-$muted:           $gray-600 !default;
+
+$muted:           $gray-600 !default;  // Added by Stulipan
+$hover-bg:        $gray-100 !default;  // Added by Stulipan
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default

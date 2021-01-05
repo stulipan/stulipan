@@ -2,7 +2,7 @@
     <div class="product-variants">
     {% if product.isFlower %}
 {#            {% include 'webshop/site/product-widget-addToCartForm-isFlower.html.twig' %}#}
-        <div class="mb-2">
+        <div class="">
             <div class="product-variant-selector-label">Méret</div>
         </div>
 
@@ -43,7 +43,7 @@
         {% endif %}
         {% do form.options.setRendered() %}
 
-        <div class="mt-2 mb-2">
+        <div class="mt-3">
             <div class="product-variant-selector-label">Szállítás</div>
         </div>
         <div class="row order-delivery-date mb-4 JS--deliveryDateContainer">

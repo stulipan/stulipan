@@ -30,100 +30,80 @@
 @import "bootstrap-theme/bootstrap/_variables.scss";
 @import "bootstrap-theme/bootstrap/mixins";
 
-$zindex-drp-backdrop:                   1018 !default;
-$zindex-drp:                            1019 !default; // It is bellow $zindex-sticky
+$zindex-drp-backdrop:                               1018 !default;
+$zindex-drp:                                        1019 !default; // It is bellow $zindex-sticky
 
-// Color system
-$drp-item-selected-bg:                  lighten($primary, 5%) !default;
-$drp-item-selected-bg-secondary:        #72b9ea !default;
-$drp-item-selected-color:               $white !default;
-$drp-item-disabled-color:               $gray-600 !default;
-$drp-item-hover-color:                  $white !default;
-$drp-item-hover-bg:                     $hover-bg !default;
-$drp-ranges-tag-bg:                     $gray-100 !default;
-$drp-item-focus-bg:                     darken($primary, 5%) !default;
-$drp-font-size:                         $font-size-base !default;
+$drp-font-size:                                     $font-size-base !default;
+$drp-focus-border-color:                            darken($primary, 5%) !default;
 
-$drp-padding-y:                         .75rem !default;
-$drp-padding-x:                         $drp-padding-y !default;
+$drp-padding-y:                                     .75rem !default;
+$drp-padding-x:                                     $drp-padding-y !default;
 
-$drp-bg:                                #fff !default;
-$drp-border-radius:                     $border-radius !default;
-$drp-border-color:                      $gray-400 !default;
-$drp-shadow:                            0 .5rem 1rem rgba(0, 0, 0, .15) !default;
+$drp-bg:                                            #fff !default;
+$drp-border-radius:                                 $border-radius !default;
+$drp-border-color:                                  $input-border-color !default;
+$drp-shadow:                                        $dropdown-shadow !default; //0 .5rem 1rem rgba(0, 0, 0, .15) !default;
 
-$drp-width:                             470px !default;
-$drp-ranges-width:                      580px !default;
-$drp-ranges-dropdown-width:             470px !default;
+$drp-width:                                         470px !default;
+$drp-ranges-width:                                  580px !default;
+$drp-ranges-dropdown-width:                         470px !default;
 
-$drp-single-width:                      250px !default;
-$drp-single-ranges-width:               420px !default;
-$drp-single-ranges-dropdown-width:      250px !default;
+$drp-single-width:                                  250px !default;
+$drp-single-ranges-width:                           420px !default;
+$drp-single-ranges-dropdown-width:                  250px !default;
 
-$drp-width-mobile:                      290px !default;
+$drp-width-mobile:                                  290px !default;
 
-$drp-content-max-height:                500px !default;
-$drp-content-bg:                        $gray-100 !default;
+$drp-content-max-height:                            500px !default;
+$drp-content-bg:                                    $gray-100 !default;
 
 // Ranges
-$drp-ranges-max-height:                 300px !default;
 
-$drp-ranges-selected-color:             $drp-item-selected-color !default;
-$drp-ranges-selected-bg:                $drp-item-selected-bg !default;
-$drp-ranges-selected-hover-border-color:    darken($drp-item-selected-bg, 5%) !default;
+$drp-ranges-padding-y:                              $drp-padding-y !default;
+$drp-ranges-padding-x:                              $drp-padding-x !default;
+$drp-ranges-shadow:                                 inset -7px 0 12px -7px rgba(0,0,0,0.1) !default;
 
-$drp-ranges-padding-y:                  $drp-padding-y !default;
-$drp-ranges-padding-x:                  $drp-padding-x !default;
-$drp-ranges-shadow:                     inset -7px 0 12px -7px rgba(0,0,0,0.1) !default;
+$drp-ranges-ul-padding-y:                           0 !default;
+$drp-ranges-li-padding-y:                           .25rem !default;
+$drp-ranges-li-padding-x:                           .3125rem !default; //8px !default;
 
-$drp-ranges-list-padding-y:                 0 !default;
-$drp-ranges-option-padding-y:               .25rem !default;
-$drp-ranges-option-padding-x:               .3125rem !default; //8px !default;
+$drp-ranges-li-font-size:                           $drp-font-size * .9 !default;
 
-$drp-ranges-option-font-size:          $drp-font-size * .9 !default; //.7875rem !default;
+$drp-ranges-li-bg-mobile:                           $gray-100 !default;
+$drp-ranges-li-hover-bg:                            $hover-bg !default;
+$drp-ranges-li-hover-color:                         inherit !default;
+$drp-ranges-li-active-bg:                           #72b9ea !default;
+$drp-ranges-li-active-color:                        $white !default;
+$drp-ranges-li-focus-border-color:                  $drp-focus-border-color !default;
+$drp-ranges-li-border-radius:                       $drp-border-radius !default;
 
-$drp-ranges-option-bg-mobile:          $drp-ranges-tag-bg !default;
-$drp-ranges-option-hover-bg:           $drp-item-hover-bg !default;
-$drp-ranges-option-hover-color:        inherit !default;
-$drp-ranges-option-active-bg:          $drp-item-selected-bg-secondary !default;
-$drp-ranges-option-active-color:       $drp-item-selected-color !default;
-$drp-ranges-option-focus-border-color:  $drp-item-focus-bg !default;
-
-//#71b9ea
-$drp-ranges-option-border-radius:       $drp-border-radius !default;
-
-// show-ranges-dropdown
 
 
 // calendar-table
-$drp-calendar-prev-bg:                  $gray-100 !default;
-$drp-calendar-prev-focus-bg:            $gray-200 !default;
+$drp-calendar-prev-bg:                              $gray-100 !default;
+$drp-calendar-prev-hover-bg:                        $gray-200 !default;
 
-$drp-calendar-table-week-color:         $gray-400 !default;
-$drp-calendar-table-td-week-font-size:  80% !default;
+$drp-calendar-table-week-color:                     $gray-400 !default;
+$drp-calendar-table-td-week-font-size:              80% !default;
 
-$drp-calendar-table-td-border-radius:   $drp-border-radius !default;
-$drp-calendar-table-td-bg:              $white !default;
-$drp-calendar-table-td-available-bg:    $drp-calendar-table-td-bg !default;
-$drp-calendar-table-td-in-range-bg:     $drp-item-selected-bg-secondary !default;
-$drp-calendar-table-td-start-date-bg:   $drp-item-selected-bg !default;
-$drp-calendar-table-td-start-date-hover-bg:     darken($drp-item-selected-bg, 5%) !default;
+$drp-calendar-table-td-border-radius:               $drp-border-radius !default;
+$drp-calendar-table-td-bg:                          $white !default;
+$drp-calendar-table-td-available-bg:                $drp-calendar-table-td-bg !default;
+$drp-calendar-table-td-in-range-bg:                 $gray-200 !default;
+$drp-calendar-table-td-start-date-bg:               #72b9ea !default;
+$drp-calendar-table-td-start-date-hover-bg:         darken(#72b9ea, 5%) !default;
 
-$drp-calendar-table-td-start-date-color:    $drp-item-selected-color !default;
-$drp-calendar-table-td-in-range-color:      $drp-item-selected-color !default;
-$drp-calendar-table-td-disabled-color:      $drp-item-disabled-color !default;
-$drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
+$drp-calendar-table-td-start-date-color:            $white !default;
+$drp-calendar-table-td-in-range-color:              inherit !default;
+$drp-calendar-table-td-disabled-color:              $gray-600 !default;
+$drp-calendar-table-td-off-font-size:               100% !default; //85% !default;
+$drp-calendar-table-td-focus-border-color:          $drp-focus-border-color !default;
 
 .daterangepicker {
     position: absolute;
     color: inherit;
     background-color: $drp-bg;
     border-radius: $drp-border-radius;
-    border: 1px solid $drp-border-color;
-    //width: calc(100vw - 2*15px);
-    //padding: 0;
-    //margin-top: 7px;
-    //margin-bottom: 20px;
     z-index: $zindex-drp;
     display: none;
     font-size: $drp-font-size;
@@ -155,23 +135,20 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
         pointer-events: auto;
         background-clip: padding-box;
         outline: 0;
-        //overflow: hidden;
-        //overflow-y: auto;
 
         .drp-something2 {
             display: flex;
             flex: 1 1 auto;
             justify-content: space-between;
             flex-direction: column;
-            //padding: .75rem;
         }
 
         & .drp-calendars {
             display: flex;
-            //justify-content: space-between;
             justify-content: center;
             align-items: center;
             height: 100%;
+            flex-wrap: wrap;
         }
     }
 
@@ -182,28 +159,24 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
     & .drp-footer {
         display: flex;
         align-items: center;
-        //align-items: flex-end;
         justify-content: flex-end;
         padding-top: $drp-padding-y;
         flex-shrink: 0;
+        flex-wrap: wrap;
 
         & .drp-selected {
             display: flex;
             align-items: center;
-            height: 100%;
             font-size: 12px;
             line-height: 14px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
-        //& .drp-buttons {
-        //    display: flex;
-        //    justify-content: space-between;
-        //}
         & .drp-buttons {
             display: flex;
             justify-content: space-between;
             text-align: right;
-            //display: none;
             line-height: 12px;
             vertical-align: middle;
             padding: 0;
@@ -232,9 +205,6 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
 
     & .drp-row {
         display: flex;
-        //width: 100%;
-        //-ms-flex-wrap: wrap;
-        //flex-wrap: wrap;   /// BIG CHNAGE
         margin-right: -10px;
         margin-left: -10px;
     }
@@ -244,8 +214,6 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
         flex: 0 0 auto;
         padding-right: 10px;
         padding-left: 10px;
-        //margin-left: auto;
-        //margin-right: auto;
     }
     & .drp-col.left.single {
         width: 100%;
@@ -253,7 +221,9 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
     & .drp-col.left:not(.single),
     & .drp-col.right {
         width: 50%;
+        min-width: 200px;  //
         flex: 1 1 auto;
+        margin-bottom: 10px;
     }
     &.auto-apply {
         & .drp-buttons {
@@ -316,6 +286,7 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
     right: auto !important;
     top: 0 !important;
     margin-bottom: 0;
+    border: 1px solid $drp-border-color;
 
     & .drp-something2 {
         width: 100%;
@@ -348,7 +319,7 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
             }
         }
         & .drp-something2 {
-            width: calc(100% - 140px);
+            width: calc(100% - 130px);
 
             @include media-breakpoint-down(xs) {
                 width: 100%;
@@ -382,7 +353,7 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
     }
     &:not(.show-ranges-dropdown) .drp-ranges {
         display: flex;
-        width: 140px;
+        width: 130px;
         padding: $drp-ranges-padding-y 0;
         box-shadow: $drp-ranges-shadow;
 
@@ -404,7 +375,7 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
             & ul {
                 list-style: none;
                 margin: 0 auto;
-                padding: $drp-ranges-list-padding-y;
+                padding: $drp-ranges-ul-padding-y;
                 width: 100%;
 
                 @media (max-width: 575.98px) {
@@ -412,19 +383,19 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
                 }
             }
             & li {
-                font-size: $drp-ranges-option-font-size;
-                padding: $drp-ranges-option-padding-y $drp-ranges-option-padding-x $drp-ranges-option-padding-y $drp-ranges-option-padding-x;
+                font-size: $drp-ranges-li-font-size;
+                padding: $drp-ranges-li-padding-y $drp-ranges-li-padding-x $drp-ranges-li-padding-y $drp-ranges-li-padding-x;
                 margin: 0 $drp-ranges-padding-x;
                 cursor: pointer;
                 border: 2px solid transparent;
-                border-radius: $drp-ranges-option-border-radius;
+                border-radius: $drp-ranges-li-border-radius;
 
                 &:hover {
-                    background-color: $drp-ranges-option-hover-bg;
+                    background-color: $drp-ranges-li-hover-bg;
                 }
                 &.active {
-                    background-color: $drp-ranges-option-active-bg;
-                    color: $drp-ranges-option-active-color;
+                    background-color: $drp-ranges-li-active-bg;
+                    color: $drp-ranges-li-active-color;
 
                     //&:before {
                     //    content: "\f00c";
@@ -439,17 +410,17 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
                     //}
                 }
                 &.next {
-                    //border-color: $drp-ranges-option-active-bg;
+                    //border-color: $drp-ranges-li-active-bg;
                 }
                 &:focus {
                     outline: none;
-                    border-color: $drp-ranges-option-focus-border-color;
+                    border-color: $drp-ranges-li-focus-border-color;
                 }
                 @media (max-width: 575.98px) {
                     display: inline-block;
-                    border-radius: $drp-ranges-option-border-radius;
+                    border-radius: $drp-ranges-li-border-radius;
                     padding: .25rem .5rem;
-                    background-color: $drp-ranges-option-bg-mobile;
+                    background-color: $drp-ranges-li-bg-mobile;
                     margin: 0 .25rem .25rem 0;
                 }
             }
@@ -594,7 +565,7 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
 
         &:hover,
         &:focus {
-            background-color: $drp-calendar-prev-focus-bg;
+            background-color: $drp-calendar-prev-hover-bg;
         }
     }
 
@@ -602,7 +573,8 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
     & td {
         text-align: center;
         vertical-align: middle;
-        min-width: 26px;
+        min-width: 24px;
+        max-width: 26px;
         height: 24px;
         line-height: 16px;
         white-space: nowrap;
@@ -654,9 +626,10 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
             }
             &.available:focus {
                 outline: none;
-                border: 2px solid darken($drp-item-selected-bg, 15%);
+                border: 2px solid $drp-calendar-table-td-focus-border-color;
                 border-radius: $drp-calendar-table-td-border-radius;
             }
+
             &.week {
                 font-size: $drp-calendar-table-td-week-font-size;
                 color: $drp-calendar-table-week-color;
@@ -676,14 +649,16 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
                 border-radius: 0;
             }
             &.start-date,
-            &.start-date:hover {
+            &.start-date:hover,
+            &.start-date:focus {
                 border-top-left-radius: $drp-calendar-table-td-border-radius;
                 border-bottom-left-radius: $drp-calendar-table-td-border-radius;
                 border-top-right-radius: 0;
                 border-bottom-right-radius: 0;
             }
             &.end-date,
-            &.end-date:hover {
+            &.end-date:hover,
+            &.end-date:focus {
                 border-top-left-radius: 0;
                 border-bottom-left-radius: 0;
                 border-top-right-radius: $drp-calendar-table-td-border-radius;
@@ -763,7 +738,7 @@ $drp-calendar-table-td-off-font-size:       100% !default; //85% !default;
 
 .daterangepicker .calendar-time {
     text-align: center;
-    margin: .5rem auto 0 auto;
+    margin: 5px auto 0 auto;
     position: relative;
 
     & select.disabled {

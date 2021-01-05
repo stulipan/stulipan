@@ -517,7 +517,6 @@
                 cancelClass: 'btn-secondary',
             }
             let sidebarDateSettings = {
-                parentEl: "#JS--idosavS",
                 opens: 'right',
                 autoApply: true,
                 autoUpdateInput: false,
@@ -536,12 +535,14 @@
                 },
                 alwaysShowCalendars: true,
                 showCustomRangeLabel: true,
-                autoWidth: true,
+
+                parentEl: "#JS--idosavS",
+                displayInline: true,
+
+                // autoWidth: true,
 
                 // singleDatePicker: true,
-                // displayInline: true,
                 // showWeekNumbers: true,
-
                 // showRangesAsDropdown: true,
                 // showDropdowns: true,
                 drops: "auto",

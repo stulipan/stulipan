@@ -12,6 +12,8 @@ $adaptive-tabs-dropdown-z-index:                      $zindex-dropdown - 2 !defa
 
 $adaptive-tabs-dropdown-item-padding-y:               $dropdown-item-padding-y !default;
 $adaptive-tabs-dropdown-item-padding-x:               $dropdown-item-padding-x !default;
+$adaptive-tabs-link-hover-color:                      $dropdown-link-hover-color !default;
+$adaptive-tabs-link-hover-bg:                         $dropdown-link-hover-bg !default;
 
 .adaptive-tabs {
   position: relative;
@@ -47,14 +49,24 @@ $adaptive-tabs-dropdown-item-padding-x:               $dropdown-item-padding-x !
     @include box-shadow($adaptive-tabs-dropdown-box-shadow);
     padding: $adaptive-tabs-dropdown-padding-x;
     max-height: 195px;
-    overflow-y: scroll;
+    overflow-y: auto;
 
 
     & .adaptive-item {
       margin-right: 0;
+      //padding-top: .125rem;
+      //padding-bottom: .125rem;
       
       & .nav-link {
         padding: $adaptive-tabs-dropdown-item-padding-y $adaptive-tabs-dropdown-item-padding-x;
+
+        @include hover-focus {
+          color: $adaptive-tabs-link-hover-color;
+          text-decoration: none;
+          @include gradient-bg($adaptive-tabs-link-hover-bg);
+          outline: none;
+          box-shadow: none;
+        }
       }
     }
   }

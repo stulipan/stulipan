@@ -19,6 +19,11 @@
     text-decoration: none;
   }
 
+  &:focus {
+    outline: none;   // Added by Stulipan
+    box-shadow: $btn-focus-box-shadow;  // Added by Stulipan
+  }
+
   // Disabled state lightens text
   &.disabled {
     color: $nav-link-disabled-color;

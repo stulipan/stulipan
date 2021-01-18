@@ -15,23 +15,18 @@
     border-color: $hover-border;
   }
 
-  &:focus,
+  //&:focus,
+  &.focus-visible,
   &.focus {
     // Avoid using mixin so we can pass custom focus shadow properly
     @if $enable-shadows {
       // Ez volt az eredeti
       //box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($background), $border, 15%), .5);
-      box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($background), $border, 15%), 1);
-
-      // Ez az új, tőlem:
-      //box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width darken($border, 5%);
+      box-shadow: $btn-box-shadow, $btn-focus-box-shadow;
     } @else {
       // Ez volt az eredeti
       //box-shadow: 0 0 0 $btn-focus-width rgba(mix(color-yiq($background), $border, 15%), .5);
-      box-shadow: 0 0 0 $btn-focus-width rgba(mix(color-yiq($background), $border, 15%), 1);
-
-      // Ez az új, tőlem:
-      //box-shadow: 0 0 0 $btn-focus-width darken($border, 5%);
+      box-shadow: $btn-focus-box-shadow;
     }
   }
 

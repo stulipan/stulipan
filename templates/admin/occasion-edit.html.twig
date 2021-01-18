@@ -79,10 +79,11 @@
 
             $('#JS--datum input').on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                $(this).focus();
             });
 
             $('#JS--datum input').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
+                $(this).focus();
             });
         });
 	</script>

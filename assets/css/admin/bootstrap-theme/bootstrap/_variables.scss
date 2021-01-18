@@ -359,7 +359,7 @@ $font-size-sm:                $font-size-base * .875 !default;
 $font-weight-lighter:         lighter !default;
 $font-weight-light:           300 !default;
 $font-weight-normal:          400 !default;
-$font-weight-bold:            700 !default; //700 !default;
+$font-weight-bold:            600 !default; //700 !default;
 $font-weight-bolder:          bolder !default;
 
 $font-weight-base:            $font-weight-normal !default;
@@ -466,7 +466,7 @@ $input-btn-line-height:       $line-height-base !default;
 
 $input-btn-focus-width:       1px !default; //.125rem !default;
 $input-btn-focus-color:       rgba($component-active-bg, 1) !default; //lighten($component-active-bg, 25) !default; // rgba($component-active-bg, .25) !default;
-$input-btn-focus-box-shadow:  0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
+$input-btn-focus-box-shadow:  0 0 0 1px $white, 0 0 0 3px lighten($primary, 15%) !default; //0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
 
 $input-btn-padding-y-sm:      .25rem !default;
 $input-btn-padding-x-sm:      .3125rem !default; //.45rem !default;
@@ -560,7 +560,7 @@ $input-border-radius-lg:                $border-radius-lg !default;
 $input-border-radius-sm:                $border-radius-sm !default;
 
 $input-focus-bg:                        $input-bg !default;
-$input-focus-border-color:              rgba($component-active-bg, 25%) !default;
+$input-focus-border-color:              $input-border-color !default; //rgba($component-active-bg, 25%) !default;
 $input-focus-color:                     $input-color !default;
 $input-focus-width:                     $input-btn-focus-width !default;
 $input-focus-box-shadow:                $input-btn-focus-box-shadow !default;
@@ -664,9 +664,9 @@ $custom-radio-indicator-icon-checked:           str-replace(url("data:image/svg+
 $custom-switch-width:                           $custom-control-indicator-size * 1.75 !default;
 $custom-switch-indicator-border-radius:         $custom-control-indicator-size / 2 !default;
 $custom-switch-indicator-size:                  calc(#{$custom-control-indicator-size} - #{$custom-control-indicator-border-width * 4}) !default;
-$custom-switch-indicator-border-color:          $border-color !default;
-$custom-switch-indicator-checked-bg:            #bcd9ec !default; // $gray-100 !default; // Added by Stulipan
-$custom-switch-indicator-checked-color:         $component-active-bg !default; // Added by Stulipan
+$custom-switch-indicator-border-color:          $input-border-color !default; //$border-color !default;
+$custom-switch-indicator-checked-bg:            $component-active-bg !default; // $gray-100 !default; // Added by Stulipan
+$custom-switch-indicator-checked-color:         $white !default; // Added by Stulipan
 
 $custom-select-padding-y:           $input-padding-y !default;
 $custom-select-padding-x:           $input-padding-x !default;

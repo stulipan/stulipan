@@ -27,11 +27,16 @@
     text-decoration: none;
   }
 
-  &:not(.btn-link):focus,   // :not(.btn-link) Added by Stulipan
-  &:not(.btn-link).focus {
-    outline: 0;
-    //box-shadow: $btn-focus-box-shadow;
+  &:focus,
+  &.focus {
+    outline: none;
+    box-shadow: $btn-focus-box-shadow;
   }
+
+  //&:not(.btn-link):focus-visible {  // :not(.btn-link) Added by Stulipan
+  //  outline: not;
+  //  box-shadow: $btn-focus-box-shadow;
+  //}
 
   // Disabled comes first so active can properly restyle
   &.disabled,
@@ -86,17 +91,16 @@ fieldset:disabled a.btn {
           border-color: $hover-border;
         }
 
-        &:focus,
-        &.focus {
+        //&.focus,
+        &:focus-visible {
           // Avoid using mixin so we can pass custom focus shadow properly
           @if $enable-shadows {
             //box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(darken($primary, 5%), 1);
-            box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1);
+            box-shadow: $btn-box-shadow, $btn-focus-box-shadow;
           } @else {
             //box-shadow: 0 0 0 $btn-focus-width rgba(darken($primary, 5%), .5);
-            box-shadow: 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1)
+            box-shadow: $btn-focus-box-shadow;
           }
-          border-color: $primary;
         }
 
         // Disabled comes first so active can properly restyle
@@ -172,10 +176,11 @@ fieldset:disabled a.btn {
   &:focus,
   &.focus {
     outline: 0;
-    color: $link-secondary-color;
-    text-decoration: $link-secondary-hover-decoration;
-    box-shadow: none;
-    @include gradient-bg($link-secondary-focus-bg);
+    //color: $link-secondary-color;
+    //text-decoration: $link-secondary-hover-decoration;
+    //@include gradient-bg($link-secondary-focus-bg);
+    box-shadow: $btn-focus-box-shadow;
+    //@include gradient-bg($link-secondary-focus-bg);
   }
 
   &:disabled,

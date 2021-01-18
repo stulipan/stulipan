@@ -71,9 +71,10 @@
     &.show .nav-link,
     & .nav-link:hover,
     & .nav-link:focus,{
-      //outline: none;
-      //border-radius: $border-radius;
+      outline: none;
+      border-radius: $border-radius;
       //background-color: rgba($gray-400, .5);
+      box-shadow: none; // Added by Stulipan
     }
   }
 
@@ -267,8 +268,11 @@
   .navbar-brand {
     color: $navbar-dark-brand-color;
 
-    @include hover-focus {
+    &:focus {
+      outline: none;  // Added by Stulipan
+      border-radius: .25rem;   // Added by Stulipan
       color: $navbar-dark-brand-hover-color;
+      box-shadow: 0 0 0 2px lighten($primary, 15%);  // Added by Stulipan
     }
   }
 

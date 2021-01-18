@@ -32,9 +32,9 @@ class DeliverySpecialDateFormType extends AbstractType
     {
         $builder
             ->add('specialDate', DateType::class, [
-                'label' => 'Dátum',
+//                'label' => 'Dátum',
                 'widget' => 'single_text',
-                'attr' => ['placeholder' => 'ÉÉÉÉ-HH-NN', 'autocomplete' => 'off'],
+//                'attr' => ['placeholder' => 'ÉÉÉÉ-HH-NN', 'autocomplete' => 'off'],
                 'html5' => false,
             ])
             ->add('dateType', EntityType::class, [
@@ -45,7 +45,7 @@ class DeliverySpecialDateFormType extends AbstractType
                         'type' => $type,
                     ]);
                 },
-                'label' => 'Típus',
+//                'label' => 'Típus',
                 'multiple' => false,
                 'expanded' => true,
             ])

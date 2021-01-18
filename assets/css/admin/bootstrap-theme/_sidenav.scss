@@ -9,6 +9,12 @@ $sidenav-width:                     240px !default;
 $sidenav-bg:                        $body-bg !default;
 $sidenav-font-size:                 $font-size-base !default;
 
+$sidenav-icon-width:                1.25rem !default;
+$sidenav-icon-margin-x:             .75rem !default;
+$sidenav-icon-color:                $gray-700 !default;
+
+$sidenav-link-hover-bg:             $gray-200 !default;
+
 
 .sidenav-sticky {
   position: fixed;
@@ -74,9 +80,9 @@ $sidenav-font-size:                 $font-size-base !default;
     margin-top: 2px;
 
     & .sidenav-icon {
-      width: 1.25rem;
-      margin-right: .75rem;
-      color: $gray-700;
+      width: $sidenav-icon-width;
+      margin-right: $sidenav-icon-margin-x;
+      color: $sidenav-icon-color;
       font-size: 1rem;
       line-height: 1rem;
     }
@@ -88,14 +94,15 @@ $sidenav-font-size:                 $font-size-base !default;
       box-shadow: none;
       background-color: transparent;
       padding: 0;
-      margin: 0 0 0 calc(1.25rem + .75rem);
+      margin: 0;
       list-style: none;
       background-clip: padding-box;
 
       & .sidenav-dropdown-item {
         display: block;
         width: 100%;
-        padding: .3125rem .5rem;
+        padding: .5rem .5rem;
+        padding-left: calc(#{$sidenav-icon-width} + #{$sidenav-icon-margin-x} + .5rem);
         border-radius: .25rem;
         color: $gray-700;
         font-weight: $font-weight-base;
@@ -107,13 +114,14 @@ $sidenav-font-size:                 $font-size-base !default;
         &.nav-subitem-selected {
           color: $primary;
           font-weight: 500;
-          background-color: darken($blue-lighten, 5%);
+          //background-color: darken($blue-lighten, 5%);
+          background-color: $gray-100;
         }
 
         &:focus,
         &:hover {
           outline: none;
-          background-color: $hover-bg;
+          background-color: $sidenav-link-hover-bg;
         }
       }
       & .sidenav-icon {
@@ -132,7 +140,7 @@ $sidenav-font-size:                 $font-size-base !default;
       &:focus,
       &:hover {
         outline: none;
-        background-color: $hover-bg !important;
+        background-color: $sidenav-link-hover-bg !important;
       }
     }
 
@@ -151,7 +159,7 @@ $sidenav-font-size:                 $font-size-base !default;
   }
 
   & .sidenav-link {
-    background-color: $gray-300;
+    background-color: $gray-100;
     //background-color: $white;
 
     & .sidenav-icon {

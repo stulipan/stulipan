@@ -87,15 +87,18 @@ $btn-more-actions-content:      "\f141" !default; // ellipsis-h
     border-color: $hover-border;
   }
 
-  &:focus,
+  &:focus {
+    outline: 0;
+  }
+
+  &:focus-visible,
   &.focus {
     // Avoid using mixin so we can pass custom focus shadow properly
     @if $enable-shadows {
-      box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1);
+      box-shadow: $btn-box-shadow, $btn-focus-box-shadow;
     } @else {
-      box-shadow: 0 0 0 $btn-focus-width rgba(mix(color-yiq($primary), $primary, 15%), 1)
+      box-shadow: $btn-focus-box-shadow;
     }
-    border-color: $primary;
   }
 
   // Disabled comes first so active can properly restyle

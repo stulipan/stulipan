@@ -7,25 +7,17 @@
 
     <title>{% block title %}Admin Page{% endblock %}</title>
     {% block stylesheets %}
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}">
-
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
+        <link rel="stylesheet" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">
         {{ encore_entry_link_tags('admin-theme') }}
         {{ encore_entry_link_tags('daterangepicker') }}
         {{ encore_entry_link_tags('v-admin') }}
 
-        <!-- HYPER CSS -->
         <link href="{{ asset('webshop/admin/custom-select2.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('webshop/admin/v-style.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" />
-{#        <link href="{{ asset('webshop/admin/select2.min.css')}}" rel="stylesheet" type="text/css" />#}
-
-
     {% endblock %}
 </head>
-<body class="admin {% block bodyClass %} {% endblock %}">
+<body class="admin {% block bodyClass %}{% endblock %}">
 
 {% block body %}
 {% endblock %}

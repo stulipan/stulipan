@@ -8,47 +8,43 @@
 
 //$vp-height:                   1.5rem !default;  //24px
 
-$vp-padding-y:                $input-padding-y !default;
-$vp-padding-x:                $input-padding-x !default;
-$vp-margin-y:                 1rem !default;
-$vp-margin-x:                 .5rem !default;
+$vp-padding-y:                            $input-padding-y !default;
+$vp-padding-x:                            $input-padding-x !default;
+$vp-margin-y:                             1rem !default;
+$vp-margin-x:                             .5rem !default;
 
-$vp-bg:                       $secondary !default;
-$vp-hover-bg:                 $secondary !default;
+$vp-bg:                                   $secondary !default;
+$vp-hover-bg:                             $hover-bg !default;
 
-$vp-border-width:             $input-btn-border-width !default;
-$vp-border-radius:            $border-radius !default;
-$vp-border-color:             $border-color !default;
+$vp-border-width:                         $input-border-width !default;
+$vp-border-radius:                        $input-border-radius !default;
+$vp-border-color:                         $input-border-color !default;
 
-$vp-text-color:               $yiq-text-dark !default;
-$vp-font-weight:              $font-weight-normal !default;
-$vp-font-size:                $input-btn-font-size !default;
-$vp-line-height:              $input-btn-line-height !default;
+$vp-text-color:                           $yiq-text-dark !default;
+$vp-font-weight:                          $font-weight-normal !default;
+$vp-font-size:                            $input-btn-font-size !default;
+$vp-line-height:                          $input-btn-line-height !default;
 
-$vp-checked-bg:               $white !default;
-$vp-checked-color:            $primary !default;
-$vp-checked-border-color:     $vp-checked-color !default;
-$vp-focus-width:              $input-btn-focus-width !default;
-$vp-focus-color:              $vp-checked-color !default;
-$vp-focus-shadow:             0 0 0 $vp-focus-width $vp-focus-color !default;
+$vp-checked-bg:                           $white !default;
+$vp-checked-color:                        $primary !default;
+$vp-checked-border-color:                 $vp-checked-color !default;
+$vp-checked-indicator:                    str-replace(url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 10 10' fill='#{$vp-checked-color}'%3E%3Cpath d='M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0'%3E%3C/path%3E%3C/svg%3E"), "#", "%23");
 
-$vp-transition:               color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
+$vp-focus-shadow:                         $input-focus-box-shadow !default;
+$vp-transition:                           $btn-transition !default;
 
-$vp-custom-border-width:      $vp-border-width !default;
-$vp-custom-border-color:      $vp-border-color !default;
-$vp-custom-bg:                $white !default;
-$vp-custom-checked-bg:        $white !default;
-$vp-custom-checked-color:     $primary !default;
-$vp-custom-checked-border-color: $vp-custom-checked-color !default;
-$vp-custom-focus-shadow:      0 0 0 $vp-focus-width $vp-focus-color !default;
+$vp-choice-label-font-size-smaller:       90% !default;
 
-@mixin figure-variant($background, $border, $hover-background: darken($background, 7.5%), $hover-border: darken($border, 10%), $active-background: darken($background, 10%), $active-border: darken($border, 12.5%)) {
-  color: color-yiq($background);
-  //@include gradient-bg($background);
-  background-color: $background;
-  border-color: darken($border, 5%);
-  //@include box-shadow($btn-box-shadow);
-}
+// Custom
+$vp-custom-border-width:                  $vp-border-width !default;
+$vp-custom-border-color:                  $vp-border-color !default;
+$vp-custom-bg:                            $white !default;
+
+$vp-custom-checked-bg:                    $white !default;
+$vp-custom-checked-color:                 $primary !default;
+$vp-custom-checked-border-color:          $vp-custom-checked-color !default;
+$vp-custom-focus-shadow:                  $input-focus-box-shadow !default;
+
 
 .vp input[type=checkbox],
 .vp input[type=radio] {
@@ -60,22 +56,22 @@ $vp-custom-focus-shadow:      0 0 0 $vp-focus-width $vp-focus-color !default;
 .vp,
 .vp-custom {
   position: relative;
-  //display: inline-block;
   display: flex;
   flex: 1;
   width: 100%;
   height: 100%;
-  //padding-bottom: $vp-margin-y;
   align-items: flex-start;
-
   @include font-size($vp-font-size);
   line-height: $vp-line-height;
   border: none;
   @include border-radius($border-radius, 0);
 
   &:hover .vp-figure {
-    //background-color: darken($vp-bg, 3%);
-    @include gradient-bg(darken($vp-bg, 3%));
+    @include gradient-bg($vp-hover-bg);
+  }
+
+  &:focus {
+    outline: none;
   }
 
   & .vp-figure {
@@ -87,9 +83,8 @@ $vp-custom-focus-shadow:      0 0 0 $vp-focus-width $vp-focus-color !default;
     width: 100%;
     height: 100%;
     padding: $vp-padding-y $vp-padding-x;
-    margin-bottom: 0; // because label element has a bottom margin by default
+    margin-bottom: 0;           // because label element has a bottom margin by default
     @include transition($vp-transition);
-    //@include border-radius($border-radius, 0);
     background-color: $vp-bg;
     @include gradient-bg($vp-bg);
     border-radius: inherit;
@@ -101,76 +96,50 @@ $vp-custom-focus-shadow:      0 0 0 $vp-focus-width $vp-focus-color !default;
       text-align: center;
     }
 
+    & .vp-choice-label-primary {
+      font-weight: bold;
+      color: $yiq-text-dark;
+    }
+    & .vp-choice-label-secondary {
+      font-size: $vp-choice-label-font-size-smaller;
+      margin-top: .25rem;
+    }
+
     &:after {
       position: absolute;
-      /*font-family: Font Awesome\ 5 Free;*/
-      /*content: "\f058";*/
-      /*width: 1.325rem;*/
-      /*height: 1.325rem;*/
-      /*top: -.4625rem;*/
-      /*right: -.4625rem;*/
-      /*-moz-osx-font-smoothing: grayscale;*/
-      /*-webkit-font-smoothing: antialiased;*/
-      /*display: inline-block;*/
-      /*font-style: normal;*/
-      /*font-weight: 900;*/
-      /*font-size: 1.325rem;*/
-      /*font-variant: normal;*/
-      /*color: #008CDE;*/
-      /*text-rendering: auto;*/
-      /*opacity: 0;*/
-      /*-webkit-transition: opacity .2s;*/
-      /*transition: opacity .2s;*/
-      /*background-color: white;*/
-      /*border-radius: 10px;*/
-
       background-color: $vp-checked-bg;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='5 5 10 10' fill='%23008cde'%3E%3Cpath d='M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0'%3E%3C/path%3E%3C/svg%3E");
+      background-image: $vp-checked-indicator;
       display: block;
-      width: 1.325rem;
-      height: 1.325rem;
-      top: -.4625rem;
-      right: -.4625rem;
+      width: 20px;
+      height: 20px;
+      top: -7px;
+      right: -7px;
       content: "";
       opacity: 0;
       transition: opacity .2s;
       -webkit-transition: opacity .2s;
       background-repeat: no-repeat;
       background-position: center center;
-      background-size: 65% 65%;
-      border: 1px solid $vp-checked-border-color;
-      border-radius: 2rem;
+      background-size: 60% 60%;
+      border: 1px solid $vp-border-color;
+      border-radius: 10px;
     }
   }
-  &.vp-has-checkbox .vp-figure:before {
-    /*font-family: Font Awesome\ 5 Free;*/
-    /*content: "\f111";*/
-    /*top: -0.4rem;*/
-    /*right: -.4rem;*/
 
-    /*-moz-osx-font-smoothing: grayscale;*/
-    /*-webkit-font-smoothing: antialiased;*/
-    /*display: inline-block;*/
-    /*font-style: normal;*/
-    /*font-weight: 900;*/
-    /*font-size: 1.2rem;*/
-    /*font-variant: normal;*/
-    /*color: transparent;*/
-    /*text-rendering: auto;*/
-    /*line-height: 1;*/
+  &.vp-has-checkbox .vp-figure:before {
     opacity: 1;
     -webkit-transition: opacity .2s;
     transition: opacity .2s;
     background-color: white;
     border-radius: 10px;
-    border: 1px solid #c4cdd5;
+    border: 1px solid $vp-border-color;
     position: absolute;
     display: block;
     content: "";
-    width: 1.325rem;
-    height: 1.325rem;
-    top: -.4625rem;
-    right: -.4625rem;
+    width: 20px;
+    height: 20px;
+    top: -7px;
+    right: -7px;
     box-sizing: border-box;
   }
 }
@@ -184,31 +153,7 @@ $vp-custom-focus-shadow:      0 0 0 $vp-focus-width $vp-focus-color !default;
 .vp input[type=checkbox]:focus~.vp-figure,
 .vp input[type=radio]:focus~.vp-figure,
 .vp:focus .vp-figure {
-  background-color: $vp-hover-bg;
-  border-color: $primary;
   @include box-shadow($vp-focus-shadow);
-}
-
-
-@each $color, $value in $theme-colors-light {
-  .vp-#{$color} .vp-figure {
-    @include figure-variant($value, $value);
-  }
-
-  .vp:hover.vp-#{$color} .vp-figure {
-    background: none;
-    background-color: darken($value, 3%);
-    border-color: darken(darken($value, 5%), 5%);
-  }
-
-  .vp.vp-#{$color} input[type=checkbox]:focus~.vp-figure,
-  .vp.vp-#{$color} input[type=radio]:focus~.vp-figure,
-  .vp:focus.vp-#{$color} .vp-figure {
-    background: none;
-    background-color: darken($value, 3%);
-    border-color: $primary;
-    @include box-shadow($vp-focus-shadow);
-  }
 }
 
 // Custom style definition
@@ -243,9 +188,9 @@ $vp-custom-focus-shadow:      0 0 0 $vp-focus-width $vp-focus-color !default;
   padding-bottom: 1.5rem
 }
 
-.vp.has-peek .vp-figure {
-  margin-bottom: .5em
-}
+//.vp.has-peek .vp-figure {
+//  margin-bottom: .5em
+//}
 
 .vp-peek {
   position: absolute;
@@ -258,8 +203,9 @@ $vp-custom-focus-shadow:      0 0 0 $vp-focus-width $vp-focus-color !default;
   white-space: nowrap
 }
 
+//
 // VP choices for one-size product and date variant pickers
-
+//
 $vp-choose-font-size:         90% !default;
 $vp-choose-font-size-smaller: 87% !default;
 $vp-choose-font-weight:       $font-weight-bold !default;

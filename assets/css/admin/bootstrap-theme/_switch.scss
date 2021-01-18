@@ -19,8 +19,11 @@ $switch-checked-background:   $primary !default;
 $switch-checked-border-color: darken($switch-checked-background, 5%) !default;
 $switch-focus-width:          $input-btn-focus-width !default;
 $switch-focus-color:          $switch-checked-background !default;
-$switch-focus-shadow:         0 0 0 $switch-focus-width $switch-focus-color !default;
+$switch-focus-shadow:         $input-btn-focus-box-shadow !default; //0 0 0 $switch-focus-width $switch-focus-color !default;
 //$switch-checked-border-color: darken($primary, 5%) !default;
+
+
+// NINCS HASZNALATBAN
 
 input[data-switch] {
   z-index: -1;
@@ -28,8 +31,7 @@ input[data-switch] {
 
   &:focus+label,
   &.focus+label {
-    //box-shadow: $switch-focus-shadow;
-    border-color: $switch-focus-color;
+    box-shadow: $switch-focus-shadow;
   }
 }
 
@@ -83,14 +85,6 @@ input[data-switch]+label {
   }
 }
 
-//input[data-switch]+label:before {
-//
-//}
-//
-//input[data-switch]+label:after {
-//
-//}
-
 input[data-switch]:checked+label {
   background: $switch-checked-background;
   border-color: $switch-checked-border-color;
@@ -108,27 +102,6 @@ input[data-switch]:checked+label {
   }
 }
 
-//input[data-switch]:checked+label:before {
-//
-//}
-//
-//input[data-switch]:checked+label:after {
-//
-//}
-
-//input[data-switch=bool]+label {
-//  background-color: #dc3545
-//}
-//
-//input[data-switch=bool]+label:before,
-//input[data-switch=bool]:checked+label:before {
-//  color: #fff!important
-//}
-//
-//input[data-switch=bool]+label:after {
-//  background-color: $switch-bullet-color;
-//}
-
 // Color variations
 @each $color, $value in $theme-colors {
   input[data-switch=#{$color}]:checked+label {
@@ -140,21 +113,6 @@ input[data-switch]:checked+label {
     }
     &:after {
       background-color: color-yiq($value);
-    }
-  }
-
-  input[data-switch=#{$color}] {
-    &:focus+label,
-    &.focus+label {
-      // Avoid using mixin so we can pass custom focus shadow properly
-      @if $enable-shadows {
-        // Ez tőlem:
-        //box-shadow: 0 0 0 $switch-focus-width darken($value, 10%);
-        border-color: darken($value, 10%);
-      } @else {
-        // Ez tőlem:
-        border-color: darken($value, 10%);
-      }
     }
   }
 }

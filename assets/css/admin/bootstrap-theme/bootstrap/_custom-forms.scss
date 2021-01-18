@@ -203,7 +203,7 @@
     }
   }
   .custom-control-input:focus ~ .custom-control-label::before {
-    border-color: $custom-control-indicator-checked-border-color;
+    //border-color: $custom-control-indicator-checked-border-color;
   }
 
   .custom-control-input:disabled {

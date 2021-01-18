@@ -447,10 +447,12 @@
             });
             let dateSettings = {
                 parentEl: "#JS--idosav",
+                drops: 'down',
+                // drops: "auto",
                 opens: 'right',
                 autoApply: true,
                 autoUpdateInput: false,
-                // linkedCalendars: false,
+                linkedCalendars: true,
 
                 ranges: {
                     "{{ 'datetime.today'|trans }}": [moment(), moment()],
@@ -471,12 +473,12 @@
 
                 // showRangesAsDropdown: true,
                 // showDropdowns: true,
-                drops: "auto",
+
                 // timePicker: true,
                 // timePickerSeconds: true,
                 // timePicker24Hour: true,
 
-                // maxDate: moment(),
+                maxDate: moment(),
                 locale: {
                     // format: 'YYYY/MM/DD',
                     // format: 'MMM DD, [<span class="text-muted">]YYYY[</span>]',
@@ -517,6 +519,7 @@
                 cancelClass: 'btn-secondary',
             }
             let sidebarDateSettings = {
+                drops: 'down',
                 opens: 'right',
                 autoApply: true,
                 autoUpdateInput: false,
@@ -545,12 +548,11 @@
                 // showWeekNumbers: true,
                 // showRangesAsDropdown: true,
                 // showDropdowns: true,
-                drops: "auto",
                 // timePicker: true,
                 // timePickerSeconds: true,
                 // timePicker24Hour: true,
 
-                // maxDate: moment(),
+                maxDate: moment(),
                 locale: {
                     // format: 'YYYY/MM/DD',
                     // format: 'MMM DD, [<span class="text-muted">]YYYY[</span>]',

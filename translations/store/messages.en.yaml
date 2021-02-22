@@ -55,6 +55,7 @@ account:
 cart:
     cart-content: Your cart
     continue-to-checkout: Continue to checkout
+    continue-shopping: Continue shopping
     edit-cart-content: Edit cart content
     your-cart: Your cart
     your-cart-is-empty: Your cart is empty

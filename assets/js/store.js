@@ -148,6 +148,7 @@ theme.AddToCart = (function () {
     ADD_TO_CART_BUTTON        : '.JS--Button-addToCart',
     ADD_GIFT_TO_CART_BUTTON   : '.JS--Button-addGiftToCart',
     CART_SIDEBAR              : '#JS--Sidebar-Cart',
+    PRODUCT_QUANTITY          : '#cart_add_item_quantity',
   };
 
   function AddToCart(container) {
@@ -172,6 +173,7 @@ theme.AddToCart = (function () {
 
       let $form = this.$container.find('form');
       let $sidebar = $(selectors.BODY).find(selectors.CART_SIDEBAR);
+      let c0 = parseInt($form.find(selectors.PRODUCT_QUANTITY).val());
 
       $.ajax({
         url: $form.attr('action'),
@@ -180,7 +182,7 @@ theme.AddToCart = (function () {
         context: this,
       }).done(function (data) {
         $form.replaceWith(data);
-        $(selectors.BODY).trigger('cart.updated');
+        $(selectors.BODY).trigger('cart.updated', [c0]);
 
         setTimeout(function() {
           notyf.success(AlertMessages.PRODUCT_ADDED);

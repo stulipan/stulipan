@@ -28,11 +28,11 @@ $sidebar-header-padding-y:            1rem !default;
 $sidebar-header-padding-x:            1rem !default;
 $sidebar-header-padding:              $sidebar-header-padding-y $sidebar-header-padding-x !default; // Keep this for backwards compatibility
 
-$sidebar-xl:                          1140px !default;
-$sidebar-lg:                          800px !default;
-$sidebar-md:                          550px !default;
-$sidebar-md-2:                        620px !default;
-$sidebar-sm:                          300px !default;
+//$sidebar-xl:                          1140px !default;
+//$sidebar-lg:                          800px !default;
+//$sidebar-md:                          550px !default;
+//$sidebar-md-2:                        620px !default;
+//$sidebar-sm:                          300px !default; //300px !default;
 
 $sidebar-fade-transform:              none !default; // translateX(100%) !default;
 $sidebar-show-transform:              none !default; //translateX(0) !default;
@@ -41,7 +41,7 @@ $sidebar-transition:                  right .2s ease-out, left .2s ease-out !def
 $sidebar-xl:                          1000px !default;
 $sidebar-lg:                          800px !default;
 $sidebar-md:                          550px !default;
-$sidebar-sm:                          320px !default;
+$sidebar-sm:                          300px !default;
 $sidebar-default:                     380px !default;
 
 $sidebar-close-font-size:             2rem !default;
@@ -145,8 +145,8 @@ $sidebar-close-color:                 $white !default;
       left: -1 * $sidebar-default;
 
       &.sidebar-sm {
-        width: $sidebar-sm;
-        left: -1 * $sidebar-sm;
+        width: $sidebar-default;
+        left: -1 * $sidebar-default;
       }
       &.sidebar-md {
         width: $sidebar-md;
@@ -165,8 +165,8 @@ $sidebar-close-color:                 $white !default;
       right: -1 * $sidebar-default;
 
       &.sidebar-sm {
-        width: $sidebar-sm;
-        right: -1 * $sidebar-sm;
+        width: $sidebar-default;
+        right: -1 * $sidebar-default;
       }
       &.sidebar-md {
         width: $sidebar-md;

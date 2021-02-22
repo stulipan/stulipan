@@ -28,6 +28,7 @@ account:
 cart:
     cart-content: 'Kosár tartalma'
     continue-to-checkout: Tovább a pénztárhoz
+    continue-shopping: 'Vásárlás folytatása'
     edit-cart-content: 'Kosár módosítása'
     your-cart: 'A kosarad'
     your-cart-is-empty: 'A kosarad jelenleg üres'

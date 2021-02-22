@@ -43,6 +43,10 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
   .form-control {
     height: $mobile-input-height;
   }
+  .btn {
+    padding-left: .75rem !important;
+    padding-right: .75rem !important;
+  }
 
   ////////////////////////////////////
   //  SMALL

@@ -12,6 +12,8 @@ $cart-item-link-font-weight:                $font-weight-bold;
 $order-summary-padding-y:                   .5rem !default;
 $order-summary-border-width:                1px !default;
 $order-summary-border-color:                $cart-item-border-color !default;
+
+$order-summary-item-label-color:            $muted !default;
 $order-summary-total-font-size:             1.1rem !default;
 
 .cart-title {
@@ -121,6 +123,10 @@ $order-summary-total-font-size:             1.1rem !default;
 
   &:last-of-type {
     border-bottom: none;
+  }
+
+  & .order-summary-item-label {
+    color: $order-summary-item-label-color;
   }
 
   & .order-summary-total {

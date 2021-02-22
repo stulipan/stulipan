@@ -12,8 +12,8 @@
 <div class="checkout-method-selection">
     {% for choice in paymentMethodForm.paymentMethod %}
         <div class="checkout-payment-item JS--choiceContainer {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}">
-            <div class="JS--Button-pickPayment btn-loading-has-bg" data-selector="button" data-eval="markPaymentAsSelected">
-                <div class="btn-loading-invisible">
+            <div class="JS--Button-pickPayment loading-spinner-has-bg" data-selector="button" data-eval="markPaymentAsSelected">
+                <div class="loading-spinner-invisible">
                     <div class="custom-control custom-radio">
                         <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {% if choice.vars.checked is defined and choice.vars.checked %}checked{% endif %}/>
                         <label class="custom-control-label w-100" for="{{ choice.vars.id }}">

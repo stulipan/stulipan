@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('daterangepicker') }}
+{#    {{ encore_entry_link_tags('daterangepicker') }}#}
     <link href="{{ asset('webshop/site/js/easy-autocomplete.css') }}" rel="stylesheet" />
     <link href="{{ asset('webshop/site/js/easy-autocomplete.themes.css') }}" rel="stylesheet" />
 {% endblock %}
@@ -17,7 +17,6 @@
 
 {% block javascripts %}
 	{{ parent() }}
-    {% include('webshop/cart/_cart-and-checkout-localization.html.twig') %}
     {{ encore_entry_script_tags('checkout') }}
     <script src="{{ asset('webshop/site/js/jquery.easy-autocomplete.js') }}"></script>
     <script src="{{ asset('webshop/validate.min.js') }}"></script>

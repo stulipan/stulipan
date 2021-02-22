@@ -33,10 +33,10 @@ services:
             $locales: '%app_locales%'
             $supportedLocales: '%supported_locales%'
             $defaultLocale: '%locale%'
-#            $storeSettingsDirectory: '%kernel.project_dir%/src/Resources/StoreSettings'
-            $settingsDirectory: '%kernel.project_dir%/src/Resources/StoreSettings'
+            $storeSettingsDirectory: '%kernel.project_dir%/src/Resources/StoreSettings'
             $generalSettingsFile: 'general.yaml'
             $checkoutSettingsFile: 'checkout.yaml'
+            $adminSettingsFile: 'admin.yaml'
 
 
     # makes classes in src/ available to be used as services

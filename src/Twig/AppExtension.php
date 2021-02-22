@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Entity\CmsPage;
 use App\Entity\CmsPage4Twig;
+use App\Services\DateFormatConvert;
 use App\Services\FileUploader;
 use App\Services\Localization;
 use App\Services\StoreSettings;
@@ -34,16 +35,17 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     private $translator;
     private $settings;
     private $em;
+    private $convert;
 
     public function __construct(ContainerInterface $container, SessionInterface $session,
                                 Localization $localization, TranslatorInterface $translator,
-                                StoreSettings $settings, EntityManagerInterface $em)
+                                EntityManagerInterface $em, DateFormatConvert $convert)
     {
         $this->container = $container;
         $this->locale = $localization->getLocale($session->get('_locale', 'hu'));
         $this->translator = $translator;
-        $this->settings = $settings;
         $this->em = $em;
+        $this->convert = $convert;
     }
 
     public function getFunctions(): array
@@ -84,6 +86,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFilter('localizedTime', [$this, 'formatLocalizedTime']),
             new TwigFilter('money', [$this, 'formatMoney']),
             new TwigFilter('number', [$this, 'formatNumber']),
+            new TwigFilter('momentJsFormat', [$this, 'convertDateFormatFromPhpToMomentJs']),
         ];
     }
 
@@ -223,11 +226,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     public function formatLocalizedDate($dateTime, string $format=null) {
 
         if ($format == null || $format == '') {
-            if ($this->settings->get('general.date-format')) {
-                $format = $this->settings->get('general.date-format');
-            } else {
-                $format='Y-m-d';
-            }
+            $format = $this->locale->getDateFormat();
         }
         $shortMonths = [
             'jan' => $this->translator->trans('datetime.jan'),
@@ -298,26 +297,21 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
                 $dateTime = str_ireplace($weekday, ucfirst($localizedWeekday), $dateTime);
             }
         }
-
-//        if ($localizedDateTime === '') {
-            return $dateTime;
-//        }
-//        return $localizedDateTime;
-
+        return $dateTime;
     }
 
     public function formatLocalizedTime($dateTime, string $format=null)
     {
         if ($format == null || $format == '') {
-            if ($this->settings->get('general.time-format')) {
-                $format = $this->settings->get('general.time-format');
-            } else {
-                // Default format
-                $format='H:i';
-            }
+            $format = $this->locale->getTimeFormat();
         }
         $dateTime = $dateTime->format($format);  // eg: 19:20, 19:20:34    OR    07:20am
         return $dateTime;
+    }
+
+    public function convertDateFormatFromPhpToMomentJs(string $phpFormat): string
+    {
+        $this->convert->convertDateFormatFromPhpToMomentJs($phpFormat);
     }
 
     public function formatBrowserInfo(string $userAgent, string $filter)

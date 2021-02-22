@@ -71,6 +71,8 @@ cart:
     total-amount-paid: Total
     show-order-summary: Show order summary
 
+    product:
+        product-added-successfully: You have successfully added the product to your cart!
     gift:
         choose-gift-title: Choose a gift to send along with the flowers
         choose-gift: Choose gift
@@ -201,13 +203,13 @@ datetime:
     sunday: Sunday
 
 
-    mon: Mon
-    tue: Tue
-    wed: Wed
-    thu: Thu
-    fri: Fri
-    sat: Sat
-    sun: Sun
+    mon: Mo
+    tue: Tu
+    wed: We
+    thu: Th
+    fri: Fr
+    sat: Sa
+    sun: Su
 
     lifetime: Lifetime
     today: Today

@@ -1,5 +1,5 @@
 {% for item in order.items %}
-    <div class="cart-item">
+    <div class="JS--Cart-item cart-item" data-item-quantity="{% if item.quantity is defined %}{{ item.quantity }}{% endif %}">
         <div class="d-flex justify-content-between align-items-center">
 
             <div class="flex-grow-1 pr-0">
@@ -13,9 +13,9 @@
                             <div class="pl-3">
                                 <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="cart-item-link{% if hasProductLink is defined and not hasProductLink %} pointer-events-none{% endif %}">{{ item.product.name }}</a>
                                 {% if showQuantity is defined and showQuantity %}
-                                    <div class="ml-2X mr-1X mr-md-6X mt-1">
+                                    <div class="mt-1">
                                         <div class="d-flex align-items-center">
-                                            <div class="d-flex align-items-center JS--formWrapper text-center btn-loading-bg" data-wrapper-item-quantity>
+                                            <div class="d-flex align-items-center JS--Wrapper-itemQuantityBody text-center" data-wrapper-item-quantity>
                                                 {{ render(controller('App\\Controller\\Shop\\CartController::setItemQuantityForm', {'id' : item.id})) }}
                                             </div>
                                         </div>
@@ -40,7 +40,7 @@
 {#                {% if showQuantity is defined and showQuantity %}#}
 {#                    <div class="ml-2 mr-1 mr-md-6">#}
 {#                        <div class="d-flex align-items-center">#}
-{#                            <div class="d-flex align-items-center JS--formWrapper text-center btn-loading-bg" data-wrapper-item-quantity>#}
+{#                            <div class="d-flex align-items-center JS--formWrapper text-center loading-spinner-bg" data-wrapper-item-quantity>#}
 {#                                {{ render(controller('App\\Controller\\Shop\\CartController::setItemQuantityForm', {'id' : item.id})) }}#}
 {#                            </div>#}
 {#                        </div>#}
@@ -49,8 +49,9 @@
 
                 {% if showRemove is defined and showRemove %}
                     <div class="pl-1 pl-sm-4 d-flex justify-content-end mt-2 mt-sm-0">
-                        <button class="btn btn-link-secondary" data-selector="button" data-eval="removeItemFromCart" data-url="{{ path('cart-removeItem', {'id': item.id, 'showQuantity': showQuantity is defined ? showQuantity : false}) }}" title="{{ 'cart.remove-item'|trans }}">
-                            <span class="btn-loading-invisible"><i class="far fa-trash-alt"></i></span>
+{#                        <button class="btn btn-link-secondary" data-selector="button" data-eval="removeItemFromCart" data-url="{{ path('cart-removeItem', {'id': item.id, 'showQuantity': showQuantity is defined ? showQuantity : false}) }}" title="{{ 'cart.remove-item'|trans }}">#}
+                        <button class="JS--Button-removeItem btn btn-link-secondary" data-url="{{ path('cart-removeItem', {'id': item.id, 'showQuantity': showQuantity is defined ? showQuantity : false}) }}" title="{{ 'cart.remove-item'|trans }}">
+                            <span class="loading-spinner-faded"><i class="far fa-trash-alt"></i></span>
                             <div class="loading-spinner" role="status"></div>
                         </button>
                     </div>

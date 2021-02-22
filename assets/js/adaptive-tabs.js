@@ -34,8 +34,6 @@ class AdaptiveTabs {
 
     this.template = container.querySelector(Selector.TEMPLATE);
     this.template.querySelector(Selector.SECONDARY).innerHTML = this.primary.innerHTML;
-    console.log(this.template);
-    console.log(this.template.querySelector(Selector.SECONDARY));
 
     this.primary.insertAdjacentHTML('beforeend', this.template.innerHTML);
     this.template.querySelector(Selector.SECONDARY).innerHTML = '';

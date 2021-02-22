@@ -15,9 +15,10 @@
         <link href="{{ asset('webshop/admin/custom-select2.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('webshop/admin/v-style.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" />
+
     {% endblock %}
 </head>
-<body class="admin {% block bodyClass %}{% endblock %}">
+<body class="admin{% block bodyClass %}{% endblock %}">
 
 {% block body %}
 {% endblock %}
@@ -28,12 +29,109 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://sciactive.com/pnotify/packages/core/dist/PNotify.js"></script>
-    <script src="https://sciactive.com/pnotify/lib/iife/PNotifyButtons.js"></script>
 
     <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
     <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('webshop/admin/js/select2.min.js') }}"></script>
+    <script src="{{ asset('webshop/notyf.min.js') }}"></script>
+
+    <script>
+        // Innen: https://momentjs.com/docs/#/i18n/
+        moment.locale("{{ app.request.locale }}", {
+            monthsShort : [
+                "{{ 'datetime.jan'|trans }}",
+                "{{ 'datetime.feb'|trans }}",
+                "{{ 'datetime.mar'|trans }}",
+                "{{ 'datetime.apr'|trans }}",
+                "{{ 'datetime.may'|trans }}",
+                "{{ 'datetime.jun'|trans }}",
+                "{{ 'datetime.jul'|trans }}",
+                "{{ 'datetime.aug'|trans }}",
+                "{{ 'datetime.sep'|trans }}",
+                "{{ 'datetime.oct'|trans }}",
+                "{{ 'datetime.nov'|trans }}",
+                "{{ 'datetime.dec'|trans }}",
+            ]
+        });
+        moment.locale("{{ app.request.locale }}", {
+            months: [
+                "{{ 'datetime.january'|trans }}",
+                "{{ 'datetime.february'|trans }}",
+                "{{ 'datetime.march'|trans }}",
+                "{{ 'datetime.april'|trans }}",
+                "{{ 'datetime.mayy'|trans }}",
+                "{{ 'datetime.june'|trans }}",
+                "{{ 'datetime.july'|trans }}",
+                "{{ 'datetime.august'|trans }}",
+                "{{ 'datetime.september'|trans }}",
+                "{{ 'datetime.october'|trans }}",
+                "{{ 'datetime.november'|trans }}",
+                "{{ 'datetime.december'|trans }}",
+            ]
+        });
+        {#console.log("{{ storeSettings.getDateFormatInMomentJsFormat }}");#}
+        const drpBaseConfig = {
+            locale: {
+                format: "{{ storeSettings.getDateFormatInMomentJsFormat }}",
+                // format: 'YYYY-MM-DD',
+                separator: ' - ',
+                dropdownRangeLabel: "{{ 'datetime.date-range'|trans }}",
+                customRangeLabel: "{{ 'datetime.custom-range'|trans }}",
+                applyLabel: "{{ 'generic.apply'|trans }}",
+                cancelLabel: "{{ 'generic.delete'|trans }}",
+                daysOfWeek: [
+                    "{{ 'datetime.sun'|trans }}",
+                    "{{ 'datetime.mon'|trans }}",
+                    "{{ 'datetime.tue'|trans }}",
+                    "{{ 'datetime.wed'|trans }}",
+                    "{{ 'datetime.thu'|trans }}",
+                    "{{ 'datetime.fri'|trans }}",
+                    "{{ 'datetime.sat'|trans }}",
+                ],
+                monthNames: [
+                    "{{ 'datetime.january'|trans }}",
+                    "{{ 'datetime.february'|trans }}",
+                    "{{ 'datetime.march'|trans }}",
+                    "{{ 'datetime.april'|trans }}",
+                    "{{ 'datetime.mayy'|trans }}",
+                    "{{ 'datetime.june'|trans }}",
+                    "{{ 'datetime.july'|trans }}",
+                    "{{ 'datetime.august'|trans }}",
+                    "{{ 'datetime.september'|trans }}",
+                    "{{ 'datetime.october'|trans }}",
+                    "{{ 'datetime.november'|trans }}",
+                    "{{ 'datetime.december'|trans }}",
+                ],
+                firstDay: 1,
+            },
+        };
+        const drpRanges = {
+            ranges: {
+                "{{ 'datetime.today'|trans }}": [moment(), moment()],
+                "{{ 'datetime.yesterday'|trans }}": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                "{{ 'datetime.this-month'|trans }}": [moment().startOf('month'), moment().endOf('month')],
+                "{{ 'datetime.previous-month'|trans }}": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                "{{ 'datetime.last-7-days'|trans }}": [moment().subtract(6, 'days'), moment()],
+                "{{ 'datetime.last-30-days'|trans }}": [moment().subtract(29, 'days'), moment()],
+                "{{ 'datetime.this-year'|trans }}": [moment().startOf('year'), moment().endOf('year')],
+                "{{ 'datetime.previous-year'|trans }}": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                "{{ 'datetime.lifetime'|trans }}": [moment('{{ storeSettings.get('general.launch-date') }}'), moment()],
+            },
+        };
+
+        const notyf = new Notyf({
+            position: {
+                x: 'center',
+                y: 'bottom',
+            },
+            dismissible: false,
+            duration: 6000,
+
+        });
+        // notyf.success('Sikeres mentes!');
+        // notyf.error('Valami hiba tortent menteskor!');
+    </script>
+
     <script src="{{ asset('webshop/admin/js/order.detail.js') }}"></script>
 
     {{ encore_entry_script_tags('v-admin') }}

@@ -5,17 +5,32 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\DateRange;
+use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\OrderStatus;
 use App\Entity\PaymentStatus;
+use App\Services\Localization;
+use App\Services\StoreSettings;
 use DateTime;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
-class OrderRepository extends EntityRepository
+class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepository instead of classical EntityRepository
 {
+    private $settings;
+    private $localization;
+
+    public function __construct(ManagerRegistry $registry, StoreSettings $settings,
+                                Localization $localization)
+    {
+        parent::__construct($registry, Order::class);
+        $this->settings = $settings;
+        $this->localization = $localization;
+    }
+
     /**
      * Return all Orders in the last X period of time. Only REAL orders --> status shortcode == 'created'
      * @return array
@@ -93,24 +108,11 @@ class OrderRepository extends EntityRepository
             }
             if ($period == '30 days') {
                 $date->modify('-30 days');
-//                $qb->where('o.createdAt > :date')
-//                    ->setParameter('date', $date)
-//                ;
-//                dd($qb->getQuery()->getResult());
             }
             $qb->andWhere('o.createdAt > :date')
                 ->setParameter('date', $date)
             ;
         }
-
-//        $qb = $this
-//            ->createQueryBuilder('o')
-//            ->select('COUNT(o.id) as count')   // COUNT
-//            ->where('o.createdAt > :date')
-//            ->andWhere('o.status IS NOT NULL')
-//            ->setParameter('date', $date)
-//            ->orderBy('o.createdAt', 'DESC')
-//        ;
 
         if (is_array($filter)) {
             if (array_key_exists('paymentStatus', $filter)) {
@@ -223,15 +225,7 @@ class OrderRepository extends EntityRepository
                 $searchTermPermutations = $this->pc_permute($words);
 
                 foreach ($searchTermPermutations as $key => $item) {
-                    // MEGJEGYZÉS: Erre azóta nincs szükség, hogy a shippingName és billingName-ket különvettem first- és lastname-be
-                    // AMI HIÁNYZIK: A fordítotja, hogy ha valaki beírja 'renata jr fazekas' akkor
-                    // keresse first-/lastname illetve last-/firstname kombinációkba !!
-//                    array_push($comparisonsX,
-//                        $qb->expr()->like('LOWER(o.shippingName)', ':shippingName_'.$key),
-//                        $qb->expr()->like('LOWER(o.billingName)', ':billingName_'.$key)
-//                    );
-
-                    // Execute $qb->expr()->orX() with arguments from the array $comparisonsX
+                    // The following line executes $qb->expr()->orX() with arguments from the array $comparisonsX
                     $orX = call_user_func_array([$qb->expr(), 'orX'], $comparisonsX);
 
 //                    $paramsX['shippingName_'.$key] = '%'.implode(' ', $item).'%';
@@ -244,16 +238,19 @@ class OrderRepository extends EntityRepository
                 $splitPieces = explode(" - ", $filters['dateRange']);
                 $start = $splitPieces[0];
                 $end = $splitPieces[1];
+                $format = $this->localization->getCurrentLocale()->getDateFormat();
 
                 $dateRange = new DateRange();
                 if (!isset($start) or $start === null or $start == "") {
                 } else {
-                    $dateRange->setStart(DateTime::createFromFormat('!Y-m-d',$start));
+//                    $dateRange->setStart(DateTime::createFromFormat('!Y-m-d',$start));
+                    $dateRange->setStart(DateTime::createFromFormat($format, $start));
                     $start = $dateRange->getStart();
                 }
                 if (!isset($end) or $end === null or $end == "") {
                 } else {
-                    $dateRange->setEnd(DateTime::createFromFormat('!Y-m-d',$end));
+//                    $dateRange->setEnd(DateTime::createFromFormat('!Y-m-d',$end));
+                    $dateRange->setEnd(DateTime::createFromFormat($format, $end));
                     $end = $dateRange->getEnd();
                 }
 

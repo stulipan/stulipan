@@ -30,14 +30,27 @@ final class Locale
      */
     private $currencySymbol;
 
+    /**
+     * @var string
+     */
+    private $dateFormat;
 
-    public function __construct(string $code, string $name, string $currency, string $currencyCode, string $currencySymbol)
+    /**
+     * @var string
+     */
+    private $timeFormat;
+
+
+    public function __construct(string $code, string $name, string $currency, string $currencyCode, string $currencySymbol,
+                                string $dateFormat, string $timeFormat)
     {
         $this->code = $code;
         $this->name = $name;
         $this->currency = $currency;
         $this->currencyCode = $currencyCode;
         $this->currencySymbol = $currencySymbol;
+        $this->dateFormat = $dateFormat;
+        $this->timeFormat = $timeFormat;
     }
 
     /**
@@ -118,6 +131,38 @@ final class Locale
     public function setCurrencySymbol(string $currencySymbol): void
     {
         $this->currencySymbol = $currencySymbol;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateFormat(): string
+    {
+        return $this->dateFormat;
+    }
+
+    /**
+     * @param string $dateFormat
+     */
+    public function setDateFormat(string $dateFormat): void
+    {
+        $this->dateFormat = $dateFormat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimeFormat(): string
+    {
+        return $this->timeFormat;
+    }
+
+    /**
+     * @param string $timeFormat
+     */
+    public function setTimeFormat(string $timeFormat): void
+    {
+        $this->timeFormat = $timeFormat;
     }
 
 }

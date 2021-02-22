@@ -1,13 +1,29 @@
-<div class="choice-label-title">{{ name }}</div>
-<div class="choice-label-content">
-    <ul class="choice-label-price-list">
-        {% if priceSale is defined and priceSale is not empty %}
-            <li class="choice-label-price-item price price-sm">
-                <del>{{ price ? price|money : '' }}</del>
-            </li>
-            <li class="choice-label-price-item price price-sm price-sale">{{ priceSale|money }}</li>
-        {% else %}
-            <li class="choice-label-price-item price price-sm">{{ price|money }}</li>
-        {% endif %}
-    </ul>
+<div class="choice-label-wrapper">
+    <div class="choice-label-title">{{ name }}</div>
+    <div class="choice-label-content">
+        <ul class="choice-label-price-list">
+            {% if priceSale is defined and priceSale is not empty %}
+                <li class="d-inline-block choice-label-price-item price price-sm">
+                    <del>{{ price ? price|money : '' }}</del>
+                </li>
+                <li class="d-inline-block choice-label-price-item price price-sm price-sale ml-2">{{ priceSale|money }}</li>
+            {% else %}
+                <li class="d-inline-block choice-label-price-item price price-sm">{{ price|money }}</li>
+            {% endif %}
+        </ul>
+    </div>
 </div>
+
+{#<div class="choice-label-title">{{ name }}</div>#}
+{#<div class="choice-label-content">#}
+{#    <ul class="choice-label-price-list">#}
+{#        {% if priceSale is defined and priceSale is not empty %}#}
+{#            <li class="choice-label-price-item price price-sm">#}
+{#                <del>{{ price ? price|money : '' }}</del>#}
+{#            </li>#}
+{#            <li class="choice-label-price-item price price-sm price-sale">{{ priceSale|money }}</li>#}
+{#        {% else %}#}
+{#            <li class="choice-label-price-item price price-sm">{{ price|money }}</li>#}
+{#        {% endif %}#}
+{#    </ul>#}
+{#</div>#}

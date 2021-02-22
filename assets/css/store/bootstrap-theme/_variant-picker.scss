@@ -94,6 +94,8 @@ $vp-custom-focus-shadow:      0 0 0 $vp-focus-width $vp-focus-color !default;
     border: $vp-border-width solid $vp-border-color;
     //@include font-size($vp-font-size);
     color: color-yiq($vp-bg);
+    background-color: $white;
+
 
     & .vp-content {
       display: block;

@@ -1,6 +1,6 @@
 {% extends 'webshop/site/base-site.html.twig' %}
 
-{% block bodyClass %}my-account{% endblock %}
+{% block bodyClass %} my-account{% endblock %}
 
 {% block page_content %}
 
@@ -18,7 +18,7 @@
                                 <ul class="breadcrumb undefined">
                                     {% if breadcrumb is defined and breadcrumb is not empty %}
                                         {% for item in breadcrumb %}
-                                            <li class="breadcrumb-item"><a href="{{ item.url }}">{{ item.text }}</a></li>
+                                            <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ item.url }}">{{ item.text }}</a></li>
                                         {% endfor %}
                                     {% endif %}
                                 </ul>

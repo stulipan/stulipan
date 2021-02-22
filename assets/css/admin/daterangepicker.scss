@@ -396,7 +396,7 @@ $drp-cell-in-range-color:                           initial !default;
         background-clip: padding-box;
         outline: 0;
 
-        .drp-something2 {
+        .drp-calendars-wrapper {
             display: flex;
             flex: 1 1 auto;
             justify-content: space-between;
@@ -411,7 +411,7 @@ $drp-cell-in-range-color:                           initial !default;
         }
     }
 
-    &.show .drp-body .drp-something2 {
+    &.show .drp-body .drp-calendars-wrapper {
         padding: .75rem;
     }
 
@@ -505,7 +505,7 @@ $drp-cell-in-range-color:                           initial !default;
         }
     }
     &.single {
-        &:not(.show-ranges) .drp-body .drp-ranges {
+        &:not(.show-ranges) .drp-body .drp-ranges-wrapper {
             box-shadow: none;
         }
 
@@ -562,7 +562,7 @@ $drp-cell-in-range-color:                           initial !default;
     margin-bottom: 0;
     border: 1px solid $drp-border-color;
 
-    & .drp-something2 {
+    & .drp-calendars-wrapper {
         width: 100%;
     }
 
@@ -571,13 +571,17 @@ $drp-cell-in-range-color:                           initial !default;
 
         @include media-breakpoint-down(xs) {
             & .drp-calendars {
-                flex-direction: column;
 
                 & .drp-col.left:not(.single),
                 & .drp-col.right {
                     width: 100%;
                 }
             }
+        }
+    }
+    &:not(.single) .drp-body .drp-calendars {
+        @include media-breakpoint-down(xs) {
+            flex-direction: column;
         }
     }
     &:not(.show) {
@@ -592,7 +596,7 @@ $drp-cell-in-range-color:                           initial !default;
                 flex-direction: column;
             }
         }
-        & .drp-something2 {
+        & .drp-calendars-wrapper {
             width: calc(100% - 130px);
 
             @include media-breakpoint-down(xs) {
@@ -616,16 +620,16 @@ $drp-cell-in-range-color:                           initial !default;
         & .drp-body {
             flex-direction: column;
         }
-        & .drp-ranges {
+        & .drp-ranges-wrapper {
             padding: $drp-ranges-padding-y $drp-ranges-padding-x 0 $drp-ranges-padding-x;
             box-shadow: none;
 
-            & .ranges {
+            & .drp-ranges {
                 width: 100%;
             }
         }
     }
-    &:not(.show-ranges-dropdown) .drp-ranges {
+    &:not(.show-ranges-dropdown) .drp-ranges-wrapper {
         display: flex;
         width: 130px;
         padding: 0;
@@ -637,7 +641,7 @@ $drp-cell-in-range-color:                           initial !default;
             box-shadow: none;
         }
 
-        & .ranges {
+        & .drp-ranges {
             width: 100%;
             overflow-x: hidden;
             padding: $drp-ranges-padding-y 0;
@@ -720,15 +724,15 @@ $drp-cell-in-range-color:                           initial !default;
 //            flex-direction: column;
 //        }
 //    }
-//    &.show-ranges .drp-ranges,
-//    &.show-ranges.show-ranges-dropdown .drp-ranges {
+//    &.show-ranges .drp-ranges-wrapper,
+//    &.show-ranges.show-ranges-dropdown .drp-ranges-wrapper {
 //        width: 100%;
 //        box-shadow: none;
 //    }
-//    &.show-ranges:not(.show-ranges-dropdown) .drp-ranges {
+//    &.show-ranges:not(.show-ranges-dropdown) .drp-ranges-wrapper {
 //        padding: $drp-ranges-padding-y $drp-ranges-padding-x 0 $drp-ranges-padding-x;
 //
-//        & .ranges {
+//        & .drp-ranges {
 //            overflow-x: scroll;
 //            padding-bottom: .25rem;
 //
@@ -751,7 +755,7 @@ $drp-cell-in-range-color:                           initial !default;
 
 //.daterangepicker.drp-auto-width,
 //.daterangepicker.show-ranges:not(.show-ranges-dropdown) {
-//    & .drp-ranges {
+//    & .drp-ranges-wrapper {
 //        padding: $drp-ranges-padding-y $drp-ranges-padding-x 0 $drp-ranges-padding-x;
 //    }
 //}
@@ -1012,7 +1016,7 @@ $drp-cell-in-range-color:                           initial !default;
     margin-bottom: .25rem;
 }
 
-.ranges {
+.drp-ranges {
     // Firefox formatting
     scrollbar-width: thin;          /* "auto" or "thin"  */
     scrollbar-color: $gray-500 $gray-200;   /* scroll thumb & track */

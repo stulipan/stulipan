@@ -74,12 +74,12 @@ class Webshop {
 
   // Helpers
   showOverlay(el, eventText) {
-    el.addClass('btn-loading');
+    el.addClass('loading-spinner-show');
     this._proceed = true;
     el.trigger('click');
   }
   hideOverlay(el) {
-    el.removeClass('btn-loading');
+    el.removeClass('loading-spinner-show');
     this._proceed = false;
     $('body').trigger('refreshDomAndInitFloatingInputs'); // az input-float miatt szukseges
   }

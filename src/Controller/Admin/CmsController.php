@@ -11,6 +11,7 @@ use App\Form\ProductCategoryFormType;
 use App\Services\FileUploader;
 use Error;
 use Pagerfanta\Exception\NotValidCurrentPageException;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

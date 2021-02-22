@@ -13,13 +13,12 @@
     {{ pageTitle }}
 {% endblock %}
 
-{% block bodyClass %}order order-list{% endblock %}
+{% block bodyClass %} order order-list{% endblock %}
 
 {% block modal %}
     <div class="sidebar sidebar-right" id="sidebar--Filters" tabindex="-1" role="dialog" aria-labelledby="sidebarLabel" aria-hidden="true">
         <div class="sidebar-dialog sidebar-dialog-scrollable sidebar-dialog-centered" role="document">
             <div class="sidebar-content">
-{#                {{ form_start(filterFormSidebar, { 'attr': {'class': 'needs-validationX' }}) }}#}
                 <div class="sidebar-header">
                     <h3 class="sidebar-title" id="sidebarLabel">{{ 'order.filter.filters'|trans }}</h3>
                     <button type="button" class="close" data-dismiss="sidebar" aria-label="Close">
@@ -77,16 +76,9 @@
                     {{ form_end(filterFormSidebar) }}
                 </div>
                 <div class="sidebar-footer">
-                    <div class="loadingWrapper">
-                        <input type="submit" value="{{ 'generic.apply'|trans }}" onclick="$('.JS--orderFilters').submit();" class="btn btn-primary" formnovalidate>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                    </div>
-                    <div class="loadingWrapper loadingWrapper-secondary">
-                        <a href="" class="btn btn-secondary" data-dismiss="sidebar">{{ 'generic.close'|trans }}</a>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                    </div>
+                    <input type="submit" value="{{ 'generic.apply'|trans }}" onclick="$('.JS--orderFilters').submit();" class="btn btn-primary" formnovalidate>
+                    <a href="" class="btn btn-secondary" data-dismiss="sidebar">{{ 'generic.close'|trans }}</a>
                 </div>
-{#                {{ form_end(filterFormSidebar) }}#}
             </div>
         </div>
     </div>
@@ -426,198 +418,72 @@
     <script>
         $(function() {
             let dateField = $('#JS--idosav .JS--inputDate');
-            let sidebarDateField = $('#JS--idosavS .JS--inputDateS');
-
-            // Innen: https://momentjs.com/docs/#/i18n/
-            moment.locale("{{ app.request.locale }}", {
-                monthsShort : [
-                    "{{ 'datetime.jan'|trans }}",
-                    "{{ 'datetime.feb'|trans }}",
-                    "{{ 'datetime.mar'|trans }}",
-                    "{{ 'datetime.apr'|trans }}",
-                    "{{ 'datetime.may'|trans }}",
-                    "{{ 'datetime.jun'|trans }}",
-                    "{{ 'datetime.jul'|trans }}",
-                    "{{ 'datetime.aug'|trans }}",
-                    "{{ 'datetime.sep'|trans }}",
-                    "{{ 'datetime.oct'|trans }}",
-                    "{{ 'datetime.nov'|trans }}",
-                    "{{ 'datetime.dec'|trans }}",
-                ]
-            });
-            let dateSettings = {
+            let dateFieldSidebar = $('#JS--idosavS .JS--inputDateS');
+            const drpConfig4FilterBar = Object.assign({}, drpBaseConfig, drpRanges, {
                 parentEl: "#JS--idosav",
-                drops: 'down',
-                // drops: "auto",
                 opens: 'right',
+                // singleDatePicker: true,
+                drops: 'down',
                 autoApply: true,
-                autoUpdateInput: false,
+                autoUpdateInput: true,
                 linkedCalendars: true,
-
-                ranges: {
-                    "{{ 'datetime.today'|trans }}": [moment(), moment()],
-                    "{{ 'datetime.yesterday'|trans }}": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    "{{ 'datetime.this-month'|trans }}": [moment().startOf('month'), moment().endOf('month')],
-                    "{{ 'datetime.previous-month'|trans }}": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                    "{{ 'datetime.last-7-days'|trans }}": [moment().subtract(6, 'days'), moment()],
-                    "{{ 'datetime.last-30-days'|trans }}": [moment().subtract(29, 'days'), moment()],
-                    "{{ 'datetime.this-year'|trans }}": [moment().startOf('year'), moment().endOf('year')],
-                    "{{ 'datetime.previous-year'|trans }}": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-                    "{{ 'datetime.lifetime'|trans }}": [moment('{{ settings_general.get('general.launch-date') }}'), moment()],
-                },
                 alwaysShowCalendars: false,
                 showCustomRangeLabel: true,
-
-                // singleDatePicker: true,
-                // showWeekNumbers: true,
-
                 // showRangesAsDropdown: true,
+                maxDate: moment(),
+                // showWeekNumbers: true,
                 // showDropdowns: true,
-
                 // timePicker: true,
                 // timePickerSeconds: true,
                 // timePicker24Hour: true,
-
-                maxDate: moment(),
-                locale: {
-                    // format: 'YYYY/MM/DD',
-                    // format: 'MMM DD, [<span class="text-muted">]YYYY[</span>]',
-                    format: 'MMM DD, YYYY',
-                    separator: ' - ',
-                    dateRange: "{{ 'datetime.date-range'|trans }}",
-                    customRangeLabel: "{{ 'datetime.custom-range'|trans }}",
-                    applyLabel: "{{ 'generic.apply'|trans }}",
-                    cancelLabel: "{{ 'generic.delete'|trans }}",
-                    daysOfWeek: [
-                        "{{ 'datetime.sun'|trans }}",
-                        "{{ 'datetime.mon'|trans }}",
-                        "{{ 'datetime.tue'|trans }}",
-                        "{{ 'datetime.wed'|trans }}",
-                        "{{ 'datetime.thu'|trans }}",
-                        "{{ 'datetime.fri'|trans }}",
-                        "{{ 'datetime.sat'|trans }}",
-                    ],
-                    monthNames: [
-                        "{{ 'datetime.january'|trans }}",
-                        "{{ 'datetime.february'|trans }}",
-                        "{{ 'datetime.march'|trans }}",
-                        "{{ 'datetime.april'|trans }}",
-                        "{{ 'datetime.mayy'|trans }}",
-                        "{{ 'datetime.june'|trans }}",
-                        "{{ 'datetime.july'|trans }}",
-                        "{{ 'datetime.august'|trans }}",
-                        "{{ 'datetime.september'|trans }}",
-                        "{{ 'datetime.october'|trans }}",
-                        "{{ 'datetime.november'|trans }}",
-                        "{{ 'datetime.december'|trans }}",
-                    ],
-                    firstDay: 1,
-                },
-
-                buttonClasses: 'btn',
-                applyClass: 'btn-primary',
-                cancelClass: 'btn-secondary',
-            }
-            let sidebarDateSettings = {
-                drops: 'down',
-                opens: 'right',
-                autoApply: true,
-                autoUpdateInput: false,
-                // linkedCalendars: false,
-
-                ranges: {
-                    "{{ 'datetime.today'|trans }}": [moment(), moment()],
-                    "{{ 'datetime.yesterday'|trans }}": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    "{{ 'datetime.this-month'|trans }}": [moment().startOf('month'), moment().endOf('month')],
-                    "{{ 'datetime.previous-month'|trans }}": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                    "{{ 'datetime.last-7-days'|trans }}": [moment().subtract(6, 'days'), moment()],
-                    "{{ 'datetime.last-30-days'|trans }}": [moment().subtract(29, 'days'), moment()],
-                    "{{ 'datetime.this-year'|trans }}": [moment().startOf('year'), moment().endOf('year')],
-                    "{{ 'datetime.previous-year'|trans }}": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-                    "{{ 'datetime.lifetime'|trans }}": [moment('{{ settings_general.get('general.launch-date') }}'), moment()],
-                },
-                alwaysShowCalendars: true,
-                showCustomRangeLabel: true,
-
+            });
+            const drpConfig4Sidebar = Object.assign({}, drpBaseConfig, drpRanges, {
                 parentEl: "#JS--idosavS",
                 displayInline: true,
-
-                // autoWidth: true,
-
+                opens: 'right',
                 // singleDatePicker: true,
-                // showWeekNumbers: true,
+                drops: 'down',
+                autoApply: true,
+                autoUpdateInput: true,
+                linkedCalendars: true,
+                alwaysShowCalendars: false,
+                showCustomRangeLabel: true,
                 // showRangesAsDropdown: true,
+                maxDate: moment(),
+                // showWeekNumbers: true,
                 // showDropdowns: true,
                 // timePicker: true,
                 // timePickerSeconds: true,
                 // timePicker24Hour: true,
+            });
+            const format = drpBaseConfig.locale.format; // eg: YYYY-MM-DD
 
-                maxDate: moment(),
-                locale: {
-                    // format: 'YYYY/MM/DD',
-                    // format: 'MMM DD, [<span class="text-muted">]YYYY[</span>]',
-                    format: 'MMM DD, YYYY',
-                    separator: ' - ',
-                    dateRange: "{{ 'datetime.date-range'|trans }}",
-                    customRangeLabel: "{{ 'datetime.custom-range'|trans }}",
-                    applyLabel: "{{ 'generic.apply'|trans }}",
-                    cancelLabel: "{{ 'generic.delete'|trans }}",
-                    daysOfWeek: [
-                        "{{ 'datetime.sun'|trans }}",
-                        "{{ 'datetime.mon'|trans }}",
-                        "{{ 'datetime.tue'|trans }}",
-                        "{{ 'datetime.wed'|trans }}",
-                        "{{ 'datetime.thu'|trans }}",
-                        "{{ 'datetime.fri'|trans }}",
-                        "{{ 'datetime.sat'|trans }}",
-                    ],
-                    monthNames: [
-                        "{{ 'datetime.january'|trans }}",
-                        "{{ 'datetime.february'|trans }}",
-                        "{{ 'datetime.march'|trans }}",
-                        "{{ 'datetime.april'|trans }}",
-                        "{{ 'datetime.mayy'|trans }}",
-                        "{{ 'datetime.june'|trans }}",
-                        "{{ 'datetime.july'|trans }}",
-                        "{{ 'datetime.august'|trans }}",
-                        "{{ 'datetime.september'|trans }}",
-                        "{{ 'datetime.october'|trans }}",
-                        "{{ 'datetime.november'|trans }}",
-                        "{{ 'datetime.december'|trans }}",
-                    ],
-                    firstDay: 1,
-                },
-
-                buttonClasses: 'btn',
-                applyClass: 'btn-primary',
-                cancelClass: 'btn-secondary',
-            }
-            dateField.daterangepicker(dateSettings);
-            sidebarDateField.daterangepicker(sidebarDateSettings);
+            dateField.daterangepicker(drpConfig4FilterBar);
+            dateFieldSidebar.daterangepicker(drpConfig4Sidebar);
 
             // Ha van dateRange a query-ben, akkor a ketto datumot betoltom a datum valasztoba
             let string = "{{ app.request.query.get('dateRange') is defined ? app.request.query.get("dateRange") : false }}";
             if (string) {
                 picker = dateField.data('daterangepicker');
-                picker.setStartDate(moment(string.split(picker.locale.separator)[0], 'YYYY-MM-DD'));
-                picker.setEndDate(moment(string.split(picker.locale.separator)[1], 'YYYY-MM-DD'));
+                picker.setStartDate(moment(string.split(picker.locale.separator)[0], format));
+                picker.setEndDate(moment(string.split(picker.locale.separator)[1], format));
 
-                pickerS = sidebarDateField.data('daterangepicker');
-                pickerS.setStartDate(moment(string.split(pickerS.locale.separator)[0], 'YYYY-MM-DD'));
-                pickerS.setEndDate(moment(string.split(pickerS.locale.separator)[1], 'YYYY-MM-DD'));
+                pickerS = dateFieldSidebar.data('daterangepicker');
+                pickerS.setStartDate(moment(string.split(pickerS.locale.separator)[0], format));
+                pickerS.setEndDate(moment(string.split(pickerS.locale.separator)[1], format));
             }
 
 
-            // mobilon a hatter ezzel nem mozog, nem gorgeti
-            dateField.on('show.daterangepicker', function(ev, picker) {
-                picker.parentEl.addClass('daterangepicker-overflow-hiddenX');
-            });
-            // ujra gorgetheto a hatter
-            dateField.on('hide.daterangepicker', function(ev, picker) {
-                picker.parentEl.removeClass('daterangepicker-overflow-hiddenX');
-            });
+            // // mobilon a hatter ezzel nem mozog, nem gorgeti
+            // dateField.on('show.daterangepicker', function(ev, picker) {
+            //     picker.parentEl.addClass('daterangepicker-overflow-hiddenX');
+            // });
+            // // ujra gorgetheto a hatter
+            // dateField.on('hide.daterangepicker', function(ev, picker) {
+            //     picker.parentEl.removeClass('daterangepicker-overflow-hiddenX');
+            // });
             dateField.on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + picker.locale.separator + picker.endDate.format('YYYY-MM-DD'));
+                $(this).val(picker.startDate.format(format) + picker.locale.separator + picker.endDate.format(format));
                 // $(this).focus();
                 picker.hide();
             });
@@ -634,28 +500,28 @@
             });
 
 
-            sidebarDateField.on('show.daterangepicker', function(ev, pickerS) {
-                pickerS.parentEl.addClass('daterangepicker-overflow-hiddenX');
-            });
-            // ujra gorgetheto a hatter
-            sidebarDateField.on('hide.daterangepicker', function(ev, pickerS) {
-                pickerS.parentEl.removeClass('daterangepicker-overflow-hiddenX');
-            });
-            sidebarDateField.on('apply.daterangepicker', function(ev, pickerS) {
-                $(this).val(pickerS.startDate.format('YYYY-MM-DD') + pickerS.locale.separator + pickerS.endDate.format('YYYY-MM-DD'));
+            // dateFieldSidebar.on('show.daterangepicker', function(ev, pickerS) {
+            //     pickerS.parentEl.addClass('daterangepicker-overflow-hiddenX');
+            // });
+            // // ujra gorgetheto a hatter
+            // dateFieldSidebar.on('hide.daterangepicker', function(ev, pickerS) {
+            //     pickerS.parentEl.removeClass('daterangepicker-overflow-hiddenX');
+            // });
+            dateFieldSidebar.on('apply.daterangepicker', function(ev, pickerS) {
+                $(this).val(pickerS.startDate.format(format) + pickerS.locale.separator + pickerS.endDate.format(format));
                 // $(this).focus();
                 pickerS.hide();
             });
-            sidebarDateField.on('cancel.daterangepicker', function(ev, pickerS) {
+            dateFieldSidebar.on('cancel.daterangepicker', function(ev, pickerS) {
                 pickerS.startDate = moment();
                 pickerS.endDate = moment();
                 $(this).val('');
             });
             $('#JS--idosavS .JS--clearDateS').on('click', function(ev) {
                 ev.preventDefault();
-                sidebarDateField.val('');
-                sidebarDateField.data('daterangepicker').setStartDate(moment());
-                sidebarDateField.data('daterangepicker').setEndDate(moment());
+                dateFieldSidebar.val('');
+                dateFieldSidebar.data('daterangepicker').setStartDate(moment());
+                dateFieldSidebar.data('daterangepicker').setEndDate(moment());
             });
         });
     </script>

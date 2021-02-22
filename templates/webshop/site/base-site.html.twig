@@ -3,7 +3,7 @@
 {% block title %}
     {% if pageTitle is defined and pageTitle is not empty %}
     {{ pageTitle }} |
-    {% endif %} {{ settings_general.get('meta.name') }}
+    {% endif %} {{ storeSettings.get('meta.name') }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -39,35 +39,38 @@
 
 	<header class="header">
         {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
-		<div class="top-bar text-sm d-none d-lg-block">
-			<div class="container-fluid">
-				<div class="row d-flex align-items-center">
-					<div class="col-sm-12 text-center">
-						<ul class="list-inline mb-0">
-							{#<li class="list-inline-item pr-3 mr-0">#}
-								{#<svg class="svg-icon mr-2">#}
-									{#<use xlink:href="#calls-1"> </use>#}
-								{#</svg>06 1 466 6286#}
-							{#</li>#}
-							<li class="list-inline-item px-3 border-leftX d-none d-lg-inline-block">Ingyenes szállítás Budapesten!
-								<a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
+
+        {% block underNavbar %}
+            <div class="announcement-bar announcement-bar-primary">
+                <div class="container">
+                    <div class="">Ingyenes szállítás Budapesten! <a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></div>
+                </div>
+            </div>
+        {% endblock %}
+{#		<div class="top-bar text-sm d-none d-lg-block">#}
+{#			<div class="container-fluid">#}
+{#				<div class="row d-flex align-items-center">#}
+{#					<div class="col-sm-12 text-center">#}
+{#						<ul class="list-inline mb-0">#}
+{#							<li class="list-inline-item px-3 border-leftX d-none d-lg-inline-block">Ingyenes szállítás Budapesten!#}
+{#								<a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></li>#}
+{#						</ul>#}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+{#		</div>#}
 
         {% block navbar %}
-		<nav class="navbar px-0 navbar-expand-lg navbar-stickyX navbar-dark navbar-stulipan flex-column">
+		<nav class="navbar px-0 navbar-expand-lg navbar-sticky navbar-light navbar-stulipan flex-column">
 			<div class="container h-100">
-                <div class="d-flex justify-content-between align-items-center w-100 h-100 px-2 px-lg-0 py-0 py-lg-2">
+                <div class="d-flex justify-content-between align-items-center w-100 h-100 px-2 px-lg-0 py-0 py-lg-3">
                         <!-- Navbar Ted -->
                         <div class="navbar--ted d-none d-md-flex justify-content-md-center mr-md-3 order-md-3 order-2">
                             <div class="nav-item login-cart-link">
                                 <svg class="svg-icon">
                                     <use xlink:href="#calls-1"> </use>
                                 </svg>
-                                <span class="login-cart-text d-lg-inline ml-1">{{ settings_general.get('store.phone')}}</span>
+                                <span class="login-cart-text d-lg-inline ml-1">{{ storeSettings.get('store.phone')}}</span>
                             </div>
                         </div>
 
@@ -76,7 +79,8 @@
                         <!-- Navbar Logo -->
                         <div class="navbar--logo d-flex justify-content-md-start flex-grow-1 order-md-2 order-3 ml-2X ml-md-0">
                             <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
-                                <span class="h3 font-weight-bold text-uppercase text-dark">tulipan<span class="text-danger">.</span>futar  </span>
+                                <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">
+{#                                <span class="h3 font-weight-bold text-uppercase text-dark">tulipan<span class="text-danger">.</span>futar  </span>#}
                             </a>
                         </div>
 
@@ -117,8 +121,6 @@
                                             <span class="login-cart-text d-none d-lg-inline ml-1 ml-lg-2">{{ 'navbar.my-account'|trans }}</span>
                                         </a>
                                         <div aria-labelledby="myaccountDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown--flownX mt-0">
-                                            {#                                        <div class="dropdown--flown-b1">#}
-                                            {#                                            <div class="dropdown--flown-b2">#}
                                             <span class="dropdown-item text-dark disabled font-weight-bold border-bottom">{{ 'account.welcome'|trans({'{{ user }}': app.user.firstname}) }}</span>
                                             <a href="{{ path('site-user-myAccount') }}" class="dropdown-item">
                                                 <svg class="svg-icon svg-icon-heavy">
@@ -130,8 +132,6 @@
                                             <a href="{{ path('logout') }}" class="dropdown-item">
                                                 <svg class="svg-icon svg-icon-heavy"><use xlink:href="#exit-1"></use></svg>
                                                 {{ 'account.logout'|trans }}</a>
-                                            {#                                            </div>#}
-                                            {#                                        </div>#}
                                         </div>
                                     {% endif %}
                                 </li>
@@ -145,7 +145,7 @@
                 </div>
 			</div>
 
-            <div id="navbarCollapse" class="collapse navbar-collapse w-100 bg-primary order-lg-2 order-1">
+            <div id="navbarCollapse" class="collapse navbar-collapse w-100 menu-stulipan order-lg-2 order-1">
                 <div class="container">
                     <div class="">
                         <ul class="navbar-nav mx-auto px-3 px-lg-0 justify-content-center">
@@ -155,13 +155,6 @@
                 </div>
             </div>
 		</nav>
-        {% endblock %}
-        {% block underNavbar %}
-        <div class="announcement-bar announcement-bar-secondary">
-            <div class="container">
-                <div class="">Minden virágtermék árát csökkentettük. <a href="" class="">Klikk ide!</a></div>
-            </div>
-        </div>
         {% endblock %}
     </header>
 
@@ -248,38 +241,38 @@
                         <div class="row text-center text-sm-left">
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
                                 <h6 class="text-uppercase  mb-2">Elérhetőségek</h6>
-                                <p>{{ settings_general.get('company.zip') }} {{ settings_general.get('company.city') }}, {{ settings_general.get('company.address') }}</p>
+                                <p>{{ storeSettings.get('company.zip') }} {{ storeSettings.get('company.city') }}, {{ storeSettings.get('company.address') }}</p>
                                 <ul class="list-inline">
-                                    {% if settings_general.get('social.facebook') and settings_general.get('social.facebook') is not null %}
-                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.facebook') }}" target="_blank" title="facebook" class="h3"><i class="fab fa-facebook"></i></a></li>
+                                    {% if storeSettings.get('social.facebook') and storeSettings.get('social.facebook') is not null %}
+                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.facebook') }}" target="_blank" title="facebook" class="h3"><i class="fab fa-facebook"></i></a></li>
                                     {% endif %}
-                                    {% if settings_general.get('social.instagram') and settings_general.get('social.instagram') is not null %}
-                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.instagram') }}" target="_blank" title="instagram" class="h3"><i class="fab fa-instagram"></i></a></li>
+                                    {% if storeSettings.get('social.instagram') and storeSettings.get('social.instagram') is not null %}
+                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.instagram') }}" target="_blank" title="instagram" class="h3"><i class="fab fa-instagram"></i></a></li>
                                     {% endif %}
-                                    {% if settings_general.get('social.pinterest') and settings_general.get('social.pinterest') is not null %}
-                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.pinterest') }}" target="_blank" title="pinterest" class="h3"><i class="fab fa-pinterest"></i></a></li>
+                                    {% if storeSettings.get('social.pinterest') and storeSettings.get('social.pinterest') is not null %}
+                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.pinterest') }}" target="_blank" title="pinterest" class="h3"><i class="fab fa-pinterest"></i></a></li>
                                     {% endif %}
-                                    {% if settings_general.get('social.twitter') and settings_general.get('social.twitter') is not null %}
-                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.twitter') }}" target="_blank" title="vimeo" class="h3"><i class="fab fa-twitter"></i></a></li>
+                                    {% if storeSettings.get('social.twitter') and storeSettings.get('social.twitter') is not null %}
+                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.twitter') }}" target="_blank" title="vimeo" class="h3"><i class="fab fa-twitter"></i></a></li>
                                     {% endif %}
-                                    {% if settings_general.get('social.youtube') and settings_general.get('social.youtube') is not null %}
-                                    <li class="list-inline-item"><a href="{{ settings_general.get('social.youtube') }}" target="_blank" title="vimeo" class="h3"><i class="fab fa-youtube"></i></a></li>
+                                    {% if storeSettings.get('social.youtube') and storeSettings.get('social.youtube') is not null %}
+                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.youtube') }}" target="_blank" title="vimeo" class="h3"><i class="fab fa-youtube"></i></a></li>
                                     {% endif %}
                                 </ul>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
                                 <h6 class="text-uppercase  mb-2">Virágküldés</h6>
                                 <ul class="list-unstyled">
-                                    <li> <a href="/termekek/csokrok" class="" title="Virágcsokrok">Csokrok</a></li>
-                                    <li> <a href="/termekek/viragdobozok" class="" title="Virágboxok">Virágdobozok</a></li>
+                                    <li> <a href="/termekek/csokrok" class="text-decoration-none" title="Virágcsokrok">Csokrok</a></li>
+                                    <li> <a href="/termekek/viragdobozok" class="text-decoration-none" title="Virágboxok">Virágdobozok</a></li>
                                 </ul>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
                                 <h6 class="text-uppercase  mb-2">Információk</h6>
                                 <ul class="list-unstyled">
-                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="">Rólunk</a></li>
-                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="">Szállítási díjak</a></li>
-                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="">ÁSZF</a></li>
+                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="text-decoration-none">Rólunk</a></li>
+                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="text-decoration-none">Szállítási díjak</a></li>
+                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="text-decoration-none">ÁSZF</a></li>
                                 </ul>
                             </div>
                             <div class="col-sm-6 col-md-12 col-lg-3">
@@ -305,7 +298,7 @@
                     <div class="col-sm-11 col-xl-12 mx-auto">
                         <div class="row">
                             <div class="col-md-8 text-center text-sm-left">
-                                <p class="mb-md-0">© 2014 - {{ "now"|date('Y') }} {{ settings_general.get('store.url')}}. Virágküldés Budapesten és környékén, rózsadobozok, csokrok, esküvő, rendezvénydekoráció</p>
+                                <p class="mb-md-0">© 2014 - {{ "now"|date('Y') }} {{ storeSettings.get('store.url')}}. Virágküldés Budapesten és környékén, rózsadobozok, csokrok, esküvő, rendezvénydekoráció</p>
                             </div>
                             <div class="col-md-4">
                                 <div class="mt-2 mt-md-0 text-center text-sm-left text-md-right">
@@ -328,6 +321,7 @@
     <script>
         $(document).ready(function () {
             $.fn.webshop();
+
             var limitFunc = function(){
                 if (window.innerWidth>991.98){
                     $('#sidebar--mobileMenu').sidebar('hide');

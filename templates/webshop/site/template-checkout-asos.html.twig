@@ -4,7 +4,7 @@
     {{ parent() }}
 {% endblock %}
 
-{% block bodyClass %}{{ parent() }}checkout-page checkout-asos{% endblock %}
+{% block bodyClass %} {{ parent() }}checkout-page checkout-asos{% endblock %}
 
 {% block page_content %}
 
@@ -68,8 +68,8 @@
                                         <svg class="svg-icon mr-1">
                                             <use xlink:href="#calls-1"> </use>
                                         </svg>
-                                        <span class="h6 font-weight-bold text-uppercase d-none d-md-inline">{{ settings_general.get('store.phone') }}</span>
-                                        <span class="text-sm font-weight-bold text-uppercase letter-spacing-0 d-md-none d-inline">{{ settings_general.get('store.phone') }}</span>
+                                        <span class="h6 font-weight-bold text-uppercase d-none d-md-inline">{{ storeSettings.get('store.phone') }}</span>
+                                        <span class="text-sm font-weight-bold text-uppercase letter-spacing-0 d-md-none d-inline">{{ storeSettings.get('store.phone') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +135,7 @@
 {#                            <svg class="svg-icon mr-1">#}
 {#                                <use xlink:href="#calls-1"> </use>#}
 {#                            </svg>#}
-{#                            <span class="login-cart--text d-lg-inline">{{ settings_general.get('store.phone') }}</span>#}
+{#                            <span class="login-cart--text d-lg-inline">{{ storeSettings.get('store.phone') }}</span>#}
 {#                        </div>#}
 
 {#                    </div>#}

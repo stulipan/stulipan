@@ -18,6 +18,7 @@
   @include transition($btn-transition);
   letter-spacing: $btn-letter-spacing; // Added by stulipan
   text-transform: $btn-text-transform; // Added by stulipan
+  text-decoration: none; // Added by Stulipan
 
   @include hover {
     color: $body-color;
@@ -26,7 +27,7 @@
 
   &:focus,
   &.focus {
-    outline: 0;
+    //outline: 0;
     //box-shadow: $btn-focus-box-shadow;
   }
 
@@ -60,11 +61,7 @@ fieldset:disabled a.btn {
 
 @each $color, $value in $theme-colors {
   .btn-#{$color} {
-    @if $color == "primary" {
-      @include button-variant($blue-dark, $blue-dark);
-    } @else {
-      @include button-variant($value, $value);
-    }
+    @include button-variant($value, $value);
   }
 }
 

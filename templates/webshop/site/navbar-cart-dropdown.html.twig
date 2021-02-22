@@ -1,11 +1,11 @@
-    <a href="#" role="button" data-toggle="sidebar" data-target="#sidebar--Cart" class="login-cart-link login-cart-badge dropdown-toggle">
+    <a href="#" role="button" data-toggle="sidebar" data-target="#JS--Sidebar-Cart" class="login-cart-link login-cart-badge dropdown-toggle">
         <div class="position-relative">
             <svg class="svg-icon">
                 <use xlink:href="#cart-1"> </use>
             </svg>
-            <div class="login-cart-badge" data-cart-item-count>
-                {% if order.countItems is defined %}
-                    {{  order.countItems }}
+            <div class="JS--Badge-itemsCount login-cart-badge {% if order.itemsCount is defined and order.itemsCount > 0 %}show{% endif %}" data-section-id="cartBadge-template" data-section-type="cartBadge-template" data-items-count="{% if order.itemsCount is defined %}{{ order.itemsCount }}{% endif %}">
+                {% if order.itemsCount is defined %}
+                    {{  order.itemsCount }}
                 {% else %}
                     0
                 {% endif %}

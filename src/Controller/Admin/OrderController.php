@@ -28,11 +28,10 @@ use App\Form\OrderFilterType;
 use App\Form\OrderShippingAddressType;
 use App\Form\OrderStatusType;
 use App\Form\PaymentStatusType;
-use App\Services\StoreSettings;
+use App\Services\AdminSettings;
 use BarionClient;
 use BarionEnvironment;
 use DateTime;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,8 +44,6 @@ use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Pagination\PaginatedCollection;
-use Symfony\Component\Translation\MessageCatalogue;
-use Symfony\Component\Translation\MessageCatalogueInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -83,7 +80,7 @@ class OrderController extends AbstractController
      *     requirements={"page"="\d+"},
      *     )
      */
-    public function listOrders(Request $request, $page = 1, StoreSettings $settings) //, $dateRange = null, $paymentStatus = null, $orderStatus = null
+    public function listOrders(Request $request, $page = 1, AdminSettings $settings) //, $dateRange = null, $paymentStatus = null, $orderStatus = null
     {
         $dateRange = $request->query->get('dateRange');
         $searchTerm = $request->query->get('searchTerm');

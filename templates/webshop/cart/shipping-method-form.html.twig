@@ -12,8 +12,8 @@
 <div class="checkout-method-selection">
     {% for choice in shippingMethodForm.shippingMethod %}
             <div class="checkout-shipping-item JS--choiceContainer {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}">
-                        <div class="JS--Button-pickShipping btn-loading-has-bg" data-selector="button" data-eval="markShippingAsSelected">
-                            <div class="btn-loading-invisible">
+                        <div class="JS--Button-pickShipping loading-spinner-has-bg" data-selector="button" data-eval="markShippingAsSelected">
+                            <div class="loading-spinner-invisible">
                                 <div class="custom-control custom-radio">
                                         <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
                                         <label class="custom-control-label w-100" for="{{ choice.vars.id }}">

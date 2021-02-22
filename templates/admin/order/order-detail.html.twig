@@ -23,7 +23,7 @@
     {{ pageTitle }}
 {% endblock %}
 
-{% block bodyClass %}order orderDetail{% endblock %}
+{% block bodyClass %} order orderDetail{% endblock %}
 
 
     {% block modal %}
@@ -121,38 +121,41 @@
                                                         </div>
                                                     </div>
                                                 {% endfor %}
-                                                <div class="col-sm-3 col-12 JS--Button-clickDate">
-                                                    <div class="row h-100">
-                                                        {% for date in generatedDates.dates|slice(3) %}
-                                                            <div class="col-sm-12 col-12 JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} d-none" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
-                                                                <div class="vp choose-date mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}" tabindex="0">
-                                                                    <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
-                                                                        <div class="wrapper-absolute">
-                                                                            <div class="icon-wrapper">
-                                                                                <i class="far fa-calendar-alt fa-2x icon-bg"></i>
+                                                <div class="col-sm-3 col-12">
+                                                    <div class="position-relative">
+                                                        <a href="" class="tile-link JS--Button-clickDate" role="button" tabindex="0"></a>
+                                                        <div class="">
+                                                            {% for date in generatedDates.dates|slice(3) %}
+                                                                <div class="JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} d-none" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
+                                                                    <div class="vp choose-date mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}">
+                                                                        <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
+                                                                            <div class="wrapper-absolute">
+                                                                                <div class="icon-wrapper">
+                                                                                    <i class="far fa-calendar-alt fa-2x icon-bg"></i>
+                                                                                </div>
                                                                             </div>
+                                                                            <span class="vp-content">
+                                                                                <span class="tile tile-lg">
+                                                                                    {% include('/webshop/site/vp-label-date.html.twig') with {
+                                                                                        'item1': date.deliveryDate,
+                                                                                        'item2': date.deliveryDate
+                                                                                    } %}
+                                                                                </span>
+                                                                            </span>
                                                                         </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+
+                                                            <div class="JS--showCalendarIcon">
+                                                                <div class="vp vp-md choose-date mr-2">
+                                                                    <div class="vp-figure justify-content-lg-center justify-content-center align-items-center required px-2">
                                                                         <span class="vp-content">
                                                                             <span class="tile tile-lg">
-                                                                                {% include('/webshop/site/vp-label-date.html.twig') with {
-                                                                                    'item1': date.deliveryDate,
-                                                                                    'item2': date.deliveryDate
-                                                                                } %}
+                                                                                <i class="far fa-calendar-alt fa-2x"></i>
                                                                             </span>
                                                                         </span>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        {% endfor %}
-
-                                                        <div class="col-sm-12 col-12 JS--showCalendarIcon">
-                                                            <div class="vp vp-md choose-date mr-2" tabindex="0">
-                                                                <div class="vp-figure justify-content-lg-center justify-content-center align-items-center required px-2">
-                                                                    <span class="vp-content">
-                                                                        <span class="tile tile-lg JS--showCalendarIconX">
-                                                                            <i class="far fa-calendar-alt fa-2x"></i>
-                                                                        </span>
-                                                                    </span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -587,12 +590,6 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-    </script>
-    <script>
-        {#function printContent() {#}
-        {#    let content = window.open("{{ path('order-detail-print', {'id': order.id}) }}", '');#}
-        {#    content.print();#}
-        {#}#}
         $(document).ready(function () {
             let $recipientWrapper = $('.JS--recipientWrapper');
             let recipientEdit = new OrderDetail($recipientWrapper);
@@ -611,95 +608,41 @@
 
             let $commentWrapper = $('.JS--commentWrapper');
             let comment = new OrderDetail($commentWrapper);
-
-//            Order.submitShippingInfoForm({
-//                wrapper: '.JS--recipientWrapper',
-//                selector: '.JS--btn-submitRecipient',
-//                handle: 'click',
-//            });
-//
-//            Order.submitBillingInfoForm({
-//                wrapper: '.JS--senderWrapper',
-//                selector: '.JS--btn-submitSender',
-//                handle: 'click',
-//            });
-//            Order.submitDeliveryDate({
-//                wrapper: '.JS--deliveryDateContainer',
-//                selector: '.JS--Button-submitDeliveryDate',
-//                handle: 'click',
-//            });
-//            Order.submitStatusForm({
-//                wrapper: '.JS--statusWrapper',
-//                selector: '.JS--btn-submitStatus',
-//                event: 'click',
-//            });
         });
         $(function() {
-            $('.JS--Button-clickDate').daterangepicker({
-                opens: 'left',
-                autoApply: true,
-                autoUpdateInput: true,
-                singleDatePicker: true,
+            const drpConfig = Object.assign({}, drpBaseConfig, {
                 parentEl: ".JS--dateWrapper",
                 displayInline: true,
-
+                opens: 'left',
+                singleDatePicker: true,
+                autoApply: true,
+                autoUpdateInput: true,
                 minDate: moment().add(4, 'hours'),
                 maxDate: moment().add(2, 'months'),
-                locale: {
-                    format: 'YYYY-MM-DD',
-                    separator: ' / ',
-                    applyLabel: 'Alkalmaz',
-                    cancelLabel: 'Mégse',
-                    daysOfWeek: ['V','H','K','Sz','Cs','P','Sz'],
-                    monthNames: ['Január','Február','Március','Április','Május','Június','Július','Augusztus','Szeptember', 'Október', 'November', 'December'],
-                    firstDay: 1,
-                }
             });
-//            $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {
-//                ev.preventDefault();
-//                $pickerDate = picker.startDate.format('YYYY-MM-DD');
-//                $wrapper = $(this).closest('.JS--deliveryDateContainer');
-//                $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
-//                $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
-//                /**
-//                 * Csak az első 3 rádió opcióba keresi a pickerDate-et. És ha benne van, akkor a Calendárt mutatja.
-//                 */
-//                $selectedRadio = $(this).closest('.JS--dateWrapper').find('input[type="radio"][value="' + $pickerDate + '"]:not(".JS--Button-clickDate")');
-//                if ($selectedRadio.val()) {
-////                    console.log($selectedRadio);
-//                    $selectedRadio.prop('checked', true);
-//                    $dateValueWrapper.hide();
-//                    $calendarIconWrapper.show();
-//                }
-//                /**
-//                 * Ha nincs benne, akkor negyedik rádió inputhoz rendeli a pickerDate-et és elrejti a Calendárt.
-//                 */
-//                else {
-//                    $(this).val($pickerDate);  // az input, amihez kötve van a gomb, megkapja a daterangepicker értékét (dátumot)
-//                    $html = '<span class="font-weight-bold my-0">' + picker.startDate.format('MMM D') + '</span><br> <span class="price--gross text-nowrap">' + picker.startDate.format('ddd') + '</span>';
-//                    $dateValueWrapper.html($html);
-//                    $calendarIconWrapper.hide();
-//                    $dateValueWrapper.show();
-//
-//
-//                }
-//                console.log($wrapper.find('.JS--alertMessage')+ ' alertMessage');
-//                $wrapper.find('.JS--alertMessage').hide();
-//            });
-//            $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
-//                $(this).val('');
-//            });
-//            /**
-//             * Amikor nem a Daterangepicker-re klikkel, akkor biztos a Calendárt kell mutatnia.
-//             */
-//            $('.JS--dateWrapper input[type="radio"]:not(".JS--Button-clickDate")').on('click', function () {
-//                $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
-//                $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
-//                $dateValueWrapper.hide();
-//                $calendarIconWrapper.show();
-//                $wrapper = $(this).closest('.JS--deliveryDateContainer');
-//                $wrapper.find('.JS--alertMessage').hide();
-//            });
+            $('.JS--Button-clickDate').daterangepicker(drpConfig);
+
+
+            // $('.JS--Button-clickDate').daterangepicker({
+            //     opens: 'left',
+            //     autoApply: true,
+            //     autoUpdateInput: true,
+            //     singleDatePicker: true,
+            //     parentEl: ".JS--dateWrapper",
+            //     displayInline: true,
+            //
+            //     minDate: moment().add(4, 'hours'),
+            //     maxDate: moment().add(2, 'months'),
+            //     locale: {
+            //         format: 'YYYY-MM-DD',
+            //         separator: ' / ',
+            //         applyLabel: 'Alkalmaz',
+            //         cancelLabel: 'Mégse',
+            //         daysOfWeek: ['V','H','K','Sz','Cs','P','Sz'],
+            //         monthNames: ['Január','Február','Március','Április','Május','Június','Július','Augusztus','Szeptember', 'Október', 'November', 'December'],
+            //         firstDay: 1,
+            //     }
+            // });
         });
         $(function() {
             let $wrapper = $('.JS--deliveryDateContainer');
@@ -725,9 +668,7 @@
                     element: $wrapper.find('#hidden_deliveryFee'),
                     value: $wrapper.find('#hidden_deliveryFee').val(),
                     setFeeValue: function (value) {
-//                        console.log(this.element);
                         this.element.val(value);
-//                        console.log(this.element.val());
                     },
                 },
             };
@@ -745,9 +686,6 @@
                 $selectedInterval.removeClass('d-none').addClass('d-temporary');
             }
 
-//            $summaryDeliveryFeePos = $('.JS--cartWrapper').find('.JS--summaryDeliveryFee');
-//            $summaryTotal = $('.JS--cartWrapper').find('.JS--summaryTotal');
-//            $summaryTotalPos = $('.JS--cartWrapper').find('.JS--summaryTotalPos');
             function onSelectInterval(dropdown) {
                 dropdown.on('change', function () {
                     console.log($(this).val().toString());
@@ -755,15 +693,6 @@
                     // retrieve delivery fee from 'data-' attribute
                     $dropdownValue = $(this).children('option:selected').data('fee'); //.toString()
                     hiddenForm.fee.setFeeValue($dropdownValue);
-
-//                    $summaryDeliveryFeePos.html(
-//                        $dropdownValue.toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
-//                    );
-//                    $summaryTotal.html(
-//                        ($summaryTotalPos.data('summary-total') - hiddenForm.fee.value + $dropdownValue).toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
-//                    );
-//                    $('.JS--deliveryDateContainer').find('.JS--alertMessage').replaceWith('');
-//                    alert.deliveryDate.hasError = false;
                 });
             }
 
@@ -776,36 +705,38 @@
              * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.
              * Továbbá mutatja a dátumhoz tartozó idősávot.
              */
-            $("[class*='JS--generatedDate-']").click(function () {
-                $wrapper = $(this).closest('.JS--deliveryDateContainer');
-                $dateWrapper = $(this).closest('.JS--dateWrapper');
-                $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
+            $("[class*='JS--generatedDate-']").on('keydown click', function (e) {
+                if (e.keyCode === 13 || e.type === 'click') {
+                    $wrapper = $(this).closest('.JS--deliveryDateContainer');
+                    $dateWrapper = $(this).closest('.JS--dateWrapper');
+                    $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
 
-                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
-                $(this).find('.vp').addClass('vp-checked');
-                $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $(this).data('date-value'));
+                    $dateWrapper.find('.vp-checked').removeClass('vp-checked');
+                    $(this).find('.vp').addClass('vp-checked');
+                    $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $(this).data('date-value'));
 
-//                $wrapper.find('#hidden_deliveryDate').val($(this).data('date-value'));
-                hiddenForm.date.setDateValue($(this).data('date-value'));
-                console.log($(this).data('date-value'));
+                    //                $wrapper.find('#hidden_deliveryDate').val($(this).data('date-value'));
+                    hiddenForm.date.setDateValue($(this).data('date-value'));
+                    console.log($(this).data('date-value'));
 
-                // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
-                // amugy visszallitja (ujra mutatja) a CalendarIcont
-                if (! ($(this).hasClass('d-temporary')) ) {
-                    $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                    $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                    $intervalModule.removeClass('d-none').addClass('d-temporary');
-                    $dateWrapper.find('.JS--showCalendarIcon').show();
+                    // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
+                    // amugy visszallitja (ujra mutatja) a CalendarIcont
+                    if (!($(this).hasClass('d-temporary'))) {
+                        $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
+                        $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
+                        $intervalModule.removeClass('d-none').addClass('d-temporary');
+                        $dateWrapper.find('.JS--showCalendarIcon').show();
+                    }
+
+                    //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
+                    $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);
+                    hiddenForm.interval.setIntervalValue('');
+
+                    // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
+                    // Ez akkor triggerelődik, amikor kattintunk a dátumboxra (ami nem a kallendárium).
+                    console.log($intervalModule.find('.JS--intervalDropdown')[0]);
+                    onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
                 }
-
-                //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
-                $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);
-                hiddenForm.interval.setIntervalValue('');
-
-                // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
-                // Ez akkor triggerelődik, amikor kattintunk a dátumboxra (ami nem a kallendárium).
-                console.log($intervalModule.find('.JS--intervalDropdown')[0]);
-                onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
             });
             /**
              * Kezeli a kalendáriumra kattintást.
@@ -844,9 +775,12 @@
                 // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
                 // Ez akkor triggerelődik, amikor kattintunk a kalendáriumra.
                 onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
+                // $(this).find('.vp-checked')[0].focus();
+                $(this).closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
             });
             $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
+                $(this).closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
             });
         });
     </script>

@@ -91,6 +91,8 @@ settings:
         general-settings-description: 'Webáruház adatainak megtekintése és frissítése'
         translation-title: 'Webshop nyelvek'
         translation-description: 'Kezelje azokat a nyelveket, amelyeket ügyfelei megnézhetnek az üzletében'
+        admin-general-settings-title: 'Admin oldal'
+        admin-general-settings-description: 'Admin oldal működése és beállítások szerkesztése'
     translation:
         translation-title: Fordítás
         translation-is-missing: '{{ count }} fordítás hiányzik.'
@@ -120,7 +122,7 @@ customer:
         custom-filter: 'Egyedi keresés'
         not-found: 'Nem talált vásárlókat!'
         not-found-suggestion: 'Próbáld módosítani a szűrőket vagy a keresési kifejezést.'
-    send-account-invite: Meghívó email küldése
+    send-account-invite: 'Meghívó email küldése'
     previous-orders: 'Előző rendelések'
     view-profile: 'Vásárlói részletek'
     orders: Rendelések

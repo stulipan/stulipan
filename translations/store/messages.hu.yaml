@@ -27,7 +27,7 @@ account:
     last-orders: 'Utolsó rendeléseid'
 cart:
     cart-content: 'Kosár tartalma'
-    continue-to-checkout: Fizetés
+    continue-to-checkout: Tovább a pénztárhoz
     edit-cart-content: 'Kosár módosítása'
     your-cart: 'A kosarad'
     your-cart-is-empty: 'A kosarad jelenleg üres'
@@ -43,6 +43,8 @@ cart:
     total-amount-to-pay: Fizentendő
     total-amount-paid: Összesen
     show-order-summary: 'Rendelés összesítés megtekintése'
+    product:
+        product-added-successfully: 'A terméket sikeresen hozzáadtad a kosárhoz!'
     gift:
         choose-gift-title: 'A virág mellé válassz ajándékot'
         choose-gift: Kiválaszt
@@ -162,7 +164,7 @@ datetime:
     mon: Hé
     tue: Ke
     wed: Sze
-    thu: Csü
+    thu: Cs
     fri: Pé
     sat: Szo
     sun: Va

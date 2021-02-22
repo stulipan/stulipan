@@ -1,31 +1,26 @@
 // Button loader
 // To be used as loading animation
 
-.btn-loading {
+.loading-spinner-show {
   position: relative;
   pointer-events: none;
   outline: none !important;
   box-shadow: none !important;
 
-  &.btn-secondary,
-  &.btn-secondary:focus,
-  &.btn-link-secondary,
-  &.btn-link-secondary:focus {
-    //color: $border-color;
-    color: $gray-600;
-  }
-
-  &.btn:disabled {
-    opacity: 1 !important;
-  }
-  & .btn-loading-invisible {
+  & .loading-spinner-invisible {
     opacity: 0;
   }
-  &.btn-loading-bg {
+
+  & .loading-spinner-faded {
+    opacity: .3;
+  }
+
+  &.loading-spinner-bg {
     background-color: $gray-200;
     border-radius: $border-radius;
     color: $muted;
   }
+
   & .loading-spinner {
     display: inline-block;
     width: #{$line-height-base}rem;  //1.5rem
@@ -39,11 +34,33 @@
     top: calc(50% - #{$line-height-base}rem/2);
     left: calc(50% - #{$line-height-base}rem/2);
   }
-  &.btn-loading-has-bg .btn-content {
-    opacity: .5;
-  }
-  &.btn-loading-has-bg .loading-spinner {
+
+  //&.loading-spinner-has-bg .btn-content {
+  //  opacity: .5;
+  //}
+
+  &.loading-spinner-has-bg .loading-spinner {
     border-color: lighten($gray-700, 10%);
     border-right-color: transparent;
+  }
+}
+
+// Corrections
+
+.loading-spinner-show {
+  position: relative;
+  pointer-events: none;
+  outline: none !important;
+  box-shadow: none !important;
+
+  &.btn-secondary,
+  &.btn-secondary:focus,
+  &.btn-link-secondary,
+  &.btn-link-secondary:focus {
+    color: $gray-600;
+  }
+
+  &.btn:disabled {
+    opacity: 1 !important;
   }
 }

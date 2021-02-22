@@ -122,6 +122,8 @@ settings:
         general-settings-description: View and update your store details
         translation-title: Store languages
         translation-description: Manage the languages your customers can view on your store
+        admin-general-settings-title: Admin
+        admin-general-settings-description: View and configure your admin page settings
     translation:
         translation-title: Translation
         translation-is-missing: '{{ count }} translation is missing.'

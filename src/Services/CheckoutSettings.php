@@ -11,16 +11,16 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * FYI:
  *      The class is also referenced in config\packages\twig.yaml
- *      Params '$settingsDirectory' and '$checkoutSettingsFile' are defined in services.yaml
+ *      Params '$storeSettingsDirectory' and '$checkoutSettingsFile' are defined in services.yaml
  */
 final class CheckoutSettings
 {
     private $parameters;
     private $settingsFile;
 
-    public function __construct(string $settingsDirectory, string $checkoutSettingsFile)
+    public function __construct(string $storeSettingsDirectory, string $checkoutSettingsFile)
     {
-        $configDirectories = [$settingsDirectory];
+        $configDirectories = [$storeSettingsDirectory];
 
         $fileLocator = new FileLocator($configDirectories);
 
@@ -29,7 +29,7 @@ final class CheckoutSettings
         if (count($this->settingsFile) === 1) {
             $values = Yaml::parseFile($this->settingsFile[0]);
         } else {
-            throw new Exception( sprintf('__HIBA__: Multiple %s files were found. Make sure you have only one %s file in your %s folder!', $checkoutSettingsFile, $settingsDirectory));
+            throw new Exception( sprintf('__HIBA__: Multiple %s files were found. Make sure you have only one %s file in your %s folder!', $checkoutSettingsFile, $storeSettingsDirectory));
         }
 
         $this->parameters = $values['parameters'];

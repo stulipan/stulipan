@@ -167,6 +167,7 @@ fieldset:disabled a.btn {
   text-decoration: $link-secondary-decoration;
   padding: $input-btn-secondary-padding-y $input-btn-secondary-padding-x;
   border-radius: $border-radius;
+  @include transition($btn-transition);
 
   @include hover {
     color: $link-secondary-hover-color;

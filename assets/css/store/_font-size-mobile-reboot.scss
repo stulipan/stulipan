@@ -1,13 +1,13 @@
+// Corrections for mobile devices
+// E.g.: input fields must have 1rem (16px) font size (!)
 
-// -lg and -sm size are not being corrected, simply wasn't implemented !!
-$font-size-multiplier:                              1.14 !default;
 
-$mobile-font-size-base:                             1rem !default; //calc(#{$font-size-base} * 1.14) !default;
+$mobile-font-size-base:                             1rem !default;
 $mobile-line-height-base:                           1.4 !default;
 $mobile-font-size-base-sm:                          $mobile-font-size-base * .875 !default;
 $mobile-line-height-base-sm:                        1.25 !default;
-$mobile-font-size-base-lg:                          $mobile-font-size-base * 1.125 !default;
-$mobile-line-height-base-lg:                        1.5 !default;
+//$mobile-font-size-base-lg:                          $mobile-font-size-base * 1.125 !default;
+//$mobile-line-height-base-lg:                        1.5 !default;
 
 
 $mobile-input-height:                               calc(#{$mobile-line-height-base * 1em} + #{$input-padding-y * 2} + #{$input-height-border}) !default;
@@ -63,16 +63,16 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
   ////////////////////////////////////
   //  LARGE
   ////////////////////////////////////
-  .btn-lg {
-    @include font-size($mobile-font-size-base-lg);
-    line-height: $mobile-line-height-base-lg;
-  }
+  //.btn-lg {
+  //  @include font-size($mobile-font-size-base-lg);
+  //  line-height: $mobile-line-height-base-lg;
+  //}
 
   // Border color correction: darker border
   .form-control,
   .input-float .form-control
   {
-    border-color: $gray-600;
+    border-color: $gray-500;
   }
 }
 

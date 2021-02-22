@@ -38,7 +38,8 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     private $passwordEncoder;
 
-    public function __construct(UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserRepository $userRepository, RouterInterface $router,
+                                CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->router = $router;
         $this->userRepository = $userRepository;
@@ -56,7 +57,6 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function supports(Request $request)
     {
-//        dd($request->attributes->get('_route') === 'admin-login' && $request->isMethod('POST'));
         return $request->attributes->get('_route') === 'admin-login' && $request->isMethod('POST');
     }
 
@@ -69,7 +69,6 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getCredentials(Request $request)
     {
-//        dd($request->request->all());
         $credentials = [
             'email' => $request->request->get('_username'),
             'password' => $request->request->get('_password'),
@@ -90,12 +89,10 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-//        dd($credentials);
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
-//        dd($this->userRepository->findOneBy(['email' => $credentials['email']]));
         return $this->userRepository->findOneBy(['email' => $credentials['email']]);
     }
 
@@ -107,8 +104,6 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-//        dd($user->getRoles());
-//        dd($this->passwordEncoder->isPasswordValid($user, $credentials['password']));
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
@@ -116,14 +111,12 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $request->getSession()->set('_locale', $request->getLocale());
 
-//        dd($request->getPathInfo() === $this->router->generate('admin-login'));
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
         /**
          * If login URL is admin-login URL, redirects to Dashboard
          */
-//        dd($this->router->generate('admin-login'));
         if ($request->getPathInfo() === $this->router->generate('admin-login')) {
             return new RedirectResponse($this->router->generate('dashboard'));
         }

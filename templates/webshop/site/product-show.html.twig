@@ -21,12 +21,10 @@
 {% block stylesheets %}
     {{ parent() }}
     {#<link rel="stylesheet" href="{{ asset('build/v-shop.css') }}"/>#}
-    {{ encore_entry_link_tags('daterangepicker') }}
+{#    {{ encore_entry_link_tags('daterangepicker') }}#}
 {% endblock %}
 
-{% block bodyClass %}
-    product-details
-{% endblock %}
+{% block bodyClass %} product-details{% endblock %}
 
 {% block content %}
     <div class="row mt-0 mt-sm-3">
@@ -153,10 +151,10 @@
                                                 <div class="alert alert-warning mt-3"><i class="fas fa-info-circle mr-2"></i>A termék már nem áll forgalmazásban.</div>
                                             {% endif %}
 
-                                            <div class="row mb-3">
-                                                <div class="col-lg-12">
+                                            <div class="product-button">
+                                                <div class="">
                                                     <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-uppercase w-100" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
-                                                    <span class="btn-loading-invisible">
+                                                    <span class="loading-spinner-invisible">
                                                         <svg class="svg-icon svg-icon-heavy addtocart">
                                                             <use xlink:href="#cart-1"> </use>
                                                         </svg>
@@ -166,8 +164,6 @@
                                                     </button>
                                                 </div>
                                             </div>
-
-
                                             <div class="product-credit-card">
                                                 <div class="text-center">
                                                     <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
@@ -199,9 +195,26 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div >
+                                                    <div>
                                                         <span class="text-sm mr-2"><i class="far fa-credit-card"></i></span>
-                                                        <a href="" class="text-link-quickinfo">Fizess online bankkártyáddal</a>
+                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--CreditCardPayment">Fizess online bankkártyáddal</a>
+                                                        <div class="modal fade" id="modal--CreditCardPayment" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.rolunk.name }}</h3>
+                                                                        <div class="mt-4">
+                                                                            {{ pages.rolunk.content|raw }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -237,7 +250,7 @@
                                     <div class="scroll-overflower-wrapper">
                                             <div class="row row-narrow">
                                                 <div class="col-3 mb-3">
-                                                    <div class="card h-100">
+                                                    <div class="card h-100 shadow">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Courier Flower Delivery</div>
                                                             <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic1.jpg"/>
@@ -246,7 +259,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-3 mb-3">
-                                                    <div class="card h-100">
+                                                    <div class="card h-100 shadow">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Signature Interflora Black Gift Box</div>
                                                             <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic2.jpg"/>
@@ -255,7 +268,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-3 mb-3">
-                                                    <div class="card h-100">
+                                                    <div class="card h-100 shadow">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Gift Wrap and Ribbon</div>
                                                             <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic3.jpg"/>
@@ -264,7 +277,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-3 mb-3">
-                                                    <div class="card h-100">
+                                                    <div class="card h-100 shadow">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Gift Message and Flower Food</div>
                                                             <img class="img-fluid mb-2" src="/uploads/images/other/tab-hampers-pic4.jpg"/>
@@ -543,9 +556,6 @@
 {% block javascripts %}
 	{{ parent() }}
     <script src="{{ asset('build/v-shop.js') }}"></script>
-    <script src="{{ asset('webshop/lodash.core.min.js') }}"></script>
-    <script src="{{ asset('build/store.js') }}"></script>
-
 
     <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
     <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
@@ -751,7 +761,7 @@
             //     e.preventDefault();
             //     var el = $(e.currentTarget);
             //
-            //     el.addClass('btn-loading');
+            //     el.addClass('loading-spinner');
             //     _proceed = true;
             //     el.trigger('click');
             // });

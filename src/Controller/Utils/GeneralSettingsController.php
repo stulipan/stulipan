@@ -63,12 +63,12 @@ class GeneralSettingsController extends AbstractController
     /**
      * @Route("/settings/configuration", name="settings-configuration")
      *
-     * Param $settingsDirectory comes from services.yaml
+     * Param $storeSettingsDirectory comes from services.yaml
      * Param $generalSettingsFile comes from services.yaml
      */
-    public function editSettings(Request $request, StoreSettings $settings, string $settingsDirectory, string $generalSettingsFile)
+    public function editSettings(Request $request, StoreSettings $settings, string $storeSettingsDirectory, string $generalSettingsFile)
     {
-        $configDirectories = [$settingsDirectory];
+        $configDirectories = [$storeSettingsDirectory];
 
         $fileLocator = new FileLocator($configDirectories);
         $locatedFile = $fileLocator->locate($generalSettingsFile, null, false);
@@ -76,7 +76,7 @@ class GeneralSettingsController extends AbstractController
         if (count($locatedFile) === 1) {
             $values = Yaml::parseFile($locatedFile[0]);
         } else {
-            throw new Error( sprintf('HIBA: Multiple %s files were found. Make sure you have only one %s file in your %s folder!', $generalSettingsFile, $settingsDirectory));
+            throw new Error( sprintf('HIBA: Multiple %s files were found. Make sure you have only one %s file in your %s folder!', $generalSettingsFile, $storeSettingsDirectory));
         }
         
         $formBuilder = $this->createFormBuilder();
@@ -278,7 +278,7 @@ class GeneralSettingsController extends AbstractController
         }
         
         $title = 'Beállítások';
-        return $this->render('admin/settings/general-settings.html.twig', [
+        return $this->render('admin/settings/general.html.twig', [
             'form' => $form->createView(),
             'parameters' => $parameters,
             'title' => $title,
@@ -290,6 +290,6 @@ class GeneralSettingsController extends AbstractController
      */
     public function showSettingsDashboard()
     {
-        return $this->render('admin/settings/settings-home.html.twig');
+        return $this->render('admin/settings/home.html.twig');
     }
 }

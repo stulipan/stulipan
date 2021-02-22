@@ -28,6 +28,8 @@ Encore
     .addEntry('webshop', './assets/js/webshop.js')
     .addEntry('store', './assets/js/store.js')
 
+    // .addEntry('admin/init', './assets/js/admin/init.js')
+
     .addStyleEntry('daterangepicker', './assets/css/admin/daterangepicker.scss')
 
     .addStyleEntry('admin-theme', './assets/css/admin/admin-theme.scss')

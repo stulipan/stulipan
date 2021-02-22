@@ -52,12 +52,12 @@ class CheckoutSettingsController extends AbstractController
     /**
      * @Route("/settings/checkout", name="settings-checkout")
      *
-     * Param $settingsDirectory comes from services.yaml
+     * Param $storeSettingsDirectory comes from services.yaml
      * Param $checkoutSettingsFile comes from services.yaml
      */
-    public function editSettings(Request $request, StoreSettings $settings, string $settingsDirectory, string $checkoutSettingsFile)
+    public function editSettings(Request $request, StoreSettings $settings, string $storeSettingsDirectory, string $checkoutSettingsFile)
     {
-        $configDirectories = [$settingsDirectory];
+        $configDirectories = [$storeSettingsDirectory];
 
         $fileLocator = new FileLocator($configDirectories);
         $locatedFile = $fileLocator->locate($checkoutSettingsFile, null, false);
@@ -266,7 +266,7 @@ class CheckoutSettingsController extends AbstractController
             return $this->redirectToRoute('settings-checkout');
         }
         
-        return $this->render('admin/settings/checkout-settings.html.twig', [
+        return $this->render('admin/settings/checkout.html.twig', [
             'form' => $form->createView(),
             'parameters' => $parameters,
         ]);

@@ -10,6 +10,7 @@
 @import "_variant-picker";
 @import "_sidebar";
 @import "_size-utilities";
+@import "_notyf";
 
 iframe {
   border: 0;
@@ -89,7 +90,18 @@ iframe {
   .navbar--logo .h3 {
     font-size: 1.125rem;
     letter-spacing: 0.03rem;
-    color: #ffffff !important;
+    //color: #ffffff !important;
+  }
+}
+
+.navbar-brand {
+  .store-logo {
+    height: 40px;
+
+    @include media-breakpoint-down(md) {
+      height: 30px;
+      margin-left: 1rem;
+    }
   }
 }
 

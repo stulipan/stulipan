@@ -485,12 +485,12 @@ class Order
      *
      * @return int
      */
-    public function countItems(): int
+    public function itemsCount(): int
     {
         $c = 0;
         foreach ($this->getItems() as $item) {
             if ($item->getId()) {
-                $c += 1;
+                $c += $item->getQuantity();
             }
         }
         return $c;

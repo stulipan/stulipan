@@ -47,6 +47,7 @@
   @include font-size($navbar-brand-font-size);
   line-height: inherit;
   white-space: nowrap;
+  text-decoration: none; // Added by Stulipan
 
   @include hover-focus {
     text-decoration: none;
@@ -92,6 +93,7 @@
     font-size: $navbar-nav-font-size;
     letter-spacing: $navbar-nav-letter-spacing;
     font-weight: $navbar-nav-font-weight;
+    text-decoration: none; // Added by Stulipan
   }
 
   .dropdown-menu {
@@ -237,11 +239,11 @@
 
   .navbar-nav {
     .nav-link {
-      color: $navbar-light-color;
-
-      @include hover-focus {
-        color: $navbar-light-hover-color;
-      }
+      //color: $navbar-light-color;
+      //
+      //@include hover-focus {
+      //  color: $navbar-light-hover-color;
+      //}
 
       &.disabled {
         color: $navbar-light-disabled-color;
@@ -257,7 +259,7 @@
   }
 
   .navbar-toggler {
-    color: $navbar-light-color;
+    //color: $navbar-light-color;
     border-color: $navbar-light-toggler-border-color;
   }
 
@@ -338,8 +340,8 @@ $navbar-stulipan-height:                  50px !default;
 
 $navbar-login-cart-color:                  $gray-700 !default; // Added by Stulipan
 $navbar-login-cart-hover-color:            $white !default;
-$navbar-login-cart-badge-bg:                $blue !default;
-$navbar-login-cart-badge-bg-mobile:         $white !default;
+$navbar-login-cart-badge-bg:               $primary !default;
+$navbar-login-cart-badge-bg-mobile:        $white !default;
 
 
 .navbar-stulipan {
@@ -347,12 +349,17 @@ $navbar-login-cart-badge-bg-mobile:         $white !default;
 
   @media (max-width: breakpoint-max(md)) {
     & {
-      background-color: $blue;
+      background-color: $secondary;
       border: none;
       height: $navbar-stulipan-height;
       min-height: $navbar-stulipan-height;
     }
   }
+}
+
+.menu-stulipan {
+  //background-color: $secondary;
+  background-color: #ffe6e1;
 }
 
 .navbar-custom {
@@ -450,22 +457,22 @@ $navbar-login-cart-badge-bg-mobile:         $white !default;
     color: $navbar-login-cart-color;
   }
 
-  @media (max-width: breakpoint-max(md)) {
-    //height: $navbar-stulipan-height;
-    color: $navbar-login-cart-hover-color;
-
-    &:hover {
-      color: $navbar-login-cart-hover-color;
-    }
-    &:focus {
-      outline: none;
-    }
-    &:focus-visible {
-      outline: none;
-      background-color: rgba($gray-400, .5);
-      border-radius: 2px;
-    }
-  }
+  //@media (max-width: breakpoint-max(md)) {
+  //  //height: $navbar-stulipan-height;
+  //  color: $navbar-login-cart-hover-color;
+  //
+  //  &:hover {
+  //    color: $navbar-login-cart-hover-color;
+  //  }
+  //  &:focus {
+  //    outline: none;
+  //  }
+  //  &:focus-visible {
+  //    outline: none;
+  //    background-color: rgba($gray-400, .5);
+  //    border-radius: 2px;
+  //  }
+  //}
 
   &:after {
     display: none
@@ -488,6 +495,7 @@ $navbar-login-cart-badge-bg-mobile:         $white !default;
     left: 12px;
     width: 20px;
     height: 20px;
+    display: none;
     line-height: 20px;
     border-radius: 50%;
     background-color: $navbar-login-cart-badge-bg;
@@ -495,9 +503,13 @@ $navbar-login-cart-badge-bg-mobile:         $white !default;
     text-align: center;
     font-size: 0.6rem;
 
-    @media (max-width: breakpoint-max(md)) {
-      background-color: $navbar-login-cart-badge-bg-mobile;
-      color: $yiq-text-dark;
+    &.show {
+      display: block;
     }
+
+    //@media (max-width: breakpoint-max(md)) {
+    //  background-color: $navbar-login-cart-badge-bg-mobile;
+    //  color: $yiq-text-dark;
+    //}
   }
 }

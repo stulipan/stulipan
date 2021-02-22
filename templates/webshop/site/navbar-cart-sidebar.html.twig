@@ -1,4 +1,4 @@
-<div class="sidebar sidebar-right fade" id="sidebar--Cart" tabindex="-1" role="dialog" aria-labelledby="sidebarLabel" aria-hidden="true">
+<div class="sidebar sidebar-right fade" id="JS--Sidebar-Cart" tabindex="-1" role="dialog" aria-labelledby="sidebarLabel" aria-hidden="true">
     <div class="sidebar-dialog sidebar-dialog-scrollable sidebar-dialog-centered" role="document">
         <div class="sidebar-content">
             <div class="sidebar-header">
@@ -9,43 +9,25 @@
             </div>
             <div class="sidebar-body">
                 <div class="d-flex flex-column justify-content-between h-100">
-                    <div class="cart">
+                    <div class="JS--Sidebar-cartBody cart" data-section-id="sidebarCart-template" data-section-type="sidebarCart-template">
                         {% include 'webshop/cart/cart.html.twig' with {
                             'showQuantity': false,
                             'showRemove': false,
                             'showTotal': true,
                         } %}
-{#                        {% if order.items is empty %}#}
-{#                            {% include('webshop/cart/cart-is-empty.html.twig') %}#}
-{#                        {% endif %}#}
-
-{#                        {% if order.items is defined %}#}
-{#                            {% for item in order.items %}#}
-{#                                <div class="cart-item">#}
-{#                                    {% include('webshop/cart/cart-item.html.twig') %}#}
-{#                                </div>#}
-{#                            {% endfor %}#}
-
-{#                            <div class="cart-item cart-total">#}
-{#                                <span class="text-uppercase text-muted">Összesen</span>#}
-{#                                <strong class="text-uppercase">{{  order.summary.totalAmountToPay|money }}</strong>#}
-{#                            </div>#}
-{#                        {% endif %}#}
                     </div>
                 </div>
             </div>
             <div class="sidebar-footer">
                 <div class="d-flex flex-column justify-content-between flex-grow-1">
-                        <button class="btn btn-warning w-100" data-webshop-selector="button" data-eval="showCart" data-url="{{ path('site-checkout-step1-pickDeliveryAddress') }}" >
-                            <span class="btn-loading-invisible"><svg class="svg-icon"><use xlink:href="#cart-1"> </use></svg>{{ 'cart.continue-to-checkout'|trans }}</span>
+                        <button class="btn btn-primary w-100" data-webshop-selector="button" data-eval="showCart" data-url="{{ path('site-checkout-step0-pickExtraGift') }}" >
+                            <span class="loading-spinner-invisible"><svg class="svg-icon"><use xlink:href="#cart-1"> </use></svg>{{ 'cart.continue-to-checkout'|trans }}</span>
                             <div class="loading-spinner" role="status"></div>
                         </button>
 
                         <div class="mt-3">
                             <div class="card-body text-center p-0 px-2">
                                 <a href="{{ path('site-checkout-step0-pickExtraGift') }}" class="text-link-checkout mt-0 d-block">{{ 'cart.edit-cart-content'|trans }}</a>
-                                {#                                    <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="http://www.stulipan.dfr/uploads/images/icons/CIB_logo.png">#}
-                                {#                                    <img alt="" class="img-fluid h-15px left-block mb-2" src="http://www.stulipan.dfr/uploads/images/termekek/paypal.png">#}
                             </div>
                         </div>
                 </div>

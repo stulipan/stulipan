@@ -553,8 +553,6 @@
     import Multiselect from 'vue-multiselect'
     import SaveToolbar from './../_components/save-toolbar/SaveToolbar.vue'
     import MultiselectBellow from "./../_components/MultiselectBellow"
-    // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-    import Trumbowyg from 'vue-trumbowyg';
 
     const initialData = () => {
         return {
@@ -584,8 +582,6 @@
             Multiselect,
             SaveToolbar,
             MultiselectBellow,
-            // ClassicEditor,
-            Trumbowyg,
         },
         props: [
             'formIsPosting',

@@ -14,6 +14,7 @@
   color: $pagination-color;
   background-color: $pagination-bg;
   border: $pagination-border-width solid $pagination-border-color;
+  text-decoration: none; // Added by Stulipan
 
   &:hover {
     z-index: 2;

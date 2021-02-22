@@ -84,7 +84,7 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
       justify-content: center;
       background-color: $checkout-shopi-left-bg;
       border-right: none;
-      padding-top: 1rem;
+      padding-top: 1.5rem;
       padding-right: 0;
 
       & .shopi-left-body {
@@ -120,6 +120,7 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
         border-right: $border-width solid $border-color;
         padding-right: 1.5rem;
         padding-left: 1.5rem;
+        padding-top: 2rem;
 
         & .shopi-left-body {
           max-width: 602px;
@@ -177,12 +178,17 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 }
 
 
-.minicard--title {
+.address-title {
   font-weight: $font-weight-bold;
 }
-.minicard--address {
-  //font-size: $font-size-base-secondary;
+.address-details {
+  color: $muted;
+  font-size: $font-size-base-secondary;
 }
+
+//input, select {
+//  border-radius: $border-radius;
+//}
 
 
 
@@ -334,6 +340,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.checkout-block-text {
+  color: $muted;
+}
+
 .checkout-recipient-current,
 .checkout-sender-current {
   color: $label-color;
@@ -351,9 +361,9 @@ h1, h2, h3, h4, h5, h6 {
   //color: $label-color;
 
   &:last-of-type {
-    padding-bottom: 0;
+    //padding-bottom: 0;
     margin-bottom: 0;
-    border-bottom: none;
+    //border-bottom: none;
   }
 }
 .text-link-checkout {
@@ -367,7 +377,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-.btn-goto {
-  text-transform: initial;
-  letter-spacing: 0;
-}
+//.btn-goto {
+//  text-transform: initial;
+//  letter-spacing: 0;
+//}

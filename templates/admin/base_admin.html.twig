@@ -17,7 +17,7 @@
                     </button>
                 </div>
                 <div class="sidebar-body pb-0">
-                    {% include '/admin/settings/_settings-dashboard-widget.html.twig' %}
+                    {% include '/admin/settings/home-widget.html.twig' %}
                 </div>
 {#                <div class="sidebar-footer">#}
 {#                    <div class="loadingWrapper loadingWrapper-secondary">#}
@@ -42,7 +42,6 @@
                 </div>
                 <div class="sidebar-body bg-body p-0">
                     {% include 'admin/navbar-sidenav-widget.html.twig' %}
-{#                    {% include '/admin/settings/_settings-dashboard-widget.html.twig' %}#}
                 </div>
             </div>
         </div>
@@ -270,46 +269,17 @@
         });
 
         $(document).ready(function () {
-//            const stackBottomModal = {
-//                dir1: 'up', // With a dir1 of 'up', the stacks will start appearing at the bottom.
-//                // Without a `dir2`, this stack will be horizontally centered, since the `dir1` axis is vertical.
-//                firstpos1: 25, // The notices will appear 25 pixels from the bottom of the context.
-//                // Without a `spacing1`, this stack's notices will be placed 25 pixels apart.
-//                push: 'top', // Each new notice will appear at the bottom of the screen, which is where the 'top' of the stack is. Other notices will be pushed up.
-//                // modal: true, // When a notice appears in this stack, a modal overlay will be created.
-//                overlayClose: true, // When the user clicks on the overlay, all notices in this stack will be closed.
-//                context: document.getElementById('page-container') // The notices will be placed in the 'page-container' element.
-//            };
-            PNotify.defaults.styling = 'bootstrap4';
-            PNotify.defaults.icons = 'fontawesome5';
-
             {% for msg in app.session.flashBag.get('success') %}
-            PNotify.success({
-                title: 'Siker!',
-                text: '{{ msg|raw }}',
-                modules: { Desktop: { desktop: true } },
-                textTrusted: true,
-//                stack: stackBottomModal,
-            });
-            {% endfor %}
-            {% for msg in app.session.flashBag.get('warning') %}
-            PNotify.notice({
-                title: 'Figyelem!',
-                text: '{{ msg|raw }}',
-                modules: { Desktop: { desktop: true } },
-//                stack: stackBottomModal,
-            });
-            {% endfor %}
-            {% for msg in app.session.flashBag.get('danger') %}
-            PNotify.error({
-                title: 'Upsz...',
-                text: '{{ msg|raw }}',
-                modules: { Desktop: { desktop: true } },
-//                cornerClass: 'alert-dark',
-//                stack: stackBottomModal,
-            });
+                notyf.success('Sikeres modosítás.');
             {% endfor %}
 
+            {% for msg in app.session.flashBag.get('warning') %}
+                notyf.success('Figyelem!');
+            {% endfor %}
+
+            {% for msg in app.session.flashBag.get('danger') %}
+                notyf.error('Upsz... Hiba történt!);
+            {% endfor %}
         });
     </script>
 {% endblock %}

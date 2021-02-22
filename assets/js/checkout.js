@@ -631,7 +631,7 @@ class Checkout {
     if (this._proceed) { this._proceed = false; return; }
 
     let $wrapperQuantity = $el.closest('[data-wrapper-item-quantity]');
-    $wrapperQuantity.addClass('btn-loading');
+    $wrapperQuantity.addClass('loading-spinner-show');
     this._proceed = true;
 
     let $wrapper = $el.closest(Wrapper.CART);
@@ -646,13 +646,13 @@ class Checkout {
       $formWrapper.html(data);
       this.hideOverlay($el);
       this.cart.hideAlert();
-      $wrapperQuantity.removeClass('btn-loading');
+      $wrapperQuantity.removeClass('loading-spinner-show');
 
     }).fail(function (jqXHR) {
       $form.replaceWith(jqXHR.responseText);
       this.hideOverlay($el);
       this.cart.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.WARNING_NOT_ENOUGH_STOCK, 'warning');
-      $wrapperQuantity.removeClass('btn-loading');
+      $wrapperQuantity.removeClass('loading-spinner-show');
     });
   }
   pickGreetingCardMessage (e) {
@@ -920,13 +920,13 @@ class Checkout {
 
   // Helpers
   showOverlay(el) {
-    el.addClass('btn-loading');
+    el.addClass('loading-spinner-show');
     this._proceed = true;
     el.trigger('click');
     document.dispatchEvent(new Event('disposeTooltip'));
   }
   hideOverlay(el) {
-    el.removeClass('btn-loading');
+    el.removeClass('loading-spinner-show');
     this._proceed = false;
     document.dispatchEvent(new Event('initFloatingInput')); // az input-float miatt szukseges
     document.dispatchEvent(new Event('initFormValidation'));

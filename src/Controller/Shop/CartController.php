@@ -50,6 +50,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -364,12 +365,15 @@ class CartController extends AbstractController
 
             // If AJAX request, renders and returns an HTML form with the value
             if ($form->isValid() && $request->isXmlHttpRequest()) {
-                return $this->render('webshop/cart/cart-item-quantity.html.twig', [
-                    'quantityForm' => $form->createView(),
+                $html = $this->renderView('webshop/cart/cart.html.twig', [
+                    'order' => $orderBuilder->getCurrentOrder(),
+                    'showQuantity' => true,
+                    'showRemove' => true,
+                    'showSummary' => true,
                 ]);
+                return new Response($html, 200);
             }
         }
-
 
         /**
          * If AJAX, renders a new form, with the original, pre-submit data, then renders a Response with 400 error code.
@@ -378,37 +382,62 @@ class CartController extends AbstractController
 
             // change quantity back to pre-submit value
             $item->setQuantity($quantityBeforeSubmit);
-            // create new form
-            $form = $this->createForm(SetItemQuantityType::class, $item);
-            $html = $this->renderView('webshop/cart/cart-item-quantity.html.twig', [
-                'quantityForm' => $form->createView()
+            $html = $this->renderView('webshop/cart/cart.html.twig', [
+                'order' => $orderBuilder->getCurrentOrder(),
+                'showQuantity' => true,
+                'showRemove' => true,
+                'showSummary' => true,
             ]);
             return new Response($html,400);
         }
 
-        /**
-         * Renders form initially with data
-         */
-        return $this->render('webshop/cart/cart-item-quantity.html.twig', [
-            'quantityForm' => $form->createView(),
-        ]);
+//        /**
+//         * Renders form initially with data
+//         */
+//        return $this->render('webshop/cart/cart-item-quantity.html.twig', [
+//            'quantityForm' => $form->createView(),
+//        ]);
     }
 
-//    /**
-//     * Gets the cart. To be used in AJAX calls.
-//     *
-//     * @Route("/cart/getCart", name="cart-getCart", methods={"GET"})
-//     */
-//    public function getCart(Request $request): Response
-//    {
-//        $orderBuilder = $this->orderBuilder;
-//        return $this->render('webshop/cart/cart.html.twig', [
-//            'order' => $orderBuilder->getCurrentOrder(),
-//            'showQuantity' => true,
-//            'showRemove' => true,
-//            'showSummary' => true,
-//        ]);
-//    }
+    /**
+     * Gets the number of items in the Cart/Order.
+     * Returns a JSON response.
+     *
+     * @Route("/cart/getItemsCount", name="cart-getItemsCount", methods={"GET"})
+     */
+    public function getItemsCount(Request $request, Session $session): JsonResponse
+    {
+        $orderBuilder = $this->orderBuilder;
+
+        if ($request->isXmlHttpRequest()) {
+            if ($session->get('orderId') != null && $orderBuilder->getCurrentOrder()->getId() == $session->get('orderId')) {
+                $json = json_encode($orderBuilder->getCurrentOrder()->itemsCount(), JSON_UNESCAPED_UNICODE);
+                return new JsonResponse($json,200, [], true);
+            }
+        }
+//        return new JsonResponse('error', 400);
+    }
+
+    /**
+     * Gets the cart. To be used in AJAX calls.
+     *
+     * @Route("/cart/getCart", name="cart-getCart", methods={"GET"})
+     */
+    public function getCart(Request $request, Session $session): Response
+    {
+        $orderBuilder = $this->orderBuilder;
+
+        if ($request->isXmlHttpRequest()) {
+            if ($session->get('orderId') != null && $orderBuilder->getCurrentOrder()->getId() == $session->get('orderId')) {
+                return $this->render('webshop/cart/cart.html.twig', [
+                    'order' => $orderBuilder->getCurrentOrder(),
+                    'showQuantity'=> false,
+                    'showRemove'=> false,
+                    'showTotal'=> true,
+                ]);
+            }
+        }
+    }
 
     /**
      * NO LONGER USED!!!!

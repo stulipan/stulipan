@@ -104,6 +104,10 @@ parameters:
         itemsPerPage:
             content: 10
             type: Number
+        notificationDuration:
+            content: 6000
+            type: Number
+            label: Notification duration. Time on screen (in miliseconds)
         beallitas2:
             content: 200
             type: Text

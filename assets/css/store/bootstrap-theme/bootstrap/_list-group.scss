@@ -51,6 +51,7 @@
   background-color: $list-group-bg;
   border: $list-group-border-width solid $list-group-border-color;
   //border-top: $list-group-border-width solid $list-group-border-color;
+  text-decoration: none; // Added by Stulipan
 
   &:first-child {
     @include border-top-radius($list-group-border-radius);
@@ -123,6 +124,7 @@
 
     &:last-child {
       margin-bottom: -$list-group-border-width;
+      border-bottom: none;
     }
   }
 

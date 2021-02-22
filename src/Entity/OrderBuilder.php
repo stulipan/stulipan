@@ -486,24 +486,25 @@ class OrderBuilder
         return null;
     }
 
-    /**
-     * Counts the number of items in an order
-     *
-     * @return int
-     */
-    public function countItems(): int
-    {
-//        $count = [];
-        $c = 0;
-        foreach ($this->order->getItems() as $item) {
-            if ($item->getId()) {
-                $c += 1;
-            }
-//            $count[$item->getId()] = ($count[$item->getId()] ?? 0)+ 1;
-        }
-//        return count($count);
-        return $c;
-    }
+//    /**
+//     * Counts the number of items in an order
+//     *
+//     * @return int
+//     */
+////    public function countItems(): int
+//    public function itemCount(): int
+//    {
+////        $count = [];
+//        $c = 0;
+//        foreach ($this->order->getItems() as $item) {
+//            if ($item->getId()) {
+//                $c += 1;
+//            }
+////            $count[$item->getId()] = ($count[$item->getId()] ?? 0)+ 1;
+//        }
+////        return count($count);
+//        return $c;
+//    }
 
     /**
      * Update the price for an existing product.

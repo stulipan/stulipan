@@ -156,13 +156,13 @@
                                 <div class="vertical-form-row">
                                     <div class="vertical-col mr-3">
                                         <a href="#" class="text-link-checkout" data-selector="button" data-eval="showSenderForm" data-url="{{ path('cart-editSender') }}">
-                                            <span class="btn-loading-invisible">Új számlázási cím</span>
+                                            <span class="loading-spinner-invisible">Új számlázási cím</span>
                                             <div class="loading-spinner" role="status"></div>
                                         </a>
                                     </div>
                                     <div class="vertical-col">
                                         <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--senderList">
-                                            <span class="btn-loading-invisible">Számlázási címeid</span>
+                                            <span class="loading-spinner-invisible">Számlázási címeid</span>
                                             <div class="loading-spinner" role="status"></div>
                                         </a>
                                     </div>
@@ -200,14 +200,14 @@
 
 {% block gotoNext %}
     <div class="mt-20px mt-md-4 d-flex justify-content-center justify-content-md-between flex-column">
-        <button data-selector="button" data-eval="submitPaymentMethod" data-url="{{ path('site-checkout-step4-thankyou') }}" class="JS--Button-gotoThankYou btn btn-lg btn-success btn-goto order-1 order-md-2 px-2 px-md-4 py-3">
-            <span class="btn-loading-invisible">A rendelést leadom</span>
+        <button data-selector="button" data-eval="submitPaymentMethod" data-url="{{ path('site-checkout-step4-thankyou') }}" class="JS--Button-gotoThankYou btn btn-success btn-lg btn-goto order-1 order-md-2 px-2 px-md-4 py-3">
+            <span class="loading-spinner-invisible">A rendelést leadom</span>
             <span class="loading-spinner" role="status"></span>
         </button>
     </div>
     <div class="mt-4 d-flex justify-content-center justify-content-md-end flex-column">
         <div class="px-4 px-md-0 text-center">
-            <span class="text-sm">A 'Megrendelem' gombra kattintással rendelésed rögzítésre kerül, illetve elfogadod az ÁSZF-ben foglaltakat és hozzájárulsz, hogy némely itt megadott adatot a Difiori felhasználhassa, hogy számodra fokozott vásárlási élményt nyújtson a jövőben.</span>
+            <span class="text-sm text-muted">A 'Megrendelem' gombra kattintással rendelésed rögzítésre kerül, illetve elfogadod az ÁSZF-ben foglaltakat és hozzájárulsz, hogy némely itt megadott adatot a Difiori felhasználhassa, hogy számodra fokozott vásárlási élményt nyújtson a jövőben.</span>
         </div>
     </div>
     <div class="mt-2 mb-5 d-flex justify-content-center justify-content-md-end flex-column">

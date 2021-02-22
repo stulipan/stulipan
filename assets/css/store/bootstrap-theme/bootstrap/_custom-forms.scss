@@ -38,6 +38,7 @@
     } @else {
       box-shadow: $custom-control-indicator-focus-box-shadow;
     }
+    border-color: $custom-control-indicator-focus-border-color; // Added by Stulipan
   }
 
   &:focus:not(:checked) ~ .custom-control-label::before {
@@ -77,7 +78,9 @@
   // Background-color and (when enabled) gradient
   &::before {
     position: absolute;
-    top: ($font-size-base * $line-height-base - $custom-control-indicator-size) / 2;
+    //top: ($font-size-base * $line-height-base - $custom-control-indicator-size) / 2;
+    //top: calc(0.075rem);
+    top: calc((50% - #{$font-size-base} / 2) * .6);
     left: -($custom-control-gutter + $custom-control-indicator-size);
     display: block;
     width: $custom-control-indicator-size;
@@ -92,7 +95,8 @@
   // Foreground (icon)
   &::after {
     position: absolute;
-    top: ($font-size-base * $line-height-base - $custom-control-indicator-size) / 2;
+    //top: ($font-size-base * $line-height-base - $custom-control-indicator-size) / 2;
+    top: calc((50% - #{$font-size-base} / 2) * .6);
     left: -($custom-control-gutter + $custom-control-indicator-size);
     display: block;
     width: $custom-control-indicator-size;

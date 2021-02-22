@@ -39,7 +39,7 @@ $blue:            #2c6ecb !default; //#006fbb !default; //#008CDE !default;
 $blue-lighten:    #ebf6fd !default;
 $blue-dark:       darken($blue, 5%) !default; //#0070BD !default;
 $blue-darken:     #001429 !default;
-$blue-active:     #72b9ea !default;
+$blue-active:     #d2e4fd !default;
 $indigo:          #6610f2 !default;
 $purple:          #876EBD !default;
 $purple-lighten:  #d1bff8 !default;
@@ -809,7 +809,7 @@ $nav-tabs-border-width:             $border-width !default;
 $nav-tabs-border-radius:            $border-radius !default;
 $nav-tabs-link-hover-border-color:  $gray-400 !default; //$gray-200 $gray-200 $nav-tabs-border-color !default;
 $nav-tabs-link-hover-bg:            $hover-bg !default; //$gray-200 $gray-200 $nav-tabs-border-color !default;
-$nav-tabs-link-active-color:        $white !default;
+$nav-tabs-link-active-color:        initial !default;
 $nav-tabs-link-active-bg:           $primary-active !default;
 $nav-tabs-link-active-border-color: $primary !default; //$gray-300 $gray-300 $nav-tabs-link-active-bg !default;
 

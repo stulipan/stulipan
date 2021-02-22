@@ -4,7 +4,7 @@
     {{ parent() }}
 {% endblock %}
 
-{% block bodyClass %}{{ parent() }}checkout-page checkout-shopi{% endblock %}
+{% block bodyClass %}checkout-page checkout-shopi{% endblock %}
 
 {% block page_content %}
 
@@ -14,9 +14,10 @@
         {% endblock %}
 
         <div class="cart-collapse">
-            <div class="d-flex d-lg-none col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center my-lg-0 order-lg-1 order-1 my-2 px-0 px-md-10px">
+            <div class="d-flex d-lg-none col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center my-lg-0 order-lg-1 order-1 my-3 px-0 px-md-10px">
                 <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
-                    <span class="h3 font-weight-bold text-uppercase text-primary ml-0">tulipan<span class="text-danger">.</span>futar  </span>
+{#                    <span class="h3 font-weight-bold text-uppercase text-primary ml-0">tulipan<span class="text-danger">.</span>futar  </span>#}
+                    <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">
                 </a>
             </div>
             <div class="cart-collapse-header">
@@ -50,9 +51,9 @@
 {#                    style="max-width: 500px;"#}
                     <div class="row">
                         <div class="col-md-12 correction-no-padding">
-                            <div class="d-none d-lg-flex col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center my-lg-0 order-lg-1 order-1 px-0 px-md-10px">
+                            <div class="d-none d-lg-flex col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center my-lg-0 order-lg-1 order-1 pb-2 px-0 px-md-10px">
                                 <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
-                                    <span class="h3 font-weight-bold text-uppercase text-primary ml-0">tulipan<span class="text-danger">.</span>futar  </span>
+                                    <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">
                                 </a>
                             </div>
 
@@ -78,7 +79,7 @@
             <div id="right_column" class="shopi-right">
                 <div class="container shopi-right-body">
                     <div class="row navbar-stickyX sticky-topX">
-                        <div class="col-md-12 pt-4">
+                        <div class="col-md-12 pt-4 px-5">
 
                             {% block rightColumn %}
                             {% endblock %}

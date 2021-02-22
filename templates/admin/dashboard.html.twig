@@ -163,13 +163,13 @@
                             <div class="h3 card-title">{{ 'dashboard.your-store-and-company-details'|trans }}</div>
                             <div class="row">
                                 <div class="col-lg-6 pb-2 pb-md-0">
-                                    {{ 'settings.general-settings.store-name'|trans }}: <span class="text-muted">{{ settings_general.get('store.name') }}</span> <br>
-                                    {{ 'settings.general-settings.store-url'|trans }}: <span class="text-muted">{{ settings_general.get('store.url') }}</span> <br>
-                                    {{ 'settings.general-settings.customer-support'|trans }}: <span class="text-muted">{{ settings_general.get('store.email') }}, {{ settings_general.get('store.phone') }}</span>
+                                    {{ 'settings.general-settings.store-name'|trans }}: <span class="text-muted">{{ storeSettings.get('store.name') }}</span> <br>
+                                    {{ 'settings.general-settings.store-url'|trans }}: <span class="text-muted">{{ storeSettings.get('store.url') }}</span> <br>
+                                    {{ 'settings.general-settings.customer-support'|trans }}: <span class="text-muted">{{ storeSettings.get('store.email') }}, {{ storeSettings.get('store.phone') }}</span>
                                 </div>
                                 <div class="col-lg-6">
-                                    {{ 'settings.general-settings.business-name'|trans }}: <span class="text-muted">{{ settings_general.get('company.name') }}</span> <br>
-                                    {{ 'settings.general-settings.business-address'|trans }}: <span class="text-muted">{{ settings_general.get('company.address') }}, {{ settings_general.get('company.city') }} {{ settings_general.get('company.zip') }}</span>
+                                    {{ 'settings.general-settings.business-name'|trans }}: <span class="text-muted">{{ storeSettings.get('company.name') }}</span> <br>
+                                    {{ 'settings.general-settings.business-address'|trans }}: <span class="text-muted">{{ storeSettings.get('company.address') }}, {{ storeSettings.get('company.city') }} {{ storeSettings.get('company.zip') }}</span>
                                 </div>
                             </div>
                             <div class="mt-4">

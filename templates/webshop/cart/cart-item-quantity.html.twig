@@ -1,12 +1,11 @@
     {{ form_start(quantityForm, {'attr': {
-        'class': "btn-loading-invisible",
-
+        'class': "loading-spinner-faded",
     }}) }}
     <div class="position-relative">
         <div class="float-md-left w-100 d-flex flex-row align-items-center">
-                {{ form_widget(quantityForm.quantity, {'attr': {'class': "form-control-sm form-control-cart mr-1 JS--Dropdown-setItemQuantity",
-                    'data-selector': 'select',
-                    'data-eval' : 'setItemQuantity'}}) }}
+                {{ form_widget(quantityForm.quantity, {'attr': {
+                    'class': "JS--Select-itemQuantitySelect form-control-sm form-control-cart mr-1 JS--Dropdown-setItemQuantity",
+                }}) }}
                 <span class="text-muted ml-1">{{ 'cart.pieces'|trans }}</span>
         </div>
     </div>

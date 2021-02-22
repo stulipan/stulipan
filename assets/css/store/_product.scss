@@ -46,10 +46,10 @@
     }
   }
 
-  & .product-price {
-    margin-top: map_get($spacers,3);
-  }
-  & .product-variants {
+  & .product-price,
+  & .product-variants,
+  & .product-delivery,
+  & .product-button {
     margin-top: map_get($spacers,3);
   }
   & .product-credit-card {
@@ -57,14 +57,53 @@
   }
   & .product-quickinfo-link {
     margin-top: map_get($spacers, 4);
+  }
+  & .text-link-quickinfo {
+    width: 100%;
+    color: $gray-900;
+    text-decoration: underline;
+  }
 
-    & .text-link-quickinfo {
-      //display: inline-block;
-      width: 100%;
-      //font-size: $font-size-base-secondary;
-      color: $gray-900;
-      text-decoration: underline;
+  & .product-variant-selector-label {
+    color: $label-color;
+    margin-bottom: .25rem;
+  }
+  .choice-label-wrapper {
+    display: grid;
+    grid-template-columns: 6fr minmax(9rem, auto);
+    grid-template-areas: "title price";
+    column-gap: .75rem;
+    flex-grow: 1;
+
+    @include media-breakpoint-down(xs) {
+      grid-template-columns: auto;
+      grid-template-areas:
+            "title"
+            "price";
+      margin-left: .25rem;
     }
+  }
+  .choice-label-title {
+    grid-area: title;
+    align-self: flex-start;
+    color: initial;
+  }
+  .choice-label-content {
+    grid-area: price;
+    align-self: flex-start;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    text-align: right;
+
+    @include media-breakpoint-down(xs) {
+      text-align: left;
+    }
+  }
+  .choice-label-price-list {
+    margin-bottom: 0;
+    padding-inline-start: 0;
+
   }
 }
 
@@ -90,64 +129,6 @@
   }
 }
 
-
-//.product-hover-overlay {
-//  position: absolute;
-//  width: 100%;
-//  height: 100%;
-//  top: 0;
-//  left: 0;
-//  display: -ms-flexbox;
-//  display: flex;
-//  -ms-flex-align: center;
-//  align-items: center;
-//  -ms-flex-pack: center;
-//  justify-content: center;
-//  background: rgba(255, 255, 255, 0.92);
-//  opacity: 0;
-//  transition: all 0.5s
-//}
-//
-//.product-hover-overlay .product-hover-overlay-buttons {
-//  z-index: 3
-//}
-//
-//.product-hover-overlay .btn {
-//  width: 40px;
-//  height: 40px;
-//  text-align: center;
-//  line-height: 40px;
-//  padding: 0;
-//  transition: all 0.3s
-//}
-//
-//.product-hover-overlay .btn.btn-product-left {
-//  -webkit-transform: translateX(-20px);
-//  transform: translateX(-20px);
-//  opacity: 0
-//}
-//
-//.product-hover-overlay .btn.btn-product-right {
-//  -webkit-transform: translateX(20px);
-//  transform: translateX(20px);
-//  opacity: 0
-//}
-//
-//.product-hover-overlay .btn.btn-buy {
-//  width: auto;
-//  padding-left: 2rem;
-//  padding-right: 2rem;
-//  margin-left: .5rem;
-//  margin-right: .5rem
-//}
-//
-//.product-hover-overlay .product-hover-overlay-link {
-//  position: absolute;
-//  width: 100%;
-//  height: 100%;
-//  left: 0;
-//  top: 0
-//}
 
 @media (min-width: 576px) {
   .product-columns {
@@ -190,20 +171,7 @@
   }
 }
 
-.product-variant-selector-label {
-  color: $label-color;
-  margin-bottom: .25rem;
-}
 
-//.product-variant-selector-label span {
-//  font-weight: normal;
-//  font-size: .8rem;
-//  text-transform: none;
-//  font-family: "HK Grotesk", sans-serif;
-//  /*color: #adb5bd*/
-//  color: #869196;
-//  letter-spacing: 0.1em;
-//}
 
 .detail-option-btn-label {
   position: relative
@@ -253,7 +221,7 @@
 }
 
 $price-font-size-default:        1.14rem;
-$price-font-weight:              $font-weight-bold !default;
+$price-font-weight:              $font-weight-base !default;
 $price-font-size-mobile:         calc(#{$price-font-size-default} * 0.80);
 $price-font-size-sm:             $font-size-base; //$font-size-base-secondary;
 

@@ -55,6 +55,7 @@
     font-weight: $nav-link-font-weight;
     //border-bottom: (3 * $nav-tabs-border-width) solid transparent;
     @include border-radius($nav-tabs-border-radius);
+    @include transition($input-transition);  // Added by Stulipan
 
     @include hover {
       //color: $nav-tabs-link-active-color;

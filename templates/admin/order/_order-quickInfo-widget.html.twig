@@ -1,4 +1,4 @@
 <div class="text-muted">
-    <span class="mr-2">{{ order.createdAt|date('Y-m-d') }}, {{ order.createdAt|date('H:i')}}</span>
+    <span class="mr-2">{{ order.createdAt|localizedDate }}, {{ order.createdAt|localizedTime }}</span>
     <span class="mr-2"><span class="text-muted">{{ 'order.order-id'|trans }}</span> {{ order.id }}</span>
 </div>

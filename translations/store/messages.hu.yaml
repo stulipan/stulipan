@@ -43,7 +43,7 @@ cart:
     subtotal: Részösszeg
     total-amount-to-pay: Fizentendő
     total-amount-paid: Összesen
-    show-order-summary: 'Rendelés összesítés megtekintése'
+    show-order-summary: 'Rendelés összesítése'
     product:
         product-added-successfully: 'A terméket sikeresen hozzáadtad a kosárhoz!'
     gift:

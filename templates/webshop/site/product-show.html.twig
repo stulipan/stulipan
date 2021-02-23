@@ -172,13 +172,13 @@
                                                         Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>
                                                 </div>
                                             </div>
-                                            <div class="product-quickinfo-link">
-                                                <div class="">
-                                                    <div>
+                                            <div class="product-quickinfo">
+                                                <div class="product-list-group list-group">
+                                                    <div class="list-group-item">
                                                         <span class="text-sm mr-2"><i class="fas fa-shipping-fast"></i></span>
                                                         <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Szállítási díjak</a>
                                                         <div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-lg modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
                                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -195,11 +195,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div>
+                                                    <div class="list-group-item">
                                                         <span class="text-sm mr-2"><i class="far fa-credit-card"></i></span>
                                                         <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--CreditCardPayment">Fizess online bankkártyáddal</a>
                                                         <div class="modal fade" id="modal--CreditCardPayment" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-lg modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
                                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -250,7 +250,7 @@
                                     <div class="scroll-overflower-wrapper">
                                             <div class="row row-narrow">
                                                 <div class="col-3 mb-3">
-                                                    <div class="card h-100 shadow">
+                                                    <div class="card h-100 shadow border-0">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Courier Flower Delivery</div>
                                                             <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic1.jpg"/>
@@ -259,7 +259,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-3 mb-3">
-                                                    <div class="card h-100 shadow">
+                                                    <div class="card h-100 shadow border-0">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Signature Interflora Black Gift Box</div>
                                                             <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic2.jpg"/>
@@ -268,7 +268,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-3 mb-3">
-                                                    <div class="card h-100 shadow">
+                                                    <div class="card h-100 shadow border-0">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Gift Wrap and Ribbon</div>
                                                             <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic3.jpg"/>
@@ -277,7 +277,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-3 mb-3">
-                                                    <div class="card h-100 shadow">
+                                                    <div class="card h-100 shadow border-0">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Gift Message and Flower Food</div>
                                                             <img class="img-fluid mb-2" src="/uploads/images/other/tab-hampers-pic4.jpg"/>
@@ -306,89 +306,57 @@
                                     <div class="h3 general-info-title">Miért válaszd a Tulipánfutárt?</div>
                                 </div>
                                 <div class="col-sm-12 mt-3">
-                                    <div class="card accordion" id="accordionMiertDobozok">
-                                        <div class="list-group">
-                                            <div class="list-group-item p-0">
-                                                <div class="card-body position-relative">
-                                                    <div class="position-relative d-flex justify-content-between align-items-center">
-                                                        <div class="d-inline-flex align-items-center">
-                                                            <div class="general-info-item-title mb-0">INGYENES szállítás Budapesten!</div>
-                                                        </div>
-                                                        <div class="d-flex text-sm">
-                                                            <i class="fas fa-chevron-right"></i>
-                                                        </div>
-                                                    </div>
-                                                    <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"></a>
-                                                </div>
-                                                <div id="collapseOne" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                    <div class="accordion mb-4" id="accordionMiertDobozok">
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz1">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapseOne">INGYENES szállítás Budapesten!</a>
+                                            </div>
+                                            <div id="collapse1" class="collapse" aria-labelledby="miertDoboz1" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
                                                     <p class="general-info-item-description">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div class="list-group-item p-0">
-                                                <div class="card-body position-relative">
-                                                    <div class="position-relative d-flex justify-content-between align-items-center">
-                                                        <div class="d-inline-flex align-items-center">
-                                                            <div class="general-info-item-title mb-0">Virágküldés a nap 24 órájában</div>
-                                                        </div>
-                                                        <div class="d-flex text-sm">
-                                                            <i class="fas fa-chevron-right"></i>
-                                                        </div>
-                                                    </div>
-                                                    <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"></a>
-                                                </div>
-                                                <div id="collapseTwo" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                        </div>
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz2">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapseOne">Virágküldés a nap 24 órájában</a>
+                                            </div>
+                                            <div id="collapse2" class="collapse" aria-labelledby="miertDoboz2" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
                                                     <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div class="list-group-item p-0">
-                                                <div class="card-body position-relative">
-                                                    <div class="position-relative d-flex justify-content-between align-items-center">
-                                                        <div class="d-inline-flex align-items-center">
-                                                            <div class="general-info-item-title mb-0">Magas vásárlói elégedettség</div>
-                                                        </div>
-                                                        <div class="d-flex text-sm">
-                                                            <i class="fas fa-chevron-right"></i>
-                                                        </div>
-                                                    </div>
-                                                    <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"></a>
-                                                </div>
-                                                <div id="collapseThree" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                        </div>
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz3">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapseOne">Magas vásárlói elégedettség</a>
+                                            </div>
+                                            <div id="collapse3" class="collapse" aria-labelledby="miertDoboz3" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
                                                     <p class="general-info-item-description">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div class="list-group-item p-0">
-                                                <div class="card-body position-relative">
-                                                    <div class="position-relative d-flex justify-content-between align-items-center">
-                                                        <div class="d-inline-flex align-items-center">
-                                                            <div class="general-info-item-title mb-0">Egyedi terméket szeretnél?</div>
-                                                        </div>
-                                                        <div class="d-flex text-sm">
-                                                            <i class="fas fa-chevron-right"></i>
-                                                        </div>
-                                                    </div>
-                                                    <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"></a>
-                                                </div>
-                                                <div id="collapseFour" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                        </div>
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz4">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseOne">Egyedi terméket szeretnél?</a>
+                                            </div>
+                                            <div id="collapse4" class="collapse" aria-labelledby="miertDoboz4" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
                                                     <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div class="list-group-item p-0">
-                                                <div class="card-body position-relative">
-                                                    <div class="position-relative d-flex justify-content-between align-items-center">
-                                                        <div class="d-inline-flex align-items-center">
-                                                            <div class="general-info-item-title mb-0">Ügyfélszolgálat</div>
-                                                        </div>
-                                                        <div class="d-flex text-sm">
-                                                            <i class="fas fa-chevron-right"></i>
-                                                        </div>
-                                                    </div>
-                                                    <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive"></a>
-                                                </div>
-                                                <div id="collapseFive" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">
+                                        </div>
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz5">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapseOne">Ügyfélszolgálat</a>
+                                            </div>
+                                            <div id="collapse5" class="collapse" aria-labelledby="miertDoboz5" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
                                                     <p class="general-info-item-description">
                                                         Telefon: 06 1 466 6286<br>
                                                         Email: info@difiori.hu
@@ -406,152 +374,6 @@
         </div>
     </div>
 {% endblock %}
-
-{#{% block contentWide %}#}
-{#    <div class="general-info-section">#}
-{#        <div class="d-flex flex-column flex-md-row">#}
-{#            <div class="d-flex flex-grow-1 w-100 justify-content-center justify-content-md-end bg-custom-gray py-3 my-4X ml-3X order-2 order-md-1">#}
-{#                <div class="general-info-section-left">#}
-{#                    <div class="miert-dobozok p-3">#}
-{#                        <div class="row">#}
-{#                            <div class="col-sm-11 mx-sm-auto col-md-11 mr-md-auto ml-md-0 col-lg-11">#}
-{#                                <div class="h3 general-info-title">Miért válaszd a Tulipánfutárt?</div>#}
-{#                            </div>#}
-{#                            <div class="col-sm-11 mx-sm-auto col-md-10 mr-md-auto ml-md-0 col-lg-7X mt-3">#}
-{#                                <div class="card accordion" id="accordionMiertDobozok">#}
-{#                                    <div class="list-group">#}
-{#                                        <div class="list-group-item p-0">#}
-{#                                            <div class="card-body position-relative">#}
-{#                                                <div class="position-relative d-flex justify-content-between align-items-center">#}
-{#                                                    <div class="d-inline-flex align-items-center">#}
-{#                                                        <div class="general-info-item-title mb-0">INGYENES szállítás Budapesten!</div>#}
-{#                                                    </div>#}
-{#                                                    <div class="d-flex text-sm">#}
-{#                                                        <i class="fas fa-chevron-right"></i>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"></a>#}
-{#                                            </div>#}
-{#                                            <div id="collapseOne" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">#}
-{#                                                <p class="general-info-item-description">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.#}
-{#                                                </p>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                        <div class="list-group-item p-0">#}
-{#                                            <div class="card-body position-relative">#}
-{#                                                <div class="position-relative d-flex justify-content-between align-items-center">#}
-{#                                                    <div class="d-inline-flex align-items-center">#}
-{#                                                        <div class="general-info-item-title mb-0">Virágküldés a nap 24 órájában</div>#}
-{#                                                    </div>#}
-{#                                                    <div class="d-flex text-sm">#}
-{#                                                        <i class="fas fa-chevron-right"></i>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"></a>#}
-{#                                            </div>#}
-{#                                            <div id="collapseTwo" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">#}
-{#                                                <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;#}
-{#                                                </p>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                        <div class="list-group-item p-0">#}
-{#                                            <div class="card-body position-relative">#}
-{#                                                <div class="position-relative d-flex justify-content-between align-items-center">#}
-{#                                                    <div class="d-inline-flex align-items-center">#}
-{#                                                        <div class="general-info-item-title mb-0">Magas vásárlói elégedettség</div>#}
-{#                                                    </div>#}
-{#                                                    <div class="d-flex text-sm">#}
-{#                                                        <i class="fas fa-chevron-right"></i>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"></a>#}
-{#                                            </div>#}
-{#                                            <div id="collapseThree" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">#}
-{#                                                <p class="general-info-item-description">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.#}
-{#                                                </p>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                        <div class="list-group-item p-0">#}
-{#                                            <div class="card-body position-relative">#}
-{#                                                <div class="position-relative d-flex justify-content-between align-items-center">#}
-{#                                                    <div class="d-inline-flex align-items-center">#}
-{#                                                        <div class="general-info-item-title mb-0">Egyedi terméket szeretnél?</div>#}
-{#                                                    </div>#}
-{#                                                    <div class="d-flex text-sm">#}
-{#                                                        <i class="fas fa-chevron-right"></i>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"></a>#}
-{#                                            </div>#}
-{#                                            <div id="collapseFour" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">#}
-{#                                                <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.#}
-{#                                                </p>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                        <div class="list-group-item p-0">#}
-{#                                            <div class="card-body position-relative">#}
-{#                                                <div class="position-relative d-flex justify-content-between align-items-center">#}
-{#                                                    <div class="d-inline-flex align-items-center">#}
-{#                                                        <div class="general-info-item-title mb-0">Ügyfélszolgálat</div>#}
-{#                                                    </div>#}
-{#                                                    <div class="d-flex text-sm">#}
-{#                                                        <i class="fas fa-chevron-right"></i>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                                <a href="" class="tile-link" id="miertDobozOne" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive"></a>#}
-{#                                            </div>#}
-{#                                            <div id="collapseFive" class="card-body collapse" aria-labelledby="miertDobozOne" data-parent="#accordionMiertDobozok">#}
-{#                                                <p class="general-info-item-description">#}
-{#                                                    Telefon: 06 1 466 6286<br>#}
-{#                                                    Email: info@difiori.hu#}
-{#                                                </p>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="d-flex flex-grow-1 w-100 justify-content-center justify-content-md-start bg-custom-yellow px-0 px-md-2 order-1 order-md-2">#}
-{#                <div class="general-info-section-right">#}
-{#                    <div class="miert-dobozok general-info-group p-3 mt-3">#}
-{#                        <div class="row">#}
-{#                            <div class="col-sm-11 mx-sm-auto col-md-12 mb-3">#}
-{#                                <div class="h3 general-info-title mb-5">Delivered by a carefully selected courier partner</div>#}
-{#                            </div>#}
-{#                            <div class="col-sm-11 mx-sm-auto col-md-12">#}
-{#                                <div class="row row-narrow">#}
-{#                                    <div class="col-md-6 col-6 mb-3">#}
-{#                                        <div class="general-info-item-title">Courier Flower Delivery</div>#}
-{#                                        <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic1.jpg"/>#}
-{#                                        <p class="general-info-item-description"> We work closely with our courier partner to ensure that your beautifully designed bouquet arrives in pristine condition.</p>#}
-{#                                    </div>#}
-{#                                    <div class="col-md-6 col-6 mb-3">#}
-{#                                        <div class="general-info-item-title">Signature Interflora Black Gift Box</div>#}
-{#                                        <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic2.jpg"/>#}
-{#                                        <p class="general-info-item-description">Your bouquet will be delivered in a signature Interflora black gift box, with the impact of the flowers seen as soon as the box is opened.</p>#}
-{#                                    </div>#}
-{#                                    <div class="col-md-6 col-6 mb-3">#}
-{#                                        <div class="general-info-item-title">Gift Wrap and Ribbon</div>#}
-{#                                        <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic3.jpg"/>#}
-{#                                        <p class="general-info-item-description">Your bouquet will be presented in elegant Interflora gift wrap and a pretty ribbon. A specially formulated gel solution ensures freshness during delivery.	</p>#}
-{#                                    </div>#}
-{#                                    <div class="col-md-6 col-6 mb-3">#}
-{#                                        <div class="general-info-item-title">Gift Message and Flower Food</div>#}
-{#                                        <img class="img-fluid mb-2" src="/uploads/images/other/tab-hampers-pic4.jpg"/>#}
-{#                                        <p class="general-info-item-description">Your personal message will be displayed on an attractive greeting card and will accompany your gift. To ensure the flowers remain fresh and in the best possible condition we include some flower food.</p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#{% endblock %}#}
 
 {% block javascripts %}
 	{{ parent() }}

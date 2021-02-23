@@ -30,6 +30,20 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
     line-height: $mobile-line-height-base;
   }
 
+  $__mobile-line-height:              $mobile-line-height-base * 1rem !default;
+
+  .collapse-arrow-show {
+    &:after {
+      --font-size: #{$mobile-font-size-base};
+      --line-height: #{$__mobile-line-height};
+    }
+  }
+  .svg-icon {
+    --font-size: #{$mobile-font-size-base};
+    --line-height: #{$__mobile-line-height};
+  }
+
+
   ////////////////////////////////////
   //  FORM INPUTS
   ///////////////////////////////////

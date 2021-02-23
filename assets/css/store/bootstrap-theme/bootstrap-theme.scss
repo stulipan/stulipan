@@ -2,6 +2,7 @@
 @import "_announcement-bar";
 @import "_badge-quantity";
 @import "_button-loader";
+@import "_collapse-show-toggle";
 @import "_field-group";
 @import "_input-float";
 @import "_review";
@@ -63,10 +64,6 @@ iframe {
   & a:first-of-type {
     margin-left: -.75rem;
   }
-}
-
-.svg-icon.svg-icon-heavy {
-  stroke-width: 5
 }
 
 .top-bar {

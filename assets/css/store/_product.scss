@@ -36,13 +36,12 @@
   & .product-name h1 {
     font-size: 1.35rem;
     font-weight: $font-weight-bold;
-    //text-transform: initial;
     line-height: 1.3em;
+    letter-spacing: 0;
     margin-bottom: 0;
 
     @include media-breakpoint-up(md) {
       font-size: 2.05rem;
-      //line-height: 2.5rem;
     }
   }
 
@@ -55,7 +54,7 @@
   & .product-credit-card {
     margin-top: map_get($spacers, 4);
   }
-  & .product-quickinfo-link {
+  & .product-quickinfo {
     margin-top: map_get($spacers, 4);
   }
   & .text-link-quickinfo {
@@ -83,11 +82,13 @@
       margin-left: .25rem;
     }
   }
+
   .choice-label-title {
     grid-area: title;
     align-self: flex-start;
     color: initial;
   }
+
   .choice-label-content {
     grid-area: price;
     align-self: flex-start;
@@ -100,10 +101,18 @@
       text-align: left;
     }
   }
+
   .choice-label-price-list {
     margin-bottom: 0;
     padding-inline-start: 0;
+  }
 
+  .product-list-group {
+    .list-group-item {
+      border: none;
+      padding: .25rem 0;
+
+    }
   }
 }
 

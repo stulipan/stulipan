@@ -64,8 +64,8 @@ class Webshop {
     console.log('teete')
     e.preventDefault();
     let $el = $(e.currentTarget);
-    if (this._proceed) { this._proceed = false; return; }
-    this.showOverlay($el, Event.CLICK);
+    // if (this._proceed) { this._proceed = false; return; }
+    // this.showOverlay($el, Event.CLICK);
 
     let url = $el.data('url');
     // let url = $el.attr('href');

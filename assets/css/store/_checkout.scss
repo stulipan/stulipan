@@ -157,6 +157,9 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
     border-top: $checkout-shopi-collapse-header-border-width solid $checkout-shopi-collapse-header-border-color;
     border-bottom: $checkout-shopi-collapse-header-border-width solid $checkout-shopi-collapse-header-border-color;
   }
+  & .cart-collapse-title {
+    text-decoration: none;
+  }
   & .cart-collapse-body {
     background-color: $checkout-shopi-collapse-body-bg;
 

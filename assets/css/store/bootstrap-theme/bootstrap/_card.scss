@@ -264,6 +264,7 @@
 .accordion {
   > .card {
     overflow: hidden;
+    border: $card-border-width solid $card-border-color; // Added by Stulipan
 
     &:not(:first-of-type) {
       .card-header:first-child {

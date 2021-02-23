@@ -13,15 +13,25 @@
 @import "_font-size-mobile-reboot";
 
 
+$svg-icon-size-width:           $font-size-base !default;
+$svg-icon-line-height:          $line-height-base * 1rem !default;
+
+
 .svg-icon {
-  width: 18px;
-  height: 18px;
+  --font-size: #{$svg-icon-size-width};
+  --line-height: #{$toggle-arrow-line-height};
+  width: var(--font-size);
+  height: var(--font-size);
   margin-right: .5rem;
   stroke: currentColor;
   stroke-width: 3px;
   --layer1: currentColor;
   --layer2: currentColor;
-  margin-bottom: 5px;
+  margin-bottom: calc((var(--line-height) - var(--font-size)) / 2);
+}
+
+.svg-icon.svg-icon-heavy {
+  stroke-width: 5
 }
 
 

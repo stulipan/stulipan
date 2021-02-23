@@ -69,9 +69,78 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 pb-3">
                             {% block gotoNext %}
                             {% endblock %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 correction-no-padding">
+                            <ul class="list-inline checkout-footer-list py-3 mb-0">
+
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--aboutUs">Rólunk</a>
+                                    <div class="modal fade" id="modal--aboutUs" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h3 class="modal-title" id="modalLabel">{{ pages.rolunk.name }}</h3>
+                                                    <div class="mt-4">
+                                                        {{ pages.rolunk.content|raw }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--shippingInfo">Szállítási díjak</a>
+                                    <div class="modal fade" id="modal--shippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
+                                                    <div class="mt-4">
+                                                        {{ pages.szallitasiDijak.content|raw }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--termsOfService">ÁSZF</a>
+                                    <div class="modal fade" id="modal--termsOfService" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h3 class="modal-title" id="modalLabel">{{ pages.aszf.name }}</h3>
+                                                    <div class="mt-4">
+                                                        {{ pages.aszf.content|raw }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

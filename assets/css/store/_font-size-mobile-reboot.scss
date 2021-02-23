@@ -86,12 +86,12 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
   //  line-height: $mobile-line-height-base-lg;
   //}
 
-  // Border color correction: darker border
-  .form-control,
-  .input-float .form-control
-  {
-    border-color: $gray-500;
-  }
+  //// Border color correction: darker border
+  //.form-control,
+  //.input-float .form-control
+  //{
+  //  border-color: $gray-500;
+  //}
 }
 
 

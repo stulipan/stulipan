@@ -59,9 +59,9 @@ class UserRegistrationFormType extends AbstractType
                 'required' => true,
                 'always_empty' => false, // Ezzel nem felejti el a jelszót, amikor hibás/hiányzó adatok miatt újratölti a form-ot
             ])
-            ->add('username',TextType::class,[
-                'required' => false,
-            ])
+//            ->add('username',TextType::class,[
+//                'required' => false,
+//            ])
             ->add('optin', CheckboxType::class, [
                 'required' => false,
                 'mapped' => false,

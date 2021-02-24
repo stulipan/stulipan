@@ -8,41 +8,15 @@
 
 {# Ez azért kell, hogy az ERROR badge ne jelenjen meg a hibaüzenetben. #}
 {% block form_errors -%}
+{#    !!! Az if-et ki kell vegyem, hogy mindig megjelenitse a span-t, mert ezt hasznalja a js alapu hibajelzes (pl: checkout)#}
 {#    {%- if errors|length > 0 -%}#}
         <span class="{% if form is not rootform %}invalid-feedback{% else %}alert alert-danger{% endif %}">
             {%- for error in errors -%}
 {#                <span class="d-block">#}
 {#                    <span class="form-error-message">{{ error.message }}</span>#}
 {#                </span>#}
-                {{ error.message }}
+                {{- error.message -}}
             {%- endfor -%}
         </span>
 {#    {%- endif %}#}
 {%- endblock form_errors %}
-
-{# Ez azért kell, hogy ne rakja be automatikusan a form-control class-t #}
-{#{% block choice_widget_collapsed -%}#}
-{#    {%- set attr = attr|merge({class: (attr.class|default('form-control'))|trim}) -%}#}
-
-{#    #}{#    {{- parent() -}}#}
-{#    #}{#    A parent() helyett beszurtam a kodot amit a parent generalna: #}
-{#    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}#}
-{#        {% set required = false %}#}
-{#    {%- endif -%}#}
-{#    <div class="form-control--Background">#}
-{#    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>#}
-{#        {%- if placeholder is not none -%}#}
-{#            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>#}
-{#        {%- endif -%}#}
-{#        {%- if preferred_choices|length > 0 -%}#}
-{#            {% set options = preferred_choices %}#}
-{#            {{- block('choice_widget_options') -}}#}
-{#            {%- if choices|length > 0 and separator is not none -%}#}
-{#                <option disabled="disabled">{{ separator }}</option>#}
-{#            {%- endif -%}#}
-{#        {%- endif -%}#}
-{#        {%- set options = choices -%}#}
-{#        {{- block('choice_widget_options') -}}#}
-{#    </select>#}
-{#    </div>#}
-{#{%- endblock choice_widget_collapsed %}#}

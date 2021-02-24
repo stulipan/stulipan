@@ -52,23 +52,24 @@
   }
 
   .form-control {
-    @if $state == 'invalid' {  // Added by Stulipan (the if condition)
+    @if $state == 'invalid' {  // Added by Stulipan (the if condition, so that only error fields get formatted)
       .was-validated &:#{$state},
       &.is-#{$state} {
         border-color: $color;
         //box-shadow: 0 0 0 $input-focus-width rgba($color, 1);
+        //box-shadow: rgba($color, 1) 0 0 $input-btn-focus-width;
 
         @if $enable-validation-icons {
           padding-right: $input-height-inner;
-          //background-image: $icon;
-          //background-repeat: no-repeat;
-          //background-position: center right $input-height-inner-quarter;
-          //background-size: $input-height-inner-half $input-height-inner-half;
+          background-image: $icon;
+          background-repeat: no-repeat;
+          background-position: center right $input-height-inner-quarter;
+          background-size: $input-height-inner-half $input-height-inner-half;
         }
 
         &:focus {
           border-color: $color;
-          box-shadow: 0 0 0 $input-focus-width rgba($color, 1);
+          box-shadow: 0 0 0 $input-btn-focus-width rgba($color, .20);
         }
 
         ~ .#{$state}-feedback,
@@ -76,16 +77,6 @@
           display: block;
         }
       }
-
-      //// Added by Stulipan
-      //&:valid {
-      //  border-color: $border-color;
-      //  @include form-control-focus();
-      //}
-      //// Added by Stulipan
-      //&:valid + .invalid-feedback {
-      //  display: none !important;
-      //}
     }
   }
 
@@ -151,7 +142,7 @@
     .was-validated &:#{$state},
     &.is-#{$state} {
       ~ .custom-control-label {
-        color: $color;
+        //color: $color;
 
         &::before {
           border-color: $color;
@@ -166,13 +157,16 @@
       &:checked {
         ~ .custom-control-label::before {
           border-color: lighten($color, 10%);
-          @include gradient-bg(lighten($color, 10%));
+          //@include gradient-bg(lighten($color, 10%));
         }
       }
 
       &:focus {
         ~ .custom-control-label::before {
-          box-shadow: 0 0 0 $input-focus-width rgba($color, .25);
+          @if $state == 'invalid' {  // Added by Stulipan (only the @if)
+            box-shadow: 0 0 0 $input-focus-width rgba($color, .25);
+          }
+
         }
 
         &:not(:checked) ~ .custom-control-label::before {

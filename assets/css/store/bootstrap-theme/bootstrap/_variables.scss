@@ -151,7 +151,7 @@ $enable-grid-classes:                         true !default;
 $enable-pointer-cursor-for-buttons:           true !default;
 $enable-print-styles:                         true !default;
 $enable-responsive-font-sizes:                false !default;
-$enable-validation-icons:                     true !default;
+$enable-validation-icons:                     false !default;
 $enable-deprecation-messages:                 true !default;
 
 // Added by stulipan
@@ -293,8 +293,8 @@ $box-shadow:                  0 0 0 1px $gray-300, 0 1px 3px 0 $gray-300 !defaul
 $box-shadow-lg:               0 1rem 3rem rgba($black, .175) !default;
 $dropdown-shadow:             0 0 0 1px $gray-300, 0 .125rem .375rem 1px rgba($gray-300, 1) !default;
 
-$component-active-color:      $white !default;
-$component-active-bg:         theme-color("primary") !default;
+$component-active-color:      theme-color("primary") !default;
+$component-active-bg:         $white !default;
 
 $caret-width:                 .3em !default;
 $caret-vertical-align:        $caret-width * .85 !default;
@@ -453,9 +453,9 @@ $input-btn-font-family:       null !default;
 $input-btn-font-size:         $font-size-base !default;
 $input-btn-line-height:       $line-height-base !default;
 
-$input-btn-focus-width:       7px !default //1px !default; //.125rem !default;
-$input-btn-focus-color:       rgba($blue, .15) !default; // rgba($component-active-bg, 25) !default;
-$input-btn-focus-box-shadow:  $input-btn-focus-color 0 0 $input-btn-focus-width !default; //0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
+$input-btn-focus-width:       .125rem !default; //7px !default //1px !default; //.125rem !default;
+$input-btn-focus-color:       rgba($blue, .20) !default; // rgba($component-active-bg, 25) !default;
+$input-btn-focus-box-shadow:  0 0 0 $input-btn-focus-width $input-btn-focus-color !default; //$input-btn-focus-color 0 0 $input-btn-focus-width !default; //0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
 
 $input-btn-padding-y-sm:      .375rem !default; //.25rem !default;
 $input-btn-padding-x-sm:      .45rem !default; //.3125rem !default;
@@ -552,7 +552,7 @@ $input-border-radius-lg:                $border-radius-lg !default;
 $input-border-radius-sm:                $border-radius-sm !default;
 
 $input-focus-bg:                        $input-bg !default;
-$input-focus-border-color:              rgba($component-active-bg, 25%) !default;
+$input-focus-border-color:              $input-border-color !default; //rgba($component-active-bg, 25%) !default;
 $input-focus-color:                     $input-color !default;
 $input-focus-width:                     $input-btn-focus-width !default;
 $input-focus-box-shadow:                $input-btn-focus-box-shadow !default;
@@ -573,7 +573,7 @@ $input-height-lg:                       calc(#{$input-line-height * 1em} + #{$in
 
 $input-transition:                      border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
 
-// Added by Stulipan
+// ---- Added by Stulipan
 $input-select-padding-y:                $input-padding-y !default;
 $input-select-padding-x:                $input-padding-x !default;
 $input-select-bg-size-y:                20px !default; // In pixels because image dimensions
@@ -587,7 +587,7 @@ $input-select-padding-x-sm:             $input-padding-x-sm !default;
 $input-select-bg-size-y-sm:             18px !default; // In pixels because image dimensions
 $input-select-bg-size-x-sm:             16px !default; // In pixels because image dimensions
 $input-select-background-sm:            $input-select-indicator no-repeat right .25rem center / $input-select-bg-size-x-sm $input-select-bg-size-y-sm, linear-gradient(180deg, mix($body-bg, $gray-100-select, 15%), $gray-100-select) !default;
-// END Added by Stulipan
+// ---- END Added by Stulipan
 
 $form-text-margin-top:                  .25rem !default;
 
@@ -621,8 +621,8 @@ $custom-control-indicator-border-width: $input-border-width !default;
 $custom-control-indicator-disabled-bg:          $input-disabled-bg !default;
 $custom-control-label-disabled-color:           $gray-600 !default;
 
-$custom-control-indicator-checked-color:        $component-active-bg !default; //$component-active-color !default;
-$custom-control-indicator-checked-bg:           $component-active-color !default; //$component-active-bg !default;
+$custom-control-indicator-checked-color:        $component-active-color !default;
+$custom-control-indicator-checked-bg:           $component-active-bg !default;
 $custom-control-indicator-checked-disabled-bg:  rgba(theme-color("primary"), .5) !default;
 $custom-control-indicator-checked-box-shadow:   none !default;
 $custom-control-indicator-checked-border-color: $input-border-color !default; //$component-active-bg !default; //$component-active-color !default;
@@ -738,7 +738,7 @@ $custom-file-text: (
 
 $form-feedback-margin-top:          $form-text-margin-top !default;
 $form-feedback-font-size:           $small-font-size !default;
-$form-feedback-valid-color:         $border-color !default; // theme-color("success") !default;
+$form-feedback-valid-color:         $input-border-color !default; //theme-color("success") !default;
 $form-feedback-invalid-color:       theme-color("danger") !default;
 
 $form-feedback-icon-valid-color:    $form-feedback-valid-color !default;

@@ -16,7 +16,7 @@
     </div>
 {% endmacro %}
 
-{{ form_start(registrationForm, { 'attr': {'class': '' }}) }}
+{{ form_start(registrationForm, { 'attr': {'class': 'need-validation' }}) }}
 <div class="form-row">
     <div class="col-lg-12 mb-4">
         <h3 class="font-weight-normal">{{ 'registration.create-account-title'|trans }}</h3>
@@ -36,12 +36,12 @@
     {% endif %}
     <div class="form-group col-lg-12">
         <label for="{{ registrationForm.password.vars.full_name }}" class="form-label">{{ 'registration.password'|trans }}</label>
-        <div class="input-group">
+{#        <div class="input-group">#}
             {{ form_widget(registrationForm.password, {'attr': {'class': 'border-right-0X'}}) }}
             {#<div class="input-group-append">#}
                 {#<span class="input-group-text bg-white text-gray-500"><i class="fas fa-eye"></i></span>#}
             {#</div>#}
-        </div>
+{#        </div>#}
         {{ form_errors(registrationForm.password) }}
     </div>
     {#<div class="form-group col-lg-12">#}
@@ -50,15 +50,17 @@
         {#{{ form_errors(registrationForm.username) }}#}
     {#</div>#}
     <div class="form-group col-lg-12">
-        <div class="custom-control custom-checkbox mb-2 text-muted">
+        <div class="custom-control custom-checkbox mb-2">
             <input id="{{ registrationForm.optin.vars.id }}" type="checkbox" name="{{ registrationForm.optin.vars.full_name }}" class="custom-control-input" {{ registrationForm.optin.vars.checked == true ? 'checked=\"checked\"' : '' }}>
             <label for="{{ registrationForm.optin.vars.id }}" class="custom-control-label align-middle">{{ 'registration.newsletter-sign-up'|trans }}</label>
             {{ form_errors(registrationForm.optin) }}
             {% do registrationForm.optin.setRendered() %}
         </div>
-        <div class="custom-control custom-checkbox text-muted">
-            <input id="{{ registrationForm.terms.vars.id }}" type="checkbox" name="{{ registrationForm.terms.vars.full_name }}" class="custom-control-input" {{ registrationForm.terms.vars.checked == true ? 'checked=\"checked\"' : '' }}>
-            <label for="{{ registrationForm.terms.vars.id }}" class="custom-control-label align-middle">{{ 'registration.accept-terms-and-conditions'|trans }}</label>
+    </div>
+    <div class="form-group col-lg-12">
+        <div class="custom-control custom-checkbox">
+            <input class="custom-control-input {% if registrationForm.terms.vars.valid is same as(false) %}is-invalid{% endif %}" id="{{ registrationForm.terms.vars.id }}" type="checkbox" name="{{ registrationForm.terms.vars.full_name }}" {{ registrationForm.terms.vars.checked == true ? 'checked=\"checked\"' : '' }}>
+            <label class="custom-control-label align-middle" for="{{ registrationForm.terms.vars.id }}">{{ 'registration.accept-terms-and-conditions'|trans }}</label>
             {{ form_errors(registrationForm.terms) }}
             {% do registrationForm.terms.setRendered() %}
         </div>

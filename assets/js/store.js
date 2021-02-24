@@ -230,8 +230,13 @@ theme.CartSection = (function () {
   // AddToCart.prototype = _.assignIn({}, AddToCart.prototype, {
   $.extend(Cart.prototype, {
 
+    _disableFormElements: function() {
+      $(selectors.CART_BODY).find("*", "form").prop('disabled', true);
+    },
+
     addGiftToCart: function(e) {
       e.preventDefault();
+      this._disableFormElements();
 
       let $el = $(e.currentTarget);
       if (theme.proceed) { theme.proceed = false; return; }
@@ -266,6 +271,7 @@ theme.CartSection = (function () {
      */
     removeItem: function(e) {
       e.preventDefault();
+      this._disableFormElements();
 
       let $el = $(e.currentTarget);
       if (theme.proceed) { theme.proceed = false; return; }
@@ -290,6 +296,7 @@ theme.CartSection = (function () {
     },
     setItemQuantity: function (e) {
       e.preventDefault();
+
       let $el = $(e.currentTarget),
           $itemQuantityBody = $el.closest(selectors.ITEM_QUANTITY_BODY),
           $form = $itemQuantityBody.find('form')
@@ -318,6 +325,9 @@ theme.CartSection = (function () {
       }).always(function() {
         theme.LoadingOverlay.hide($itemQuantityBody);
       });
+      // This is executed way before Ajax call is completed,
+      // BUT this way the form is yet not disabled when submitted.
+      this._disableFormElements();
 
     },
 

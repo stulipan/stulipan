@@ -68,7 +68,8 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 
     @include media-breakpoint-up(sm) {
       & .card-body {
-        padding: 0;
+        padding-left: 0;
+        padding-right: 0;
       }
     }
   }
@@ -84,7 +85,7 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
       justify-content: center;
       background-color: $checkout-shopi-left-bg;
       border-right: none;
-      padding-top: 1.5rem;
+      padding-top: 1rem;
       padding-right: 0;
 
       & .shopi-left-body {
@@ -315,7 +316,7 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 
 .checkout-shopi {
   & .order-summary {
-    margin-top: 1rem;
+    margin-top: 0;
   }
   & .shipping-address,
   & .customer-basic-details,
@@ -325,7 +326,7 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
   & .shipping-method,
   & .billing-address,
   & .user-registration {
-    margin-top: 30px;
+    margin-top: 20px;
   }
   &.thank-you-page {
     & .shipping-address,

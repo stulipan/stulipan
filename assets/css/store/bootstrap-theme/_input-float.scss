@@ -46,7 +46,7 @@ $input-float-select-background:           $input-float-select-indicator no-repea
 }
 .input-float.active .form-control,
 .input-float.show .form-control {
-  padding: calc(#{$input-float-padding-y} * 1.90) $input-float-padding-x calc(#{$input-float-padding-y} * 0.10);
+  padding: calc(#{$input-float-padding-y} * 1.80) $input-float-padding-x calc(#{$input-float-padding-y} * 0.20);
 
   //&::-webkit-input-placeholder,
   //&::-moz-placeholder,

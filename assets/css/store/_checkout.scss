@@ -221,10 +221,48 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
   }
 
   & .checkout-summary-item-title {
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing;
   }
   & .checkout-summary-item-description {
     color: $yiq-text-dark;
   }
+
+  .checkout-summary-item-grid {
+    display: grid;
+    grid-template-columns: 2fr 6fr 2fr;
+    grid-template-areas: "label data action";
+    column-gap: .75rem;
+    flex-grow: 1;
+
+    .checkout-summary-item-label {
+      grid-area: label;
+      align-self: flex-start;
+    }
+    .checkout-summary-item-data {
+      grid-area: data;
+      align-self: flex-start;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      text-align: left;
+    }
+    .checkout-summary-item-action {
+      grid-area: action;
+      align-self: flex-start;
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      text-align: right;
+    }
+
+    @include media-breakpoint-down(sm) {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "label action"
+                            "data data";
+      row-gap: .5rem;
+    }
+  }
+
 }
 
 ///////////////////////////////////

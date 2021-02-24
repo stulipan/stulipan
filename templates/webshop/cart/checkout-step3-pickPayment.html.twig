@@ -23,13 +23,13 @@
                             <div class="checkout-summary">
                                     <div class="">
                                         <div class="w-100 checkout-summary-item">
-                                            <div class="row">
-                                                <div class="col-3 col-sm-2">
+                                            <div class="checkout-summary-item-grid">
+                                                <div class="checkout-summary-item-label">
                                                     <div class="checkout-summary-item-title">
                                                         Címzett
                                                     </div>
                                                 </div>
-                                                <div class="col-9 col-sm-8">
+                                                <div class="checkout-summary-item-data">
                                                     <div class="checkout-summary-item-description">
                                                         {{ order.recipient.fullname }},
                                                         {{ order.recipient.address.street }},
@@ -38,41 +38,41 @@
                                                         {{ order.recipient.phone }}
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-2 text-right pt-2 pt-sm-0">
+                                                <div class="checkout-summary-item-action">
                                                     <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">Módosítás</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="w-100 checkout-summary-item">
-                                            <div class="row">
-                                                <div class="col-3 col-sm-2">
+                                            <div class="checkout-summary-item-grid">
+                                                <div class="checkout-summary-item-label">
                                                     <div class="checkout-summary-item-title">
                                                         Aki küldi
                                                     </div>
                                                 </div>
-                                                <div class="col-9 col-sm-8">
+                                                <div class="checkout-summary-item-data">
                                                     <div class="checkout-summary-item-description">
                                                         {{ order.billingFullname }}, {{ order.email }}, {{ order.billingPhone }}
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-2 text-right pt-2 pt-sm-0">
+                                                <div class="checkout-summary-item-action">
                                                     <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">Módosítás</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="w-100 checkout-summary-item">
-                                            <div class="row">
-                                                <div class="col-3 col-sm-2">
+                                            <div class="checkout-summary-item-grid">
+                                                <div class="checkout-summary-item-label">
                                                     <div class="checkout-summary-item-title">
                                                         Szállítás
                                                     </div>
                                                 </div>
-                                                <div class="col-9 col-sm-8">
+                                                <div class="checkout-summary-item-data">
                                                     <div class="checkout-summary-item-description">
                                                         {{ order.shippingMethod }}, {{ order.deliveryDate|localizedDate('Y M j.')|lower }}, {{ order.deliveryInterval }}
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-2 text-right pt-2 pt-sm-0">
+                                                <div class="checkout-summary-item-action">
                                                     <a href="{{ path('site-checkout-step2-pickShipping') }}" class="text-sm text-nowrap">Módosítás</a>
                                                 </div>
                                             </div>

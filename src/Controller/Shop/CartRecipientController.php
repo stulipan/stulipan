@@ -59,7 +59,7 @@ class CartRecipientController extends AbstractController
      */
     public function editRecipientForm(Request $request, ?Recipient $recipient, $id = null, ValidatorInterface $validator)
     {
-        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+//        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
         // If User from session is equal to User in Recipient
         $orderBuilder = $this->orderBuilder;

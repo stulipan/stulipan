@@ -37,7 +37,7 @@ class CartSenderController extends AbstractController
      */
     public function editSenderForm(Request $request, ?Sender $sender, $id = null, ValidatorInterface $validator)
     {
-        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+//        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
         $orderBuilder = $this->orderBuilder;
         $customer = $orderBuilder->getCurrentOrder()->getCustomer() ? $orderBuilder->getCurrentOrder()->getCustomer() : null;

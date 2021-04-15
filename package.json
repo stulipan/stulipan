@@ -28,7 +28,7 @@
         "@pnotify/bootstrap4": "^5.2.0",
         "@pnotify/core": "^5.2.0",
         "@sweetalert2/theme-bootstrap-4": "^4.0.3",
-        "axios": "^0.19.0",
+        "axios": "^0.21.1",
         "bootstrap": "^4.3.1",
         "eslint": "^6.8.0",
         "notyf": "^3.9.0",

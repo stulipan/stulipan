@@ -2,7 +2,7 @@
     {#{% form_theme form 'bootstrap_4_horizontal_layout.html.twig' %}#}
     {{ form_start(form, { 'attr': {'class': 'form-inline JS--editForm needs-validation' }}) }}
     <div class="input-group input-group-sm">
-        <div class="form-group no-spinners">
+        <div class="form-group">
             {#<input type="text" class="form-control" ="">#}
             {#<div class="d-inline">#}
             {{ form_widget(form.stock, { 'attr': {
@@ -29,7 +29,7 @@
 			{#<div class="mb-3">#}
 				{#<div class="form-group row">#}
 					{#<div class="col-sm-4 col-lg-2 text-sm-righttt">#}
-                        {#{{ form_label(form.stock, form.stock, { 'label_attr': {'class': 'col-form-label' }}) }}#}
+                        {#{{ form_label(form.stock, form.stock, { 'label_attr': {'class': '' }}) }}#}
 					{#</div>#}
 					{#<div class="col-sm-8 col-lg-5 input-group">#}
                         {#{{ form_widget(form.stock) }}#}

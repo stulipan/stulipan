@@ -40,29 +40,41 @@ class OrderBillingAddressType extends AbstractType
         $builder->add('id', HiddenType::class,[
                 'mapped' => false, // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
             ]);
-        $builder->add('billingName', TextType::class,[
+        $builder->add('billingFirstname', TextType::class,[
                 'label' => 'Címzett',
                 'required' => true,
                 'attr' => [
                     'placeholder' => '',
-                    'autocomplete' => 'name'
+                    'autocomplete' => 'firstname'
                 ]
             ]);
+        $builder->add('billingLastname', TextType::class,[
+            'label' => 'Címzett',
+            'required' => true,
+            'attr' => [
+                'placeholder' => '',
+                'autocomplete' => 'lastname'
+            ]
+        ]);
         $builder->add('billingCompany',TextType::class, [
             'label' => 'Cégnév',
             'required' => false,
             ]);
+        $builder->add('billingVatNumber',TextType::class, [
+            'label' => 'ÁFA szám',
+            'required' => false,
+        ]);
         $builder->add('billingAddress',OrderAddressType::class,[
             'label' => false,
             'addressType' => Address::DELIVERY_ADDRESS,  // this option is defined in AddressType, so that it can receive a value
             ]);
-        $builder->add('billingPhone',TelType::class,[
-                'label' => 'Telefonszám',
-                'required' => false,
-                'constraints' => [
-                    new PhoneNumber(['regionCode' => 'HU']),
-                ],
-            ]);
+//        $builder->add('billingPhone',TelType::class,[
+//                'label' => 'Telefonszám',
+//                'required' => false,
+//                'constraints' => [
+//                    new PhoneNumber(['regionCode' => 'HU']),
+//                ],
+//            ]);
         $builder->add('customer',HiddenType::class,[
                 'mapped' => false,
             ]);

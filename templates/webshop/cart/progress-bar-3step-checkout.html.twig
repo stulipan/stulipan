@@ -1,56 +1,78 @@
-<section name="progress_bar">
-    <div class="progress--bar-container">
-        <div class="containerX">
-            <div class="row no-gutters">
-                <div class="col-lg-12 mx-auto">
-                    <ul class="progress--bar">
-                        {% if progressBar is defined %}
-                            {% if progressBar == 'pickExtraGift' %}
+{% if progressBar is defined and progressBar is not empty %}
+<div class="mt-2">
+    <ul class="progress--bar">
+            {% if progressBar == 'pickExtraGift' %}
 
-                                <li class="progress--bar-item active">
-                                    <span>Válassz ajándékot</span>
-                                </li>
-                                <li class="progress--bar-item">
-                                    <span>Kinek küldöd</span>
-                                </li>
-                                <li class="progress--bar-item ">
-                                    <span>Fizetés</span>
-                                </li>
+                <li class="progress--bar-item active">
+                    <span>{{ 'checkout.cart-progress-bar'|trans }}</span>
+                </li>
+                <li class="progress--bar-item">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <span>{{ 'checkout.recipient-progress-bar'|trans }}</span>
+                </li>
+                <li class="progress--bar-item ">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <span>{{ 'checkout.shipping-progress-bar'|trans }}</span>
+                </li>
+                <li class="progress--bar-item ">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <span>{{ 'checkout.payment-progress-bar'|trans }}</span>
+                </li>
 
-                            {% elseif progressBar == 'pickRecipient' %}
+            {% elseif progressBar == 'pickDeliveryAddress' %}
 
-                                <li class="progress--bar-item with-tick">
-                                    <span class="progress--bar-tick"><i class="fa fa-check mt-1" ></i></span>
-                                    <span><a href="{{ path('site-checkout-step1-pickExtraGift') }}" class="text-white">Válassz ajándékot</a></span>
-                                </li>
-                                <li class="progress--bar-item active">
-                                    <span>Kinek küldöd</span>
-                                </li>
-                                <li class="progress--bar-item ">
-                                    <span>Fizetés</span>
-                                </li>
+                <li class="progress--bar-item with-tick">
+                    <a href="{{ path('site-checkout-step0-pickExtraGift') }}" class="">{{ 'checkout.cart-progress-bar'|trans }}</a>
+                </li>
+                <li class="progress--bar-item active">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <span>{{ 'checkout.recipient-progress-bar'|trans }}</span>
+                </li>
+                <li class="progress--bar-item ">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <span>{{ 'checkout.shipping-progress-bar'|trans }}</span>
+                </li>
+                <li class="progress--bar-item ">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <span>{{ 'checkout.payment-progress-bar'|trans }}</span>
+                </li>
 
-                            {% elseif progressBar == 'pickPayment' %}
+            {% elseif progressBar == 'pickShipping' %}
 
-                                <li class="progress--bar-item with-tick">
-                                    <span class="progress--bar-tick"><i class="fa fa-check mt-1" ></i></span>
-                                    <span><a href="{{ path('site-checkout-step1-pickExtraGift') }}" class="text-white">Válassz ajándékot</a></span>
-                                </li>
-                                <li class="progress--bar-item with-tick">
-                                    <span class="progress--bar-tick"><i class="fa fa-check mt-1" ></i></span>
-                                    <span><a href="{{ path('site-checkout-step2-pickRecipient') }}" class="text-white">Kinek küldöd</a></span>
-                                </li>
-                                <li class="progress--bar-item active">
-                                    <span>Fizetés</span>
-                                </li>
+                <li class="progress--bar-item with-tick">
+                    <a href="{{ path('site-checkout-step0-pickExtraGift') }}" class="">{{ 'checkout.cart-progress-bar'|trans }}</a>
+                </li>
+                <li class="progress--bar-item with-tick">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="">{{ 'checkout.recipient-progress-bar'|trans }}</a>
+                </li>
+                <li class="progress--bar-item active">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <span>{{ 'checkout.shipping-progress-bar'|trans }}</span>
+                </li>
+                <li class="progress--bar-item">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <span>{{ 'checkout.payment-progress-bar'|trans }}</span>
+                </li>
 
-                            {% endif %}
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </div>
+            {% elseif progressBar == 'pickPayment' %}
 
-
-    </div>
-</section>
+                <li class="progress--bar-item with-tick">
+                    <a href="{{ path('site-checkout-step0-pickExtraGift') }}" class="">{{ 'checkout.cart-progress-bar'|trans }}</a>
+                </li>
+                <li class="progress--bar-item with-tick">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="">{{ 'checkout.recipient-progress-bar'|trans }}</a>
+                </li>
+                <li class="progress--bar-item with-tick">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <a href="{{ path('site-checkout-step2-pickShipping') }}" class="">{{ 'checkout.shipping-progress-bar'|trans }}</a>
+                </li>
+                <li class="progress--bar-item active">
+                    <i class="fas fa-angle-right text-muted mr-2"></i>
+                    <span>{{ 'checkout.payment-progress-bar'|trans }}</span>
+                </li>
+            {% endif %}
+    </ul>
+</div>
+{% endif %}

@@ -1,27 +1,27 @@
-    <span class="h5 myaccount-card-title mt-0 mb-3">
-        {% if order.payment is defined and order.payment %}
-            {{ order.payment.getName() }}
+    <h6 class="checkout-block-title">Fizetés mód</h6>
+
+    <div class="mt-2">
+        {% if order.paymentMethod is defined and order.paymentMethod %}
+            {{ order.paymentMethod.getName() }}
         {% else %}
             {{ 'order.payment.Payment'|trans }}
         {% endif %}
-    </span>
-
-
-    <div class="">
-        {% if order.payment is defined and order.payment %}
-            <p class="mt-2X">{{ order.payment.short() }} </p>
-            {% if order.payment.image %}
+        <div class="text-size-secondary text-muted mt-1">
+        {% if order.paymentMethod is defined and order.paymentMethod %}
+            <p>{{ order.paymentMethod.short() }} </p>
+            {% if order.paymentMethod.image %}
                 <div class="mt-2">
-                    <img class="border-0X h-20px d-noneX d-md-inlineX" src="{{ asset('/uploads/images/termekek/' ~ order.payment.image) }}" />
+                    <img class="h-20px" src="{{ asset('/uploads/images/termekek/' ~ order.paymentMethod.image) }}" />
                 </div>
             {% endif %}
             {% if order.isBankTransfer is defined and order.isBankTransfer == true %}
                 <a class="btnX btn-link-secondaryX" data-toggle="collapse" href="#collapseReszletek" role="button" aria-expanded="false" aria-controls="collapseReszletek">Az utaláshoz szükséges infók <i class="fas fa-angle-down ml-1"></i></a>
                 <div class="text-smX mt-1 collapse" id="collapseReszletek">
-                    {{ order.payment.description|raw }}
+                    {{ order.paymentMethod.description|raw }}
                 </div>
             {% endif %}
         {% else %}
-            {% include 'admin/_notAvailable-insert.html.twig' %}
+            {% include 'admin/_missing-data-insert.html.twig' %}
         {% endif %}
+        </div>
     </div>

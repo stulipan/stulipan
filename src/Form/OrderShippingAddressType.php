@@ -40,14 +40,22 @@ class OrderShippingAddressType extends AbstractType
         $builder->add('id', HiddenType::class,[
                 'mapped' => false, // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
             ]);
-        $builder->add('shippingName', TextType::class,[
-                'label' => 'Címzett',
-                'required' => true,
-                'attr' => [
-                    'placeholder' => '',
-                    'autocomplete' => 'name'
-                ]
-            ]);
+        $builder->add('shippingFirstname', TextType::class,[
+            'label' => 'Címzett',
+            'required' => true,
+            'attr' => [
+                'placeholder' => '',
+                'autocomplete' => 'firstname'
+            ]
+        ]);
+        $builder->add('shippingLastname', TextType::class,[
+            'label' => 'Címzett',
+            'required' => true,
+            'attr' => [
+                'placeholder' => '',
+                'autocomplete' => 'lastname'
+            ]
+        ]);
         $builder->add('shippingAddress',OrderAddressType::class,[
             'label' => false,
             'addressType' => Address::DELIVERY_ADDRESS,  // this option is defined in AddressType, so that it can receive a value

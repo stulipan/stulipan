@@ -66,7 +66,7 @@ final class Summary
     {
         $price = 0;
         foreach ($this->order->getItems() as $item) {
-            $price += $item->getPrice() * $item->getQuantity();
+            $price += $item->getUnitPrice() * $item->getQuantity();
         }
         return $price;
     }

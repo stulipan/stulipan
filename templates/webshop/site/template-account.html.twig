@@ -1,9 +1,6 @@
 {% extends 'webshop/site/base-site.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link href="{{ asset('webshop/site/checkout.css') }}" rel="stylesheet" />
-{% endblock %}
+{% block bodyClass %}my-account{% endblock %}
 
 {% block page_content %}
 
@@ -12,15 +9,15 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-12 col-xl-10 mx-auto">
+            <div class="col-sm-10 col-md-11 col-xl-10 mx-auto">
                 {% block header %}
-                    <div class="row">
-                        <div class="col-lg-12 mb-3 mb-md-0">
-                            <div class="d-none d-md-block">
+                    <div class="row mt-3 d-none d-md-block">
+                        <div class="col-lg-12">
+                            <div class="">
                                 <ul class="breadcrumb undefined">
                                     {% if breadcrumb is defined and breadcrumb is not empty %}
                                         {% for item in breadcrumb %}
-                                            <li class="breadcrumb-item"><a href="{{ item.url }}">{{ item.text }}</a></li>
+                                            <li class="breadcrumb-item"><a class="text-decoration-none" href="{{ item.url }}">{{ item.text }}</a></li>
                                         {% endfor %}
                                     {% endif %}
                                 </ul>
@@ -29,44 +26,88 @@
                     </div>
                 {% endblock %}
 
-                <div class="row mb-3">
-                    <div class="col-md-4">
+                <div class="row mt-3">
+                    <div class="col-md-4 correction-no-padding">
                         {% block sidebar %}
-                            <div class="card mb-20px">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <a href="{{ path('site-user-myAccount') }}" class="text-dark">
-                                            <svg class="svg-icon svg-icon-heavy">
-                                                <use xlink:href="#male-user-1"> </use>
-                                            </svg>
-                                            Fiókom
+                            <div class="account-sidebar card mb-20px">
+                                <div class="list-group list-group-flush">
+{#                                    <li class="list-group-item">#}
+                                        <a href="{{ path('site-user-myAccount') }}" class="list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-inline-flex align-items-center">
+                                                    <svg class="svg-icon svg-icon-heavy">
+                                                        <use xlink:href="#male-user-1"> </use>
+                                                    </svg>
+                                                    {{ 'account.my-account'|trans }}
+                                                </div>
+                                                <div class="d-flex text-mutedX text-sm">
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </div>
+                                            </div>
                                         </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="{{ path('site-user-myOrders') }}" class="text-dark">
-                                            <svg class="svg-icon svg-icon-heavy"><use xlink:href="#retail-bag-2"></use></svg>
-                                            Rendeléseim
+{#                                    </li>#}
+{#                                    <li class="list-group-item">#}
+                                        <a href="{{ path('site-user-myOrders') }}" class="text-darkX list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-inline-flex align-items-center">
+                                                    <svg class="svg-icon svg-icon-heavy"><use xlink:href="#retail-bag-2"></use></svg>
+                                                    {{ 'account.my-orders'|trans }}
+                                                </div>
+                                                <div class="d-flex text-mutedX text-sm">
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </div>
+                                            </div>
+
                                         </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="{{ path('site-user-myDetails') }}" class="text-dark">
-                                            <i class="fas fa-clipboard-list"></i>
-                                            Adataim
+{#                                    </li>#}
+{#                                    <li class="list-group-item">#}
+                                        <a href="{{ path('site-user-myDetails') }}" class="text-darkX list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-inline-flex align-items-center">
+                                                    <i class="fas fa-clipboard-list"></i>
+                                                    {{ 'account.account-information'|trans }}
+                                                </div>
+                                                <div class="d-flex text-mutedX text-sm">
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </div>
+                                            </div>
                                         </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="{{ path('site-user-myAccount') }}" class="text-dark">
-                                            <i class="fa fa-sign-in-alt"></i>
-                                            Jelszó módosítás
+{#                                    </li>#}
+{#                                    <li class="list-group-item">#}
+                                        <a href="{{ path('site-user-myAccount') }}" class="text-darkX list-group-item list-group-item-action">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-inline-flex align-items-center">
+                                                    <i class="fa fa-sign-in-alt"></i>
+                                                    {{ 'account.change-password'|trans }}
+                                                </div>
+                                                <div class="d-flex text-mutedX text-sm">
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </div>
+                                            </div>
                                         </a>
-                                    </li>
-                                </ul>
+{#                                    </li>#}
+                                </div>
                             </div>
                         {% endblock %}
                     </div>
                     <div class="col-md-8 mb-4">
-                        {% block content %}
-                        {% endblock %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="back-to-my-account mb-3 mb-md-0">
+                                    <a href="{{ path('site-user-myAccount') }}" class="text-dark">
+                                        <i class="fas fa-long-arrow-alt-left mr-2"></i>
+                                        {#            <svg class="svg-icon svg-icon-heavy">#}
+                                        {#                <use xlink:href="#male-user-1"> </use>#}
+                                        {#            </svg>#}
+                                        {{ 'account.my-account'|trans }}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-12 correction-no-padding">
+                                {% block content %}
+                                {% endblock %}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -75,5 +116,5 @@
     </div>
 {% endblock %}
 
-{% block footerServices %}
+{% block footerHighlights %}
 {% endblock %}

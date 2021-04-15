@@ -80,6 +80,10 @@ class OrderFilterType extends AbstractType
         ]);
     
     }
-    
+
+    public function getBlockPrefix()
+    {
+        return parent::getBlockPrefix().'_'.str_shuffle('0123456789');
+    }
 }
 

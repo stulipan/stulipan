@@ -8,7 +8,8 @@ use App\Form\ProductCategoryFormType;
 use App\Normalizer\DfrObjectSerializer;
 use App\Pagination\PaginatedCollection;
 use App\Services\FileUploader;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use App\Services\StoreSettings;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -103,19 +104,15 @@ class ProductCategoryController extends AbstractController
     /**
      * @Route("/product/category/{page}", name="product-listCategories", requirements={"page"="\d+"})
      */
-    public function listProductCategories($page = 1)
+    public function listProductCategories($page = 1, StoreSettings $settings)
     {
         $queryBuilder = $this->getDoctrine()
             ->getRepository(ProductCategory::class)
             ->findAllQueryBuilder();
         $imageDirectory =  $this->getParameter('category_images_directory');
 
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        //On the Pagerfanta object, call setMaxPerPage() to set displayed items to 10, the set current page
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
         try {

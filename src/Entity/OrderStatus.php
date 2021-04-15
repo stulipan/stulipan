@@ -14,17 +14,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class OrderStatus implements JsonSerializable
 {
-    public const STATUS_CREATED = 'created'; // rendelés létrehozva
-    public const STATUS_PAYMENT_PENDING = 'pending'; // fizetésre vár
-    public const STATUS_PAYMENT_FAILED = 'failed'; // fizetésre sikertelen
-    public const STATUS_PAYMENT_REFUNDED = 'refunded'; // összeg visszafizetve
+    public const CART_CREATED = 'cart.created'; // kosár létrehozva
+    public const CART_UPDATED = 'cart.updated'; // kosár frissítve
+
+    public const ORDER_CREATED = 'created'; // rendelés létrehozva
+    public const PAYMENT_PENDING = 'pending'; // fizetésre vár
+    public const PAYMENT_FAILED = 'failed'; // fizetésre sikertelen
+    public const PAYMENT_REFUNDED = 'refunded'; // összeg visszafizetve
 
     public const STATUS_SENT = 'sent'; // elküldve, azaz szállítás alatt
     public const STATUS_FULFILLED = 'fulfilled'; // teljesítve
     public const STATUS_RETURNED = 'returned'; // visszaküldve
 
-    public const STATUS_REJECTED = 'rejected'; // elutasítva - ezt még nem tudom mikor kell használni
-    public const STATUS_DELETED = 'deleted'; // törölve
+    public const ORDER_REJECTED = 'rejected'; // elutasítva - ezt még nem tudom mikor kell használni
+    public const ORDER_DELETED = 'deleted'; // törölve
+
+    public const CONVERSION_TRACKING_LOADED = 'conversion.tracking.loaded';
 
     /**
      * @var int

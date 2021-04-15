@@ -31,9 +31,11 @@ class DeliverySpecialDate
     private $specialDate;
 
     /**
-     * @Assert\NotBlank(message="Válassz típust.")
-     * @ORM\ManyToOne(targetEntity="App\Entity\DeliveryDateType")
-     * @ORM\JoinColumn(name="date_type_id", referencedColumnName="id")
+     * @var DeliveryDateType
+     *
+     * @Assert\NotNull(message="Válassz típust.")
+     * @ORM\ManyToOne(targetEntity="App\Entity\DeliveryDateType", inversedBy="specialDates")
+     * @ORM\JoinColumn(name="date_type_id", referencedColumnName="id", nullable=false)
      */
     private $dateType;
 

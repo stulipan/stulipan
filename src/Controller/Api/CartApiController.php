@@ -6,7 +6,7 @@ use App\Controller\BaseController;
 use App\Entity\Model\MessageAndCustomer;
 use App\Entity\Order;
 
-use App\Entity\OrderBuilder;
+use App\Services\OrderBuilder;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

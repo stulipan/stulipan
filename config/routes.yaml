@@ -3,11 +3,17 @@ index:
     controller: App\Controller\Shop\ShopController::index
 
 admin:
-    path: /admin
+    path: /{all}/admin   # {all} so that both /admin and /hu/admin work
     controller: App\Controller\Admin\AdminController::showAdmin
 
 logout:
     path: /logout
+    methods: GET
+
+admin-logout:
+#    path: /{all}/admin/logout
+    path: '/%app_locales%/admin/logout'
+    methods: GET
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.yaml"

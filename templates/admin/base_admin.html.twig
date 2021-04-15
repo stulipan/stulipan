@@ -17,13 +17,31 @@
                     </button>
                 </div>
                 <div class="sidebar-body pb-0">
-                    {% include '/admin/settings/_settings-dashboard-widget.html.twig' %}
+                    {% include '/admin/settings/home-widget.html.twig' %}
                 </div>
-                <div class="sidebar-footer">
-                    <div class="loadingWrapper loadingWrapper-secondary">
-                        <a href="" class="btn btn-secondary" data-dismiss="sidebar">{{ 'generic.close'|trans }}</a>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                    </div>
+{#                <div class="sidebar-footer">#}
+{#                    <div class="loadingWrapper loadingWrapper-secondary">#}
+{#                        <a href="" class="btn btn-secondary" data-dismiss="sidebar">{{ 'generic.close'|trans }}</a>#}
+{#                        <div class="JS--loadingOverlay d-flex align-items-stretch"></div>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+        </div>
+    </div>
+    <div class="sidebar sidebar-left sidebar-sm fade" id="burgerMenuContent" tabindex="-1" role="dialog" aria-labelledby="sidebarMenu" aria-hidden="true">
+        <div class="sidebar-dialog sidebar-dialog-scrollable sidebar-dialog-centered" role="document">
+            <div class="sidebar-content">
+                <div class="sidebar-header">
+{#                    <h3 class="sidebar-title" id="sidebarMenu">Menu</h3>#}
+                    <a href="/" class="navbar-brand" id="sidebarMenu" target="_blank">
+                        <span class="h4 font-weight-bold text-uppercase text-primary ml-0">tulipan<span class="text-danger">.</span>futar  </span>
+                    </a>
+                    <button type="button" class="close" data-dismiss="sidebar" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="sidebar-body bg-body p-0">
+                    {% include 'admin/navbar-sidenav-widget.html.twig' %}
                 </div>
             </div>
         </div>
@@ -38,12 +56,23 @@
                     <a href="/" class="navbar-brand order-lg-1 order-2 mr-4" target="_blank">
                         <span class="h4 font-weight-bold text-uppercase text-white ml-0">tulipan<span class="text-danger">.</span>futar  </span>
                     </a>
-                    <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#burgerMenuContent" aria-controls="burgerMenuContent" aria-expanded="false" aria-label="Toggle navigation">
-                        {#<span class="navbar-toggler-icon"></span>#}
-                        <i class="fas fa-bars mr-0"></i>
-                    </button>
-                    <div class="collapse navbar-collapse active coll justify-content-center order-lg-2 order-5" id="burgerMenuContent">
-                        <ul class="navbar-nav">
+{#                    <button class="navbar-toggler order-1" type="button" data-toggle="sidebar" data-target="#burgerMenuContent">#}
+{#                        #}{#<span class="navbar-toggler-icon"></span>#}
+{#                        <i class="fas fa-bars"></i>#}
+{#                    </button>#}
+
+                    <div class="navbar-custom order-1">
+                        <ul class="navbar-nav flex-row">
+                            <li class="nav-item">
+                                <button class="navbar-toggler" type="button" data-toggle="sidebar" data-target="#burgerMenuContent">
+                                    <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="collapse navbar-collapse active coll justify-content-center order-lg-2 order-5" id="burgerMenuContent_">
+                        <ul class="navbar-nav" style="display: none;">
                             <li class="nav-item">
                                 <a href="{{ path('dashboard') }}" class="nav-link text-nowrap">
                                     {#<i class="dripicons-meter"></i>#}
@@ -60,14 +89,13 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnavTermekek">
                                     <a href="{{ path('product-list') }}" class="dropdown-item">
-                                        <i class="fas fa-boxes mr-1"></i></i>
+                                        <i class="fas fa-boxes mr-1"></i>
                                         Termékek
                                     </a>
                                     <a href="{{ path('product-listCategories') }}" class="dropdown-item">
                                         <i class="fas fa-list-ul mr-1"></i>
                                         Kategóriák
                                     </a>
-
                                 </div>
                             </li>
 
@@ -131,7 +159,7 @@
                                         <i class="far fa-file-code"></i>
                                         Oldalak
                                     </a>
-                                    <a href="{{ path('about') }}" class="dropdown-item">
+                                    <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="dropdown-item">
                                         <i class="far fa-trash-alt mr-1"></i>
                                         HTML modulok
                                     </a>
@@ -157,158 +185,14 @@
         </div>
     </div>
 
-    {#<nav class="sidebar-sticky">#}
-    {#<div class="left-side-menu left-side-menu-light bg-dark text-light">#}
-
-        {#<div class="slimScrollDivX" style="position: relative; overflow: hidden; width: auto; height: 443px;">#}
-            {#<div class="slimscroll-menu active" style="overflow: hidden; width: auto; height: 443px;">#}
-
-                {#<!-- LOGO -->#}
-                {#<a href="{{ path('homepage') }}" class="logo text-center my-3" target="_blank">#}
-                    {#<span class="logo-lg">#}
-                            {#<h3 class="font-weight-bold text-uppercase text-light">tulipan<span class="text-danger">.</span>futar  </h3>#}
-                            {#<img src="assets/images/logo-dark.png" alt="" height="16">#}
-                    {#</span>#}
-                    {#<span class="logo-sm text">#}
-                        {#<span class="font-weight-bold text-uppercase text-light">t<span class="text-danger">.</span>f  </span>#}
-                            {#<img src="assets/images/logo_sm.png" alt="" height="16">#}
-                    {#</span>#}
-                {#</a>#}
-
-                {#<!--- Sidemenu -->#}
-                {#<ul class="metismenu side-nav side-nav-light">#}
-
-                    {#<li class="side-nav-title side-nav-item">Webshop</li>#}
-
-                    {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('dashboard') }}" class="side-nav-link">#}
-                            {#<i class="dripicons-meter"></i>#}
-                            {#<i class="fas fa-tachometer-alt"></i>#}
-                            {#<span class="badge badge-success float-right">7</span>#}
-                            {#<span> Dashboard </span>#}
-                        {#</a>#}
-                    {#</li>#}
-
-                    {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('product-list') }}" class="side-nav-link">#}
-                            {#<i class="fas fa-th"></i>#}
-                            {#<span> Termékek </span>#}
-                        {#</a>#}
-                    {#</li>#}
-
-
-                    {#<li class="side-nav-title side-nav-item mt-1 pb-1">Bolt</li>#}
-
-                    {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('boltzaras_list') }}" class="side-nav-link">#}
-                            {#<i class="far fa-calendar-check"></i>#}
-                            {#<span> Boltzárás </span>#}
-                        {#</a>#}
-                    {#</li>#}
-
-                    {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('invoice-list') }}" class="side-nav-link">#}
-                            {#<i class="dripicons-heart"></i>#}
-                            {#<i class="fas fa-lgX fa-file-invoice-dollar fa-dollar-signX"></i>#}
-                            {#<span class="badge badge-danger float-right">Új</span>#}
-                            {#<span> Számlák </span>#}
-                        {#</a>#}
-                    {#</li>#}
-
-                    {#<li class="side-nav-title side-nav-item mt-1 pb-1">Rendelések</li>#}
-
-                    {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('order-list') }}" class="side-nav-link">#}
-                            {#<i class="far fa-calendar-check"></i>#}
-                            {#<span> Rendelések </span>#}
-                            {#<span class="badge badge-danger float-right mr-2">32</span>#}
-                        {#</a>#}
-                    {#</li>#}
-
-                    {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('invoice-list') }}" class="side-nav-link">#}
-                            {#<i class="fas fa-lgX fa-file-invoice-dollar fa-dollar-signX"></i>#}
-                            {#<span>Vásárlók</span>#}
-                        {#</a>#}
-                    {#</li>#}
-
-                    {#<li class="side-nav-title side-nav-item mt-2">Leltár</li>#}
-                    {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('inventory-supply-list') }}" class="side-nav-link">#}
-                            {#<i class="fas fa-cubes"></i>#}
-                            {#<span> Szállítmányok</span>#}
-                        {#</a>#}
-                    {#</li>#}
-                    {#<li class="side-nav-item mb-0">#}
-                        {#<a href="{{ path('inventory-waste-list') }}" class="side-nav-link">#}
-                            {#<i class="far fa-trash-alt"></i>#}
-                            {#<span> Selejt</span>#}
-                        {#</a>#}
-                    {#</li>#}
-                    {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('inventory-product-list-all') }}" class="side-nav-link">#}
-                            {#<i class="far fa-list-alt"></i>#}
-                            {#<span> Terméklista</span>#}
-                        {#</a>#}
-                    {#</li>#}
-
-
-                    {#{% if is_granted('ROLE_DELIVERY_SETTINGS') %}#}
-                    {#<li class="side-nav-title side-nav-item mt-2">Szállítási beállítások</li>#}
-                    {#<li class="side-nav-item">#}
-                        {#<a href="{{ path('occasion-list') }}" class="side-nav-link">#}
-                            {#<i class="far fa-calendar-alt"></i>#}
-                            {#<span> Szállítási napok</span>#}
-                        {#</a>#}
-                    {#</li>#}
-                    {#<li class="side-nav-item mb-0">#}
-                        {#<a href="{{ path('delivery-date-type-list') }}" class="side-nav-link">#}
-                            {#<i class="far fa-clock"></i>#}
-                            {#<span> Idősávok</span>#}
-                        {#</a>#}
-                    {#</li>#}
-                    {#<li class="side-nav-item mb-0">#}
-                        {#<a href="{{ path('shipping-list') }}" class="side-nav-link">#}
-                            {#<i class="fas fa-cog"></i>#}
-                            {#<span> Szállítás és fizetési módok</span>#}
-                        {#</a>#}
-                    {#</li>#}
-                    {#{% endif %}#}
 
 
 
-                {#</ul>#}
 
-                {#<!-- Help Box -->#}
-                {#<div class="help-box text-light text-center">#}
-                    {#<a href="{{ path('homepage') }}" class="text-light" target="_blank">Webshop megnyitása</a>#}
-                    {#<img src="assets/images/help-icon.svg" height="90" alt="Helper Icon Image">#}
-                    {#<h5 class="mt-3">Unlimited Access</h5>#}
-                    {#<p class="mb-3">Upgrade to plan to get access to unlimited reports</p>#}
-                    {#<a href="javascript: void(0);" class="btn btn-outline-light btn-sm">Upgrade</a>#}
-                {#</div>#}
-                {#<!-- end Help Box -->#}
-                {#<!-- End Sidebar -->#}
 
-                {#<div class="clearfix"></div>#}
-
-                {#<ul class="metismenu side-nav side-nav-light text-center">#}
-                {#<li class="side-nav-item">#}
-                    {#<a href="{{ path('logout') }}" class="side-nav-link">#}
-                        {#<span> Kilépés </span>#}
-                        {#<i class="fas fa-sign-out-alt"></i>#}
-                    {#</a>#}
-                {#</li>#}
-                {#</ul>#}
-
-            {#</div>#}
-            {#<div class="slimScrollBar" style="background: rgb(158, 165, 171); width: 8px; position: absolute; top: 0; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 143.983px;"></div>#}
-            {#<div class="slimScrollRail" style="width: 8px; height: 100%; position: absolute; top: 0; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>#}
-        {#</div>#}
-        {#<!-- Sidebar -left -->#}
-
-    {#</div>#}
-    {#</nav>#}
+    <nav class="sidenav-sticky">
+        {% include 'admin/navbar-sidenav-widget.html.twig' %}
+    </nav>
 
     <div class="content-page p-0" style="overflow: hidden; min-height: 0; ">
         {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
@@ -385,46 +269,17 @@
         });
 
         $(document).ready(function () {
-//            const stackBottomModal = {
-//                dir1: 'up', // With a dir1 of 'up', the stacks will start appearing at the bottom.
-//                // Without a `dir2`, this stack will be horizontally centered, since the `dir1` axis is vertical.
-//                firstpos1: 25, // The notices will appear 25 pixels from the bottom of the context.
-//                // Without a `spacing1`, this stack's notices will be placed 25 pixels apart.
-//                push: 'top', // Each new notice will appear at the bottom of the screen, which is where the 'top' of the stack is. Other notices will be pushed up.
-//                // modal: true, // When a notice appears in this stack, a modal overlay will be created.
-//                overlayClose: true, // When the user clicks on the overlay, all notices in this stack will be closed.
-//                context: document.getElementById('page-container') // The notices will be placed in the 'page-container' element.
-//            };
-            PNotify.defaults.styling = 'bootstrap4';
-            PNotify.defaults.icons = 'fontawesome5';
-
             {% for msg in app.session.flashBag.get('success') %}
-            PNotify.success({
-                title: 'Siker!',
-                text: '{{ msg|raw }}',
-                modules: { Desktop: { desktop: true } },
-                textTrusted: true,
-//                stack: stackBottomModal,
-            });
-            {% endfor %}
-            {% for msg in app.session.flashBag.get('warning') %}
-            PNotify.notice({
-                title: 'Figyelem!',
-                text: '{{ msg|raw }}',
-                modules: { Desktop: { desktop: true } },
-//                stack: stackBottomModal,
-            });
-            {% endfor %}
-            {% for msg in app.session.flashBag.get('danger') %}
-            PNotify.error({
-                title: 'Upsz...',
-                text: '{{ msg|raw }}',
-                modules: { Desktop: { desktop: true } },
-//                cornerClass: 'alert-dark',
-//                stack: stackBottomModal,
-            });
+                notyf.success('Sikeres modosítás.');
             {% endfor %}
 
+            {% for msg in app.session.flashBag.get('warning') %}
+                notyf.success('Figyelem!');
+            {% endfor %}
+
+            {% for msg in app.session.flashBag.get('danger') %}
+                notyf.error('Upsz... Hiba történt!);
+            {% endfor %}
         });
     </script>
 {% endblock %}

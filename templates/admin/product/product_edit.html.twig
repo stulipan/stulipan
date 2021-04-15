@@ -1,7 +1,8 @@
 {% extends 'admin/template-editing.html.twig' %}
 {#{% extends 'admin/template-with-sidebar.html.twig' %}#}
 
-{% set pageTitle = title %}
+{% set activeMenu = 'products' %}
+{% set pageTitle = product is defined and product is not null ? product.name : 'Új termék hozzáadása' %}
 {% set breadcrumb = {
     0: {
         'url': path('dashboard'),

@@ -2,7 +2,7 @@
     <div class="col-md-6 col-lg-4">
         <div class="card d-block mb-4 {% if selectedRecipient is defined and selectedRecipient == recipient.id %} selected {% endif %}">
             <div class="card-body">
-                <h5 class="card-title">{{ recipient.name }}</h5>
+                <h5 class="card-title">{{ recipient.fullname }}</h5>
                 <p class="card-text text-sm">
                     <span class="">{{ recipient.address.street }}</span> <br>
                     <span class="">{{ recipient.address.city }}, {{ recipient.address.province }}</span> <br>

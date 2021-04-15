@@ -1,0 +1,12 @@
+{#
+    Use it like this:
+
+    {% include 'admin/_missing-image-insert.html.twig' with {
+        customStyle: 'style="--img-width:100%; --img-height:250px;"',
+        className: 'img-unavailable-lg'
+    } %}
+#}
+
+<div class="img-thumbnail img-unavailable{% if className is defined and className is not empty %} {{ className }}{% endif %}" {% if customStyle is defined and customStyle is not empty %}{{ customStyle|raw }}{% endif %}>
+    <i class="far fa-image mr-0"></i>
+</div>

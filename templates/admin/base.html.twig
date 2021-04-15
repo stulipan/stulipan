@@ -7,35 +7,21 @@
 
     <title>{% block title %}Admin Page{% endblock %}</title>
     {% block stylesheets %}
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}">
-
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-{#        <link href="{{ asset('webshop/site/bootstrap.css') }}" rel="stylesheet" type="text/css" />#}
-        {{ encore_entry_link_tags('v-bootstrap') }}
-
-
-{#        <link href="{{ asset('webshop/site/style.css') }}" rel="stylesheet" type="text/css" />#}
-
-        <!-- HYPER CSS -->
-        <link href="{{ asset('webshop/admin/hyper/custom.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('webshop/admin/v-style.css') }}" rel="stylesheet" type="text/css" />
-
-
+        <link rel="stylesheet" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">
+        {{ encore_entry_link_tags('admin-theme') }}
+        {{ encore_entry_link_tags('daterangepicker') }}
         {{ encore_entry_link_tags('v-admin') }}
-{#        <link href="{{ asset('build/v-admin.css') }}" rel="stylesheet" type="text/css"/>#}
-        <link rel="shortcut icon" href="{{ asset('webshop/site/favicon.png')}}">
 
-        <link href="{{ asset('webshop/site/js/daterangepicker.css') }}" rel="stylesheet" />
+        <link href="{{ asset('webshop/admin/custom-select2.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('webshop/admin/v-style.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" />
 
     {% endblock %}
 </head>
-<body data-layout="topnav" class="admin {% block bodyClass %} {% endblock %}">
+<body class="admin{% block bodyClass %}{% endblock %}">
 
-
-    {% block body %}{% endblock %}
-
+{% block body %}
+{% endblock %}
 
 
 {% block javascripts %}
@@ -44,18 +30,101 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>#}
-{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>#}
-
     <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
     <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
+    <script src="{{ asset('webshop/admin/js/select2.min.js') }}"></script>
 
-    <script src="https://sciactive.com/pnotify/lib/iife/PNotify.js"></script>
-    <script src="https://sciactive.com/pnotify/lib/iife/PNotifyButtons.js"></script>
+    <script>
+        // Innen: https://momentjs.com/docs/#/i18n/
+        moment.locale("{{ app.request.locale }}", {
+            monthsShort : [
+                "{{ 'datetime.jan'|trans }}",
+                "{{ 'datetime.feb'|trans }}",
+                "{{ 'datetime.mar'|trans }}",
+                "{{ 'datetime.apr'|trans }}",
+                "{{ 'datetime.may'|trans }}",
+                "{{ 'datetime.jun'|trans }}",
+                "{{ 'datetime.jul'|trans }}",
+                "{{ 'datetime.aug'|trans }}",
+                "{{ 'datetime.sep'|trans }}",
+                "{{ 'datetime.oct'|trans }}",
+                "{{ 'datetime.nov'|trans }}",
+                "{{ 'datetime.dec'|trans }}",
+            ]
+        });
+        moment.locale("{{ app.request.locale }}", {
+            months: [
+                "{{ 'datetime.january'|trans }}",
+                "{{ 'datetime.february'|trans }}",
+                "{{ 'datetime.march'|trans }}",
+                "{{ 'datetime.april'|trans }}",
+                "{{ 'datetime.mayy'|trans }}",
+                "{{ 'datetime.june'|trans }}",
+                "{{ 'datetime.july'|trans }}",
+                "{{ 'datetime.august'|trans }}",
+                "{{ 'datetime.september'|trans }}",
+                "{{ 'datetime.october'|trans }}",
+                "{{ 'datetime.november'|trans }}",
+                "{{ 'datetime.december'|trans }}",
+            ]
+        });
+        {#console.log("{{ storeSettings.getDateFormatInMomentJsFormat }}");#}
+        const drpBaseConfig = {
+            locale: {
+                format: "{{ storeSettings.getDateFormatInMomentJsFormat }}",
+                // format: 'YYYY-MM-DD',
+                separator: ' - ',
+                dropdownRangeLabel: "{{ 'datetime.date-range'|trans }}",
+                customRangeLabel: "{{ 'datetime.custom-range'|trans }}",
+                applyLabel: "{{ 'generic.apply'|trans }}",
+                cancelLabel: "{{ 'generic.delete'|trans }}",
+                daysOfWeek: [
+                    "{{ 'datetime.sun'|trans }}",
+                    "{{ 'datetime.mon'|trans }}",
+                    "{{ 'datetime.tue'|trans }}",
+                    "{{ 'datetime.wed'|trans }}",
+                    "{{ 'datetime.thu'|trans }}",
+                    "{{ 'datetime.fri'|trans }}",
+                    "{{ 'datetime.sat'|trans }}",
+                ],
+                monthNames: [
+                    "{{ 'datetime.january'|trans }}",
+                    "{{ 'datetime.february'|trans }}",
+                    "{{ 'datetime.march'|trans }}",
+                    "{{ 'datetime.april'|trans }}",
+                    "{{ 'datetime.mayy'|trans }}",
+                    "{{ 'datetime.june'|trans }}",
+                    "{{ 'datetime.july'|trans }}",
+                    "{{ 'datetime.august'|trans }}",
+                    "{{ 'datetime.september'|trans }}",
+                    "{{ 'datetime.october'|trans }}",
+                    "{{ 'datetime.november'|trans }}",
+                    "{{ 'datetime.december'|trans }}",
+                ],
+                firstDay: 1,
+            },
+        };
+        const drpRanges = {
+            ranges: {
+                "{{ 'datetime.today'|trans }}": [moment(), moment()],
+                "{{ 'datetime.yesterday'|trans }}": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                "{{ 'datetime.this-month'|trans }}": [moment().startOf('month'), moment().endOf('month')],
+                "{{ 'datetime.previous-month'|trans }}": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                "{{ 'datetime.last-7-days'|trans }}": [moment().subtract(6, 'days'), moment()],
+                "{{ 'datetime.last-30-days'|trans }}": [moment().subtract(29, 'days'), moment()],
+                "{{ 'datetime.this-year'|trans }}": [moment().startOf('year'), moment().endOf('year')],
+                "{{ 'datetime.previous-year'|trans }}": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                "{{ 'datetime.lifetime'|trans }}": [moment('{{ storeSettings.get('general.launch-date') }}'), moment()],
+            },
+        };
+    </script>
 
-    <script src="{{ asset('webshop/admin/hyper/js/order.detail.js') }}"></script>
-    <script src="{{ asset('build/v-admin.js') }}"></script>
-    {{ encore_entry_script_tags('v-boostrap-js') }}
+    <script src="{{ asset('webshop/admin/js/order.detail.js') }}"></script>
+
+    {{ encore_entry_script_tags('v-admin') }}
+    {{ encore_entry_script_tags('sidebar') }}
+    {{ encore_entry_script_tags('floating-input') }}
+    {{ encore_entry_script_tags('adaptive-tabs') }}
 {% endblock %}
 </body>
 </html>

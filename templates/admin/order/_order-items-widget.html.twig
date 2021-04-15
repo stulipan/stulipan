@@ -1,23 +1,21 @@
-    <span class="h5 admin-card-title">{{ 'order.cart-products'|trans }}</span>
+    <div class="h5 mb-0">{{ 'order.cart-products'|trans }}</div>
 
-    <div name="products_in_basket" class="bg-white mt-2">
-        <div class="">
-            <div class="cart-itemX">
-                <div class="row d-flex align-items-center">
-                    <div class="col-12">
-                        {% for item in order.items %}
-                            {% include 'admin/order/_order-item-single-widget.html.twig' %}
-                        {% endfor %}
+    <div id="products_in_basket" class="bg-white mt-2">
+        <div class="row d-flex align-items-center">
+            <div class="col-12">
+
+                {% for item in order.items %}
+                    {% include 'admin/order/_order-item-single-widget.html.twig' %}
+                {% endfor %}
+
+                <div class="cart-item">
+                    <div class="row d-flex align-items-center text-center">
+                        <div class="col-12">
+                            {% include 'webshop/cart/_cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-    </div>
-    <div name="written_message" class="text-sm bg-white pt-3 border-top">
-        <div class="row d-flex align-items-center text-center">
-            <div class="col-12">
-                {% include 'webshop/cart/_cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
             </div>
         </div>
     </div>

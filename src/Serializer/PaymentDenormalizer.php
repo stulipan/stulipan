@@ -2,7 +2,7 @@
 
 namespace App\Serializer;
 
-use App\Entity\Payment;
+use App\Entity\PaymentMethod;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -27,7 +27,7 @@ class PaymentDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         if (isset($data['id'])) {
-            $object = $this->em->find(Payment::class, $data['id']);
+            $object = $this->em->find(PaymentMethod::class, $data['id']);
             return $object;
         }
         return;
@@ -38,7 +38,7 @@ class PaymentDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        if ($type != Payment::class) {
+        if ($type != PaymentMethod::class) {
             return false;
         }
         return true;

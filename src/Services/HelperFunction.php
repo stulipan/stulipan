@@ -7,6 +7,15 @@ use Exception;
 
 class HelperFunction //extends AbstractController
 {
+    private $storeSettings;
+
+    /**
+     * @return mixed
+     */
+    public function __construct(StoreSettings $storeSettings)
+    {
+        $this->storeSettings = $storeSettings;
+    }
     /**
      * @param string|null $period
      * @return string|null
@@ -33,8 +42,8 @@ class HelperFunction //extends AbstractController
             if ($period == '30 days') {
                 $start->modify('-29 days');
             }
-            $start = $start->format('Y-m-d');
-            $end = $end->format('Y-m-d');
+            $start = $start->format($this->storeSettings->getDateFormat());
+            $end = $end->format($this->storeSettings->getDateFormat());
         }
         return $start.' - '.$end;
     }

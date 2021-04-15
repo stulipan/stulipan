@@ -1,0 +1,71 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block bodyClass %} print{% endblock %}
+
+{# !!!! NINCS HASZNALATBAN !!!!!! #}
+
+{% block page_content %}
+
+    {% block modal %}
+    {% endblock %}
+
+    <div class="row">
+        <div class="col-lg-12 col-xl-11 mx-auto">
+            {% block header %}
+                <div class="row mt-1 mt-sm-3">
+                    <div class="col-lg-12 mt-2">
+                        <div class="header-wrapper">
+                            <div class="header-title">
+                                <div class="d-flex flex-column flex-md-row flex-nowrap align-items-start">
+                                    <div class="d-flex text-nowrap">
+                                        {% block headerTitleWrapper %}
+                                            <div class="page-title h3 d-inline mr-md-2 mr-1">{% block headerTitle %}{{ pageTitle }}{% endblock %}</div>
+                                        {% endblock %}
+                                    </div>
+                                    <div class="d-flex">
+                                        {% block headerStatusWrapper %}
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="header-actions">
+                                {% block headerActionsWrapper %}
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+
+            {% block beforeContent %}
+            {% endblock %}
+
+            {% block mainContent %}
+            <div class="row mt-3">
+                <div class="col-md-8 correction-no-padding">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+                <div id="__SIDEBAR" class="col-md-4 correction-no-padding">
+                    {% block sidebar %}
+                    {% endblock %}
+                </div>
+            </div>
+            {% endblock %}
+
+            {% block additionalContent %}
+            {% endblock %}
+
+
+        </div>
+    </div>
+{% endblock %}
+

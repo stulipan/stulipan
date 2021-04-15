@@ -1,0 +1,203 @@
+<div class="form-row">
+    <div class="col-12">
+        <ul class="settings-item-list">
+            <li class="settings-item">
+                <a href="{{ path('settings-configuration') }}" class="w-100 h-100">
+                    <div class="settings-item-body">
+                        <div class="settings-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="settings-option">
+                            <div>
+                                <span class="text-primary">{{ 'settings.dashboard.general-settings-title'|trans }}</span>
+                            </div>
+                            <div>
+                                {{ 'settings.dashboard.general-settings-description'|trans }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
+            <li class="settings-item">
+                    <a href="{{ path('settings-checkout') }}" class="w-100 h-100">
+                        <div class="settings-item-body">
+                            <div class="settings-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="settings-option">
+                                <div>
+                                    <span class="text-primary">Pénztár</span>
+                                </div>
+                                <div>
+                                    Pénztár folyamat testreszabása.
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+            </li>
+            {% endif %}
+            {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
+            <li class="settings-item">
+                <a href="{{ path('shipping-list') }}" class="w-100 h-100">
+                    <div class="settings-item-body">
+                        <div class="settings-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <div class="settings-option">
+                            <div>
+                                <span class="text-primary">Szállítás és fizetés</span>
+                            </div>
+                            <div>
+                                Szállítás és fizetési módok beállítása.
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endif %}
+            {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
+            <li class="settings-item">
+                    <a href="{{ path('occasion-list') }}" class="w-100 h-100">
+                        <div class="settings-item-body">
+                            <div class="settings-icon">
+                                <i class="far fa-calendar-alt"></i>
+                            </div>
+                            <div class="settings-option">
+                                <div>
+                                    <span class="text-primary">Szállítási napok</span>
+                                </div>
+                                <div>
+                                    Kiemelt szállítási napok.
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+            </li>
+            {% endif %}
+            {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
+            <li class="settings-item">
+                <a href="{{ path('delivery-date-type-list') }}" class="w-100 h-100">
+                    <div class="settings-item-body">
+                        <div class="settings-icon">
+                            <i class="far fa-clock"></i>
+                        </div>
+                        <div class="settings-option">
+                            <div>
+                                <span class="text-primary">Szállítási idősávok</span>
+                            </div>
+                            <div>
+                                Szállítási idősávok definiálása.
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endif %}
+            {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
+            <li class="settings-item">
+                <a href="{{ path('geo-price') }}" class="w-100 h-100">
+                    <div class="settings-item-body">
+                        <div class="settings-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <div class="settings-option">
+                            <div>
+                                <span class="text-primary">Szállítási díjak</span>
+                            </div>
+                            <div>
+                                Rendelj szállítási díjakat az egyes területekhez.
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endif %}
+            {% if is_granted('ROLE_MANAGE_VAT') %}
+            <li class="settings-item">
+                <a href="{{ path('vat-rate-list') }}" class="w-100 h-100">
+                    <div class="settings-item-body">
+                        <div class="settings-icon">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="settings-option">
+                            <div>
+                                <span class="text-primary">ÁFA</span>
+                            </div>
+                            <div>
+                                ÁFA típusok.
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endif %}
+            {% if is_granted('ROLE_MANAGE_VAT') %}
+            <li class="settings-item">
+                <a href="{{ path('vat-value-list') }}" class="w-100 h-100">
+                    <div class="settings-item-body">
+                        <div class="settings-icon">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="settings-option">
+                            <div>
+                                <span class="text-primary">ÁFA értékek</span>
+                            </div>
+                            <div>
+                                ÁFA értékek.
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endif %}
+            {% if is_granted('ROLE_MANAGE_TRANSLATION') %}
+            <li class="settings-item">
+                <a href="{{ path('translation-edit-byCategory') }}" class="w-100 h-100">
+                    <div class="settings-item-body">
+                        <div class="settings-icon">
+                            {#                            <i class="fas fa-globe-americas"></i>#}
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <div class="settings-option">
+                            <div>
+                                <span class="text-primary">{{ 'settings.dashboard.translation-title'|trans }}</span>
+                            </div>
+                            <div>
+                                {{ 'settings.dashboard.translation-description'|trans }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+<div class="form-row py-4">
+    <div class="col-12 border-bottom">
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-12">
+        <ul class="settings-item-list">
+            <li class="settings-item">
+                <a href="{{ path('settings-admin-general') }}" class="w-100 h-100">
+                    <div class="settings-item-body">
+                        <div class="settings-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="settings-option">
+                            <div>
+                                <span class="text-primary">{{ 'settings.dashboard.admin-general-settings-title'|trans }}</span>
+                            </div>
+                            <div>
+                                {{ 'settings.dashboard.admin-general-settings-description'|trans }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

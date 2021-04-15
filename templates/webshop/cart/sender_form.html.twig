@@ -1,75 +1,92 @@
-{# this tag only applies to the forms defined in this template #}
-{{ form_start(senderForm, { 'attr': {'class': 'JS--senderForm JS--editForm-sender' }}) }}
-        <div class="row">
+{% import _self as myOwnMacro %}
 
-            <div class="col-lg-12 mb-3">
-                <span class="detail-option-heading font-weight-bold"></span>
-                <span class="text-mutedX">Add meg a számlázási adataidat, vagy válassz az előzőleg használtak közül.</span>
-            </div>
+{% macro firstname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.firstname.vars.value is defined and item.firstname.vars.value %}active{% endif %}">
+        <label for="{{ item.firstname.vars.full_name }}" class="form-label">Keresztnév</label>
+        {{ form_widget(item.firstname, {'attr': {'class': '', 'placeholder': 'Keresztnév'}}) }}
+        {{ form_errors(item.firstname) }}
+    </div>
+{% endmacro %}
 
-            <div class="form-group col-md-6">
-                <label for="{{ senderForm.name.vars.full_name }}" class="form-label">Név</label>
-                {{ form_widget(senderForm.name, {'attr': {'class': 'form-controlX'}}) }}
-                {{ form_errors(senderForm.name) }}
-            </div>
-            <div class="form-group col-md-6">
-                <label for="{{ senderForm.company.vars.full_name }}" class="form-label">Cégnév</label>
-                {{ form_widget(senderForm.company, {'attr': {'class': 'form-controlX', 'placeholder': 'Válalkozás Kft.' }}) }}
+{% macro lastname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.lastname.vars.value is defined and item.lastname.vars.value %}active{% endif %}">
+        <label for="{{ item.lastname.vars.full_name }}" class="form-label">Vezetéknév</label>
+        {{ form_widget(item.lastname, {'attr': {'class': '', 'placeholder': 'Vezetéknév'}}) }}
+        {{ form_errors(item.lastname) }}
+    </div>
+{% endmacro %}
+
+{{ form_start(senderForm, { 'attr': {'class': 'JS--Wrapper-senderForm',
+}}) }}
+        <div class="form-row">
+            {% if app.request.locale == 'hu' %}
+                {{ myOwnMacro.lastname(senderForm) }}
+                {{ myOwnMacro.firstname(senderForm) }}
+            {% endif %}
+            {% if app.request.locale == 'en' %}
+                {{ myOwnMacro.firstname(senderForm) }}
+                {{ myOwnMacro.lastname(senderForm) }}
+            {% endif %}
+        </div>
+        <div class="form-row">
+            <div class="form-group input-float col-sm-8 {% if senderForm.company.vars.value is defined and senderForm.company.vars.value %}active{% endif %}">
+                <label for="{{ senderForm.company.vars.full_name }}" class="form-label">Cég neve</label>
+                {{ form_widget(senderForm.company, {'attr': {'class': '', 'placeholder': 'Cég neve' }}) }}
                 {{ form_errors(senderForm.company) }}
             </div>
-            <div class="form-group col-md-6">
-                <label for="{{ senderForm.address.street.vars.full_name }}" class="form-label">Utca</label>
-                {{ form_widget(senderForm.address.street, {'attr': {'class': 'form-controlX' }}) }}
-                {{ form_errors(senderForm.address.street) }}
+            <div class="form-group input-float col-sm-4 {% if senderForm.companyVatNumber.vars.value is defined and senderForm.companyVatNumber.vars.value %}active{% endif %}">
+                <label for="{{ senderForm.companyVatNumber.vars.full_name }}" class="form-label">ÁFA szám</label>
+                {{ form_widget(senderForm.companyVatNumber, {'attr': {'class': '', 'placeholder': 'ÁFA szám' }}) }}
+                {{ form_errors(senderForm.companyVatNumber) }}
             </div>
-            <div class="form-group col-md-6">
+        </div>
+        <div class="form-row">
+            <div class="form-group input-float col-md-12 {% if senderForm.address.street.vars.value is defined and senderForm.address.street.vars.value %}active{% endif %}">
+                <label for="{{ senderForm.address.street.vars.full_name }}" class="form-label">Utca</label>
+                {{ form_widget(senderForm.address.street, {'attr': {'class': '', 'placeholder': 'Cím: Utca, házszám, emelet, ajtó...' }}) }}
+                {{ form_errors(senderForm.address.street) }}
+{#                <span class="invalid-feedback">#}
+{#                    {% for error in senderForm.address.street.vars.errors %}#}
+{#                        {{ error.message }}#}
+{#                    {% endfor %}#}
+{#                </span>#}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group input-float col-md-12 {% if senderForm.address.city.vars.value is defined and senderForm.address.city.vars.value %}active{% endif %}">
                 <label for="{{ senderForm.address.city.vars.full_name }}" class="form-label">Település</label>
-                {{ form_widget(senderForm.address.city, {'attr': {'class': 'JS--senderForm-city' }}) }}
+                {{ form_widget(senderForm.address.city, {'attr': {'class': 'JS--senderForm-city', 'placeholder': 'Város, település' }}) }}
                 {{ form_errors(senderForm.address.city) }}
             </div>
-            <div class="form-group col-md-6">
-                <label for="{{ senderForm.address.zip.vars.full_name }}" class="form-label">Irányítószám</label>
-                {{ form_widget(senderForm.address.zip, {'attr': {'class': 'JS--senderForm-zip', 'data-url' : path('cart-getPlaceByZip') }}) }}
-                {{ form_errors(senderForm.address.zip) }}
+        </div>
+        <div class="form-row">
+            <div class="col-sm-5">
+                <div class="form-group input-float input-float-select {% if senderForm.address.country.vars.value is defined and senderForm.address.country.vars.value %}active{% endif %}">
+                    <label for="{{ senderForm.address.country.vars.full_name }}" class="form-label">Ország</label>
+                    {{ form_widget(senderForm.address.country, {'attr': {'class': '', 'placeholder': 'Ország' }}) }}
+                    {{ form_errors(senderForm.address.country) }}
+                </div>
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group input-float col-sm-4 {% if senderForm.address.province.vars.value is defined and senderForm.address.province.vars.value %}active{% endif %}">
                 <label for="{{ senderForm.address.province.vars.full_name }}" class="form-label">Megye</label>
-                {{ form_widget(senderForm.address.province, {'attr': {'class': 'JS--senderForm-province' }}) }}
+                {{ form_widget(senderForm.address.province, {'attr': {'class': 'JS--senderForm-province', 'placeholder': 'Megye' }}) }}
                 {{ form_errors(senderForm.address.province) }}
             </div>
-            <div class="form-group col-md-6">
-                <label for="{{ senderForm.address.country.vars.full_name }}" class="form-label">Ország</label>
-                {{ form_widget(senderForm.address.country, {'attr': {'class': 'form-control' }}) }}
-                {{ form_errors(senderForm.address.country) }}
+            <div class="form-group input-float col-sm-3 {% if senderForm.address.zip.vars.value is defined and senderForm.address.zip.vars.value %}active{% endif %}">
+                <label for="{{ senderForm.address.zip.vars.full_name }}" class="form-label">Irányítószám</label>
+                {{ form_widget(senderForm.address.zip, {'attr': {'class': 'JS--senderForm-zip', 'placeholder': 'Irányítószám', 'data-url' : path('cart-getPlaceByZip') }}) }}
+                {{ form_errors(senderForm.address.zip) }}
             </div>
-            <div class="form-group col-md-6">
-                <label for="{{ senderForm.phone.vars.full_name }}" class="form-label">Telefonszám</label>
-                {{ form_widget(senderForm.phone, {'attr': {'class': 'form-controlX', 'placeholder': '' }}) }}
-                {{ form_errors(senderForm.phone) }}
-            </div>
-            <!-- /sender fields -->
-
-            <div class="form-group col-lg-12">
-                <div class="loadingWrapper">
-                    <button type="submit" class="JS--Button-submit btn btn-success mr-2">Adatok mentése </button>
-                    <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                </div>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') and order.currentOrder.customer.hasSenders %}
-                <div class="loadingWrapper loadingWrapper-secondary">
-                    <a href="" class="JS--Button-getSenders text-secondary text-sm" data-url="{{ path('cart-getSenders') }}">Mégse</a>
-                    <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                </div>
-                {% endif %}
-            </div>
-
         </div>
+{#            <div class="form-group input-float col-md-12 {% if senderForm.phone.vars.value is defined and senderForm.phone.vars.value %}active{% endif %}">#}
+{#                <label for="{{ senderForm.phone.vars.full_name }}" class="form-label">Telefonszám</label>#}
+{#                {{ form_widget(senderForm.phone, {'attr': {'class': '', 'placeholder': 'Telefonszám, pl: +36... vagy 06...' }}) }}#}
+{#                {{ form_errors(senderForm.phone) }}#}
+{#            </div>#}
 
         {# Render CSRF token etc .#}
         <div style="display:none">
             {{ form_rest(senderForm) }}
         </div>
-
-
-
-
 {{ form_end(senderForm) }}
+{#{% do senderForm.setRendered() %}#}

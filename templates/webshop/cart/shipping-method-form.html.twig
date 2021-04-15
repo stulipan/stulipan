@@ -1,41 +1,46 @@
+{{ form_start(shippingMethodForm, { 'attr': {'class': 'JS--Wrapper-shippingForm',
+}}) }}
+{#{% if not shippingMethodForm.vars.valid %}#}
+{#    <div class="JS--alertMessage alert alert-danger mt-3" role="alert">#}
+{#        <i class="fas fa-exclamation-circle mr-1 text-muted"></i>#}
+{#        {% for error in shippingMethodForm.shippingMethod.vars.errors %}#}
+{#            {{ error.message }}#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#{% endif %}#}
+<div class="form-group radio-validation mb-0">
+    <div class="checkout-method-selection content-body-thick-border">
+        {% for choice in shippingMethodForm.shippingMethod %}
+            <div class="checkout-shipping-item JS--Wrapper-choice {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}">
+                <div class="JS--Button-pickChoice loading-spinner-has-bg">
+                    <div class="loading-spinner-invisible">
+                        <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
+                                <label class="custom-control-label w-100" for="{{ choice.vars.id }}">
+                                    <div class="d-flex justify-content-start justify-content-sm-between">
+                                        <div class="checkout-shipping-item-title pr-2 pr-sm-0">{{ choice.vars.label }}</div>
+                                        <div class="price--shipping text-nowrap font-italic">
+                                            {% if shippingMethods[loop.index0].price == 0 %}
+                                                <span class="badge badge-light pt-1 px-2">INGYENES</span>
+                                            {% else %}
+                                                {{ shippingMethods[loop.index0].price|money }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
 
-        <div class="row">
-            {% if not form.shipping.shipping.vars.valid %}
-            <div class="col-lg-12 mb-3">
-                <div class="alert alert-danger" role="alert"> {{ form.shipping.shipping.vars.errors }} </div>
-            </div>
-            {% endif %}
-            {% for choice in form.shipping.shipping %}
-                {% if shippingMethods[loop.index0].enabled == true %}
-                <div class="col-lg-12 mb-2X mb-md-3X mb-1 mb-sm-0">
-                    <div class="cardX shippingMethod--card rounded loadingWrapper loadingWrapper-secondary JS--choiceContainer {% if choice.vars.checked is defined and choice.vars.checked %}selected_XXXXXX{% endif %}">
-                        <div class="row minicard--body px-0">
-                            <div class="col-sm-12">
-                                <div class="custom-control custom-radio JS--Button-pickShipping" data-url="{{ path('cart-setShipping', {id: choice.vars.value}) }}">
-                                    <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
-                                    <label class="custom-control-label font-weight-bold" for="{{ choice.vars.id }}">
-                                        {{ choice.vars.label }}
-                                    </label>
-                                    <span class="price--shipping text-nowrap font-italic ml-0 ml-sm-2">
-                                        {% if shippingMethods[loop.index0].price == 0 %}
-                                            <span class="badge badge-success pt-1 px-2">INGYENES</span>
-                                        {% else %}
-                                            {{ shippingMethods[loop.index0].price|money }}
-                                        {% endif %}
-                                    </span>
-
-                                </div>
-                                <div class="text-sm shippingMethod--description-muted mb-0 pl-4 pt-1">{{ shippingMethods[loop.index0].description|raw }}</div>
-                            </div>
-                            {#<div class="col-sm-4 text-right mt-3 mt-sm-0">#}
-                                {#<span class="price--shipping">{{ shippingMethods[loop.index0].price|money }}</span>#}
-                            {#</div>#}
+                                    <div class="d-flex justify-content-start w-100">
+                                        <div class="checkout-shipping-item-description pt-1">{{ shippingMethods[loop.index0].description|raw }}</div>
+                                    </div>
+                                </label>
                         </div>
-                        <div class="JS--loadingOverlay d-flex align-items-stretch loading-lg"></div>
-                    </div>
-                </div>
-                {% endif %}
-            {% endfor %}
-            {% do form.shipping.shipping.setRendered() %}
 
-        </div>
+                    </div>
+                    <div class="loading-spinner" role="status"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {{ form_errors(shippingMethodForm.shippingMethod) }}
+    {% do shippingMethodForm.shippingMethod.setRendered() %}
+</div>
+{{ form_end(shippingMethodForm) }}

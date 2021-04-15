@@ -2,7 +2,7 @@
             {{ form_start(commentForm, { 'attr': {'class': 'JS--form' }}) }}
                 <div class="form-group position-relative">
                     {#<label for="{{ commentForm.message.vars.full_name }}" class="form-label">Üzenetet</label>#}
-                    {#<span class="detail-option-heading font-weight-bold"><span>(max 200 karakter)</span></span>#}
+                    {#<span class="product-variant-selector-label font-weight-bold"><span>(max 200 karakter)</span></span>#}
                     {{ form_widget(commentForm.message, {'attr': {'class': 'input-area JS--commentForm-message', 'rows': 3, 'placeholder': commentForm.message.vars.label }} ) }}
                     <div class="btn-input-area">
                         <div class="loadingWrapper">
@@ -11,7 +11,6 @@
                         </div>
                     </div>
                     <span class="text-sm text-muted-extra float-right mt-2">Csak te és az adminok látjátok a kommenteket</span>
-                    {#commentForm.message.vars.attr.rows#}
                     {{ form_errors(commentForm.message) }}
                 </div>
             <div class="form-group">

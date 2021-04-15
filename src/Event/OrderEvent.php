@@ -10,6 +10,13 @@ final class OrderEvent extends GenericEvent
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
      * @var string
      */
+    public const PRODUCT_ADDED_TO_CART = 'product.added';
+
+
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
     public const PAYMENT_UPDATED = 'order.paymentStatusUpdated';
 
     /**
@@ -29,5 +36,12 @@ final class OrderEvent extends GenericEvent
      * @var string
      */
     public const DELIVERY_DATE_UPDATED = 'order.deliveryDateUpdated';
+
+
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
+    public const SET_ORDER_AS_TRACKED = 'conversionTracking.loaded';
 
 }

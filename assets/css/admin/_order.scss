@@ -1,0 +1,274 @@
+
+$cart-item-padding-y:             1rem !default;
+$cart-item-border-width:          1px !default;
+$cart-item-border-color:          $gray-300 !default;
+
+$cart-item-image-width:           50px !default;
+
+$order-summary-padding-y:         .5rem !default;
+$order-summary-border-width:      1px !default;
+$order-summary-border-color:      $cart-item-border-color !default;
+$order-summary-total-font-size:   1.1rem !default;
+
+
+.cart-item {
+  padding-top: $cart-item-padding-y;
+  padding-bottom: $cart-item-padding-y;
+  border-bottom: $cart-item-border-width solid $cart-item-border-color;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  & .cart-item-img {
+    max-width: $cart-item-image-width;
+  }
+}
+
+.cart-message {
+  position: relative;
+  overflow: hidden;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  max-width: $cart-item-image-width;
+  min-width: $cart-item-image-width;
+  height: $cart-item-image-width;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  font-size: .7875rem;
+  line-height: 1rem;
+  padding: .5rem 0;
+  background-color: $gray-100;
+
+  & .svg-icon {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    left: 0px;
+    bottom: -2px;
+    margin-right: 0;
+    margin-bottom: 0;
+    opacity: .4;
+    -webkit-transform: rotate(30deg);
+    transform: rotate(30deg);
+    stroke: currentColor;
+    stroke-width: 3;
+    vertical-align: text-bottom;
+    --layer1: currentColor;
+    --layer2: currentColor;
+  }
+}
+.cart-message-title {
+  margin-left: 1rem;
+}
+
+$item-grid-gap:         .75rem !default;
+
+.cart-item-detail--wrapper {
+  display: grid;
+  grid-template-columns: 6fr minmax(9rem,auto) minmax(7rem,auto);
+  grid-template-areas: "title calculation total";
+  column-gap: $item-grid-gap;
+  flex-grow: 1;
+  margin-left: 1.5rem;
+
+  @include media-breakpoint-down(sm) {
+    grid-template-columns: auto minmax(7rem,auto);
+    grid-template-areas:
+            "title total"
+            "calculation .";
+    margin-left: 1rem;
+  }
+}
+
+.cart-item-detail--title {
+  grid-area: title;
+  align-self: flex-start;
+}
+.cart-item-detail--calculation {
+  grid-area: calculation;
+  align-self: flex-start;
+
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: right;
+
+  @include media-breakpoint-down(sm) {
+    text-align: left;
+  }
+}
+.cart-item-detail--total {
+  grid-area: total;
+  align-self: flex-start;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: right;
+}
+
+
+
+.order-summary-item {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding-top: $order-summary-padding-y;
+  padding-bottom: $order-summary-padding-y;
+  border-bottom: $order-summary-border-width solid $order-summary-border-color;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  & .order-summary-total {
+    font-weight: 700;
+    font-size: $order-summary-total-font-size;
+  }
+}
+
+$timeline-path-color:                       $gray-300 !default;
+$timeline-path-width:                       4px !default;
+
+$timeline-item-padding:                     $card-spacer-x !default;
+
+$timeline-icon-size:                        28px !default;
+$timeline-icon-border-width:                3px !default;
+$timeline-icon-border-color:                $body-bg !default;
+$timeline-icon-color:                       $white !default;
+$timeline-icon-bg:                          darken($gray-500, 10%) !default;
+
+
+.timeline-alt {
+  position: relative;
+
+  &:before {
+    background-color: $timeline-path-color;
+    bottom: 10px;
+    content: "";
+    left: calc(#{$timeline-item-padding} + (#{$timeline-icon-size} / 2) - (#{$timeline-path-width} / 2));
+    position: absolute;
+    top: $timeline-item-padding;
+    width: $timeline-path-width;
+    z-index: 0
+  }
+
+  & .timeline-item {
+    position: relative;
+    padding: $timeline-item-padding;
+
+    &:not(.timeline-comment):last-of-type {
+      padding-bottom: 0;
+    }
+
+    &.timeline-comment {
+      background-color: #ffffff;
+      -webkit-box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+      box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+    }
+
+    & .timeline-icon {
+      position: absolute;
+      //float: left;
+      height: $timeline-icon-size;
+      width: $timeline-icon-size;
+      border-radius: 50%;
+      border: $timeline-icon-border-width solid $timeline-icon-border-color;
+      //@include font-size($font-size-sm);
+      font-size: 70%;
+      text-align: center;
+      background-color: $timeline-icon-bg;
+      color: $timeline-icon-color;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &.timeline-comment .timeline-icon,
+    &.timeline-input .timeline-icon {
+      height: 40px;
+      width: 40px;
+      left: 12px;
+    }
+
+    & .timeline-item-info {
+      margin-left: 40px
+    }
+
+    //&.timeline-input .timeline-item-info {
+      /*margin-top: 5px;*/
+    //}
+  }
+}
+
+.btn-link-timeline {
+  color: inherit;
+}
+.btn-link-timeline:hover,
+.btn-link-timeline:focus,
+.btn-link-timeline:active {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.btn-link-timeline > .timeline-item {
+  background-color: #fff;
+}
+
+// timeline input textarea
+.btn-input-area {
+  position: absolute;
+  right: calc(.45rem);
+  /*background: none;*/
+  border: none;
+  outline: none;
+  cursor: pointer;
+  top: calc(.45rem);
+}
+.btn-input-area i {
+  margin-right: 0;
+}
+.input-area {
+  padding-right: 3.25rem !important;
+}
+
+
+// List page
+.order.order-list .order-billingInfo,
+.order.order-list .order-shippingInfo,
+.order.order-list .order-deliveryInfo {
+  font-size: .7875rem;
+  line-height: 1.1rem;
+  /*color: #869196;*/
+}
+
+/*  Used in table list for hover elements !!! NOT IN USE !!!*/
+.overlay-container {
+  position: relative;
+  /*margin: -.75rem;*/
+  /*padding: .75rem;*/
+  width: 100%;
+  height: 100%;
+}
+.overlay-container .overlay-cell {
+  position: absolute;
+  /*top: 50%;*/
+  width: 100%;
+  height: 100%;
+  color: #fff;
+}
+.overlay-cell .overlay-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+tr .overlay-cell .overlay-content {
+  display: none;
+}
+tr:hover .overlay-cell .overlay-content {
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch;
+}

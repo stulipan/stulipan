@@ -1,0 +1,21 @@
+// Review stars
+
+.review-stars-group {
+  padding-left: 0;
+  list-style: none;
+
+  & .review-stars-item{
+    display: inline-block;
+    font-size: $font-size-sm;
+    color: $gray-400;
+
+    &:not(:last-of-type) {
+      //margin-right: .5rem;
+    }
+
+    &.active {
+      color: $warning;
+    }
+  }
+
+}

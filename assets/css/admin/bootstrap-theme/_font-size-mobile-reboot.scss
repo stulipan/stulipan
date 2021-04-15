@@ -1,0 +1,55 @@
+
+// -lg and -sm size are not being corrected, simply wasn't implemented !!
+$font-size-multiplier:                              1.14 !default;
+
+$mobile-font-size-base:                             .9375rem !default; //calc(#{$font-size-base} * 1.14) !default;
+$mobile-font-size-base-sm:                          $mobile-font-size-base * .875 !default;
+$mobile-line-height-base:                           1.4375 !default;
+
+$mobile-input-height:                               calc(#{$mobile-line-height-base * 1em} + #{$input-padding-y * 2} + #{$input-height-border}) !default;
+$mobile-input-height-sm:                            calc(#{$input-line-height-sm * 1em} + #{$input-btn-padding-y-sm * 2} + #{$input-height-border}) !default;
+
+@include media-breakpoint-down(sm) {
+  body {
+    @include font-size($mobile-font-size-base);
+    line-height: $mobile-line-height-base;
+  }
+
+  .col-form-label,
+  .list-group-item,
+  .dropdown-menu,
+  .adaptive-tabs .adaptive-button,
+  {
+    @include font-size($mobile-font-size-base);
+    line-height: $mobile-line-height-base;
+  }
+
+  .sidenav,
+  .btn,
+  .form-control,
+  .translation   // because .translation is a fake input field
+  {
+    @include font-size(1rem);
+    line-height: $mobile-line-height-base;
+  }
+
+  small
+  {
+    @include font-size($mobile-font-size-base-sm);
+  }
+
+  // Height correction based mobile-line-height-base
+  .form-control,
+  .field-addon-prepend,
+  .field-addon-append,
+  .btn-go-back,
+  .btn-more-actions
+  {
+    height: $mobile-input-height;
+
+  }
+  .form-control-sm {
+    height: $mobile-input-height-sm;
+  }
+}
+

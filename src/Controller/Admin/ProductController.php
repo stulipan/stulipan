@@ -2,22 +2,20 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Order;
-use App\Entity\OrderStatus;
-use App\Entity\PaymentStatus;
 use App\Entity\Product\Product;
 use App\Entity\Price;
 use App\Entity\Product\ProductStatus;
 use App\Entity\VatRate;
-use App\Form\OrderFilterType;
 use App\Form\ProductFilterType;
 use App\Form\ProductFormType;
 use App\Form\ProductQuantityFormType;
 use App\Services\FileUploader;
-use App\Services\Settings;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use App\Services\StoreSettings;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +38,7 @@ class ProductController extends AbstractController
      *     requirements={"page"="\d+"},
      *     )
      */
-    public function listProducts(Request $request, $page = 1, Settings $settings)
+    public function listProducts(Request $request, $page = 1, StoreSettings $settings)
     {
         $searchTerm = $request->query->get('searchTerm');
         $status = $request->query->get('status');
@@ -138,8 +136,7 @@ class ProductController extends AbstractController
             'status' => $status,
         ]);
 
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
         $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
@@ -259,9 +256,8 @@ class ProductController extends AbstractController
         }
 
         return $this->render('admin/product/product_edit.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Új termék hozzáadása',
-            
+//            'form' => $form->createView(),
+
         ]);
     }
 
@@ -296,9 +292,8 @@ class ProductController extends AbstractController
         }
 
         return $this->render('admin/product/product_edit.html.twig', [
-            'form' => $form->createView(),
+//            'form' => $form->createView(),
             'product' => $product,
-            'title' => 'Termék módosítása', 
         ]);
     }
     

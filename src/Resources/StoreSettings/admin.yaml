@@ -1,0 +1,21 @@
+parameters:
+    general:
+        label:
+            content: 'Általános beállítások'
+            type: Hidden
+            label: 'A webshop műkődését meghatározó általános beállítások.'
+        itemsPerPage:
+            content: 11
+            type: Number
+        product-variant-view:
+            content: dropdown
+            type: Text
+            choices: { Dropdown: dropdown, 'Variant picker': variant-picker }
+        date-format:
+            content: Y/m/d
+            type: Text
+            choices: { '1980 january 5': 'Y F j', '1980. january 5.': 'Y. F j.', '1980 jan 5.': 'Y M j.', '1980 jan 5': 'Y M j', '5 january 1980': 'j F Y', '5 jan 1980': 'j M Y', 'January 5, 1980': 'F j, Y', 'Jan. 5, 1980': 'M. j, Y', 1980/01/31: Y/m/d, '1980-01-31': Y-m-d, 1980.01.31: Y.m.d, 01/31/1980: d/m/Y, 31/01/1980: d/m/Y, 31.01.1980: d.m.Y, 31-01-1980: d-m-Y }
+        time-format:
+            content: 'H:i'
+            type: Text
+            choices: { '19:20': 'H:i', '19:20:35': 'H:i:s', '07:20 am': 'h:i a', '07:20:35 am': 'h:i:s a' }

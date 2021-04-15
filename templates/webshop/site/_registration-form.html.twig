@@ -1,48 +1,47 @@
-{{ form_start(registrationForm, { 'attr': {'class': '' }}) }}
+{% import _self as myOwnMacro %}
+
+{% macro firstname(item) %}
+    <div class="form-group col-md-6">
+        <label for="{{ item.firstname.vars.full_name }}" class="form-label">{{ 'registration.firstname'|trans }}</label>
+        {{ form_widget(item.firstname, {'attr': {'class': ''}}) }}
+        {{ form_errors(item.firstname) }}
+    </div>
+{% endmacro %}
+
+{% macro lastname(item) %}
+    <div class="form-group col-md-6">
+        <label for="{{ item.lastname.vars.full_name }}" class="form-label">{{ 'registration.lastname'|trans }}</label>
+        {{ form_widget(item.lastname, {'attr': {'class': ''}}) }}
+        {{ form_errors(item.lastname) }}
+    </div>
+{% endmacro %}
+
+{{ form_start(registrationForm, { 'attr': {'class': 'JS--Wrapper-registrationForm' }}) }}
 <div class="form-row">
     <div class="col-lg-12 mb-4">
-        <h4 class="font-weight-normal mb-0">Fiók létrehozása</h4>
-        <span class="text-muted-extra text-xs">* Kötelező mezők</span>
+        <h3 class="font-weight-normal">{{ 'registration.create-account-title'|trans }}</h3>
     </div>
-    {#<div class="col-lg-12 text-muted mb-5">#}
-        {#Regisztrálj, hogy gyorsabb és kényelmesebb legyen a vásárlás élménye. Regisztrált felhasználóként tudni fogod követni rendelésed állapotát, címzetteket kezelni.#}
-    {#</div>#}
-
     <div class="form-group col-lg-12">
-        <label for="{{ registrationForm.email.vars.full_name }}" class="form-label">{{ registrationForm.email.vars.label }}
-            {#{% if registrationForm.email.vars.required == true %} <span class='text-danger'>*</span> {% endif %}#}
-        </label>
+        <label for="{{ registrationForm.email.vars.full_name }}" class="form-label">{{ 'registration.email-address'|trans }}</label>
         {{ form_widget(registrationForm.email, {'attr': {'class': ''}}) }}
         {{ form_errors(registrationForm.email) }}
     </div>
-    {#<div class="col-lg-12">#}
-    {#<div class="form-row">#}
-        <div class="form-group col-lg-6">
-            <label for="{{ registrationForm.lastname.vars.full_name }}" class="form-label">{{ registrationForm.lastname.vars.label }}
-                {#{% if registrationForm.lastname.vars.required == true %} <span class='text-danger'>*</span> {% endif %}#}
-            </label>
-            {{ form_widget(registrationForm.lastname, {'attr': {'class': ''}}) }}
-            {{ form_errors(registrationForm.lastname) }}
-        </div>
-        <div class="form-group col-lg-6">
-            <label for="{{ registrationForm.firstname.vars.full_name }}" class="form-label">{{ registrationForm.firstname.vars.label }}
-                {#{% if registrationForm.firstname.vars.required == true %} <span class='text-danger'>*</span> {% endif %}#}
-            </label>
-            {{ form_widget(registrationForm.firstname, {'attr': {'class': ''}}) }}
-            {{ form_errors(registrationForm.firstname) }}
-        </div>
-    {#</div>#}
-    {#</div>#}
+    {% if app.request.locale == 'hu' %}
+        {{ myOwnMacro.lastname(registrationForm) }}
+        {{ myOwnMacro.firstname(registrationForm) }}
+    {% endif %}
+    {% if app.request.locale == 'en' %}
+        {{ myOwnMacro.firstname(registrationForm) }}
+        {{ myOwnMacro.lastname(registrationForm) }}
+    {% endif %}
     <div class="form-group col-lg-12">
-        <label for="{{ registrationForm.password.vars.full_name }}" class="form-label">{{ registrationForm.password.vars.label }}
-            {#{% if registrationForm.password.vars.required == true %} <span class='text-danger'>*</span> {% endif %}#}
-        </label>
-        <div class="input-group">
+        <label for="{{ registrationForm.password.vars.full_name }}" class="form-label">{{ 'registration.password'|trans }}</label>
+{#        <div class="input-group">#}
             {{ form_widget(registrationForm.password, {'attr': {'class': 'border-right-0X'}}) }}
             {#<div class="input-group-append">#}
                 {#<span class="input-group-text bg-white text-gray-500"><i class="fas fa-eye"></i></span>#}
             {#</div>#}
-        </div>
+{#        </div>#}
         {{ form_errors(registrationForm.password) }}
     </div>
     {#<div class="form-group col-lg-12">#}
@@ -51,22 +50,25 @@
         {#{{ form_errors(registrationForm.username) }}#}
     {#</div>#}
     <div class="form-group col-lg-12">
-        <div class="custom-control custom-checkbox mb-2 text-sm text-muted">
+        <div class="custom-control custom-checkbox mb-2">
             <input id="{{ registrationForm.optin.vars.id }}" type="checkbox" name="{{ registrationForm.optin.vars.full_name }}" class="custom-control-input" {{ registrationForm.optin.vars.checked == true ? 'checked=\"checked\"' : '' }}>
-            <label for="{{ registrationForm.optin.vars.id }}" class="custom-control-label align-middle">{{  registrationForm.optin.vars.label }}</label>
+            <label for="{{ registrationForm.optin.vars.id }}" class="custom-control-label text-reset align-middle">{{ 'registration.newsletter-sign-up'|trans }}</label>
             {{ form_errors(registrationForm.optin) }}
             {% do registrationForm.optin.setRendered() %}
         </div>
-        <div class="custom-control custom-checkbox text-sm text-muted">
-            <input id="{{ registrationForm.terms.vars.id }}" type="checkbox" name="{{ registrationForm.terms.vars.full_name }}" class="custom-control-input" {{ registrationForm.terms.vars.checked == true ? 'checked=\"checked\"' : '' }}>
-            <label for="{{ registrationForm.terms.vars.id }}" class="custom-control-label align-middle">{{  registrationForm.terms.vars.label }}</label>
+    </div>
+    <div class="form-group col-lg-12">
+        <div class="custom-control custom-checkbox">
+            <input id="{{ registrationForm.terms.vars.id }}" class="custom-control-input {% if registrationForm.terms.vars.valid is same as(false) %}is-invalid{% endif %}" type="checkbox" name="{{ registrationForm.terms.vars.full_name }}" {{ registrationForm.terms.vars.checked == true ? 'checked=\"checked\"' : '' }}>
+            <label for="{{ registrationForm.terms.vars.id }}" class="custom-control-label text-reset align-middle">{{ 'registration.terms.accept-terms-label'|trans({ '{{ terms }}': 'href="#" data-toggle="modal" data-target="#modal--termsOfService"', '{{ privacy }}': 'href="#" data-toggle="modal" data-target="#modal--privacyPolicy"' })|raw }}</label>
             {{ form_errors(registrationForm.terms) }}
             {% do registrationForm.terms.setRendered() %}
         </div>
+
     </div>
 
     <div class="col-lg-12 mt-2 text-center mb-1">
-        <button type="submit" value="Regisztrálok" class="btn btn-primary" formnovalidate>Regisztrálok</button>
+        <button type="submit" value="Regisztrálok" class="JS--Button-register btn btn-primary px-5" formnovalidate>{{ 'registration.register-button'|trans }}</button>
     </div>
 
     {# Render CSRF token etc .#}
@@ -75,3 +77,6 @@
     </div>
 </div>
 {{ form_end(registrationForm) }}
+
+{% include '/webshop/site/widgets/_privacy-policy-popup.html.twig' %}
+{% include '/webshop/site/widgets/_terms-and-condition-popup.html.twig' %}

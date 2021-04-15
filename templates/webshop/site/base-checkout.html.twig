@@ -1,93 +1,32 @@
-{# webshop/site/base-site.html.twig #}
 {% extends 'webshop/site/base.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('webshop/site/checkout.css') }}" rel="stylesheet" />
-    <link href="{{ asset('webshop/site/js/daterangepicker.css') }}" rel="stylesheet" />
+{#    {{ encore_entry_link_tags('daterangepicker') }}#}
     <link href="{{ asset('webshop/site/js/easy-autocomplete.css') }}" rel="stylesheet" />
     <link href="{{ asset('webshop/site/js/easy-autocomplete.themes.css') }}" rel="stylesheet" />
-
 {% endblock %}
 
 {% block body %}
     {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
-	<header class="header">
-		<!-- Navbar-->
-		<nav class="navbarX navbar-expand-lg navbar-stickyX navbar-light pb-2 pb-md-2 pt-3 pt-md-4">
-			<div class="container flex-lg-wrap">
 
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 mx-lg-auto">
-
-                        <div class="w-100 d-flex justify-content-between align-items-center">
-                    {#<div class="row">#}
-
-                        <!-- Navbar Logo -->
-                            <div class="col-sm-4 col-lg-4 navbar--logo-checkout d-flex justify-content-lg-start my-lg-0 order-lg-1 order-1 px-0 px-md-10px">
-                                <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
-                                    <span class="h4 font-weight-bold text-uppercase text-info ml-0">tulipan<span class="text-danger">.</span>futar  </span>
-                                </a>
-                            </div>
-
-                        <!-- Navbar Title -->
-                        {#<div class="col-sm-3 col-lg-4 navbar--logo d-none d-md-flex text-center justify-content-lg-center order-lg-2 order-2">#}
-                            {#<span class="h3 text-muted-extraX font-weight-bold text-uppercase ml-0">{{ title }} </span>#}
-                        {#</div>#}
-
-                        <!-- Navbar Login Cart -->
-                            <div class="col-sm-4 col-lg-4 navbar--login-cart d-flex justify-content-end my-lg-0 order-lg-3 order-3 pl-0 pl-md-10px">
-                                <div class="nav-item">
-                                    <svg class="svg-icon mr-1">
-                                        <use xlink:href="#calls-1"> </use>
-                                    </svg>
-                                    <span class="h6 font-weight-bold text-uppercase d-none d-md-inline">{{ settings.get('store.phone') }}</span>
-                                    <span class="text-sm font-weight-bold text-uppercase letter-spacing-0 d-md-none d-inline">{{ settings.get('store.phone') }}</span>
-                                </div>
-                            </div>
-
-                    {#</div>#}
-                </div>
-
-                    </div>
-                </div>
-
-			</div>
-		</nav>
-		<!-- /Navbar -->
-
-	</header>
-
-
-
-    {% block page_content %}{% endblock %}
-
-
-
-
-	<footer class="main-footer">
-		<div class="bg-gray-300 text-muted">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12 mb-5X mb-lg-0">
-						<div class="font-weight-bold text-uppercase text-dark text-center py-3">
-                            <svg class="svg-icon mr-1">
-                                <use xlink:href="#calls-1"> </use>
-                            </svg>
-                            <span class="login-cart--text d-lg-inline">{{ settings.get('store.phone') }}</span>
-                        </div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
-
-
+    {% block page_content %}
+    {% endblock %}
 
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
     <script src="{{ asset('webshop/site/js/jquery.easy-autocomplete.js') }}"></script>
+    <script>
+        window.addEventListener( "pageshow", function ( event ) {
+            var historyTraversal = event.persisted ||
+                ( typeof window.performance != "undefined" &&
+                    window.performance.navigation.type === 2 );
+            if ( historyTraversal ) {
+                // Handle page restore.
+                window.location.reload();
+            }
+        });
+    </script>
 {% endblock %}

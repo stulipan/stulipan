@@ -1,0 +1,102 @@
+{{ form_start(form, { 'attr': {'class': '' }}) }}
+    {% if parameters is defined and parameters %}
+        {% for group, params in parameters %}
+            <div class="row mt-3 mt-md-20px">
+                <div class="col-md-12">
+                    <div class="">
+                        <div class="row">
+                            <div class="col-md-4 col-lg-5 ">
+                                {%  if params.label is defined %}
+                                    <div class="pr-md-5 pr-lg-7">
+                                        {%  if params.label.content is defined %}
+                                            <div class="h5">{{ params['label']['content'] }}</div>
+                                        {% endif %}
+                                        {%  if params.label.label is defined %}
+                                            <div class="text-muted mt-2 mt-md-2">{{ params['label']['label'] }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-8 col-lg-7 correction-no-padding mt-3 mt-md-0">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {% for key, value in params %}
+                                                    {% if key != 'label' %}
+                                                        {% if value.type is defined and value.type == 'DateTime' %}
+                                                            <div class="form-group row {% if loop.last %}mb-0{% endif %}">
+                                                                <div class="col-sm-12">
+                                                                    {{ form_label(form.offsetGet(group ~ '_' ~ key)) }}
+                                                                </div>
+                                                                <div class="col-sm-12">
+                                                                    <div class="field-groupX">
+                                                                        <div class="field-item field-append">
+                                                                            <div class="field-addon-append">
+                                                                                <i class="far fa-calendar-alt"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        {{ form_widget(form.offsetGet(group ~ '_' ~ key)) }}
+                                                                    </div>
+                                                                    {{ form_errors(form.offsetGet(group ~ '_' ~ key)) }}
+                                                                </div>
+                                                            </div>
+                                                        {% elseif value['type'] == 'Boolean' %}
+                                                            <div class="form-group row {% if loop.last %}mb-0{% endif %}">
+                                                                <div class="col-sm-12">
+                                                                    {{ form_label(form.offsetGet(group ~ '_' ~ key)) }}
+                                                                </div>
+                                                                <div class="col-sm-12">
+                                                                    {{ form_widget(form.offsetGet(group ~ '_' ~ key), {label_attr: {class: 'checkbox-custom'} }) }}
+                                                                    {% if value.description is defined %}
+                                                                        <div class="custom-control custom-checkbox">
+                                                                            <div class="text-muted checkbox-custom">{{ value.description }}</div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {{ form_errors(form.offsetGet(group ~ '_' ~ key)) }}
+                                                                </div>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="form-group row {% if loop.last %}mb-0{% endif %}">
+                                                                <div class="col-sm-12">
+                                                                    {{ form_label(form.offsetGet(group ~ '_' ~ key)) }}
+                                                                </div>
+                                                                <div class="col-sm-12">
+                                                                    {{ form_widget(form.offsetGet(group ~ '_' ~ key)) }}
+                                                                    {{ form_errors(form.offsetGet(group ~ '_' ~ key)) }}
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-20px border-bottom d-none d-md-block"></div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+<div class="row mt-20px">
+    <div class="col-md-4 col-lg-5 ">
+    </div>
+    <div class="col-md-8 col-lg-7 mb-3">
+        <div class="">
+            {# Render CSRF token etc .#}
+            <div style="display:none">
+                {{ form_rest(form) }}
+            </div>
+
+            <input type="submit" value="Mentés" class="btn btn-primary mr-1" formnovalidate>
+            <a href="{{ cancelUrl }}" class="btn btn-secondary">Mégse</a>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+{% do form.setRendered() %}

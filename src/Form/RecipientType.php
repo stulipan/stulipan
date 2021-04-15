@@ -41,28 +41,27 @@ class RecipientType extends AbstractType
             $builder->setAction($this->urlGenerator->generate('cart-editRecipient', ['id' => $builder->getData()->getId()]));
         }
         $builder->add('id', HiddenType::class,[
-                'mapped' => false, // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-            ]);
-        $builder->add('name', TextType::class,[
-                'label' => 'Címzett',
-                'required' => true,
-                'attr' => [
-                    'placeholder' => '',
-                    'autocomplete' => 'name'
-                ]
-            ]);
+            'mapped' => false, // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
+        ]);
+        $builder->add('firstname',TextType::class, [
+            'required' => true,
+            'attr' => ['autocomplete' => 'given-name']
+        ]);
+        $builder->add('lastname',TextType::class, [
+            'required' => true,
+            'attr' => ['autocomplete' => 'family-name']
+        ]);
         $builder->add('address',AddressType::class,[
             'label' => false,
             'addressType' => Address::DELIVERY_ADDRESS,  // this option is defined in AddressType, so that it can receive a value
         ]);
         $builder->add('phone',TelType::class,[
-                'label' => 'Telefonszám',
-                'required' => false,
-                'constraints' => [
-                    new PhoneNumber(['regionCode' => 'HU']),
-                ],
-            ]);
-//        $builder->get('phone')->addModelTransformer($this->stringToNumberTransformer);  //ez akkor kellett amikor a telszmot int -kent taroltam db-ben
+            'required' => false,
+            'constraints' => [
+                new PhoneNumber(['regionCode' => 'HU', 'message' => 'checkout.recipient.invalid-phone']),
+            ],
+            'attr' => ['autocomplete' => 'tel']
+        ]);
         $builder->add('customer',HiddenType::class,[
                 'mapped' => false,
             ]);
@@ -75,15 +74,8 @@ class RecipientType extends AbstractType
             'data_class' => Recipient::class,
             'attr' => [
                 'novalidate' => 'novalidate',
-//                'autocomplete' => 'pleasedont',
                 'data-autocomplete-url' => $this->urlGenerator->generate('cart-search-api'),
             ],
         ]);
     }
-//    public function getBlockPrefix()
-//    {
-//        return '';
-//    }
-
-
 }

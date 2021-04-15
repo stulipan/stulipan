@@ -1,9 +1,10 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-    #    in_memory: { memory: ~ }
+        # users_in_memory: { memory: null }
+
         # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider_from_sajat_db:
+        store_user_provider_from_sajat_db:
             entity:
                 class: App\Entity\User
                 # a property = username (vagy =email) alapján próbálja megtalálni a db-ben a megfelelő bejegyzést (felhasználót)
@@ -13,6 +14,16 @@ security:
                 property: email
                 # if you're using multiple entity managers
                 # manager_name: customer
+        admin_user_provider_from_sajat_db:
+            entity:
+                class: App\Entity\User
+                # a property = username (vagy =email) alapján próbálja megtalálni a db-ben a megfelelő bejegyzést (felhasználót)
+                # azaz a username mezőbe beírt felhasználót próbálja megtalálni. Lehetne property: email
+                # Továbbá, a Sessionbe elmentett Usert, az ID-ja alapján lekéri db-ből, az esetlegesen közben frissült adatok miatt.
+                # used to reload user from session & other features (e.g. switch_user)
+                property: email
+                  # if you're using multiple entity managers
+                  # manager_name: customer
 
         # Ez volt az eredeti login beallítás, amivel az itt eltárolt usert keresi meg
         #in_memory:
@@ -39,11 +50,12 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-#   Ez a rész arra szolgál, hogy az Admin és a sima Weboldal autentikációja különvegyük, ne legyen átjárás.
-#   Párhuzamosan két user léphet így be kettő kontextusba: egy Adminba, egy a Weboldalra.
-#   A kontextuson tudnak osztozkodni ezzel a két beállítással:  'context: my_context' és 'stateless: false'
+        # Ez a rész arra szolgál, hogy az Admin és a sima Weboldal autentikációja különvegyük, ne legyen átjárás.
+        # Párhuzamosan két user léphet így be kettő kontextusba: egy Adminba, egy a Weboldalra.
+        # A kontextuson tudnak osztozkodni ezzel a két beállítással:  'context: my_context' és 'stateless: false'
         api_login:
             pattern:  ^/admin/api/login
+            provider: admin_user_provider_from_sajat_db
             stateless: true
             anonymous: true
             json_login:
@@ -52,34 +64,43 @@ security:
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
         api:
             pattern: ^/admin/api/
+            provider: admin_user_provider_from_sajat_db
             anonymous: true
 #            stateless: true   # it tells Symfony to not store the user in the session
             stateless: false
-            context: my_context
+            context: api_context
             logout: ~
             guard:
                 authenticators:
                     - App\Security\TokenAuthenticator
 #                    - lexik_jwt_authentication.jwt_token_authenticator # Hasznald ezt a sajat authenticatorod helyett.
+
         admin:
-            pattern: ^/{_locale}/admin/
-            provider: app_user_provider_from_sajat_db
+            #            pattern: ^/(hu|en)/admin           # ez is mukodik, vagy altalanosabb az also sor
+            pattern: ^/%app_locales%/admin      #app_locales come from services.yaml
+            provider: admin_user_provider_from_sajat_db
             anonymous: true
             guard:
                 authenticators:
                     - App\Security\AdminLoginFormAuthenticator
+            #            form_login:
+            #                login_path: admin-login
+            #                check_path: admin-login
+            #                csrf_token_generator: security.csrf.token_manager
+            #                use_referer: true
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 2592000 # 30 days in seconds, if missing, default is one year.
+                path: /%app_locales%/admin
             switch_user: true  # Add to any URL '?_switch_user=' and the email address of a user to impersonate
             logout:
-                path:   logout # admin-logout #/admin/logout
+                path: admin-logout
                 target: admin-login
             context: my_context
             stateless: false
         main:
             pattern: ^/
-            provider: app_user_provider_from_sajat_db
+            provider: store_user_provider_from_sajat_db
             anonymous: true
             guard:
                 authenticators:
@@ -88,15 +109,21 @@ security:
                 login_path: site-login
                 check_path: site-login
                 use_referer: true
+                require_previous_session: false  # ??? jan 21, 2021
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 2592000 # 30 days in seconds, if missing, default is one year.
+                path: /
             switch_user: true  # Add to any URL '?_switch_user=' and the email address of a user to impersonate
             logout:
                 path:   logout #/logout
-                target: homepage
+                success_handler: my_logout_handler  # it's set up in services.yaml
+#                target: homepage    # use this for always directing to homepage after logout
+
             context: my_context
             stateless: false
+
+
 
 
 #        main:
@@ -126,12 +153,11 @@ security:
 #                default_target_path: product-list
 
             # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # http_basic: true
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
 
-            # form_login: true
-            # https://symfony.com/doc/current/security/form_login_setup.html
 
     role_hierarchy:
         ROLE_EDITOR:  [
@@ -169,10 +195,9 @@ security:
         - { path: ^/(hu|en)/admin/$,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/(hu|en)/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-#        - { path: ^/admin/deliverydate/type, roles: ROLE_ADMIN }
         - { path: ^/(hu|en)/admin/user, roles: ROLE_MANAGER }
-#        - { path: ^/admin/, roles: ROLE_MANAGER }
-#        - { path: ^/termekek/, roles: ROLE_USER }  # csak testeles miatt, ha azt akarom hogy logged in userek lassak
+        - { path: ^/(hu|en)/admin/, roles: ROLE_MANAGER }
+        - { path: ^/(hu|en)/my-account, roles: ROLE_USER }
 
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 

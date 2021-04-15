@@ -5,10 +5,10 @@ namespace App\Serializer;
 use App\Entity\Order;
 use App\Entity\OrderAddress;
 use App\Entity\OrderItem;
-use App\Entity\Payment;
+use App\Entity\PaymentMethod;
 use App\Entity\Recipient;
 use App\Entity\Sender;
-use App\Entity\Shipping;
+use App\Entity\ShippingMethod;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -92,15 +92,15 @@ class OrderDenormalizer implements DenormalizerInterface, DenormalizerAwareInter
             $billingAddress = $this->denormalizer->denormalize($data['billingAddress'],OrderAddress::class, $format, $context);
             $object->setBillingAddress($billingAddress);
         }
-        if (isset($data['shipping'])) {
-            /** @var Shipping $shipping */
-            $shipping = $this->denormalizer->denormalize($data['shipping'],Shipping::class, $format, $context);
-            $object->setShipping($shipping);
+        if (isset($data['shippingMethod'])) {
+            /** @var ShippingMethod $shipping */
+            $shipping = $this->denormalizer->denormalize($data['shippingMethod'],ShippingMethod::class, $format, $context);
+            $object->setShippingMethod($shipping);
         }
-        if (isset($data['payment'])) {
-            /** @var Payment $payment */
-            $payment = $this->denormalizer->denormalize($data['payment'],Payment::class, $format, $context);
-            $object->setPayment($payment);
+        if (isset($data['paymentMethod'])) {
+            /** @var PaymentMethod $payment */
+            $payment = $this->denormalizer->denormalize($data['paymentMethod'],PaymentMethod::class, $format, $context);
+            $object->setPaymentMethod($payment);
         }
         return $object;
     }

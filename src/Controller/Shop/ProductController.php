@@ -4,8 +4,8 @@ namespace App\Controller\Shop;
 
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductCategory;
-use App\Form\CartAddItemType;
-use App\Services\Settings;
+use App\Form\AddToCart\CartAddItemType;
+use App\Services\StoreSettings;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

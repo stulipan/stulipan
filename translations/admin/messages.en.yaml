@@ -50,7 +50,7 @@ order:
     choose-time-frame: Choose time frame...
     free-delivery: Ingyenes szállítás
     choose-the-timeframe-when-the-recipient-will-available-at-delivery-address: Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.
-    save-delivery-time: Szállítás időpont mentése
+    save-delivery-time: Save date
 
     payment: Payment
     instructions-for-bank-transfer: Instructions for bank transfer
@@ -83,15 +83,15 @@ order:
     filter:
         filters: Filter orders
         more-filters: More filtering
-        filter-by-date: Filter by date
+        filter-by-date: Filter by date...
         search: Search
         search-button: Search
         search-placeholder: Search...
         search-result: 'Search:'
         filter-by-order-status: Order status
-        choose-order-status: Order status
+        choose-order-status: Order status...
         filter-by-payment-status: Payment status
-        choose-payment-status: Payment status
+        choose-payment-status: Payment status...
 
 
 dashboard:
@@ -122,6 +122,8 @@ settings:
         general-settings-description: View and update your store details
         translation-title: Store languages
         translation-description: Manage the languages your customers can view on your store
+        admin-general-settings-title: Admin
+        admin-general-settings-description: View and configure your admin page settings
     translation:
         translation-title: Translation
         translation-is-missing: '{{ count }} translation is missing.'
@@ -168,11 +170,13 @@ generic:
     edit: Edit
     modify: Modify
     preview: Preview
+    open: Open
     save: Save
     save-changes: Save changes
     cancel: Cancel
     close: Close
     more-actions: More actions
+    more: More
     ok: OK
     apply: Apply
     delete: Delete

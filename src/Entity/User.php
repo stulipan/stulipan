@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Table(name="myuser")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity("email", message="Az email címet elgépelted, vagy már regisztráltál vele!")
+ * @UniqueEntity("email", message="registration.email-is-in-use")
  */
 class User implements UserInterface, Serializable
 {
@@ -39,7 +39,7 @@ class User implements UserInterface, Serializable
 
     /**
      * @ORM\Column(type="string", length=64)
-     * @Assert\NotBlank(message="Adj meg egy jelszót!")
+     * @Assert\NotBlank(message="registration.password-is-missing")
      */
     private $password;
 
@@ -48,8 +48,8 @@ class User implements UserInterface, Serializable
      * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="Írd be az email címedet!")
-     * @Assert\Email(message="Ellenőrizd, hogy helyesen írtad be az email címet!")
+     * @Assert\NotBlank(message="registration.email-is-missing")
+     * @Assert\Email(message="registration.email-is-invalid")
      */
     private $email;
 
@@ -105,41 +105,14 @@ class User implements UserInterface, Serializable
     private $image;
 
     /**
-     * @var Recipient[]|ArrayCollection|null
+     * @var Customer|null
+     * @Groups({"orderView", "orderList"})
      *
-     * ==== One User/Customer has Recipients ====
-     * ==== mappedBy="customer" => az Recipients entitásban definiált 'customer' attribútumról van szó ====
+     * ==== One User is a Customer ====
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Recipient", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
-     * @Assert\NotBlank(message="Egy felhasználónak több címzetje lehet.")
+     * @ORM\OneToOne(targetEntity="App\Entity\Customer", mappedBy="user")
      */
-    private $recipients;
-
-    /**
-     * @var Sender[]|ArrayCollection|null
-     *
-     * ==== One User/Customer has Senders ====
-     * ==== mappedBy="customer" => a Senders entitásban definiált 'customer' attribútumról van szó ====
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Sender", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
-     * @Assert\NotBlank(message="Egy felhasználónak több számlázási címe lehet.")
-     */
-    private $senders;
-
-    /**
-     * @var Order[]|ArrayCollection|null
-     *
-     * ==== One User/Customer has Orders ====
-     * ==== mappedBy="customer" => az Order entitásban definiált 'customer' attribútumról van szó ====
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="customer", orphanRemoval=true)  //, cascade={"persist"}
-     * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
-     * @ORM\OrderBy({"id" = "DESC"})
-     * @ Assert\NotBlank(message="Egy felhasználónak több rendelése lehet.")
-     */
-    private $orders = [];
+    private $customer;
 
     /**
      * @ ORM\Column()
@@ -150,9 +123,6 @@ class User implements UserInterface, Serializable
     public function __construct()
     {
         $this->isActive = true;
-        $this->recipients = new ArrayCollection();
-        $this->senders = new ArrayCollection();
-        $this->orders = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
     }
@@ -306,7 +276,7 @@ class User implements UserInterface, Serializable
      */
     public function setFirstname(?string $name)
     {
-        $this->firstname = $name;
+        $this->firstname = $this->ucWords($name);
     }
 
     /**
@@ -314,7 +284,7 @@ class User implements UserInterface, Serializable
      */
     public function setLastname(?string $name)
     {
-        $this->lastname = $name;
+        $this->lastname = $this->ucWords($name);
     }
 
     /**
@@ -402,155 +372,31 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @param Recipient $recipient
+     * @return Customer|null
      */
-    public function addRecipient(Recipient $recipient): void
+    public function getCustomer(): ?Customer
     {
-        $this->recipients->add($recipient);
+        return $this->customer;
     }
 
     /**
-     * @param Recipient $recipient
+     * @param Customer|null $customer
      */
-    public function removeRecipient(Recipient $recipient): void
+    public function setCustomer(?Customer $customer): void
     {
-        $this->recipients->removeElement($recipient);
-    }
-
-    /**
-     * @return Recipient[]|Collection
-     */
-    public function getRecipients(): Collection
-    {
-        return $this->recipients;
-    }
-    
-    /**
-     * Checking if the Customer has Recipients.
-     *
-     * @return bool
-     */
-    public function hasRecipients(): bool
-    {
-        if ($this->recipients and !$this->recipients->isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param Sender $sender
-     */
-    public function addSender(Sender $sender): void
-    {
-        $this->senders->add($sender);
-    }
-
-    /**
-     * @param Sender $sender
-     */
-    public function removeSender(Sender $sender): void
-    {
-        $this->senders->removeElement($sender);
-    }
-
-    /**
-     * @return Sender[]|Collection
-     */
-    public function getSenders(): Collection
-    {
-        return $this->senders;
-    }
-    
-    /**
-     * Checking if the Customer has Senders.
-     *
-     * @return bool
-     */
-    public function hasSenders(): bool
-    {
-        if ($this->senders and !$this->senders->isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @return Order[]|Collection
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-    
-    /**
-     * @return Order[]|Collection
-     *
-     */
-    public function getOrdersPlaced(): Collection
-    {
-        $realOrders = new ArrayCollection();
-        foreach ($this->orders as $order) {
-            if ($order->getStatus() !== null) {
-                $realOrders->add($order);
-            }
-        }
-
-//        if ($realOrders->isEmpty()) {
-//            return null;
-//        }
-        return $realOrders;
-    }
-
-    /**
-     * @return Order[]|Collection
-     */
-    public function getLastOrder()
-    {
-        return $this->getOrdersPlaced()->first();
+        $this->customer = $customer;
     }
 
     /**
      * @return bool
      */
-    public function hasOrder(Order $order)
+    public function hasCustomer(): bool
     {
-        return $this->orders->contains($order);
+        return $this->customer ? true : false;
     }
 
-    /**
-     * @return int
-     */
-    public function countOrders(): int
+    private function ucWords (?string $string)
     {
-        return $this->orders->count();
-    }
-    
-    /**
-     * @return int
-     */
-    public function countRealOrders(): int
-    {
-        $realOrders = new ArrayCollection();
-        foreach ($this->orders as $order) {
-            if ($order->getStatus() !== null) {
-                $realOrders->add($order);
-            }
-        }
-        return $realOrders->count();
-    }
-
-    /**
-     * @return float
-     */
-    public function getSpentAmount(): float
-    {
-        $spent = 0;
-        foreach ($this->getOrdersPlaced() as $o => $order) {
-            $spent += $order->getSummary()->getTotalAmountToPay();
-        }
-        return (float) $spent;
+        return $string ? ucwords($string) : $string;
     }
 }

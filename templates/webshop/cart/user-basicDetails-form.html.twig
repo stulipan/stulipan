@@ -1,41 +1,79 @@
-            {#{{ form_start(customerForm) }}#}
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <label for="{{ customerForm.email.vars.full_name }}" class="form-label">{{ customerForm.email.vars.label }}
-                            </label>
-                            {{ form_widget(customerForm.email, {'attr': {'class': ''}}) }}
-                            {{ form_errors(customerForm.email) }}
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="{{ customerForm.phone.vars.full_name }}" class="form-label">{{ customerForm.phone.vars.label }}</label>
-                            {{ form_widget(customerForm.phone, {'attr': {'class': 'form-controlX'}}) }}
-                            {{ form_errors(customerForm.phone) }}
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="{{ customerForm.lastname.vars.full_name }}" class="form-label">{{ customerForm.lastname.vars.label }}
-                            </label>
-                            {{ form_widget(customerForm.lastname, {'attr': {'class': ''}}) }}
-                            {{ form_errors(customerForm.lastname) }}
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="{{ customerForm.firstname.vars.full_name }}" class="form-label">{{ customerForm.firstname.vars.label }}
-                            </label>
-                            {{ form_widget(customerForm.firstname, {'attr': {'class': ''}}) }}
-                            {{ form_errors(customerForm.firstname) }}
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <div class="custom-control custom-checkbox mb-2 text-sm text-muted">
-                                <input id="{{ customerForm.optin.vars.id }}" type="checkbox" name="{{ customerForm.optin.vars.full_name }}" class="custom-control-input" {{ customerForm.optin.vars.checked == true ? 'checked=\"checked\"' : '' }}>
-                                <label for="{{ customerForm.optin.vars.id }}" class="custom-control-label align-middle">{{  customerForm.optin.vars.label }}</label>
-                                {{ form_errors(customerForm.optin) }}
-                                {% do customerForm.optin.setRendered() %}
-                            </div>
-                        </div>
-                        {# Render CSRF token etc .#}
-                        {#<div style="display:none">#}
-                            {#{{ form_rest(customerForm) }}#}
-                        {#</div>#}
+{% import _self as myOwnMacro %}
 
+{% macro firstname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.firstname.vars.value is defined and item.firstname.vars.value %}active{% endif %}">
+        <label for="{{ item.firstname.vars.full_name }}" class="form-label">{{ 'checkout.customer.firstname'|trans }}</label>
+        {{ form_widget(item.firstname, {'attr': {'class': '', 'placeholder': 'checkout.customer.firstname'|trans}}) }}
+        {{ form_errors(item.firstname) }}
+    </div>
+{% endmacro %}
+
+{% macro lastname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.lastname.vars.value is defined and item.lastname.vars.value %}active{% endif %}">
+        <label for="{{ item.lastname.vars.full_name }}" class="form-label">{{ 'checkout.customer.lastname'|trans }}</label>
+        {{ form_widget(item.lastname, {'attr': {'class': '', 'placeholder': 'checkout.customer.lastname'|trans}}) }}
+        {{ form_errors(item.lastname) }}
+    </div>
+{% endmacro %}
+
+
+{{ form_start(customerForm, { 'attr': {'class': 'JS--Wrapper-customerForm',
+    'data-wrapper-customer-form': '',
+}}) }}
+        <div class="form-row">
+            {% if app.request.locale == 'hu' %}
+                {{ myOwnMacro.lastname(customerForm) }}
+                {{ myOwnMacro.firstname(customerForm) }}
+            {% endif %}
+            {% if app.request.locale == 'en' %}
+                {{ myOwnMacro.firstname(customerForm) }}
+                {{ myOwnMacro.lastname(customerForm) }}
+            {% endif %}
+
+            <div class="form-group input-float input-float-block-spaces col-sm-12 {% if customerForm.phone.vars.value is defined and customerForm.phone.vars.value is not empty %}active{% endif %}">
+                <div class="field-item field-append">
+                    <div class="field-addon-append">
+                        <div class="btn" data-toggle="tooltip" data-placement="top" title="{{ 'checkout.phone-number-tooltip'|trans }}">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
                     </div>
-            {#{{ form_end(customerForm) }}#}
-            {% do customerForm.setRendered() %}
+                </div>
+                <label for="{{ customerForm.phone.vars.full_name }}" class="form-label">{{ 'checkout.customer.phone'|trans }}</label>
+                {{ form_widget(customerForm.phone, {'attr': {'placeholder': 'checkout.customer.phone-placeholder'|trans }}) }}
+                {{ form_errors(customerForm.phone) }}
+            </div>
+
+{#            {% if not is_granted('IS_AUTHENTICATED_FULLY') is same as(true) %}#}
+            <div class="form-group input-float col-sm-12 {% if customerForm.email.vars.value is defined and customerForm.email.vars.value is not empty %}active{% endif %}">
+                <label for="{{ customerForm.email.vars.full_name }}" class="form-label">{{ 'checkout.customer.email-address'|trans }}</label>
+                {% set attr = {
+                    'placeholder': 'checkout.customer.email-address'|trans,
+                } %}
+                {{ form_widget(customerForm.email, {'attr': attr}) }}
+                {{ form_errors(customerForm.email) }}
+            </div>
+{#            {% endif %}#}
+{#            {% do customerForm.email.setRendered() %}#}
+
+            <div class="form-group col-lg-12 mb-0">
+                <div class="custom-control custom-checkbox">
+                    <input id="{{ customerForm.acceptsMarketing.vars.id }}" type="checkbox" name="{{ customerForm.acceptsMarketing.vars.full_name }}" class="custom-control-input" {{ customerForm.acceptsMarketing.vars.checked == true ? 'checked=\"checked\"' : '' }}>
+                    <label for="{{ customerForm.acceptsMarketing.vars.id }}" class="custom-control-label text-reset align-middle">{{ 'checkout.customer.newsletter-optin'|trans }}</label>
+                    {{ form_errors(customerForm.acceptsMarketing) }}
+                    {% do customerForm.acceptsMarketing.setRendered() %}
+                </div>
+            </div>
+
+            {# On the My Account > User Details page, the Submit button is shown #}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') is same as(true) %}
+            <div class="col-lg-12 mt-3">
+                <input type="submit" class="btn btn-primary" value="Módosítások mentése">
+            </div>
+            {% endif %}
+
+            <div style="display:none">
+                {{ form_rest(customerForm) }}
+            </div>
+        </div>
+{{ form_end(customerForm) }}
+{#{% do customerForm.setRendered() %}#}

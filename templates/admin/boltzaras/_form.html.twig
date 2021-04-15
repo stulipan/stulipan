@@ -6,10 +6,9 @@
                     {{ form_label(form.munkatars) }}
 					<div class="input-group">
                         {{ form_widget(form.munkatars, {'attr': {
-                                'class': 'form-controlX select2 select2-multiple select2-hidden-accessible',
+                                'class': 'JS--munkatars select2Xselect2-multiple select2-hidden-accessible',
                                 'data-toggle' : 'select2',
                                 'data-placeholder' : 'Válassz...',
-                                'aria-hidden' : 'true',
                         }}) }}
 					</div>
                     {{ form_errors(form.munkatars) }}
@@ -47,7 +46,7 @@
 				</div>
 				<div class="mb-2">
                     {{ form_label(form.kassza) }} <br />
-					<div class="input-group no-spinners">
+					<div class="input-group">
                         {{ form_widget(form.kassza, {'attr': {'class': ''}}) }}
 						<div class="input-group-append">
 							<span class="input-group-text">Ft</span>
@@ -57,7 +56,7 @@
 				</div>
 				<div class="mb-2">
                     {{ form_label(form.bankkartya) }} <br />
-					<div class="input-group no-spinners">
+					<div class="input-group">
 						<!--div class="input-group-prepend">
 					<span class="input-group-text">{{ form.bankkartya.vars.label }}</span>
 				  </div-->
@@ -70,7 +69,7 @@
 				</div>
 				<div class="mb-2">
                     {{ form_label(form.keszpenz) }} <br />
-					<div class="input-group no-spinners">
+					<div class="input-group">
                         {{ form_widget(form.keszpenz, {'attr': {'class': ''}}) }}
 						<div class="input-group-append">
 							<span class="input-group-text">Ft</span>

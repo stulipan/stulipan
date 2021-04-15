@@ -1,44 +1,52 @@
-{{ form_start(registrationForm, { 'attr': {'class': 'JS--registrationForm' }}) }}
+{% import _self as myOwnMacro %}
+
+{% macro firstname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.firstname.vars.value is defined and item.firstname.vars.value %}active{% endif %}">
+        <label for="{{ item.firstname.vars.full_name }}" class="form-label">Keresztnév</label>
+        {{ form_widget(item.firstname, {'attr': {'class': '', 'placeholder': 'Keresztnév'}}) }}
+        {{ form_errors(item.firstname) }}
+    </div>
+{% endmacro %}
+
+{% macro lastname(item) %}
+    <div class="form-group input-float col-md-6 {% if item.lastname.vars.value is defined and item.lastname.vars.value %}active{% endif %}">
+        <label for="{{ item.lastname.vars.full_name }}" class="form-label">Vezetéknév</label>
+        {{ form_widget(item.lastname, {'attr': {'class': '', 'placeholder': 'Vezetéknév'}}) }}
+        {{ form_errors(item.lastname) }}
+    </div>
+{% endmacro %}
+
+{{ form_start(registrationForm, { 'attr': {'class': 'JS--Wrapper-registrationForm' }}) }}
 <div class="form-row">
-    <div class="form-group col-lg-12">
-        <label for="{{ registrationForm.email.vars.full_name }}" class="form-label">{{ registrationForm.email.vars.label }}
+    <div class="form-group input-float col-sm-12 {% if registrationForm.email.vars.value is defined and registrationForm.email.vars.value is not empty %}active{% endif %}">
+        <label for="{{ registrationForm.email.vars.full_name }}" class="form-label">Email címed
             {#{% if registrationForm.email.vars.required == true %} <span class='text-danger'>*</span> {% endif %}#}
         </label>
-        {{ form_widget(registrationForm.email, {'attr': {'class': ''}}) }}
+        {{ form_widget(registrationForm.email, {'attr': {'placeholder': 'Email címed'}}) }}
         {{ form_errors(registrationForm.email) }}
     </div>
-    <div class="form-group col-lg-6 d-noneX">
-        <label for="{{ registrationForm.lastname.vars.full_name }}" class="form-label">{{ registrationForm.lastname.vars.label }}
-            {#{% if registrationForm.lastname.vars.required == true %} <span class='text-danger'>*</span> {% endif %}#}
-        </label>
-        {{ form_widget(registrationForm.lastname, {'attr': {'class': ''}}) }}
-        {{ form_errors(registrationForm.lastname) }}
-    </div>
-    <div class="form-group col-lg-6 d-noneX">
-        <label for="{{ registrationForm.firstname.vars.full_name }}" class="form-label">{{ registrationForm.firstname.vars.label }}
-            {#{% if registrationForm.firstname.vars.required == true %} <span class='text-danger'>*</span> {% endif %}#}
-        </label>
-        {{ form_widget(registrationForm.firstname, {'attr': {'class': ''}}) }}
-        {{ form_errors(registrationForm.firstname) }}
-    </div>
-    <div class="form-group col-lg-12">
-        <label for="{{ registrationForm.password.vars.full_name }}" class="form-label">{{ registrationForm.password.vars.label }}
+    {% if app.request.locale == 'hu' %}
+        {{ myOwnMacro.lastname(registrationForm) }}
+        {{ myOwnMacro.firstname(registrationForm) }}
+    {% endif %}
+    {% if app.request.locale == 'en' %}
+        {{ myOwnMacro.firstname(registrationForm) }}
+        {{ myOwnMacro.lastname(registrationForm) }}
+    {% endif %}
+    <div class="form-group input-float col-sm-12 {% if registrationForm.password.vars.value is defined and registrationForm.password.vars.value is not empty %}active{% endif %}">
+        <label for="{{ registrationForm.password.vars.full_name }}" class="form-label">Jelszó
             {#{% if registrationForm.password.vars.required == true %} <span class='text-danger'>*</span> {% endif %}#}
         </label>
-        <div class="input-group">
-            {{ form_widget(registrationForm.password, {'attr': {'class': 'border-right-0X'}}) }}
-            {#<div class="input-group-append">#}
-                {#<span class="input-group-text bg-white text-gray-500"><i class="fas fa-eye"></i></span>#}
-            {#</div>#}
-        </div>
         {{ form_errors(registrationForm.password) }}
-    </div>
-    <div class="form-group col-lg-12">
-        <div class="custom-control custom-checkbox text-sm text-muted">
-            <input id="{{ registrationForm.terms.vars.id }}" type="checkbox" name="{{ registrationForm.terms.vars.full_name }}" class="custom-control-input" {{ registrationForm.terms.vars.checked == true ? 'checked=\"checked\"' : '' }}>
-            <label for="{{ registrationForm.terms.vars.id }}" class="custom-control-label align-middle">{{  registrationForm.terms.vars.label }}</label>
-            {{ form_errors(registrationForm.terms) }}
-            {% do registrationForm.terms.setRendered() %}
+        <div class="JS--passWrapper">
+            <div class="field-item field-append">
+                <div class="field-addon-append JS--passButton">
+                    <div class="btn">
+                        <i class="fas fa-eye text-dark"></i>
+                    </div>
+                </div>
+            </div>
+            {{ form_widget(registrationForm.password, {'attr': {'placeholder': 'Jelszó'}}) }}
         </div>
     </div>
 

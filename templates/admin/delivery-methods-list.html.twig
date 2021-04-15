@@ -1,57 +1,48 @@
-{% extends 'admin/base_admin.html.twig' %}
+{% extends 'admin/template-editing.html.twig' %}
 
+{% set activeMenu = 'settings' %}
+{% set pageTitle = title %}
+{% set breadcrumb = {
+    0: {
+        'url': path('settings-home'),
+        'text': 'settings.settings'|trans,
+    },
+} %}
 
-{% block title %}
-	{{ title }}
-{% endblock %}
+{% set cancelUrl = path('settings-home') %}
 
+{% block content %}
 
-{% block stylesheets %}
-    {{ parent() }}
-{% endblock %}
-
-
-{% block page_content %}
-		
-	{% block LISTA %}
-
-        {% include 'admin/settings/_header.html.twig' with {
-            'pageTitle' : title,
-            'backToUrl': 'settings-home',
-            'backToText': 'Beállítások'
-        } %}
-
-        <div class="row row-5">
-            <div class="col-md-4 pt-0 pt-md-3 mb-3">
+        <div class="row mt-3 mt-md-20px">
+            <div class="col-md-4 mb-3">
                 <div class="mb-3">
                     A megrendelt virágot a DIFIORI munkatársai fogják kiszállítani.
                 </div>
-                <div class="admin-card-toprightX">
-                    <a href="{{ path('shipping-edit') }}" class="btn btn-outline-primary mb-2"><i class="fas fa-plus-square mr-1"></i> Új szállítási  mód</a>
-                    {#<a href="{{ path('delivery-date-type-edit') }}" class="btn btn-primary mb-2 ml-1"><i class="far fa-calendar-plus ml-1"></i> Új szállítási mód</a>#}
+                <div class="d-flex">
+                    <a href="{{ path('shipping-edit') }}" class="btn btn-primary mb-2">Új szállítási  mód</a>
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="cardX mb-20px">
-                    <div class="card-bodyX">
+                <div class="mb-20px">
+                    <div class="">
                         <div class="row">
                             {% if shippings is defined %}
                                 {% for item in shippings %}
-                                    <div class="col-md-12 mb-3">
+                                    <div class="col-md-12 mb-3 correction-no-padding">
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <div class="mb-2">
-                                                            <span class="h5 admin-card-title mb-3">{{ item.name }} </span>
-                                                            <div class="admin-card-topright">
-                                                                <span class="badge badge-{{ item.enabled ? 'success' : 'danger' }}">{{ item.enabled ? 'Engedélyezve' : 'Letiltva' }}</span>
+                                                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start">
+                                                            <div class="d-flex flex-column align-items-start">
+                                                                <div class="h5 mb-0">{{ item.name }} </div>
+                                                                <div class="font-weight-bold font-italic d-inline-block"> {{ item.price|money }}</div>
+                                                            </div>
+                                                            <div class="d-flex flex-column align-items-center mt-1 mt-md-0">
+                                                                <div class="badge badge-{{ item.enabled ? 'success' : 'danger' }}">{{ item.enabled ? 'Engedélyezve' : 'Letiltva' }}</div>
                                                             </div>
                                                         </div>
-                                                        <div class="">
-                                                            <div class="h6 font-weight-bold font-italic d-inline-block my-0"> {{ item.price|money }}</div>
-                                                        </div>
-                                                        <div class="text-muted mb-0">
+                                                        <div class="mt-3">
                                                             {{ item.description|raw  }}
                                                         </div>
 
@@ -59,14 +50,16 @@
                                                 </div>
                                             </div>
                                             <div class="card-footer">
-                                                <div class="d-inline-block text-xs text-muted mr-2">
-                                                    <em>Létrehozva: {{ item.createdAt|date('Y-m-d')}}, {{ item.createdAt|date('H:i')}}</em> <br>
-                                                    <em>Utolsó módosítás: {{ item.updatedAt|date('Y-m-d')}}, {{ item.updatedAt|date('H:i')}}</em>
-                                                </div>
-                                                <div class="admin-card-topright text-muted text-right">
-                                                    <a href="{{ path('shipping-edit', {'id': item.id}) }}" class="btn btn-secondary">
-                                                        <i class="far fa-edit"></i> Módosít
-                                                    </a>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <small class="d-inline-block text-muted mr-2">
+                                                        <em>Létrehozva: {{ item.createdAt|date('Y-m-d')}}, {{ item.createdAt|date('H:i')}}</em> <br>
+                                                        <em>Utolsó módosítás: {{ item.updatedAt|date('Y-m-d')}}, {{ item.updatedAt|date('H:i')}}</em>
+                                                    </small>
+                                                    <div class="d-flex">
+                                                        <a href="{{ path('shipping-edit', {'id': item.id}) }}" class="btn btn-secondary">
+                                                            <i class="far fa-edit mr-2"></i> Módosít
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -91,13 +84,13 @@
         } %}
 
 
-        <div class="row row-5">
-            <div class="col-md-4 pt-0 pt-md-3 mb-3">
+        <div class="row mt-3 mt-md-20px">
+            <div class="col-md-4 mb-3">
                 <div class="mb-3">
                     A megrendelt virágot a DIFIORI munkatársai fogják kiszállítani.
                 </div>
-                <div class="admin-card-toprightX">
-                    <a href="{{ path('shipping-edit') }}" class="btn btn-outline-primary mb-2"><i class="fas fa-plus-square mr-1"></i> Új fizetési  mód</a>
+                <div class="d-flex">
+                    <a href="{{ path('shipping-edit') }}" class="btn btn-primary mb-2">Új fizetési  mód</a>
                 </div>
             </div>
             <div class="col-md-8">
@@ -106,38 +99,42 @@
                         <div class="row">
                         {% if payments is defined %}
                             {% for item in payments %}
-                                <div class="col-md-12 mb-3">
+                                <div class="col-md-12 mb-3 correction-no-padding">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="mb-2">
-                                                        <span class="h5 admin-card-title mb-3">{{ item.name }} </span>
-                                                        <div class="admin-card-topright">
-                                                            <span class="badge badge-{{ item.enabled ? 'success' : 'danger' }}">{{ item.enabled ? 'Engedélyezve' : 'Letiltva' }}</span>
+                                                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start">
+                                                        <div class="d-flex flex-column align-items-start">
+                                                            <div class="h5 mb-0">{{ item.name }} </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column align-items-center mt-1 mt-md-0">
+                                                            <div class="badge badge-{{ item.enabled ? 'success' : 'danger' }}">{{ item.enabled ? 'Engedélyezve' : 'Letiltva' }}</div>
                                                         </div>
                                                     </div>
-                                                    <div class="mb-2">
+                                                    <div class="mt-2">
                                                         {% if item.image is defined and item.image != '' %}
                                                             <img class="img-fluid h-20px mr-0" src="{{ asset('/uploads/images/termekek/' ~ item.image) }}" alt="">
                                                         {% endif %}
                                                     </div>
-                                                    <div class="text-muted mb-0">
+                                                    <div class="mt-3">
                                                         {{ item.description|raw  }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card-footer">
-                                            <div class="d-inline-block text-xs text-muted mr-2">
-                                                <em>Létrehozva: {{ item.createdAt|date('Y-m-d')}}, {{ item.createdAt|date('H:i')}}</em> <br>
-                                                <em>Utolsó módosítás: {{ item.updatedAt|date('Y-m-d')}}, {{ item.updatedAt|date('H:i')}}</em>
-                                            </div>
-                                            <div class="admin-card-topright text-muted text-right">
-                                                <a href="{{ path('shipping-edit', {'id': item.id}) }}" class="btn btn-secondary">
-                                                    <i class="far fa-edit"></i>
-                                                    Módosít
-                                                </a>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small class="d-inline-block text-muted mr-2">
+                                                    <em>Létrehozva: {{ item.createdAt|date('Y-m-d')}}, {{ item.createdAt|date('H:i')}}</em> <br>
+                                                    <em>Utolsó módosítás: {{ item.updatedAt|date('Y-m-d')}}, {{ item.updatedAt|date('H:i')}}</em>
+                                                </small>
+                                                <div class="d-flex">
+                                                    <a href="{{ path('shipping-edit', {'id': item.id}) }}" class="btn btn-secondary">
+                                                        <i class="far fa-edit mr-2"></i>
+                                                        Módosít
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -156,19 +153,4 @@
 
 
 
-        <!-- footer of default page content widget -->
-        {#{{ include('/admin/_footer_of_default_page_content.html.twig') }}#}
-
-	{% endblock %}
 {% endblock %}
-
-
-
-
-
-{% block javascripts %}
-    {{ parent() }}
-
-{% endblock %}
-        
-

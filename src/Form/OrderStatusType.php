@@ -76,7 +76,7 @@ class OrderStatusType extends AbstractType
         ]);
         $builder->add('note',TextareaType::class,[
             'label' => 'Megjegyzés',
-            'attr' => ['rows' => '5'],
+            'attr' => ['rows' => '3'],
             'required' => false,
             'mapped' => false,
         ]);

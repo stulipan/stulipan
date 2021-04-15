@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\TimestampableTrait;
-use App\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -36,10 +35,18 @@ class Recipient
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="Add meg a címzett nevét.")
+     * @ORM\Column(name="firstname", type="string", length=255, nullable=false)
+     * @Assert\NotNull(message="checkout.recipient.missing-firstname")
      */
-    private $name='';
+    private $firstname='';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastname", type="string", length=255, nullable=false)
+     * @Assert\NotNull(message="checkout.recipient.missing-lastname")
+     */
+    private $lastname='';
 
     /**
      * @var Address
@@ -54,12 +61,12 @@ class Recipient
     private $address;
 
     /**
-     * @var User
+     * @var Customer
      *
      * ==== Many Recipients belong to one Customer ====
      * ==== inversed By="recipients" => a User entitásban definiált 'recipients' attibútumról van szó; A Címzettet így kötjük vissza a Customerhez
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="recipients")
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="recipients")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @ Assert\NotBlank(message="Egy címzetnek kell legyen felhasználója/Customer.")
      */
@@ -70,7 +77,7 @@ class Recipient
      * @var string
      *
      * @ORM\Column(name="phone", type="string", length=15, nullable=false)
-     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     * @Assert\NotBlank(message="checkout.recipient.missing-phone")
      * @ AssertApp\PhoneNumber()
      */
     private $phone;
@@ -87,23 +94,50 @@ class Recipient
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getFullname();
     }
 
     /**
      * @return string|null
      */
-    public function getName(): ?string
+    public function getFullname(): ?string
     {
-        return $this->name;
+        if ($this->lastname && $this->firstname) {
+            return $this->lastname.' '.$this->firstname;
+        }
+        return null;
     }
 
     /**
-     * @var string $name
+     * @return string
      */
-    public function setName(?string $name): void
+    public function getFirstname(): ?string
     {
-        $this->name = $name;
+        return $this->firstname;
+    }
+
+    /**
+     * @param string $firstname
+     */
+    public function setFirstname(?string $firstname): void
+    {
+        $this->firstname = $firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string $lastname
+     */
+    public function setLastname(?string $lastname): void
+    {
+        $this->lastname = $lastname;
     }
 
     /**
@@ -123,17 +157,17 @@ class Recipient
     }
 
     /**
-     * @return User
+     * @return Customer|null
      */
-    public function getCustomer(): ?User
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
     /**
-     * @var User $customer
+     * @var Customer|null $customer
      */
-    public function setCustomer(?User $customer): void
+    public function setCustomer(?Customer $customer): void
     {
         $this->customer = $customer;
     }

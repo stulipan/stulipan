@@ -1,11 +1,11 @@
-<section name="jartal_mar_nalunk">
+<div id="already_registered" class="mt-3">
     <div class="container">
-        <div class="row row-wide-mobile">
-            <div class="col-lg-12 col-wide-mobile mb-2">
-                <div class="cartX text-center">
-                    <span class="text-smX text-muted">Jártál már nálunk? Ha már van fiókod, <a href="{{ path('site-login') }}" class="">itt tudsz bejelentkezni.</a></span>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-center">
+                    <span class="">{{ 'checkout.already-registered'|trans({ '{{ link }}': path('site-login') })|raw }}</span>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>

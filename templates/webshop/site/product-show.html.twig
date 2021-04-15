@@ -4,7 +4,7 @@
 {% set breadcrumb = {
     0: {
         'url': path('homepage'),
-        'text': 'Home',
+        'text': 'generic.home'|trans,
     },
     1: {
         'url': path('site-product-list', { 'slug': product.categories[0].slug }),
@@ -21,27 +21,26 @@
 {% block stylesheets %}
     {{ parent() }}
     {#<link rel="stylesheet" href="{{ asset('build/v-shop.css') }}"/>#}
-    <link href="{{ asset('webshop/site/js/daterangepicker.css') }}" rel="stylesheet" />
+{#    {{ encore_entry_link_tags('daterangepicker') }}#}
 {% endblock %}
 
-{% block bodyClass %}
-    product-details
-{% endblock %}
+{% block bodyClass %} product-details{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-xl-10X col-lg-12 mx-auto">
+    <div class="row mt-0 mt-sm-3">
+        <div class="col-lg-11X col-xl-12 mx-auto">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="row">
-                        <div class="col-md-6 col-lg-7 order-1 mb-4">
+                        <div class="col-md-6 col-lg-7 order-1 correction-product-image-no-padding">
                             <div class="row">
+                                <!-- Thumbnails lef to the  Main Image -->
                                 {% if isThumbnailsLeft == true %}
-                                <div class="col-2 pr-0">
+                                <div class="d-none d-sm-flex col-sm-2 pr-0 order-2 order-sm-1">
                                     <div data-slider-id="1" class="owl-thumbs">
                                         {% if product.images is defined %}
                                             {% for image in product.images %}
-                                                <button class="owl-thumb-item detail-thumb-item mb-3">
+                                                <button class="owl-thumb-item detail-thumb-item mb-10px">
                                                     <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
                                                 </button>
                                             {% endfor %}
@@ -49,41 +48,41 @@
                                     </div>
                                 </div>
                                 {% endif %}
-                                <div class="{% if isThumbnailsLeft == true %}col-10{% else %}col-12{% endif %} detail-carousel pl-3">
-                                    {% set bestseller = false %}
-                                    {% if product.isUnavailable %}
-                                        <div class="ribbon ribbon-dark">MIND ELKELT</div>
-                                    {% elseif product.hasBadges %}
-                                        {% for badge in product.badges %}
-                                            {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
-                                            {% else %}
-                                                {% set bestseller = true %}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                    <div>
-                                        {#<span class="delivery show-for-large mr-10px"></span>#}
-                                        <div data-slider-id="1" class="owl-carousel detail-slider product-image">
-                                            {% if product.images is defined %}
-                                                {% for image in product.images %}
-                                                    <div class="item"><a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
-                                                            <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" alt="{{ product.name }} 1" class="img-fluid">
-                                                            {% if bestseller %}
-                                                                <div class="card-img-overlay d-flex align-items-end p-0">
-                                                                    <div class="text-center w-100 overlay--bestseller">
-                                                                        <i class="fas fa-trophy"></i> Bestseller
-                                                                    </div>
-                                                                </div>
-                                                            {% endif %}
-                                                        </a>
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
+                                <!-- MAIN IMAGE -->
+                                <div class="order-1 order-sm-2 {% if isThumbnailsLeft == true %}col-12 col-sm-10{% else %}col-12{% endif %}">
+                                    <div class="detail-carousel position-relative">
+                                        {% set bestseller = false %}
+                                        {% if product.isUnavailable %}
+                                            <div class="ribbon ribbon-dark">MIND ELKELT</div>
+                                        {% elseif product.hasBadges %}
+                                            {% for badge in product.badges %}
+                                                {% if badge.css is defined and badge.css != 'bestseller' %}
+                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                                {% else %}
+                                                    {% set bestseller = true %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <div class="">
+                                            <div data-slider-id="1" class="owl-carousel detail-slider owl-theme">
+                                                {% if product.images is defined %}
+                                                    {% for image in product.images %}
+                                                        <div class="item">
+                                                            <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
+                                                                <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" alt="{{ product.name }} 1" class="img-fluid">
+                                                            </a>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
                                         </div>
+                                        {% if bestseller %}
+                                            <div class="ribbon ribbon-bottom"><i class="fas fa-trophy"></i> Bestseller</div>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 {% if isThumbnailsLeft == false %}
+                                <!-- Thumbnails bellow Main Image -->
                                 <div class="col-12">
                                     <div data-slider-id="1" class="owl-thumbs row">
                                         {% if product.images is defined %}
@@ -97,201 +96,276 @@
                                 </div>
                                 {% endif %}
                             </div>
-                            {#<div class="row">#}
-                            {#<div class="col-12 mt-4">#}
-                            {#<p class="mb-2">{{ product.description }}#}
-                            {#</p>#}
-                            {#</div>#}
-                            {#</div>#}
                         </div>
-                        <div class="col-md-6 col-lg-5 pl-lg-4 order-2 mb-4">
-                            <h1 class="mb-1">{{ product.name }}</h1>
-                            {% if product.isPubliclyAvailable %}
-                                {% if product.isFlower %}
-
-                                {% else %}
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <ul class="list-inline mb-0">
-                                            <li class="list-inline-item price">
-                                                <del>{{ (product.price.numericValue*4)|money }}</del>
-                                            </li>
-                                            <li class="list-inline-item h4 price price-sale">{{ product.price.numericValue|money }}</li>
-
-                                        </ul>
+                        <div class="col-md-6 col-lg-5 order-2 mt-3 mt-md-0">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="product-reviews">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <div class="d-flex align-items-center">
+                                                <ul class="review-stars-group mr-2 mb-0">
+                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                                                    <li class="review-stars-item"><i class="fa fa-star"></i></li>
+                                                </ul>
+                                            </div>
+                                            <div class="">
+                                                <a href="#" class="text-sm">25 értékelés <i class="fas fa-long-arrow-alt-right ml-1"></i></a>
+                                            </div>
+                                        </div>
                                     </div>
-                                {% endif %}
-                            {% endif %}
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <div class="d-flex align-items-center">
-                                    <ul class="list-inline mr-2 mb-0">
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-warning"></i></li>
-                                        <li class="list-inline-item mr-0"><i class="fa fa-star text-gray-300"></i></li>
-                                    </ul>
-                                    <a href="#" class="minicard--toolLink">25 értékelés</a>
                                 </div>
-                            </div>
+                                <div class="col-12 mt-2">
+                                    <div class="product-name">
+                                        <h1 class="">{{ product.name }}</h1>
+                                    </div>
+                                </div>
 
+                                <div class="col-12">
+                                    {% if product.isPubliclyAvailable %}
+                                        {% if product.isFlower %}
+
+                                        {% else %}
+                                            <div class="product-price">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <ul class="list-inline mb-0">
+                                                        <li class="list-inline-item price">
+                                                            <del>{{ (product.price.numericValue*4)|money }}</del>
+                                                        </li>
+                                                        <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    <!-- Add to cart form -->
+                                        <div data-section-id="addToCart-template" data-section-type="addToCart-template">
+
+                                            {% if product.isPubliclyAvailable %}
+                                                {% include 'webshop/site/product-show-addToCartForm-widget.html.twig' %}
+                                            {% else %}
+                                                <div class="alert alert-warning mt-3"><i class="fas fa-info-circle mr-2"></i>A termék már nem áll forgalmazásban.</div>
+                                            {% endif %}
+
+                                            <div class="product-button">
+                                                <div class="">
+                                                    <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-uppercase w-100" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
+                                                    <span class="loading-spinner-invisible">
+                                                        <svg class="svg-icon svg-icon-heavy addtocart">
+                                                            <use xlink:href="#cart-1"> </use>
+                                                        </svg>
+                                                        Kosárba rakom
+                                                    </span>
+                                                        <div class="loading-spinner" role="status"></div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="product-credit-card">
+                                                <div class="text-center">
+                                                    <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
+                                                    <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/termekek/paypal.png">
+                                                    <div class="text-sm">
+                                                        Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>
+                                                </div>
+                                            </div>
+                                            <div class="product-quickinfo">
+                                                <div class="product-list-group list-group">
+                                                    <div class="list-group-item">
+                                                        <span class="text-sm mr-2"><i class="fas fa-shipping-fast"></i></span>
+                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Szállítási díjak</a>
+                                                        <div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
+                                                                        <div class="mt-4">
+                                                                            {{ pages.szallitasiDijak.content|raw }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="list-group-item">
+                                                        <span class="text-sm mr-2"><i class="far fa-credit-card"></i></span>
+                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--CreditCardPayment">Fizess online bankkártyáddal</a>
+                                                        <div class="modal fade" id="modal--CreditCardPayment" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.rolunk.name }}</h3>
+                                                                        <div class="mt-4">
+                                                                            {{ pages.rolunk.content|raw }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+
+                            </div>
 
 
                             {#<p class="mb-2">{{ product.description }}</p>#}
 
-
-                            {#<ul class="product--bullet-points text-smX mb-4">#}
-                            {#<li>Ingyenes szállítás Budapesten!</li>#}
-                            {#<li>Standard méret látható a képen</li>#}
-                            {#<li>Mindig friss virágból</li>#}
-                            {#</ul>#}
-
-
-                            <!-- Add to cart form -->
-
-                            {% if product.isPubliclyAvailable %}
-{#                                {% form_theme form 'bootstrap_4_layout.html.twig' %}#}
-                                {{ form_start(form) }}
-
-                                    {% if product.isFlower %}
-
-                                        {% include 'webshop/site/product-widget-addToCartForm-isFlower.html.twig' %}
-
-                                    {% else %}
-
-                                        {% if form.options is defined and form.options is not empty %}
-                                            {% for item in form.options %}
-                                                <div class="form-group row">
-                                                    <div class="col-md-12">
-                                                        <label class="detail-option-heading">{{ item.selectedOption.vars.value }}</label>
-                                                        <div class="form-row">
-                                                            {% if settings.get('general.product-variant-view') == 'dropdown' %}
-                                                                <div class="col-8 col-sm-8 col-md-6">
-                                                                    {{ form_widget(item.selectedOptionValue) }}
-                                                                </div>
-                                                            {% elseif settings.get('general.product-variant-view') == 'variant-picker' %}
-                                                                {% for choice in item.selectedOptionValue %}
-                                                                    <div class="col-sm-4 col-4">
-                                                                        {% include 'webshop/site/visual-picker-4-product-variant.html.twig' %}
-                                                                    </div>
-                                                                {% endfor %}
-                                                                {% do item.selectedOptionValue.setRendered() %}
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                            {{ form_errors(form.options) }}
-                                        {% endif %}
-                                        {% do form.options.setRendered() %}
-
-                                        {% do form.deliveryDate.deliveryDate.setRendered() %}
-
-                                        <div class="row">
-                                            <div class="col-12 detail-option mb-4">
-                                                <label class="detail-option-heading">Items <span>(required)</span></label>
-                                                {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
-
-                                            </div>
-                                        </div>
-                                    {% endif %}
-
-                                    <div class="row mb-3">
-                                        <div class="col-lg-12">
-                                            <button type="submit" class="JS--Button-addToCart btn btn-success btn-lg mb-1 w-100">
-                                                <svg class="svg-icon svg-icon-heavy addtocart">
-                                                    <use xlink:href="#cart-1"> </use>
-                                                </svg>
-                                                Kosárba rakom
-                                            </button>
-                                            <div class="JS--loadingOverlay d-flex align-items-stretch loading-lg"></div>
-                                        </div>
-                                    </div>
-
-                                {{ form_end(form) }}
-
-                                <div class="cardX border-0 mb-3">
-                                    <div class="card-bodyX bg-warning-lightenX text-center p-0 px-2">
-                                        <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
-                                        <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/termekek/paypal.png">
-                                        <p class="card-text text-xs text-muted">
-                                            Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</p>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <span class="badge badge--unavailableProduct"><i class="fas fa-info-circle"></i>A termék már nem áll forgalmazásban</span>
-                            {% endif %}
-
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-12 mt-3 mb-3"></div>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block contentWide %}
-    <div class="marketing-details">
-        <div class="d-flex flex-column flex-md-row">
-            <div class="d-flex flex-grow-1 w-100 justify-content-center justify-content-md-end bg-custom-gray py-3 my-4X ml-3X">
-                <div class="order-2 order-lg-1" style="max-width: 500px;">
-                    <div class="miert-dobozok p-3">
-                        <div class="row">
-                            <div class="col-md-12 col-lg-10 mb-3">
-                                <div class="marketing-title text-lg mb-5">Miért válaszd a Tulipánfutárt?</div>
-                                <p></p>
-                                <h5 class="h5 marketing-subtitleX">INGYENES szállítás Budapesten!</h5>
-                                <p class="text-muted font-weight-light text-smX">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="/szallitasi-dijak" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
-                                </p>
-
-                                <h5 class="h5 marketing-subtitleX">Virágküldés a nap 24 órájában</h5>
-                                <p class="text-muted font-weight-light text-smX">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;
-                                </p>
-
-                                <h5 class="h5 marketing-subtitleX">Magas vásárlói elégedettség</h5>
-                                <p class="text-muted font-weight-light text-smX">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
-                                </p>
-
-                                <h5 class="h5 marketing-subtitleX">Egyedi terméket szeretnél?</h5>
-                                <p class="text-muted font-weight-light text-smX">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
-                                </p>
-
-                                <h5 class="h5 marketing-subtitleX">Ügyfélszolgálat</h5>
-                                <p class="text-muted font-weight-light text-smX">
-                                    Telefon: 06 1 466 6286<br>
-                                    Email: info@difiori.hu
-                                </p>
-
+    <div class="bg-secondary py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-11 col-xl-12 mx-auto">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-10 mx-auto">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="h3 general-info-title">Delivered by a carefully selected courier partner</div>
+                                </div>
+                                <div class="col-sm-12 mt-5 scroll-overflower">
+                                    <div class="scroll-overflower-wrapper">
+                                            <div class="row row-narrow">
+                                                <div class="col-3 mb-3">
+                                                    <div class="card h-100 shadow border-0">
+                                                        <div class="card-body">
+                                                            <div class="general-info-item-title">Courier Flower Delivery</div>
+                                                            <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic1.jpg"/>
+                                                            <p class="general-info-item-description"> We work closely with our courier partner to ensure that your beautifully designed bouquet arrives in pristine condition.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3 mb-3">
+                                                    <div class="card h-100 shadow border-0">
+                                                        <div class="card-body">
+                                                            <div class="general-info-item-title">Signature Interflora Black Gift Box</div>
+                                                            <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic2.jpg"/>
+                                                            <p class="general-info-item-description">Your bouquet will be delivered in a signature Interflora black gift box, with the impact of the flowers seen as soon as the box is opened.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3 mb-3">
+                                                    <div class="card h-100 shadow border-0">
+                                                        <div class="card-body">
+                                                            <div class="general-info-item-title">Gift Wrap and Ribbon</div>
+                                                            <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic3.jpg"/>
+                                                            <p class="general-info-item-description">Your bouquet will be presented in elegant Interflora gift wrap and a pretty ribbon. A specially formulated gel solution ensures freshness during delivery.	</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3 mb-3">
+                                                    <div class="card h-100 shadow border-0">
+                                                        <div class="card-body">
+                                                            <div class="general-info-item-title">Gift Message and Flower Food</div>
+                                                            <img class="img-fluid mb-2" src="/uploads/images/other/tab-hampers-pic4.jpg"/>
+                                                            <p class="general-info-item-description">Your personal message will be displayed on an attractive greeting card and will accompany your gift. To ensure the flowers remain fresh and in the best possible condition we include some flower food.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-grow-1 w-100 justify-content-center justify-content-md-start bg-custom-yellow px-0 px-md-2">
-                <div class="order-1 order-lg-2" style="max-width: 500px;">
-                    <div class="miert-dobozok p-3 mt-3">
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <div class="marketing-title text-lg mb-4">Delivered by a carefully selected courier partner</div>
-                            </div>
-                            <div class="col-md-6 col-6 mb-3">
-                                <h5>Courier Flower Delivery</h5>
-                                <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic1.jpg"/>
-                                <p class="text-muted font-weight-light"> We work closely with our courier partner to ensure that your beautifully designed bouquet arrives in pristine condition.</p>
-                            </div>
-                            <div class="col-md-6 col-6 mb-3">
-                                <h5>Signature Interflora Black Gift Box</h5>
-                                <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic2.jpg"/>
-                                <p class="text-muted font-weight-light">Your bouquet will be delivered in a signature Interflora black gift box, with the impact of the flowers seen as soon as the box is opened.</p>
-                            </div>
-                            <div class="col-md-6 col-6 mb-3">
-                                <h5>Gift Wrap and Ribbon</h5>
-                                <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic3.jpg"/>
-                                <p class="text-muted font-weight-light">Your bouquet will be presented in elegant Interflora gift wrap and a pretty ribbon. A specially formulated gel solution ensures freshness during delivery.	</p>
-                            </div>
-                            <div class="col-md-6 col-6 mb-3">
-                                <h5>Gift Message and Flower Food</h5>
-                                <img class="img-fluid mb-2" src="/uploads/images/other/tab-hampers-pic4.jpg"/>
-                                <p class="text-muted font-weight-light">Your personal message will be displayed on an attractive greeting card and will accompany your gift. To ensure the flowers remain fresh and in the best possible condition we include some flower food.</p>
+        </div>
+    </div>
+    <div class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-11 col-xl-12 mx-auto">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-6 mx-auto">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="h3 general-info-title">Miért válaszd a Tulipánfutárt?</div>
+                                </div>
+                                <div class="col-sm-12 mt-3">
+                                    <div class="accordion mb-4" id="accordionMiertDobozok">
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz1">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapseOne">INGYENES szállítás Budapesten!</a>
+                                            </div>
+                                            <div id="collapse1" class="collapse" aria-labelledby="miertDoboz1" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
+                                                    <p class="general-info-item-description">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz2">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapseOne">Virágküldés a nap 24 órájában</a>
+                                            </div>
+                                            <div id="collapse2" class="collapse" aria-labelledby="miertDoboz2" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
+                                                    <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz3">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapseOne">Magas vásárlói elégedettség</a>
+                                            </div>
+                                            <div id="collapse3" class="collapse" aria-labelledby="miertDoboz3" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
+                                                    <p class="general-info-item-description">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz4">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseOne">Egyedi terméket szeretnél?</a>
+                                            </div>
+                                            <div id="collapse4" class="collapse" aria-labelledby="miertDoboz4" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
+                                                    <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div  class="card-header border-bottom-0" id="miertDoboz5">
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapseOne">Ügyfélszolgálat</a>
+                                            </div>
+                                            <div id="collapse5" class="collapse" aria-labelledby="miertDoboz5" data-parent="#accordionMiertDobozok">
+                                                <div class="card-body pt-2">
+                                                    <p class="general-info-item-description">
+                                                        Telefon: 06 1 466 6286<br>
+                                                        Email: info@difiori.hu
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -305,20 +379,41 @@
 	{{ parent() }}
     <script src="{{ asset('build/v-shop.js') }}"></script>
 
-
     <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
     <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
     <script>
         // ------------------------------------------------------- //
         // Detail Carousel with thumbs
         // ------------------------------------------------------ //
+        // $('.detail-slider').owlCarousel({
+        //     loop: true,
+        //     items: 1,
+        //     thumbs: true,
+        //     thumbsPrerendered: true,
+        //     dots: true,
+        //     responsiveClass: false
+        // });
         $('.detail-slider').owlCarousel({
             loop: true,
-            items: 1,
             thumbs: true,
             thumbsPrerendered: true,
-            dots: false,
-            responsiveClass: false
+            margin: 0,
+            nav: false,
+            dots: true,
+            navText: ['<img src="img/prev.svg" alt="" width="50">', '<img src="img/next.svg" alt="" width="50">'],
+            smartSpeed: 400,
+            responsiveClass: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 1
+                },
+                1000: {
+                    items: 1
+                }
+            }
         });
 
         // ------------------------------------------------------- //
@@ -421,7 +516,7 @@
     <script>
         $(function() {
             let $wrapper = $('.JS--deliveryDateContainer');
-            let $vp = $wrapper.find('.visual-picker-checked');
+            let $vp = $wrapper.find('.vp-checked');
             // let $currentValue = $vp.find('input').val();
             // console.log($currentValue);
 
@@ -433,9 +528,9 @@
             $("[class*='JS--generatedDate-']").click(function () {
                 $dateWrapper = $wrapper.find('.JS--dateWrapper');
 
-                $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
-                $(this).find('.visual-picker').find('input').prop('checked', true);
-                $(this).find('.visual-picker').addClass('visual-picker-checked');
+                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
+                $(this).find('.vp').find('input').prop('checked', true);
+                $(this).find('.vp').addClass('vp-checked');
 
                 // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
                 // amugy visszallitja (ujra mutatja) a CalendarIcont
@@ -455,8 +550,8 @@
                 $dateWrapper = $(this).closest('.JS--dateWrapper');
 
                 $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                $dateWrapper.find('.visual-picker-checked').find('input').prop('checked', false);
-                $dateWrapper.find('.visual-picker-checked').removeClass('visual-picker-checked');
+                $dateWrapper.find('.vp-checked').find('input').prop('checked', false);
+                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
 
                 $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
 
@@ -464,8 +559,8 @@
                     $wrapper.find('.JS--showCalendarIcon').hide();
                     $dateModule.removeClass('d-none').addClass('d-temporary');
                 }
-                $dateModule.find('.visual-picker').find('input').prop('checked', true);
-                $dateModule.find('.visual-picker').addClass('visual-picker-checked');
+                $dateModule.find('.vp').find('input').prop('checked', true);
+                $dateModule.find('.vp').addClass('vp-checked');
 
                 if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
                     $wrapper.find('.JS--showCalendarIcon').show();
@@ -479,20 +574,19 @@
     <script>
         // Displays the loading circle
         $(function() {
-            var proceed = false;
-            $(document).on('click', '.JS--Button-addToCart', function (event) {
-                if (proceed) {
-                    proceed = false;
-                    return;
-                }
-                event.preventDefault();
-                var $element = $(event.currentTarget);
-                $element.addClass('text-success-faded');
-                $element.next('.JS--loadingOverlay').addClass('loading-overlay loading');
-                proceed = true;
-                $element.trigger('click');
-                $element.prop('disabled', true);
-            });
+            // let _proceed = false;
+            // $(document).on('click', '.JS--Button-addToCart', function (e) {
+            //     if (_proceed) {
+            //         _proceed = false;
+            //         return;
+            //     }
+            //     e.preventDefault();
+            //     var el = $(e.currentTarget);
+            //
+            //     el.addClass('loading-spinner');
+            //     _proceed = true;
+            //     el.trigger('click');
+            // });
         });
     </script>
 {% endblock %}

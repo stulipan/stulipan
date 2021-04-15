@@ -2,22 +2,29 @@
 
 namespace App\Twig;
 
-//use ApiPlatform\Core\Tests\Fixtures\TestBundle\Entity\ThirdLevel;
+use App\Entity\CmsPage;
+use App\Entity\CmsPage4Twig;
+use App\Services\DateFormatConvert;
 use App\Services\FileUploader;
 use App\Services\Localization;
+use App\Services\StoreSettings;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use phpDocumentor\Reflection\Types\This;
 use Psr\Container\ContainerInterface;
+use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class AppExtension extends AbstractExtension implements ServiceSubscriberInterface
+class AppExtension extends AbstractExtension implements ServiceSubscriberInterface, GlobalsInterface
 {
     private const UA_BROWSER_NAME = 'name';
     private const UA_BROWSER_VERSION = 'version';
@@ -26,18 +33,33 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     private $container;
     private $locale;
     private $translator;
+    private $settings;
+    private $em;
+    private $convert;
 
-    public function __construct(ContainerInterface $container, SessionInterface $session, Localization $localization, TranslatorInterface $translator)
+    public function __construct(ContainerInterface $container, SessionInterface $session,
+                                Localization $localization, TranslatorInterface $translator,
+                                EntityManagerInterface $em, DateFormatConvert $convert)
     {
         $this->container = $container;
         $this->locale = $localization->getLocale($session->get('_locale', 'hu'));
         $this->translator = $translator;
+        $this->em = $em;
+        $this->convert = $convert;
     }
 
     public function getFunctions(): array
     {
         return [
-          new TwigFunction('uploaded_asset', [$this, 'getPathOfUploadedAsset'])
+            new TwigFunction('uploaded_asset', [$this, 'getPathOfUploadedAsset']),
+//            new TwigFunction('pages', [$this, 'getCmsPageContent']),
+        ];
+    }
+
+    public function getGlobals(): array
+    {
+        return [
+            'pages' => $this->getPages(),
         ];
     }
 
@@ -61,9 +83,42 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFilter('browser', [$this, 'formatBrowserInfo']),
             new TwigFilter('timeAgo', [$this, 'formatTimeAgo']),
             new TwigFilter('localizedDate', [$this, 'formatLocalizedDate']),
+            new TwigFilter('localizedTime', [$this, 'formatLocalizedTime']),
             new TwigFilter('money', [$this, 'formatMoney']),
             new TwigFilter('number', [$this, 'formatNumber']),
+            new TwigFilter('momentJsFormat', [$this, 'convertDateFormatFromPhpToMomentJs']),
         ];
+    }
+
+
+    public function getPages()
+    {
+        $cmsPages = $this->em->getRepository(CmsPage::class)->findAll();
+
+        $pages = [];
+        foreach ($cmsPages as $page => $value) {
+            $pages[$value->getSlug()] = $value;
+        }
+        $pages = $this->convertToObject($pages);
+        return $pages;
+    }
+
+    /**
+     * Converts an array to object (stdClass). Used in $this->getPages()
+     * @param $array
+     * @return stdClass
+     */
+    public function convertToObject($array)
+    {
+        $object = new stdClass();
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->convertToObject($value);
+            }
+            $camelCaseKey = lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $key))));
+            $object->$camelCaseKey = $value;
+        }
+        return $object;
     }
 
     public function formatMoney($amount)
@@ -94,6 +149,10 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function formatTimeAgo($datetime, $level=1)
     {
+//        For dates older than 2 days, date will not be displayed as timeAgo
+//        if ($datetime->diff(new DateTime())->days > 2) {
+//            return strtolower($this->formatLocalizedDate($datetime, 'Y M j. | H:i'));
+//        }
         return $this->calculateTimeElapsed($datetime, $level);
     }
 
@@ -164,7 +223,11 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $string;
     }
 
-    public function formatLocalizedDate($dateTime, string $format='Y-m-d') {
+    public function formatLocalizedDate($dateTime, string $format=null) {
+
+        if ($format == null || $format == '') {
+            $format = $this->locale->getDateFormat();
+        }
         $shortMonths = [
             'jan' => $this->translator->trans('datetime.jan'),
             'feb' => $this->translator->trans('datetime.feb'),
@@ -184,7 +247,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'february' => $this->translator->trans('datetime.february'),
             'march' => $this->translator->trans('datetime.march'),
             'april' => $this->translator->trans('datetime.april'),
-            'may' => $this->translator->trans('datetime.mayy'),
+            'mayy' => $this->translator->trans('datetime.mayy'),
             'june' => $this->translator->trans('datetime.june'),
             'july' => $this->translator->trans('datetime.july'),
             'august' => $this->translator->trans('datetime.august'),
@@ -234,12 +297,21 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
                 $dateTime = str_ireplace($weekday, ucfirst($localizedWeekday), $dateTime);
             }
         }
+        return $dateTime;
+    }
 
-//        if ($localizedDateTime === '') {
-            return $dateTime;
-//        }
-//        return $localizedDateTime;
+    public function formatLocalizedTime($dateTime, string $format=null)
+    {
+        if ($format == null || $format == '') {
+            $format = $this->locale->getTimeFormat();
+        }
+        $dateTime = $dateTime->format($format);  // eg: 19:20, 19:20:34    OR    07:20am
+        return $dateTime;
+    }
 
+    public function convertDateFormatFromPhpToMomentJs(string $phpFormat): string
+    {
+        $this->convert->convertDateFormatFromPhpToMomentJs($phpFormat);
     }
 
     public function formatBrowserInfo(string $userAgent, string $filter)

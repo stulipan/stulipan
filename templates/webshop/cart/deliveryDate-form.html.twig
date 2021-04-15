@@ -23,7 +23,7 @@
         <div class="col-lg-12">
             <div class="mb-2">
                 <span class="form-label">Kézbesítés napja:</span>
-                {#<span class="detail-option-heading font-weight-bold"><span>(Melyik napon szállítsuk ki?)</span></span>#}
+                {#<span class="product-variant-selector-label font-weight-bold"><span>(Melyik napon szállítsuk ki?)</span></span>#}
             </div>
             <div class="row order-delivery-date">
                 <div class="col-md-12 col-lg-12 JS--dateWrapper">
@@ -31,7 +31,7 @@
                         {% for choice in dateForm.deliveryDate %}
                             <div class="col-sm-3 col-3">
                                 {% if not loop.last %}
-                                    {{ include('webshop/site/choiceItem.html.twig') }}
+                                    {{ include('webshop/site/vp-choice-date.html.twig') }}
                                 {% else %}
                                     <div class="visual-picker visual-picker-md align-top mr-2">
                                         <input class="JS--Button-clickDate" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="" {{ choice.vars.checked ? 'checked' : '' }}/>
@@ -41,7 +41,7 @@
 
                                                         </span>
                                                         <span class="tile tile-lg JS--showCalendarIcon">
-                                                            <i class="far fa-calendar-alt fa-2x text-gray-700 mr-0"></i>
+                                                            <i class="far fa-calendar-alt fa-2x"></i>
                                                         </span>
                                                     </span>
                                         </label>
@@ -121,7 +121,7 @@
     {#</script>#}
     {#<script>#}
         {#$(document).ready(function () {#}
-            {#var $globalWrapper = $('.JS--globalWrapper');#}
+            {#var $globalWrapper = $('.JS--Wrapper-checkout');#}
             {#var $gotoStep3 = new handleOrder($globalWrapper);#}
 
             {#var $cartWrapper = $('.JS--cartWrapper');#}

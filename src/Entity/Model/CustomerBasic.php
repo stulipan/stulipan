@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Entity\Model;
 
 use App\Controller\Utils\GeneralUtils;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\Constraints as CustomAssert;
@@ -21,8 +19,8 @@ class CustomerBasic
      * @var string
      * @Groups({"orderView", "orderList"})
      *
-     * @Assert\NotBlank()
-     * @Assert\Email(message="Ellenőrizd, hogy helyesen írtad be az email címet!")
+     * @Assert\NotBlank(message="checkout.customer.missing-email-address")
+     * @Assert\Email(message="checkout.customer.invalid-email-address")
      */
     private $email;
 
@@ -30,7 +28,7 @@ class CustomerBasic
      * @var string
      * @Groups({"orderView", "orderList"})
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="checkout.customer.missing-firstname")
      */
     private $firstname;
 
@@ -38,7 +36,7 @@ class CustomerBasic
      * @var string
      * @Groups({"orderView", "orderList"})
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="checkout.customer.missing-lastname")
      */
     private $lastname;
 
@@ -46,8 +44,8 @@ class CustomerBasic
      * @var string
      * @Groups({"orderView", "orderList"})
      *
-     * @Assert\NotBlank(message="Add meg a telefonszámot.")
-     * @CustomAssert\PhoneNumber(regionCode="HU")
+     * @Assert\NotBlank(message="checkout.customer.missing-phone")
+     * @CustomAssert\PhoneNumber(regionCode="HU", message="checkout.customer.invalid-phone")
      */
     private $phone;
 

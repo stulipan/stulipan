@@ -5,9 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\Order;
 use App\Entity\OrderStatus;
 use App\Model\OrdersSummary;
-use App\Entity\Payment;
+use App\Entity\PaymentMethod;
 use App\Entity\PaymentStatus;
-use App\Entity\Shipping;
+use App\Entity\ShippingMethod;
 use App\Form\ShippingFormType;
 use App\Services\HelperFunction;
 use DateTime;
@@ -43,7 +43,7 @@ class AdminController extends AbstractController
 //        $orders = $this->getDoctrine()->getRepository(Order::class)->findAllLast('24 hours');
         $orderCount = $rep->countAllLast('24 hours');
         $unpaidCount = $rep->countAllLast('24 hours', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast('24 hours', ['orderStatus' => OrderStatus::STATUS_CREATED]);
+        $unfulfilledCount = $rep->countAllLast('24 hours', ['orderStatus' => OrderStatus::ORDER_CREATED]);
 
         $lastDay = new OrdersSummary();
         $lastDay->setOrderCount($orderCount['count']);
@@ -54,7 +54,7 @@ class AdminController extends AbstractController
 
         $orderCount = $rep->countAllLast('7 days');
         $unpaidCount = $rep->countAllLast('7 days', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast('7 days', ['orderStatus' => OrderStatus::STATUS_CREATED]);
+        $unfulfilledCount = $rep->countAllLast('7 days', ['orderStatus' => OrderStatus::ORDER_CREATED]);
 
         $lastWeek = new OrdersSummary();
         $lastWeek->setOrderCount($orderCount['count']);
@@ -66,7 +66,7 @@ class AdminController extends AbstractController
         $orderCount = $rep->countAllLast('30 days');
 //        dd($orderCount);
         $unpaidCount = $rep->countAllLast('30 days', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast('30 days', ['orderStatus' => OrderStatus::STATUS_CREATED]);
+        $unfulfilledCount = $rep->countAllLast('30 days', ['orderStatus' => OrderStatus::ORDER_CREATED]);
 
         $lastMonth = new OrdersSummary();
         $lastMonth->setOrderCount($orderCount['count']);
@@ -77,7 +77,7 @@ class AdminController extends AbstractController
 
         $orderCount = $rep->countAllLast('lifetime');
         $unpaidCount = $rep->countAllLast('lifetime', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast(null, ['orderStatus' => OrderStatus::STATUS_CREATED]);
+        $unfulfilledCount = $rep->countAllLast(null, ['orderStatus' => OrderStatus::ORDER_CREATED]);
 
         $lifetime = new OrdersSummary();
         $lifetime->setOrderCount($orderCount['count']);
@@ -100,10 +100,10 @@ class AdminController extends AbstractController
     public function listShippingMethods()
     {
         $shippings = $this->getDoctrine()
-            ->getRepository(Shipping::class)
+            ->getRepository(ShippingMethod::class)
             ->findAll();
         $payments = $this->getDoctrine()
-            ->getRepository(Payment::class)
+            ->getRepository(PaymentMethod::class)
             ->findAll();
 
         $noResult = '';
@@ -124,7 +124,7 @@ class AdminController extends AbstractController
      * @IsGranted("ROLE_MANAGE_SHIPPING")
      * @Route("/shipping/edit/{id}", name="shipping-edit")
      */
-    public function editShipping(Request $request, ?Shipping $shipping, $id = null)
+    public function editShipping(Request $request, ?ShippingMethod $shipping, $id = null)
     {
         if (!$shipping) {
             /**

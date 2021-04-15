@@ -5,8 +5,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\VatRate;
 use App\Entity\VatValue;
-use App\Form\VatRateFormType;
-use App\Form\VatValueFormType;
+use App\Form\Vat\VatRateFormType;
+use App\Form\Vat\VatValueFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

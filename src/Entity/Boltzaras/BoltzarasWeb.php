@@ -3,12 +3,13 @@
 namespace App\Entity\Boltzaras;
 
 use App\Entity\TimestampableTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="boltzaras_web")
- * @ORM\Entity(repositoryClass="App\Repository\BoltzarasWebRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Boltzaras\BoltzarasWebRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class BoltzarasWeb
@@ -45,7 +46,7 @@ class BoltzarasWeb
         return $this->month;
     }
 
-    public function setMonth(\DateTime $datum = null)
+    public function setMonth(DateTime $datum = null)
     {
         $this->month = $datum;
     }

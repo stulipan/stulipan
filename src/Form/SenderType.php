@@ -18,6 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
 class SenderType extends AbstractType
@@ -38,30 +40,27 @@ class SenderType extends AbstractType
         }
         $builder
             ->add('id',HiddenType::class, [
-            'mapped' => false,  // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
+                'mapped' => false,  // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
             ])
-            ->add('name',TextType::class, [
-                'label' => 'Feladó',
+            ->add('firstname',TextType::class, [
                 'required' => true,
-                'attr' => [
-                    'placeholder' => 'Szabó Mária',
-                    'autocomplete' => 'name'
-                ]
+                'attr' => ['autocomplete' => 'given-name']
+            ])
+            ->add('lastname',TextType::class, [
+                'required' => true,
+                'attr' => ['autocomplete' => 'family-name']
             ])
             ->add('company',TextType::class, [
-                'label' => 'Cégnév',
                 'required' => false,
+                'attr' => ['autocomplete' => 'organization'],
+            ])
+            ->add('companyVatNumber',TextType::class, [
+                'required' => false,
+                'attr' => ['autocomplete' => 'off'],
             ])
             ->add('address',AddressType::class, [
                 'label' => false,
                 'addressType' => Address::BILLING_ADDRESS,  // this option is defined in AddressType, so that it can receive a value
-            ])
-            ->add('phone',TelType::class,[
-                'label' => 'Telefonszám',
-                'required' => false,
-                'constraints' => [
-                    new PhoneNumber(['regionCode' => 'HU']),
-                ],
             ])
             ->add('customer',HiddenType::class, [
                 'mapped' => false,
@@ -76,6 +75,4 @@ class SenderType extends AbstractType
             'attr' => ['novalidate' => 'novalidate'],
         ]);
     }
-
-
 }

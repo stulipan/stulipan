@@ -1,6 +1,6 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-
+{% set activeMenu = 'boltzaras' %}
 {% block title %}
 	{{ title }}
 {% endblock %}
@@ -22,8 +22,8 @@
             <div class="col-lg-12">
                 <div class="page-title h1 d-inline mr-md-2 mr-1">{{ title }}</div>
                 <div class="d-inline float-rightX">
-                    <a href="{{ path('inventory-supply-edit') }}" class="btn btn-outline-primary mb-2"><i class="fas fa-sign-in-alt mr-1"></i> Új bejövő áru rögzítése</a>
-                    <a href="{{ path('inventory-product-edit') }}" class="btn btn-outline-primary ml-1 mb-2"><i class="fas fa-plus-circle mr-1"></i>  Új termék</a>
+                    <a href="{{ path('inventory-supply-edit') }}" class="btn btn-primary mb-2"><i class="fas fa-sign-in-alt mr-1"></i> Új bejövő áru rögzítése</a>
+                    <a href="{{ path('inventory-product-edit') }}" class="btn btn-primary ml-1 mb-2"><i class="fas fa-plus-circle mr-1"></i>  Új termék</a>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
                                         {% for category in item.productCategories %}
                                         <a href="{{ path('inventory-supply-edit', {'id': item.id}) }}" class="">
                                             <span class="badge badge-primary">{{ category }}</span>
-                                            {{ render(controller('App\\Controller\\Boltzaras\\InventoryController::itemsPerCategory', {'isWaste': 0, 'supply' : item.id, 'category' : category.id})) }}
+                                            {{ render(controller('App\\Boltzaras\\Controller\\InventoryController::itemsPerCategory', {'isWaste': 0, 'supply' : item.id, 'category' : category.id})) }}
                                         </a>
                                         {% endfor %}
                                     </td>

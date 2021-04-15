@@ -2,26 +2,15 @@
 
 namespace App\Controller\Shop;
 
+use App\Entity\CmsPage;
+use App\Entity\CmsPage4Twig;
 use App\Entity\Product\Product;
-use App\Services\Settings;
+use App\Services\StoreSettings;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ShopController extends AbstractController
 {
-
-    /**
-     * @Route("/szallitasi-dijak", name="shipping_details")
-     */
-    public function showShippingInfo()
-    {
-        return $this->render('webshop/site/shipping_details.html.twig');
-    }
-
-
-
-
-
 
 
 //    public function generateProductList($categoryId = NULL)
@@ -60,22 +49,12 @@ class ShopController extends AbstractController
     /**
      * @Route("/", name="homepage")
      */
-    public function showHomepage(Settings $settings)
+    public function showHomepage(StoreSettings $settings)
     {
-//        $metaTitle = $settings->get('meta-title');
-//        dd($metaTitle);
         $products= $this->getDoctrine()->getRepository(Product::class)->findAll();
         return $this->render('webshop/site/homepage.html.twig', ['products' => $products]);
     }
 
-    /**
-     * @Route("/rolunk", name="about")
-     */
-    public function showAbout()
-    {
-
-        return $this->render('webshop/site/about.html.twig');
-    }
 
     /**
      * @Route("/404", name="404")

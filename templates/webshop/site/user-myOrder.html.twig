@@ -1,40 +1,47 @@
 {% extends 'webshop/site/template-account.html.twig' %}
 
-{% set pageTitle = 'Rendeléseim' %}
+{% set pageTitle = 'account.my-orders'|trans %}
 {% set breadcrumb = {
     0: {
         'url': path('homepage'),
-        'text': 'Home',
+        'text': 'generic.home'|trans,
     },
     1: {
         'url': path('site-user-myAccount'),
-        'text': 'Fiókom',
+        'text': 'account.my-account'|trans
     },
     2: {
         'url': path('site-user-myAccount'),
-        'text': 'Rendeléseim',
+        'text': 'account.my-orders'|trans,
+    },
+    3: {
+        'url': path('site-user-myOrder', {'id': order.id}),
+        'text': 'Rendelés #' ~ order.number,
     },
 } %}
 
 {% block content %}
     <div class="card mb-20px">
-        <div class="card-wrapper">
-            <div class="block-body">
-                <span class="h4 myaccount-card-title">Rendelés #{{ order.number }}</span>
+        <div class="">
+            <div class="card-body">
+                <div class="card-tile h3">Rendelés #{{ order.number }}</div>
                 {% if order.isUnpaid %}
-                    <div class="text-sm text-danger mt-2">Fizetésre vár</div>
+{#                    <div class="text-sm text-danger mt-2">Fizetésre vár</div>#}
+                    <div class="badge badge-danger">Fizetésre vár</div>
                 {% endif %}
                 {% if order.isFulfilled %}
-                    <div class="text-sm text-success mt-2">It's delivered!</div>
+                    <div class="badge badge-success">It's delivered!</div>
                 {% endif %}
             </div>
         </div>
     </div>
 
     <div class="card mb-20px">
-        <div class="card-wrapper">
+        <div class="">
             <div class="card-body">
-                {% include 'webshop/cart/_order-items-widget.html.twig' %}
+                <div class="cart">
+                    {% include 'webshop/cart/_order-items-widget.html.twig' %}
+                </div>
                 {% include 'webshop/cart/_order-summary-widget.html.twig' %}
             </div>
         </div>
@@ -42,7 +49,7 @@
     <div class="card mb-20px">
         <div class="card-wrapper">
             <div class="card-body">
-                {% include 'webshop/cart/_order-sender-recipient-widget.html.twig' %}
+                {% include 'webshop/cart/_order-recipient-widget.html.twig' %}
             </div>
         </div>
     </div>
@@ -51,6 +58,14 @@
         <div class="card-wrapper">
             <div class="card-body">
                 {% include 'webshop/cart/_order-delivery-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-body">
+                {% include 'webshop/cart/_order-sender-widget.html.twig' %}
             </div>
         </div>
     </div>

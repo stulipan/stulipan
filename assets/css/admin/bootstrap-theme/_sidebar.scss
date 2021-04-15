@@ -1,0 +1,398 @@
+// Sidebars
+
+// Padding applied to the sidebar body
+$sidebar-inner-padding:               1rem !default;
+$sidebar-inner-padding-y:             1rem !default;
+$sidebar-inner-padding-x:             1rem !default;
+
+$sidebar-dialog-margin:               0 !default;
+$sidebar-dialog-margin-y-sm-up:       1.75rem !default;
+
+$sidebar-title-line-height:           1.4rem !default //$line-height-base !default;
+
+$sidebar-content-color:               null !default;
+$sidebar-content-bg:                  $white !default;
+$sidebar-content-border-color:        rgba($black, .2) !default;
+$sidebar-content-border-width:        $border-width !default;
+$sidebar-content-border-radius:       0 !default;
+$sidebar-content-box-shadow-xs:       0 .25rem .5rem rgba($black, .5) !default;
+$sidebar-content-box-shadow-sm-up:    0 0 0 1px rgba($gray-800, .05), 0 1px 11px 0 rgba($gray-800, 0.15) !default; //0 .5rem 1rem rgba($black, .5) !default;
+
+$sidebar-backdrop-bg:                 $modal-backdrop-bg !default;
+$sidebar-backdrop-opacity:            .1 !default;
+$sidebar-header-border-color:         $gray-200 !default;
+$sidebar-footer-border-color:         $sidebar-header-border-color !default;
+$sidebar-header-border-width:         $sidebar-content-border-width !default;
+$sidebar-footer-border-width:         $sidebar-header-border-width !default;
+
+$sidebar-header-height:               50px !default;
+$sidebar-header-padding-y:            .75rem !default;
+$sidebar-header-padding-x:            1rem !default;
+$sidebar-header-padding:              $sidebar-header-padding-y $sidebar-header-padding-x !default; // Keep this for backwards compatibility
+
+//$sidebar-xl:                          1140px !default;
+//$sidebar-lg:                          800px !default;
+//$sidebar-md:                          550px !default;
+//$sidebar-md-2:                        620px !default;
+//$sidebar-sm:                          300px !default;
+
+$sidebar-fade-transform:              none !default; // translateX(100%) !default;
+$sidebar-show-transform:              none !default; //translateX(0) !default;
+$sidebar-transition:                  right .2s ease-out, left .2s ease-out !default;
+
+$sidebar-xl:                          1000px !default;
+$sidebar-lg:                          760px !default;
+$sidebar-md:                          550px !default;
+$sidebar-sm:                          320px !default;
+$sidebar-default:                     380px !default;
+
+
+
+// .sidebar-open      - body class for killing the scroll
+// .sidebar           - container to scroll within
+// .sidebar-dialog    - positioning shell for the actual sidebar
+// .sidebar-content   - actual sidebar w/ bg and corners and stuff
+
+
+.sidebar-open {
+  // Kill the scroll on the body
+  overflow: hidden;
+
+  .sidebar {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+.sidebar.show,
+.sidebar.fade {
+  opacity: 1;
+}
+
+// Container that the sidebar scrolls within
+.sidebar {
+  position: fixed;
+  top: 0;
+  z-index: $zindex-modal;
+  display: none;
+  height: 100%;
+  overflow: hidden;
+  // Prevent Chrome on Windows from adding a focus outline. For details, see
+  // https://github.com/twbs/bootstrap/pull/10951.
+  outline: 0;
+  // We deliberately don't use `-webkit-overflow-scrolling: touch;` due to a
+  // gnarly iOS Safari bug: https://bugs.webkit.org/show_bug.cgi?id=158342
+  // See also https://github.com/twbs/bootstrap/issues/17695
+
+  //opacity: 1 !important;
+
+  &.sidebar-left {
+    margin-right: auto;
+    @include transition($sidebar-transition);
+  }
+
+  &.sidebar-right {
+    //left: unset !important;
+    margin-left: auto;
+    @include transition($sidebar-transition);
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .sidebar.sidebar-left {
+    & {
+      width: calc(100%);
+      left: calc(-1 * 100%);
+
+      &.sidebar-sm {
+        width: $sidebar-sm;
+        left: -1 * $sidebar-sm;
+      }
+      &.sidebar-md,
+      &.sidebar-lg,
+      &.sidebar-xl {
+        width: calc(100%);
+        left: calc(-1 * 100%);
+      }
+    }
+  }
+  .sidebar.sidebar-right {
+    & {
+      width: calc(100%);
+      right:  calc(-1 * 100%);
+
+      &.sidebar-sm {
+        width: $sidebar-sm;
+        right: -1 * $sidebar-sm;
+      }
+      &.sidebar-md,
+      &.sidebar-lg,
+      &.sidebar-xl {
+        width: calc(100%);
+        right:  calc(-1 * 100%);
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .sidebar.sidebar-left {
+    & {
+      width: $sidebar-default;
+      left: -1 * $sidebar-default;
+
+      &.sidebar-sm {
+        width: $sidebar-sm;
+        left: -1 * $sidebar-sm;
+      }
+      &.sidebar-md {
+        width: $sidebar-md;
+        left: -1 * $sidebar-md;
+      }
+      &.sidebar-lg,
+      &.sidebar-xl {
+        width: $sidebar-md;
+        left: -1 * $sidebar-md;
+      }
+    }
+  }
+  .sidebar.sidebar-right {
+    & {
+      width: $sidebar-default;
+      right: -1 * $sidebar-default;
+
+      &.sidebar-sm {
+        width: $sidebar-sm;
+        right: -1 * $sidebar-sm;
+      }
+      &.sidebar-md {
+        width: $sidebar-md;
+        right: -1 * $sidebar-md;
+      }
+      &.sidebar-lg,
+      &.sidebar-xl {
+        width: $sidebar-md;
+        right: -1 * $sidebar-md;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  // Automatically set sidebar's width for larger viewports
+  .sidebar.sidebar-left {
+    & {
+      &.sidebar-lg,
+      &.sidebar-xl {
+        width: $sidebar-lg;
+        left: -1 * $sidebar-lg;
+      }
+    }
+  }
+
+  .sidebar.sidebar-right {
+    & {
+      &.sidebar-lg,
+      &.sidebar-xl {
+        width: $sidebar-lg;
+        right: -1 * $sidebar-lg;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  // Automatically set sidebar's width for larger viewports
+  .sidebar.sidebar-left {
+    & {
+      &.sidebar-lg {
+        width: $sidebar-lg;
+        left: -1 * $sidebar-lg;
+      }
+      &.sidebar-xl {
+        width: $sidebar-xl;
+        left: -1 * $sidebar-xl;
+      }
+    }
+  }
+
+  .sidebar.sidebar-right {
+    & {
+      &.sidebar-lg {
+        width: $sidebar-lg;
+        right: -1 * $sidebar-lg;
+      }
+      &.sidebar-xl {
+        width: $sidebar-xl;
+        right: -1 * $sidebar-xl;
+      }
+    }
+  }
+}
+
+.sidebar.sidebar-left.show {
+  left: 0;
+  @include transition($sidebar-transition);
+}
+.sidebar.sidebar-right.show {
+  right: 0;
+  @include transition($sidebar-transition);
+}
+
+
+// Shell div to position the sidebar with bottom padding
+.sidebar-dialog {
+  position: relative;
+  width: auto;
+  margin: $sidebar-dialog-margin 0;
+  // allow clicks to pass through for custom click handling to close sidebar
+  pointer-events: none;
+
+}
+
+.sidebar-dialog-scrollable {
+  display: flex; // IE10/11
+  //max-height: calc(100% - #{$sidebar-dialog-margin * 2});
+
+  .sidebar-content {
+    //max-height: calc(100vh - #{$sidebar-dialog-margin * 2}); // IE10/11
+    overflow: hidden;
+  }
+
+  .sidebar-header,
+  .sidebar-footer {
+    flex-shrink: 0;
+  }
+
+  .sidebar-body {
+    overflow-y: auto;
+  }
+}
+
+.sidebar-dialog-centered {
+  display: flex;
+  align-items: center;
+  //min-height: calc(100% - #{$sidebar-dialog-margin * 2});
+
+  // Ensure `sidebar-dialog-centered` extends the full height of the view (IE10/11)
+  &::before {
+    display: block; // IE10
+    //height: calc(100vh - #{$sidebar-dialog-margin * 2});
+    content: "";
+  }
+
+  // Ensure `.sidebar-body` shows scrollbar (IE10/11)
+  &.sidebar-dialog-scrollable {
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+
+    .sidebar-content {
+      max-height: none;
+    }
+
+    &::before {
+      content: none;
+    }
+  }
+}
+
+// Actual sidebar
+.sidebar-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%; // Ensure `.sidebar-content` extends the full width of the parent `.sidebar-dialog`
+  height: 100%;
+  // counteract the pointer-events: none; in the .sidebar-dialog
+  color: $sidebar-content-color;
+  pointer-events: auto;
+  background-color: $sidebar-content-bg;
+  background-clip: padding-box;
+  //border: $sidebar-content-border-width solid $sidebar-content-border-color;
+  @include border-radius($sidebar-content-border-radius);
+  @include box-shadow($sidebar-content-box-shadow-xs);
+  // Remove focus outline from opened sidebar
+  outline: 0;
+}
+
+// sidebar background
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: $zindex-modal-backdrop;
+  width: 100vw;
+  height: 100vh;
+  background-color: $sidebar-backdrop-bg;
+
+  // Fade for backdrop
+  &.fade { opacity: 0; }
+  &.show { opacity: $sidebar-backdrop-opacity; }
+}
+
+// sidebar header
+// Top section of the sidebar w/ title and dismiss
+.sidebar-header {
+  display: flex;
+  //align-items: flex-start; // so the close btn always stays on the upper right corner
+  align-items: center;
+  justify-content: space-between; // Put sidebar header elements (title and dismiss) on opposite ends
+  padding: $sidebar-header-padding-y $sidebar-header-padding-x;
+  border-bottom: $sidebar-header-border-width solid $sidebar-header-border-color;
+  @include border-top-radius($sidebar-content-border-radius);
+  height: $sidebar-header-height;
+  overflow: hidden;
+
+  .close {
+    font-size: 2 * $font-size-base;
+    opacity: 1;
+    //padding: $sidebar-header-padding-y $sidebar-header-padding-x;
+    // auto on the left force icon to the right even when there is no .sidebar-title
+    //margin: (-$sidebar-header-padding-y) (-$sidebar-header-padding-x) (-$sidebar-header-padding-y) auto;
+    //font-size: 29px;
+    line-height: .5em;
+    padding: .6rem .7rem .8rem;
+    margin: -.3rem -.6rem -.3rem auto;
+  }
+}
+
+// Title text within header
+.sidebar-title {
+  margin-bottom: 0;
+  line-height: $sidebar-title-line-height;
+}
+
+// sidebar body
+// Where all sidebar content resides (sibling of .sidebar-header and .sidebar-footer)
+.sidebar-body {
+  position: relative;
+  // Enable `flex-grow: 1` so that the body take up as much space as possible
+  // when should there be a fixed height on `.sidebar-dialog`.
+  flex: 1 1 auto;
+  padding: $sidebar-inner-padding;
+  height: 100%;
+}
+
+// Footer (for actions)
+.sidebar-footer {
+  display: flex;
+  align-items: center; // vertically center
+  justify-content: flex-start; // Right align buttons with flex property because text-align doesn't work on flex items
+  padding: $sidebar-inner-padding;
+  border-top: $sidebar-footer-border-width solid $sidebar-footer-border-color;
+  @include border-bottom-radius($sidebar-content-border-radius);
+
+  // Easily place margin between footer elements
+  > :not(:first-child) { margin-left: .25rem; }
+  > :not(:last-child) { margin-right: .25rem; }
+}
+
+// Measure scrollbar width for padding body during sidebar show/hide
+.sidebar-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}

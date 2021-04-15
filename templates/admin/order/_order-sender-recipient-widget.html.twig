@@ -1,62 +1,61 @@
-    <div name="sender_recipient" class="">
-        <div class="row row-narrowX">
-            <div class="col-lg-6 col-narrowX h-100">
-                <div class="">
-                    <div class="h5 admin-card-title mb-3">{{ 'order.sender'|trans }}</div>
+    <div id="sender_recipient" class="">
+        <div class="row">
+            <div class="col-12 col-sm-6 h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="h5 mb-0">{{ 'order.sender'|trans }}</div>
                     {% if isEditEnabled is defined and isEditEnabled == true %}
-                        <div class="admin-card-topright">
-                        <a class="btn-link-secondary" href="" data-toggle="modal" data-target="#modal--Sender" data-backdrop="static" data-url="{{ path('order-editBillingInfo', {id: order.id}) }}"><i class="far fa-edit"></i></a>
+                        <div class="edit-block d-print-none">
+                            <div class="d-flex align-items-center">
+                                <a class="btn-link-secondary" href="" data-toggle="modal" data-target="#modal--Sender" data-backdrop="static" data-url="{{ path('order-editBillingInfo', {id: order.id}) }}"><i class="far fa-edit mr-0"></i></a>
+                            </div>
                         </div>
                     {% endif %}
                 </div>
-                <div class="minicardX bg-lightX mt-1">
-                    <div class="minicard--bodyX h-100">
+                <div class="mt-3">
+                    <div class="h-100">
                         <div class="mb-1 font-weight-bold text-primary">
-                            {% if order.billingName is defined and order.billingName is not null %}
-                                {{ order.billingName }} {{ order.billingCompany is defined and order.billingCompany ? ' / ' ~ order.billingCompany : ''}}
+                            {% if order.billingFullname is defined and order.billingFullname is not null %}
+                                {{ order.billingFullname }}
+                                {% if order.billingCompany is defined and order.billingCompany %}
+                                    <br>
+                                    {{ order.billingCompany }}
+                                {% endif %}
                             {% else %}
-                                {% include 'admin/_notAvailable-insert.html.twig' %}
+                                {% include 'admin/_missing-data-insert.html.twig' %}
                             {% endif %}
                         </div>
                         <div class="">
-                                <span class="">
-                                    {{ 'order.phone-number'|trans }}
-                                    {% if order.billingPhone is defined and order.billingPhone %}
-                                        <em>{{ order.billingPhone }}</em>
-                                    {% else %}
-                                        {% include 'admin/_notAvailable-insert.html.twig' %}
-                                    {% endif %}
-                                </span>
-                            <br>
                             <span class="">
-                                    {% if order.billingAddress is defined and order.billingAddress %}
-                                        {{ order.billingAddress.zip }} {{ order.billingAddress.city }},<br> {{ order.billingAddress.street }}
-                                        <br>
-                                        <span class="text-muted">{{ order.billingAddress.province }}, {{ order.billingAddress.country }}</span>
-                                    {% else %}
-                                        {% include 'admin/_notAvailable-insert.html.twig' %}
-                                    {% endif %}
-                                </span>
+                                {% if order.billingAddress is defined and order.billingAddress %}
+                                    {{ order.billingAddress.zip }} {{ order.billingAddress.city }},<br> {{ order.billingAddress.street }}
+                                    <br>
+                                    <span class="text-muted">{{ order.billingAddress.province }}, {{ order.billingAddress.country }}</span>
+                                {% else %}
+                                    {% include 'admin/_missing-data-insert.html.twig' %}
+                                {% endif %}
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-narrowX mt-4 mt-md-0 h-100">
-                <div class="">
-                    <div class="h5 admin-card-title mb-3">{{ 'order.recipient'|trans }}</div>
+            <div class="col-12 col-sm-6 mt-4 mt-sm-0 h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="h5 mb-0">{{ 'order.recipient'|trans }}</div>
                     {% if isEditEnabled is defined and isEditEnabled == true %}
-                    <div class="admin-card-topright">
-                        <a class="btn-link-secondary"  href="" data-toggle="modal" data-target="#modal--Recipient" data-backdrop="static" data-url="{{ path('order-editShippingInfo', {id: order.id}) }}"><i class="far fa-edit"></i></a>
-                    </div>
+                        <div class="edit-block d-print-none">
+                            <div class="d-flex">
+                                <a class="btn-link-secondary"  href="" data-toggle="modal" data-target="#modal--Recipient" data-backdrop="static" data-url="{{ path('order-editShippingInfo', {id: order.id}) }}"><i class="far fa-edit mr-0"></i></a>
+                            </div>
+                        </div>
                     {% endif %}
                 </div>
-                <div class="minicardX bg-lightX recipient mt-1">
-                    <div class="minicard--bodyX h-100">
+                <div class="recipient mt-3">
+                    <div class="h-100">
                         <div class="mb-1 font-weight-bold text-success">
-                            {% if order.shippingName is defined and order.shippingName is not null %}
-                                {{ order.shippingName }}
+                            {% if order.shippingFullname is defined and order.shippingFullname is not null %}
+                                {{ order.shippingFullname }}
                             {% else %}
-                                {% include 'admin/_notAvailable-insert.html.twig' %}
+                                {% include 'admin/_missing-data-insert.html.twig' %}
                             {% endif %}
                         </div>
                         <div class="">
@@ -65,7 +64,7 @@
                                     {% if order.shippingPhone is defined and order.shippingPhone %}
                                         <em>{{ order.shippingPhone }}</em>
                                     {% else %}
-                                        {% include 'admin/_notAvailable-insert.html.twig' %}
+                                        {% include 'admin/_missing-data-insert.html.twig' %}
                                     {% endif %}
                                 </span>
                             <br>
@@ -75,7 +74,7 @@
                                         <br>
                                         <span class="text-muted">{{ order.shippingAddress.province }}, {{ order.shippingAddress.country }}</span>
                                     {% else %}
-                                        {% include 'admin/_notAvailable-insert.html.twig' %}
+                                        {% include 'admin/_missing-data-insert.html.twig' %}
                                     {% endif %}
                                 </span>
                         </div>

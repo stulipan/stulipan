@@ -18,7 +18,7 @@ use App\Entity\OrderLogChannel;
 use App\Entity\OrderStatus;
 use App\Event\OrderEvent;
 use App\Entity\PaymentStatus;
-use App\Form\CartHiddenDeliveryDateFormType;
+use App\Form\DeliveryDate\CartHiddenDeliveryDateFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
 
@@ -28,25 +28,22 @@ use App\Form\OrderFilterType;
 use App\Form\OrderShippingAddressType;
 use App\Form\OrderStatusType;
 use App\Form\PaymentStatusType;
-use App\Services\Settings;
+use App\Services\AdminSettings;
 use BarionClient;
 use BarionEnvironment;
 use DateTime;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Pagination\PaginatedCollection;
-use Symfony\Component\Translation\MessageCatalogue;
-use Symfony\Component\Translation\MessageCatalogueInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -83,7 +80,7 @@ class OrderController extends AbstractController
      *     requirements={"page"="\d+"},
      *     )
      */
-    public function listOrders(Request $request, $page = 1, Settings $settings) //, $dateRange = null, $paymentStatus = null, $orderStatus = null
+    public function listOrders(Request $request, $page = 1, AdminSettings $settings) //, $dateRange = null, $paymentStatus = null, $orderStatus = null
     {
         $dateRange = $request->query->get('dateRange');
         $searchTerm = $request->query->get('searchTerm');
@@ -118,6 +115,7 @@ class OrderController extends AbstractController
             $data['paymentStatus'] = $em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus]);
         }
         $filterForm = $this->createForm(OrderFilterType::class, $data);
+        $filterFormSidebar = $this->createForm(OrderFilterType::class, $data);
 
         $filterUrls = [];
         foreach ($filterTags as $key => $value) {
@@ -145,7 +143,7 @@ class OrderController extends AbstractController
         ];
         $filterQuickLinks['unfulfilled'] = [
             'name' => 'Feldolgozás alatt',
-            'url' => $this->generateUrl('order-list-table',['orderStatus' => OrderStatus::STATUS_CREATED]),
+            'url' => $this->generateUrl('order-list-table',['orderStatus' => OrderStatus::ORDER_CREATED]),
             'active' => false,
         ];
 
@@ -159,7 +157,7 @@ class OrderController extends AbstractController
             $filterQuickLinks['unpaid']['active'] = true;
             $hasCustomFilter = true;
         }
-        if (!$dateRange && $orderStatus && $orderStatus === OrderStatus::STATUS_CREATED) {
+        if (!$dateRange && $orderStatus && $orderStatus === OrderStatus::ORDER_CREATED) {
             $filterQuickLinks['unfulfilled']['active'] = true;
             $hasCustomFilter = true;
         }
@@ -178,8 +176,7 @@ class OrderController extends AbstractController
             'paymentStatus' => $paymentStatus,
         ]);
 
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
         $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
@@ -194,11 +191,11 @@ class OrderController extends AbstractController
             $orders[] = $result;
         }
 
-        if (!$orders) {
+//        if (!$orders) {
 //            $this->addFlash('danger', 'Nem talált rendeléseket! Próbáld módosítani a szűrőket.');
-        }
+//        }
 
-        return $this->render('admin/order/order-list-table-withProducts.html.twig', [
+        return $this->render('admin/order/order-list.html.twig', [
             'orders' => $orders,
             'paginator' => $pagerfanta,
             'total' => $pagerfanta->getNbResults(),
@@ -208,7 +205,135 @@ class OrderController extends AbstractController
             'filterForm' => $filterForm->createView(),
             'filterTags' => $filterTags,
             'filterUrls' => $filterUrls,
-            'filterFormModal' => $filterForm->createView(),
+            'filterFormSidebar' => $filterFormSidebar->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/orders/abandoned", name="order-list-abandoned",
+     *     requirements={"page"="\d+"},
+     *     )
+     */
+    public function listAbandonedOrders(Request $request, $page = 1, AdminSettings $settings)
+    {
+        $dateRange = $request->query->get('dateRange');
+        $searchTerm = $request->query->get('searchTerm');
+        $paymentStatus = $request->query->get('paymentStatus');
+        $orderStatus = $request->query->get('orderStatus');
+        $page = $request->query->get('page') ? $request->query->get('page') : $page;
+
+        $filterTags = [];
+        $urlParams = [];
+        $data = $filterTags;
+        $em = $this->getDoctrine();
+        if ($dateRange) {
+            $filterTags['dateRange'] = 'Idősáv: '.$dateRange;
+            $data['dateRange'] = $dateRange;
+            $urlParams['dateRange'] = $dateRange;
+        }
+        if ($searchTerm) {
+            $filterTags['searchTerm'] = 'Keresés: '.$searchTerm;
+            $data['searchTerm'] = $searchTerm;
+            $urlParams['searchTerm'] = $searchTerm;
+        }
+        if ($orderStatus) {
+            $filterTags['orderStatus'] = $em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $orderStatus])->getName();
+            $urlParams['orderStatus'] = $orderStatus;
+            $data['orderStatus'] = $em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $orderStatus]);
+        }
+        if ($paymentStatus) {
+            $filterTags['paymentStatus'] = $em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus])->getName();
+            $urlParams['paymentStatus'] = $paymentStatus;
+            $data['paymentStatus'] = $em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus]);
+        }
+        $filterForm = $this->createForm(OrderFilterType::class, $data);
+        $filterFormSidebar = $this->createForm(OrderFilterType::class, $data);
+
+        $filterUrls = [];
+        foreach ($filterTags as $key => $value) {
+            // remove the current filter from the urlParams
+            $shortlist = array_diff_key($urlParams,[$key => '']);
+
+            // generate the URL with the remaining filters
+            $filterUrls[$key] = $this->generateUrl('order-list-table',[
+                'dateRange' => isset($shortlist['dateRange']) ? $shortlist['dateRange'] : null,
+                'searchTerm' => isset($shortlist['searchTerm']) ? $shortlist['searchTerm'] : null,
+                'orderStatus' => isset($shortlist['orderStatus']) ? $shortlist['orderStatus'] : null,
+                'paymentStatus' => isset($shortlist['paymentStatus']) ? $shortlist['paymentStatus'] : null,
+            ]);
+        }
+
+        $filterQuickLinks['all'] = [
+            'name' => 'Összes rendelés',
+            'url' => $this->generateUrl('order-list-table'),
+            'active' => false,
+        ];
+        $filterQuickLinks['unpaid'] = [
+            'name' => 'Fizetésre váró',
+            'url' => $this->generateUrl('order-list-table',['paymentStatus' => PaymentStatus::STATUS_PENDING]),
+            'active' => false,
+        ];
+        $filterQuickLinks['unfulfilled'] = [
+            'name' => 'Feldolgozás alatt',
+            'url' => $this->generateUrl('order-list-table',['orderStatus' => OrderStatus::ORDER_CREATED]),
+            'active' => false,
+        ];
+
+        // Generate the quicklinks which are placed above the filter
+        $hasCustomFilter = false;
+        if (!$dateRange && !$orderStatus && !$paymentStatus && !$searchTerm) {
+            $filterQuickLinks['all']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$dateRange && $paymentStatus && ( $paymentStatus === PaymentStatus::STATUS_PENDING || $paymentStatus === PaymentStatus::STATUS_PARTIALLY_PAID)) {
+            $filterQuickLinks['unpaid']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$dateRange && $orderStatus && $orderStatus === OrderStatus::ORDER_CREATED) {
+            $filterQuickLinks['unfulfilled']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$hasCustomFilter) {
+            $filterQuickLinks['custom'] = [
+                'name' => 'Egyedi szűrés',
+                'url' => $this->generateUrl('order-list-table',$request->query->all()),
+                'active' => true,
+            ];
+        }
+
+        $queryBuilder = $em->getRepository(Order::class)->findAllQuery([
+            'dateRange' => $dateRange,
+            'searchTerm' => $searchTerm,
+            'orderStatus' => $orderStatus,
+            'paymentStatus' => $paymentStatus,
+        ], false);
+
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
+        //$pagerfanta->setCurrentPage($page);
+
+        try {
+            $pagerfanta->setCurrentPage($page);
+        } catch(NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        $orders = [];
+        foreach ($pagerfanta->getCurrentPageResults() as $result) {
+            $orders[] = $result;
+        }
+
+        return $this->render('admin/order/order-list-abandoned.html.twig', [
+            'orders' => $orders,
+            'paginator' => $pagerfanta,
+            'total' => $pagerfanta->getNbResults(),
+            'count' => count($orders),
+            'orderCount' => empty($orders) ? 'Nincsenek rendelések' : count($orders),
+            'filterQuickLinks' => $filterQuickLinks,
+            'filterForm' => $filterForm->createView(),
+            'filterTags' => $filterTags,
+            'filterUrls' => $filterUrls,
+            'filterFormSidebar' => $filterFormSidebar->createView(),
         ]);
     }
 
@@ -217,7 +342,13 @@ class OrderController extends AbstractController
      */
     public function handleFilterForm(Request $request)
     {
-        $form = $this->createForm(OrderFilterType::class);
+        $dataFromRequest = $request->request->all();
+        $formName = array_keys($dataFromRequest)[0];
+
+        // Since there are two Filter forms on the page with randomly created unique names (blockPrefixes -> see OrderFilterType)
+        // the form name must be extracted from the Request data and used to recreate the very same form.
+        $form = $this->get('form.factory')->createNamed($formName, OrderFilterType::class);
+//        $form = $this->createForm(OrderFilterType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -317,8 +448,8 @@ class OrderController extends AbstractController
         /**
          *
          */
-//        if ($order->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED || $order->getStatus()->getShortcode() === OrderStatus::STATUS_REJECTED ||
-//            $order->getStatus()->getShortcode() === OrderStatus::STATUS_RETURNED || $order->getStatus()->getShortcode() === OrderStatus::STATUS_DELETED) {
+//        if ($order->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED || $order->getStatus()->getShortcode() === OrderStatus::ORDER_REJECTED ||
+//            $order->getStatus()->getShortcode() === OrderStatus::STATUS_RETURNED || $order->getStatus()->getShortcode() === OrderStatus::ORDER_DELETED) {
 //            $isDeliveryOverdue = false;
 //        } else {
         
@@ -347,6 +478,82 @@ class OrderController extends AbstractController
             
         ]);
     }
+
+    /**
+     * @Route("/orders/print/{id}", name="order-detail-print")
+     */
+    public function showOrderDetailPrint(Request $request, ?Order $order, $id = null, \App\Services\Localization $localization)
+    {
+        if (!$order) {
+            throw $this->createNotFoundException('STUPID: Nincs ilyen rendelés!' );
+        }
+
+        $shippingForm = $this->createForm(OrderShippingAddressType::class, $order);
+        $billingForm = $this->createForm(OrderBillingAddressType::class, $order);
+
+        $offset = GeneralUtils::DELIVERY_DATE_HOUR_OFFSET;
+        $days = (new DateTime('+2 months'))->diff(new DateTime('now'))->days;
+        for ($i = 0; $i <= $days; $i++) {
+            /**
+             * ($i*24 + offset) = 0x24+4 = 4 órával későbbi dátum lesz
+             * Ez a '4' megegyezik azzal, amit a javascriptben adtunk meg, magyarán 4 órával
+             * későbbi időpont az első lehetséges szállítási nap.
+             */
+            $dates[] = (new DateTime('+'. ($i*24 + $offset).' hours'));
+        }
+
+        $generatedDates = new GeneratedDates();
+        foreach ($dates as $date) {
+
+            $specialDate = $this->getDoctrine()->getRepository(DeliverySpecialDate::class)
+                ->findOneBy(['specialDate' => $date]);
+
+            if (!$specialDate) {
+                $dateType = $this->getDoctrine()->getRepository(DeliveryDateType::class)
+                    ->findOneBy(['default' => DeliveryDateType::IS_DEFAULT]);
+            } else {
+                $dateType = $specialDate->getDateType();
+            }
+            $intervals = null === $dateType ? null : $dateType->getIntervals();
+
+            $dateWithIntervals = new DeliveryDateWithIntervals();
+            $dateWithIntervals->setDeliveryDate($date);
+            $dateWithIntervals->setIntervals($intervals);
+
+            $generatedDates->addItem($dateWithIntervals);
+        }
+
+        $selectedDate = null === $order->getDeliveryDate() ? null : $order->getDeliveryDate();
+        $selectedInterval = null === $order->getDeliveryInterval() ? null : $order->getDeliveryInterval();
+        $selectedIntervalFee = null === $order->getDeliveryFee() ? null : $order->getDeliveryFee();
+
+        $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
+        $hiddenDateForm = $this->createForm(CartHiddenDeliveryDateFormType::class, $hiddenDates);
+
+        $statusForm = $this->createForm(OrderStatusType::class, $order);
+        $paymentStatusForm = $this->createForm(PaymentStatusType::class, $order);
+
+        $log = new OrderLog();
+
+        $log->setChannel($this->getDoctrine()->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => OrderLog::CHANNEL_ADMIN]));
+        $log->setOrder($order);
+        $log->setComment(true);
+//        $orderLog->setMessage('');
+        $commentForm = $this->createForm(OrderCommentType::class, $log);
+
+        return $this->render('admin/order/order-detail-print.html.twig', [
+            'order' => $order,
+            'shippingForm' => $shippingForm->createView(),
+            'billingForm' => $billingForm->createView(),
+            'generatedDates' => $generatedDates,
+            'hiddenDateForm' => $hiddenDateForm->createView(),
+            'selectedDate' => $selectedDate,
+            'selectedInterval' => $selectedInterval,
+            'statusForm' => $statusForm->createView(),
+            'paymentStatusForm' => $paymentStatusForm->createView(),
+            'commentForm' => $commentForm->createView(),
+        ]);
+    }
     
     /**
      * Edit the shipping address information in an Order.
@@ -365,7 +572,8 @@ class OrderController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $order->setShippingName($data->getShippingName());
+            $order->setShippingFirstname($data->getShippingFirstname());
+            $order->setShippingLastname($data->getShippingLastname());
             $order->setShippingAddress($data->getShippingAddress());
             $order->setShippingPhone($data->getShippingPhone());
             
@@ -423,7 +631,8 @@ class OrderController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $order->setBillingName($data->getBillingName());
+            $order->setBillingFirstname($data->getBillingFirstname());
+            $order->setBillingLastname($data->getBillingLastname());
             $order->setBillingCompany($data->getBillingCompany());
             $order->setBillingAddress($data->getBillingAddress());
             $order->setBillingPhone($data->getBillingPhone());
@@ -473,14 +682,14 @@ class OrderController extends AbstractController
      */
     public function editDeliveryDate(Request $request, ?Order $order, $id = null, HiddenDeliveryDate $date)
     {
+        $date = $request->request->get('date');
         if (!$order) {
             throw $this->createNotFoundException("STUPID: Nincs ilyen rendelés!");
         } else {
             $form = $this->createForm(CartHiddenDeliveryDateFormType::class, $date);
         }
         $form->handleRequest($request);
-//        dd($form->getData());
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $order->setDeliveryDate(DateTime::createFromFormat('!Y-m-d', $data->getDeliveryDate()));
@@ -495,7 +704,7 @@ class OrderController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($order);
             $entityManager->flush();
-        
+
             /**
              * If AJAX request, and because at this point the form data is processed, it returns Success (code 200)
              */
@@ -512,11 +721,17 @@ class OrderController extends AbstractController
          * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
          */
         if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
-            $html = $this->renderView('webshop/cart/hiddenDeliveryDate-form.html.twig', [
+            $html = $this->renderView('webshop/cart/hidden-delivery-date-form.html.twig', [
                 'hiddenDateForm' => $form->createView(),
             ]);
             return new Response($html,400);
         }
+
+        $this->addFlash('success', 'Szállítási idő sikeresen módosítva!');
+        $html = $this->render('admin/item.html.twig', [
+            'item' => 'Szállítási idő sikeresen módosítva!',
+        ]);
+        return new Response($html, 200);//        return $this->redirectToRoute('order-detail', ['id' => $order->getId(),]);
     }
     
     /**

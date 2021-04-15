@@ -1,36 +1,24 @@
-{% extends 'webshop/site/base-site.html.twig' %}
+{% extends 'webshop/site/template-account.html.twig' %}
 
+{% set pageTitle = 'registration.login-meta-title'|trans %}
 
-{# this tag only applies to the forms defined in this template #}
-{#{% form_theme form 'bootstrap_4_layout.html.twig' %}#}
-
-{% block title %}
-    {{ title }}
-{% endblock %}
-
-
-
-{% block stylesheets %}
-    {{ parent() }}
-    <link href="{{ asset('webshop/site/checkout.css') }}" rel="stylesheet" />
+{% block underNavbar %}
 {% endblock %}
 
 {% block page_content %}
-
-
-    <section name="user_regisztracio">
-        <div class="container mb-3 mt-3 mt-lg-4">
-            <div class="row row-wide-mobile">
-                <div class="col-12 col-wide-mobile">
+    <div id="user_registration" class="JS--Wrapper-registration" data-section-id="registration" data-section-type="registration-section">
+        <div class="container my-3 my-lg-4">
+            <div class="row">
+                <div class="col-12">
                     <div class="row justify-content-center">
                         <div class="col-lg-5 col-md-6 mb-3">
-                            <div class="cart block bg-white">
-                                <div class="cart-wrapper">
+                            <div class="card">
+                                <div class="">
 
-                                    <div class="block-body px-3 px-md-4">
+                                    <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12 mb-4">
-                                                <h4 class="font-weight-normal">Bejelentkezés</h4>
+                                                <h3 class="font-weight-normal">{{ 'registration.login-title'|trans }}</h3>
                                             </div>
                                             {#<div class="col-lg-12 text-muted mb-5">#}
                                             {#Jelentkezz be fiókodba, hogy tudd követni rendelésed állapotát, elmentett címre kérni a kiszállítást.#}
@@ -42,23 +30,25 @@
                                             {% endif %}
 
                                             <div class="col-lg-12">
-                                                <form action="{{ path('site-login') }}" method="post" name="login">
+                                                <form action="{{ path('site-login') }}" method="post" name="login" class="JS--Wrapper-loginForm" novalidate="novalidate">
                                                     <div class="form-group">
-                                                        <label for="_username" class="sr-onlyX form-label">Email cím</label>
+                                                        <label for="_username" class="form-label">{{ 'registration.email-address'|trans }}</label>
                                                         <input type="text" id="username" name="_username" class="form-control" placeholder="" required {% if last_username is defined and last_username is empty %}autofocus{% endif %} value="{{ last_username is defined ? last_username : '' }}" />
+                                                        <span class="invalid-feedback"></span>
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label for="inputPassword" class="sr-onlyX form-label">Jelszó</label>
-                                                        <div class="input-group">
-                                                            <input type="password" id="inputPassword" name="_password" class="form-control border-right-0X" placeholder="" required />
-                                                        </div>
+                                                        <label for="_password" class="form-label">{{ 'registration.password'|trans }}</label>
+{#                                                        <div class="input-group">#}
+                                                            <input type="password" id="inputPassword" name="_password" class="form-control" placeholder="" required />
+{#                                                        </div>#}
+                                                        <span class="invalid-feedback"></span>
                                                     </div>
 
                                                     <div class="form-group mb-3 text-left">
-                                                        <div class="custom-control custom-checkbox text-sm text-muted align-items-center">
-                                                            <input type="checkbox" id="checkbox-signin" name="_remember_me" class="custom-control-input" checked="checked">
-                                                            <label class="custom-control-label align-middle" for="checkbox-signin">Remember me</label>
+                                                        <div class="custom-control custom-checkbox text-muted align-items-center">
+                                                            <input type="checkbox" id="remember_me" name="_remember_me" class="custom-control-input" checked="checked">
+                                                            <label class="custom-control-label align-middle" for="remember_me">{{ 'registration.remember-me'|trans }}</label>
                                                         </div>
                                                     </div>
                                                     {#{% set referer = app.request.server.get('http-referer')|default('/') %}#}
@@ -66,7 +56,7 @@
                                                     {#<input type="hidden" name="_target_path" value="{{ app.session.get('_security.main.target_path') }}" />#}
                                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                                                     <div class="mt-2 text-center mb-1">
-                                                        <button type="submit" value="Mentés" class="btn btn-primary" formnovalidate>Bejelentkezek</button>
+                                                        <button type="submit" value="Mentés" class="JS--Button-login btn btn-primary px-5" formnovalidate>{{ 'registration.login-button'|trans }}</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -80,13 +70,9 @@
                             </div>
                         </div>
                         <div class="col-lg-5 col-md-6">
-                            <div class="cart bg-white">
-                                <div class="cart-wrapper">
-
-                                    <div class="block-body px-3 px-md-4">
-                                        {% include('webshop/site/_registration-form.html.twig') %}
-                                    </div>
-
+                            <div class="card">
+                                <div class="card-body">
+                                    {% include('webshop/site/_registration-form.html.twig') %}
                                 </div>
                             </div>
                         </div>
@@ -94,35 +80,75 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+{% endblock %}
 
-
-    <section name="tovabb_lepes">
-        <div class="container mb-5">
-            <div class="row">
-                <div class="col-lg-12">
-
-                    <div class="d-flex justify-content-between flex-column flex-lg-row">
-
-                        {# Render CSRF token etc .#}
-                        <div style="display:none">
-                            {#{{ form_rest(form) }}#}
-                        </div>
-
-                        {#<button type="submit" value="Mentés" class="btn btn-success order-1 order-lg-2" formnovalidate>Regisztrálok </button>#}
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-
+{% block footerHighlights %}
 {% endblock %}
 
 {% block javascripts %}
-	{{ parent() }}
     <script>
-
+        window.onload = function() {
+            document.getElementById("username").focus();
+        };
+        var loginConstraints = {
+            '_username': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'registration.email-is-missing'|trans}}'
+                },
+                // email: true,
+                email: {
+                    message: '{{ 'registration.email-is-invalid'|trans}}'
+                }
+            },
+            '_password': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'registration.password-at-login-is-missing'|trans}}'
+                }
+            },
+        };
+        var registrationConstraints = {
+            '{{ registrationForm.email.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'registration.email-is-missing'|trans}}'
+                },
+                // email: true,
+                email: {
+                    message: '{{ 'registration.email-is-invalid'|trans}}'
+                }
+            },
+            {#'{{ registrationForm.firstname.vars.full_name }}': {#}
+            {#    presence: {#}
+            {#        allowEmpty: false,#}
+            {#        message: '{{ 'registration.firstname-is-missing'|trans}}'#}
+            {#    }#}
+            {#},#}
+            {#'{{ registrationForm.lastname.vars.full_name }}': {#}
+            {#    presence: {#}
+            {#        allowEmpty: false,#}
+            {#        message: '{{ 'registration.lastname-is-missing'|trans}}'#}
+            {#    }#}
+            {#},#}
+            '{{ registrationForm.password.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'registration.password-is-missing'|trans}}'
+                }
+            },
+            '{{ registrationForm.terms.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'registration.terms.accept-terms-error'|trans}}'
+                },
+                inclusion: {
+                    within: [true],
+                    message: '{{ 'registration.terms.accept-terms-error'|trans}}'
+                },
+            },
+        };
     </script>
+    {{ parent() }}
 {% endblock %}

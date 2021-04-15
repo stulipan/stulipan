@@ -1,18 +1,18 @@
         <div class="d-flex align-items-start">
             <div class="cart-message">
 {#                <i class="far fa-envelope-open"></i>#}
-                <svg class="svg-icon svg-icon-heavyX"><use xlink:href="#mail-1"></use></svg>
+                <svg class="svg-icon"><use xlink:href="#mail-1"></use></svg>
                 <div class="">
                     <span class="d-block text-mutedX text-uppercase mt-1">{{ 'order.message'|trans }}</span>
                 </div>
             </div>
-            <div class="cart-title text-left">
-                <p class="text-mutedX text-sm mb-0">
+            <div class="cart-message-title text-left">
+                <p class="text-sm mb-0">
                     {% if message is defined and message is not null %}
                         <span><em>{{ message }}</em></span> <br>
                         <span>{{ messageAuthor }}</span>
                     {% else %}
-                        {% include 'admin/_notAvailable-insert.html.twig' %}
+                        {% include 'admin/_missing-data-insert.html.twig' %}
                     {% endif %}
                 </p>
             </div>

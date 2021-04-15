@@ -1,5 +1,6 @@
 {% extends 'admin/template-with-sidebar.html.twig' %}
 
+{% set activeMenu = 'cms' %}
 {% set pageTitle = form.vars.data ? form.vars.data.name : 'Új oldal' %}
 {% set breadcrumb = {
 	0: {
@@ -13,45 +14,73 @@
 } %}
 {% set cancelUrl = path('cms-page-list') %}
 
-{% block title %}
-	{{ pageTitle }}
+
+{% block stylesheets %}
+	{{ parent() }}
+{#	<script src="https://cdn.tiny.cloud/1/lq4gczs0epyi1cahrkv32fdx7bt7s92hxhnleiooa95xdypk/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>#}
+	<script src="{{ asset('webshop/tinymce.min.js') }}"></script>
+	<script src="{{ asset('webshop/plugin.min.js') }}"></script>
+	<script>
+		tinymce.init({
+			selector:'.JS--cmsPageContent',
+			// language: 'hu',
+			block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3; Header 4=h4; Header 5=h5; Header 6=h6; Blockquote=blockquote; Code=code',
+			plugins: 'code image imagetools media link wordcount lists advlistXX table fullscreen autoresize',
+			// tabfocus_elements: ':prev,:next',
+			// contextmenu: 'link image table',
+			entity_encoding : 'raw',
+			min_height: 400,
+			max_height: 600,
+			menubar:false,
+			// statusbar: false,
+			branding: false,
+			relative_urls : false,
+			// insert_button_items: 'image link inserttable',
+			toolbar1: 'insert formatselect | bold italic underline strikethrough | removeformat | numlist bullist | outdent indent | align | link unlink | table | image media | fullscreen | code |',
+			menu: {
+				file: { title: 'File', items: 'newdocument restoredraft | preview | print ' },
+				edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
+				view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
+				insert: { title: 'Insert', items: 'image link media template codesample | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },
+				// format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat' },
+				format: { title: 'Format', items: '' },
+				tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
+				table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },
+			},
+			skin_url: 'http://www.stulipan.dfr/webshop',
+			image_class_list: [
+				{title: 'Choose...', value: ''},
+				{title: 'img-fluid', value: 'img-fluid'},
+			],
+		});
+	</script>
 {% endblock %}
 
-{% block headerMoreActions %}
-	{%  if form.vars.data.id is defined and form.vars.data.id is not null %}
-	<div class="navbar--toolbar">
-		<div class="nav-item">
-			<a class="btn btn-link-secondary" href="{{ path('cms-page-duplicate', {'id': form.vars.data.id}) }}"><i class="far fa-clone"></i>Másolat készítése</a>
-		</div>
-	</div>
+{% block headerActionsWrapper %}
+	{% if form.vars.data.id is defined and form.vars.data.id is not null %}
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right">
+		<ul class="nav nav-tabs adaptive-primary">
+			<li class="nav-item adaptive-item">
+				<a class="nav-link" href="{{ path('cms-page-duplicate', {'id': form.vars.data.id}) }}"><i class="far fa-clone mr-2"></i>Másolat készítése</a>
+			</li>
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
 	{% endif %}
 {% endblock %}
 
-{% block content %}
-	<div class="card mb-20px">
-		<div class="card-wrapper">
-			<div class="card-body">
-				<div class="h5 admin-card-title mb-4">Oldal részletei</div>
-				<div>
-					{% include '/admin/cms/_page-form.html.twig' with {'cancelUrl': cancelUrl}  %}
-				</div>
-			</div>
-		</div>
-	</div>
-{% endblock %}
-
-{% block sidebar %}
-	<div class="card text-whiteX bg-lightX overflow-hidden mb-20px">
-		<div class="card-body">
-			<div class="h5 admin-card-title mb-3">Kép</div>
-			<div class="w-100 mt-2">
-				{% if form.vars.data.image|default %}
-					<div class="d-flexX w-100 img-thumbnail" style="background: url('{{ uploaded_asset(form.vars.data.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; height: 250px;"></div>
-				{% else %}
-					<span class="text-muted">Nincs</span>
-				{% endif %}
-			</div>
-
+{% block mainContent %}
+	<div class="row mt-3">
+		<div class="col-md-12">
+			{% include '/admin/cms/_page-form.html.twig' with {'cancelUrl': cancelUrl}  %}
 		</div>
 	</div>
 {% endblock %}
@@ -59,26 +88,4 @@
 {% block javascripts %}
     {{ parent() }}
 	{{ encore_entry_script_tags('CmsImageUpload') }}
-	<script>
-		$(function () {
-			$('.JS--cmsPageContent').trumbowyg({
-				btns: [
-					// ['undo', 'redo'], // Only supported in Blink browsers
-					['formatting'],
-					['strong', 'em', 'underline'],
-					['unorderedList', 'orderedList'],
-					['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-					['link'],
-					['insertImage'],
-					['removeformat'],
-					['viewHTML'],
-				],
-				// autogrow: true,
-				changeActiveDropdownIcon: true,
-				tagsToRemove: ['script', 'link'],
-				imageWidthModalEdit: true,
-				removeformatPasted: true,
-			});
-		});
-	</script>
 {% endblock %}

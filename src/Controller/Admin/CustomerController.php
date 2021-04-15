@@ -3,12 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use App\Form\CustomerFilterType;
-use App\Services\Settings;
+use App\Form\Customer\CustomerFilterType;
+use App\Services\StoreSettings;
 use Cassandra\Custom;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +28,7 @@ class CustomerController extends AbstractController
      *     requirements={"page"="\d+"},
      *     )
      */
-    public function listOrders(Request $request, $page = 1, Settings $settings, TranslatorInterface $translator)
+    public function listOrders(Request $request, $page = 1, StoreSettings $settings, TranslatorInterface $translator)
     {
         $dateRange = $request->query->get('dateRange');
         $searchTerm = $request->query->get('searchTerm');
@@ -81,7 +83,7 @@ class CustomerController extends AbstractController
         ];
 //        $filterQuickLinks['unfulfilled'] = [
 //            'name' => 'Feldolgozás alatt',
-//            'url' => $this->generateUrl('order-list-table',['orderStatus' => OrderStatus::STATUS_CREATED]),
+//            'url' => $this->generateUrl('order-list-table',['orderStatus' => OrderStatus::ORDER_CREATED]),
 //            'active' => false,
 //        ];
 
@@ -95,7 +97,7 @@ class CustomerController extends AbstractController
             $filterQuickLinks['enabled']['active'] = true;
             $hasCustomFilter = true;
         }
-//        if (!$dateRange && $orderStatus && $orderStatus === OrderStatus::STATUS_CREATED) {
+//        if (!$dateRange && $orderStatus && $orderStatus === OrderStatus::ORDER_CREATED) {
 //            $filterQuickLinks['unfulfilled']['active'] = true;
 //            $hasCustomFilter = true;
 //        }
@@ -113,8 +115,7 @@ class CustomerController extends AbstractController
             'status' => $status,
         ]);
 
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
         $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 

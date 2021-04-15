@@ -1,34 +1,32 @@
-    <span class="h5 admin-card-title mt-0 mb-3">
-        {% if order.payment is defined and order.payment %}
-            {{ order.payment.getName() }}
+<div class="d-flex justify-content-between align-items-center">
+    <div class="h5 mb-0">
+        {% if order.paymentMethod is defined and order.paymentMethod %}
+            {{ order.paymentMethod.getName() }}
         {% else %}
             {{ 'order.payment.payment'|trans }}
         {% endif %}
-    </span>
+    </div>
 
     {% if order.paymentStatus is defined and order.paymentStatus is not null %}
-        <div class="admin-card-topright float-sm-right">
+        <div class="d-flex align-items-center">
             <span class="badge badge-lg badge-{{ order.paymentStatus.css }}">{{ order.paymentStatus }}</span>
         </div>
     {% endif %}
+</div>
 
-
-    <div class="toll-free-box">
-        {#<h4> <i class="mdi mdi-deskphone"></i> Toll Free : 1-234-567-8901</h4>#}
-        {% if order.payment is defined and order.payment %}
-            <p class="mt-2X">{{ order.payment.short() }} </p>
-            {% if order.payment.image %}
-                <div class="mt-2">
-                    <img class="border-0X h-20px d-noneX d-md-inlineX" src="{{ asset('/uploads/images/termekek/' ~ order.payment.image) }}" />
-                </div>
-            {% endif %}
-            {% if order.isBankTransfer is defined and order.isBankTransfer == true %}
-                <a class="btnX btn-link-secondaryX" data-toggle="collapse" href="#collapseReszletek" role="button" aria-expanded="false" aria-controls="collapseReszletek">{{ 'order.instructions-for-bank-transfer'|trans }} <i class="fas fa-angle-down ml-1"></i></a>
-                <div class="text-smX mt-1 collapse" id="collapseReszletek">
-                    {{ order.payment.description|raw }}
-                </div>
-            {% endif %}
-        {% else %}
-            {% include 'admin/_notAvailable-insert.html.twig' %}
-        {% endif %}
-    </div>
+{% if order.paymentMethod is defined and order.paymentMethod %}
+    <div class="mt-3">{{ order.paymentMethod.short() }} </div>
+    {% if order.paymentMethod.image %}
+        <div class="mt-3">
+            <img class="border-0X h-20px d-noneX d-md-inlineX" src="{{ asset('/uploads/images/termekek/' ~ order.paymentMethod.image) }}" />
+        </div>
+    {% endif %}
+    {% if order.isBankTransfer is defined and order.isBankTransfer == true %}
+        <a class="btnX btn-link-secondaryX" data-toggle="collapse" href="#collapseReszletek" role="button" aria-expanded="false" aria-controls="collapseReszletek">{{ 'order.instructions-for-bank-transfer'|trans }} <i class="fas fa-angle-down ml-1"></i></a>
+        <div class="text-smX mt-1 collapse" id="collapseReszletek">
+            {{ order.paymentMethod.description|raw }}
+        </div>
+    {% endif %}
+{% else %}
+    {% include 'admin/_missing-data-insert.html.twig' %}
+{% endif %}

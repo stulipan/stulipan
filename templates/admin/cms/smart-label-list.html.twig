@@ -1,0 +1,79 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set activeMenu = 'smartLabels' %}
+{% set pageTitle = 'Matricák' %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+} %}
+
+{% block headerActionsWrapper %}
+	<a href="{{ path('smart-label-new') }}" class="btn btn-primary">Új matrica</a>
+{% endblock %}
+
+{% block tableHeader %}
+	{% if labels is defined and labels is not empty %}
+		<tr>
+			<th scope="col">Név</th>
+			<th scope="col">Kép</th>
+			<th scope="col">Aktív</th>
+			<th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+		</tr>
+	{% endif %}
+{% endblock %}
+
+{% block tableBody %}
+	{% if labels is defined and labels is not empty %}
+		{% for label in labels %}
+			<tr>
+				<td class="align-middle entryX">
+					<a href="{{ path('cms-page-edit', {'id': label.id}) }}" class="">
+						{{ label.name }}
+					</a>
+				</td>
+				<td class="align-middle">
+					{% if label.image is defined and label.image is not empty and label.image|default %}
+						<div class="img-thumbnail" style="background: url('{{ uploaded_asset(label.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
+					{% else %}
+						{% include 'admin/_missing-image-insert.html.twig' %}
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					{% if label.enabled is defined and label.enabled == true %}
+						<span class="badge badge-success">&nbsp;</span>
+					{% else %}
+						<span class="badge badge-secondary">&nbsp;</span>
+					{% endif %}
+				</td>
+
+				<td class="align-middle">
+					<div class="w-100">
+						{#                            <a href="{{ path('product-edit', {'id': product.id}) }}" class="btn btn-sm btn-secondary" title="Módosít">#}
+						<i class="far fa-edit"></i>
+						{#							</a>#}
+						{#                            <a href="{{ path('site-product-show', {'id': product.id}) }}" class="btn btn-sm btn-secondary" target="_blank" title="Megtekinti a weboldalon">#}
+						{#                                <i class="fas fa-external-link-alt"></i>#}
+						{#							</a>#}
+						{#                            <a href="{{ path('product-delete', {'id': product.id}) }}" onclick="alert('Biztosan törölni akarod?')" class="btn btn-sm btn-secondary" title="Töröl">#}
+						{#                                <i class="far fa-trash-alt"></i>#}
+						{#							</a>#}
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+{% endblock %}
+
+{% block tableEmpty %}
+	{% if labels is defined and labels is empty %}
+		<div class="h-100 text-center p-4">
+			<div class="h1 text-muted-extra">
+				<i class="fas fa-tags"></i>
+			</div>
+			<div class="font-18 mt-3 mb-2">Nem talált matricákat!</div>
+			<div class="text-muted-extra">Próbáld módosítani a szűrőket.</div>
+		</div>
+	{% endif %}
+{% endblock %}

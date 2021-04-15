@@ -1,12 +1,4 @@
-<div>
-    <span class="mr-2">{{ order.createdAt|date('Y-m-d') }}, {{ order.createdAt|date('H:i')}}</span>
-    <span class="text-muted mr-2"><span class="text-muted">{{ 'order.order-id'|trans }}</span> {{ order.id }}</span>
-
-    {% if order.paymentStatus is defined and order.paymentStatus is not null %}
-        <span class="badge mr-1 badge-lg badge-{{ order.paymentStatus.css }}">{{ order.paymentStatus }}</span>
-    {% endif %}
-
-    {% if order.status %}
-        <span class="mr-1 badge badge-lg badge-{{ order.status.css }}">{{ order.status }}</span>
-    {% endif %}
+<div class="text-muted">
+    <span class="mr-2">{{ order.createdAt|localizedDate }}, {{ order.createdAt|localizedTime }}</span>
+    <span class="mr-2"><span class="text-muted">{{ 'order.order-id'|trans }}</span> {{ order.id }}</span>
 </div>

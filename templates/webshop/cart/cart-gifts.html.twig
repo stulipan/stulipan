@@ -1,0 +1,29 @@
+        <div class="form-row">
+            {% if products is defined %}
+            {% for product in products %}
+                {% if product.isPubliclyAvailable %}
+                    <div class="col-lg-3 col-md-3 col-4">
+                            <div class="product position-relative">
+                                <div class="product-image">
+                                    <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ product.productName}}" class="img-fluid">
+    {#                                            <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link product-hover-overlay-link">#}
+    {#                                            </a>#}
+                                </div>
+                                <div class="py-2 text-center">
+                                    <p class="productList--name mb-1">
+                                        <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.productName }}</a>
+                                    </p>
+                                    <span class="productList--price-gross">{{ product.price.numericValue|money }}</span>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" class="JS--Button-addGiftToCart btn btn-sm btn-primary" data-url="{{ path('cart-addGift', {'id': product.id}) }}">
+                                        <span class="loading-spinner-invisible">{{ 'cart.gift.choose-gift'|trans }}</span>
+                                        <div class="loading-spinner" role="status"></div>
+                                    </button>
+                                </div>
+                            </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+        </div>

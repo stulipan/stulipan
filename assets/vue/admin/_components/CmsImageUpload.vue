@@ -9,10 +9,15 @@
             ref="vueclip"
     >
         <template v-slot:clip-uploader-action="props">
-            <div class="uploader-action" v-bind:class="{dragging: props.dragging}">
+            <div class="uploader-action" v-bind:class="{dragging: props.dragging}" tabindex="0">
                 <div class="dz-message">
-                    <i class="fas fa-upload mb-2"></i>
-                    <p class="mb-0">Képfeltöltés... </p>
+                    <div class="d-flex">
+                        <i class="fas fa-arrow-circle-up fa-2x"></i>
+                    </div>
+                    <a class="btn btn-secondary mt-3">Kép hozzáadása</a>
+                    <div class="d-flex text-muted mt-2">
+                        vagy húzd be ide a fájlt a feltöltéshez
+                    </div>
                 </div>
             </div>
         </template>
@@ -94,23 +99,12 @@
                 this.imageIsUploading = false;
                 this.imageIsSaved = true;
             },
-            onRemoveImage(image) {
-                const index = this.product.images.findIndex((img) => img.id === image.id);
-                // if exists the image
-                if (index !== -1) {
-                    this.product.images.splice(index, 1);
-                    for (let i in this.product.images) {
-                        this.product.images[i].ordering = i;
-                    }
-                }
-            },
             resetUploader () {
                 this.$refs.vueclip.removeAllFiles();
                 this.uploadedFiles = [];
                 this.componentKey += 1;
             },
             complete (file, status, xhr) {
-                console.log(file);
                 // Adding server id to be used for deleting the file.
                 if (status === 'success') {
                     let data = JSON.parse(xhr.response);
@@ -123,11 +117,11 @@
                     document.getElementsByClassName('V--imageId')[0].value = image.image.id;
                     file.addAttribute('id', image.image.id);
 
-                    console.log(file.customAttributes.id);   ////////////
+                    // console.log(file.customAttributes.id);   ////////////
                 } else {
                     let json = JSON.parse(xhr.response);
                     this.errors.push(json.errors.imageFile);
-                    console.log(json.errors.imageFile)
+                    // console.log(json.errors.imageFile)
                 }
             },
             addedFile (file) {

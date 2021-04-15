@@ -5,7 +5,7 @@
  * --------------------------------------------------------------------------
  */
 
-import $ from 'jquery'
+// import $ from 'jquery'
 import Util from './util'
 
 /**
@@ -84,7 +84,8 @@ class Sidebar {
     this._isBodyOverflowing   = false;
     this._ignoreBackdropClick = false;
     this._isTransitioning     = false;
-    this._scrollbarWidth      = 0
+    this._scrollbarWidth      = 0;
+    this._backdropCss         = this._config.backdropCss;
   }
 
   // Getters
@@ -243,9 +244,9 @@ class Sidebar {
       document.body.appendChild(this._element)
     }
 
-    // this._element.style.display = 'block'
+    this._element.style.display = 'block'
     this._element.removeAttribute('aria-hidden');
-    this._element.setAttribute('aria-sidebar', true);
+    this._element.setAttribute('aria-modal', true);
 
     if ($(this._dialog).hasClass(ClassName.SCROLLABLE)) {
       this._dialog.querySelector(Selector.SIDEBAR_BODY).scrollTop = 0
@@ -320,9 +321,9 @@ class Sidebar {
   }
 
   _hideSidebar() {
-    // this._element.style.display = 'none'
+    this._element.style.display = 'none'
     this._element.setAttribute('aria-hidden', true);
-    this._element.removeAttribute('aria-sidebar');
+    this._element.removeAttribute('aria-modal');
     this._isTransitioning = false;
     this._showBackdrop(() => {
       $(document.body).removeClass(ClassName.OPEN);
@@ -374,6 +375,7 @@ class Sidebar {
       }
 
       $(this._backdrop).addClass(ClassName.SHOW);
+      $(this._backdrop).addClass(this._backdropCss);
 
       if (!callback) {
         return

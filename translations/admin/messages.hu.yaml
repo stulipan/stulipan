@@ -26,7 +26,7 @@ order:
     choose-time-frame: 'Válassz idősávot...'
     free-delivery: 'Ingyenes szállítás'
     choose-the-timeframe-when-the-recipient-will-available-at-delivery-address: 'Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.'
-    save-delivery-time: 'Szállítási időpont mentése'
+    save-delivery-time: 'Időpont mentése'
     payment: Fizetés
     instructions-for-bank-transfer: 'Banki utaláshoz szükséges adatok'
     payment-status: 'Fizetés állapota'
@@ -55,15 +55,15 @@ order:
     filter:
         filters: 'Rendelések szűrése'
         more-filters: 'Rendelések szűrése'
-        filter-by-date: 'Szűrés dátumra'
+        filter-by-date: 'Szűrés dátumra...'
         search: Keresés
         search-button: OK
         search-placeholder: Keresés...
         search-result: 'Keresés:'
         filter-by-order-status: 'Rendelés állapota'
-        choose-order-status: 'Rendelés státusza'
+        choose-order-status: 'Rendelés státusza...'
         filter-by-payment-status: 'Fizetés állapota'
-        choose-payment-status: 'Fizetés állapota'
+        choose-payment-status: 'Fizetés állapota...'
 dashboard:
     dashboard: Kezelőpult
     settings: Beállítások
@@ -91,6 +91,8 @@ settings:
         general-settings-description: 'Webáruház adatainak megtekintése és frissítése'
         translation-title: 'Webshop nyelvek'
         translation-description: 'Kezelje azokat a nyelveket, amelyeket ügyfelei megnézhetnek az üzletében'
+        admin-general-settings-title: 'Admin oldal'
+        admin-general-settings-description: 'Admin oldal működése és beállítások szerkesztése'
     translation:
         translation-title: Fordítás
         translation-is-missing: '{{ count }} fordítás hiányzik.'
@@ -120,7 +122,7 @@ customer:
         custom-filter: 'Egyedi keresés'
         not-found: 'Nem talált vásárlókat!'
         not-found-suggestion: 'Próbáld módosítani a szűrőket vagy a keresési kifejezést.'
-    send-account-invite: null
+    send-account-invite: 'Meghívó email küldése'
     previous-orders: 'Előző rendelések'
     view-profile: 'Vásárlói részletek'
     orders: Rendelések
@@ -135,11 +137,13 @@ generic:
     edit: Szerkesztés
     modify: Módosít
     preview: Előnézet
+    open: Megnyit
     save: Mentés
     save-changes: 'Módosítások mentése'
     cancel: Mégse
     close: Bezár
     more-actions: Műveletek
+    more: További
     ok: OK
     apply: Alkalmaz
     delete: Töröl

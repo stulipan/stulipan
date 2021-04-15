@@ -33,7 +33,7 @@
                     <a class="nav-link py-2 text-nowrap {% if loop.first == 1 %} active {% endif %}" id="{{ category }}-tab" data-toggle="tab" href="#{{ category }}" role="tab" aria-controls="{{ category }}" aria-selected="true">
                         <span class="text-smX text-primaryX text-uppercase">{{ category }}
                             {#{% if supplyId is defined %}#}
-                                {#{{ render(controller('App\\Controller\\Boltzaras\\InventoryController::itemsPerCategory', {'supply' : supplyId, 'category' : category.id})) }}#}
+                                {#{{ render(controller('App\\Boltzaras\\Admin\\Controller\\InventoryController::itemsPerCategory', {'supply' : supplyId, 'category' : category.id})) }}#}
                             {#{% endif %}#}
                             {% if itemsPerCategory[category.id] is defined %}
                                 <span class="badge badge-number badge-warning ml-lg-1">{{ itemsPerCategory[category.id] }}</span>
@@ -49,7 +49,7 @@
             {% for category in categories %}
 
             <div class="tab-pane fade {% if loop.first == 1 %} show active {% endif %}" id="{{ category }}" role="tabpanel" aria-labelledby="{{ category }}-tab">
-                <div class="table-responsive bg-tulipan-gray mb-3 px-0">
+                <div class="table-responsive mb-3 px-0">
                     <table class="table table-centered table-sm table-hover table-bordered table-inventory-edit mb-0" id="inventory-supply-list-{{ category }}" data-page-length="100">
                         <thead class="thead-light">
                         <tr class="text-center">

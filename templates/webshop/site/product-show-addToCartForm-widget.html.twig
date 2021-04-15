@@ -1,0 +1,187 @@
+{{ form_start(form) }}
+    <div class="product-variants">
+        <div class="product-variant-selector-label">Product ID: {{ product.sku }}</div>
+    </div>
+
+    {% if product.isFlower %}
+        <div class="product-variants">
+            <div class="product-variant-selector-label">Méret</div>
+
+            {% if form.options is defined and form.options is not empty %}
+                <div class="product-variant-selector-content">
+                    <div class="content-body-thick-border">
+                        {% for item in form.options|slice(0,1) %}
+                            <div class="list-group list-group-flush">
+                                {% for choice in item.selectedOptionValue %}
+                                    <div class="list-group-item">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
+                                            <label class="custom-control-label w-100" for="{{ choice.vars.id }}">
+                                                {{ choice.vars.label|raw }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                {% do item.selectedOptionValue.setRendered() %}
+                            </div>
+                        {% endfor %}
+                        {{ form_errors(form.options) }}
+                    </div>
+                    <div class="d-flex mt-2">
+                        <a href="#" class="text-link-quickinfo text-right text-sm" data-toggle="modal" data-target="#modal--SizeInfo">Méret útmutató</a>
+                        <div class="modal fade" id="modal--SizeInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
+                                        <div class="mt-4">
+                                            {{ pages.szallitasiDijak.content|raw }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="product-variant-selector-content">
+                    <div class="content-body-thick-border">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="egyMeret" name="egyMeret" required="required" value="egyMeret" checked/>
+                                    <label class="custom-control-label w-100" for="egyMeret">
+                                        {% include('webshop/site/vp-label-product-variant.html.twig') with {
+                                            'name': 'Egy méret',
+                                            'price': product.price.numericValue,
+                                            'priceSale': (product.price.numericValue*4),
+                                        } %}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    {#            <div class="form-row">#}
+    {#                <div class="col-sm-12">#}
+    {#                    <div class="vp choose-one-size vp-checked">#}
+    {#                        <div class="vp-figure">#}
+    {#                            <div class="vp-content">#}
+    {#                                {% include('webshop/site/vp-label-product-variant.html.twig') with {#}
+    {#                                    'name': 'Egy méret',#}
+    {#                                    'price': product.price.numericValue,#}
+    {#                                    'priceSale': (product.price.numericValue*4),#}
+    {#                                } %}#}
+    {#                            </div>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#            </div>#}
+            {% endif %}
+            {% do form.options.setRendered() %}
+        </div>
+
+        <div class="product-delivery">
+            <div class="product-variant-selector-label">Szállítás</div>
+
+            <div class="product-variant-selector-content mb-4 JS--deliveryDateContainer">
+                <div class="content-body-thick-border JS--dateWrapper">
+                    <div class="form-row">
+
+                        {% for choice in form.deliveryDate.deliveryDate|slice(0,3) %}
+                            <div class="col-sm-3 col-4 JS--generatedDate-{{ choice.vars.value }}">
+                                {% include('webshop/site/vp-choice-date.html.twig') %}
+                            </div>
+                        {% endfor %}
+                        <div class="col-sm-3 col-12 JS--Button-clickDate">
+                            <div class="row">
+                                {% for choice in form.deliveryDate.deliveryDate|slice(3) %}
+                                    <div class="col-sm-12 col-12 JS--generatedDate-{{ choice.vars.value }} d-none">
+                                        {% include('webshop/site/vp-choice-date.html.twig') %}
+                                    </div>
+                                {% endfor %}
+
+                                <div class="col-sm-12 col-12 JS--showCalendarIcon">
+                                    <div class="vp choose-date" tabindex="0">
+                                        <div class="vp-figure">
+                                            <span class="vp-content">
+                                                <span class="tile tile-lg">
+                                                    <i class="far fa-calendar-alt fa-2x"></i>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% do form.deliveryDate.deliveryDate.setRendered() %}
+                        {{ form_errors(form.deliveryDate.deliveryDate) }}
+                    </div>
+                    <div class="text-sm mt-2">
+                        Kosárba rakás után megadható a napszakasz is.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+{#        {% if not form.vars.valid %}#}
+{#            <div class="JS--alertMessage alert alert-danger mt-3" role="alert" data-alert-message>#}
+{#                <i class="fas fa-exclamation-circle mr-1 text-muted"></i>#}
+{#                {% for error in form.vars.errors %}#}
+{#                    {{ error.message }}#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        {% endif %}#}
+    {% else %}
+
+        {% if form.options is defined and form.options is not empty %}
+            {% for item in form.options %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="product-variant-selector-label">{{ item.selectedOption.vars.value }}</div>
+                        <div class="form-row">
+                            {% if storeSettings.get('general.product-variant-view') == 'dropdown' %}
+                                <div class="form-group col-8 col-sm-8 col-md-6">
+                                    {{ form_widget(item.selectedOptionValue) }}
+                                </div>
+                            {% elseif storeSettings.get('general.product-variant-view') == 'variant-picker' %}
+                                {% for choice in item.selectedOptionValue %}
+                                    <div class="col-sm-4 col-4">
+                                        {% include 'webshop/site/variant-picker-4-product-variant.html.twig' %}
+                                    </div>
+                                {% endfor %}
+                                {% do item.selectedOptionValue.setRendered() %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {{ form_errors(form.options) }}
+        {% endif %}
+        {% do form.options.setRendered() %}
+        {% do form.deliveryDate.deliveryDate.setRendered() %}
+
+        <div class="row">
+            <div class="col-12 detail-option mb-4">
+                <div class="product-variant-selector-label">
+                    Items <span>(required)</span>
+                </div>
+                {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
+                {{ form_errors(form.quantity) }}
+            </div>
+        </div>
+
+    {% endif %}
+
+    {# Render CSRF token etc .#}
+    <div style="display:none">
+        {{ form_rest(form) }}
+    </div>
+{{ form_end(form) }}

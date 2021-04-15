@@ -1,0 +1,13 @@
+    {{ form_start(quantityForm, {'attr': {
+        'class': "loading-spinner-faded",
+    }}) }}
+    <div class="position-relative">
+        <div class="float-md-left w-100 d-flex flex-row align-items-center">
+                {{ form_widget(quantityForm.quantity, {'attr': {
+                    'class': "JS--Select-itemQuantitySelect form-control-sm form-control-cart mr-1 JS--Dropdown-setItemQuantity",
+                }}) }}
+                <span class="text-muted ml-1">{{ 'cart.pieces'|trans }}</span>
+        </div>
+    </div>
+    {{ form_end(quantityForm) }}
+    <div class="loading-spinner" role="status"></div>

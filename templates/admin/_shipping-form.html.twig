@@ -4,8 +4,8 @@
         <div class="col-lg-12">
                 <div class="form-group row">
                     <div class="col-sm-4 col-lg-2">
-{#                        {{ form_label(form.name, 'Megnevezés', {'label_attr': {'class': 'col-form-label'}}) }}#}
-                        <label for="{{ form.name.vars.full_name }}" class="col-form-label">Megnevezés</label>
+{#                        {{ form_label(form.name, 'Megnevezés', {'label_attr': {'class': ''}}) }}#}
+                        <label for="{{ form.name.vars.full_name }}" class="">Megnevezés</label>
                     </div>
                     <div class="col-sm-8 col-lg-10 ">
                         {{ form_widget(form.name, {'attr': {
@@ -18,7 +18,7 @@
                 <div class="form-group row">
                     <div class="col-sm-4 col-lg-2">
 {#                        {{ form_label(form.description) }}#}
-                        <label for="{{ form.description.vars.full_name }}" class="col-form-label">Leírás</label>
+                        <label for="{{ form.description.vars.full_name }}" class="">Leírás</label>
                     </div>
                     <div class="col-sm-8 col-lg-10 ">
                         {{ form_widget(form.description) }}
@@ -32,14 +32,14 @@
                 <div class="form-group row">
                     <div class="col-sm-4 col-lg-2">
 {#                        {{ form_label(form.price) }}#}
-                        <label for="{{ form.price.vars.full_name }}" class="col-form-label">Szállítási díj</label>
+                        <label for="{{ form.price.vars.full_name }}" class="">Szállítási díj</label>
                     </div>
                     <div class="col-sm-8 col-lg-6 ">
-                        <div class="input-group">
-                            {{ form_widget(form.price) }}
-                            <div class="input-group-append">
-                                <span class="input-group-text">Ft</span>
+                        <div class="field-group">
+                            <div class="field-item field-prepend">
+                                <div class="field-addon-prepend w-addon-smX">HUF</div>
                             </div>
+                            {{ form_widget(form.price) }}
                         </div>
                         {{ form_errors(form.price) }}
                     </div>
@@ -48,7 +48,7 @@
                 <div class="form-group row">
                     <div class="col-sm-4 col-lg-2">
 {#                        {{ form_label(form.ordering) }}#}
-                        <label for="{{ form.ordering.vars.full_name }}" class="col-form-label">Sorrend</label>
+                        <label for="{{ form.ordering.vars.full_name }}" class="">Sorrend</label>
                     </div>
                     <div class="col-sm-8 col-lg-6 ">
                         {{ form_widget(form.ordering) }}
@@ -60,10 +60,10 @@
                     <div class="col-sm-4 col-lg-2">
                         {#{{ form_label(form.enabled) }}#}
 {#                        <label">Engedélyezve</label>#}
-                        <label for="{{ form.enabled.vars.full_name }}" class="col-form-labelX">Engedélyezve</label>
+                        <label for="{{ form.enabled.vars.full_name }}" class="X">Engedélyezve</label>
                     </div>
                     <div class="col-sm-8 col-lg-10 ">
-                        <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="info">
+                        <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">
                         <label class="form-check-label required" for="{{ form.enabled.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>
 
                         {{ form_errors(form.enabled) }}

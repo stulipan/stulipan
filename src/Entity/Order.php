@@ -9,11 +9,10 @@ use App\Entity\OrderItem;
 use App\Entity\OrderStatus;
 use App\Entity\Product\Product;
 use App\Entity\TimestampableTrait;
-use App\Entity\User;
 use App\Entity\Recipient;
 use App\Entity\Sender;
-use App\Entity\Payment;
-use App\Entity\Shipping;
+use App\Entity\PaymentMethod;
+use App\Entity\ShippingMethod;
 use App\Entity\Discount;
 
 use App\Model\Summary;
@@ -25,6 +24,7 @@ use Doctrine\Common\Collections\Collection;
 use Egulias\EmailValidator\Warning\AddressLiteral;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -74,14 +74,14 @@ class Order
     private $paymentStatus;
 
     /**
-     * @var User|null
+     * @var Customer|null
      * @Groups({"orderView", "orderList"})
      *
      * ==== Many Orders belong to one Customer ====
-     * ==== inversed By="orders" => a User entitásban definiált 'orders' attibútumról van szó; A Ordert így kötjük vissza a Customerhez
+     * ==== inversed By="orders" => a Customer entitásban definiált 'orders' attibútumról van szó; A Ordert így kötjük vissza a Customerhez
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="orders")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="orders")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true)
      * @ Assert\NotBlank(message="Egy rendelésnek kell legyen customer-je.")
      */
     private $customer;
@@ -113,6 +113,15 @@ class Order
      * @Assert\Email(message="Ellenőrizd, hogy helyesen írtad be az email címet!")
      */
     private $email;
+
+    /**
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="customer_phone", type="string", length=15, nullable=false)
+     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     */
+    private $phone;
 
     /**
      * @var Recipient|null
@@ -170,28 +179,28 @@ class Order
     private $items;
 
     /**
-     * @var Shipping|null
+     * @var ShippingMethod|null
      * @Groups({"orderView", "orderList"})
      *
      * ==== Many Orders have one Shipping => Egy rendeléshez egy Szállítás tartozik ====
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Shipping")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ShippingMethod")
      * @ORM\JoinColumn(name="shipping_id", referencedColumnName="id", nullable=true)
      * @Assert\NotBlank(message="Válassz szállítási módot!")
      */
-    private $shipping;
+    private $shippingMethod;
 
     /**
-     * @var Payment|null
+     * @var PaymentMethod|null
      * @Groups({"orderView", "orderList"})
      *
      * ==== Many Orders have one Payment => Egy rendeléshez egy Fizetés tartozik ====
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Payment")
+     * @ORM\ManyToOne(targetEntity="App\Entity\PaymentMethod")
      * @ORM\JoinColumn(name="payment_id", referencedColumnName="id", nullable=true)
      * @Assert\NotBlank(message="Válassz fizetési módot!")
      */
-    private $payment;
+    private $paymentMethod;
 
 
     /**
@@ -227,18 +236,27 @@ class Order
      * @ORM\Column(name="delivery_fee", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
      */
     private $deliveryFee = 0;
-    
+
     /**
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="shipping_name", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="Add meg a címzett nevét.")
+     * @ORM\Column(name="shipping_firstname", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a keresztnevet.")
      */
-    private $shippingName;
+    private $shippingFirstname;
 
     /**
-     * @var int|null
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="shipping_lastname", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a vezetéknevet.")
+     */
+    private $shippingLastname;
+
+    /**
+     * @var string|null
      * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="shipping_phone", type="string", length=15, nullable=false)
@@ -263,10 +281,19 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="billing_name", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="Add meg a címzett nevét.")
+     * @ORM\Column(name="billing_firstname", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a keresztnevet.")
      */
-    private $billingName;
+    private $billingFirstname;
+
+    /**
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="billing_lastname", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Add meg a vezetéknevet.")
+     */
+    private $billingLastname;
 
     /**
      * @var string|null
@@ -277,7 +304,7 @@ class Order
     private $billingCompany;
 
     /**
-     * @var int|null
+     * @var string|null
      * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="billing_phone", type="string", length=15, nullable=false)
@@ -286,7 +313,7 @@ class Order
     private $billingPhone;
 
     /**
-     * @var float|null
+     * @var string|null
      *
      * @ORM\Column(name="billing_vat_number", type="string", length=255, nullable=true)
      */
@@ -336,6 +363,44 @@ class Order
     private $clientDetails;
 
     /**
+     * @var bool|null
+     * @Groups({"orderView"})
+     *
+     * @ORM\Column(name="is_accepted_terms", type="boolean", nullable=true, options={"default"=false})
+     */
+    private $isAcceptedTerms;
+
+    /**
+     * @var bool|null
+     * @Groups({"orderView"})
+     *
+     * @ORM\Column(name="is_conversion_tracked", type="boolean", nullable=true, options={"default"=false})
+     */
+    private $isConversionTracked;
+
+    /**
+     * @var string|null
+     * @Groups({"orderView"})
+     *
+     * @ORM\Column(name="token", type="string", length=50, nullable=true)
+     */
+    private $token;
+
+    /**
+     * @var Transaction[]|ArrayCollection|null;
+     * @Groups({"orderView"})
+     *
+     * ==== One Order has several Transactions ====
+     * ==== mappedBy="order" => a Transaction entitásban definiált 'order' attribútumról van szó ====
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="order", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="order_id", nullable=true)
+     * @ORM\OrderBy({"createdAt"="ASC", "id"="ASC"})
+     * @Assert\NotBlank(message="Egy rendelésnek több tranzakciója lehet.")
+     */
+    private $transactions;
+
+    /**
      * @var OrderLog[]|ArrayCollection|null
      * @Groups({"orderView"})
      *
@@ -353,6 +418,7 @@ class Order
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
         $this->logs = new ArrayCollection();
     }
 
@@ -452,12 +518,12 @@ class Order
      *
      * @return int
      */
-    public function countItems(): int
+    public function itemsCount(): int
     {
         $c = 0;
         foreach ($this->getItems() as $item) {
             if ($item->getId()) {
-                $c += 1;
+                $c += $item->getQuantity();
             }
         }
         return $c;
@@ -496,17 +562,17 @@ class Order
     }
 
     /**
-     * @return User|null
+     * @return Customer|null
      */
-    public function getCustomer(): ?User
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
     /**
-     * @param User $customer
+     * @param Customer $customer
      */
-    public function setCustomer(?User $customer): void
+    public function setCustomer(?Customer $customer): void
     {
         $this->customer = $customer;
     }
@@ -524,7 +590,8 @@ class Order
      */
     public function setFirstname(?string $firstname)
     {
-        $this->firstname = ucwords($firstname);
+        $this->firstname = $this->ucWords($firstname);
+
     }
     
     /**
@@ -540,7 +607,7 @@ class Order
      */
     public function setLastname(?string $lastname)
     {
-        $this->lastname = ucwords($lastname);
+        $this->lastname = $this->ucWords($lastname);
     }
     
     /**
@@ -549,7 +616,16 @@ class Order
     public function getFullname(): ?string
     {
         $fullname = $this->firstname.' '.$this->lastname;
-        return ucwords($fullname);
+        return $this->ucWords($fullname);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getInitials(): ?string
+    {
+        $fullnameInitial = $this->firstname[0].$this->lastname[0];
+        return $this->ucWords($fullnameInitial);
     }
     
     
@@ -570,6 +646,22 @@ class Order
     }
 
     /**
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string|null $phone
+     */
+    public function setPhone(?string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    /**
      * @return Recipient|null
      */
     public function getRecipient(): ?Recipient
@@ -583,6 +675,14 @@ class Order
     public function setRecipient(?Recipient $recipient): void
     {
         $this->recipient = $recipient;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasRecipient(): bool
+    {
+        return null === $this->getRecipient() ? false : true;
     }
 
     /**
@@ -634,35 +734,43 @@ class Order
     }
 
     /**
-     * @return Payment|null
+     * @return bool
      */
-    public function getPayment(): ?Payment
+    public function hasSender(): bool
     {
-        return $this->payment;
+        return null === $this->getSender() ? false : true;
     }
 
     /**
-     * @ param Payment $payment
+     * @return PaymentMethod|null
      */
-    public function setPayment(?Payment $payment): void
+    public function getPaymentMethod(): ?PaymentMethod
     {
-        $this->payment = $payment;
+        return $this->paymentMethod;
     }
 
     /**
-     * @return Shipping|null
+     * @param PaymentMethod|null $paymentMethod
      */
-    public function getShipping(): ?Shipping
+    public function setPaymentMethod(?PaymentMethod $paymentMethod): void
     {
-        return $this->shipping;
+        $this->paymentMethod = $paymentMethod;
     }
 
     /**
-     * @param Shipping $shipping
+     * @return ShippingMethod|null
      */
-    public function setShipping(?Shipping $shipping): void
+    public function getShippingMethod(): ?ShippingMethod
     {
-        $this->shipping = $shipping;
+        return $this->shippingMethod;
+    }
+
+    /**
+     * @param ShippingMethod $shippingMethod
+     */
+    public function setShippingMethod(?ShippingMethod $shippingMethod): void
+    {
+        $this->shippingMethod = $shippingMethod;
     }
 
     /**
@@ -674,9 +782,9 @@ class Order
     }
 
     /**
-     * @param Discount $discount
+     * @param Discount|null $discount
      */
-    public function setDiscount(Discount $discount): void
+    public function setDiscount(?Discount $discount): void
     {
         $this->discount = $discount;
     }
@@ -749,21 +857,47 @@ class Order
 //        return $this->itemsTotal;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getShippingFirstname(): ?string
+    {
+        return $this->shippingFirstname;
+    }
+
+    /**
+     * @var null|string $name
+     */
+    public function setShippingFirstname(?string $name): void
+    {
+        $this->shippingFirstname = $this->ucWords($name);
+    }
 
     /**
      * @return string|null
      */
-    public function getShippingName(): ?string
+    public function getShippingLastname(): ?string
     {
-        return $this->shippingName;
+        return $this->shippingLastname;
     }
 
     /**
-     * @var string $name
+     * @var null|string $name
      */
-    public function setShippingName(?string $name): void
+    public function setShippingLastname(?string $name): void
     {
-        $this->shippingName = ucwords($name);
+        $this->shippingLastname = $this->ucWords($name);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getShippingFullname(): ?string
+    {
+        if ($this->shippingLastname && $this->shippingFirstname) {
+            return $this->shippingLastname.' '.$this->shippingFirstname;
+        }
+        return null;
     }
 
     /**
@@ -775,7 +909,7 @@ class Order
     }
 
     /**
-     * @var string $phone
+     * @var null|string $phone
      */
     public function setShippingPhone(?string $phone)
     {
@@ -801,17 +935,44 @@ class Order
     /**
      * @return string|null
      */
-    public function getBillingName(): ?string
+    public function getBillingFirstname(): ?string
     {
-        return $this->billingName;
+        return $this->billingFirstname;
     }
 
     /**
-     * @var string $name
+     * @var null|string $name
      */
-    public function setBillingName(?string $name): void
+    public function setBillingFirstname(?string $name): void
     {
-        $this->billingName = ucwords($name);
+        $this->billingFirstname = $this->ucWords($name);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBillingLastname(): ?string
+    {
+        return $this->billingLastname;
+    }
+
+    /**
+     * @var null|string $name
+     */
+    public function setBillingLastname(?string $name): void
+    {
+        $this->billingLastname = $this->ucWords($name);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBillingFullname(): ?string
+    {
+        if ($this->billingLastname && $this->billingFirstname) {
+            return $this->billingLastname.' '.$this->billingFirstname;
+        }
+        return null;
     }
 
     /**
@@ -823,7 +984,7 @@ class Order
     }
 
     /**
-     * @var string $company
+     * @var null|string $company
      */
     public function setBillingCompany(?string $company): void
     {
@@ -831,17 +992,17 @@ class Order
     }
 
     /**
-     * @return float|null
+     * @return string|null
      */
-    public function getBillingVatNumber(): ?float
+    public function getBillingVatNumber(): ?string
     {
-        return (float) $this->billingVatNumber;
+        return $this->billingVatNumber;
     }
 
     /**
-     * @var float $vat
+     * @var string|null $vat
      */
-    public function setBillingVatNumber(?float $vat): void
+    public function setBillingVatNumber(?string $vat): void
     {
         $this->billingVatNumber = $vat;
     }
@@ -887,9 +1048,9 @@ class Order
     }
 
     /**
-     * @param DateTime $deliveryDate
+     * @param DateTime|null $deliveryDate
      */
-    public function setDeliveryDate(DateTime $deliveryDate)
+    public function setDeliveryDate(?DateTime $deliveryDate)
     {
         $this->deliveryDate = $deliveryDate;
     }
@@ -913,7 +1074,7 @@ class Order
     /**
      * @return ClientDetails
      */
-    public function getClientDetails(): ClientDetails
+    public function getClientDetails(): ?ClientDetails
     {
         return $this->clientDetails;
     }
@@ -925,6 +1086,55 @@ class Order
     {
         $this->clientDetails = $clientDetails;
     }
+
+    /**
+     * @return bool|null
+     */
+    public function IsAcceptedTerms(): ?bool
+    {
+        return $this->isAcceptedTerms;
+    }
+
+    /**
+     * @param bool|null $isAcceptedTerms
+     */
+    public function setIsAcceptedTerms(?bool $isAcceptedTerms): void
+    {
+        $this->isAcceptedTerms = $isAcceptedTerms;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getIsConversionTracked(): ?bool
+    {
+        return $this->isConversionTracked;
+    }
+
+    /**
+     * @param bool|null $isConversionTracked
+     */
+    public function setIsConversionTracked(?bool $isConversionTracked): void
+    {
+        $this->isConversionTracked = $isConversionTracked;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string|null $token
+     */
+    public function setToken(?string $token): void
+    {
+        $this->token = $token;
+    }
+
 
     /**
      * @param OrderLog $log
@@ -969,17 +1179,17 @@ class Order
      */
     public function isDeliveryDateInPast(): bool
     {
-        $date = $this->getDeliveryDate();
+        $date = clone $this->getDeliveryDate();
 //        dd((new \DateTime('now +'. GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours')));
 //        dd((new \DateTime('now +4 hours'))->diff($date)->format('%r%h'));
 //        dd((new \DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day')));
-        
         if ($date) {
             /** A '+1 day' azert kell mert az adott datum 00:00 orajat veszi.
              * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
              * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
              */
-            $diff = (new DateTime('now +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+1 day'));
+//            $diff = (new DateTime('today +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+0 day'));
+            $diff = (new DateTime('today'))->diff($date->modify('+0 day'));
             if ($diff->days >= 0 && $diff->invert == 0) {
                 return false;
             } elseif ($diff->invert == 1) {
@@ -989,9 +1199,33 @@ class Order
         return true;
     }
 
+    public function getDeliveryOverdueDays(): ?int
+    {
+        if (!$this->getDeliveryDate()) return null;
+
+        $date = clone $this->getDeliveryDate();
+        /** DeliveryOverdueDays are calculated only for 'Open' and 'Paid' orders */
+        if (!$this->isClosed() && $this->isPaid()) {
+            if ($date) {
+                /** A '+1 day' azert kell mert az adott datum 00:00 orajat veszi.
+                 * Ergo, ha feb 6. reggel rendelek delutani idopontra, akkor az mar a multban van!
+                 * Ugyanis a delutani datum feb 6, 00:00 ora lesz adatbazisban, ami reggelhez kepest a multban van!
+                 */
+//            $diff = (new DateTime('today +' . GeneralUtils::DELIVERY_DATE_HOUR_OFFSET . ' hours'))->diff($date->modify('+0 day'));
+                $diff = (new DateTime('today'))->diff($date->modify('+0 day'));
+                if ($diff->days >= 0 && $diff->invert == 0) {
+                    return $diff->days;
+                } elseif ($diff->invert == 1) {
+                    return -$diff->days;
+                }
+            }
+        }
+        return null;
+    }
+
     public function isDeliveryOverdue(): bool
     {
-        if ($this->getStatus() && $this->getStatus()->getShortcode() === OrderStatus::STATUS_CREATED) {
+        if ($this->getStatus() && $this->getStatus()->getShortcode() === OrderStatus::ORDER_CREATED) {
             return $this->isDeliveryDateInPast();
         } else {
             return false;
@@ -1004,9 +1238,9 @@ class Order
     public function isClosed(): bool
     {
         if ($this->getStatus() && (
-                $this->getStatus()->getShortcode() === OrderStatus::STATUS_PAYMENT_REFUNDED ||
+                $this->getStatus()->getShortcode() === OrderStatus::PAYMENT_REFUNDED ||
                 $this->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED ||
-                $this->getStatus()->getShortcode() === OrderStatus::STATUS_DELETED
+                $this->getStatus()->getShortcode() === OrderStatus::ORDER_DELETED
             )) {
             return true;
         } else {
@@ -1041,9 +1275,17 @@ class Order
         }
     }
 
+    public function isPaid(): bool
+    {
+        if ($this->getPaymentStatus()->getShortcode() === PaymentStatus::STATUS_PAID) {
+            return true;
+        }
+        return false;
+    }
+
     public function isBankTransfer(): bool
     {
-        if ($this->getPayment() && $this->getPayment()->isBankTransfer()) {
+        if ($this->getPaymentMethod() && $this->getPaymentMethod()->isBankTransfer()) {
             return true;
         } else {
             return false;
@@ -1058,5 +1300,70 @@ class Order
             }
         }
         return false;
+    }
+
+    /**
+     * @return Transaction[]|Collection|null
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * @param Transaction $transaction
+     */
+    public function addTransaction(Transaction $transaction): void
+    {
+        if (!$this->transactions->contains($transaction)) {
+            $transaction->setOrder($this);
+            $this->transactions->add($transaction);
+        }
+    }
+
+    /**
+     * @param Transaction $transaction
+     */
+    public function removeTransaction(Transaction $transaction): void
+    {
+        $this->transactions->removeElement($transaction);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTransactions(): bool
+    {
+        return !$this->transactions->isEmpty();
+    }
+
+
+    private function ucWords (?string $string)
+    {
+        return $string ? ucwords($string) : $string;
+    }
+
+    public function copyPropertyValuesInto($destinationObject)
+    {
+        $mergeIntoDestinationObj = function($property, $value, $destObj) {
+            if ($property != 'id') {
+                $propertyAccessor = PropertyAccess::createPropertyAccessorBuilder()
+                    ->enableExceptionOnInvalidIndex()
+                    ->getPropertyAccessor();
+
+                $propertyAccessor->setValue($destObj, $property, $value);
+            }
+        };
+
+        foreach($this as $property => $value) {
+            $params = [
+                $property,
+                $value,
+                $destinationObject,
+            ];
+            call_user_func_array($mergeIntoDestinationObj, $params);
+        }
+
+
     }
 }

@@ -1,37 +1,38 @@
 <div class="navbar-custom">
-    <ul class="navbar-nav mb-0">
-
-        <li class="nav-item h-100">
-            <a class="nav-link nav-user navbar-textX dropdown-toggle arrow-none" id="userDropdown" data-toggle="dropdown" data-display="static" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <div class="account-user-avatar">
-                    <img src="{{ app.user.image is defined ? asset('/uploads/images/termekek/' ~ app.user.image) : '' }}" alt="" class="rounded-circle">
-                </div>
-                <div class="account-user-detail">
-                    <span class="account-user-name">Helló, {{ app.user.username|capitalize }}!</span>
-                    <span class="account-position">{{ app.user.email }}</span>
+    <ul class="navbar-nav flex-row">
+        <li class="nav-item dropdown">
+            <a class="nav-link" id="userDropdown" data-toggle="dropdown" data-display="static" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <div class="nav-user">
+                    <div class="account-user-avatar">
+                        <img src="{{ app.user.image is defined ? asset('/uploads/images/termekek/' ~ app.user.image) : '' }}" alt="" class="rounded-circle">
+                    </div>
+                    <div class="account-user-detail">
+                        <span class="account-user-name">Helló, {{ app.user.username|capitalize }}!</span>
+                        <span class="account-position">{{ app.user.email }}</span>
+                    </div>
                 </div>
             </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-transition dropdown-menu-topbar mt-2 mr-2" aria-labelledby="userDropdown">
-                <div class="dropdown-header noti-title">
-                    <span class="m-0">Üdv, {{ app.user.firstName ? app.user.firstName : app.user.email }}!</span>
-                </div>
-
+            <div class="dropdown-menu dropdown-menu-right dropdown-transition dropdown-menu-topbar mt-2" aria-labelledby="userDropdown">
                 <a href="{{ path('user-showProfile', {'id': app.user.id}) }}" class="dropdown-item notify-item">
-                    <i class="far fa-user"></i>
+                    <i class="far fa-user mr-2"></i>
                     Adatlap
                 </a>
                 {% if is_granted('ROLE_IMPERSONATE_USER') %}
-                <a href="{{ path('admin', {'_switch_user': 'liviu.chioran+1@gmail.com'}) }}" class="dropdown-item notify-item">
-                    <i class="fas fa-user-secret"></i>
+                <a href="{{ path('dashboard', {'_switch_user': 'liviu.chioran+1@gmail.com'}) }}" class="dropdown-item notify-item">
+                    <i class="fas fa-user-secret mr-2"></i>
                     Impersonate user
                 </a>
                 {%  endif %}
                 <a href="{{ path('admin-logout') }}" class="dropdown-item notify-item">
-                    <i class="fas fa-sign-out-alt"></i>
+                    <i class="fas fa-sign-out-alt mr-2"></i>
                     <span>Kijelentkezés</span>
                 </a>
-
             </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link" href="#" role="button" data-toggle="sidebar" data-target="#slider--Settings" aria-haspopup="true" aria-expanded="false">
+                <span class="navbar-toggler-icon"><i class="fas fa-cog"></i></span>
+            </a>
         </li>
     </ul>
 </div>

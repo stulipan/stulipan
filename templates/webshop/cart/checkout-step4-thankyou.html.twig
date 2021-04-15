@@ -1,79 +1,96 @@
-{% extends 'webshop/site/base-site.html.twig' %}
+{#{% extends 'webshop/site/template-checkout-asos.html.twig' %}#}
+{% extends 'webshop/site/template-checkout-shopi.html.twig' %}
 
 {% block title %}
     Sikeres rendelés | {{ parent() }}
 {% endblock %}
 
+{% block bodyClass %} {{ parent() }} thank-you-page{% endblock %}
 
-
-{% block stylesheets %}
-    {{ parent() }}
-    <link href="{{ asset('webshop/site/checkout.css') }}" rel="stylesheet" />
+{% block underNavbar %}
 {% endblock %}
 
-{% block page_content %}
-
-    {{ include('webshop/site/alert-widget.html.twig') }}
-
-    <section class="mt-3">
-        <div class="container text-center">
-            <div class="icon-rounded bg-success mx-auto text-white">
-                <svg class="svg-icon w-1rem h-1rem align-middle">
-                    <use xlink:href="#checkmark-1"> </use>
-                </svg>
-            </div>
-
-            <div class="row text-left">
-                <div class="col-lg-7 mx-auto">
-                    <div class="block text-center mb-4">
-                        {#{{ dump(order) }}#}
-                        <h4 class="mt-4 mb-2 ff-base">Köszönjük, {{ order.billingName }}. A rendelést sikeresen leadtad.</h4>
-                        <p class="text-muted mb-0">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
-                    </div>
-
-                    <div class="card mb-20px">
-                        <div class="card-wrapper">
-                            <div class="card-body">
-                                {% include 'webshop/cart/_order-items-widget.html.twig' %}
-                                {% include 'webshop/cart/_order-summary-widget.html.twig' %}
+{% block leftColumn %}
+    {{ dump(isConversionTracked) }}
+    <div class="mt-2 mt-md-3">
+        <div class="alert alert-success">
+            <span class="mb-0"><i class="fas fa-check-circle mr-1"></i> Köszönjük, {{ order.fullname }}. A rendelést sikeresen leadtad.</span>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 correction-no-padding">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
+                        </div>
+                        <div class="shipping-address">
+                            <div class="content-body-thick-border">
+                                <div class="bg-white p-3">
+                                    {% include 'webshop/cart/_order-recipient-widget.html.twig' %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shipping-method">
+                            <div class="content-body-thick-border">
+                                <div class="bg-white p-3">
+                                    {% include 'webshop/cart/_order-delivery-widget.html.twig' %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="customer-basic-details">
+                            <div class=" content-body-thick-border">
+                                <div class="bg-white p-3">
+                                    {% include 'webshop/cart/_order-sender-widget.html.twig' %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-method">
+                            <div class="content-body-thick-border">
+                                <div class="bg-white p-3">
+                                    {% include 'webshop/cart/_order-payment-widget.html.twig' %}
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-20px">
-                        <div class="card-wrapper">
-                            <div class="card-body">
-                                {% include 'webshop/cart/_order-sender-recipient-widget.html.twig' %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card mb-20px">
-                        <div class="card-wrapper">
-                            <div class="card-body">
-                                {% include 'webshop/cart/_order-delivery-widget.html.twig' %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card mb-20px">
-                        <div class="card-wrapper">
-                            <div class="card-body">
-                                {% include 'webshop/cart/_order-payment-widget.html.twig' %}
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-
-            <p class="mt-3 mb-5"> <a href="{{ path('homepage') }}" class="btn btn-outline-dark">Vissza a nyitóoldalra</a></p>
         </div>
-    </section>
-
-
+    </div>
 
 {% endblock %}
 
-{% block javascripts %}
-	{{ parent() }}
+{%  block cartCollapse %}
+    <div class="cart">
+        {% include 'webshop/cart/cart.html.twig' with {
+            'showMessage': true,
+            'showQuantity': false,
+            'showRemove': false,
+            'showSummary': false,
+            'hasProductLink': false,
+        } %}
+    </div>
+    {% include('/webshop/cart/checkout-sidebar-paid-summary.html.twig') %}
+{% endblock %}
+
+{%  block rightColumn %}
+    <div class="cart">
+        {% include 'webshop/cart/cart.html.twig' with {
+            'showMessage': true,
+            'showQuantity': false,
+            'showRemove': false,
+            'showSummary': false,
+            'hasProductLink': false,
+        } %}
+    </div>
+    {% include('/webshop/cart/checkout-sidebar-paid-summary.html.twig') %}
+{% endblock %}
+
+{% block gotoNext %}
+    <div class="mt-20px mt-md-4 mb-5 mb-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
+        <a href="{{ path('homepage') }}" class="btn btn-lgX btn-primary order-1 order-md-2">Tovább a webáruházba</a>
+        <div class="order-2 order-md-1"></div>
+    </div>
+{% endblock %}
+
+{% block footerHighlights %}
 {% endblock %}

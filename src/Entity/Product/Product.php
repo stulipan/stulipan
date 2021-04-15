@@ -585,6 +585,18 @@ class Product //implements \JsonSerializable
             return false;
         }
     }
+
+    /**
+     * @param int $quantity
+     * @return bool
+     */
+    public function hasEnoughStock(int $quantity): bool
+    {
+        if ($this->stock - $quantity < 0) {
+            return false;
+        }
+        return true;
+    }
     
     /**
      * @return bool

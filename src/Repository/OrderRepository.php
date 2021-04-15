@@ -4,18 +4,34 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Customer;
 use App\Entity\DateRange;
+use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\OrderStatus;
 use App\Entity\PaymentStatus;
+use App\Services\Localization;
+use App\Services\StoreSettings;
 use DateTime;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
-class OrderRepository extends EntityRepository
+class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepository instead of classical EntityRepository
 {
+    private $settings;
+    private $localization;
+
+    public function __construct(ManagerRegistry $registry, StoreSettings $settings,
+                                Localization $localization)
+    {
+        parent::__construct($registry, Order::class);
+        $this->settings = $settings;
+        $this->localization = $localization;
+    }
+
     /**
      * Return all Orders in the last X period of time. Only REAL orders --> status shortcode == 'created'
      * @return array
@@ -39,7 +55,7 @@ class OrderRepository extends EntityRepository
             $date->modify('-30 days');
         }
 
-        $status = OrderStatus::STATUS_CREATED;
+        $status = OrderStatus::ORDER_CREATED;
         $status = $this->getEntityManager()->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $status]);
 
         $qb = $this
@@ -93,24 +109,11 @@ class OrderRepository extends EntityRepository
             }
             if ($period == '30 days') {
                 $date->modify('-30 days');
-//                $qb->where('o.createdAt > :date')
-//                    ->setParameter('date', $date)
-//                ;
-//                dd($qb->getQuery()->getResult());
             }
             $qb->andWhere('o.createdAt > :date')
                 ->setParameter('date', $date)
             ;
         }
-
-//        $qb = $this
-//            ->createQueryBuilder('o')
-//            ->select('COUNT(o.id) as count')   // COUNT
-//            ->where('o.createdAt > :date')
-//            ->andWhere('o.status IS NOT NULL')
-//            ->setParameter('date', $date)
-//            ->orderBy('o.createdAt', 'DESC')
-//        ;
 
         if (is_array($filter)) {
             if (array_key_exists('paymentStatus', $filter)) {
@@ -151,38 +154,18 @@ class OrderRepository extends EntityRepository
      * @return Query
      * @throws Exception
      */
-    public function findAllQuery($filters = [])
+//    public function findAllQuery($filters = [])
+    public function findAllQuery($filters = [], $onlyPlacedOrders = true)
     {
-        $qb = $this->createQueryBuilder('o')
-            ->andWhere('o.status IS NOT NULL')
-            ->orderBy('o.createdAt', 'DESC')
-        ;
+        $qb = $this->createQueryBuilder('o');
+
+        if ($onlyPlacedOrders) {
+            $qb->andWhere('o.status IS NOT NULL');
+        }
+
+        $qb->orderBy('o.createdAt', 'DESC');
 
         if (is_array($filters)) {
-            if (array_key_exists('dateRange', $filters) && $filters['dateRange']) {
-                $splitPieces = explode(" - ", $filters['dateRange']);
-                $start = $splitPieces[0];
-                $end = $splitPieces[1];
-
-                $dateRange = new DateRange();
-                if (!isset($start) or $start === null or $start == "") {
-                } else {
-                    $dateRange->setStart(DateTime::createFromFormat('!Y-m-d',$start));
-                    $start = $dateRange->getStart();
-                }
-                if (!isset($end) or $end === null or $end == "") {
-                } else {
-                    $dateRange->setEnd(DateTime::createFromFormat('!Y-m-d',$end));
-                    $end = $dateRange->getEnd();
-                }
-
-                $end->modify('24 hours'); // Ez nelkül az $end mindig az adott nap 00:00:00 óráját veszi, ergó az aznapi rendelések kimaradnak
-                $qb->andWhere('o.createdAt >= :start')
-                    ->andWhere('o.createdAt <= :end')
-                    ->setParameter('start', $start)
-                    ->setParameter('end', $end)
-                ;
-            }
             if (array_key_exists('searchTerm', $filters) && $filters['searchTerm']) {
                 $searchTerm = strtolower($filters['searchTerm']);
 //                $qb->andWhere('o.id LIKE :id OR
@@ -220,8 +203,10 @@ class OrderRepository extends EntityRepository
                     $qb->expr()->like('LOWER(CONCAT(o.lastname,\' \',o.firstname))',':fullname2'),
                     $qb->expr()->like('o.billingPhone', ':billingPhone'),
                     $qb->expr()->like('o.shippingPhone', ':shippingPhone'),
-                    $qb->expr()->like('LOWER(o.shippingName)', ':shippingName'),
-                    $qb->expr()->like('LOWER(o.billingName)', ':billingName'),
+                    $qb->expr()->like('LOWER(CONCAT(o.shippingFirstname,\' \',o.shippingLastname))',':shippingName1'),
+                    $qb->expr()->like('LOWER(CONCAT(o.shippingLastname,\' \',o.shippingFirstname))',':shippingName2'),
+                    $qb->expr()->like('LOWER(CONCAT(o.billingFirstname,\' \',o.billingLastname))',':billingName1'),
+                    $qb->expr()->like('LOWER(CONCAT(o.billingLastname,\' \',o.billingFirstname))',':billingName2'),
                 ];
                 $paramsX = [
                     'id' => '%'.$searchTerm.'%',
@@ -233,8 +218,10 @@ class OrderRepository extends EntityRepository
                     'fullname2' => '%'.$searchTerm.'%',
                     'billingPhone' => '%'.$searchTerm.'%',
                     'shippingPhone' => '%'.$searchTerm.'%',
-                    'shippingName' => '%'.$searchTerm.'%',
-                    'billingName' => '%'.$searchTerm.'%',
+                    'shippingName1' => '%'.$searchTerm.'%',
+                    'shippingName2' => '%'.$searchTerm.'%',
+                    'billingName1' => '%'.$searchTerm.'%',
+                    'billingName2' => '%'.$searchTerm.'%',
                 ];
 
                 // If $searchTerms contains several words (Eg: renata jr fazekas)
@@ -243,17 +230,41 @@ class OrderRepository extends EntityRepository
                 $searchTermPermutations = $this->pc_permute($words);
 
                 foreach ($searchTermPermutations as $key => $item) {
-                    array_push($comparisonsX,
-                        $qb->expr()->like('LOWER(o.shippingName)', ':shippingName_'.$key),
-                        $qb->expr()->like('LOWER(o.billingName)', ':billingName_'.$key)
-                    );
-                    // Execute $qb->expr()->orX() with arguments from the array $comparisonsX
+                    // The following line executes $qb->expr()->orX() with arguments from the array $comparisonsX
                     $orX = call_user_func_array([$qb->expr(), 'orX'], $comparisonsX);
 
-                    $paramsX['shippingName_'.$key] = '%'.implode(' ', $item).'%';
-                    $paramsX['billingName_'.$key] = '%'.implode(' ', $item).'%';
+//                    $paramsX['shippingName_'.$key] = '%'.implode(' ', $item).'%';
+//                    $paramsX['billingName_'.$key] = '%'.implode(' ', $item).'%';
                 }
                 $qb->andWhere($orX)->setParameters($paramsX);
+            }
+
+            if (array_key_exists('dateRange', $filters) && $filters['dateRange']) {
+                $splitPieces = explode(" - ", $filters['dateRange']);
+                $start = $splitPieces[0];
+                $end = $splitPieces[1];
+                $format = $this->localization->getCurrentLocale()->getDateFormat();
+
+                $dateRange = new DateRange();
+                if (!isset($start) or $start === null or $start == "") {
+                } else {
+//                    $dateRange->setStart(DateTime::createFromFormat('!Y-m-d',$start));
+                    $dateRange->setStart(DateTime::createFromFormat($format, $start));
+                    $start = $dateRange->getStart();
+                }
+                if (!isset($end) or $end === null or $end == "") {
+                } else {
+//                    $dateRange->setEnd(DateTime::createFromFormat('!Y-m-d',$end));
+                    $dateRange->setEnd(DateTime::createFromFormat($format, $end));
+                    $end = $dateRange->getEnd();
+                }
+
+                $end->modify('24 hours'); // Ez nelkül az $end mindig az adott nap 00:00:00 óráját veszi, ergó az aznapi rendelések kimaradnak
+                $qb->andWhere('o.createdAt >= :start')
+                    ->andWhere('o.createdAt <= :end')
+                    ->setParameter('start', $start)
+                    ->setParameter('end', $end)
+                ;
             }
 
             if (array_key_exists('paymentStatus', $filters) && $filters['paymentStatus']) {
@@ -300,7 +311,7 @@ class OrderRepository extends EntityRepository
             $date->modify('-30 days');
         }
 
-        $status = OrderStatus::STATUS_CREATED;
+        $status = OrderStatus::ORDER_CREATED;
         $status = $this->getEntityManager()->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $status]);
 
         $qb = $this
@@ -351,6 +362,37 @@ class OrderRepository extends EntityRepository
 //            ->setParameter('status', 1)
             ->getQuery()
             ;
+    }
+
+    /**
+     * @param array $criteria
+     *
+     * @return Query
+     */
+    public function findLastPartialOrder(array $criteria)
+    {
+        $qb = $this
+            ->createQueryBuilder('o')
+            ->andWhere('o.status IS NULL')
+        ;
+        $qb->orderBy('o.id', 'DESC');
+
+        if (is_array($criteria)) {
+            if (array_key_exists('customer', $criteria) && $criteria['customer']) {
+                $customer = $criteria['customer'];
+
+                $qb->andWhere('o.customer = :customer')
+                    ->setParameter('customer', $customer);
+
+                $resultArray = $qb->getQuery()->getResult();
+                if (count($resultArray) > 0) {
+                    return $qb->getQuery()->getResult()[0];
+                }
+                return null;
+            }
+        }
+
+        return null;
     }
 
     /**

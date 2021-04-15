@@ -2,21 +2,24 @@
         <div class="cart-item py-1">
         <div class="slide-checkout--item">
             <div class="d-flex align-items-center">
-                <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
-                    <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid navbar-cart-product-image">
-                </a>
+                <div class="badge-quantity-wrapper">
+                    <span class="badge-quantity">{{ item.quantity }}</span>
+                    <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
+                        <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid navbar-cart-product-image">
+                    </a>
+                </div>
                 <div class="d-flex w-100 justify-content-between">
                     <div class="pl-3 flex-grow-1">
                         <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="cart-item-link" target="_blank">{{ item.product.name }}</a>
                         <span class="d-block text-mutedX">SKU: {{ item.product.sku }} </span>
-{#                        <strong class="d-block text-sm">{{ (item.price * item.quantity) |money }}</strong>#}
+{#                        <strong class="d-block text-sm">{{ (item.unitPrice * item.quantity) |money }}</strong>#}
                     </div>
                     <div class="pl-3 pr-5 text-right">
-                        <span class="text-nowrap">{{ item.price|money }}</span>
+                        <span class="text-nowrap">{{ item.unitPrice|money }}</span>
                         <span class="text-nowrap"> <small class="d-inline-block text-muted px-2">x</small> {{ item.quantity }}</span>
                     </div>
                     <div class="text-right">
-                        <span class="d-block text-nowrap">{{ (item.price * item.quantity) |money }}</span>
+                        <span class="d-block text-nowrap">{{ (item.unitPrice * item.quantity) |money }}</span>
 {#                        <span class="d-block text-muted">{{ item.quantity }} db</span>#}
                     </div>
                 </div>

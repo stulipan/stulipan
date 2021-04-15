@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\TimestampableTrait;
-use App\Entity\User;
 use App\Entity\Address;
 
 use App\Form\AddressType;
@@ -15,11 +14,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as CustomAssert;
 
 /**
  *
  * @ORM\Table(name="sender")
  * @ORM\Entity
+ *
+ * @CustomAssert\BillingCompanyIsValid()
  */
 class Sender
 {
@@ -35,12 +37,12 @@ class Sender
     private $id;
 
     /**
-     * @var User
+     * @var Customer
      *
      * ==== Many Senders belong to one Customer ====
      * ==== inversed By="senders" => a User entitásban definiált 'senders' attibútumról van szó; A Sendert így kötjük vissza a Customerhez
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="senders")
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="senders")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @ Assert\NotBlank(message="Egy számlázási címnek kell legyen felhasználója/Customer.")
      */
@@ -61,10 +63,18 @@ class Sender
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @Assert\NotNull(message="Add meg a számlázási nevet.")
+     * @ORM\Column(name="firstname", type="string", length=255, nullable=false)
+     * @Assert\NotNull(message="Add meg a keresztnevet.")
      */
-    private $name='';
+    private $firstname='';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastname", type="string", length=255, nullable=false)
+     * @Assert\NotNull(message="Add meg a vezetéknevet.")
+     */
+    private $lastname='';
 
     /**
      * @var string|null
@@ -74,13 +84,19 @@ class Sender
     private $company='';
 
     /**
-     * @var int
+     * @var string|null
      *
-     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
-     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     * @ORM\Column(name="company_vat_number", type="string", length=255, nullable=true)
      */
-    private $phone;
+    private $companyVatNumber='';
 
+//    /**
+//     * @var int
+//     *
+//     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
+//     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+//     */
+//    private $phone;
 
     /**
      * @return int
@@ -92,23 +108,50 @@ class Sender
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getFullname();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFullname(): ?string
+    {
+        if ($this->lastname && $this->firstname) {
+            return $this->lastname.' '.$this->firstname;
+        }
+        return null;
     }
 
     /**
      * @return string
      */
-    public function getName(): ?string
+    public function getFirstname(): ?string
     {
-        return $this->name;
+        return $this->firstname;
     }
 
     /**
-     * @var string $name
+     * @param string $firstname
      */
-    public function setName(?string $name): void
+    public function setFirstname(?string $firstname): void
     {
-        $this->name = $name;
+        $this->firstname = $firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string $lastname
+     */
+    public function setLastname(?string $lastname): void
+    {
+        $this->lastname = $lastname;
     }
 
     /**
@@ -128,37 +171,54 @@ class Sender
     }
 
     /**
-     * @return User
+     * @return string|null
      */
-    public function getCustomer(): ?User
+    public function getCompanyVatNumber(): ?string
+    {
+        return $this->companyVatNumber;
+    }
+
+    /**
+     * @param string|null $companyVatNumber
+     */
+    public function setCompanyVatNumber(?string $companyVatNumber): void
+    {
+        $this->companyVatNumber = $companyVatNumber;
+    }
+
+
+    /**
+     * @return Customer|null
+     */
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
     /**
-     * @var User $customer
+     * @var Customer|null $customer
      */
-    public function setCustomer(?User $customer): void
+    public function setCustomer(?Customer $customer): void
     {
         $this->customer = $customer;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @var string $phone
-     */
-    public function setPhone(?string $phone)
-    {
-        $utils = new GeneralUtils();
-        $this->phone = $utils->formatPhoneNumber($phone);
-    }
+//    /**
+//     * @return string
+//     */
+//    public function getPhone(): ?string
+//    {
+//        return $this->phone;
+//    }
+//
+//    /**
+//     * @var string $phone
+//     */
+//    public function setPhone(?string $phone)
+//    {
+//        $utils = new GeneralUtils();
+//        $this->phone = $utils->formatPhoneNumber($phone);
+//    }
 
     /**
      * @return Address

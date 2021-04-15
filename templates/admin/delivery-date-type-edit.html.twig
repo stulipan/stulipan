@@ -1,5 +1,6 @@
 {% extends 'admin/template-editing.html.twig' %}
 
+{% set activeMenu = 'settings' %}
 {% set pageTitle = title %}
 {% set breadcrumb = {
     0: {
@@ -23,7 +24,7 @@
 {% endblock %}
 
 {% block moduleDescription %}
-    Itt tudsz megadni idősávokat. Az itt megadott idősávokat majd egy kiemelt naphoz rendelheted. <a href="{{ path('occasion-list') }}">Kiemelt napok listája itt'</a>
+    Itt tudsz megadni idősávokat. Az itt megadott idősávokat majd egy kiemelt naphoz rendelheted. <a href="{{ path('occasion-list') }}">Kiemelt napok listája itt.</a>
 {% endblock %}
 
 {% block contentInner %}
@@ -33,6 +34,15 @@
 {% block javascripts %}
 	{{ parent() }}
 	<script>
+        // const floatContainer = document.getElementsByClassName('form-float')[0];
+        // const floatField = floatContainer.getElementsByTagName('input')[0];
+        // floatField.addEventListener('focus', () => {
+        //     floatContainer.classList.add('active');
+        // });
+        // floatField.addEventListener('blur', () => {
+        //     floatContainer.classList.remove('active');
+        // });
+
         jQuery(document).ready(function() {
             var $wrapper = $('.JS--Wrapper-allIntervals');
             var $inputFieldsWrapper = $('.JS--Wrapper-fieldsForOneInterval');

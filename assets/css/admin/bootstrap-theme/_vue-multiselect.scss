@@ -1,0 +1,622 @@
+// Vue multiselect CSS
+
+
+// Added by Stulipan
+fieldset[disabled] .multiselect {
+  pointer-events: none
+}
+
+.multiselect__spinner {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  width: 48px;
+  height: 35px;
+  background: #fff;
+  display: block;
+
+  &:after,
+  &:before {
+    position: absolute;
+    content: "";
+    top: 50%;
+    left: 50%;
+    margin: -8px 0 0 -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    border: 2px solid transparent;
+    border-top-color: #008CDE;
+    box-shadow: 0 0 0 1px transparent
+  }
+  &:before {
+    animation: spinning 2.4s cubic-bezier(.41, .26, .2, .62);
+    animation-iteration-count: infinite
+  }
+  &:after {
+    animation: spinning 2.4s cubic-bezier(.51, .09, .21, .8);
+    animation-iteration-count: infinite
+  }
+}
+
+
+.multiselect__loading-enter-active,
+.multiselect__loading-leave-active {
+  transition: opacity .4s ease-in-out;
+  opacity: 1
+}
+
+.multiselect__loading-enter,
+.multiselect__loading-leave-active {
+  opacity: 0
+}
+
+$multiselect-font-size:                           $input-font-size !default;
+$multiselect-line-height:                         $input-line-height !default;
+$multiselect-border-radius:                       $input-border-radius !default;
+$multiselect-border-color:                        $input-border-color !default;
+$multiselect-padding-y:                           $input-padding-y !default;
+$multiselect-padding-x:                           $input-padding-x !default;
+
+$multiselect-input-border-color:                  $multiselect-border-color !default;
+$multiselect-input-placeholder-color:             $input-placeholder-color !default;
+$multiselect-focus-border-color:                  $input-focus-border-color !default;
+$multiselect-focus-box-shadow:                    $input-focus-box-shadow !default;
+
+$multiselect-tags-bg:                             $secondary !default;
+$multiselect-tags-bg-gradient:                    linear-gradient(180deg, mix($body-bg, $multiselect-tags-bg, 15%), $multiselect-tags-bg);
+$multiselect-tags-padding-top-y:                  4px !default;
+$multiselect-tags-padding-bottom-y:               7px !default;
+
+$multiselect-tag-line-height:                     1 !default;
+$multiselect-tag-color:                           $body-color !default;
+$multiselect-tag-bg:                              $gray-300 !default;
+$multiselect-tag-margin-x:                        .25rem !default;
+$multiselect-tag-padding-y:                       5px !default;
+$multiselect-tag-padding-x:                       0 !default; //.5rem !default;
+
+$multiselect-tag-icon-color:                      inherit !default;
+$multiselect-tag-icon-focus-color:                inherit !default;
+$multiselect-tag-icon-bg:                         inherit !default;
+$multiselect-tag-icon-hover-bg:                   $gray-500 !default;
+$multiselect-tag-icon-focus-bg:                   $multiselect-tag-icon-hover-bg !default;
+
+$multiselect-select-indicator-padding-x:          calc(#{$multiselect-padding-x} + 5px) !default; // 5px is my random extra padding
+$multiselect-select-indicator-border-width:       5px !default;
+$multiselect-select-indicator-color:              $gray-700 !default;
+
+$multiselect-option-highlight-bg:                 $hover-bg !default;
+$multiselect-option-highlight-color:              inherit !default;
+$multiselect-option-selected-bg:                  $white !default;
+$multiselect-option-selected-color:               $multiselect-option-highlight-color !default;
+$multiselect-option-selected-highlight-bg:        $multiselect-option-highlight-bg !default;
+$multiselect-option-selected-highlight-color:     $multiselect-option-selected-color !default;
+
+
+$multiselect-option-group-bg:                         $gray-300 !default;
+$multiselect-option-group-highlight-bg:               $gray-400 !default;
+$multiselect-option-group-highlight-color:            inherit !default;
+$multiselect-option-group-selected-highlight-bg:      $multiselect-option-group-highlight-bg !default;
+$multiselect-option-group-selected-highlight-color:   $multiselect-option-group-highlight-color !default;
+
+$multiselect-content-bg:                          $white !default;
+$multiselect-content-border-width:                1px !default;
+$multiselect-content-border-color:                $multiselect-border-color !default;
+$multiselect-content-shadow:                      $dropdown-shadow !default;
+
+.multiselect,
+.multiselect__input,
+.multiselect__single {
+  font-family: inherit;
+  font-size: $multiselect-font-size;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation
+}
+
+.multiselect {
+  box-sizing: content-box;
+  display: block;
+  position: relative;
+  width: 100%;
+  /*min-height: 36px;*/
+  //min-height: calc(2*.3125rem + 1.5rem + 2px);
+  //min-height: calc (5px + 20px + 6px + 2px);  // 1.3rem = 20.8px
+  text-align: left;
+  line-height: $multiselect-line-height;
+  color: #40484c;
+  /*box-shadow: .multiselect__tag-iconrgba(22, 29, 37, 0.05) 0px 1px 0px 0px;*/
+
+  & * {
+    box-sizing: border-box
+  }
+  &:focus {
+    outline: none
+  }
+}
+
+.multiselect--disabled {
+  background: #ededed;
+  pointer-events: none;
+  opacity: .6
+}
+
+.multiselect--active {
+  z-index: 50
+}
+
+.multiselect:not(.multiselect--active) .multiselect__tags {
+  background: $multiselect-tags-bg-gradient;
+}
+
+//.multiselect:not(.multiselect--active) .multiselect__input,
+//.multiselect:not(.multiselect--active) .multiselect__single {
+//  background: inherit;
+//}
+
+.multiselect--active:not(.multiselect--above) .multiselect__current,
+.multiselect--active:not(.multiselect--above) .multiselect__input,
+.multiselect--active:not(.multiselect--above) .multiselect__tags {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.multiselect--active .multiselect__select {
+  transform: rotate(180deg);
+}
+
+.multiselect--above.multiselect--active .multiselect__current,
+.multiselect--above.multiselect--active .multiselect__input,
+.multiselect--above.multiselect--active .multiselect__tags {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+// The input field
+.multiselect__input,
+.multiselect__single {
+  position: relative;
+  display: inline-block;
+  min-height: 20px;
+  border: 1px solid transparent;
+  border-radius: $multiselect-border-radius;
+  background: transparent;
+  padding: 0 0 0 0;
+  width: 100%;
+  transition: border .1s ease;
+  box-sizing: border-box;
+  margin-top: 2px;
+  margin-bottom: calc(#{$multiselect-tags-padding-bottom-y} - 2px);
+  vertical-align: top;
+}
+
+.multiselect__input {
+  &:-ms-input-placeholder {
+    color: $multiselect-input-placeholder-color;
+  }
+  &::placeholder {
+    color: $multiselect-input-placeholder-color;
+  }
+}
+
+.multiselect__placeholder {
+  color: $multiselect-input-placeholder-color;
+  display: inline-block;
+  //margin-bottom: 5px;
+  margin-top: calc(1px + 2px); // correction because when the input is displayed, the input has border of 1 px
+  margin-left: 1px;
+}
+
+.multiselect--active .multiselect__placeholder {
+  display: none;
+}
+
+.multiselect__input,
+.multiselect__single {
+  &:hover {
+    //border-color: $multiselect-input-border-color;
+  }
+  &:focus {
+    outline: none;
+    //border-color: $multiselect-focus-border-color;
+  }
+}
+
+.multiselect__single {
+  padding-left: 5px;
+  margin-bottom: $multiselect-tags-padding-bottom-y;
+}
+
+
+.multiselect--active .multiselect__tags,
+.multiselect--active:hover .multiselect__tags,
+.multiselect--active:focus .multiselect__tags,
+.multiselect--active:active .multiselect__tags {
+  border-color: $multiselect-focus-border-color;
+  box-shadow: $multiselect-focus-box-shadow;
+}
+
+.multiselect__tag~.multiselect__input,
+.multiselect__tag~.multiselect__single {
+  width: auto
+}
+
+
+
+.multiselect__tags-wrap {
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.multiselect__tags {
+  width: 100%;
+  display: inline-block;
+  min-height: calc(#{$multiselect-tags-padding-top-y} + 20px + #{$multiselect-tags-padding-bottom-y} + 2px);  // 1.3rem = 20.8px
+  //padding: 6px 40px 0 8px;
+  padding: $multiselect-tags-padding-top-y 40px 0 $multiselect-padding-x;
+  border-radius: $multiselect-border-radius;
+  border: 1px solid $multiselect-border-color;
+  background: #fff;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.multiselect__tag {
+  position: relative;
+  display: inline-block;
+  padding: $multiselect-tag-padding-y calc(22px + 10px/2) $multiselect-tag-padding-y 10px;
+  /*margin-bottom: 5px;*/
+  border-radius: $multiselect-border-radius;
+  margin-right: $multiselect-tag-margin-x;
+  color: $multiselect-tag-color;
+  line-height: $multiselect-tag-line-height;
+  background-color: $multiselect-tag-bg;
+
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  height: auto;
+
+  & .multiselect__tag-icon {
+    position: absolute;
+    display: inline-flex;
+    justify-content: center;
+    padding: $multiselect-tag-padding-y 10px $multiselect-tag-padding-y 10px;
+    margin-top: -$multiselect-tag-padding-y;
+    margin-bottom: -$multiselect-tag-padding-y;
+
+    //display: inline-block;
+    cursor: pointer;
+    right: 0;
+    height: 100%;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-style: normal;
+    width: 22px;
+    text-align: center;
+    transition: all .2s ease;
+    border-radius: $multiselect-border-radius;
+    background-color: $multiselect-tag-icon-bg;
+
+    &:after {
+      content: "\f00d";
+    }
+
+    &:focus,
+    &:hover {
+      background: $multiselect-tag-icon-focus-bg;
+    }
+
+    &:focus:after,
+    &:hover:after {
+      color: $multiselect-tag-icon-focus-color;
+    }
+  }
+}
+
+
+.multiselect__current {
+  min-height: 34px;
+  overflow: hidden;
+  padding: 8px 30px 0 12px;
+  white-space: nowrap;
+  border-radius: $multiselect-border-radius;
+  border: 1px solid #e8e8e8
+}
+
+.multiselect__current,
+.multiselect__select {
+  line-height: inherit;
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  text-decoration: none;
+  cursor: pointer
+}
+
+// Select (dropdown) indicator
+.multiselect__select {
+  position: absolute;
+  height: 100%;
+  right: 0;
+  top: 0;
+  padding: 0 $multiselect-select-indicator-padding-x;
+  text-align: center;
+  transition: transform .2s ease;
+
+  &:before {
+    position: relative;
+    right: 0;
+    top: calc(50% + #{$multiselect-select-indicator-border-width}/2);
+    color: #637381;
+    margin-top: 4px;
+    border-color: $multiselect-select-indicator-color transparent transparent;
+    border-style: solid;
+    border-width: $multiselect-select-indicator-border-width $multiselect-select-indicator-border-width 0 $multiselect-select-indicator-border-width;
+    content: ""
+  }
+}
+
+
+.multiselect .multiselect__content-wrapper {
+  position: absolute;
+  display: block;
+  background: $multiselect-content-bg;
+  width: 100%;
+  overflow: auto;
+  border: $multiselect-content-border-width solid $multiselect-content-border-color;
+  border-top: none;
+  border-bottom-left-radius: $multiselect-border-radius;
+  border-bottom-right-radius: $multiselect-border-radius;
+  z-index: 50;
+  //-webkit-box-shadow: 0 0 0 1px rgba(39,44,48,0.05), 0 2px 7px 1px rgba(39,44,48,0.16);
+  //box-shadow: 0 0 0 1px rgba(39,44,48,0.05), 0 2px 7px 1px rgba(39,44,48,0.16);
+  box-shadow: $multiselect-content-shadow;
+  -webkit-overflow-scrolling: touch;
+
+  max-height: 300px !important;
+  @include media-breakpoint-down(sm) {
+    max-height: 150px !important;
+  }
+
+  & .multiselect__content {
+    list-style: none;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    min-width: 100%;
+    vertical-align: top;
+
+    &.multiselect__element {
+      display: block
+    }
+  }
+}
+
+.multiselect.multiselect--above .multiselect__content-wrapper {
+  bottom: 100%;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: $multiselect-border-radius;
+  border-top-right-radius: $multiselect-border-radius;
+  border-bottom: none;
+}
+
+.multiselect__content::webkit-scrollbar {
+  /*display: none*/
+}
+
+
+
+.multiselect__option {
+  display: block;
+  padding: .75rem;
+  min-height: 34px;
+  /*line-height: 16px;*/
+  //line-height: 1.5rem;
+  text-decoration: none;
+  text-transform: none;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:after {
+    top: 0;
+    right: 0;
+    position: absolute;
+    line-height: 34px;
+    padding-right: 12px;
+    padding-left: 20px;
+    font-size: 13px
+  }
+
+  &.multiselect__option--highlight {
+    /*background: #008CDE;*/
+    /*color: #fff;*/
+    outline: none;
+    background: $multiselect-option-highlight-bg;
+    color: $multiselect-option-highlight-color;
+
+    &:after {
+      content: attr(data-select);
+      background: #008CDE;
+      color: #fff
+    }
+  }
+
+  &.multiselect__option--selected {
+    /*background: #f3f3f3;*/
+    /*color: #40484c;*/
+    /*font-weight: 700*/
+    background: $multiselect-option-selected-bg;
+    color: $multiselect-option-selected-color;
+
+    &:after {
+      content: attr(data-selected);
+      color: silver
+    }
+
+    &.multiselect__option--highlight {
+      //background: #40484c;
+      //color: #fff
+      background: $multiselect-option-selected-highlight-bg;
+      color: $multiselect-option-selected-highlight-color;
+
+      &:after {
+        background: #40484c;
+        content: attr(data-deselect);
+        color: #fff
+      }
+    }
+  }
+
+  &.multiselect__option--disabled {
+    //background: #ededed!important;
+    //color: #a6a6a6!important;
+    opacity: .6;
+    cursor: text;
+    pointer-events: none
+  }
+
+  &.multiselect__option--group {
+    /*background: #ededed;*/
+    //color: #40484c;
+    background: $multiselect-option-group-bg;
+    font-style: italic;
+
+    &.multiselect__option--highlight {
+      background: $multiselect-option-group-highlight-bg;
+      color: $multiselect-option-group-highlight-color;
+    }
+
+    &.multiselect__option--highlight:after {
+      background: #40484c
+    }
+
+    //.multiselect__option--disabled.multiselect__option--highlight {
+    //  background: #dedede
+    //}
+
+    &.multiselect__option--group-selected.multiselect__option--highlight {
+      /*background: #40484c;*/
+      /*color: #fff*/
+      background: $multiselect-option-group-selected-highlight-bg;
+      color: $multiselect-option-group-selected-highlight-color;
+
+      &:after {
+        //background: #40484c;
+        //content: attr(data-deselect);
+        //color: #fff
+      }
+    }
+
+  }
+
+
+}
+
+
+.multiselect--disabled .multiselect__current,
+.multiselect--disabled .multiselect__select {
+  /*background: #ededed;*/
+  color: #a6a6a6
+}
+
+
+
+
+.multiselect-enter-active,
+.multiselect-leave-active {
+  transition: all .15s ease
+}
+
+.multiselect-enter,
+.multiselect-leave-active {
+  opacity: 0
+}
+
+.multiselect__strong {
+  margin-bottom: 8px;
+  line-height: 20px;
+  display: inline-block;
+  vertical-align: top
+}
+
+[dir=rtl] {
+  & .multiselect {
+    text-align: right
+  }
+  & .multiselect__select {
+    right: auto;
+    left: 1px
+  }
+  & .multiselect__tags {
+    padding: 8px 8px 0 40px
+  }
+  & .multiselect__content {
+    text-align: right
+  }
+  & .multiselect__option:after {
+    right: auto;
+    left: 0
+  }
+  & .multiselect__clear {
+    right: auto;
+    left: 12px
+  }
+  & .multiselect__spinner {
+    right: auto;
+    left: 1px
+  }
+}
+
+@keyframes spinning {
+  0% {
+    transform: rotate(0)
+  }
+  to {
+    transform: rotate(2turn)
+  }
+}
+
+// Correction for 'taggable' which was added by Stulipan
+.multiselect.taggable {
+  & .multiselect__select {
+    display: none;
+  }
+  &:not(.multiselect--active) .multiselect__tags {
+    background: #fff;
+    cursor: text;
+  }
+  & .multiselect__tags {
+    min-height: calc((#{$multiselect-tags-padding-top-y} + 20px + #{$multiselect-tags-padding-bottom-y} + 2px) + (#{$multiselect-tags-padding-top-y} + 20px + #{$multiselect-tags-padding-bottom-y}));
+    border-bottom-left-radius: $multiselect-border-radius;
+    border-bottom-right-radius: $multiselect-border-radius;
+  }
+  & .multiselect__content-wrapper {
+    display: none;
+    //border: none;
+    //box-shadow: none;
+  }
+}
+
+// Correction for 'detached' which was added by Stulipan
+.multiselect.detached {
+  & .multiselect__content-wrapper {
+    margin-top: .5rem;
+    border-radius: $multiselect-border-radius;
+    border: none;
+  }
+  &.multiselect--above {
+    & .multiselect__content-wrapper {
+      margin-bottom: .5rem;
+    }
+  }
+  &.multiselect--active .multiselect__current,
+  &.multiselect--active .multiselect__input,
+  &.multiselect--active .multiselect__tags {
+    border-radius: $multiselect-border-radius;
+  }
+}

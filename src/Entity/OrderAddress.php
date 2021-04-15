@@ -39,7 +39,7 @@ class OrderAddress
      * @var string
      *
      * @ORM\Column(name="street", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="Add meg a címet.")
+     * @Assert\NotBlank(message="checkout.recipient.missing-address")
      */
     private $street='';
 
@@ -47,15 +47,15 @@ class OrderAddress
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="Add meg a települést.")
+     * @Assert\NotBlank(message="checkout.recipient.missing-city")
      */
     private $city;
 
     /**
      * @var int
      *
-     * @Assert\Range(min=0, minMessage="Hibás irányítószám.")
-     * @Assert\NotBlank(message="Add meg az irányítószámot.")
+     * @Assert\Range(min=0, minMessage="checkout.recipient.invalid-zip")
+     * @Assert\NotBlank(message="checkout.recipient.missing-zip")
      * @ORM\Column(name="zip", type="integer", nullable=false)
      */
     private $zip;
@@ -64,7 +64,7 @@ class OrderAddress
      * @var string
      *
      * @ORM\Column(name="province", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="Add meg a megyét.")
+     * @Assert\NotBlank(message="checkout.recipient.missing-province")
      */
     private $province='';
 //
@@ -81,7 +81,7 @@ class OrderAddress
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Geo\GeoCountry")  //, inversedBy="orderAddresses"
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=false)
-     * @ Assert\NotBlank(message="Add meg az országot.")
+     * @ Assert\NotBlank(message="checkout.recipient.missing-country")
      * @Assert\Valid()
      */
     private $country;

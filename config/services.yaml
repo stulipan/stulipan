@@ -1,6 +1,3 @@
-# Define the application behavior related configuration options in the config/services.yaml file.
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
-
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
@@ -23,9 +20,7 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        public: false       # Allows optimizing the container by removing unused services; this also means
-                            # fetching services directly from the container via $container->get() won't work.
-                            # The best practice is to be explicit about your dependencies anyway.
+
         bind:
             $targetDirectory: '%images_directory%'    # used in Services\FileUploader.php
             $imagePath: '%images_directory%'          # used in Form\ImageType.php
@@ -33,22 +28,38 @@ services:
             $locales: '%app_locales%'
             $supportedLocales: '%supported_locales%'
             $defaultLocale: '%locale%'
+            $storeSettingsDirectory: '%kernel.project_dir%/src/Resources/StoreSettings'
+            $generalSettingsFile: 'general.yaml'
+            $checkoutSettingsFile: 'checkout.yaml'
+            $adminSettingsFile: 'admin.yaml'
+
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
-        resource: '../src/Controller'
+        resource: '../src/Controller/'
         tags: ['controller.service_arguments']
-    App\Entity\OrderBuilder:
-        public: true
-    App\Entity\OrderSessionStorage:
-        public: true
+
+
+    App\Boltzaras\:
+        resource: '../src/Boltzaras/*'
+        exclude: '../src/Boltzaras/{Entity,Migrations,Tests,Kernel.php}'
+
+    boltzaras_controller:
+        namespace: App\Boltzaras\Controller\  # these 2 lines are equivalent to: App\Boltzaras\Controller\:
+        resource: '../src/Boltzaras/Controller'
+        tags: ['boltzaras_controller.service_arguments']
+
 
     # Events
     App\Event\SetOrderNumber:
@@ -74,16 +85,17 @@ services:
         tags:
             - { name: translation.loader, alias: yaml }
 
-    App\Entity\Model\MessageAndCustomer:
-        public: true
     App\Entity\Model\DeliveryDate:
         public: true
     App\Entity\Model\HiddenDeliveryDate:
         public: true
 
+    # used in security.yaml in the main firewall's logout
+    my_logout_handler:
+        class: App\Security\LogoutHandler
 
     app.eventListeners.routeLocaleRewriteSubscriber:
-        class: App\Event\routeLocaleRewriteSubscriber
+        class: App\Event\RouteLocaleRewriteSubscriber
         arguments: ["@router", "%kernel.default_locale%", "%supported_locales%"]
         tags:
             - { name: kernel.event_subscriber }
@@ -92,6 +104,8 @@ services:
         resource: '../src/Repository'
     App\Services\:
         resource: '../src/Services'
+    App\Security\:
+        resource: '../src/Security'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

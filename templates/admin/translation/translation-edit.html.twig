@@ -1,4 +1,4 @@
-{% extends 'admin/template-editing.html.twig' %}
+{% extends 'admin/template-listing.html.twig' %}
 
 {% set pageTitle = 'settings.translation.translation-title'|trans %}
 {% if interface is defined and interface is not null %}
@@ -35,11 +35,11 @@
     {% endif %}
 {% endblock %}
 
-{% block headerTopright %}
-<div class="admin-card-topright d-sm-inline-block d-block">
-    <div class="navbar justify-content-start">
+{% block headerActionsWrapper %}
+<div class="">
+    <div class="nav nav-tabs">
         <div class="nav-item dropdown">
-            <a class="btn btn-link-secondary dropdown-toggle mr-1" href="javascript: void(0);" id="chooseInterface" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle mr-1" href="javascript: void(0);" id="chooseInterface" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                 {{ 'settings.translation.interface'|trans }}
                 {% if interface == 'store' %}
                     {{ 'settings.translation.store-texts'|trans }}
@@ -61,16 +61,16 @@
         </div>
 
         <div class="nav-item dropdown">
-            <a class="btn btn-link-secondary dropdown-toggle" id="langsDropdown" href="#" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" id="langsDropdown" href="#" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                 {% set myLocale = 'hu' %}
-                <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="topbar-flag topbar-flag-selected rounded-circleX">
+                <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="translation-flag translation-flag-selected">
             </a>
             <div class="dropdown-menu dropdown-transition dropdown-menu-left dropdown-menu-sm-right mt-2" aria-labelledby="langsDropdown">
                 <a href="/hu" class="dropdown-item text-smX">
-                    <img src="{{ asset('/webshop/site/flags/4x3/hu.svg') }}" alt="magyar" class="topbar-flag">Magyar
+                    <img src="{{ asset('/webshop/site/flags/4x3/hu.svg') }}" alt="magyar" class="translation-flag">Magyar
                 </a>
 {#                <a href="/en" class="dropdown-item text-sXm">#}
-{#                    <img src="{{ asset('/webshop/site/flags/4x3/gb.svg') }}" alt="english" class="topbar-flag">English#}
+{#                    <img src="{{ asset('/webshop/site/flags/4x3/gb.svg') }}" alt="english" class="translation-flag">English#}
 {#                </a>#}
             </div>
         </div>
@@ -79,20 +79,48 @@
 {% endblock %}
 
 {% block content %}
+    <div class="row mt-2 mt-md-20px">
+        <div class="col-md-12 correction-no-padding">
+            {% if incompleteCount is defined and incompleteCount > 0 %}
+                <div class="alert alert-warning shadow mb-3">
+                    <i class="fas fa-exclamation-circle mr-1"></i>
+                    {% if incompleteCount == 1 %}
+                        {{ 'settings.translation.translation-is-missing'|trans({ '{{ count }}': incompleteCount }) }}
+                    {% else %}
+                        {{ 'settings.translation.translations-are-missing'|trans({ '{{ count }}': incompleteCount }) }}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
     <div class="row">
-        <div class="col-md-12 px-0 px-md-10px">
+        <div class="col-md-12 correction-no-padding">
             <div class="card mb-30px">
                 <div class="card-body">
-                    <div class="no-margins">
-                        <ul class="nav nav-tabs mb-3">
-{#                            {{ dump(app.request.attributes.get('category')) }}#}
+                    <nav class="adaptive-tabs">
+                        <ul class="nav nav-tabs adaptive-primary">
                             {% for category, url in navigationTabs %}
-                                <li class="nav-item">
+                                <li class="nav-item adaptive-item">
                                     <a class="nav-link {% if app.request.attributes.get('category') == category %}active{% endif %}" href="{{ url }}">{{ category|capitalize }}</a>
                                 </li>
                             {% endfor %}
                         </ul>
-                    </div>
+                        <ul class="adaptive-template">
+                            <li class="nav-item adaptive-item adaptive-more">
+                                <button type="button" class="adaptive-button nav-link btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+{#											<i class="fas fa-ellipsis-h"></i>#}
+                                    {{ 'generic.more'|trans }}
+                                </button>
+                                <ul class="adaptive-secondary">
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="border-top">
+                </div>
+                <div class="card-body mt-3">
+                    <div class="">
                         {% for key, form in forms %}
                                 {{ form_start(form, { 'attr': {'class': '' }}) }}
                                     <div class="row">
@@ -102,10 +130,9 @@
 
                                                 {% if "this_is_a_title" in child.vars.block_prefixes %}
                                                 <div class="form-group">
-{#                                                    <div class="row no-margins pt-3 border-top"></div>#}
                                                     <div class="row">
-                                                        <div class="col-md-12 mb-2X">
-                                                            <h4>{{ sourceText[key][child.vars.label]|capitalize }}</h4>
+                                                        <div class="col-md-12">
+                                                            <h3>{{ sourceText[key][child.vars.label]|capitalize }}</h3>
                                                             {% do child.setRendered() %}
                                                         </div>
                                                     </div>
@@ -113,16 +140,16 @@
 
                                                 {% else %}
                                                     {% if child.vars.id != 'form__token' %}
-                                                        <div class="form-group row">
+                                                        <div class="form-group form-row">
                                                             <div class="col-md-12">
                                                                 <label>{{ sourceLabel[key][child.vars.label] }}</label>
                                                             </div>
-                                                            <div class="col-md-6 mb-lg-0 mb-2">
+                                                            <div class="col-6 mb-lg-0 mb-2">
                                                                 <div class="translation">
                                                                     <div class="position-relative">{{ sourceText[key][child.vars.label] }}</div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-6">
                                                                 {{ form_widget(child, {'attr': {'placeholder': sourceText[key][child.vars.label], 'class': 'JS--autoExpand' }}) }}
                                                                 {{ form_errors(child) }}
                                                             </div>
@@ -143,6 +170,7 @@
                                 {{ form_end(form) }}
                                 {% do form.setRendered() %}
                         {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

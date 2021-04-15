@@ -1,0 +1,33 @@
+
+// Hides sidebar navigation on My Account subpages only on Mobile
+
+
+.back-to-my-account {
+  display: none;
+}
+@include media-breakpoint-down(sm) {
+  .my-account {
+    & .account-sidebar {
+      display: none;
+    }
+    & .back-to-my-account {
+      display: flex;
+    }
+  }
+
+  .my-account.my-account-show-sidebar {
+    & .account-sidebar {
+      display: block;
+    }
+    & .back-to-my-account {
+      display: none;
+    }
+  }
+}
+
+
+.previous-orders {
+  & .list-group-item {
+    padding: 1.5rem 0;
+  }
+}

@@ -1,5 +1,6 @@
 {% extends 'admin/template-listing.html.twig' %}
 
+{% set activeMenu = 'boltzaras' %}
 {% set pageTitle = title %}
 {% set breadcrumb = {
     0: {
@@ -12,83 +13,92 @@
     {{ title }}
 {% endblock %}
 
-{% block bodyClass %}boltzaras boltzaras-list{% endblock %}
+{% block bodyClass %} boltzaras boltzaras-list{% endblock %}
 
 {% block modal %}
 {% endblock %}
 
-{% block headerTopright %}
-    <a href="{{ path('boltzaras-edit') }}" class="btn btn-outline-primary mb-2"><i class="fas fa-plus-circle mr-1"></i> Új jelentés</a>
-    <a href="{{ path('boltzaras-webshop-edit') }}" class="btn btn-outline-primary mb-2 ml-1"><i class="fas fa-shopping-cart mr-1"></i> Új web forgalom</a>
+{% block headerActionsWrapper %}
+    <a href="{{ path('boltzaras-edit') }}" class="btn btn-primary">Új jelentés</a>
+    <a href="{{ path('boltzaras-webshop-edit') }}" class="btn btn-primary ml-2">Új web forgalom</a>
 {% endblock %}
 
 {% block beforeContent %}
     {% if is_granted('ROLE_BOLTZARAS_STAT') %}
-        <div class="row row-5">
-            <div class="col-xl-3 col-lg-6 col-6 mb-20px">
-                <div class="card tilebox-one h-100 mb-0">
-                    <div class="card-body d-flex flex-column">
-                        <div class="card--infoCard">
-                            <div class="float-right">
-                                <i class="fas fa-shopping-basket"></i>
+        <div class="row mt-2 mt-sm-3">
+            <div class="col-12 overflow-x-scroll overflow-x-md-hidden">
+                <div class="position-relative">
+                    <div class="w-lg mx-auto py-1 pr-3 pr-md-0">
+                        <div class="form-row">
+                            <div class="col-3">
+                                <div class="card tilebox-one h-100 mb-0">
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="card--infoCard">
+                                            <div class="float-right">
+                                                <i class="fas fa-shopping-basket"></i>
+                                            </div>
+                                            <span class="h6 quickinfo-title">Készpénz</span>
+                                            <span class="h5 quickinfo-highlight">{{ keszpenz|money }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <span class="h6 quickinfo-title">Készpénz</span>
-                            <span class="h5 quickinfo-highlight">{{ keszpenz|money }}</span>
+
+                            <div class="col-3">
+                                <div class="card tilebox-one h-100 mb-0">
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="card--infoCard">
+                                            <div class="float-right">
+                                                <i class="far fa-credit-card"></i>
+                                            </div>
+                                            <span class="h6 quickinfo-title">Bankkártya</span>
+                                            <span class="h5 quickinfo-highlight">{{ bankkartya|money }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-3">
+                                <div class="card tilebox-one bg-successX text-whitXe h-100 mb-0">
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="card--infoCard">
+                                            <div class="float-right">
+                                                <i class="fas fa-dollar-sign"></i>
+                                            </div>
+                                            <span class="h6 quickinfo-title">Bolt összesen</span>
+                                            <span class="h5 quickinfo-highlight text-success">{{ (keszpenz + bankkartya)|money }}</span>
+                                            <span class="text-muted">Mr. Feka: {{ (keszpenz + bankkartya - kassza)|money }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-3">
+                                <div class="card tilebox-one bg-infoX text-whiteX h-100 mb-0">
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="card--infoCard">
+                                            <div class="float-right">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <span class="h6 quickinfo-title">Webshop</span>
+                                            <span class="h5 quickinfo-highlight text-primary">{{ webshop|money }}</span>
+                                            <span class="text-sm font-weight-normal">*csak 2018 adatok</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-xl-3 col-lg-6 col-6 mb-20px">
-                <div class="card tilebox-one h-100 mb-0">
-                    <div class="card-body d-flex flex-column">
-                        <div class="card--infoCard">
-                            <div class="float-right">
-                                <i class="far fa-credit-card"></i>
-                            </div>
-                            <span class="h6 quickinfo-title">Bankkártya</span>
-                            <span class="h5 quickinfo-highlight">{{ bankkartya|money }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-6 col-6 mb-20px">
-                <div class="card tilebox-one bg-successX text-whitXe h-100 mb-0">
-                    <div class="card-body d-flex flex-column">
-                        <div class="card--infoCard">
-                            <div class="float-right">
-                                <i class="fas fa-dollar-sign"></i>
-                            </div>
-                            <span class="h6 quickinfo-title">Bolt összesen</span>
-                            <span class="h5 quickinfo-highlight text-success">{{ (keszpenz + bankkartya)|money }}</span>
-                            <span class="text-muted">Mr. Feka: {{ (keszpenz + bankkartya - kassza)|money }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-6 col-6 mb-20px">
-                <div class="card tilebox-one bg-infoX text-whiteX h-100 mb-0">
-                    <div class="card-body d-flex flex-column">
-                        <div class="card--infoCard">
-                            <div class="float-right">
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                            <span class="h6 quickinfo-title">Webshop</span>
-                            <span class="h5 quickinfo-highlight text-primary">{{ webshop|money }}</span>
-                            <span class="text-sm font-weight-normal">*csak 2018 adatok</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     {% endif %}
 {% endblock %}
 
 {% block contentFilter %}
-    {{ include('/admin/dateRange-picker-widget.html.twig') }}
+    <div class="card-body pb-0">
+        {% include('/admin/dateRange-picker-widget.html.twig') %}
+    </div>
 {% endblock %}
 
 {% block tableHeader %}

@@ -3,7 +3,7 @@
 namespace App\Controller\Shop;
 
 use App\Entity\Geo\GeoPlace;
-use App\Entity\OrderBuilder;
+use App\Services\OrderBuilder;
 use App\Entity\Product\ProductCategory;
 use App\Repository\GeoPlaceRepository;
 
@@ -103,19 +103,20 @@ class CartUtilsController extends AbstractController
     public function cartDetailsDropdown()
     {
         $orderBuilder = $this->orderBuilder;
-        return $this->render('webshop/site/navbar-cartDropdown.html.twig', [
+//        dd($orderBuilder->getCurrentOrder());
+        return $this->render('webshop/site/navbar-cart-dropdown.html.twig', [
             'order' => $orderBuilder->getCurrentOrder(),
             'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
         ]);
     }
-    
+
     /**
      * Renders the slider cart. The items are retrieved from session
      */
-    public function cartSliderSidebar()
+    public function showSidebarCart()
     {
         $orderBuilder = $this->orderBuilder;
-        return $this->render('webshop/site/cart-slider-sidebar.html.twig', [
+        return $this->render('webshop/site/navbar-cart-sidebar.html.twig', [
             'order' => $orderBuilder->getCurrentOrder(),
             'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
         ]);

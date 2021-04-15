@@ -85,7 +85,7 @@
                     this.$http.put('/hu/admin/api/products/'+ productData.id, productData)
                         .then(
                             response => {
-                                this.showToast('A módosítások sikeresen elmentve.', 'success');
+                                // this.showToast('A módosítások sikeresen elmentve.', 'success');
                                 this.productInForm = response.data.products[0];  /// ITT CELSZERU BETOLTENI A VISSZAJOVO objektumot
                                 this.formIsPosting = false;
                             },

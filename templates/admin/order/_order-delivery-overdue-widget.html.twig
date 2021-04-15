@@ -1,0 +1,43 @@
+{%  if order.deliveryOverdueDays is defined and order.deliveryOverdueDays is not null %}
+    {% if showFutureDatesOnly is defined and showFutureDatesOnly == true %}
+{#        {{ dump(order.deliveryOverdueDays) }}#}
+        {%  if order.deliveryOverdueDays >= -2 and order.deliveryOverdueDays <= 2 %}
+        <div class="position-relative">
+            <div class="vertical-ribbon {% if isSizedSm is defined and isSizedSm == true%}vertical-ribbon-sm{% endif %} vertical-ribbon-{% if order.deliveryOverdue is defined and order.deliveryOverdue == true or order.deliveryOverdueDays == 0 %}danger{% elseif order.deliveryOverdueDays >= -2 %}warning{% endif %}">
+                <div class="d-flex flex-column justify-content-between">
+                        <div class="ribbon-text-h2">{{ order.deliveryOverdueDays|abs }}</div>
+                        {% if order.deliveryOverdue is defined and order.deliveryOverdue == true %}
+                            <div class="">nappal</div>
+                            <div class="">ezelőtt</div>
+                        {% elseif order.deliveryOverdueDays >= -2 %}
+                            <div class="">nap</div>
+                            <div class="">múlva</div>
+                        {% elseif order.deliveryOverdueDays == 0 %}
+                            <div class="">nap</div>
+                            <div class="">múlva</div>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+
+    <div class="position-relative">
+        <div class="vertical-ribbon {% if isSizedSm is defined and isSizedSm == true%}vertical-ribbon-sm{% endif %} vertical-ribbon-{% if order.deliveryOverdue is defined and order.deliveryOverdue == true or order.deliveryOverdueDays == 0 %}danger{% elseif order.deliveryOverdueDays >= -2 %}warning{% endif %}">
+            <div class="d-flex flex-column justify-content-between">
+                    <div class="ribbon-text-h2">{{ order.deliveryOverdueDays|abs }}</div>
+                    {% if order.deliveryOverdue is defined and order.deliveryOverdue == true %}
+                        <div class="">nappal</div>
+                        <div class="">ezelőtt</div>
+                    {% elseif order.deliveryOverdueDays >= -2 %}
+                        <div class="">nap</div>
+                        <div class="">múlva</div>
+                    {% elseif order.deliveryOverdueDays == 0 %}
+                        <div class="">nap</div>
+                        <div class="">múlva</div>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}

@@ -1,5 +1,6 @@
 {% extends 'admin/template-listing.html.twig' %}
 
+{% set activeMenu = 'cms' %}
 {% set pageTitle = title %}
 {% set breadcrumb = {
 	0: {
@@ -12,8 +13,27 @@
 	{{ title }}
 {% endblock %}
 
-{% block headerTopright %}
-	<a href="{{ path('cms-page-new') }}" class="btn btn-outline-primary mb-2"><i class="fas fa-plus-circle"></i>Új oldal</a>
+{% block headerActionsWrapper %}
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">
+		<ul class="nav nav-tabs adaptive-primary">
+			<li class="nav-item adaptive-item">
+				<a href="{{ path('cms-page-new') }}" class="nav-link">Új bla bla</a>
+			</li>
+			<li class="nav-item adaptive-item">
+				<a href="{{ path('cms-page-new') }}" class="nav-link">Új bla bla</a>
+			</li>
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	<a href="{{ path('cms-page-new') }}" class="btn btn-primary">Új oldal</a>
 {% endblock %}
 
 {% block tableHeader %}
@@ -53,9 +73,9 @@
 				</td>
 				<td class="align-middle">
 					{% if page.image|default %}
-						<div class="d-flexX w-100X img-thumbnail" style="background: url('{{ uploaded_asset(page.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
+						<div class="img-thumbnail" style="background: url('{{ uploaded_asset(page.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
 					{% else %}
-						<span class="text-muted">{{ 'generic.Not available'|trans }}</span>
+						{% include 'admin/_missing-image-insert.html.twig' %}
 					{% endif %}
 				</td>
 				<td class="align-middle">

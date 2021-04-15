@@ -12,7 +12,7 @@ Vue.use(VueResource);
 Vue.use(VueClip);   // Simple and hackable file uploader
 Vue.use(VModal, { dialog: true });
 
-import './../../css/v-theme.scss';
+// import './../../css/v-theme.scss';
 
 Vue.http.options.root = 'http://stulipan.dfr';
 const uploadUrls = {

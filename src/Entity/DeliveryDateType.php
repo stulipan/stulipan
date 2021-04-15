@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="delivery_date_type")
  * @ORM\Entity(repositoryClass="App\Repository\DeliveryDateTypeRepository")
  * @ORM\HasLifecycleCallbacks
- * @UniqueEntity("default", message="Csak egy alapértelmezett típus lehet!")
+ * @ UniqueEntity("default", message="Csak egy alapértelmezett típus lehet!")
  */
 class DeliveryDateType
 {
@@ -42,26 +42,36 @@ class DeliveryDateType
     /**
      * @var bool
      *
-     * @ORM\Column(name="default", type="boolean", nullable=true)
+     * @ORM\Column(name="default", type="boolean", nullable=false, options={"default"=false})
      */
-    private $default = '0';
+    private $default;
 
     /**
-     * @var DeliveryDateInterval
+     * @var DeliveryDateInterval[]|ArrayCollection|null
      *
      * @ORM\OneToMany(targetEntity="App\Entity\DeliveryDateInterval", mappedBy="dateType", orphanRemoval=true, cascade={"persist"})
-     * @ORM\OrderBy({"ordering" = "ASC"})
      * @ORM\JoinColumn(name="id", referencedColumnName="date_type_id")
+     * @ORM\OrderBy({"ordering" = "ASC"})
      *
-     * @Assert\Collection(
-     *
-     * )
+     * @Assert\Collection()
      */
     private $intervals;
+
+    /**
+     * @var DeliverySpecialDate[]|ArrayCollection|null
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\DeliverySpecialDate", mappedBy="dateType")
+     * @ ORM\JoinColumn(name="id", referencedColumnName="date_type_id")
+     * @ORM\OrderBy({"ordering" = "ASC"})
+     *
+     * @ Assert\Collection()
+     */
+    private $specialDates;
 
     public function __construct()
     {
         $this->intervals = new ArrayCollection();
+        $this->specialDates = new ArrayCollection();
     }
 
     /**

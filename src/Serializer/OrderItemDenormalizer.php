@@ -39,9 +39,9 @@ class OrderItemDenormalizer implements DenormalizerInterface, DenormalizerAwareI
             $object->setOrder($order);
             $object->setProduct($product);
             $object->setQuantity(1);
-            $object->setPrice($product->getPrice()->getNumericValue());
+            $object->setUnitPrice($product->getPrice()->getNumericValue());
     
-            $object->setPriceTotal($object->getPrice() * $object->getQuantity());
+            $object->setPriceTotal($object->getUnitPrice() * $object->getQuantity());
             $order->addItem($object);
         }
         return $object;

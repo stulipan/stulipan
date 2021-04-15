@@ -99,7 +99,7 @@ class ProductOption implements JsonSerializable
      *
      * ==== One Option belongs/is linked to many SelectedVariants ====
      *
-     * @ORM\OneToMany(targetEntity="ProductSelectedOption", mappedBy="option", orphanRemoval=true, fetch="EXTRA_LAZY")     //, cascade={"persist", "remove"}
+     * @ORM\OneToMany(targetEntity="ProductSelectedOption", mappedBy="option", fetch="EXTRA_LAZY")     //orphanRemoval=true, cascade={"persist", "remove"}
      * @ORM\JoinColumn(name="id", referencedColumnName="option_id", nullable=false)
      * @ ORM\OrderBy({"ordering": "ASC"})
      * @ Assert\NotBlank(message="Egy terméknek legalább egy kép szükséges.")
@@ -257,7 +257,7 @@ class ProductOption implements JsonSerializable
     {
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('option', $option))
-            ->andWhere(Criteria::expr()->eq('value', $optionValue))
+            ->andWhere(Criteria::expr()->eq('optionValue', $optionValue))
 //            ->orderBy(['position' => Criteria::ASC])
         ;
         return $this->selectedOptions->matching($criteria)->first();

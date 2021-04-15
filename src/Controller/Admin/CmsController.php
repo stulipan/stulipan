@@ -4,18 +4,15 @@ namespace App\Controller\Admin;
 
 use App\Entity\CmsPage;
 use App\Entity\ImageEntity;
-use App\Entity\Model\ErrorEntity;
-use App\Entity\Product\ProductCategory;
 use App\Form\Cms\CmsPageFormType;
-use App\Form\ProductCategoryFormType;
 use App\Services\FileUploader;
+use App\Services\StoreSettings;
 use Error;
 use Pagerfanta\Exception\NotValidCurrentPageException;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -147,18 +144,15 @@ class CmsController extends AbstractController
     /**
      * @Route("/page/list/{page}", name="cms-page-list", requirements={"page"="\d+"})
      */
-    public function listCmsWithPagination($page = 1)
+    public function listCmsWithPagination($page = 1, StoreSettings $settings)
     {
         $queryBuilder = $this->getDoctrine()
             ->getRepository(CmsPage::class)
             ->findAllQueryBuilder()
         ;
 
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
         try {
@@ -178,8 +172,6 @@ class CmsController extends AbstractController
 //            );
             $this->addFlash('danger', 'Nem talált egy CMS oldalt sem!');
         }
-
-//        $paginatedCollection = new PaginatedCollection($items, $pagerfanta->getNbResults());
 
         return $this->render('admin/cms/page-list.html.twig', [
             'items' => $pages,

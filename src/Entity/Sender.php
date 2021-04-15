@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\TimestampableTrait;
-use App\Entity\User;
 use App\Entity\Address;
 
 use App\Form\AddressType;
@@ -38,12 +37,12 @@ class Sender
     private $id;
 
     /**
-     * @var User
+     * @var Customer
      *
      * ==== Many Senders belong to one Customer ====
      * ==== inversed By="senders" => a User entitásban definiált 'senders' attibútumról van szó; A Sendert így kötjük vissza a Customerhez
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="senders")
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="senders")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @ Assert\NotBlank(message="Egy számlázási címnek kell legyen felhasználója/Customer.")
      */
@@ -189,17 +188,17 @@ class Sender
 
 
     /**
-     * @return User
+     * @return Customer|null
      */
-    public function getCustomer(): ?User
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
     /**
-     * @var User $customer
+     * @var Customer|null $customer
      */
-    public function setCustomer(?User $customer): void
+    public function setCustomer(?Customer $customer): void
     {
         $this->customer = $customer;
     }

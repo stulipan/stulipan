@@ -3,12 +3,13 @@
 
 namespace App\Boltzaras\Controller;
 
+use App\Services\StoreSettings;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
@@ -192,18 +193,14 @@ class InventoryInvoiceController extends AbstractController
     /**
      * @Route("/invoice/{page}", name="invoice-list", requirements={"page"="\d+"})
      */
-    public function listInvoicesWithPagination($page = 1)
+    public function listInvoicesWithPagination($page = 1, StoreSettings $settings)
     {
         $queryBuilder = $this->getDoctrine()
             ->getRepository(InventoryInvoice::class)
             ->findAllQueryBuilder();
 
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        //On the Pagerfanta object, call setMaxPerPage() to set displayed items to 10, the set current page
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
         try {

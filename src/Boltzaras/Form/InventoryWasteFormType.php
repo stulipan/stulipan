@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form\Inventory;
+namespace App\Boltzaras\Form;
 
 use App\Entity\Boltzaras\InventoryWaste;
 

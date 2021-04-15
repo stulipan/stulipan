@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Boltzaras;
 
 use App\Entity\Keszlet;
 //use Doctrine\ORM\EntityRepository;

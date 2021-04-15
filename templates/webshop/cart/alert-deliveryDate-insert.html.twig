@@ -1,6 +1,6 @@
 {% block AZUZENET %}
     {% for msg in app.session.flashBag.get('date-missing') %}
-        <div class="JS--alertMessage alert alert-danger mt-3" role="alert" data-alert-message>
+        <div class="JS--alertMessage alert alert-danger mt-3" role="alert">
             <i class="fas fa-exclamation-circle mr-1 text-muted"></i>
             {{ include('webshop/cart/alert-msg.html.twig') }}
         </div>

@@ -33,7 +33,6 @@
     <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
     <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('webshop/admin/js/select2.min.js') }}"></script>
-    <script src="{{ asset('webshop/notyf.min.js') }}"></script>
 
     <script>
         // Innen: https://momentjs.com/docs/#/i18n/
@@ -118,18 +117,6 @@
                 "{{ 'datetime.lifetime'|trans }}": [moment('{{ storeSettings.get('general.launch-date') }}'), moment()],
             },
         };
-
-        const notyf = new Notyf({
-            position: {
-                x: 'center',
-                y: 'bottom',
-            },
-            dismissible: false,
-            duration: 6000,
-
-        });
-        // notyf.success('Sikeres mentes!');
-        // notyf.error('Valami hiba tortent menteskor!');
     </script>
 
     <script src="{{ asset('webshop/admin/js/order.detail.js') }}"></script>

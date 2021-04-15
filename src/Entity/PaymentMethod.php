@@ -19,9 +19,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 class PaymentMethod
 {
-    use TimestampableTrait;
+    public const CREDIT_CARD = 'cib';
+    public const PAYPAL = 'paypal';
+    public const BANK_TRANSFER ='bank';
+    public const BARION = 'barion';
 
-    private const BANK_TRANSFER = 3; // the value is from db
+    use TimestampableTrait;
 
     /**
      * @var int
@@ -258,6 +261,6 @@ class PaymentMethod
      */
     public function isBankTransfer(): bool
     {
-        return self::BANK_TRANSFER == $this->id ? true : false;
+        return self::BANK_TRANSFER == $this->getShortcode() ? true : false;
     }
 }

@@ -40,7 +40,7 @@ $drp-padding-y:                                     .75rem !default;
 $drp-padding-x:                                     $drp-padding-y !default;
 
 $drp-bg:                                            #fff !default;
-$drp-border-radius:                                 $border-radius !default;
+$drp-border-radius:                                 $input-border-radius !default;
 $drp-border-color:                                  $input-border-color !default;
 $drp-shadow:                                        $dropdown-shadow !default; //0 .5rem 1rem rgba(0, 0, 0, .15) !default;
 
@@ -77,27 +77,6 @@ $drp-ranges-li-active-color:                        $white !default;
 $drp-ranges-li-focus-border-color:                  $drp-focus-border-color !default;
 $drp-ranges-li-focus-box-shadow:                    $input-btn-focus-box-shadow !default;
 $drp-ranges-li-border-radius:                       $drp-border-radius !default;
-
-
-
-// calendar-table
-$drp-calendar-prev-bg:                              $gray-100 !default;
-$drp-calendar-prev-hover-bg:                        $gray-200 !default;
-
-$drp-calendar-table-week-color:                     $gray-400 !default;
-$drp-calendar-table-td-week-font-size:              80% !default;
-
-$drp-calendar-table-td-bg:                          $white !default;
-$drp-calendar-table-td-available-bg:                $drp-calendar-table-td-bg !default;
-$drp-calendar-table-td-in-range-bg:                 $gray-200 !default;
-$drp-calendar-table-td-start-date-bg:               #72b9ea !default;
-$drp-calendar-table-td-start-date-hover-bg:         darken(#72b9ea, 5%) !default;
-
-$drp-calendar-table-td-start-date-color:            $white !default;
-$drp-calendar-table-td-in-range-color:              inherit !default;
-$drp-calendar-table-td-disabled-color:              $gray-600 !default;
-$drp-calendar-table-td-off-font-size:               100% !default; //85% !default;
-$drp-calendar-table-td-focus-border-color:          $drp-focus-border-color !default;
 
 
 $drp-weekdays-row-color:                            $gray-600 !default;
@@ -152,7 +131,7 @@ $drp-cell-in-range-color:                           initial !default;
     & .prev.available,
     & .next.available {
         background-color: #f0f3f5;
-        @include border-radius($drp-border-radius);
+        @include border-radius($drp-cell-border-radius, 0);
         white-space: nowrap;
         cursor: pointer;
         padding: .125rem .25rem;
@@ -172,7 +151,7 @@ $drp-cell-in-range-color:                           initial !default;
     & .prev span {
         color: #202a36;
         border-width: 0 2px 2px 0;
-        border-radius: 0;
+        @include border-radius($drp-cell-border-radius, 0);
         display: inline-block;
         padding: 3px;
         font-family: "Font Awesome 5 Free";
@@ -243,7 +222,7 @@ $drp-cell-in-range-color:                           initial !default;
             box-sizing: border-box;
             //z-index: 10000;
             border: 2px solid transparent;
-            border-radius: .25rem;
+            @include border-radius($drp-cell-border-radius, 0);
 
         }
         //&:hover span {
@@ -260,18 +239,11 @@ $drp-cell-in-range-color:                           initial !default;
         &.off.in-range,
         &.off.start-date,
         &.off.end-date {
-            //font-size: $drp-calendar-table-td-off-font-size;
-            //background-color: $drp-calendar-table-td-bg;
             color: $drp-cell-disabled-color;
         }
 
         &.off.ends {
             visibility: hidden;
-            //height: 0px;
-            //padding: 0;
-            //border-top: 0;
-            //border-bottom: 0;
-            //overflow: hidden;
         }
         &.in-range:not(.start-date):not(.end-date) {
             border-radius: 0;
@@ -293,14 +265,14 @@ $drp-cell-in-range-color:                           initial !default;
         &.start-date:focus span,
         &.end-date:focus,
         &.end-date:focus span {
-            @include border-radius($drp-cell-border-radius);
+            @include border-radius($drp-cell-border-radius, 0);
         }
         &.start-date.end-date {
-            @include border-radius($drp-cell-border-radius);
+            @include border-radius($drp-cell-border-radius, 0);
         }
         //&.start-date:hover,
         //&.end-date:hover {
-            //background-color: $drp-calendar-table-td-start-date-hover-bg !important;
+        //background-color: $drp-calendar-table-td-start-date-hover-bg !important;
         //}
         &.in-range:not(.off):not(.start-date):not(.end-date) {
             background-color: $drp-cell-in-range-bg;
@@ -316,7 +288,6 @@ $drp-cell-in-range-color:                           initial !default;
         &.disabled {
             color: $drp-cell-disabled-color;
             cursor: not-allowed;
-            //text-decoration: line-through;
         }
         &.available:hover span {
             background-color: $drp-cell-hover-bg !important;
@@ -325,8 +296,7 @@ $drp-cell-in-range-color:                           initial !default;
         &.available:focus {
             outline: none;
             z-index: 2;
-            @include border-radius($drp-cell-border-radius !important);
-            //border: 2px solid $drp-cell-focus-border-color;
+            @include border-radius($drp-cell-border-radius !important, 0);
             box-shadow: $drp-ranges-li-focus-box-shadow;
         }
     }
@@ -348,22 +318,12 @@ $drp-cell-in-range-color:                           initial !default;
     min-height: 210px;
 }
 
-.daterangepicker .calendar-table table thead tr:first-of-type th {
-    /* padding: 0.25rem 0; */
-    padding-top: .5rem !important;
-    border-bottom: 1px solid #adb5bd !important;
-    color: #637281 !important;
-    font-size: 80% !important;
-}
-
-
-
 
 .daterangepicker {
     position: absolute;
     color: inherit;
     background-color: $drp-bg;
-    @include border-radius($drp-border-radius);
+    @include border-radius($drp-border-radius, 0);
     z-index: $zindex-drp;
     display: none;
     font-size: $drp-font-size;
@@ -521,9 +481,8 @@ $drp-cell-in-range-color:                           initial !default;
 }
 
 @media (min-width: 576px) {
-    //.daterangepicker:not(.drp-inline),
-    .daterangepicker:not(.drp-inline):not(.drp-auto-width),
-    .daterangepicker:not(.drp-auto-width) {
+    .daterangepicker:not(.drp-inline),
+    .daterangepicker {
         max-width: $drp-width;
 
         &.show-ranges {
@@ -544,8 +503,8 @@ $drp-cell-in-range-color:                           initial !default;
         }
     }
 
-    .daterangepicker:not(.drp-inline):not(.drp-auto-width) .drp-col.left:not(.single),
-    .daterangepicker:not(.drp-inline):not(.drp-auto-width) .drp-col.right {
+    .daterangepicker:not(.drp-inline) .drp-col.left:not(.single),
+    .daterangepicker:not(.drp-inline) .drp-col.right {
         flex: 0 0 50%;
         max-width: 50%
     }
@@ -667,7 +626,7 @@ $drp-cell-in-range-color:                           initial !default;
                 margin: 0.25rem $drp-ranges-padding-x;
                 cursor: pointer;
                 border: 2px solid transparent;
-                @include border-radius($drp-ranges-li-border-radius);
+                @include border-radius($drp-ranges-li-border-radius, 0);
 
                 &:hover {
                     background-color: $drp-ranges-li-hover-bg;
@@ -698,7 +657,7 @@ $drp-cell-in-range-color:                           initial !default;
                 }
                 @media (max-width: 575.98px) {
                     display: inline-block;
-                    @include border-radius($drp-ranges-li-border-radius);
+                    @include border-radius($drp-ranges-li-border-radius, 0);
                     padding: .25rem .5rem;
                     background-color: $drp-ranges-li-bg-mobile;
                     margin: 0 .25rem .25rem 0;
@@ -707,58 +666,6 @@ $drp-cell-in-range-color:                           initial !default;
         }
     }
 }
-
-//// Show autoWidth
-//.daterangepicker.drp-auto-width {
-//    //display: inline-block;
-//    width: 100%;
-//    max-width: 380px;  // This follows the width of the modal/sidebar which contains the DRP
-//    //max-width: 100%;
-//    top: 100% !important;
-//    margin-bottom: 20px;
-//
-//    & .drp-body {
-//        flex-direction: column;
-//
-//        & .drp-calendars {
-//            flex-direction: column;
-//        }
-//    }
-//    &.show-ranges .drp-ranges-wrapper,
-//    &.show-ranges.show-ranges-dropdown .drp-ranges-wrapper {
-//        width: 100%;
-//        box-shadow: none;
-//    }
-//    &.show-ranges:not(.show-ranges-dropdown) .drp-ranges-wrapper {
-//        padding: $drp-ranges-padding-y $drp-ranges-padding-x 0 $drp-ranges-padding-x;
-//
-//        & .drp-ranges {
-//            overflow-x: scroll;
-//            padding-bottom: .25rem;
-//
-//            & ul {
-//                width: calc(960px - 20px);
-//            }
-//            & li {
-//                display: inline-block;
-//                //border-radius: .25rem;
-//                padding: .25rem .5rem;
-//                //background-color: #f0f3f5;
-//                margin: 0 .25rem .25rem 0;
-//            }
-//        }
-//    }
-//    &:not(.show) {
-//        display: none;
-//    }
-//}
-
-//.daterangepicker.drp-auto-width,
-//.daterangepicker.show-ranges:not(.show-ranges-dropdown) {
-//    & .drp-ranges-wrapper {
-//        padding: $drp-ranges-padding-y $drp-ranges-padding-x 0 $drp-ranges-padding-x;
-//    }
-//}
 
 // Adjustments for the opening direction
 .daterangepicker {
@@ -814,130 +721,8 @@ $drp-cell-in-range-color:                           initial !default;
 
 .daterangepicker .calendar-table {
     width: 100%;
-
-    & th,
-    & td {
-        text-align: center;
-        vertical-align: middle;
-        min-width: 24px;
-        max-width: 26px;
-        height: 24px;
-        line-height: 16px;
-        white-space: nowrap;
-        cursor: pointer;
-    }
-
-    & table {
-        width: 100%;
-        margin: 0;
-        border-spacing: 0 .25rem;
-        border-collapse: separate;
-
-        & thead tr {
-            & th {
-                font-weight: normal;
-            }
-            &:first-of-type {
-                padding: 0.25rem 0;
-            }
-            &:not(:first-of-type) th {
-                color: #637281;
-                font-size: 80%;
-            }
-            &:nth-of-type(2) th {
-                padding-top: .5rem;
-                border-bottom: 1px solid $drp-border-color;
-            }
-            &:first-of-type th:first-of-type:not(.prev) {
-                cursor: auto;
-            }
-            & th.week {
-                color: $drp-calendar-table-week-color;
-            }
-            & th.month {
-                width: auto;
-                font-weight: bold;
-                cursor: auto;
-            }
-        }
-        & tbody td {
-            border: 2px solid transparent;
-            //border: none;
-            border-radius: 0;
-
-            &.available:hover {
-                background-color: #eee;
-                color: inherit;
-                @include border-radius($drp-cell-border-radius);
-            }
-            &.available:focus {
-                outline: none;
-                @include border-radius($drp-cell-border-radius !important);
-                border: 2px solid $drp-cell-focus-border-color;
-                //box-shadow: $drp-ranges-li-focus-box-shadow;
-            }
-
-            &.week {
-                font-size: $drp-calendar-table-td-week-font-size;
-                color: $drp-calendar-table-week-color;
-            }
-            &.off,
-            &.off.in-range,
-            &.off.start-date,
-            &.off.end-date {
-                font-size: $drp-calendar-table-td-off-font-size;
-                background-color: $drp-calendar-table-td-bg;
-                color: $drp-calendar-table-td-disabled-color;
-            }
-            //&.off.available,
-            &.off.ends {
-                visibility: hidden;
-            }
-            &.in-range:not(.start-date):not(.end-date) {
-                border-radius: 0;
-            }
-            &.start-date,
-            &.start-date:hover,
-            &.start-date:focus {
-                @include border-left-radius($drp-cell-border-radius);
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-            }
-            &.end-date,
-            &.end-date:hover,
-            &.end-date:focus {
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-                @include border-right-radius($drp-cell-border-radius);
-            }
-            &.start-date.end-date {
-                @include border-radius($drp-cell-border-radius);
-            }
-            &.start-date:hover,
-            &.end-date:hover {
-                background-color: $drp-calendar-table-td-start-date-hover-bg !important;
-            }
-            &.in-range:not(.off):not(.start-date):not(.end-date) {
-                background-color: $drp-calendar-table-td-in-range-bg;
-                color: $drp-cell-in-range-color;
-            }
-            &.active,
-            &.active:hover,
-            &.start-date,
-            &.end-date {
-                background-color: $drp-calendar-table-td-start-date-bg;
-                color: $drp-calendar-table-td-start-date-color;
-            }
-            &.disabled {
-                color: $drp-calendar-table-td-disabled-color;
-                cursor: not-allowed;
-                //text-decoration: line-through;
-            }
-        }
-    }
 }
 
-//.daterangepicker td.disabled,
 .daterangepicker {
     & option.disabled {
         color: #e3e3e3;
@@ -954,30 +739,12 @@ $drp-cell-in-range-color:                           initial !default;
             width: 40%;
             display: inline-block;
         }
-        //&.monthselect,
-        //&.yearselect {
-        //    height: 30px;
-        //    background: #f3f3f4;
-        //    border: 1px solid #b9bcbe;
-        //    padding: 1px;
-        //    margin: 0;
-        //    cursor: default;
-        //    color: inherit;
-        //}
         &.hourselect,
         &.minuteselect,
         &.secondselect,
         &.ampmselect {
             display: inline-block;
             width: 50px;
-            //height: 30px;
-            //margin: 0 auto;
-            //background: #eee;
-            //border: 1px solid #eee;
-            //padding: 2px;
-            //outline: 0;
-            //font-size: 90%;
-            //color: inherit;
         }
     }
 }
@@ -1001,12 +768,6 @@ $drp-cell-in-range-color:                           initial !default;
         margin-bottom: 1.25rem;
     }
 }
-
-//// When week numbers are shown, hides first empty <th> in <thead>
-//.drp-calendar:not(.single).left .table-condensed.week thead tr:first-of-type th:first-of-type,
-//.drp-calendar:not(.single).left .table-condensed:not(.week) thead tr:first-of-type th:last-of-type {
-//    display: none;
-//}
 
 .drp-form-group {
     width: 100%;

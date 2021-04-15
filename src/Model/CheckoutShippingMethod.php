@@ -18,7 +18,7 @@ class CheckoutShippingMethod
      * @var ShippingMethod
      * @Groups({"orderView", "orderList"})
      *
-     * @Assert\NotNull(message="cart.missing-shipping-method")
+     * @Assert\NotNull(message="checkout.missing-shipping-method")
      */
     private $shippingMethod;
 

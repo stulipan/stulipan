@@ -1,7 +1,8 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-    #    in_memory: { memory: ~ }
+        # users_in_memory: { memory: null }
+
         # used to reload user from session & other features (e.g. switch_user)
         store_user_provider_from_sajat_db:
             entity:
@@ -49,9 +50,9 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-#   Ez a rész arra szolgál, hogy az Admin és a sima Weboldal autentikációja különvegyük, ne legyen átjárás.
-#   Párhuzamosan két user léphet így be kettő kontextusba: egy Adminba, egy a Weboldalra.
-#   A kontextuson tudnak osztozkodni ezzel a két beállítással:  'context: my_context' és 'stateless: false'
+        # Ez a rész arra szolgál, hogy az Admin és a sima Weboldal autentikációja különvegyük, ne legyen átjárás.
+        # Párhuzamosan két user léphet így be kettő kontextusba: egy Adminba, egy a Weboldalra.
+        # A kontextuson tudnak osztozkodni ezzel a két beállítással:  'context: my_context' és 'stateless: false'
         api_login:
             pattern:  ^/admin/api/login
             provider: admin_user_provider_from_sajat_db
@@ -116,7 +117,9 @@ security:
             switch_user: true  # Add to any URL '?_switch_user=' and the email address of a user to impersonate
             logout:
                 path:   logout #/logout
-                target: homepage
+                success_handler: my_logout_handler  # it's set up in services.yaml
+#                target: homepage    # use this for always directing to homepage after logout
+
             context: my_context
             stateless: false
 
@@ -150,12 +153,11 @@ security:
 #                default_target_path: product-list
 
             # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # http_basic: true
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
 
-            # form_login: true
-            # https://symfony.com/doc/current/security/form_login_setup.html
 
     role_hierarchy:
         ROLE_EDITOR:  [

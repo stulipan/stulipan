@@ -5,7 +5,7 @@ namespace App\Controller\Api;
 use App\Controller\BaseController;
 use App\Entity\Order;
 
-use App\Entity\OrderBuilder;
+use App\Services\OrderBuilder;
 use App\Entity\OrderItem;
 use App\Entity\Product\Product;
 use App\Serializer\CustomerDenormalizer;

@@ -1,0 +1,245 @@
+@import "bootstrap/bootstrap.scss";
+@import "addons/addons.scss";
+@import "sections/sections.scss";
+
+@import "sweetalert2/sweetalert2";
+@import "daterangepicker";
+@import "_font-size-mobile-reboot";
+
+
+$svg-icon-size-width:           $font-size-base !default;
+$svg-icon-line-height:          $line-height-base * 1rem !default;
+
+
+.svg-icon {
+  --font-size: #{$svg-icon-size-width};
+  --line-height: #{$toggle-arrow-line-height};
+  width: var(--font-size);
+  height: var(--font-size);
+  margin-right: .5rem;
+  stroke: currentColor;
+  stroke-width: 3px;
+  --layer1: currentColor;
+  --layer2: currentColor;
+  margin-bottom: calc((var(--line-height) - var(--font-size)) / 2);
+}
+
+.svg-icon.svg-icon-heavy {
+  stroke-width: 5
+}
+
+.checkout-customer .svg-icon {
+  --font-size: 2.5rem;
+  --line-height: 2.5rem;
+  opacity: .7;
+}
+
+// Custom correction by Stulipan
+// VP (VARIANT PICKER) used on daterangepicker
+.JS--Button-clickDate:focus {
+  outline: none;
+
+  &+div .vp .vp-figure {
+    @include vp-shadow($vp-focus-shadow);
+  }
+}
+
+.JS--Button-clickDate, .JS--Button-clickDate * {
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.custom-control.text-sm .custom-control-label {
+  //padding-top: calc(.1875rem + .06rem);
+  //padding-top: calc((#{$font-size-base} * (1 - #{$text-sm-font-size}))/2 + (#{$line-height-base} * 1rem - #{$text-sm-line-height})/2);
+  //padding-top: ($font-size-base * (1 - $text-sm-font-size))/2 + ($line-height-base * 1rem - $text-sm-line-height)/2;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+// Mobile menuben volt hasznalva, de MAR NINC HASZNALVA
+//.close.modal-close {
+//  width: 50px;
+//  height: 50px;
+//  text-align: center;
+//  line-height: 50px;
+//  background: #343a40;
+//  color: #fff !important;
+//  position: absolute;
+//  top: -5px;
+//  right: -5px;
+//  opacity: 1;
+//  //font-size: .8rem;
+//  z-index: 999;
+//  cursor: pointer;
+//  outline: none;
+//  border-radius: $border-radius;
+//}
+
+
+.pointer-events-none {
+  pointer-events: none !important;
+}
+
+.wrapper-absolute {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+.icon-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+
+  & .icon-bg {
+    position: absolute;
+    width: 1.2rem;
+    height: 1.2rem;
+    right: -2px;
+    bottom: -2px;
+    margin-right: 0;
+    margin-bottom: 0;
+    opacity: .6;
+    -webkit-transform: rotate(30deg);
+    transform: rotate(-30deg);
+    font-size: 1.2rem;
+  }
+}
+
+
+//
+//  Custom classes
+//
+
+// Hero banners
+.light-overlay, .dark-overlay {
+  position: relative;
+
+  & .overlay-content {
+    position: relative;
+    z-index: 20;
+  }
+
+  &::after {
+    content: ' ';
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: .3;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
+
+.heroBanner h1,
+.heroBanner-title {
+  font-family: 'Archivo Black', sans-serif;
+  color: white;
+  font-weight: normal;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.heroBanner-btn {
+  /*background-color: #ffffffc9; */
+  background-image: none;
+  border-color: #f8f9fa;
+  /*color: #343a40;*/
+  color: white;
+  border-radius: 3px;
+  border-width: 2px;
+}
+.heroBanner-btn:hover {
+  background-color: #ffffffc9;
+}
+
+.heroBanner-btnZ {
+  background-image: none;
+  border-color: #f8f9fa;
+  color: white;
+  border-radius: 3px;
+  border-width: 2px;
+}
+.heroBanner-btnZ:hover {
+  background-color: #ffffffc9;
+}
+
+// It is used on Product Detail page
+.marketing-title
+{
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: normal;
+}
+
+// Ekko lightbox
+.ekko-lightbox .modal-header {
+  padding: 0
+}
+
+.ekko-lightbox .modal-title {
+  display: none
+}
+
+.ekko-lightbox .ekko-lightbox-nav-overlay span {
+  padding: 0 .5rem
+}
+
+.ekko-lightbox .nav-arrow {
+  -ms-flex-positive: 0;
+  flex-grow: 0
+}
+
+.ekko-lightbox .nav-arrow-right {
+  justify-self: right
+}
+
+.ekko-lightbox .close {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  vertical-align: top;
+  background: #343a40;
+  color: #fff;
+  top: -5px;
+  right: -5px;
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  font-size: 2rem;
+  z-index: 999;
+  cursor: pointer;
+  outline: none
+}
+
+.ekko-lightbox .close span {
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  text-shadow: none;
+  font-weight: normal
+}
+
+.ekko-lightbox .modal-footer {
+  -ms-flex-pack: center;
+  justify-content: center;
+  padding-top: 0
+}

@@ -2,15 +2,18 @@
 
 namespace App\Security;
 
-use App\Entity\Order;
-use App\Entity\OrderBuilder;
-use App\Entity\User;
+use App\Entity\Customer;
+use App\Services\OrderBuilder;
+use App\Services\OrderSessionStorage;
 use App\Repository\UserRepository;
+use App\Services\AbandonedOrderRetriever;
+use App\Services\CustomerBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -43,8 +46,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @var UserPasswordEncoderInterface
      */
     private $passwordEncoder;
+
     /**
-     * @var User
+     * @var Customer
      */
     private $customer;
     /**
@@ -56,6 +60,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     private $orderBuilder;
     /**
+     * @param CustomerBuilder $customerBuilder
+     */
+    private $customerBuilder;
+    /**
+     * @param AbandonedOrderRetriever $abandonedOrderRetriever
+     */
+    private $abandonedOrderRetriever;
+    /**
      * @var EntityManagerInterface
      */
     private $em;
@@ -64,9 +76,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     private $requestStack;
 
+    private $orderSession;
+
     public function __construct(UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager,
-                                UserPasswordEncoderInterface $passwordEncoder, Security $security, OrderBuilder $orderBuilder,
-                                EntityManagerInterface $em)
+                                UserPasswordEncoderInterface $passwordEncoder,
+                                Security $security, OrderBuilder $orderBuilder, EntityManagerInterface $em,
+                                CustomerBuilder $customerBuilder, OrderSessionStorage $orderSession,
+                                AbandonedOrderRetriever $abandonedOrderRetriever)
     {
         $this->router = $router;
         $this->userRepository = $userRepository;
@@ -75,6 +91,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->security = $security;
         $this->em = $em;
         $this->orderBuilder = $orderBuilder;
+        $this->customerBuilder = $customerBuilder;
+        $this->orderSession = $orderSession;
+        $this->abandonedOrderRetriever = $abandonedOrderRetriever;
     }
 
     /**
@@ -87,7 +106,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function supports(Request $request)
     {
-//        dd($request->attributes->get('_route') === 'site-login' && $request->isMethod('POST'));
         return $request->attributes->get('_route') === 'site-login' && $request->isMethod('POST');
     }
 
@@ -138,24 +156,88 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-//        dd($user->getRoles());
-//        dd($this->passwordEncoder->isPasswordValid($user, $credentials['password']));
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-//        dd($request->getPathInfo() === $this->router->generate('admin-login'));
+        $orderInSession = $this->orderSession->getOrderById();  // extract Order from session, if any
+        $customer = $this->customerBuilder->retrieveCustomer($orderInSession);  // build Customer object
+        $abandonedOrder = $this->abandonedOrderRetriever->getOrder();
 
-        $this->getItemsFromPreviousOrder();
+        if ($customer->getId() === null) {
+            $this->em->persist($customer);
+            $this->em->flush();
+        }
+
+        /**
+         * Gets the items from abandoned Order and adds them to the Order in session.
+         * Returns the Order in session (with id!).
+         */
+        if ($orderInSession && $abandonedOrder) {
+            if ($abandonedOrder->hasItems()) {
+                foreach ($abandonedOrder->getItems() as $item) {
+                    if (!$orderInSession->containsTheProduct($item->getProduct())) {
+                        $abandonedOrder->removeItem($item);
+                        $item->setOrder($orderInSession);
+                        $orderInSession->addItem($item);
+                    }
+                }
+            }
+            // nem akarjuk az elozo Order teljes tartalmat atmasolni
+            // $abandonedOrder->copyPropertyValuesInto($orderInSession);
+
+            $orderInSession->setCustomer($customer);
+            $orderInSession->setFirstname($customer->getFirstname());
+            $orderInSession->setLastname($customer->getLastname());
+            $orderInSession->setEmail($customer->getEmail());
+            $orderInSession->setPhone($customer->getPhone());
+
+            if ($orderInSession->getRecipient()) {
+                $orderInSession->getRecipient()->setCustomer($customer);
+                $this->em->persist($orderInSession->getRecipient());
+            }
+            if ($orderInSession->getSender()) {
+                $orderInSession->getSender()->setCustomer($customer);
+                $this->em->persist($orderInSession->getSender());
+            }
+
+            $abandonedOrder->setCustomer(null);
+            $abandonedOrder->setRecipient(null);
+            $abandonedOrder->setSender(null);
+            $this->em->remove($abandonedOrder);  // remove abandonedOrder from db
+
+            $this->em->persist($orderInSession);
+            $this->em->flush();
+        }
+
+        /** If no Order in session, adds the abandonedOrder to the session */
+        if (!$orderInSession && $abandonedOrder) {
+            $this->orderBuilder->setCurrentOrder($abandonedOrder);
+        }
+
+        if ($orderInSession) {
+            if ($customer) {
+                $orderInSession->setCustomer($customer);
+                $orderInSession->setFirstname($customer->getFirstname());
+                $orderInSession->setLastname($customer->getLastname());
+                $orderInSession->setEmail($customer->getEmail());
+                $orderInSession->setPhone($customer->getPhone());
+
+                if ($orderInSession->getRecipient()) {
+                    $orderInSession->getRecipient()->setCustomer($customer);
+                    $this->em->persist($orderInSession->getRecipient());
+                }
+                if ($orderInSession->getSender()) {
+                    $orderInSession->getSender()->setCustomer($customer);
+                    $this->em->persist($orderInSession->getSender());
+                }
+                $this->em->persist($orderInSession);
+                $this->em->flush();
+            }
+        }
+
         $request->getSession()->set('_locale', $request->getLocale());
-
-//        dd($request->request->get('_target_path'));
-//        dd($this->getTargetPath($request->getSession(), $providerKey));
-
-//        if ($targetPath = $request->request->get('_target_path')) {
-//            return new RedirectResponse($targetPath);
-//        }
 
         /**
          * Scenario 1: If there was a target path which triggered login, redirects to target path
@@ -175,9 +257,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($this->router->generate('homepage'));
         }
 
-//        return new RedirectResponse($this->router->generate('site-cart'));
-//        return null;
-        
         return new Response('OK',200);
     }
 
@@ -188,36 +267,4 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         return $this->router->generate('site-login');
     }
-
-    /**
-     * Helper function. It is executed right after successful authentication
-     * I use it above in onAuthenticationSuccess()
-     */
-    private function getItemsFromPreviousOrder()
-    {
-        /**
-         * After login, gets items from Customer's previous order and adds them to current order.
-         * It's best to be done right after login, than anywhere else in a controller.
-         *
-         * This way this is executed only once, not needed to put it many controller methods/functions where you would need it executed!
-         */
-        $this->customer = $this->security->getUser();
-        if ($this->customer) {
-            $this->orderBuilder->setCustomer($this->customer);
-            $prevOrder = $this->em->getRepository(Order::class)
-                ->findOneBy(['customer' => $this->customer], ['id' => 'DESC']);   ///??? nem mindig talalja meg
-            if ($prevOrder && $prevOrder->hasItems()) {
-                foreach ($prevOrder->getItems() as $item) {
-                    if (!$this->orderBuilder->containsTheProduct($item->getProduct())) {
-                        /**
-                         * Csak átrakom az Itemeket a régi Orderből az újba. A régibe nem maradnak meg!
-                         * Ez később baj lehet, amikor elhagyott kosár statisztikát csinálnánk és hamisan ott marad
-                         */
-                        $this->orderBuilder->addItemFromPreviousOrder($item);
-                    }
-                }
-            }
-        }
-    }
-
 }

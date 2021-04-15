@@ -1,0 +1,14 @@
+{% extends 'admin/order/order-list.html.twig' %}
+
+{% set activeMenu = 'orders' %}
+{% set pageTitle = 'Elhagyott kosarak' %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+} %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Inventory;
+namespace App\Boltzaras\Form;
 
 use App\Entity\Boltzaras\InventoryInvoiceCompany;
 

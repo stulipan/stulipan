@@ -2,12 +2,11 @@
 {#        <span class="text-muted">{{ 'checkout.recipient.previously-saved-recipients-modal-description'|trans }}</span>#}
 {#    </div>#}
 {% for recipient in recipients %}
-{#                {{ include('webshop/cart/recipient_widget.html.twig') }}#}
     <div class="checkout-recipient-item mt-4">
         <div class="JS--item h-100">
             <div class="d-flex flex-column flex-sm-row justify-content-between h-100">
                 <div class="">
-                    <span class="address-title">{{ recipient.fullname }}</span> {% if selectedRecipient is defined and selectedRecipient == recipient.id %}<span class="text-primary"><i class="far fa-check-circle"></i></span>{% endif %}<br>
+                    <span class="address-title">{{ recipient.fullname }}</span> {% if selectedRecipient is defined and selectedRecipient == recipient.id %}<span class="badge badge-warning text-uppercase font-italic">{{ 'checkout.recipient.last-used'|trans }}</span>{% endif %}<br>
                     <span class="address-details">{{ recipient.address.street }}</span> <br>
                     <span class="address-details">{{ recipient.address.zip }} {{ recipient.address.city }}</span> <br>
                     <span class="address-details">{{ recipient.address.province }}, {{ recipient.address.country }}</span> <br>
@@ -16,12 +15,12 @@
                 <div class="d-flex align-items-center h-100 mt-2 mt-sm-0">
                     <div class="d-flex flex-row flex-sm-column h-100">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            <a href="{{ path('cart-pickRecipient', {id: recipient.id}) }}" class="JS--Button-pickRecipient btn btn-primary btn-sm mb-0 mb-sm-2" data-selector="button" data-eval="pickRecipient">
+                            <a href="{{ path('cart-pickRecipient', {id: recipient.id}) }}" class="JS--Button-pickRecipient btn btn-primary btn-sm mb-0 mb-sm-2">
                                 <span class="loading-spinner-invisible">{{ 'checkout.recipient.select-recipient'|trans }}</span>
                                 <div class="loading-spinner" role="status"></div>
                             </a>
                         {% endif %}
-                        <button class="JS--Button-deleteRecipient btn btn-sm btn-secondary ml-2 ml-sm-0" data-selector="button" data-eval="deleteRecipient" data-url="{{ path('cart-deleteRecipient', {id: recipient.id}) }}">
+                        <button class="JS--Button-deleteRecipient btn btn-sm btn-secondary ml-2 ml-sm-0" data-url="{{ path('cart-deleteRecipient', {id: recipient.id}) }}">
                             <span class="loading-spinner-invisible">{{ 'generic.delete'|trans }}</span>
                             <div class="loading-spinner" role="status"></div>
                         </button>

@@ -38,7 +38,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -143,7 +143,7 @@ class OrderController extends AbstractController
         ];
         $filterQuickLinks['unfulfilled'] = [
             'name' => 'Feldolgozás alatt',
-            'url' => $this->generateUrl('order-list-table',['orderStatus' => OrderStatus::STATUS_CREATED]),
+            'url' => $this->generateUrl('order-list-table',['orderStatus' => OrderStatus::ORDER_CREATED]),
             'active' => false,
         ];
 
@@ -157,7 +157,7 @@ class OrderController extends AbstractController
             $filterQuickLinks['unpaid']['active'] = true;
             $hasCustomFilter = true;
         }
-        if (!$dateRange && $orderStatus && $orderStatus === OrderStatus::STATUS_CREATED) {
+        if (!$dateRange && $orderStatus && $orderStatus === OrderStatus::ORDER_CREATED) {
             $filterQuickLinks['unfulfilled']['active'] = true;
             $hasCustomFilter = true;
         }
@@ -176,8 +176,7 @@ class OrderController extends AbstractController
             'paymentStatus' => $paymentStatus,
         ]);
 
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
         $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
@@ -192,11 +191,139 @@ class OrderController extends AbstractController
             $orders[] = $result;
         }
 
-        if (!$orders) {
+//        if (!$orders) {
 //            $this->addFlash('danger', 'Nem talált rendeléseket! Próbáld módosítani a szűrőket.');
+//        }
+
+        return $this->render('admin/order/order-list.html.twig', [
+            'orders' => $orders,
+            'paginator' => $pagerfanta,
+            'total' => $pagerfanta->getNbResults(),
+            'count' => count($orders),
+            'orderCount' => empty($orders) ? 'Nincsenek rendelések' : count($orders),
+            'filterQuickLinks' => $filterQuickLinks,
+            'filterForm' => $filterForm->createView(),
+            'filterTags' => $filterTags,
+            'filterUrls' => $filterUrls,
+            'filterFormSidebar' => $filterFormSidebar->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/orders/abandoned", name="order-list-abandoned",
+     *     requirements={"page"="\d+"},
+     *     )
+     */
+    public function listAbandonedOrders(Request $request, $page = 1, AdminSettings $settings)
+    {
+        $dateRange = $request->query->get('dateRange');
+        $searchTerm = $request->query->get('searchTerm');
+        $paymentStatus = $request->query->get('paymentStatus');
+        $orderStatus = $request->query->get('orderStatus');
+        $page = $request->query->get('page') ? $request->query->get('page') : $page;
+
+        $filterTags = [];
+        $urlParams = [];
+        $data = $filterTags;
+        $em = $this->getDoctrine();
+        if ($dateRange) {
+            $filterTags['dateRange'] = 'Idősáv: '.$dateRange;
+            $data['dateRange'] = $dateRange;
+            $urlParams['dateRange'] = $dateRange;
+        }
+        if ($searchTerm) {
+            $filterTags['searchTerm'] = 'Keresés: '.$searchTerm;
+            $data['searchTerm'] = $searchTerm;
+            $urlParams['searchTerm'] = $searchTerm;
+        }
+        if ($orderStatus) {
+            $filterTags['orderStatus'] = $em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $orderStatus])->getName();
+            $urlParams['orderStatus'] = $orderStatus;
+            $data['orderStatus'] = $em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $orderStatus]);
+        }
+        if ($paymentStatus) {
+            $filterTags['paymentStatus'] = $em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus])->getName();
+            $urlParams['paymentStatus'] = $paymentStatus;
+            $data['paymentStatus'] = $em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus]);
+        }
+        $filterForm = $this->createForm(OrderFilterType::class, $data);
+        $filterFormSidebar = $this->createForm(OrderFilterType::class, $data);
+
+        $filterUrls = [];
+        foreach ($filterTags as $key => $value) {
+            // remove the current filter from the urlParams
+            $shortlist = array_diff_key($urlParams,[$key => '']);
+
+            // generate the URL with the remaining filters
+            $filterUrls[$key] = $this->generateUrl('order-list-table',[
+                'dateRange' => isset($shortlist['dateRange']) ? $shortlist['dateRange'] : null,
+                'searchTerm' => isset($shortlist['searchTerm']) ? $shortlist['searchTerm'] : null,
+                'orderStatus' => isset($shortlist['orderStatus']) ? $shortlist['orderStatus'] : null,
+                'paymentStatus' => isset($shortlist['paymentStatus']) ? $shortlist['paymentStatus'] : null,
+            ]);
         }
 
-        return $this->render('admin/order/order-list-table-withProducts.html.twig', [
+        $filterQuickLinks['all'] = [
+            'name' => 'Összes rendelés',
+            'url' => $this->generateUrl('order-list-table'),
+            'active' => false,
+        ];
+        $filterQuickLinks['unpaid'] = [
+            'name' => 'Fizetésre váró',
+            'url' => $this->generateUrl('order-list-table',['paymentStatus' => PaymentStatus::STATUS_PENDING]),
+            'active' => false,
+        ];
+        $filterQuickLinks['unfulfilled'] = [
+            'name' => 'Feldolgozás alatt',
+            'url' => $this->generateUrl('order-list-table',['orderStatus' => OrderStatus::ORDER_CREATED]),
+            'active' => false,
+        ];
+
+        // Generate the quicklinks which are placed above the filter
+        $hasCustomFilter = false;
+        if (!$dateRange && !$orderStatus && !$paymentStatus && !$searchTerm) {
+            $filterQuickLinks['all']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$dateRange && $paymentStatus && ( $paymentStatus === PaymentStatus::STATUS_PENDING || $paymentStatus === PaymentStatus::STATUS_PARTIALLY_PAID)) {
+            $filterQuickLinks['unpaid']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$dateRange && $orderStatus && $orderStatus === OrderStatus::ORDER_CREATED) {
+            $filterQuickLinks['unfulfilled']['active'] = true;
+            $hasCustomFilter = true;
+        }
+        if (!$hasCustomFilter) {
+            $filterQuickLinks['custom'] = [
+                'name' => 'Egyedi szűrés',
+                'url' => $this->generateUrl('order-list-table',$request->query->all()),
+                'active' => true,
+            ];
+        }
+
+        $queryBuilder = $em->getRepository(Order::class)->findAllQuery([
+            'dateRange' => $dateRange,
+            'searchTerm' => $searchTerm,
+            'orderStatus' => $orderStatus,
+            'paymentStatus' => $paymentStatus,
+        ], false);
+
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
+        //$pagerfanta->setCurrentPage($page);
+
+        try {
+            $pagerfanta->setCurrentPage($page);
+        } catch(NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        $orders = [];
+        foreach ($pagerfanta->getCurrentPageResults() as $result) {
+            $orders[] = $result;
+        }
+
+        return $this->render('admin/order/order-list-abandoned.html.twig', [
             'orders' => $orders,
             'paginator' => $pagerfanta,
             'total' => $pagerfanta->getNbResults(),
@@ -321,8 +448,8 @@ class OrderController extends AbstractController
         /**
          *
          */
-//        if ($order->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED || $order->getStatus()->getShortcode() === OrderStatus::STATUS_REJECTED ||
-//            $order->getStatus()->getShortcode() === OrderStatus::STATUS_RETURNED || $order->getStatus()->getShortcode() === OrderStatus::STATUS_DELETED) {
+//        if ($order->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED || $order->getStatus()->getShortcode() === OrderStatus::ORDER_REJECTED ||
+//            $order->getStatus()->getShortcode() === OrderStatus::STATUS_RETURNED || $order->getStatus()->getShortcode() === OrderStatus::ORDER_DELETED) {
 //            $isDeliveryOverdue = false;
 //        } else {
         

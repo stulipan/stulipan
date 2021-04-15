@@ -8,14 +8,16 @@ use App\Entity\DeliveryDateType;
 use App\Entity\DeliverySpecialDate;
 use App\Form\DeliveryDate\DeliveryDateTypeFormType;
 use App\Form\DeliveryDate\DeliverySpecialDateFormType;
+use App\Services\StoreSettings;
 use DateTime;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\HttpCache\Store;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
@@ -32,18 +34,15 @@ class DeliveryDateController extends AbstractController
     /**
      * @Route("/delivery/datetype/{page}", name="delivery-date-type-list", requirements={"page"="\d+"})
      */
-    public function listDeliveryDateTypesWithPagination($page = 1)
+    public function listDeliveryDateTypesWithPagination($page = 1, StoreSettings $settings)
     {
         $queryBuilder = $this->getDoctrine()
             ->getRepository(DeliveryDateType::class)
             ->findAllQueryBuilder()
         ;
 
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
         try {
@@ -144,18 +143,15 @@ class DeliveryDateController extends AbstractController
     /**
      * @Route("/delivery/occasion/{page}", name="occasion-list", requirements={"page"="\d+"})
      */
-    public function listSpecialDatesWithPagination($page = 1)
+    public function listSpecialDatesWithPagination($page = 1, StoreSettings $settings)
     {
         $queryBuilder = $this->getDoctrine()
             ->getRepository(DeliverySpecialDate::class)
             ->findAllQueryBuilder()
         ;
 
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
         try {

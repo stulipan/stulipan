@@ -17,9 +17,7 @@
 
 {% block javascripts %}
 	{{ parent() }}
-    {{ encore_entry_script_tags('checkout') }}
     <script src="{{ asset('webshop/site/js/jquery.easy-autocomplete.js') }}"></script>
-    <script src="{{ asset('webshop/validate.min.js') }}"></script>
     <script>
         window.addEventListener( "pageshow", function ( event ) {
             var historyTraversal = event.persisted ||

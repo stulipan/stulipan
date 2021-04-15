@@ -43,7 +43,7 @@ class AdminController extends AbstractController
 //        $orders = $this->getDoctrine()->getRepository(Order::class)->findAllLast('24 hours');
         $orderCount = $rep->countAllLast('24 hours');
         $unpaidCount = $rep->countAllLast('24 hours', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast('24 hours', ['orderStatus' => OrderStatus::STATUS_CREATED]);
+        $unfulfilledCount = $rep->countAllLast('24 hours', ['orderStatus' => OrderStatus::ORDER_CREATED]);
 
         $lastDay = new OrdersSummary();
         $lastDay->setOrderCount($orderCount['count']);
@@ -54,7 +54,7 @@ class AdminController extends AbstractController
 
         $orderCount = $rep->countAllLast('7 days');
         $unpaidCount = $rep->countAllLast('7 days', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast('7 days', ['orderStatus' => OrderStatus::STATUS_CREATED]);
+        $unfulfilledCount = $rep->countAllLast('7 days', ['orderStatus' => OrderStatus::ORDER_CREATED]);
 
         $lastWeek = new OrdersSummary();
         $lastWeek->setOrderCount($orderCount['count']);
@@ -66,7 +66,7 @@ class AdminController extends AbstractController
         $orderCount = $rep->countAllLast('30 days');
 //        dd($orderCount);
         $unpaidCount = $rep->countAllLast('30 days', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast('30 days', ['orderStatus' => OrderStatus::STATUS_CREATED]);
+        $unfulfilledCount = $rep->countAllLast('30 days', ['orderStatus' => OrderStatus::ORDER_CREATED]);
 
         $lastMonth = new OrdersSummary();
         $lastMonth->setOrderCount($orderCount['count']);
@@ -77,7 +77,7 @@ class AdminController extends AbstractController
 
         $orderCount = $rep->countAllLast('lifetime');
         $unpaidCount = $rep->countAllLast('lifetime', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast(null, ['orderStatus' => OrderStatus::STATUS_CREATED]);
+        $unfulfilledCount = $rep->countAllLast(null, ['orderStatus' => OrderStatus::ORDER_CREATED]);
 
         $lifetime = new OrdersSummary();
         $lifetime->setOrderCount($orderCount['count']);

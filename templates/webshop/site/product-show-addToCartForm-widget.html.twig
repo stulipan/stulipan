@@ -9,7 +9,7 @@
 
             {% if form.options is defined and form.options is not empty %}
                 <div class="product-variant-selector-content">
-                    <div class="card-body p-2 bg-secondary">
+                    <div class="content-body-thick-border">
                         {% for item in form.options|slice(0,1) %}
                             <div class="list-group list-group-flush">
                                 {% for choice in item.selectedOptionValue %}
@@ -50,7 +50,7 @@
                 </div>
             {% else %}
                 <div class="product-variant-selector-content">
-                    <div class="card-body p-2 bg-secondary">
+                    <div class="content-body-thick-border">
                         <div class="list-group list-group-flush">
                             <div class="list-group-item">
                                 <div class="custom-control custom-radio">
@@ -90,7 +90,7 @@
             <div class="product-variant-selector-label">Szállítás</div>
 
             <div class="product-variant-selector-content mb-4 JS--deliveryDateContainer">
-                <div class="card-body p-2 bg-secondary JS--dateWrapper">
+                <div class="content-body-thick-border JS--dateWrapper">
                     <div class="form-row">
 
                         {% for choice in form.deliveryDate.deliveryDate|slice(0,3) %}

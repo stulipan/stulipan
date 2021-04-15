@@ -37,7 +37,7 @@ final class DeliveryOverdue
      */
     public function isDeliveryOverdue(): bool
     {
-        if ($this->order->getStatus() && $this->order->getStatus()->getShortcode() === OrderStatus::STATUS_CREATED) {
+        if ($this->order->getStatus() && $this->order->getStatus()->getShortcode() === OrderStatus::ORDER_CREATED) {
             return $this->order->isDeliveryDateInPast();
         } else {
             return false;

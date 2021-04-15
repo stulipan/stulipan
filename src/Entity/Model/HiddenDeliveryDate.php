@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\Model;
 
 use App\Entity\DeliveryDateInterval;
+use Datetime;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -14,13 +15,13 @@ class HiddenDeliveryDate
 {
     /**
      * @var string
-     * @Assert\NotNull(message="Jelöld meg a szállítási napot.")
+     * @Assert\NotNull(message="checkout.delivery-date.missing-date")
      */
     private $deliveryDate;
 
     /**
      * @var string
-     * @Assert\Expression("this.missingDeliveryInterval()", message = "Válaszd ki, mely napszakban történjen meg a kiszállítás.")
+     * @Assert\Expression("this.missingDeliveryInterval()", message = "checkout.delivery-date.missing-interval")
      *
      */
     private $deliveryInterval;
@@ -33,7 +34,7 @@ class HiddenDeliveryDate
 
     public function __construct($date = null, string $interval = null, float $fee = null)
     {
-        if ($date instanceof \Datetime) {
+        if ($date instanceof Datetime) {
             $this->deliveryDate = $date->format('Y-m-d');
         } else {
             $this->deliveryDate = $date;

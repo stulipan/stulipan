@@ -9,6 +9,7 @@ use App\Admin\Boltzaras\Form\BoltzarasWebFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
 
+use App\Services\StoreSettings;
 use DateTime;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Swift_Mailer;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -197,7 +198,7 @@ class BoltzarasController extends AbstractController
      *     defaults={"start"=null, "end"=null}
      *     )
      */
-    public function listActionWithPagination(Request $request, $page = 1)
+    public function listActionWithPagination(Request $request, $page = 1, StoreSettings $settings)
     {
 //        $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -252,12 +253,8 @@ class BoltzarasController extends AbstractController
                 ->getSingleResult();
         }
 
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        //On the Pagerfanta object, call setMaxPerPage() to set displayed items to 10, the set current page
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
         try {

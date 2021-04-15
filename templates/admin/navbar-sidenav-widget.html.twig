@@ -75,6 +75,12 @@
                         </div>
                         Rendelések
                     </a>
+                    <a href="{{ path('order-list-abandoned') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'order-list-abandoned' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        Elhagyott kosarak
+                    </a>
                     <a href="{{ path('customer-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'customer-list' %}nav-subitem-selected{% endif %}">
                         <div class="sidenav-icon">
                             <i class="fas fa-user-friends"></i>

@@ -5,7 +5,7 @@ namespace App\Controller\Api;
 use App\Controller\BaseController;
 use App\Entity\Order;
 
-use App\Entity\OrderBuilder;
+use App\Services\OrderBuilder;
 use App\Entity\OrderItem;
 use App\Entity\Product\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -60,9 +60,9 @@ class OrderItemApiController extends BaseController
             $orderItem->setOrder($order);
             $orderItem->setProduct($product);
             $orderItem->setQuantity(1);
-            $orderItem->setPrice($product->getPrice()->getNumericValue());
+            $orderItem->setUnitPrice($product->getPrice()->getNumericValue());
         
-            $orderItem->setPriceTotal($orderItem->getPrice() * $orderItem->getQuantity());
+            $orderItem->setPriceTotal($orderItem->getUnitPrice() * $orderItem->getQuantity());
             $order->addItem($orderItem);
         } else {
             $key = $order->indexOfProduct($product);
@@ -74,8 +74,8 @@ class OrderItemApiController extends BaseController
             if ($item->getQuantity()+1 <= $product->getStock()) {
                 $item->setQuantity($item->getQuantity()+1);
                 $price = $product->getPrice()->getNumericValue();
-                $item->setPrice($price);
-                $item->setPriceTotal($item->getPrice() * $item->getQuantity());
+                $item->setUnitPrice($price);
+                $item->setPriceTotal($item->getUnitPrice() * $item->getQuantity());
             } else {
                 $errors['message'] = sprintf('A termékből nincs több készleten');
             }

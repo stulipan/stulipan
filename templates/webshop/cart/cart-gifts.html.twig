@@ -16,7 +16,6 @@
                                     <span class="productList--price-gross">{{ product.price.numericValue|money }}</span>
                                 </div>
                                 <div class="text-center">
-{#                                    <button type="button" class="JS--Button-addGiftToCart btn btn-sm btn-primary" data-selectorx="button" data-evalx="addGiftToCart" data-url="{{ path('cart-addGift', {'id': product.id}) }}">#}
                                     <button type="button" class="JS--Button-addGiftToCart btn btn-sm btn-primary" data-url="{{ path('cart-addGift', {'id': product.id}) }}">
                                         <span class="loading-spinner-invisible">{{ 'cart.gift.choose-gift'|trans }}</span>
                                         <div class="loading-spinner" role="status"></div>

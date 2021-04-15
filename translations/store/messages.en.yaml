@@ -30,6 +30,8 @@ navbar:
 registration:
     login-title: Returning customer
     login-button: Login
+    login-meta-title: Login
+    registration-meta-title: Registration
     create-account: Create account
     create-account-title: New customer
     register-button: Register
@@ -40,7 +42,18 @@ registration:
     lastname: Lastname
     remember-me: Remember me
     newsletter-sign-up: I want to be informed first hand about promotions and news.
-    accept-terms-and-conditions: I have read and accept the Terms and Conditions and the Privacy Policy, and I consent to the data processing contained therein.
+
+    email-is-missing: 'Enter your email address!'
+    email-is-invalid: 'Invalid email address!'
+    email-is-in-use: 'This email address is already in use!'
+    password-is-missing: 'Enter a password!'
+    firstname-is-missing: Please enter your first name!
+    lastname-is-missing: Please enter your last name!
+    password-at-login-is-missing: 'Enter your password!'
+
+    terms:
+        accept-terms-label: 'I have read and accept the <a {{ terms }}>Terms and conditions</a> and agree to the use my personal data as laid out in the <a {{ privacy }}>Privacy policy</a>.'
+        accept-terms-error: 'Please make sure you have read the Terms and conditions.'
 
 
 account:
@@ -74,11 +87,11 @@ cart:
 
     product:
         product-added-successfully: You have successfully added the product to your cart!
+        not-enough-stock: 'Not enough stock is available.'
     gift:
         choose-gift-title: Choose a gift to send along with the flowers
         choose-gift: Choose gift
         gift-added-successfully: You have successfully added the gift to your cart!
-    not-enough-stock: 'Not enough stock is available.'
 
     greeting-card:
         send-message-title: Send a message
@@ -128,6 +141,11 @@ checkout:
         missing-country: Please select a country.
         missing-phone: Please enter recipient's phone number.
         invalid-phone: 'A valid phone number is required. Valid format: +36... or 06...'
+        missing-recipient: "Don't forget to enter recipient's information."
+        last-used: 'Last used'
+
+    sender:
+        last-used: 'Last used'
 
     customer:
         customer-information-title: Customer details
@@ -144,7 +162,18 @@ checkout:
         missing-phone: Please enter your phone number!
         invalid-phone: 'A valid phone number is required. Valid format: +36... or 06...'
         newsletter-optin: Keep me up to date on special offers. Solely for customers!
-
+        missing-customer: 'Missing customer information!'
+    shipping:
+        shipping-method-missing: Please select a shipping method!
+    delivery-date:
+        missing-date: Choose a day on which to make the delivery.
+        missing-interval: Select a time interval.'
+        delivery-date-missing: Please pick a delivery date!
+    payment:
+        payment-method-missing: Please select a payment method!
+    terms:
+        accept-terms-label: 'By placing this order you accept and agree to our <a {{ terms }}>Terms and conditions</a> and <a {{ privacy }}>Privacy policy</a> and you acknowledge that we will use the information you provided to fulfill the order.'
+        accept-terms-error: 'Please accept the Terms and conditions before placing your order.'
     continue-to-shipping-address-button: 'Continue to shipping address'
     continue-to-recipient-address-button: 'Continue to recipient''s address'
     continue-to-shipping-method-button: Continue to shipping method

@@ -16,10 +16,7 @@
     </div>
 {% endmacro %}
 
-{{ form_start(senderForm, { 'attr': {'class': 'JS--senderForm JS--editForm-sender',
-    'data-wrapper-sender-form': '',
-    'data-selector' : 'form',
-    'data-eval' : 'submitSenderForm',
+{{ form_start(senderForm, { 'attr': {'class': 'JS--Wrapper-senderForm',
 }}) }}
         <div class="form-row">
             {% if app.request.locale == 'hu' %}
@@ -92,3 +89,4 @@
             {{ form_rest(senderForm) }}
         </div>
 {{ form_end(senderForm) }}
+{#{% do senderForm.setRendered() %}#}

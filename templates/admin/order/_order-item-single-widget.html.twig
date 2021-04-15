@@ -14,11 +14,11 @@
                         <div class="text-muted">SKU: {{ item.product.sku }}</div>
                     </div>
                     <div class="cart-item-detail--calculation">
-                        <span class="text-nowrap">{{ item.price|money }}</span>
+                        <span class="text-nowrap">{{ item.unitPrice|money }}</span>
                         <span class="text-nowrap"> <small class="d-inline-block text-muted px-2">x</small> {{ item.quantity }}</span>
                     </div>
                     <div class="cart-item-detail--total">
-                        <div class="text-nowrap">{{ (item.price * item.quantity) |money }}</div>
+                        <div class="text-nowrap">{{ (item.unitPrice * item.quantity) |money }}</div>
                     </div>
                 </div>
             </div>

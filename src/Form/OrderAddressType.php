@@ -43,30 +43,23 @@ class OrderAddressType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $preferredCountries = $this->em->getRepository(GeoCountry::class)->findBy(['alpha2' => 'hu']);
-        //$builder->setAction($this->urlGenerator->generate('cart_set_delivery_address', ['id' => '0']));
         $builder->add('id',HiddenType::class,[
-             // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-            'mapped' => false,
+            'mapped' => false, // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
         ]);
         $builder->add('street',TextType::class,[
-            'label' => 'Cím',
+            'attr' => ['autocomplete' => 'street-address'],
         ]);
         $builder->add('city',TextType::class,[
-            'label' => 'Város',
-            'attr' => ['autocomplete' => 'cityXXX'],
+            'attr' => ['autocomplete' => 'address-level2'],
         ]);
         $builder->add('zip',IntegerType::class,[
-            'label' => 'Iranyítószám',
+            'attr' => ['autocomplete' => 'postal-code'],
         ]);
-
-//        $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onPostSubmitData']);
-
         $builder->add('province',TextType::class,[
-            'label' => 'Megye',
+            'attr' => ['autocomplete' => 'address-level1'],
         ]);
         $builder->add('country',EntityType::class,[
             'class' => GeoCountry::class,
-            'label' => 'Ország',
             'placeholder' => 'Válassz országot...',
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('c')
@@ -74,52 +67,13 @@ class OrderAddressType extends AbstractType
             },
             'choice_label' => 'name',
             'preferred_choices' => $preferredCountries,
+            'attr' => ['autocomplete' => 'country-name'],
         ]);
         $builder->add('addressType',HiddenType::class,[
             'attr' => ['value' => $options['addressType']],
         ]);
         $builder->getForm();
     }
-
-//    /**
-//     * Elősször azt próbáltam, hogy a form adatait manipulálom FormEvent kapcsán
-//     */
-//    function onPostSubmitData(FormEvent $event)
-//    {
-//        $form = $event->getForm();
-////        $formFieldData = $event->getForm()->getData(); // 'zip'
-//        $formData = $event->getData();
-//        if ($formData['zip']) {
-//            $place = $this->em->getRepository(GeoPlace::class)
-//                ->findOneBy(['zip' => $formData['zip']]);
-//
-//            if (null !== $place && '' !== $place) {
-//                $formData['city'] = $place->getCity();
-//                $formData['province'] = $place->getProvince();
-//                $event->setData($formData);
-//
-////                $this->addElements($form->getParent(), $place);
-//            }
-//        } else {
-//            return;
-//        }
-//    }
-//
-//    protected function addElements(FormInterface $form, GeoPlace $place = null)
-//    {
-//        $city = null === $place ? null : $place->getCity();
-//        $province = null === $place ? null : $place->getProvince();
-//
-//        $form->add('city', TextType::class,[
-//            'label' => 'Város',
-//            'attr' => ['autocomplete' => 'cityXXX'],
-//        ]);
-//        $form->get('city')->setData($city);
-//        $form->add('province',TextType::class,[
-//            'label' => 'Megye',
-//        ]);
-//        $form->get('province')->setData($province);
-//    }
 
     public function configureOptions(OptionsResolver $resolver)
     {

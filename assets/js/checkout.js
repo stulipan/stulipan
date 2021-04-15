@@ -1,7 +1,14 @@
 /**
  * --------------------------------------------------------------------------
- * checkout.js
+ * checkout.js    !!!!!!!!   NOT IN USE  !!!!!!!!
  * Contains the JS actions needed on the Checkout pages
+ *
+ *
+ *
+ * !!!!!!!!   NOT IN USE  !!!!!!!!
+ *
+ *
+ *
  * --------------------------------------------------------------------------
  */
 // import $ from 'jquery'
@@ -225,7 +232,7 @@ class Checkout {
       this.recipient = new Entity(Wrapper.RECIPIENT);
       new FormValidation(Wrapper.RECIPIENT_FORM, recipientConstraints, this.recipient);
     }
-    if (document.querySelector(Wrapper.CUSTOMER)) {
+    if (document.querySelector(Wrapper.CUSTOMER) && document.querySelector(Wrapper.CUSTOMER_FORM)) {
       this.customer = new Entity(Wrapper.CUSTOMER);
       new FormValidation(Wrapper.CUSTOMER_FORM, customerConstraints, this.customer);
     }

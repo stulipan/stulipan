@@ -46,6 +46,9 @@ class Transaction
     public const STATUS_ERROR        = 'error';
     public const STATUS_SUCCESS      = 'success';
 
+    public const SOURCE_WEB         = 'web';
+    public const SOURCE_POS         = 'pos';
+
 
     use TimestampableTrait;
 
@@ -137,9 +140,9 @@ class Transaction
     private $parent;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
-     * @ORM\Column(name="processed_at", type="datetime", nullable=false)
+     * @ORM\Column(name="processed_at", type="datetime", nullable=true)
      *
      */
     protected $processedAt;
@@ -323,17 +326,17 @@ class Transaction
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getProcessedAt(): DateTime
+    public function getProcessedAt(): ?DateTime
     {
         return $this->processedAt;
     }
 
     /**
-     * @param DateTime $processedAt
+     * @param DateTime|null $processedAt
      */
-    public function setProcessedAt(DateTime $processedAt): void
+    public function setProcessedAt(?DateTime $processedAt): void
     {
         $this->processedAt = $processedAt;
     }

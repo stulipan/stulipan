@@ -1,0 +1,6 @@
+#"Username could not be found.": "Nem találtunk ilyen email címet!"
+#"Invalid credentials.": "Hibás jelszó!"
+#"Invalid CSRF token.": "Valami hiba történt!"
+
+#"Invalid credentials.": "Incorrect password."
+#"Username could not be found.": "Nem találtunk felhasználót ilyen email címmel."

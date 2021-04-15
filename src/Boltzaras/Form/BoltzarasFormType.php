@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Boltzaras\Form;
+namespace App\Boltzaras\Form;
 
 use App\Entity\Boltzaras\Boltzaras;
 

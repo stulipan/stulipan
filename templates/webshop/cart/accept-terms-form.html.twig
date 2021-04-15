@@ -1,0 +1,16 @@
+{{ form_start(acceptTermsForm, { 'attr': {'class': 'JS--Wrapper-acceptTermsForm' }}) }}
+<div class="form-row">
+    <div class="form-group col-lg-12 mb-0">
+        <div class="custom-control custom-checkbox">
+            <input id="{{ acceptTermsForm.isAcceptedTerms.vars.id }}" class="custom-control-input {% if acceptTermsForm.isAcceptedTerms.vars.valid is same as(false) %}is-invalid{% endif %}" type="checkbox" name="{{ acceptTermsForm.isAcceptedTerms.vars.full_name }}" {{ acceptTermsForm.isAcceptedTerms.vars.checked == true ? 'checked=\"checked\"' : '' }}>
+            <label for="{{ acceptTermsForm.isAcceptedTerms.vars.id }}" class="custom-control-label text-reset align-middle">{{ 'checkout.terms.accept-terms-label'|trans({ '{{ terms }}': 'href="#" data-toggle="modal" data-target="#modal--termsOfService"', '{{ privacy }}': 'href="#" data-toggle="modal" data-target="#modal--privacyPolicy"' })|raw }}</label>
+            {{ form_errors(acceptTermsForm.isAcceptedTerms) }}
+            {% do acceptTermsForm.isAcceptedTerms.setRendered() %}
+        </div>
+    </div>
+</div>
+{# Render CSRF token etc .#}
+<div style="display:none">
+    {{ form_rest(acceptTermsForm) }}
+</div>
+{{ form_end(acceptTermsForm) }}

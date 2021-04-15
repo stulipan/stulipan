@@ -11,49 +11,47 @@
 {% endblock %}
 
 {% block leftColumn %}
+    {{ dump(isConversionTracked) }}
     <div class="mt-2 mt-md-3">
-        <div class="">
-            <div class="row text-left">
-                <div class="col-lg-12 mx-auto">
-                    <div class="alert alert-success">
-                        <span class="mb-0"><i class="fas fa-check-circle mr-1"></i> Köszönjük, {{ order.billingFullname }}. A rendelést sikeresen leadtad.</span>
-                    </div>
-                    <div class="">
-                        <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
-                    </div>
-
-                    <div class="shipping-address">
-                        <div class="card border">
-                            <div class="card-body">
-                                {% include 'webshop/cart/_order-recipient-widget.html.twig' %}
+        <div class="alert alert-success">
+            <span class="mb-0"><i class="fas fa-check-circle mr-1"></i> Köszönjük, {{ order.fullname }}. A rendelést sikeresen leadtad.</span>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 correction-no-padding">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
+                        </div>
+                        <div class="shipping-address">
+                            <div class="content-body-thick-border">
+                                <div class="bg-white p-3">
+                                    {% include 'webshop/cart/_order-recipient-widget.html.twig' %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="shipping-method">
+                            <div class="content-body-thick-border">
+                                <div class="bg-white p-3">
+                                    {% include 'webshop/cart/_order-delivery-widget.html.twig' %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="customer-basic-details">
+                            <div class=" content-body-thick-border">
+                                <div class="bg-white p-3">
+                                    {% include 'webshop/cart/_order-sender-widget.html.twig' %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-method">
+                            <div class="content-body-thick-border">
+                                <div class="bg-white p-3">
+                                    {% include 'webshop/cart/_order-payment-widget.html.twig' %}
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="shipping-method">
-                        <div class="card border">
-                            <div class="card-body">
-                                {% include 'webshop/cart/_order-delivery-widget.html.twig' %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="customer-basic-details">
-                        <div class="card border">
-                            <div class="card-body">
-                                {% include 'webshop/cart/_order-sender-widget.html.twig' %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="payment-method">
-                        <div class="card border">
-                            <div class="card-body">
-                                {% include 'webshop/cart/_order-payment-widget.html.twig' %}
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>

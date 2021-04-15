@@ -78,9 +78,9 @@ class OrderItem
      * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
+     * @ORM\Column(name="unit_price", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
      */
-    private $price = 0;
+    private $unitPrice = 0;
 
     /**
      * @var float
@@ -175,17 +175,17 @@ class OrderItem
     /**
      * @return float
      */
-    public function getPrice(): ?float
+    public function getUnitPrice(): ?float
     {
-        return (float) $this->price;
+        return (float) $this->unitPrice;
     }
 
     /**
-     * @param float $price
+     * @param float $unitPrice
      */
-    public function setPrice(float $price): void
+    public function setUnitPrice(float $unitPrice): void
     {
-        $this->price = $price;
+        $this->unitPrice = $unitPrice;
     }
 
     /**

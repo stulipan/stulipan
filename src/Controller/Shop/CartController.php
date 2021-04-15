@@ -3,6 +3,7 @@
 namespace App\Controller\Shop;
 
 use App\Entity\Address;
+use App\Entity\Customer;
 use App\Entity\GreetingCardMessageCategory;
 use App\Entity\ClientDetails;
 use App\Entity\Model\DeliveryDate;
@@ -11,13 +12,15 @@ use App\Entity\DeliverySpecialDate;
 use App\Entity\Geo\GeoPlace;
 use App\Entity\Model\CustomerBasic;
 use App\Entity\Model\HiddenDeliveryDate;
+use App\Form\AcceptTermsType;
+use App\Form\Customer\CustomerType;
 use App\Model\CartGreetingCard;
 use App\Model\CheckoutPaymentMethod;
 use App\Model\CheckoutRecipientAndCustomer;
 use App\Model\CheckoutShippingMethod;
 use App\Entity\Order;
 
-use App\Entity\OrderBuilder;
+use App\Services\OrderBuilder;
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductCategory;
 use App\Entity\OrderItem;
@@ -28,7 +31,6 @@ use App\Entity\PaymentMethod;
 
 use App\Form\DeliveryDate\CartHiddenDeliveryDateFormType;
 use App\Form\Checkout\PaymentMethodType;
-use App\Form\CustomerBasic\CustomerBasicsFormType;
 use App\Repository\GeoPlaceRepository;
 use App\Validator\Constraints as AssertApp;
 
@@ -45,7 +47,10 @@ use App\Form\Cart\SetItemQuantityType;
 use App\Form\Checkout\ShippingMethodType;
 use App\Form\SetDiscountType;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use phpDocumentor\Reflection\Types\This;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
@@ -57,6 +62,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -77,27 +83,48 @@ class CartController extends AbstractController
      * Handles the CustomerBasic form.
      * Submit the form from AJAX.
      *
-     * @Route("/cart/setCustomer", name="cart-setCustomer", methods={"POST"})
+     * @Route("/cart/setCustomer/{id}", name="cart-setCustomer", methods={"POST", "GET"})
      */
-    public function setCustomer(Request $request, ?CustomerBasic $customer)
+    public function setCustomer(Request $request, ?Customer $customer, $id = null)
     {
-
         $orderBuilder = $this->orderBuilder;
-        $form = $this->createForm(CustomerBasicsFormType::class, $customer); //,
+        $form = $this->createForm(CustomerType::class, $customer); //,
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var CustomerBasic $data */
+            /** @var Customer $data */
             $data = $form->getData();
-            $orderBuilder->setCustomerBasic($data);
 
-            //
-            $customer = $this->getUser();
-            if ($customer) {
-                $customer->setPhone($data->getPhone());
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($customer);
-                $entityManager->flush();
+            // If object has Id, it's already saved into db, and is not a new object.
+            if (!$data->getId()) {
+                // find a customer with this email address
+                $existingCustomer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(['email' => $data->getEmail()]);
             }
+
+            // replace old Customer info with newly provided in the form
+            if (isset($existingCustomer) && $existingCustomer) {
+                $customer = $existingCustomer;
+                $customer->setEmail($data->getEmail());
+                $customer->setPhone($data->getPhone());
+                $customer->setFirstname($data->getFirstname());
+                $customer->setLastname($data->getLastname());
+                $customer->setAcceptsMarketing($data->isAcceptsMarketing());
+            } else {
+                $customer = $data;
+            }
+
+            // Update optin date only when isAcceptsMarketing is true
+            if ($customer->isAcceptsMarketing()) {
+                $customer->setAcceptsMarketingUpdatedAt(new DateTime('now'));
+                $customer->setMarketingOptinLevel(Customer::OPTIN_LEVEL_SINGLE_OPTIN);
+            }
+
+            $customer->addOrder($orderBuilder->getCurrentOrder());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($customer);
+            $entityManager->flush();
+
+            $orderBuilder->setCustomer($customer);
         }
 
         /** Renders the form with errors */
@@ -108,6 +135,17 @@ class CartController extends AbstractController
             return new Response($html,400);
         }
 
+        if ($form->isSubmitted() && $form->isValid() && $request->isXmlHttpRequest()) {
+            $html = $this->renderView('webshop/cart/user-basicDetails-form.html.twig', [
+                'customerForm' => $form->createView(),
+            ]);
+            return new Response($html,200);
+        }
+
+//        // If not Ajax call, then it was called from the My Account > User Details page.
+//        // Therefore we must redirect back to User Details page.
+//
+//        return $this->redirectToRoute('site-user-myDetails', ['customerForm' => $form->createView()]);
         /**
          * Renders form initially with data
          */
@@ -224,6 +262,42 @@ class CartController extends AbstractController
         } else {
             throw $this->createNotFoundException(
                 'setPaymentMethod not allowed!'
+            );
+        }
+    }
+
+    /**
+     * @Route("/cart/setAcceptTerms/{isAcceptedTerms}", name="cart-setAcceptTerms", methods={"POST"})
+     */
+    public function setAcceptTerms(Request $request, ?bool $isAcceptedTerms = null): Response  //, ?Order $order
+    {
+        if ($request->isXmlHttpRequest()) {
+            $orderBuilder = $this->orderBuilder;
+            $form = $this->createForm(AcceptTermsType::class, [ 'isAcceptedTerms' => $isAcceptedTerms]);
+            $form->handleRequest($request);
+
+//            dd($isAcceptedTerms);
+//            dd($form->isValid());
+            if ($form->isSubmitted() && $form->isValid()) {
+                $orderBuilder->setIsAcceptedTerms($form->get('isAcceptedTerms')->getData());
+            }
+            /** Renders form with errors */
+            if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
+                $html = $this->renderView('webshop/cart/accept-terms-form.html.twig', [
+                    'acceptTermsForm' => $form->createView(),
+                ]);
+                return new Response($html,400);
+            }
+            $html = $this->renderView('webshop/cart/accept-terms-form.html.twig', [
+                'acceptTermsForm' => $form->createView(),
+            ]);
+            return new Response($html,200);
+//            return $this->render('webshop/cart/accept-terms-form.html.twig', [
+//                'acceptTermsForm' => $form->createView(),
+//            ]);
+        } else {
+            throw $this->createNotFoundException(
+                'setAcceptTerms not allowed!'
             );
         }
     }

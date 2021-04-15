@@ -1,16 +1,24 @@
-{{ form_start(hiddenDateForm, { 'attr': {'class': '',
-    'data-wrapper-delivery-date-form': '',
+{{ form_start(hiddenDateForm, { 'attr': {'class': 'JS--Wrapper-deliveryDateForm',
 }}) }}
-{#{{ form_start(hiddenDateForm, { 'attr': {'class': 'JS--hiddenDeliveryDateForm' }}) }}#}
+        <div class="form-row">
+                <div class="form-group">
+                        {{ form_widget(hiddenDateForm.deliveryDate, { 'attr': {'class': 'd-none' }}) }}
+                        {{ form_errors(hiddenDateForm.deliveryDate) }}
+                </div>
+        </div>
+        <div class="form-row">
+                <div class="form-group">
+                        {{ form_widget(hiddenDateForm.deliveryInterval, { 'attr': {'class': 'd-none' }}) }}
+                        {{ form_errors(hiddenDateForm.deliveryInterval) }}
+                </div>
+        </div>
 
-        {{ form_widget(hiddenDateForm.deliveryDate, { 'attr': {'class': 'd-none' }}) }}
-        {{ form_errors(hiddenDateForm.deliveryDate) }}
-
-        {{ form_widget(hiddenDateForm.deliveryInterval, { 'attr': {'class': 'd-none' }}) }}
-        {{ form_errors(hiddenDateForm.deliveryInterval) }}
-
-        {{ form_widget(hiddenDateForm.deliveryFee, { 'attr': {'class': 'd-none' }}) }}
-        {{ form_errors(hiddenDateForm.deliveryFee) }}
+        <div class="form-row">
+                <div class="form-group">
+                        {{ form_widget(hiddenDateForm.deliveryFee, { 'attr': {'class': 'd-none' }}) }}
+                        {{ form_errors(hiddenDateForm.deliveryFee) }}
+                </div>
+        </div>
 
         {#<button type="submit">Submit</button>#}
 

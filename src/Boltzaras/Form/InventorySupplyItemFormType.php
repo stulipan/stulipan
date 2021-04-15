@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Form\Inventory;
+namespace App\Boltzaras\Form;
 
 use App\Entity\Boltzaras\InventorySupplyItem;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use App\Form\Inventory\InventoryProductFormType;
+use App\Boltzaras\Form\InventoryProductFormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

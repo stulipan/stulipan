@@ -40,49 +40,28 @@ class SenderType extends AbstractType
         }
         $builder
             ->add('id',HiddenType::class, [
-            'mapped' => false,  // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
+                'mapped' => false,  // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
             ])
-//            ->add('name',TextType::class, [
-//                'label' => 'Feladó',
-//                'required' => true,
-//                'attr' => [
-//                    'placeholder' => 'Szabó Mária',
-//                    'autocomplete' => 'name'
-//                ]
-//            ])
             ->add('firstname',TextType::class, [
                 'required' => true,
-                'attr' => [
-                    'placeholder' => 'Mária',
-                    'autocomplete' => 'firstname'
-                ]
+                'attr' => ['autocomplete' => 'given-name']
             ])
             ->add('lastname',TextType::class, [
                 'required' => true,
-                'attr' => [
-                    'placeholder' => 'Szabó',
-                    'autocomplete' => 'lastname'
-                ]
+                'attr' => ['autocomplete' => 'family-name']
             ])
             ->add('company',TextType::class, [
-                'label' => 'Cégnév',
                 'required' => false,
+                'attr' => ['autocomplete' => 'organization'],
             ])
             ->add('companyVatNumber',TextType::class, [
-                'label' => 'ÁFA szám',
                 'required' => false,
+                'attr' => ['autocomplete' => 'off'],
             ])
             ->add('address',AddressType::class, [
                 'label' => false,
                 'addressType' => Address::BILLING_ADDRESS,  // this option is defined in AddressType, so that it can receive a value
             ])
-//            ->add('phone',TelType::class,[
-//                'label' => 'Telefonszám',
-//                'required' => false,
-//                'constraints' => [
-//                    new PhoneNumber(['regionCode' => 'HU']),
-//                ],
-//            ])
             ->add('customer',HiddenType::class, [
                 'mapped' => false,
             ])

@@ -107,7 +107,7 @@ parameters:
         notificationDuration:
             content: 6000
             type: Number
-            label: Notification duration. Time on screen (in miliseconds)
+            label: 'Notification duration. Time on screen (in miliseconds)'
         beallitas2:
             content: 200
             type: Text
@@ -122,7 +122,7 @@ parameters:
             type: Text
             choices: { Dropdown: dropdown, 'Variant picker': variant-picker }
         date-format:
-            content: 'Y M j.'
+            content: Y-m-d
             type: Text
             choices: { '1980 january 5': 'Y F j', '1980. january 5.': 'Y. F j.', '1980 jan 5.': 'Y M j.', '1980 jan 5': 'Y M j', '5 january 1980': 'j F Y', '5 jan 1980': 'j M Y', 'January 5, 1980': 'F j, Y', 'Jan. 5, 1980': 'M. j, Y', 1980/01/31: Y/m/d, '1980-01-31': Y-m-d, 1980.01.31: Y.m.d, 01/31/1980: d/m/Y, 31/01/1980: d/m/Y, 31.01.1980: d.m.Y, 31-01-1980: d-m-Y }
         time-format:

@@ -15,100 +15,125 @@
 
 {% block leftColumn %}
     <div id="shipping_address" class="shipping-address">
-        <div class="card">
-            <div class="card-body">
-                <div class="JS--recipientWrapper" data-wrapper-recipient>
-                <div class="" data-wrapper-alert>
-                    <div class="checkout-block-header">
-                        <h4 class="checkout-block-title">{{ 'checkout.recipient.recipient-title'|trans }}</h4>
-                    </div>
-                    <div class="checkout-block-text">
-                        <span class="">{{ 'checkout.recipient.recipient-description'|trans }}</span>
-                    </div>
-                </div>
-
-                {% include('webshop/cart/alert-recipient-insert.html.twig') %}
-                <div class="mt-3">
-                    <div class="modal fade" id="modal--recipientList" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-{#                                    <h3 class="checkout-block-title modal-title" id="modalLabel">{{ 'checkout.recipient.previously-saved-recipients-modal-title'|trans}}</h3>#}
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+        <div class="row">
+            <div class="col-lg-12 correction-no-padding">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="JS--Wrapper-recipient">
+                            <div class="JS--Wrapper-alert">
+                                <div class="checkout-block-header">
+                                    <h4 class="checkout-block-title">{{ 'checkout.recipient.recipient-title'|trans }}</h4>
                                 </div>
-                                <div class="modal-body">
-                                    <h3 class="modal-title" id="modalLabel">{{ 'checkout.recipient.previously-saved-recipients-modal-title'|trans}}</h3>
-                                    <div data-wrapper-recipient-list>
-                                        {% if recipients is defined %}
-                                            {% include('webshop/cart/recipient_list.html.twig') %}
-                                        {% endif %}
+                                <div class="checkout-block-text">
+                                    <span class="">{{ 'checkout.recipient.recipient-description'|trans }}</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <div class="modal fade" id="modal--recipientList" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                {#                                    <h3 class="checkout-block-title modal-title" id="modalLabel">{{ 'checkout.recipient.previously-saved-recipients-modal-title'|trans}}</h3>#}
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h3 class="modal-title" id="modalLabel">{{ 'checkout.recipient.previously-saved-recipients-modal-title'|trans}}</h3>
+                                                <div class="JS--Wrapper-recipientList">
+                                                    {% if recipients is defined %}
+                                                        {% include('webshop/cart/recipient_list.html.twig') %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div class="JS--Wrapper-recipientBody">
+                                    {#                        {% if recipient is defined and recipient %}#}
+                                    {#                            {% include 'webshop/cart/recipient-current.html.twig' %}#}
+                                    {#                        {% endif %}#}
+                                    {% if recipientForm is defined %}
+                                        {% include('webshop/cart/recipient_form.html.twig') %}
+                                    {% endif %}
+                                </div>
+                                {% if recipients.count >= 1 %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                <div class="vertical-form-row">
+                                                    <div class="vertical-col mr-3">
+                                                        <a href="#" class="JS--Button-showRecipientForm text-link-checkout" data-url="{{ path('cart-editRecipient') }}">
+                                                            <span class="loading-spinner-invisible">{{ 'checkout.recipient.new-recipient'|trans }}</span>
+                                                            <div class="loading-spinner" role="status"></div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="vertical-col">
+                                                        <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--recipientList">
+                                                            <span class="loading-spinner-invisible">{{ 'checkout.recipient.previously-saved-recipients'|trans }}</span>
+                                                            <div class="loading-spinner" role="status"></div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <button class="JS--Button-refreshRecipientList d-none" data-url="{{ path('cart-getRecipients') }}"></button>
                             </div>
                         </div>
                     </div>
-
-                    <div class="JS--recipientContentBlock" data-wrapper-recipient-body>
-{#                        {% if recipient is defined and recipient %}#}
-{#                            {% include 'webshop/cart/recipient-current.html.twig' %}#}
-{#                        {% endif %}#}
-                        {% if recipientForm is defined %}
-                            {% include('webshop/cart/recipient_form.html.twig') %}
-                        {% endif %}
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                <div class="vertical-form-row">
-                                    <div class="vertical-col mr-3">
-                                        <a href="#" class="text-link-checkout" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient') }}">
-                                            <span class="loading-spinner-invisible">{{ 'checkout.recipient.new-recipient'|trans }}</span>
-                                            <div class="loading-spinner" role="status"></div>
-                                        </a>
-                                    </div>
-                                    <div class="vertical-col">
-                                        <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--recipientList">
-                                            <span class="loading-spinner-invisible">{{ 'checkout.recipient.previously-saved-recipients'|trans }}</span>
-                                            <div class="loading-spinner" role="status"></div>
-                                        </a>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <button class="d-none" data-selector="button" data-eval="refreshRecipientList" data-url="{{ path('cart-getRecipients') }}"></button>
                 </div>
-            </div>
             </div>
         </div>
     </div>
 
     <div id="customer_basic_details" class="customer-basic-details">
-        <div class="card">
-            <div class="card-body">
-                <div class="" data-wrapper-customer>
-                <div class="" data-wrapper-alert>
-                    <div class="checkout-block-header">
-                        <h4 class="checkout-block-title">{{ 'checkout.customer.customer-information-title'|trans }}</h4>
-                    </div>
-                    <div class="checkout-block-text">
-                        <span class="">{{ 'checkout.customer.customer-information-description'|trans }}</span>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-lg-12 correction-no-padding">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="JS--Wrapper-customer">
+                            <div class="JS--Wrapper-alert">
+                                <div class="checkout-block-header">
+                                    <h4 class="checkout-block-title">{{ 'checkout.customer.customer-information-title'|trans }}</h4>
+                                </div>
+                                <div class="checkout-block-text">
+                                    <span class="">{{ 'checkout.customer.customer-information-description'|trans }}</span>
+                                </div>
+                            </div>
 
-                {% include('webshop/cart/alert-customerBasic-insert.html.twig') %}
-                <div class="mt-3">
-                    <div class="row">
-                        <div class="col-md-12 order-2 order-md-1">
-                            <div class="" data-wrapper-customer-body>
-                                {% include('webshop/cart/user-basicDetails-form.html.twig') %}
+                            {% include('webshop/cart/alert-customerBasic-insert.html.twig') %}
+                            <div class="mt-3">
+                                <div class="row">
+                                    <div class="col-md-12 order-2 order-md-1">
+                                        <div class="JS--Wrapper-customerBody">
+                                            {% if is_granted('IS_AUTHENTICATED_FULLY') is same as(true) and order.customer is defined %}
+                                                <div class="checkout-customer bg-secondary d-flex align-items-center p-3">
+                                                    <div class="mr-3">
+                                                        <svg class="svg-icon mr-0">
+                                                            <use xlink:href="#male-user-1"> </use>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="">
+                                                        {{ order.customer.fullname }} ({{ order.customer.email }}, {{ order.customer.phone }}) <br>
+                                                        <a href="{{ asset('logout') }}" class="">{{ 'account.logout'|trans }}</a>
+
+                                                    </div>
+
+                                                </div>
+                                            {% else %}
+                                                {% include('webshop/cart/user-basicDetails-form.html.twig') %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
@@ -124,14 +149,13 @@
 
 {% block gotoNext %}
     <div class="mt-20px mt-md-4 mb-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
-        <button data-selector="button" data-eval="submitRecipientAndCustomer" data-url="{{ path('site-checkout-step2-pickShipping') }}" class="JS--Button-gotoStep3 btn btn-success btn-lg btn-goto order-1 order-md-2">
+        <button data-url="{{ path('site-checkout-step2-pickShipping') }}" class="JS--Button-gotoStep2 btn btn-success btn-lg btn-goto order-1 order-md-2">
             <span class="loading-spinner-invisible">{{ 'checkout.continue-to-shipping-method-button'|trans }}</span>
             <span class="loading-spinner" role="status"></span>
         </button>
         <a href="{{ path('site-checkout-step0-pickExtraGift') }}" class="order-2 order-md-1 text-center mt-3 mt-md-0"><i class="fas fa-chevron-left text-sm mr-2"></i>{{ 'checkout.back-to-cart-button'|trans }}</a>
     </div>
 {% endblock %}
-
 
 
 {% block javascripts %}
@@ -233,242 +257,11 @@
 
 //            $(".JS--name").easyAutocomplete(options);
         });
+        {% for msg in app.session.flashBag.get('recipient-missing') %}
+            notyf.error('{{ msg }}');
+        {% endfor %}
+        {% for msg in app.session.flashBag.get('customer-missing') %}
+            notyf.error('{{ msg }}');
+        {% endfor %}
     </script>
-    <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
-    <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
-{#    <script>#}
-{#        $(function() {#}
-{#            $('.JS--Button-clickDate').daterangepicker({#}
-{#                opens: 'left',#}
-{#                autoApply: true,#}
-{#                autoUpdateInput: false,#}
-{#                singleDatePicker: true,#}
-{#                //            alwaysShowCalendars: true,#}
-{#                minDate: moment().add(4, 'hours'),#}
-{#                maxDate: moment().add(2, 'months'),#}
-{#                locale: {#}
-{#                    format: 'YYYY-MM-DD',#}
-{#                    separator: ' / ',#}
-{#                    applyLabel: 'Alkalmaz',#}
-{#                    cancelLabel: 'Mégse',#}
-{#                    daysOfWeek: [#}
-{#                        'V',#}
-{#                        'H',#}
-{#                        'K',#}
-{#                        'Sz',#}
-{#                        'Cs',#}
-{#                        'P',#}
-{#                        'Sz'#}
-{#                    ],#}
-{#                    monthNames: [#}
-{#                        'Január',#}
-{#                        'Február',#}
-{#                        'Március',#}
-{#                        'Április',#}
-{#                        'Május',#}
-{#                        'Június',#}
-{#                        'Július',#}
-{#                        'Augusztus',#}
-{#                        'Szeptember',#}
-{#                        'Október',#}
-{#                        'November',#}
-{#                        'December'#}
-{#                    ],#}
-{#                    firstDay: 1,#}
-{#                }#}
-{#            });#}
-{#//            $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {#}
-{#//                ev.preventDefault();#}
-{#//                $pickerDate = picker.startDate.format('YYYY-MM-DD');#}
-{#//                $wrapper = $(this).closest('.JS--deliveryDateContainer');#}
-{#//                $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');#}
-{#//                $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');#}
-{#//                /**#}
-{#//                 * Csak az első 3 rádió opcióba keresi a pickerDate-et. És ha benne van, akkor a Calendárt mutatja.#}
-{#//                 */#}
-{#//                $selectedRadio = $(this).closest('.JS--dateWrapper').find('input[type="radio"][value="' + $pickerDate + '"]:not(".JS--Button-clickDate")');#}
-{#//                if ($selectedRadio.val()) {#}
-{#////                    console.log($selectedRadio);#}
-{#//                    $selectedRadio.prop('checked', true);#}
-{#//                    $dateValueWrapper.hide();#}
-{#//                    $calendarIconWrapper.show();#}
-{#//                }#}
-{#//                /**#}
-{#//                 * Ha nincs benne, akkor negyedik rádió inputhoz rendeli a pickerDate-et és elrejti a Calendárt.#}
-{#//                 */#}
-{#//                else {#}
-{#//                    $(this).val($pickerDate);  // az input, amihez kötve van a gomb, megkapja a daterangepicker értékét (dátumot)#}
-{#//                    $html = '<span class="font-weight-bold my-0">' + picker.startDate.format('MMM D') + '</span><br> <span class="price--gross text-nowrap">' + picker.startDate.format('ddd') + '</span>';#}
-{#//                    $dateValueWrapper.html($html);#}
-{#//                    $calendarIconWrapper.hide();#}
-{#//                    $dateValueWrapper.show();#}
-{#//#}
-{#//#}
-{#//                }#}
-{#//                console.log($wrapper.find('.JS--alertMessage')+ ' alertMessage');#}
-{#//                $wrapper.find('.JS--alertMessage').hide();#}
-{#//            });#}
-{#//            $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {#}
-{#//                $(this).val('');#}
-{#//            });#}
-{#//            /**#}
-{#//             * Amikor nem a Daterangepicker-re klikkel, akkor biztos a Calendárt kell mutatnia.#}
-{#//             */#}
-{#//            $('.JS--dateWrapper input[type="radio"]:not(".JS--Button-clickDate")').on('click', function () {#}
-{#//                $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');#}
-{#//                $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');#}
-{#//                $dateValueWrapper.hide();#}
-{#//                $calendarIconWrapper.show();#}
-{#//                $wrapper = $(this).closest('.JS--deliveryDateContainer');#}
-{#//                $wrapper.find('.JS--alertMessage').hide();#}
-{#//            });#}
-{#        });#}
-{#    </script>#}
-{#    <script>#}
-{#        $(function() {#}
-{#            let $wrapper = $('.JS--deliveryDateContainer');#}
-{#            let $vp = $wrapper.find('.vp-checked');#}
-{#            let hiddenForm = {#}
-{#                date: {#}
-{#                    element: $wrapper.find('#hidden_deliveryDate'),#}
-{#                    value: $wrapper.find('#hidden_deliveryDate').val(),#}
-{#                    setDateValue: function (value) {#}
-{#                        this.element.val(value);#}
-{#                    },#}
-{#                },#}
-{#                interval: {#}
-{#                    element: $wrapper.find('#hidden_deliveryInterval'),#}
-{#                    value: $wrapper.find('#hidden_deliveryInterval').val(),#}
-{#                    setIntervalValue: function (value) {#}
-{#                        this.element.val(value);#}
-{#                    },#}
-{#                },#}
-{#                fee: {#}
-{#                    element: $wrapper.find('#hidden_deliveryFee'),#}
-{#                    value: $wrapper.find('#hidden_deliveryFee').val(),#}
-{#                    setFeeValue: function (value) {#}
-{#//                        console.log(this.element);#}
-{#                        this.element.val(value);#}
-{#//                        console.log(this.element.val());#}
-{#                    },#}
-{#                },#}
-{#            };#}
-{#            $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);#}
-{#            $selectedInterval = $wrapper.find('.JS--generatedInterval-' + hiddenForm.date.value);#}
-{#            $intervalDropdown = $selectedInterval.find('.JS--intervalDropdown');#}
-
-{#            console.log($vp);#}
-
-{#            if ($selectedDate.hasClass('d-none')) {#}
-{#                $selectedDate.removeClass('d-none').addClass('d-temporary');#}
-{#                $wrapper.find('.JS--showCalendarIcon').hide();#}
-{#            }#}
-{#            if ($selectedInterval.hasClass('d-none')) {#}
-{#                $selectedInterval.removeClass('d-none').addClass('d-temporary');#}
-{#            }#}
-
-{#            $summaryDeliveryFeePos = $('.JS--cartWrapper').find('.JS--summaryDeliveryFee');#}
-{#            $summaryTotal = $('.JS--cartWrapper').find('.JS--summaryTotal');#}
-{#            $summaryTotalPos = $('.JS--cartWrapper').find('.JS--summaryTotalPos');#}
-{#            function onSelectInterval(dropdown) {#}
-{#                 dropdown.on('change', function () {#}
-{#                     hiddenForm.interval.setIntervalValue($(this).val());#}
-{#                     // retrieve delivery fee from 'data-' attribute#}
-{#                     $dropdownValue = $(this).children('option:selected').data('fee'); //.toString()#}
-{#                     hiddenForm.fee.setFeeValue($dropdownValue);#}
-
-{#                     $summaryDeliveryFeePos.html(#}
-{#                         $dropdownValue.toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})#}
-{#                     );#}
-{#                     $summaryTotal.html(#}
-{#                         ($summaryTotalPos.data('summary-total') - hiddenForm.fee.value + $dropdownValue).toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})#}
-{#                     );#}
-{#                     $('.JS--deliveryDateContainer').find('.JS--alertMessage').replaceWith('');#}
-{#                     alert.deliveryDate.hasError = false;#}
-{#                 });#}
-{#            }#}
-{#            #}
-{#            // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.#}
-{#            // Ez akkor triggerelődik, amikor nem kattintunk sem dátumboxra, sem kalendáriumra.#}
-{#            console.log($intervalDropdown);#}
-{#            onSelectInterval($intervalDropdown);#}
-
-{#            /**#}
-{#             * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.#}
-{#             * Továbbá mutatja a dátumhoz tartozó idősávot.#}
-{#             */#}
-{#            $("[class*='JS--generatedDate-']").click(function () {#}
-{#                $wrapper = $(this).closest('.JS--deliveryDateContainer');#}
-{#                $dateWrapper = $(this).closest('.JS--dateWrapper');#}
-{#                $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');#}
-
-{#                $dateWrapper.find('.vp-checked').removeClass('vp-checked');#}
-{#                $(this).find('.vp').addClass('vp-checked');#}
-{#                $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $(this).data('date-value'));#}
-
-{#//                $wrapper.find('#hidden_deliveryDate').val($(this).data('date-value'));#}
-{#                hiddenForm.date.setDateValue($(this).data('date-value'));#}
-{#                console.log($(this).data('date-value'));#}
-
-{#                // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit#}
-{#                // amugy visszallitja (ujra mutatja) a CalendarIcont#}
-{#                if (! ($(this).hasClass('d-temporary')) ) {#}
-{#                    $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');#}
-{#                    $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');#}
-{#                    $intervalModule.removeClass('d-none').addClass('d-temporary');#}
-{#                    $dateWrapper.find('.JS--showCalendarIcon').show();#}
-{#                }#}
-
-{#                //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!#}
-{#                $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);#}
-{#                hiddenForm.interval.setIntervalValue('');#}
-
-{#                // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.#}
-{#                // Ez akkor triggerelődik, amikor kattintunk a dátumboxra.#}
-{#                onSelectInterval($intervalModule.find('.JS--intervalDropdown'));#}
-{#            });#}
-{#            /**#}
-{#             * Kezeli a kalendáriumra kattintást.#}
-{#             */#}
-{#            $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {#}
-{#                ev.preventDefault();#}
-{#                $pickerDate = picker.startDate.format('YYYY-MM-DD');#}
-{#                $wrapper = $(this).closest('.JS--deliveryDateContainer');#}
-{#                $dateWrapper = $(this).closest('.JS--dateWrapper');#}
-{#                $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');#}
-
-{#                hiddenForm.date.setDateValue($pickerDate);#}
-
-{#                $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');#}
-{#                $dateWrapper.find('.vp-checked').removeClass('vp-checked');#}
-{#                $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');#}
-
-{#                $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);#}
-{#                $intervalModule = $wrapper.find('.JS--generatedInterval-' + $pickerDate);#}
-
-{#                if ($dateModule.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon#}
-{#                    $wrapper.find('.JS--showCalendarIcon').hide();#}
-{#                    $dateModule.removeClass('d-none').addClass('d-temporary');#}
-{#                }#}
-{#                $dateModule.find('.vp').addClass('vp-checked');#}
-{#                $intervalModule.removeClass('d-none').addClass('d-temporary');#}
-
-{#                if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {#}
-{#                    $wrapper.find('.JS--showCalendarIcon').show();#}
-{#                }#}
-
-{#                //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!#}
-{#                $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);#}
-{#                hiddenForm.interval.setIntervalValue('');#}
-
-{#                // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.#}
-{#                // Ez akkor triggerelődik, amikor kattintunk a kalendáriumra.#}
-{#                onSelectInterval($intervalModule.find('.JS--intervalDropdown'));#}
-{#            });#}
-{#            $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {#}
-{#                $(this).val('');#}
-{#            });#}
-{#        });#}
-{#    </script>#}
-
 {% endblock %}

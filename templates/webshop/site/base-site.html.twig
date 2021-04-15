@@ -319,10 +319,10 @@
 
 {% block javascripts %}
 	{{ parent() }}
-    {{ encore_entry_script_tags('webshop') }}
+{#    {{ encore_entry_script_tags('webshop') }}#}
     <script>
         $(document).ready(function () {
-            $.fn.webshop();
+            // $.fn.webshop();
 
             var limitFunc = function(){
                 if (window.innerWidth>991.98){

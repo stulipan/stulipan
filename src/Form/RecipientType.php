@@ -41,13 +41,15 @@ class RecipientType extends AbstractType
             $builder->setAction($this->urlGenerator->generate('cart-editRecipient', ['id' => $builder->getData()->getId()]));
         }
         $builder->add('id', HiddenType::class,[
-                'mapped' => false, // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
-            ]);
+            'mapped' => false, // ha hidden mezőről van szó, ami maga az ID, akkor azt nem szabad map-elni az entityvel.
+        ]);
         $builder->add('firstname',TextType::class, [
             'required' => true,
+            'attr' => ['autocomplete' => 'given-name']
         ]);
         $builder->add('lastname',TextType::class, [
             'required' => true,
+            'attr' => ['autocomplete' => 'family-name']
         ]);
         $builder->add('address',AddressType::class,[
             'label' => false,
@@ -58,6 +60,7 @@ class RecipientType extends AbstractType
             'constraints' => [
                 new PhoneNumber(['regionCode' => 'HU', 'message' => 'checkout.recipient.invalid-phone']),
             ],
+            'attr' => ['autocomplete' => 'tel']
         ]);
         $builder->add('customer',HiddenType::class,[
                 'mapped' => false,
@@ -71,7 +74,6 @@ class RecipientType extends AbstractType
             'data_class' => Recipient::class,
             'attr' => [
                 'novalidate' => 'novalidate',
-//                'autocomplete' => 'pleasedont',
                 'data-autocomplete-url' => $this->urlGenerator->generate('cart-search-api'),
             ],
         ]);

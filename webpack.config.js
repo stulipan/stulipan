@@ -1,18 +1,28 @@
 const Encore = require('@symfony/webpack-encore');
 
+// Manually configure the runtime environment if not already configured yet by the "encore" command.
+// It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
     Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
 
 Encore
-    // the project directory where compiled assets will be stored
+    // directory where compiled assets will be stored
     .setOutputPath('public/build/')
-    // the public path used by the web server to access the previous directory
+    // public path used by the web server to access the output path
     .setPublicPath('/build')
-    // the public path you will use in Symfony's asset() function - e.g. asset('build/some_file.js')
+    // only needed for CDN's or sub-directory deploy
     .setManifestKeyPrefix('build/')
 
-    // .addEntry('invoice', './assets/js/invoice-app.js')
+    /*
+     * ENTRY CONFIG
+     *
+     * Each entry will result in one JavaScript file (e.g. app.js)
+     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
+     */
+
+    .addEntry('app', './assets/app.js')
+
     .addEntry('v-admin', './assets/vue/admin/v-admin.js')
     .addEntry('ProductEdit', './assets/vue/admin/product/ProductEdit.js')
     .addEntry('CmsImageUpload', './assets/vue/admin/_components/CmsImageUpload.js')
@@ -24,42 +34,67 @@ Encore
     .addEntry('floating-input', './assets/js/floating-input.js')
     .addEntry('adaptive-tabs', './assets/js/adaptive-tabs.js')
 
-    .addEntry('checkout', './assets/js/checkout.js')
-    .addEntry('webshop', './assets/js/webshop.js')
     .addEntry('store', './assets/js/store.js')
 
     // .addEntry('admin/init', './assets/js/admin/init.js')
 
+    .addStyleEntry('app-style', './assets/styles/app-style.scss')
     .addStyleEntry('daterangepicker', './assets/css/admin/daterangepicker.scss')
 
     .addStyleEntry('admin-theme', './assets/css/admin/admin-theme.scss')
-    .addStyleEntry('store-theme', './assets/css/store/store-theme.scss')
+    .addStyleEntry('store-theme', './assets/css/store/stulipan-theme/store-theme.scss')
 
+    // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
+    .enableStimulusBridge('./assets/controllers.json')
 
+    // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
+    // .splitEntryChunks()
+
+    // will require an extra script tag for runtime.js
+    // but, you probably want this, unless you're building a single-page app
+    .enableSingleRuntimeChunk()
+
+    /*
+     * FEATURE CONFIG
+     *
+     * Enable & configure other features below. For a full
+     * list of features, see:
+     * https://symfony.com/doc/current/frontend.html#adding-more-features
+     */
     .cleanupOutputBeforeBuild()
+    .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
-
-    // the following line enables hashed filenames (e.g. app.abc123.css)
+    // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
-    // .enableVersioning(!Encore.isProduction())
 
-    // .enableReactPreset()
+    .configureBabel((config) => {
+        config.plugins.push('@babel/plugin-proposal-class-properties');
+    })
 
-    // uncomment to define the assets of the project
-    //.addEntry('js/app', './assets/js/app.js')
-    // .addStyleEntry('css/app', './assets/css/app.scss')
+    // enables @babel/preset-env polyfills
+    .configureBabelPresetEnv((config) => {
+        config.useBuiltIns = 'usage';
+        config.corejs = 3;
+    })
+
+    // enables Sass/SCSS support
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
 
+    // uncomment if you use React
+    //.enableReactPreset()
+
     // Enable Vue loader
     .enableVueLoader()
 
-    // uncomment if you use Sass/SCSS files
-    .enableSassLoader()
+    // uncomment to get integrity="..." attributes on your script & link tags
+    // requires WebpackEncoreBundle 1.4 or higher
+    //.enableIntegrityHashes(Encore.isProduction())
 
-    // uncomment for legacy applications that require $/jQuery as a global variable
-    // .autoProvidejQuery()
+    // uncomment if you're having problems with a jQuery plugin
+    //.autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

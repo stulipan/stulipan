@@ -16,7 +16,7 @@
     </div>
 {% endmacro %}
 
-{{ form_start(registrationForm, { 'attr': {'class': 'need-validation' }}) }}
+{{ form_start(registrationForm, { 'attr': {'class': 'JS--Wrapper-registrationForm' }}) }}
 <div class="form-row">
     <div class="col-lg-12 mb-4">
         <h3 class="font-weight-normal">{{ 'registration.create-account-title'|trans }}</h3>
@@ -52,22 +52,23 @@
     <div class="form-group col-lg-12">
         <div class="custom-control custom-checkbox mb-2">
             <input id="{{ registrationForm.optin.vars.id }}" type="checkbox" name="{{ registrationForm.optin.vars.full_name }}" class="custom-control-input" {{ registrationForm.optin.vars.checked == true ? 'checked=\"checked\"' : '' }}>
-            <label for="{{ registrationForm.optin.vars.id }}" class="custom-control-label align-middle">{{ 'registration.newsletter-sign-up'|trans }}</label>
+            <label for="{{ registrationForm.optin.vars.id }}" class="custom-control-label text-reset align-middle">{{ 'registration.newsletter-sign-up'|trans }}</label>
             {{ form_errors(registrationForm.optin) }}
             {% do registrationForm.optin.setRendered() %}
         </div>
     </div>
     <div class="form-group col-lg-12">
         <div class="custom-control custom-checkbox">
-            <input class="custom-control-input {% if registrationForm.terms.vars.valid is same as(false) %}is-invalid{% endif %}" id="{{ registrationForm.terms.vars.id }}" type="checkbox" name="{{ registrationForm.terms.vars.full_name }}" {{ registrationForm.terms.vars.checked == true ? 'checked=\"checked\"' : '' }}>
-            <label class="custom-control-label align-middle" for="{{ registrationForm.terms.vars.id }}">{{ 'registration.accept-terms-and-conditions'|trans }}</label>
+            <input id="{{ registrationForm.terms.vars.id }}" class="custom-control-input {% if registrationForm.terms.vars.valid is same as(false) %}is-invalid{% endif %}" type="checkbox" name="{{ registrationForm.terms.vars.full_name }}" {{ registrationForm.terms.vars.checked == true ? 'checked=\"checked\"' : '' }}>
+            <label for="{{ registrationForm.terms.vars.id }}" class="custom-control-label text-reset align-middle">{{ 'registration.terms.accept-terms-label'|trans({ '{{ terms }}': 'href="#" data-toggle="modal" data-target="#modal--termsOfService"', '{{ privacy }}': 'href="#" data-toggle="modal" data-target="#modal--privacyPolicy"' })|raw }}</label>
             {{ form_errors(registrationForm.terms) }}
             {% do registrationForm.terms.setRendered() %}
         </div>
+
     </div>
 
     <div class="col-lg-12 mt-2 text-center mb-1">
-        <button type="submit" value="Regisztrálok" class="btn btn-primary px-5" formnovalidate>{{ 'registration.register-button'|trans }}</button>
+        <button type="submit" value="Regisztrálok" class="JS--Button-register btn btn-primary px-5" formnovalidate>{{ 'registration.register-button'|trans }}</button>
     </div>
 
     {# Render CSRF token etc .#}
@@ -76,3 +77,6 @@
     </div>
 </div>
 {{ form_end(registrationForm) }}
+
+{% include '/webshop/site/widgets/_privacy-policy-popup.html.twig' %}
+{% include '/webshop/site/widgets/_terms-and-condition-popup.html.twig' %}

@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\TimestampableTrait;
-use App\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -62,12 +61,12 @@ class Recipient
     private $address;
 
     /**
-     * @var User
+     * @var Customer
      *
      * ==== Many Recipients belong to one Customer ====
      * ==== inversed By="recipients" => a User entitásban definiált 'recipients' attibútumról van szó; A Címzettet így kötjük vissza a Customerhez
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="recipients")
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="recipients")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @ Assert\NotBlank(message="Egy címzetnek kell legyen felhasználója/Customer.")
      */
@@ -158,17 +157,17 @@ class Recipient
     }
 
     /**
-     * @return User
+     * @return Customer|null
      */
-    public function getCustomer(): ?User
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
     /**
-     * @var User $customer
+     * @var Customer|null $customer
      */
-    public function setCustomer(?User $customer): void
+    public function setCustomer(?Customer $customer): void
     {
         $this->customer = $customer;
     }

@@ -171,51 +171,50 @@
 
                             <div class="JS--intervalsWrapper mt-4">
                             {#{% if date.intervals is defined %}#}
-                            <div class="row">
-                                <div class="col-lg-12 mb-3X">
-                                    <span class="form-label text-body mb-0">{{ 'order.pick-delivery-interval'|trans }}</span> <br>
-
-                                </div>
-                            </div>
-                            <div class="form-row order-delivery-date">
-                                {% for date in generatedDates.dates %}
-                                    <div class="col-md-12 col-12 JS--generatedInterval-{{ date.deliveryDate|localizedDate('Y-m-d') }} d-none">
-                                        <form>
-                                            {% set index = loop.index %}
-
-                                            <div class="row">
-                                                <div class="col-lg-8 col-12">
-                                                    <div class="form-control--Background my-1 px-0">
-                                                        <select id="dateForm_deliveryInterval" name="dateForm_deliveryInterval" required="required" class="JS--intervalDropdown form-control form-control-dropdown">
-                                                            <option value="">{{ 'order.choose-time-frame'|trans }}</option>
-                                                            {% for interval in date.intervals %}
-                                                                <option value="{{ interval }}" data-fee="{% if interval.price %}{{ interval.price }}{% else %}0{% endif %}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}selected="selected"{% endif %}>
-                                                                    {{ interval }} óra között: {% if interval.price %} +{{ interval.price|money }} {% else %} {{ 'order.free-delivery'|trans }} {% endif %}
-                                                                </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                        {#<i class="fas fa-chevron-down form-control-dropdown"></i>#}
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-12">
-                                                    <div class="text-sm text-muted-extra alertX alert-warningX py-3X mt-lg-0 mt-1">
-                                                                                        <span class="text-primary-lighten mr-1">
-                                                                                            <i class="fas fa-info-circle"></i>
-                                                                                        </span>
-                                                        {{ 'order.choose-the-timeframe-when-the-recipient-will-available-at-delivery-address'|trans }}
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                        </form>
+                                <div class="row">
+                                    <div class="col-lg-12 mb-3X">
+                                        <span class="form-label text-body mb-0">{{ 'order.pick-delivery-interval'|trans }}</span> <br>
                                     </div>
-                                {% endfor %}
-                                <div class="col-md-12 col-12 mb-1X">
-                                    {% include('/webshop/cart/hidden-delivery-date-form.html.twig') %}
+                                </div>
+                                <div class="form-row order-delivery-date">
+                                    {% for date in generatedDates.dates %}
+                                        <div class="col-md-12 col-12 JS--generatedInterval-{{ date.deliveryDate|localizedDate('Y-m-d') }} d-none">
+                                            <form>
+                                                {% set index = loop.index %}
+
+                                                <div class="row">
+                                                    <div class="col-lg-8 col-12">
+                                                        <div class="form-control--Background my-1 px-0">
+                                                            <select id="dateForm_deliveryInterval" name="dateForm_deliveryInterval" required="required" class="JS--intervalDropdown form-control form-control-dropdown">
+                                                                <option value="">{{ 'order.choose-time-frame'|trans }}</option>
+                                                                {% for interval in date.intervals %}
+                                                                    <option value="{{ interval }}" data-fee="{% if interval.price %}{{ interval.price }}{% else %}0{% endif %}" {% if selectedDate is defined and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') and selectedInterval is defined and selectedInterval == interval.name %}selected="selected"{% endif %}>
+                                                                        {{ interval }} óra között: {% if interval.price %} +{{ interval.price|money }} {% else %} {{ 'order.free-delivery'|trans }} {% endif %}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            {#<i class="fas fa-chevron-down form-control-dropdown"></i>#}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-12">
+                                                        <div class="text-sm text-muted-extra alertX alert-warningX py-3X mt-lg-0 mt-1">
+                                                                                            <span class="text-primary-lighten mr-1">
+                                                                                                <i class="fas fa-info-circle"></i>
+                                                                                            </span>
+                                                            {{ 'order.choose-the-timeframe-when-the-recipient-will-available-at-delivery-address'|trans }}
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </form>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="col-md-12 col-12 mb-1X">
+                                        {% include('/webshop/cart/hidden-delivery-date-form.html.twig') %}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         </div>
                         <div class="modal-footer">
                             <div class="loadingWrapper loadingWrapper-secondary">
@@ -659,9 +658,7 @@
                     element: $wrapper.find('#hidden_deliveryInterval'),
                     value: $wrapper.find('#hidden_deliveryInterval').val(),
                     setIntervalValue: function (value) {
-                        console.log('setIntervalValue: ' + value);
                         this.element.val(value);
-                        console.log('setIntervalValue: ' + this.element.val());
                     },
                 },
                 fee: {
@@ -672,11 +669,16 @@
                     },
                 },
             };
+
+            // Set initial value in DRP
+            if (hiddenForm.date.value) {
+                $('.JS--Button-clickDate').data('daterangepicker').setStartDate(hiddenForm.date.value);
+                $('.JS--Button-clickDate').data('daterangepicker').setEndDate(hiddenForm.date.value);
+            }
+
             $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);
             $selectedInterval = $wrapper.find('.JS--generatedInterval-' + hiddenForm.date.value);
             $intervalDropdown = $selectedInterval.find('.JS--intervalDropdown');
-
-            console.log($vp);
 
             if ($selectedDate.hasClass('d-none')) {
                 $selectedDate.removeClass('d-none').addClass('d-temporary');
@@ -688,7 +690,6 @@
 
             function onSelectInterval(dropdown) {
                 dropdown.on('change', function () {
-                    console.log($(this).val().toString());
                     hiddenForm.interval.setIntervalValue($(this).val().toString());
                     // retrieve delivery fee from 'data-' attribute
                     $dropdownValue = $(this).children('option:selected').data('fee'); //.toString()
@@ -698,7 +699,6 @@
 
             // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
             // Ez akkor triggerelődik, amikor nem kattintunk sem dátumboxra, sem kalendáriumra.
-            console.log($intervalDropdown);
             onSelectInterval($intervalDropdown);
 
             /**
@@ -715,9 +715,7 @@
                     $(this).find('.vp').addClass('vp-checked');
                     $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $(this).data('date-value'));
 
-                    //                $wrapper.find('#hidden_deliveryDate').val($(this).data('date-value'));
                     hiddenForm.date.setDateValue($(this).data('date-value'));
-                    console.log($(this).data('date-value'));
 
                     // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
                     // amugy visszallitja (ujra mutatja) a CalendarIcont
@@ -734,8 +732,11 @@
 
                     // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
                     // Ez akkor triggerelődik, amikor kattintunk a dátumboxra (ami nem a kallendárium).
-                    console.log($intervalModule.find('.JS--intervalDropdown')[0]);
                     onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
+
+                    // Set daterangepicker to current value
+                    $('.JS--Button-clickDate').data('daterangepicker').setStartDate($(this).data('date-value'));
+                    $('.JS--Button-clickDate').data('daterangepicker').setEndDate($(this).data('date-value'));
                 }
             });
             /**

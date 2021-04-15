@@ -21,17 +21,7 @@
         <div class="card-body">
             <div class="card-title h4 mb-0">Felhasználó adatai</div>
             <div class="mt-3">
-{#                {{ form_start(customerForm, { 'attr': {'class': 'JS--messageAndCustomerForm' }}) }}#}
-                    {% include('webshop/cart/user-basicDetails-form.html.twig') %}
-                    {# Render CSRF token etc .#}
-                    <div style="display:none">
-                        {{ form_rest(customerForm) }}
-                    </div>
-                    <div class="mt-3">
-                        <input type="submit" class="btn btn-primary" value="Módosítások mentése">
-                    </div>
-{#                {{ form_end(customerForm) }}#}
-{#                {% do customerForm.setRendered() %}#}
+                {% include('webshop/cart/user-basicDetails-form.html.twig') %}
             </div>
         </div>
     </div>

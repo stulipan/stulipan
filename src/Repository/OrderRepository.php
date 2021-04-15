@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Customer;
 use App\Entity\DateRange;
 use App\Entity\Order;
 use App\Entity\OrderItem;
@@ -54,7 +55,7 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
             $date->modify('-30 days');
         }
 
-        $status = OrderStatus::STATUS_CREATED;
+        $status = OrderStatus::ORDER_CREATED;
         $status = $this->getEntityManager()->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $status]);
 
         $qb = $this
@@ -153,12 +154,16 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
      * @return Query
      * @throws Exception
      */
-    public function findAllQuery($filters = [])
+//    public function findAllQuery($filters = [])
+    public function findAllQuery($filters = [], $onlyPlacedOrders = true)
     {
-        $qb = $this->createQueryBuilder('o')
-            ->andWhere('o.status IS NOT NULL')
-            ->orderBy('o.createdAt', 'DESC')
-        ;
+        $qb = $this->createQueryBuilder('o');
+
+        if ($onlyPlacedOrders) {
+            $qb->andWhere('o.status IS NOT NULL');
+        }
+
+        $qb->orderBy('o.createdAt', 'DESC');
 
         if (is_array($filters)) {
             if (array_key_exists('searchTerm', $filters) && $filters['searchTerm']) {
@@ -306,7 +311,7 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
             $date->modify('-30 days');
         }
 
-        $status = OrderStatus::STATUS_CREATED;
+        $status = OrderStatus::ORDER_CREATED;
         $status = $this->getEntityManager()->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $status]);
 
         $qb = $this
@@ -357,6 +362,37 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
 //            ->setParameter('status', 1)
             ->getQuery()
             ;
+    }
+
+    /**
+     * @param array $criteria
+     *
+     * @return Query
+     */
+    public function findLastPartialOrder(array $criteria)
+    {
+        $qb = $this
+            ->createQueryBuilder('o')
+            ->andWhere('o.status IS NULL')
+        ;
+        $qb->orderBy('o.id', 'DESC');
+
+        if (is_array($criteria)) {
+            if (array_key_exists('customer', $criteria) && $criteria['customer']) {
+                $customer = $criteria['customer'];
+
+                $qb->andWhere('o.customer = :customer')
+                    ->setParameter('customer', $customer);
+
+                $resultArray = $qb->getQuery()->getResult();
+                if (count($resultArray) > 0) {
+                    return $qb->getQuery()->getResult()[0];
+                }
+                return null;
+            }
+        }
+
+        return null;
     }
 
     /**

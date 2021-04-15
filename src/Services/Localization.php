@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Entity\Locale;
+use App\Model\Locale;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;

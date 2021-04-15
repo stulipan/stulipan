@@ -6,6 +6,8 @@ navbar:
 registration:
     login-title: Bejelentkezés
     login-button: Bejelentkezek
+    login-meta-title: Bejelentkezés
+    registration-meta-title: Regisztráció
     create-account: 'Új fiók'
     create-account-title: 'Fiók létrehozása'
     register-button: Regisztrálok
@@ -16,7 +18,19 @@ registration:
     lastname: Vezetéknév
     remember-me: 'Maradjak bejelentkezve'
     newsletter-sign-up: 'Feliratkozom a hírlevélre, hogy elsőként értesüljek az akciókról, újdonságokról.'
-    accept-terms-and-conditions: 'Kijelentem, hogy az Általános Szerződési Feltételeket és az Adatvédelmi nyilatkozatot megismertem és elfogadom, az abban szereplő adatkezelésekhez hozzájárulok.'
+
+    email-is-missing: 'Írd be az email címedet.'
+    email-is-invalid: 'Ellenőrizd, hogy helyesen írtad be az email címet.'
+    email-is-in-use: 'Az email címet elgépelted, vagy már regisztráltál vele!'
+    password-is-missing: 'Adj meg egy jelszót.'
+    firstname-is-missing: 'Add meg a keresztnevedet.'
+    lastname-is-missing: 'Add meg a vezetéknevedet.'
+    password-at-login-is-missing: 'Add meg a jelszót.'
+
+    terms:
+        accept-terms-label: 'Kijelentem, hogy az <a {{ terms }}>Általános Szerződési Feltételeket</a> és az <a {{ privacy }}>Adatvédelmi nyilatkozatot</a> megismertem és elfogadom, az abban szereplő adatkezelésekhez hozzájárulok.'
+        accept-terms-error: 'Kérjük olvasd el és fogadd el az ÁSZF-et.'
+
 account:
     my-account: 'Saját fiókom'
     logout: Kijelentkezés
@@ -46,11 +60,11 @@ cart:
     show-order-summary: 'Rendelés összesítése'
     product:
         product-added-successfully: 'A terméket sikeresen hozzáadtad a kosárhoz!'
+        not-enough-stock: 'Nincs elegendő készlet.'
     gift:
         choose-gift-title: 'A virág mellé válassz ajándékot'
         choose-gift: Kiválaszt
         gift-added-successfully: 'Az ajándékot sikeresen hozzáadtad a kosárhoz!'
-    not-enough-stock: 'Nincs elegendő készlet.'
     greeting-card:
         send-message-title: 'Üzenet a címzettnek'
         free-card-good-to-know: 'Jó tudni!'
@@ -97,6 +111,10 @@ checkout:
         missing-country: 'Válasszd ki az országot.'
         missing-phone: 'Add meg a telefonszámot.'
         invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
+        missing-recipient: 'Nem adtál még meg címzettet.'
+        last-used: 'Legutóbb használt'
+    sender:
+        last-used: 'Legutóbb használt'
     customer:
         customer-information-title: 'Aki küldi'
         customer-information-description: 'Email címeden és telefonszámodon fogunk értesíteni a rendelés teljesítéséről.'
@@ -112,6 +130,18 @@ checkout:
         missing-phone: 'Add meg a telefonszámot.'
         invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
         newsletter-optin: 'Pipáld be és értesíteni fogunk akcióinkról. Kizárólag vásárlóink részére!'
+        missing-customer: 'Nem adtad meg az adataidat vagy valamelyik mezőt nem tölötted ki.'
+    shipping:
+        shipping-method-missing: 'Válassz szállítási módot!'
+    delivery-date:
+        missing-date: 'Jelöld meg a szállítási napot.'
+        missing-interval: 'Válaszd ki, mely napszakban történjen meg a kiszállítás.'
+        delivery-date-missing: 'Válassz egy szállítási időt.'
+    payment:
+        payment-method-missing: 'Válassz fizetési módot!'
+    terms:
+        accept-terms-label: 'A rendelés leadásával kijelented, hogy elolvastad és elfogadod az <a {{ terms }}>ÁSZF</a> illetve az <a {{ privacy }}>Adatvédelemben</a> foglaltakat és hozzájárulsz, hogy az itt megadott adatokat felhasználjuk a rendelés teljesítéséhez.'
+        accept-terms-error: 'A rendelés leadásához kérjük fogadd el az ÁSZF-et.'
     continue-to-shipping-address-button: 'Tovább a szállítási címhez'
     continue-to-recipient-address-button: 'Tovább a címzett megadásához'
     continue-to-shipping-method-button: 'Tovább a szállítási módhoz'

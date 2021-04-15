@@ -3,7 +3,7 @@
 namespace App\Controller\Shop;
 
 use App\Entity\Geo\GeoPlace;
-use App\Entity\OrderBuilder;
+use App\Services\OrderBuilder;
 use App\Entity\Product\ProductCategory;
 use App\Repository\GeoPlaceRepository;
 
@@ -103,6 +103,7 @@ class CartUtilsController extends AbstractController
     public function cartDetailsDropdown()
     {
         $orderBuilder = $this->orderBuilder;
+//        dd($orderBuilder->getCurrentOrder());
         return $this->render('webshop/site/navbar-cart-dropdown.html.twig', [
             'order' => $orderBuilder->getCurrentOrder(),
             'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),

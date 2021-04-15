@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\CustomerBasic;
 
+use App\Entity\Customer;
 use App\Entity\Model\CustomerBasic;
 use App\Entity\User;
 
@@ -18,6 +19,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+/**
+ * !!!!! NOT IN USE !!!!
+ *
+ */
 
 class CustomerBasicsFormType extends AbstractType
 {
@@ -71,10 +76,10 @@ class CustomerBasicsFormType extends AbstractType
 //                    new PhoneNumber(['regionCode' => 'HU']),
 //                ],
             ])
-            ->add('optin', CheckboxType::class, [
+            ->add('acceptsMarketing', CheckboxType::class, [
                 'label' => 'Pipáld be és értesíteni fogunk akcióinkról. Kizárólag vásárlóink részére!',
                 'required' => false,
-                'mapped' => false,
+                'mapped' => true,
 //                'constraints' => new IsTrue(['message' => 'Biztosan nem akarsz feliratkozni a hírlevélre?']),
             ])
 //            ->add('terms', CheckboxType::class, [
@@ -89,7 +94,8 @@ class CustomerBasicsFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => CustomerBasic::class,
+//            'data_class' => CustomerBasic::class,
+            'data_class' => Customer::class,
             'attr' => ['novalidate' => 'novalidate'],
         ]);
     }

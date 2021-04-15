@@ -18,7 +18,7 @@ class CheckoutPaymentMethod
      * @var PaymentMethod
      * @Groups({"orderView", "orderList"})
      *
-     * @Assert\NotNull(message="cart.missing-payment-method")
+     * @Assert\NotNull(message="checkout.payment-method-missing")
      */
     private $paymentMethod;
 

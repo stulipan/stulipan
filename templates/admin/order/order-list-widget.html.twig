@@ -69,16 +69,15 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-4 pl-md-2 mt-2 mt-md-0">
-                                    <div class="text-mutedZ">
+                                    <div class="">
                                         {% for item in order.items %}
-                                            <div class="rowX">
-                                                <div class="text-nowrapX">
+                                            <div class="">
+                                                <div class="">
                                                     <div class="d-flex">
                                                         <a class="mr-1" href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
-                                                            <img class="img-thumbnail rounded-circleX" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" width="50px;" />
+                                                            <img class="img-thumbnail" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" width="50px;" />
                                                         </a>
                                                         <div class="text-sm mb-1">
-                                                            {#Ár: {{ item.price|money }}, #}
                                                             <span class="text-muted">Menny.:</span> <em>{{ item.quantity }} db </em><br>
                                                             <span class="text-muted">Összesen:</span> <em>{{ item.priceTotal|money }} </em><br>
                                                             <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="text-uppercaseX text-dark text-md"><strong>{{ item.product.productName }}</strong> <em><span class="badge badge-danger">{{ item.subproductAttribute ? '' ~ item.subproductAttribute : ''  }}</span></em></a><br>

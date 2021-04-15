@@ -8,7 +8,7 @@
 
 {% block page_content %}
 
-    <div class="JS--globalWrapper" data-wrapper-global>
+    <div class="JS--Wrapper-checkout" data-wrapper-global data-section-id="checkout-template" data-section-type="checkout-template">
 
         {% block modal %}
         {% endblock %}
@@ -50,7 +50,7 @@
                 <div class="container shopi-left-body">
 {#                    style="max-width: 500px;"#}
                     <div class="row">
-                        <div class="col-md-12 correction-no-padding">
+                        <div class="col-md-12">
                             <div class="d-none d-lg-flex col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center my-lg-0 order-lg-1 order-1 pb-2 px-0 px-md-10px">
                                 <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
                                     <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">
@@ -79,30 +79,14 @@
                             <ul class="list-inline checkout-footer-list py-3 mb-0">
 
                                 <li class="list-inline-item">
-                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--aboutUs">Rólunk</a>
-                                    <div class="modal fade" id="modal--aboutUs" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <h3 class="modal-title" id="modalLabel">{{ pages.rolunk.name }}</h3>
-                                                    <div class="mt-4">
-                                                        {{ pages.rolunk.content|raw }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--privacyPolicy">Adatvedelem</a>
+                                    {% include '/webshop/site/widgets/_privacy-policy-popup.html.twig' %}
                                 </li>
 
                                 <li class="list-inline-item">
                                     <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--shippingInfo">Szállítási díjak</a>
                                     <div class="modal fade" id="modal--shippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                        <div class="modal-dialog modal-lg modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -122,23 +106,7 @@
 
                                 <li class="list-inline-item">
                                     <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--termsOfService">ÁSZF</a>
-                                    <div class="modal fade" id="modal--termsOfService" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <h3 class="modal-title" id="modalLabel">{{ pages.aszf.name }}</h3>
-                                                    <div class="mt-4">
-                                                        {{ pages.aszf.content|raw }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% include '/webshop/site/widgets/_terms-and-condition-popup.html.twig' %}
                                 </li>
                             </ul>
                         </div>

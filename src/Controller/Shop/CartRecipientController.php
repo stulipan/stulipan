@@ -5,7 +5,7 @@ namespace App\Controller\Shop;
 use App\Entity\Address;
 use App\Entity\Geo\GeoCountry;
 use App\Entity\Geo\GeoPlace;
-use App\Entity\OrderBuilder;
+use App\Services\OrderBuilder;
 use App\Entity\Recipient;
 use App\Repository\GeoPlaceRepository;
 use App\Form\RecipientType;
@@ -59,8 +59,6 @@ class CartRecipientController extends AbstractController
      */
     public function editRecipientForm(Request $request, ?Recipient $recipient, $id = null, ValidatorInterface $validator)
     {
-//        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
-
         // If User from session is equal to User in Recipient
         $orderBuilder = $this->orderBuilder;
         $customer = $orderBuilder->getCurrentOrder()->getCustomer();
@@ -253,7 +251,7 @@ class CartRecipientController extends AbstractController
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
         // If User from session is equal to User in Recipient
-        if ($this->getUser() === $recipient->getCustomer()) {
+        if ($this->orderBuilder->getCustomer() === $recipient->getCustomer()) {
             $orderBuilder = $this->orderBuilder;
             $orderBuilder->setRecipient($recipient);
 
@@ -274,7 +272,7 @@ class CartRecipientController extends AbstractController
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
         // If User from session is equal to User in Recipient
-        if ($this->getUser() === $recipient->getCustomer()) {
+        if ($this->orderBuilder->getCustomer() === $recipient->getCustomer()) {
             $this->orderBuilder->getCustomer()->removeRecipient($recipient);
             if ($this->orderBuilder->getCurrentOrder()->getRecipient() == $recipient) {
                 $this->orderBuilder->removeRecipient();

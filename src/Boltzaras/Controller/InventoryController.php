@@ -3,11 +3,14 @@
 
 namespace App\Boltzaras\Controller;
 
+use App\Services\StoreSettings;
+use Pagerfanta\Exception\NotValidCurrentPageException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
@@ -18,11 +21,10 @@ use App\Entity\Boltzaras\InventorySupply;
 use App\Entity\Boltzaras\InventorySupplyItem;
 use App\Entity\Boltzaras\InventoryWaste;
 use App\Entity\Boltzaras\InventoryWasteItem;
-use App\Form\Inventory\InventoryProductFormType;
-use App\Form\Inventory\InventorySupplyFormType;
-use App\Form\Inventory\InventoryWasteFormType;
+use App\Boltzaras\Form\InventoryProductFormType;
+use App\Boltzaras\Form\InventorySupplyFormType;
+use App\Boltzaras\Form\InventoryWasteFormType;
 
-use App\Pagination\PaginatedCollection;
 
 /**
  * @Route("/admin")
@@ -34,7 +36,7 @@ class InventoryController extends AbstractController
     /**
      * @Route("/inventory/supply/{page}", name="inventory-supply-list", requirements={"page"="\d+"})
      */
-    public function listSupplyWithPagination($page = 1)
+    public function listSupplyWithPagination($page = 1, StoreSettings $settings)
     {
         $itemsPerCategory = 0;
 
@@ -42,11 +44,8 @@ class InventoryController extends AbstractController
             ->getRepository(InventorySupply::class)
             ->findAllQueryBuilder();
 
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
         try {
@@ -77,8 +76,6 @@ class InventoryController extends AbstractController
 
         }
 
-
-//        $paginatedCollection = new PaginatedCollection($items, $pagerfanta->getNbResults());
 
         return $this->render('admin/inventory/supply_list.html.twig', [
             'items' => $supplies,
@@ -210,18 +207,15 @@ class InventoryController extends AbstractController
     /**
      * @Route("/inventory/waste/{page}", name="inventory-waste-list", requirements={"page"="\d+"})
      */
-    public function listWasteWithPagination($page = 1)
+    public function listWasteWithPagination($page = 1, StoreSettings $settings)
     {
         $itemsPerCategory = 0;
         $queryBuilder = $this->getDoctrine()
             ->getRepository(InventoryWaste::class)
             ->findAllQueryBuilder();
 
-        //Start with $adapter = new DoctrineORMAdapter() since we're using Doctrine, and pass it the query builder.
-        //Next, create a $pagerfanta variable set to new Pagerfanta() and pass it the adapter.
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(20);
+        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         //$pagerfanta->setCurrentPage($page);
 
         try {

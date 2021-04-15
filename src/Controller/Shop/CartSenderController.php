@@ -5,7 +5,7 @@ namespace App\Controller\Shop;
 use App\Entity\Address;
 use App\Entity\Geo\GeoCountry;
 use App\Entity\Order;
-use App\Entity\OrderBuilder;
+use App\Services\OrderBuilder;
 use App\Entity\Sender;
 use App\Form\SenderType;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -37,10 +37,8 @@ class CartSenderController extends AbstractController
      */
     public function editSenderForm(Request $request, ?Sender $sender, $id = null, ValidatorInterface $validator)
     {
-//        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
-
         $orderBuilder = $this->orderBuilder;
-        $customer = $orderBuilder->getCurrentOrder()->getCustomer() ? $orderBuilder->getCurrentOrder()->getCustomer() : null;
+        $customer = $orderBuilder->getCurrentOrder()->getCustomer();
         if (!$sender) {
             $orderBuilder->removeSender($orderBuilder->getCurrentOrder()->getSender());  // torli a mar elmentett Sendert
 
@@ -188,7 +186,7 @@ class CartSenderController extends AbstractController
     {
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
-        if ($this->getUser() === $sender->getCustomer()) {
+        if ($this->orderBuilder->getCustomer() === $sender->getCustomer()) {
             $orderBuilder = $this->orderBuilder;
             $orderBuilder->setSender($sender);
 
@@ -213,7 +211,7 @@ class CartSenderController extends AbstractController
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
         // If User from session is equal to User in Recipient
-        if ($this->getUser() === $sender->getCustomer()) {
+        if ($this->orderBuilder->getCustomer() === $sender->getCustomer()) {
             $this->orderBuilder->getCustomer()->removeSender($sender);
             if ($this->orderBuilder->getCurrentOrder()->getSender() == $sender) {
                 $this->orderBuilder->removeSender();

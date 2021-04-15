@@ -25,7 +25,7 @@ class AccessDeniedHandler implements EventSubscriberInterface
             // the priority must be greater than the Security HTTP
             // ExceptionListener, to make sure it's called before
             // the default exception listener
-            KernelEvents::EXCEPTION => ['onKernelException', 2]
+//            KernelEvents::EXCEPTION => ['onKernelException', 2]
         ];
     }
 
@@ -37,7 +37,7 @@ class AccessDeniedHandler implements EventSubscriberInterface
 
         $request = $event->getRequest();
         if($request->isXmlHttpRequest()){
-            $event->setResponse(new Response('Your session has expired!', Response::HTTP_FORBIDDEN)); //403
+            $event->setResponse(new Response('Your session has expired_!', Response::HTTP_FORBIDDEN)); //403
             return;
         }
     }

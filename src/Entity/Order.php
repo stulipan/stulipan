@@ -9,7 +9,6 @@ use App\Entity\OrderItem;
 use App\Entity\OrderStatus;
 use App\Entity\Product\Product;
 use App\Entity\TimestampableTrait;
-use App\Entity\User;
 use App\Entity\Recipient;
 use App\Entity\Sender;
 use App\Entity\PaymentMethod;
@@ -25,6 +24,7 @@ use Doctrine\Common\Collections\Collection;
 use Egulias\EmailValidator\Warning\AddressLiteral;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -74,14 +74,14 @@ class Order
     private $paymentStatus;
 
     /**
-     * @var User|null
+     * @var Customer|null
      * @Groups({"orderView", "orderList"})
      *
      * ==== Many Orders belong to one Customer ====
-     * ==== inversed By="orders" => a User entitásban definiált 'orders' attibútumról van szó; A Ordert így kötjük vissza a Customerhez
+     * ==== inversed By="orders" => a Customer entitásban definiált 'orders' attibútumról van szó; A Ordert így kötjük vissza a Customerhez
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="orders")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="orders")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=true)
      * @ Assert\NotBlank(message="Egy rendelésnek kell legyen customer-je.")
      */
     private $customer;
@@ -113,6 +113,15 @@ class Order
      * @Assert\Email(message="Ellenőrizd, hogy helyesen írtad be az email címet!")
      */
     private $email;
+
+    /**
+     * @var string|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="customer_phone", type="string", length=15, nullable=false)
+     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     */
+    private $phone;
 
     /**
      * @var Recipient|null
@@ -247,7 +256,7 @@ class Order
     private $shippingLastname;
 
     /**
-     * @var int|null
+     * @var string|null
      * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="shipping_phone", type="string", length=15, nullable=false)
@@ -295,7 +304,7 @@ class Order
     private $billingCompany;
 
     /**
-     * @var int|null
+     * @var string|null
      * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="billing_phone", type="string", length=15, nullable=false)
@@ -352,6 +361,30 @@ class Order
      * @Assert\Valid()
      */
     private $clientDetails;
+
+    /**
+     * @var bool|null
+     * @Groups({"orderView"})
+     *
+     * @ORM\Column(name="is_accepted_terms", type="boolean", nullable=true, options={"default"=false})
+     */
+    private $isAcceptedTerms;
+
+    /**
+     * @var bool|null
+     * @Groups({"orderView"})
+     *
+     * @ORM\Column(name="is_conversion_tracked", type="boolean", nullable=true, options={"default"=false})
+     */
+    private $isConversionTracked;
+
+    /**
+     * @var string|null
+     * @Groups({"orderView"})
+     *
+     * @ORM\Column(name="token", type="string", length=50, nullable=true)
+     */
+    private $token;
 
     /**
      * @var Transaction[]|ArrayCollection|null;
@@ -529,17 +562,17 @@ class Order
     }
 
     /**
-     * @return User|null
+     * @return Customer|null
      */
-    public function getCustomer(): ?User
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
     /**
-     * @param User $customer
+     * @param Customer $customer
      */
-    public function setCustomer(?User $customer): void
+    public function setCustomer(?Customer $customer): void
     {
         $this->customer = $customer;
     }
@@ -557,7 +590,8 @@ class Order
      */
     public function setFirstname(?string $firstname)
     {
-        $this->firstname = ucwords($firstname);
+        $this->firstname = $this->ucWords($firstname);
+
     }
     
     /**
@@ -573,7 +607,7 @@ class Order
      */
     public function setLastname(?string $lastname)
     {
-        $this->lastname = ucwords($lastname);
+        $this->lastname = $this->ucWords($lastname);
     }
     
     /**
@@ -582,7 +616,7 @@ class Order
     public function getFullname(): ?string
     {
         $fullname = $this->firstname.' '.$this->lastname;
-        return ucwords($fullname);
+        return $this->ucWords($fullname);
     }
 
     /**
@@ -591,7 +625,7 @@ class Order
     public function getInitials(): ?string
     {
         $fullnameInitial = $this->firstname[0].$this->lastname[0];
-        return ucwords($fullnameInitial);
+        return $this->ucWords($fullnameInitial);
     }
     
     
@@ -609,6 +643,22 @@ class Order
     public function setEmail(?string $email)
     {
         $this->email = $email;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string|null $phone
+     */
+    public function setPhone(?string $phone): void
+    {
+        $this->phone = $phone;
     }
 
     /**
@@ -732,9 +782,9 @@ class Order
     }
 
     /**
-     * @param Discount $discount
+     * @param Discount|null $discount
      */
-    public function setDiscount(Discount $discount): void
+    public function setDiscount(?Discount $discount): void
     {
         $this->discount = $discount;
     }
@@ -820,7 +870,7 @@ class Order
      */
     public function setShippingFirstname(?string $name): void
     {
-        $this->shippingFirstname = $name ? ucwords($name) : $name;
+        $this->shippingFirstname = $this->ucWords($name);
     }
 
     /**
@@ -836,7 +886,7 @@ class Order
      */
     public function setShippingLastname(?string $name): void
     {
-        $this->shippingLastname = $name ? ucwords($name) : $name;
+        $this->shippingLastname = $this->ucWords($name);
     }
 
     /**
@@ -895,7 +945,7 @@ class Order
      */
     public function setBillingFirstname(?string $name): void
     {
-        $this->billingFirstname = ucwords($name);
+        $this->billingFirstname = $this->ucWords($name);
     }
 
     /**
@@ -911,7 +961,7 @@ class Order
      */
     public function setBillingLastname(?string $name): void
     {
-        $this->billingLastname = ucwords($name);
+        $this->billingLastname = $this->ucWords($name);
     }
 
     /**
@@ -998,9 +1048,9 @@ class Order
     }
 
     /**
-     * @param DateTime $deliveryDate
+     * @param DateTime|null $deliveryDate
      */
-    public function setDeliveryDate(DateTime $deliveryDate)
+    public function setDeliveryDate(?DateTime $deliveryDate)
     {
         $this->deliveryDate = $deliveryDate;
     }
@@ -1036,6 +1086,55 @@ class Order
     {
         $this->clientDetails = $clientDetails;
     }
+
+    /**
+     * @return bool|null
+     */
+    public function IsAcceptedTerms(): ?bool
+    {
+        return $this->isAcceptedTerms;
+    }
+
+    /**
+     * @param bool|null $isAcceptedTerms
+     */
+    public function setIsAcceptedTerms(?bool $isAcceptedTerms): void
+    {
+        $this->isAcceptedTerms = $isAcceptedTerms;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getIsConversionTracked(): ?bool
+    {
+        return $this->isConversionTracked;
+    }
+
+    /**
+     * @param bool|null $isConversionTracked
+     */
+    public function setIsConversionTracked(?bool $isConversionTracked): void
+    {
+        $this->isConversionTracked = $isConversionTracked;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string|null $token
+     */
+    public function setToken(?string $token): void
+    {
+        $this->token = $token;
+    }
+
 
     /**
      * @param OrderLog $log
@@ -1102,6 +1201,8 @@ class Order
 
     public function getDeliveryOverdueDays(): ?int
     {
+        if (!$this->getDeliveryDate()) return null;
+
         $date = clone $this->getDeliveryDate();
         /** DeliveryOverdueDays are calculated only for 'Open' and 'Paid' orders */
         if (!$this->isClosed() && $this->isPaid()) {
@@ -1124,7 +1225,7 @@ class Order
 
     public function isDeliveryOverdue(): bool
     {
-        if ($this->getStatus() && $this->getStatus()->getShortcode() === OrderStatus::STATUS_CREATED) {
+        if ($this->getStatus() && $this->getStatus()->getShortcode() === OrderStatus::ORDER_CREATED) {
             return $this->isDeliveryDateInPast();
         } else {
             return false;
@@ -1137,9 +1238,9 @@ class Order
     public function isClosed(): bool
     {
         if ($this->getStatus() && (
-                $this->getStatus()->getShortcode() === OrderStatus::STATUS_PAYMENT_REFUNDED ||
+                $this->getStatus()->getShortcode() === OrderStatus::PAYMENT_REFUNDED ||
                 $this->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED ||
-                $this->getStatus()->getShortcode() === OrderStatus::STATUS_DELETED
+                $this->getStatus()->getShortcode() === OrderStatus::ORDER_DELETED
             )) {
             return true;
         } else {
@@ -1236,4 +1337,33 @@ class Order
         return !$this->transactions->isEmpty();
     }
 
+
+    private function ucWords (?string $string)
+    {
+        return $string ? ucwords($string) : $string;
+    }
+
+    public function copyPropertyValuesInto($destinationObject)
+    {
+        $mergeIntoDestinationObj = function($property, $value, $destObj) {
+            if ($property != 'id') {
+                $propertyAccessor = PropertyAccess::createPropertyAccessorBuilder()
+                    ->enableExceptionOnInvalidIndex()
+                    ->getPropertyAccessor();
+
+                $propertyAccessor->setValue($destObj, $property, $value);
+            }
+        };
+
+        foreach($this as $property => $value) {
+            $params = [
+                $property,
+                $value,
+                $destinationObject,
+            ];
+            call_user_func_array($mergeIntoDestinationObj, $params);
+        }
+
+
+    }
 }

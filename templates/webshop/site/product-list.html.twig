@@ -24,21 +24,21 @@
 
                     </div>
                 </div>
-                <div class="col-md-4 d-noneX d-md-flexX">
-                    <div class="landing--info ml-lg-5">
-                        <div class="p-lg-3">
-                            <h3>ORDER UP TO 10pm</h3>
-                            <span>For next day delivery</span>
-                        </div>
-                        <div class="p-lg-3">
-                            <h3>FREE DELIVERY</h3>
-                            <span>monday - sunday</span>
-                        </div>
-                        <div class="p-lg-3">
-                            <h3>CUSTOMER SATISFACTION</h3>
-                            <span><span class="ratings small r-45 no-margin"></span> <strong>4.3/5</strong> <a href="/en/uk/reviews">based on 348792 reviews</a></span>
-                        </div>
-                    </div>
+                <div class="col-md-4">
+{#                    <div class="landing--info ml-lg-5">#}
+{#                        <div class="p-lg-3">#}
+{#                            <h3>ORDER UP TO 10pm</h3>#}
+{#                            <span>For next day delivery</span>#}
+{#                        </div>#}
+{#                        <div class="p-lg-3">#}
+{#                            <h3>FREE DELIVERY</h3>#}
+{#                            <span>monday - sunday</span>#}
+{#                        </div>#}
+{#                        <div class="p-lg-3">#}
+{#                            <h3>CUSTOMER SATISFACTION</h3>#}
+{#                            <span><span class="ratings small r-45 no-margin"></span> <strong>4.3/5</strong> <a href="/en/uk/reviews">based on 348792 reviews</a></span>#}
+{#                        </div>#}
+{#                    </div>#}
                 </div>
             </div>
         </div>
@@ -47,11 +47,9 @@
             <h1 class="">{{ category }}</h1>
             <p class="listing--lead">{{ category.description is defined ? category.description : '!Születésnapra, évfordulóra, randira, köszönet kifejezésére, babaköszöntőre, vendégségbe, ballagásra, vagy csak úgy, ajándékozz egy szép virágcsokrot. Csak válaszd ki a csokrot és a kézbesítésről mi gondoskodunk.' }}</p>
         </div>
-        <div class="products-grid--countdown mt-3 d-none d-md-block">
-{#            <div class="listing--countdown">#}
-                <i class="far fa-clock"></i> <span>Rendelj a következő <span class="font-weight-bold">XX óra és YY percen</span> belül, <span class="font-weight-bold">holnapi</span> kiszállításhoz.</span>
-{#            </div>#}
-        </div>
+{#        <div class="products-grid--countdown mt-3 d-none d-md-block">#}
+{#            <i class="far fa-clock"></i> <span>Rendelj a következő <span class="font-weight-bold">XX óra és YY percen</span> belül, <span class="font-weight-bold">holnapi</span> kiszállításhoz.</span>#}
+{#        </div>#}
 
         {% include '/webshop/site/product-list-widget.html.twig' %}
 

@@ -37,15 +37,19 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     private $em;
     private $convert;
 
+    private $storeSettings;
+
     public function __construct(ContainerInterface $container, SessionInterface $session,
                                 Localization $localization, TranslatorInterface $translator,
-                                EntityManagerInterface $em, DateFormatConvert $convert)
+                                EntityManagerInterface $em, DateFormatConvert $convert,
+                                StoreSettings $storeSettings)
     {
         $this->container = $container;
         $this->locale = $localization->getLocale($session->get('_locale', 'hu'));
         $this->translator = $translator;
         $this->em = $em;
         $this->convert = $convert;
+        $this->storeSettings = $storeSettings;
     }
 
     public function getFunctions(): array
@@ -60,6 +64,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     {
         return [
             'pages' => $this->getPages(),
+            'copyrightYear' => $this->createCopyrightYear(),
         ];
     }
 
@@ -101,6 +106,18 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         }
         $pages = $this->convertToObject($pages);
         return $pages;
+    }
+
+    public function createCopyrightYear()
+    {
+        $launchDate = DateTime::createFromFormat($this->storeSettings->getDateFormat(), $this->storeSettings->get('general.launch-date'));
+        $present = new DateTime('now');
+        $diff = $launchDate->diff($present)->y;
+
+        if ($diff > 0) {
+            return $launchDate->format('Y') . '-' . $present->format('Y'); // Eg. 2020-2021
+        }
+        return $launchDate->format('Y'); // Eg. 2021
     }
 
     /**

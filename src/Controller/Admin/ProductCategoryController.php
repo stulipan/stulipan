@@ -132,7 +132,7 @@ class ProductCategoryController extends AbstractController
             );
         }
 
-        $paginatedCollection = new PaginatedCollection($categories, $pagerfanta->getNbResults());
+//        $paginatedCollection = new PaginatedCollection($categories, $pagerfanta->getNbResults());
 
         // render a template, then in the template, print things with {{ szamla.munkatars }}
         return $this->render('admin/product/category-list.html.twig', [

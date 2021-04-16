@@ -66,12 +66,14 @@
                 <div class="d-flex justify-content-between align-items-center w-100 h-100 px-2 px-lg-0 py-0 py-lg-3">
                         <!-- Navbar Ted -->
                         <div class="navbar--ted d-none d-md-flex justify-content-md-center mr-md-3 order-md-3 order-2">
+                            {% if storeSettings.get('store.phone') is defined and storeSettings.get('store.phone') is not empty %}
                             <div class="nav-item login-cart-link">
                                 <svg class="svg-icon">
                                     <use xlink:href="#calls-1"> </use>
                                 </svg>
                                 <span class="login-cart-text d-lg-inline ml-1">{{ storeSettings.get('store.phone')}}</span>
                             </div>
+                            {% endif %}
                         </div>
 
                         <a href="#" role="button" data-toggle="sidebar" data-target="#sidebar--mobileMenu" class="navbar-toggler navbar-toggler-right d-lg-none text-left order-lg-10 order-1 mr-2"><i class="fas fa-bars"></i></a>
@@ -167,69 +169,69 @@
         </div>
     </main>
 
-    {% block footerHighlights %}
-        <div class="bg-secondary py-5">
-            <div class="container">
-                <div class="row miert-dobozok">
-                    <div class="col-sm-11 col-xl-12 mx-auto">
-                        <div class="row">
-                            <div class="col-lg-3 col-sm-6 text-center px-lg-5 mb-5 mb-lg-0">
-                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">
-                                    <div class="service-icon">
-                                        <img src="{{  asset('uploads/images/icons/legnepszerubb-2.png') }}">
-                                    </div>
-                                    <div class="service-text">
-                                        <h6 class="">A legnépszerűbb virágfutár</h6>
-                                        <p class="font-weight-light text-sm">Budapesten és környékén. A Difiori kevesebb csupán 4 év alatt a legnépszerűbb virágfutárrá nőtte ki magát. Válassz te is minket!
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+{#    {% block footerHighlights %}#}
+{#        <div class="bg-secondary py-5">#}
+{#            <div class="container">#}
+{#                <div class="row miert-dobozok">#}
+{#                    <div class="col-sm-11 col-xl-12 mx-auto">#}
+{#                        <div class="row">#}
+{#                            <div class="col-lg-3 col-sm-6 text-center px-lg-5 mb-5 mb-lg-0">#}
+{#                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">#}
+{#                                    <div class="service-icon">#}
+{#                                        <img src="{{  asset('uploads/images/icons/legnepszerubb-2.png') }}">#}
+{#                                    </div>#}
+{#                                    <div class="service-text">#}
+{#                                        <h6 class="">A legnépszerűbb virágfutár</h6>#}
+{#                                        <p class="font-weight-light text-sm">Budapesten és környékén. A Difiori kevesebb csupán 4 év alatt a legnépszerűbb virágfutárrá nőtte ki magát. Válassz te is minket!#}
+{#                                        </p>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
 
-                            <div class="col-lg-3 col-sm-6 text-center px-lg-5 mb-5 mb-lg-0">
-                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">
-                                    <div class="service-icon">
-                                        <img src="{{  asset('uploads/images/icons/futar-kezbesites-1.png') }}">
-                                    </div>
-                                    <div class="service-text">
-                                        <h6 class="">Házhozszállítás akár aznap</h6>
-                                        <p class="font-weight-light text-sm">A gyors kézbesítést saját futárokkal biztosítjuk, választható időpontban. A szállítási módokról és díjakról <a class="text-underlineX" href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+{#                            <div class="col-lg-3 col-sm-6 text-center px-lg-5 mb-5 mb-lg-0">#}
+{#                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">#}
+{#                                    <div class="service-icon">#}
+{#                                        <img src="{{  asset('uploads/images/icons/futar-kezbesites-1.png') }}">#}
+{#                                    </div>#}
+{#                                    <div class="service-text">#}
+{#                                        <h6 class="">Házhozszállítás akár aznap</h6>#}
+{#                                        <p class="font-weight-light text-sm">A gyors kézbesítést saját futárokkal biztosítjuk, választható időpontban. A szállítási módokról és díjakról <a class="text-underlineX" href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.#}
+{#                                        </p>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
 
-                            <div class="col-lg-3 col-sm-6 text-center px-lg-5 mb-5 mb-lg-0">
-                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">
-                                    <div class="service-icon">
-                                        <img src="{{  asset('uploads/images/icons/kockazat-nelkul-1.png') }}">
-                                    </div>
-                                    <div class="service-text">
-                                        <h6 class="">Virágküldés kockázat nélkül!</h6>
-                                        <p class="font-weight-light text-sm">Fizess online kényelmesen és biztonságosan bankkártyáddal. A bankkártyás fizetést a CIB Bank biztosítja.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+{#                            <div class="col-lg-3 col-sm-6 text-center px-lg-5 mb-5 mb-lg-0">#}
+{#                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">#}
+{#                                    <div class="service-icon">#}
+{#                                        <img src="{{  asset('uploads/images/icons/kockazat-nelkul-1.png') }}">#}
+{#                                    </div>#}
+{#                                    <div class="service-text">#}
+{#                                        <h6 class="">Virágküldés kockázat nélkül!</h6>#}
+{#                                        <p class="font-weight-light text-sm">Fizess online kényelmesen és biztonságosan bankkártyáddal. A bankkártyás fizetést a CIB Bank biztosítja.#}
+{#                                        </p>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
 
-                            <div class="col-lg-3 col-sm-6 text-center px-lg-5">
-                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">
-                                    <div class="service-icon">
-                                        <img src="{{  asset('uploads/images/icons/vasarloi-elegedetseg-1.png') }}">
-                                    </div>
-                                    <div class="service-text">
-                                        <h6 class="">Magas vásárlói elégedettség</h6>
-                                        <p class="font-weight-light text-sm">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endblock %}
+{#                            <div class="col-lg-3 col-sm-6 text-center px-lg-5">#}
+{#                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">#}
+{#                                    <div class="service-icon">#}
+{#                                        <img src="{{  asset('uploads/images/icons/vasarloi-elegedetseg-1.png') }}">#}
+{#                                    </div>#}
+{#                                    <div class="service-text">#}
+{#                                        <h6 class="">Magas vásárlói elégedettség</h6>#}
+{#                                        <p class="font-weight-light text-sm">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.#}
+{#                                        </p>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    {% endblock %}#}
 
 
     <footer class="main-footer">
@@ -241,7 +243,8 @@
                         <div class="row text-center text-sm-left">
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
                                 <h6 class="text-uppercase  mb-2">Elérhetőségek</h6>
-                                <p>{{ storeSettings.get('company.zip') }} {{ storeSettings.get('company.city') }}, {{ storeSettings.get('company.address') }}</p>
+{#                                <p>{{ storeSettings.get('company.zip') }} {{ storeSettings.get('company.city') }}, {{ storeSettings.get('company.address') }}</p>#}
+                                <p>{{ storeSettings.get('store.email') }}</p>
                                 <ul class="list-inline">
                                     {% if storeSettings.get('social.facebook') and storeSettings.get('social.facebook') is not null %}
                                     <li class="list-inline-item"><a href="{{ storeSettings.get('social.facebook') }}" target="_blank" title="facebook" class="h3"><i class="fab fa-facebook"></i></a></li>
@@ -261,9 +264,9 @@
                                 </ul>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
-                                <h6 class="text-uppercase  mb-2">Virágküldés</h6>
+                                <h6 class="text-uppercase  mb-2">Termékek</h6>
                                 <ul class="list-unstyled">
-                                    <li> <a href="/termekek/csokrok" class="text-decoration-none" title="Virágcsokrok">Csokrok</a></li>
+                                    <li> <a href="/termekek/kopogtatok" class="text-decoration-none" title="Virágcsokrok">Kopogtatók, ajtódíszek</a></li>
                                     <li> <a href="/termekek/viragdobozok" class="text-decoration-none" title="Virágboxok">Virágdobozok</a></li>
                                 </ul>
                             </div>
@@ -275,18 +278,18 @@
                                     <li> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="text-decoration-none">ÁSZF</a></li>
                                 </ul>
                             </div>
-                            <div class="col-sm-6 col-md-12 col-lg-3">
-                                <h6 class="text-uppercase  mb-2">Daily Offers &amp; Discounts</h6>
-                                <p class="mb-3"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.</p>
-                                <form action="#" id="newsletter-form">
-                                    <div class="input-group">
-                                        <input type="email" placeholder="Your Email Address" aria-label="Your Email Address" class="form-control bg-transparent border-secondary border-right-0">
-                                        <div class="input-group-append">
-                                            <button type="submit" class="btn btn-outline-secondary border-left-0"> <i class="fa fa-paper-plane text-lg "></i></button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+{#                            <div class="col-sm-6 col-md-12 col-lg-3">#}
+{#                                <h6 class="text-uppercase  mb-2">Daily Offers &amp; Discounts</h6>#}
+{#                                <p class="mb-3"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. At itaque temporibus.</p>#}
+{#                                <form action="#" id="newsletter-form">#}
+{#                                    <div class="input-group">#}
+{#                                        <input type="email" placeholder="Your Email Address" aria-label="Your Email Address" class="form-control bg-transparent border-secondary border-right-0">#}
+{#                                        <div class="input-group-append">#}
+{#                                            <button type="submit" class="btn btn-outline-secondary border-left-0"> <i class="fa fa-paper-plane text-lg "></i></button>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </form>#}
+{#                            </div>#}
                         </div>
                     </div>
                 </div>
@@ -300,11 +303,11 @@
                     <div class="col-sm-11 col-xl-12 mx-auto">
                         <div class="row">
                             <div class="col-md-8 text-center text-sm-left">
-                                <p class="mb-md-0">© 2014 - {{ "now"|date('Y') }} {{ storeSettings.get('store.url')}}. Virágküldés Budapesten és környékén, rózsadobozok, csokrok, esküvő, rendezvénydekoráció</p>
+                                <p class="mb-md-0">©{{ copyrightYear }} {{ storeSettings.get('store.url')}}. {{ storeSettings.get('meta.title')}}</p>
                             </div>
                             <div class="col-md-4">
                                 <div class="mt-2 mt-md-0 text-center text-sm-left text-md-right">
-                                    <div class=""><img src="{{  asset('uploads/images/icons/CIB_logo.png') }}" alt="..." class="w-50"></div>
+{#                                    <div class=""><img src="{{  asset('uploads/images/icons/CIB_logo.png') }}" alt="..." class="w-50"></div>#}
                                 </div>
                             </div>
                         </div>

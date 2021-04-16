@@ -5,19 +5,19 @@ parameters:
             type: Hidden
             label: 'Ezek az információk fognak a weboldalon látszódni, illetve a vásárlók is ezeket az információkat fogják használni.'
         name:
-            content: 'Tulipán futár'
+            content: 'Rafina Home Decor'
             type: Text
             label: 'Bolt neve'
         url:
-            content: Tulipanfutar.hu
+            content: Rafina.hu
             type: Text
             label: 'Webshop URL'
         email:
-            content: info@tulipanfutar.hu
+            content: rafinadekor@gmail.com
             type: Text
             label: 'Ügyfélszolgálati email'
         phone:
-            content: '06 1 46 66 286'
+            content: ' '
             type: Text
             label: 'Ügyfélszolgálati telefonszám'
     company:
@@ -26,19 +26,19 @@ parameters:
             type: Hidden
             label: 'Ez a cím fog megjelenni a számlákon és a egyéb helyeken a webolalon.'
         name:
-            content: 'Maysa Car Kft.'
+            content: 'Balla Kálmán Ferenc EV.'
             type: Text
             label: 'Vállalkozás neve'
         address:
-            content: 'Bartók Béka út 9.'
+            content: ' '
             type: Text
             label: Cím
         city:
-            content: Budapest
+            content: ' '
             type: Text
             label: Város
         zip:
-            content: 1114
+            content: ' '
             type: Text
             label: Irányítószám
         country:
@@ -55,15 +55,15 @@ parameters:
             type: Hidden
             label: 'A weboldal címe és a meta adatok segítenek meghatározni, hogy a webshopja miként jelenik meg a keresőmotorokban.'
         name:
-            content: Tulipanfutar.hu
+            content: Rafina.hu
             type: Text
             label: 'Meta boltnév'
         title:
-            content: 'Virágküldés Budapesten és környékén'
+            content: 'Rafina lakás és otthon dekor, ajtódíszek, kopogtatók, rózsaboxok'
             type: Text
             label: 'Meta title'
         description:
-            content: 'A legnépszerűbb virágfutár Budapesten és környékén. Virágküldés: rózsadobozok, csokrok, esküvő, rendezvénydekoráció.'
+            content: 'Rafina lakás és otthon dekor, ajtódíszek, kopogtatók, rózsaboxok'
             type: Text
             label: 'Meta leírás'
     social:
@@ -72,10 +72,10 @@ parameters:
             type: Hidden
             label: 'Növeld követői táborod és potenciális ügyfeleid számát közösségi oldalaidon.'
         facebook:
-            content: 'https://www.facebook.com/DifioriViragszalon/'
+            content: 'https://www.facebook.com/rafinadekor'
             type: Text
         instagram:
-            content: 'https://www.instagram.com/difiori.virag/'
+            content: 'https://www.instagram.com/rafinahome/'
             type: Text
         pinterest:
             content: ' '
@@ -98,7 +98,7 @@ parameters:
             type: Hidden
             label: 'A webshop műkődését meghatározó általános beállítások.'
         launch-date:
-            content: '2018-07-25'
+            content: '2021-04-16'
             type: DateTime
             label: 'Online bolt indulás dátuma'
         itemsPerPage:
@@ -115,7 +115,7 @@ parameters:
             content: 1
             type: VatRate
         giftCategory:
-            content: 1
+            content: 2
             type: ProductCategory
         product-variant-view:
             content: dropdown

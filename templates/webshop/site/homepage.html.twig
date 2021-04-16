@@ -71,58 +71,58 @@
         </div>
     </div>
 
-    <div class="container pb-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="hero-content text-center">
-                    <h2 class="">Vásárlóink mondták</h2>
-                </div>
+{#    <div class="container pb-5">#}
+{#        <div class="row">#}
+{#            <div class="col-md-12">#}
+{#                <div class="hero-content text-center">#}
+{#                    <h2 class="">Vásárlóink mondták</h2>#}
+{#                </div>#}
 
-                <div class="col-md-12 mt-5">
-                    <div class="row">
+{#                <div class="col-md-12 mt-5">#}
+{#                    <div class="row">#}
 
-                        {% for i in 0..9 %}
-                        <div class="col-md-6">
-                            <div class="reviewbox mb-4">
-                                <div class="details">
-                                    <span class="h6 mr-2">Szabó Béla</span>
-                                    <a href="#" class="text-body text-underline"><span class="mr-2">Budaörs</span></a>
-                                    <time itemprop="dateCreated" class="date text-muted mr-2">11/09/2019</time>
-                                    <div class="d-inline-block">
-                                        <ul class="review-stars-group mr-2 mb-0">
-                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="review-stars-item"><i class="fa fa-star"></i></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="testimonial text-muted mt-4">
-                                    {%  if loop.index in [1, 5, 6, 9] %}
-                                    <span>I have bought from you several times in the past and have recommended you to friends. This particular bouquet was sent as a surprise for a 90th birthday.
-                                        <a data-expand="">Read More</a>
-                                    </span>
-                                    {% elseif loop.index is odd %}
-                                    <span>
-                                        Serenata dellivered my order to my mum in law on the chosen day, and my mum was absolutely delighted, she sent photos to all as they were indeed beautiful. Her birthday was 29/8 and today 05/09 they are still as beautiful as they were on the day. Their prices are brilliant and affordable, and I would recommend Serenata to anyone looking for the perfect 'bouquet' for that special person.
-                                    </span>
-                                    {% else %}
-                                    <span>
-                                        Easy to order from web site, delivery very good, flowers were for my daughters birthday who lives in Norfolk, she was very pleased with them. This is the third time I have used Serenata Flowers and would not hesitate to recommend them to others.
-                                    </span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        {%  endfor %}
+{#                        {% for i in 0..9 %}#}
+{#                        <div class="col-md-6">#}
+{#                            <div class="reviewbox mb-4">#}
+{#                                <div class="details">#}
+{#                                    <span class="h6 mr-2">Szabó Béla</span>#}
+{#                                    <a href="#" class="text-body text-underline"><span class="mr-2">Budaörs</span></a>#}
+{#                                    <time itemprop="dateCreated" class="date text-muted mr-2">11/09/2019</time>#}
+{#                                    <div class="d-inline-block">#}
+{#                                        <ul class="review-stars-group mr-2 mb-0">#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star"></i></li>#}
+{#                                        </ul>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="testimonial text-muted mt-4">#}
+{#                                    {%  if loop.index in [1, 5, 6, 9] %}#}
+{#                                    <span>I have bought from you several times in the past and have recommended you to friends. This particular bouquet was sent as a surprise for a 90th birthday.#}
+{#                                        <a data-expand="">Read More</a>#}
+{#                                    </span>#}
+{#                                    {% elseif loop.index is odd %}#}
+{#                                    <span>#}
+{#                                        Serenata dellivered my order to my mum in law on the chosen day, and my mum was absolutely delighted, she sent photos to all as they were indeed beautiful. Her birthday was 29/8 and today 05/09 they are still as beautiful as they were on the day. Their prices are brilliant and affordable, and I would recommend Serenata to anyone looking for the perfect 'bouquet' for that special person.#}
+{#                                    </span>#}
+{#                                    {% else %}#}
+{#                                    <span>#}
+{#                                        Easy to order from web site, delivery very good, flowers were for my daughters birthday who lives in Norfolk, she was very pleased with them. This is the third time I have used Serenata Flowers and would not hesitate to recommend them to others.#}
+{#                                    </span>#}
+{#                                    {% endif %}#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        {%  endfor %}#}
 
-                    </div>
-                </div>
+{#                    </div>#}
+{#                </div>#}
 
-            </div>
-        </div>
-    </div>
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
 
 

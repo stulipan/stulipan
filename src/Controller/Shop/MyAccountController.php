@@ -38,10 +38,9 @@ class MyAccountController extends AbstractController
     public function showMyOrders(Request $request, $page = 1, StoreSettings $settings)
     {
         $page = $request->query->get('page') ? $request->query->get('page') : $page;
-//        $queryBuilder = $em->getRepository(Order::class)->findAllQuery();
-        $orders = $this->getUser()->getOrdersPlaced()->getValues();
+        $orders = $this->getUser()->getCustomer()->getOrdersPlaced();
 
-        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+        $pagerfanta = new Pagerfanta(new ArrayAdapter($orders->getValues()));
 //        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         $pagerfanta->setMaxPerPage(5);
 

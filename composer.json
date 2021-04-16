@@ -1,7 +1,6 @@
 {
     "name": "djpiticu/stulipan",
     "license": "proprietary",
-    "version": "1.0.0",
     "type": "project",
     "description": "Stulipan Shop Application",
     "minimum-stability": "stable",

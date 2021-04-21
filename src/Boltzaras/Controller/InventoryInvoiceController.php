@@ -224,7 +224,7 @@ class InventoryInvoiceController extends AbstractController
             $szamla[$i]->getDatum()->format('Y-m-d H:i:s');
         }
 
-        $paginatedCollection = new PaginatedCollection($szamla, $pagerfanta->getNbResults());
+//        $paginatedCollection = new PaginatedCollection($szamla, $pagerfanta->getNbResults());
 
         // render a template, then in the template, print things with {{ szamla.munkatars }}
         return $this->render('admin/inventory/invoice-list.html.twig', [

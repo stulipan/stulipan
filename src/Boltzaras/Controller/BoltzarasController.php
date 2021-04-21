@@ -283,7 +283,7 @@ class BoltzarasController extends AbstractController
             $jelentes[$i]->getModositasIdopontja()->format('Y-m-d H:i:s');
         }
 
-        $paginatedCollection = new PaginatedCollection($jelentes, $pagerfanta->getNbResults());
+//        $paginatedCollection = new PaginatedCollection($jelentes, $pagerfanta->getNbResults());
 
         // render a template, then in the template, print things with {{ jelentes.munkatars }}
         return $this->render('admin/boltzaras/boltzaras_list.html.twig', [

@@ -1,11 +1,12 @@
 <div class="loading-spinner-faded">
     {% if order.items is empty %}
-    {#    {% include('webshop/cart/cart-is-empty.html.twig') %}#}
         <div class="cart-item text-center">
             <div>
                 <h6 class="text-uppercase">{{ 'cart.your-cart-is-empty'|trans }}</h6>
-    {#            <p class="mb-0">...de nem sokáig! Válogass a több mint 100 gyönyörű <a href="{{ path('site-product-listall') }}">csokor és virágdoboz</a> közül.</p>#}
                 <p class="mb-0">{{ 'cart.but-not-for-long'|trans({ '{{ link }}': path('site-product-listall') })|raw }}</p>
+            </div>
+            <div class="mt-4 mb-6">
+                <a href="{{ path('site-product-listall') }}" class="btn btn-primary">{{ 'cart.continue-shopping'|trans }}</a>
             </div>
         </div>
     {% else %}
@@ -35,9 +36,8 @@
                         <li class="order-summary-item">
                             <span>{{ 'cart.shipping-fee-calculated'|trans }}</span>
                             <span class="text-nowrap">
-    {#                    <span class="JS--summaryDeliveryFee">{{ order.currentOrder.deliveryFee|number_format(0, ',', ' ') }}</span> Ft#}
-                    <span class="JS--summaryDeliveryFee">{{ order.deliveryFee|money }}</span>
-                </span>
+                                <span class="JS--summaryDeliveryFee">{{ order.deliveryFee|money }}</span>
+                            </span>
                         </li>
                         <li class="order-summary-item border-0">
                             <span>{{ 'cart.total-amount-to-pay'|trans }}</span>

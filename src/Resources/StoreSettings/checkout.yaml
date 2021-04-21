@@ -1,4 +1,19 @@
 parameters:
+    cart:
+        label:
+            content: 'Kosár beállítások'
+            type: Hidden
+            label: Blabla...
+        gift-upsell:
+            content: false
+            type: Boolean
+            label: 'Ajándék modul megjelenítése a Kosár oldalon'
+            description: ''
+        greetings-card:
+            content: false
+            type: Boolean
+            label: 'Üzenet a címzettnek modul megjelenítése a Kosár oldalon'
+            description: ''
     legal:
         label:
             content: 'Jogszabály előírások'

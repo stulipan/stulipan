@@ -40,7 +40,7 @@
                                                 } %}
                                             </div>
                                         </div>
-
+                                        {% if checkoutSettings.get('cart.gift-upsell') %}
                                         <div class="mt-4 mt-md-5">
                                             <div class="checkout-block-header">
                                                 <h4 class="checkout-block-title">{{ 'cart.gift.choose-gift-title'|trans }}</h4>
@@ -49,10 +49,12 @@
                                                 {% include '/webshop/cart/cart-gifts.html.twig' %}
                                             </div>
                                         </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
 
+                            {% if checkoutSettings.get('cart.greetings-card') %}
                             <div id="write_message" class="mt-4 mt-md-5">
                                 <div class="row">
                                     <div class="col-lg-12 correction-no-padding">
@@ -128,9 +130,10 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
 
-                        <div id="goto_checkout" class="col-md-12 col-lg-10 mx-auto mt-20px mb-4 mb-md-5">
+                        <div id="goto_checkout" class="col-md-12 col-lg-10 mx-auto mt-20pxX mt-5 mb-4 mb-md-5">
                             <div class="row">
                                 <div class="col-lg-12 mb-4">
                                     <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">

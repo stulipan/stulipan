@@ -118,22 +118,22 @@
                         <div class="col-md-6 col-lg-5 order-2 mt-3 mt-md-0">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="product-reviews">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex align-items-center">
-                                                <ul class="review-stars-group mr-2 mb-0">
-                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                                    <li class="review-stars-item"><i class="fa fa-star"></i></li>
-                                                </ul>
-                                            </div>
-                                            <div class="">
-                                                <a href="#" class="text-sm">25 értékelés <i class="fas fa-long-arrow-alt-right ml-1"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
+{#                                    <div class="product-reviews">#}
+{#                                        <div class="d-flex align-items-center justify-content-between mb-1">#}
+{#                                            <div class="d-flex align-items-center">#}
+{#                                                <ul class="review-stars-group mr-2 mb-0">#}
+{#                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                                    <li class="review-stars-item"><i class="fa fa-star"></i></li>#}
+{#                                                </ul>#}
+{#                                            </div>#}
+{#                                            <div class="">#}
+{#                                                <a href="#" class="text-sm">25 értékelés <i class="fas fa-long-arrow-alt-right ml-1"></i></a>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
                                 </div>
                                 <div class="col-12 mt-2">
                                     <div class="product-name">
@@ -149,10 +149,11 @@
                                             <div class="product-price">
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <ul class="list-inline mb-0">
-                                                        <li class="list-inline-item price">
-                                                            <del>{{ (product.price.numericValue*4)|money }}</del>
-                                                        </li>
-                                                        <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>
+{#                                                        <li class="list-inline-item price">#}
+{#                                                            <del>{{ (product.price.numericValue*4)|money }}</del>#}
+{#                                                        </li>#}
+{#                                                        <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>#}
+                                                        <li class="list-inline-item price">{{ product.price.numericValue|money }}</li>
 
                                                     </ul>
                                                 </div>
@@ -182,14 +183,14 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="product-credit-card">
-                                                <div class="text-center">
-                                                    <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
-                                                    <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/icons/paypal.png">
-                                                    <div class="text-sm">
-                                                        Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>
-                                                </div>
-                                            </div>
+{#                                            <div class="product-credit-card">#}
+{#                                                <div class="text-center">#}
+{#                                                    <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">#}
+{#                                                    <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/icons/paypal.png">#}
+{#                                                    <div class="text-sm">#}
+{#                                                        Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>#}
+{#                                                </div>#}
+{#                                            </div>#}
                                             <div class="product-quickinfo">
                                                 <div class="product-list-group list-group">
                                                     <div class="list-group-item">

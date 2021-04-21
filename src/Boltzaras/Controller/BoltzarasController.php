@@ -4,8 +4,8 @@ namespace App\Boltzaras\Controller;
 
 use App\Entity\Boltzaras\Boltzaras;
 use App\Entity\Boltzaras\BoltzarasWeb;
-use App\Admin\Boltzaras\Form\BoltzarasFormType;
-use App\Admin\Boltzaras\Form\BoltzarasWebFormType;
+use App\Boltzaras\Form\BoltzarasFormType;
+use App\Boltzaras\Form\BoltzarasWebFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
 

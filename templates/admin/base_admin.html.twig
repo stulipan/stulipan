@@ -75,26 +75,28 @@
                         <ul class="navbar-nav" style="display: none;">
                             <li class="nav-item">
                                 <a href="{{ path('dashboard') }}" class="nav-link text-nowrap">
-                                    {#<i class="dripicons-meter"></i>#}
                                     <i class="fas fa-tachometer-alt"></i>
-                                    {#<span class="badge badge-success float-right">7</span>#}
-                                    <span> Dashboard </span>
+                                    <span>{{ 'dashboard.dashboard'|trans }}</span>
                                 </a>
                             </li>
 
 
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnavTermekek" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-boxes"></i> Termékek
+                                <a class="nav-link dropdown-toggle" href="javascript: void(0);" id="topnavTermekek" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-boxes"></i> {{ 'product.products'|trans }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnavTermekek">
                                     <a href="{{ path('product-list') }}" class="dropdown-item">
                                         <i class="fas fa-boxes mr-1"></i>
-                                        Termékek
+                                        {{ 'product.products'|trans }}
+                                    </a>
+                                    <a href="{{ path('collection-list') }}" class="dropdown-item">
+                                        <i class="fas fa-list-ul mr-1"></i>
+                                        {{ 'collection.collections'|trans }}
                                     </a>
                                     <a href="{{ path('product-listCategories') }}" class="dropdown-item">
                                         <i class="fas fa-list-ul mr-1"></i>
-                                        Kategóriák
+                                        Kategóriák (react)
                                     </a>
                                 </div>
                             </li>
@@ -110,7 +112,7 @@
                                         Boltzárás
                                     </a>
                                     <a href="{{ path('invoice-list') }}" class="dropdown-item">
-                                        <i class="fas fa-lgX fa-file-invoice-dollar fa-dollar-signX mr-1"></i>
+                                        <i class="fas fa-file-invoice-dollar mr-1"></i>
                                         Számlák
                                     </a>
 
@@ -121,12 +123,16 @@
                                 <a class="nav-link dropdown-toggle arrow-noneX" href="javascript: void(0);" id="topnav-apps" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {#<i class="fas fa-lgX fa-file-invoice-dollar mr-1"></i>#}
                                     <i class="fas fa-shopping-cart"></i>
-                                    Rendelések 
+                                    {{ 'order.orders'|trans }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-apps">
-                                    <a href="{{ path('order-list-table') }}" class="dropdown-item"><i class="fas fa-shopping-cart"></i> Rendelések</a>
+                                    <a href="{{ path('order-list-table') }}" class="dropdown-item">
+                                        <i class="fas fa-shopping-cart"></i>  {{ 'order.orders'|trans }}
+                                    </a>
 
-                                    <a href="{{ path('customer-list') }}" class="dropdown-item"><i class="fas fa-user-friends mr-1"></i> Vásárlók</a>
+                                    <a href="{{ path('customer-list') }}" class="dropdown-item">
+                                        <i class="fas fa-user-friends mr-1"></i> {{ 'customer.customers'|trans }}
+                                    </a>
                                 </div>
                             </li>
 
@@ -195,7 +201,7 @@
     </nav>
 
     <div class="content-page p-0" style="overflow: hidden; min-height: 0; ">
-        {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
+        {{ include('webshop/widgets/_navbar-impersonate-user.html.twig') }}
     </div>
     <div class="content-page">
         <div class="content">

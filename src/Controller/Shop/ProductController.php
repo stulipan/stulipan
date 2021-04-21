@@ -7,6 +7,7 @@ use App\Entity\Product\ProductCategory;
 use App\Form\AddToCart\CartAddItemType;
 use App\Services\StoreSettings;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -20,28 +21,20 @@ class ProductController extends AbstractController
      */
     public function showProductsAll()
     {
-        //$products = $this->generateProductList();
-        $entityManager = $this->getDoctrine()->getManager();
         $products= $this->getDoctrine()->getRepository(Product::class)->findAll();
-        $category = 'Virágküldés';
 
         if (!$products) {
-            //throw $this->createNotFoundException(
-            //    'Nem talált egy terméket sem! '  );
-
             $this->addFlash('success', 'Nem talált egy terméket sem! ');
-            return $this->redirectToRoute('site-product-list');
         }
 
         return $this->render('webshop/site/product-list.html.twig', [
             'products' => $products,
-            'category' => $category,
         ]);
     }
 
     /**
      * @Route({
-     *     "hu": "/termekkollekcio/{slug}",
+     *     "hu": "/kategoria/{slug}",
      *     "en": "/collection/{slug}",
      *      }, name="site-product-list")
      */
@@ -50,19 +43,15 @@ class ProductController extends AbstractController
         // slug-ból visszafejtem a kategóriát
         $category = $this->getDoctrine()
             ->getRepository(ProductCategory::class)
-            ->findOneBy(['slug' => $slug]);
+            ->findOneBy(['slug' => $slug, 'enabled' => true]);
 
         if (!$category) {
-            return $this->redirectToRoute('404');
+            throw $this->createNotFoundException('HIBA: Missing collection.');
         } else {
-            //$products = $this->generateProductList($category->getId());
             $products = $category->getProducts();
         }
         if (!$products) {
-            //throw $this->createNotFoundException(
-            //    'Nem talált egy terméket sem! '  );
             $this->addFlash('livSuccess', 'Nem talált egy terméket sem! ');
-            return $this->redirectToRoute('site-product-list');
         }
 
         return $this->render('webshop/site/product-list.html.twig', [

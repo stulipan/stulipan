@@ -602,7 +602,7 @@ $input-select-bg-size-x-sm:             16px !default; // In pixels because imag
 $input-select-background-sm:            $input-select-indicator no-repeat right .25rem center / $input-select-bg-size-x-sm $input-select-bg-size-y-sm, linear-gradient(180deg, mix($body-bg, $secondary, 15%), $secondary) !default;
 // END Added by Stulipan
 
-$form-text-margin-top:                  .25rem !default;
+$form-text-margin-top:                  .5rem !default;
 
 $form-check-input-gutter:               1.25rem !default;
 $form-check-input-margin-y:             .3rem !default;
@@ -1225,7 +1225,7 @@ $close-text-shadow:                 0 1px 0 $white !default;
 // Code
 
 $code-font-size:                    87.5% !default;
-$code-color:                        $pink !default;
+$code-color:                        $info !default; //$pink !default;
 
 $kbd-padding-y:                     .2rem !default;
 $kbd-padding-x:                     .4rem !default;

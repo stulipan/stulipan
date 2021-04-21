@@ -2,10 +2,9 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\User;
+use App\Entity\Customer;
 use App\Form\Customer\CustomerFilterType;
 use App\Services\StoreSettings;
-use Cassandra\Custom;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
@@ -13,7 +12,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,11 +26,11 @@ class CustomerController extends AbstractController
      *     requirements={"page"="\d+"},
      *     )
      */
-    public function listOrders(Request $request, $page = 1, StoreSettings $settings, TranslatorInterface $translator)
+    public function listCustomers(Request $request, $page = 1, StoreSettings $settings, TranslatorInterface $translator)
     {
         $dateRange = $request->query->get('dateRange');
         $searchTerm = $request->query->get('searchTerm');
-        $status = $request->query->get('status');
+        $acceptsMarketing = $request->query->get('acceptsMarketing');
         $page = $request->query->get('page') ? $request->query->get('page') : $page;
 
         $filterTags = [];
@@ -45,16 +43,19 @@ class CustomerController extends AbstractController
             $urlParams['dateRange'] = $dateRange;
         }
         if ($searchTerm) {
-            $filterTags['searchTerm'] = $translator->trans('customer.search-result').' '.$searchTerm;
+            $filterTags['searchTerm'] = $translator->trans('customer.filter.search-result').' '.$searchTerm;
             $data['searchTerm'] = $searchTerm;
             $urlParams['searchTerm'] = $searchTerm;
         }
-        if ($status) {
-//            $filterTags['status'] = $em->getRepository(status::class)->findOneBy(['shortcode' => $status])->getName();
-            $filterTags['status'] = $status;
-            $urlParams['status'] = $status;
-//            $data['status'] = $em->getRepository(status::class)->findOneBy(['shortcode' => $status]);
-            $data['status'] = $status;
+        if ($acceptsMarketing !== null) {
+            if ($acceptsMarketing == true) {
+                $filterTags['acceptsMarketing'] = $translator->trans('customer.filter.accepts-marketing') . ': ' . $translator->trans('customer.filter.filter-by-accepts-marketing-subscribed');
+            }
+            if ($acceptsMarketing == false) {
+                $filterTags['acceptsMarketing'] = $translator->trans('customer.filter.accepts-marketing') . ': ' . $translator->trans('customer.filter.filter-by-accepts-marketing-no');
+            }
+            $urlParams['acceptsMarketing'] = $acceptsMarketing;
+            $data['acceptsMarketing'] = $acceptsMarketing;
         }
         $filterForm = $this->createForm(CustomerFilterType::class, $data);
 
@@ -67,7 +68,7 @@ class CustomerController extends AbstractController
             $filterUrls[$key] = $this->generateUrl('customer-list',[
                 'dateRange' => isset($shortlist['dateRange']) ? $shortlist['dateRange'] : null,
                 'searchTerm' => isset($shortlist['searchTerm']) ? $shortlist['searchTerm'] : null,
-                'status' => isset($shortlist['status']) ? $shortlist['status'] : null,
+                'acceptsMarketing' => isset($shortlist['acceptsMarketing']) ? $shortlist['acceptsMarketing'] : null,
             ]);
         }
 
@@ -77,8 +78,8 @@ class CustomerController extends AbstractController
             'active' => false,
         ];
         $filterQuickLinks['enabled'] = [
-            'name' => $translator->trans('customer.filter.active-customers'),
-            'url' => $this->generateUrl('customer-list',['status' => 1]),
+            'name' => $translator->trans('customer.filter.accepts-marketing'),
+            'url' => $this->generateUrl('customer-list',['acceptsMarketing' => 1]),
             'active' => false,
         ];
 //        $filterQuickLinks['unfulfilled'] = [
@@ -89,11 +90,11 @@ class CustomerController extends AbstractController
 
         // Generate the quicklinks which are placed above the filter
         $hasCustomFilter = false;
-        if (!$dateRange && !$status && !$searchTerm) {
+        if (!$dateRange && $acceptsMarketing === null && !$searchTerm) {
             $filterQuickLinks['all']['active'] = true;
             $hasCustomFilter = true;
         }
-        if (!$dateRange && $status && $status == 1) {
+        if (!$dateRange && $acceptsMarketing !== null && $acceptsMarketing == 1) {
             $filterQuickLinks['enabled']['active'] = true;
             $hasCustomFilter = true;
         }
@@ -109,10 +110,10 @@ class CustomerController extends AbstractController
             ];
         }
 
-        $queryBuilder = $em->getRepository(User::class)->findAllQuery([
+        $queryBuilder = $em->getRepository(Customer::class)->findAllQuery([
             'dateRange' => $dateRange,
             'searchTerm' => $searchTerm,
-            'status' => $status,
+            'acceptsMarketing' => $acceptsMarketing,
         ]);
 
         $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
@@ -138,8 +139,6 @@ class CustomerController extends AbstractController
             'customers' => $customers,
             'paginator' => $pagerfanta,
             'total' => $pagerfanta->getNbResults(),
-//            'count' => count($customers),
-//            'orderCount' => empty($customers) ? 'Nincsenek rendelések' : count($customers),
             'filterQuickLinks' => $filterQuickLinks,
             'filterForm' => $filterForm->createView(),
             'filterTags' => $filterTags,
@@ -159,8 +158,8 @@ class CustomerController extends AbstractController
             $filters = $form->getData();
             $dateRange = null;
             $searchTerm = null;
-            $status = null;
-            $status = null;
+            $acceptsMarketing = null;
+            $acceptsMarketing = null;
 
             if ($filters['dateRange']) {
                 $dateRange = $filters['dateRange'];
@@ -168,53 +167,44 @@ class CustomerController extends AbstractController
             if ($filters['searchTerm']) {
                 $searchTerm = $filters['searchTerm'];
             }
-            if ($filters['status']) {
-                $status = $filters['status'];
+            if ($filters['acceptsMarketing'] !== null) {
+                $acceptsMarketing = $filters['acceptsMarketing'];
             }
-//            dd($status);
             return $this->redirectToRoute('customer-list',[
                 'dateRange' => $dateRange,
                 'searchTerm' => $searchTerm,
-                'status' => $status,
+                'acceptsMarketing' => $acceptsMarketing,
             ]);
         }
         return $this->redirectToRoute('customer-list');
     }
+
     /**
      * @Route("/customers/{id}", name="customer-show")
      */
-    public function showCustomerProfile(User $user)
+    public function showCustomerProfile(Customer $customer)
     {
-        if (!$user) {
+        if (!$customer) {
             throw $this->createNotFoundException('Nincs ilyen vásárló!');
-            //return $this->redirectToRoute('404');
         }
-//        $shippings = $this->getDoctrine()
-//            ->getRepository(Shipping::class)
-//            ->findAll();
-//        $payments = $this->getDoctrine()
-//            ->getRepository(Payment::class)
-//            ->findAll();
-
-//        $noOrders = '';
-//        if (!$shippings || !$payments) {
-//            //throw $this->createNotFoundException('Nem talált egy terméket sem!');
-//            $noResult = 'Nem talált ilyen adatot!';
-//        }
 
         $totalRevenue = 0;
-        foreach ($user->getOrdersPlaced() as $o => $order) {
-            $totalRevenue += $order->getSummary()->getTotalAmountToPay();
+        $orderCount = 0;
+
+        $orders = $customer->getOrdersPlaced();
+
+        if ($orders) {
+            $orderCount = $orders->count();
+            foreach ($orders as $o => $order) {
+                $totalRevenue += $order->getSummary()->getTotalAmountToPay();
+            }
         }
 
-        return $this->render('admin/customer-profile-show.html.twig', [
-            'user' => $user,
-//            'orders' => $user->getOrdersPlaced(),
-//            'shippings' => $shippings,
-//            'payments' => $payments,
+        return $this->render('admin/customer-detail.html.twig', [
+            'customer' => $customer,
+            'orders' => $orders,
+            'orderCount' => $orderCount,
             'totalRevenue' => $totalRevenue,
         ]);
     }
-
-
 }

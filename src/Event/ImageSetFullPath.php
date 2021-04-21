@@ -40,11 +40,28 @@ class ImageSetFullPath implements ServiceSubscriberInterface
     {
         $entity = $args->getEntity();
         
-        if ($entity instanceof ProductImage || $entity instanceof ProductCategory) {
-            $publicPath = $this->container->get(FileUploader::class)->getPublicPath($entity->getImagePath());
-            $entity->setImageUrl(
-                $this->cacheManager->getBrowserPath($publicPath, 'product_image')
-            );
+        if ($entity instanceof ProductImage) {
+            if ($entity->getImage()) {
+                $publicPath = $this->fileUploader->getPublicPath($entity->getImagePath());
+                // Equivalent to this:
+//                $publicPath = $this->container->get(FileUploader::class)->getPublicPath($entity->getImagePath());
+                $entity->setImageUrl(
+                    $this->cacheManager->getBrowserPath($publicPath, 'product_large')
+                );
+                $entity->setThumbnailUrl(
+                    $this->cacheManager->getBrowserPath($publicPath, 'product_medium')
+                );
+            }
+        }
+        if ($entity instanceof ProductCategory) {
+            if ($entity->getImage()) {
+                $publicPath = $this->fileUploader->getPublicPath($entity->getImagePath());
+                // Equivalent to this:
+//                $publicPath = $this->container->get(FileUploader::class)->getPublicPath($entity->getImagePath());
+                $entity->setImageUrl(
+                    $this->cacheManager->getBrowserPath($publicPath, 'unscaled')
+                );
+            }
         }
     }
 
@@ -58,7 +75,7 @@ class ImageSetFullPath implements ServiceSubscriberInterface
         if ($entity instanceof ProductImage || $entity instanceof ProductCategory) {
             $publicPath = $this->container->get(FileUploader::class)->getPublicPath($entity->getImagePath());
             $entity->setImageUrl(
-                $this->cacheManager->getBrowserPath($publicPath, 'product_image')
+                $this->cacheManager->getBrowserPath($publicPath, 'product_large')
             );
         }
     }

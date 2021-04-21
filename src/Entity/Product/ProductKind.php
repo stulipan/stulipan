@@ -7,6 +7,7 @@ use App\Entity\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -18,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="product_kind")
  */
-class ProductKind //implements \JsonSerializable
+class ProductKind implements JsonSerializable
 {
     use TimestampableTrait;
 
@@ -74,19 +75,19 @@ class ProductKind //implements \JsonSerializable
         $this->attributes = new ArrayCollection();
     }
     
-//    /**
-//     * {@inheritdoc}
-//     */
-//    function jsonSerialize()
-//    {
-//        return [
-//            'id'            => $this->getId(),
-//            'name'          => $this->getName(),
-////            'products'      => $this->getProducts(),
-////            'attributes'    => $this->getAttributes(),
-//        ];
-//    }
-//
+    /**
+     * {@inheritdoc}
+     */
+    function jsonSerialize()
+    {
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+//            'products'      => $this->getProducts(),
+//            'attributes'    => $this->getAttributes(),
+        ];
+    }
+
     /**
      * @return int
      */

@@ -6,7 +6,7 @@
                 <div class="">
                     <div class="d-flex align-items-start mr-2">
                         <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="{% if hasProductLink is defined and not hasProductLink %}pointer-events-none{% endif %}">
-                            <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
+                            <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_small') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
                         </a>
                         <div class="d-flex w-100 justify-content-between">
                             <div class="pl-3">

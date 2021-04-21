@@ -25,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
+ * ORM\EntityListeners({"App\Event\SetSlugProduct"})
  * @UniqueEntity("sku", message="Ez az SKU kód már használatban!")
  * @UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
  */
@@ -60,9 +61,11 @@ class Product //implements \JsonSerializable
 
     /**
      * @var string
+     * @Groups({"productView", "productList",
+     *     "orderView"})
      *
      * @ORM\Column(name="slug", type="string", length=255, nullable=false, unique=true)
-     * @Assert\NotBlank(message="A slug nem lehet üres. Pl: ez-egy-termek")
+     * @ Assert\NotBlank(message="A slug nem lehet üres. Pl: ez-egy-termek")
      */
     private $slug;
     
@@ -125,7 +128,7 @@ class Product //implements \JsonSerializable
      * @ORM\OneToMany(targetEntity="ProductImage", mappedBy="product", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="id", referencedColumnName="product_id", nullable=false)
      * @ORM\OrderBy({"ordering": "ASC"})
-     * @ Assert\NotBlank(message="Egy terméknek legalább egy kép szükséges.")
+     * Assert\NotBlank(message="Egy terméknek legalább egy kép szükséges.")
      */
     private $images;
 
@@ -167,7 +170,7 @@ class Product //implements \JsonSerializable
      *
      * @ORM\Column(name="is_flower", type="boolean", nullable=false, options={"default"=false})
      */
-    private $flower = 0;
+    private $flower = false;
 
     /**
      * @var ProductStatus
@@ -214,7 +217,7 @@ class Product //implements \JsonSerializable
      *      inverseJoinColumns={@ORM\JoinColumn(name="badge_id", referencedColumnName="id")}
      *      )
      * @ORM\OrderBy({"ordering": "ASC"})
-     * @Assert\NotBlank(message="Válassz matricát.")
+     * Assert\NotBlank(message="Válassz matricát.")
      */
     private $badges;
 
@@ -240,7 +243,7 @@ class Product //implements \JsonSerializable
      * @ORM\OneToMany(targetEntity="App\Entity\Product\ProductVariant", mappedBy="product", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="id", referencedColumnName="product_id")
      * @ORM\OrderBy({"position" = "ASC"})
-     * @Assert\NotBlank(message="Válassz variansokat.")
+     * Assert\NotBlank(message="Válassz variansokat.")
      */
     private $variants;
 
@@ -256,8 +259,8 @@ class Product //implements \JsonSerializable
      * @Groups({"productView", "productList"})
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Product\ProductKind", inversedBy="products", fetch="EAGER")
-     * @ORM\JoinColumn(name="kind_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Válassz egy terméktípust.")
+     * @ORM\JoinColumn(name="kind_id", referencedColumnName="id", nullable=true)
+     * Assert\NotBlank(message="Válassz egy terméktípust.")
      */
     private $kind;
 
@@ -457,8 +460,7 @@ class Product //implements \JsonSerializable
         if (!$this->images->isEmpty()) {
             foreach ($this->images as $image) {
                 if ($image->getOrdering() === 0) {
-//                    return $image->getImageUrl();
-                    return FileUploader::PRODUCT_FOLDER . '/' . $image->getImage()->getFile();
+                    return FileUploader::PRODUCTS_FOLDER_NAME . '/' . $image->getImage()->getFile();
                 }
             }
         }
@@ -471,7 +473,7 @@ class Product //implements \JsonSerializable
 //    public function getImagePath()
 //    {
 //        if ($this->getImage()) {
-//            return FileUploader::PRODUCT_FOLDER . '/' . $this->getImage();
+//            return FileUploader::PRODUCTS_FOLDER_NAME . '/' . $this->getImage();
 //        }
 //    }
 

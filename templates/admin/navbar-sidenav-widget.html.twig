@@ -10,7 +10,7 @@
                             <div class="sidenav-icon">
                                 <i class="fas fa-tachometer-alt"></i>
                             </div>
-                            <span>Dashboard</span>
+                            <span>{{ 'dashboard.dashboard'|trans }}</span>
                         </div>
                         <div class="d-flex align-items-center">
                         </div>
@@ -18,14 +18,14 @@
                 </a>
             </li>
 
-            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'products' %}sidenav-item-show{% endif %}">
+            <li class="sidenav-item sidenav-item-open {% if activeMenu is defined and activeMenu == 'products' %}sidenav-item-show{% endif %}">
                 <a class="sidenav-link" href="{{ path('product-list') }}" id="topnavTermekek_" role="button">
                     <div class="sidenav-item-content">
                         <div class="d-flex align-items-center">
                             <div class="sidenav-icon">
                                 <i class="fas fa-boxes"></i>
                             </div>
-                            Termékek
+                            {{ 'product.products'|trans }}
                         </div>
                         <div class="d-flex align-items-center">
 
@@ -37,13 +37,19 @@
                         <div class="sidenav-icon">
                             <i class="fas fa-boxes"></i>
                         </div>
-                        Termékek
+                        {{ 'product.products'|trans }}
+                    </a>
+                    <a href="{{ path('collection-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'collection-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-list-ul"></i>
+                        </div>
+                        {{ 'collection.collections'|trans }}
                     </a>
                     <a href="{{ path('product-listCategories') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'product-listCategories' %}nav-subitem-selected{% endif %}">
                         <div class="sidenav-icon">
                             <i class="fas fa-list-ul"></i>
                         </div>
-                        Kategóriák
+                        Kategóriák (react)
                     </a>
                     <a href="{{ path('smart-label-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'smart-label-list' %}nav-subitem-selected{% endif %}">
                         <div class="sidenav-icon">
@@ -54,14 +60,14 @@
                 </div>
             </li>
 
-            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'orders' %}sidenav-item-show{% endif %}">
+            <li class="sidenav-item sidenav-item-open {% if activeMenu is defined and activeMenu == 'orders' %}sidenav-item-show{% endif %}">
                 <a class="sidenav-link" href="{{ path('order-list-table') }}" id="topnavOrders_" role="button">
                     <div class="sidenav-item-content">
                         <div class="d-flex align-items-center">
                             <div class="sidenav-icon">
                                 <i class="fas fa-shopping-cart"></i>
                             </div>
-                            Rendelések
+                            {{ 'order.orders'|trans }}
                         </div>
                         <div class="d-flex align-items-center">
                             {#                                    <span class="badge badge-warning float-right">NEW</span>#}
@@ -73,19 +79,25 @@
                         <div class="sidenav-icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
-                        Rendelések
+                        {{ 'order.orders'|trans }}
                     </a>
                     <a href="{{ path('order-list-abandoned') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'order-list-abandoned' %}nav-subitem-selected{% endif %}">
                         <div class="sidenav-icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
-                        Elhagyott kosarak
+                        {{ 'order.abandoned-orders'|trans }}
                     </a>
                     <a href="{{ path('customer-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'customer-list' %}nav-subitem-selected{% endif %}">
                         <div class="sidenav-icon">
                             <i class="fas fa-user-friends"></i>
                         </div>
-                        Vásárlók
+                        {{ 'customer.customers'|trans }}
+                    </a>
+                    <a href="{{ path('user-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'user-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        {{ 'user.users'|trans }}
                     </a>
                 </div>
             </li>

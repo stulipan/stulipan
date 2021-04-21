@@ -1,0 +1,47 @@
+<div class="list-group-itemX text-size-secondary">
+    <div class="d-flex justify-content-between pb-2 border-bottom">
+        <div class="mr-3">
+            <div class="font-weight-bold text-uppercase">Rendelés száma: </div>
+            <div class="">#{{ order.number }}</div>
+        </div>
+        {% if order.isUnpaid %}
+            <div class="text-smX text-danger">Fizetésre vár</div>
+        {% endif %}
+        {% if order.isFulfilled %}
+            <div class="text-smX text-success">It's delivered!</div>
+        {% endif %}
+{#        <div class="">#}
+{#            <div class="font-weight-bold text-uppercase">Kézbesítés napja: </div>#}
+{#            <div class="text-size-secondary">2019-09-24</div>#}
+{#        </div>#}
+    </div>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between mt-4">
+        <div class="w-100 w-md-50 d-flex align-items-center justify-content-center justify-content-md-start">
+            <div class="d-flex flex-column justify-content-center align-items-center align-items-md-start">
+                <div class="">
+                    {% for item in order.items %}
+                        <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}">
+                            <img class="img-thumbnailX mb-1 mr-2" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_small') }}" width="80px;" />
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="d-flex flex-column align-items-center align-items-md-start">
+                    <div class="text-muted mt-2">
+                        <span class="font-weight-bold">Címzett: </span>
+                        <span class="">{{ order.shippingFullname }}</span>
+                    </div>
+                    <div class="text-muted">
+                        <span class="font-weight-bold">Kézbesítés napja: </span>
+                        <span class="">2019-09-24</span>
+                    </div>
+                </div>
+                {#            <div class="my-2">Címzett: {{ order.shippingName }}#}
+                {#            </div>#}
+            </div>
+        </div>
+        <div class="w-100 w-md-50 d-flex align-items-end justify-content-center justify-content-md-end my-3 my-md-0">
+            <a href="{{ path('site-user-myOrder', {'id': order.id}) }}" class="btn btn-sm btn-primary">Rendelés részletei</a>
+        </div>
+    </div>
+</div>

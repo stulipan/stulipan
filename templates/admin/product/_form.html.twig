@@ -43,7 +43,7 @@
                         {{ form_errors(form.imageFile) }}
                         <div class="w-100 mt-2">
                             {% if form.vars.data is defined and form.vars.data is not null and form.vars.data.image %}
-                                <img class="img-thumbnail" src="{{ uploaded_asset(form.vars.data.imagePath)|imagine_filter('product_thumbnail') }}" style="width: 200px; width: 200px;">
+                                <img class="img-thumbnail" src="{{ uploaded_asset(form.vars.data.imagePath)|imagine_filter('product_small') }}" style="width: 200px; width: 200px;">
                             {% endif %}
                         </div>
                     </div>

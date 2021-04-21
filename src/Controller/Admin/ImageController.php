@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\BaseController;
 use App\Entity\ImageEntity;
+use App\Model\ImageUsage;
 use App\Services\FileUploader;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,13 +17,6 @@ use Symfony\Component\Validator\Constraints\Image;
  */
 class ImageController extends BaseController
 {
-//    private $targetDirectory;
-//
-//    public function __construct(string $targetDirectory)
-//    {
-//        $this->targetDirectory = $targetDirectory;
-//    }
-
     //////////////////////////////////////////////////////////////////////////////////////
     ///                                                                                ///
     ///                                   IMAGE API                                    ///
@@ -33,9 +27,9 @@ class ImageController extends BaseController
      * INPUT: Takes an image uploaded in a 'multipart/form-data' form.
      * OUTPUT: JSON response with <<id, file, alt>> (ImageEntity's fields)
      *
-     * @Route("/api/images/category/", name="api-images-newCategoryImage", methods={"POST"})
+     * @Route("/api/upload/storeImage/", name="api-upload-storeImage", methods={"POST"})
      */
-    public function addCategoryImage(Request $request, FileUploader $fileUploader, ValidatorInterface $validator) //Image $image,
+    public function addImage(Request $request, FileUploader $fileUploader, ValidatorInterface $validator) //Image $image,
     {
         /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
         $file = $request->files->get('imageFile');
@@ -56,7 +50,7 @@ class ImageController extends BaseController
         }
         
         if (!is_null($file)) {
-            $newFilename = $fileUploader->uploadFile($file, null, FileUploader::IMAGE_OF_CATEGORY_TYPE); //2nd param = null, else deletes prev image
+            $newFilename = $fileUploader->uploadFile($file, null, ImageUsage::WEBSITE_IMAGE); //2nd param = null, else deletes prev image
             $image = new ImageEntity();
             $image->setFile($newFilename);
         }
@@ -64,8 +58,7 @@ class ImageController extends BaseController
         $entityManager->persist($image);
         $entityManager->flush();
     
-//        $image->setFile($image->getFile());
-        $image->setFile(FileUploader::IMAGES_FOLDER.'/'.FileUploader::CATEGORY_FOLDER.'/'.$image->getFile());
+        $image->setFile(FileUploader::UPLOADS_IMAGES_FOLDER .'/'. FileUploader::WEBSITE_FOLDER_NAME .'/'. $image->getFile());
         return $this->jsonNormalized(['images' => [$image]]);
     }
     
@@ -73,7 +66,7 @@ class ImageController extends BaseController
      * INPUT: Takes an image uploaded in a 'multipart/form-data' form.
      * OUTPUT: JSON response with <<id, file, alt>> (ImageEntity's fields)
      *
-     * @Route("/api/images/product/", name="api-images-newProductImage", methods={"POST"})
+     * @Route("/api/upload/productImage/", name="api-upload-productImage", methods={"POST"})
      */
     public function addProductImage(Request $request, FileUploader $fileUploader, ValidatorInterface $validator)
     {
@@ -97,7 +90,7 @@ class ImageController extends BaseController
         }
         
         if (!is_null($file)) {
-            $newFilename = $fileUploader->uploadFile($file, null, FileUploader::IMAGE_OF_PRODUCT_TYPE); //2nd param = null, else deletes prev image
+            $newFilename = $fileUploader->uploadFile($file, null, ImageUsage::PRODUCT_IMAGE); //2nd param = null, else deletes prev image
             $image = new ImageEntity();
             $image->setFile($newFilename);
         }
@@ -105,8 +98,7 @@ class ImageController extends BaseController
         $entityManager->persist($image);
         $entityManager->flush();
 
-//        $image->setFile($image->getFile());
-        $image->setFile(FileUploader::IMAGES_FOLDER.'/'.FileUploader::PRODUCT_FOLDER.'/'.$image->getFile());
+        $image->setFile(FileUploader::UPLOADS_IMAGES_FOLDER .'/'. FileUploader::PRODUCTS_FOLDER_NAME .'/'. $image->getFile());
         return $this->jsonNormalized(['images' => [$image]]);
     }
 }

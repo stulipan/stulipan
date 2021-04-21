@@ -107,11 +107,17 @@ input[type=number] {
   font-size: 1.2rem;
 
   &.img-unavailable-lg {
-    //width: 100%;
-    //height: 250px;
-    --img-width: 100%;
-    --img-height: 250px;
-    font-size: 3rem;
+    font-size: 6rem;
+  }
+
+  &.img-unavailable-square {
+    width: 100%;
+
+    &:after {
+      content: "";
+      display: block;
+      padding-bottom: 100%;
+    }
   }
 }
 

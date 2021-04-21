@@ -1,0 +1,117 @@
+{% extends 'admin/template-with-sidebar.html.twig' %}
+
+{% set activeMenu = 'orders' %}
+{% set pageTitle = user.fullname %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+    1: {
+        'url': path('customer-list'),
+        'text': 'customer.customers'|trans,
+    }
+} %}
+
+{% if order.isClosed is defined and order.isClosed == false %}
+    {% set isEditEnabled = true %}
+{% else %}
+    {% set isEditEnabled = false %}
+{% endif %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block headerActionsWrapper %}
+    <nav class="w-100 adaptive-tabs adaptive-tabs-right">
+        <ul class="nav nav-tabs adaptive-primary">
+            <li class="nav-item adaptive-item">
+                <a class="nav-link" href="#"><i class="far fa-envelope mr-2"></i>{{ 'user.send-account-invite'|trans }}</a>
+            </li>
+        </ul>
+        <ul class="adaptive-template">
+            <li class="nav-item adaptive-item adaptive-more">
+                <a href="" type="button" class="adaptive-button nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">{{ 'generic.more-actions'|trans }}</a>
+                <ul class="adaptive-secondary">
+                </ul>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-sidebarX mb-20px">
+                <div class="card-body card-sidebarX">
+{#                    {% include 'admin/customer-card.html.twig' with {'customer': customer, 'orderCount': orderCount} %}#}
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="h5 mb-0">{{ 'user.user'|trans }}</div>
+                        <div class="">
+                            {% if customer is defined and customer is not null %}
+                                <div class="edit-block">
+                                    <a href="{{ path('customer-show', {'id': customer.id}) }}">
+                                        {{ 'user.view-customer-profile'|trans }}
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p class="mb-0">{{ user.fullname }}</p>
+
+                        <p class="mt-3">
+                            <span>{{ 'user.email-address'|trans }}</span><br>
+                            <span class="text-muted">
+                                {{  user.email }}
+                                {% if user.isVerifiedEmail is defined and user.isVerifiedEmail == true %}
+                                    <i class="far fa-check-circle text-success"></i>
+                                {% else %}
+                                    <i class="far fa-times-circle"></i>
+                                {% endif %}
+                            </span>
+                        </p>
+
+                        <p class="">
+                            <span>{{ 'user.account-created-at'|trans }}</span><br>
+                            <span class="text-muted">
+                                {{  user.createdAt|localizedDate }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    <div class="card card-sidebar mb-20px">
+        <div class="card-body card-sidebar">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="h5 mb-0">{{ 'user.avatar-photo'|trans }}</div>
+                <div class="">
+                        <div class="edit-block">
+                            <a href="/">
+                                {{ 'generic.edit'|trans }}
+                            </a>
+                        </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <div class="checkout-customer d-flex align-items-center">
+                    <div class="img-thumbnail bg-light h1 rounded-circle p-2">
+                        {{ user.initials }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

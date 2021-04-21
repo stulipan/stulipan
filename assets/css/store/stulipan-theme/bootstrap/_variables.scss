@@ -173,8 +173,8 @@ $spacers: map-merge(
     1: ($spacer * .25),
     2: ($spacer * .5),
     3: $spacer,
-    4: ($spacer * 1.5),
-    5: ($spacer * 2),
+    4: ($spacer * 2), //($spacer * 1.5),
+    5: ($spacer * 3), //($spacer * 2),
     6: ($spacer * 6),
     5px: ($spacer-px * 5),
     10px: ($spacer-px * 10),
@@ -918,7 +918,7 @@ $pagination-disabled-border-color:  $pagination-disabled-bg !default;
 
 // Jumbotron
 
-$jumbotron-padding:                 2rem !default;
+$jumbotron-padding:                 0 !default; //2rem !default;
 $jumbotron-color:                   null !default;
 $jumbotron-bg:                      $gray-200 !default;
 

@@ -17,6 +17,7 @@
                    :categories="categories"
                    :statuses="statuses"
                    :badges="badges"
+                   :product-kinds="productKinds"
                    :formIsPosting="formIsPosting"
                    :errors="formErrors"
                    :resetForm="resetForm"
@@ -38,18 +39,22 @@
             productInForm: {
                 name: '',
                 description: '',
-                kind: {},
                 price: {
-                    value: null,
+                    numericValue: null,
                 },
+                status: {},
+                options: [],
+                // kind: {
+                //
+                // }
                 images: [],
                 image: null, //nem lehet hasznalatban
                 imageUrl: '',  //nem lehet hasznalatban
             },
             productKindId: '',
-            categories: [],
-            statuses: [],
-            badges: [],
+            // categories: [],
+            // statuses: [],
+            // badges: [],
             formErrors: [],
             resetForm: false,  // If true will hide form errors and uploaded images preview
         }
@@ -62,6 +67,11 @@
         },
         props: [
             'productId',
+            'product',
+            'statuses',
+            'categories',
+            'badges',
+            'productKinds',
         ],
         data: initialData,
         watch: {
@@ -156,96 +166,116 @@
             },
         },
         created () {
-            if (this.productId > 0 ) {
-                var p1 = this.$http.get(`/hu/admin/api/products/${this.productId}`)
-                    // .then(response => {
-                    //     this.productInForm = response.data.products[0];
-                    //     this.productInForm.images.sort(function(a, b){return a.ordering - b.ordering});
-                    //     this.productKindId = this.productInForm.kind.id;
-                    // }, response => {
-                    //     if (response.status === 422) {
-                    //         for (let item of Object.values(response.body.errors)) {
-                    //             //                            this.dataLoadingErrors.push(item.message);
-                    //             this.showToast(item.message, 'danger');
-                    //         }
-                    //     }
-                    // })
-                ;
-                var p3 = this.$http.get('/hu/admin/api/product/statuses')
-//                     .then(response => {
-//                         this.statuses = response.data.statuses;
-//                     }, response => {
-//                         if (response.status === 422) {
-//                             for (let item of Object.values(response.body.errors)) {
-// //                            this.dataLoadingErrors.push(item.message);
-//                                 this.showToast(item.message, 'danger');
-//                             }
-//                         }
-//                     })
-                ;
-                var p4 = this.$http.get('/hu/admin/api/product/categories')
-//                     .then(response => {
-//                         this.categories = response.data.categories;
-//                         // this.isDataLoading = false;
-//                     }, response => {
-//                         if (response.status === 422) {
-//                             for (let item of Object.values(response.body.errors)) {
-// //                            this.dataLoadingErrors.push(item.message);
-//                                 this.showToast(item.message, 'danger');
-//                             }
-//                         }
-//                     })
-                ;
-                var p5 = this.$http.get('/hu/admin/api/product/badges')
-//                     .then(response => {
-//                         this.badges = response.data.badges;
-//                         // this.isDataLoading = false;
-//                     }, response => {
-//                         if (response.status === 422) {
-//                             for (let item of Object.values(response.body.errors)) {
-// //                            this.dataLoadingErrors.push(item.message);
-//                                 this.showToast(item.message, 'danger');
-//                             }
-//                         }
-//                     }).finally(() => {
-//                     this.isDataLoading = false;
-//                 })
-                ;
-                Promise.all([p1,p3,p4,p5]).then(([r1,r3,r4,r5]) => {
-                    this.productInForm = r1.data.products[0];
-                    this.productInForm.images.sort(function(a, b){return a.ordering - b.ordering});
-                    this.productKindId = this.productInForm.kind.id;
+            this.productInForm = this.product;
 
-                    this.statuses = r3.data.statuses;
-                    this.categories = r4.data.categories;
-                    this.badges = r5.data.badges;
-                }, ([r1,r3,r4,r5]) => {
-                    if (r1.status === 422) {
-                        for (let item of Object.values(r1.body.errors)) {
-                            this.showToast(item.message, 'danger');
-                        }
-                    }
-                    if (r3.status === 422) {
-                        for (let item of Object.values(r3.body.errors)) {
-                            this.showToast(item.message, 'danger');
-                        }
-                    }
-                    if (r4.status === 422) {
-                        for (let item of Object.values(r4.body.errors)) {
-                            this.showToast(item.message, 'danger');
-                        }
-                    }
-                    if (r5.status === 422) {
-                        for (let item of Object.values(r5.body.errors)) {
-                            this.showToast(item.message, 'danger');
-                        }
-                    }
-                }).finally(() => {
-                    this.isDataLoading = false;
-                })
-                ;
-
+            if (this.productInForm.id !== null) {
+              this.productInForm.images.sort(function (a, b) {
+                return a.ordering - b.ordering
+              });
+              this.productKindId = this.productInForm.kind.id;
             }
+
+            this.isDataLoading = false;
+
+            // var p3 = this.$http.get('/hu/admin/api/product/statuses');
+            // var p4 = this.$http.get('/hu/admin/api/product/categories');
+            // var p5 = this.$http.get('/hu/admin/api/product/badges');
+            //
+            // Promise.all([p3, p4, p5]).then(([r3, r4, r5]) => {
+            //   this.statuses = r3.data.statuses;
+            //   this.categories = r4.data.categories;
+            //   this.badges = r5.data.badges;
+            // }, ([r3, r4, r5]) => {
+            //   if (r3.status === 422) {
+            //     for (let item of Object.values(r3.body.errors)) {
+            //       this.showToast(item.message, 'danger');
+            //     }
+            //   }
+            //   if (r4.status === 422) {
+            //     for (let item of Object.values(r4.body.errors)) {
+            //       this.showToast(item.message, 'danger');
+            //     }
+            //   }
+            //   if (r5.status === 422) {
+            //     for (let item of Object.values(r5.body.errors)) {
+            //       this.showToast(item.message, 'danger');
+            //     }
+            //   }
+            // }).finally(() => {
+            //   this.isDataLoading = false;
+            // })
+            // ;
+
+
+            // if (this.productId > 0 ) {
+            //   var p1 = this.$http.get(`/hu/admin/api/products/${this.productId}`);
+            // }
+            // var p3 = this.$http.get('/hu/admin/api/product/statuses');
+            // var p4 = this.$http.get('/hu/admin/api/product/categories');
+            // var p5 = this.$http.get('/hu/admin/api/product/badges');
+            // if (this.productId > 0 ) {
+            //   Promise.all([p1, p3, p4, p5]).then(([r1, r3, r4, r5]) => {
+            //     this.productInForm = r1.data.products[0];
+            //     this.productInForm.images.sort(function (a, b) {
+            //       return a.ordering - b.ordering
+            //     });
+            //     this.productKindId = this.productInForm.kind.id;
+            //
+            //     this.statuses = r3.data.statuses;
+            //     this.categories = r4.data.categories;
+            //     this.badges = r5.data.badges;
+            //   }, ([r1, r3, r4, r5]) => {
+            //     if (r1.status === 422) {
+            //       for (let item of Object.values(r1.body.errors)) {
+            //         this.showToast(item.message, 'danger');
+            //       }
+            //     }
+            //     if (r3.status === 422) {
+            //       for (let item of Object.values(r3.body.errors)) {
+            //         this.showToast(item.message, 'danger');
+            //       }
+            //     }
+            //     if (r4.status === 422) {
+            //       for (let item of Object.values(r4.body.errors)) {
+            //         this.showToast(item.message, 'danger');
+            //       }
+            //     }
+            //     if (r5.status === 422) {
+            //       for (let item of Object.values(r5.body.errors)) {
+            //         this.showToast(item.message, 'danger');
+            //       }
+            //     }
+            //   }).finally(() => {
+            //     this.isDataLoading = false;
+            //   })
+            //   ;
+            // }
+            // else {
+            //       Promise.all([p3, p4, p5]).then(([r3, r4, r5]) => {
+            //         this.statuses = r3.data.statuses;
+            //         this.categories = r4.data.categories;
+            //         this.badges = r5.data.badges;
+            //       }, ([r3, r4, r5]) => {
+            //         if (r3.status === 422) {
+            //           for (let item of Object.values(r3.body.errors)) {
+            //             this.showToast(item.message, 'danger');
+            //           }
+            //         }
+            //         if (r4.status === 422) {
+            //           for (let item of Object.values(r4.body.errors)) {
+            //             this.showToast(item.message, 'danger');
+            //           }
+            //         }
+            //         if (r5.status === 422) {
+            //           for (let item of Object.values(r5.body.errors)) {
+            //             this.showToast(item.message, 'danger');
+            //           }
+            //         }
+            //       }).finally(() => {
+            //         this.isDataLoading = false;
+            //       })
+            //       ;
+            //     }
 
         },
         mounted () {

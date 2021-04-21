@@ -1,58 +1,80 @@
-{% extends 'webshop/site/template-general.html.twig' %}
+{% extends 'webshop/site/template-collection.html.twig' %}
 
 {% if category.name is defined and category.name is not empty %}
     {% set pageTitle = category.name %}
 {% else %}
-    {% set pageTitle = 'Virágok' %}
+    {% set pageTitle = 'collection.products'|trans %}
 {% endif %}
 
 {% block header %}
 {% endblock %}
 
 {% block content %}
-    <div class="products-grid">
-        <div class="products-grid--header d-none d-md-flex" {% if category.imagePath is defined %} style="background-image: url({{ uploaded_asset(category.imagePath)|imagine_filter('category_image') }});" {% endif %}>
-            <div class="row flex-grow-1">
-                <div class="col-md-8 d-flex align-items-center">
-                    <div class="landing--heading p-md-3 ml-2 ml-lg-3">
-                        <h1><span class="text-danger">{{ category }}</span> </h1>
-                        <div class="row">
-                            <div class="col-md-8 p-3" style="background-color: rgba(255,255,255,.7);">
-                                <span class="listing--lead">{{ category.description is defined ? category.description : '!Születésnapra, évfordulóra, randira, köszönet kifejezésére, babaköszöntőre, vendégségbe, ballagásra, vagy csak úgy, ajándékozz egy szép virágcsokrot. Csak válaszd ki a csokrot és a kézbesítésről mi gondoskodunk.' }}</span>
-                            </div>
-                        </div>
 
-                    </div>
+    <div class="container-fluid p-0">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="position-relative text-dark">
+                <div class="jumbotron--cover jumbotron--cover-collection light-overlay" {% if category.image is defined and category.image is not empty %} style="background-image: url({{ uploaded_asset(category.imagePath)|imagine_filter('unscaled') }});" {% endif %}>
                 </div>
-                <div class="col-md-4">
-{#                    <div class="landing--info ml-lg-5">#}
-{#                        <div class="p-lg-3">#}
-{#                            <h3>ORDER UP TO 10pm</h3>#}
-{#                            <span>For next day delivery</span>#}
-{#                        </div>#}
-{#                        <div class="p-lg-3">#}
-{#                            <h3>FREE DELIVERY</h3>#}
-{#                            <span>monday - sunday</span>#}
-{#                        </div>#}
-{#                        <div class="p-lg-3">#}
-{#                            <h3>CUSTOMER SATISFACTION</h3>#}
-{#                            <span><span class="ratings small r-45 no-margin"></span> <strong>4.3/5</strong> <a href="/en/uk/reviews">based on 348792 reviews</a></span>#}
-{#                        </div>#}
-{#                    </div>#}
+                <div class="container card-img-overlay d-flex align-items-center">
+                    <div class="text-center w-100">
+                        <h1 class="font-weight-bold">{{ category is defined ? category : 'collection.products'|trans }}</h1>
+                        <span class="lead">{{ category.description is defined ? category.description|raw : '' }}</span>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="products-grid--header-mobile mt-4 d-flex d-md-none flex-column">
-            <h1 class="">{{ category }}</h1>
-            <p class="listing--lead">{{ category.description is defined ? category.description : '!Születésnapra, évfordulóra, randira, köszönet kifejezésére, babaköszöntőre, vendégségbe, ballagásra, vagy csak úgy, ajándékozz egy szép virágcsokrot. Csak válaszd ki a csokrot és a kézbesítésről mi gondoskodunk.' }}</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-11 col-xl-12 mx-auto">
+                <div class="products-grid">
+{#                    <div class="products-grid--header d-none d-md-flex" {% if category.imagePath is defined %} style="background-image: url({{ uploaded_asset(category.imagePath)|imagine_filter('category_image') }});" {% endif %}>#}
+{#                        <div class="row flex-grow-1">#}
+{#                            <div class="col-md-8 d-flex align-items-center">#}
+{#                                <div class="landing--heading p-md-3 ml-2 ml-lg-3">#}
+{#                                    <h1><span class="text-danger">{{ category is defined ? category : 'collection.products'|trans }}</span> </h1>#}
+{#                                    <div class="row">#}
+{#                                        <div class="col-md-8 p-3" style="background-color: rgba(255,255,255,.7);">#}
+{#                                            <span class="listing--lead">{{ category.description is defined ? category.description : '' }}</span>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#            #}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="col-md-4">#}
+{#                                <div class="landing--info ml-lg-5">#}
+{#                                    <div class="p-lg-3">#}
+{#                                        <h3>ORDER UP TO 10pm</h3>#}
+{#                                        <span>For next day delivery</span>#}
+{#                                    </div>#}
+{#                                    <div class="p-lg-3">#}
+{#                                        <h3>FREE DELIVERY</h3>#}
+{#                                        <span>monday - sunday</span>#}
+{#                                    </div>#}
+{#                                    <div class="p-lg-3">#}
+{#                                        <h3>CUSTOMER SATISFACTION</h3>#}
+{#                                        <span><span class="ratings small r-45 no-margin"></span> <strong>4.3/5</strong> <a href="/en/uk/reviews">based on 348792 reviews</a></span>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#            #}
+{#                    <div class="products-grid--header-mobile mt-4 d-flex d-md-none flex-column">#}
+{#                        <h1 class="">{{ category is defined ? category : 'collection.products'|trans }}</h1>#}
+{#                        <p class="listing--lead">{{ category.description is defined ? category.description : '!Születésnapra, évfordulóra, randira, köszönet kifejezésére, babaköszöntőre, vendégségbe, ballagásra, vagy csak úgy, ajándékozz egy szép virágcsokrot. Csak válaszd ki a csokrot és a kézbesítésről mi gondoskodunk.' }}</p>#}
+{#                    </div>#}
+{#                    <div class="products-grid--countdown mt-3 d-none d-md-block">#}
+{#                        <i class="far fa-clock"></i> <span>Rendelj a következő <span class="font-weight-bold">XX óra és YY percen</span> belül, <span class="font-weight-bold">holnapi</span> kiszállításhoz.</span>#}
+{#                    </div>#}
+
+                    {% include '/webshop/site/product-list-widget.html.twig' %}
+
+                </div>
+            </div>
         </div>
-{#        <div class="products-grid--countdown mt-3 d-none d-md-block">#}
-{#            <i class="far fa-clock"></i> <span>Rendelj a következő <span class="font-weight-bold">XX óra és YY percen</span> belül, <span class="font-weight-bold">holnapi</span> kiszállításhoz.</span>#}
-{#        </div>#}
-
-        {% include '/webshop/site/product-list-widget.html.twig' %}
-
     </div>
 {% endblock %}
 

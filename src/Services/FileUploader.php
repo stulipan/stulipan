@@ -3,13 +3,12 @@
 namespace App\Services;
 
 use App\Entity\ImageEntity;
+use App\Model\ImageUsage;
 use Doctrine\ORM\EntityManagerInterface;
 use ErrorException;
 use Symfony\Component\Asset\Context\RequestStackContext;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * FYI: FileUploader class is a service defined in service.yaml, 
@@ -17,16 +16,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class FileUploader
 {
-    const IMAGES_FOLDER = '/uploads/images';
-    const CATEGORY_FOLDER = 'categories';
-    const PRODUCT_FOLDER = 'products';
-    const PAGES_FOLDER = 'pages';
-    const OTHER_FOLDER = 'other';
-    
-    const IMAGE_OF_CATEGORY_TYPE = '1';
-    const IMAGE_OF_PRODUCT_TYPE = '2';
-    const IMAGE_OF_PAGE_TYPE = '3';
-    const IMAGE_OF_OTHER_TYPE = '0';
+    const UPLOADS_IMAGES_FOLDER = '/uploads/images';
+//    const IMAGES_FOLDER = '/uploads/images'; // deprecated
+    const WEBSITE_FOLDER_NAME = 'store';
+    const PRODUCTS_FOLDER_NAME = 'products';
 
     private $targetDirectory;
     private $requestStackContext;
@@ -51,14 +44,14 @@ class FileUploader
     {
         // Based on kind of the image to be uploaded, pick the appropriate target folder
         switch ($purpose) {
-            case self::IMAGE_OF_CATEGORY_TYPE:
-                $folder = self::CATEGORY_FOLDER;
+            case ImageUsage::WEBSITE_IMAGE:
+                $folder = self::WEBSITE_FOLDER_NAME;
                 break;
-            case self::IMAGE_OF_PRODUCT_TYPE:
-                $folder = self::PRODUCT_FOLDER;
+            case ImageUsage::PRODUCT_IMAGE:
+                $folder = self::PRODUCTS_FOLDER_NAME;
                 break;
             default:
-                $folder = self::OTHER_FOLDER;
+                $folder = self::WEBSITE_FOLDER_NAME;
         }
         
         if ($existingImage instanceof ImageEntity) {
@@ -81,7 +74,7 @@ class FileUploader
             try {
                 unlink($destination.'/'.$existingFilename);
             } catch (ErrorException $e) {
-                throw new \Symfony\Component\Filesystem\Exception\FileNotFoundException();
+                throw new FileNotFoundException();
             }
             $this->em->remove($existingImage);
             $this->em->flush();
@@ -92,7 +85,6 @@ class FileUploader
 
     public function getPublicPath(string $path): string
     {
-//        dd($this->requestStackContext->getBasePath());
-        return $this->requestStackContext->getBasePath().'/uploads/images/'.$path;
+        return $this->requestStackContext->getBasePath() . self::UPLOADS_IMAGES_FOLDER . '/' . $path;
     }
 }

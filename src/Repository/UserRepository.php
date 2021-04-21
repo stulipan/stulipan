@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\DateRange;
 use App\Entity\User;
+use App\Services\HelperFunction;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
@@ -12,9 +13,12 @@ use Exception;
 
 class UserRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $helper;
+
+    public function __construct(ManagerRegistry $registry, HelperFunction $helper)
     {
         parent::__construct($registry, User::class);
+        $this->helper = $helper;
     }
 
     /**
@@ -89,7 +93,7 @@ class UserRepository extends ServiceEntityRepository
                 // If $searchTerms contains several words (Eg: renata jr fazekas)
                 // then we will search id db for every permutation of it.
                 $words = explode( ' ', $searchTerm);
-                $searchTermPermutations = $this->pc_permute($words);
+                $searchTermPermutations = $this->helper->pc_permute($words);
 
                 foreach ($searchTermPermutations as $key => $item) {
                     array_push($comparisonsX,
@@ -103,7 +107,7 @@ class UserRepository extends ServiceEntityRepository
                 $qb->andWhere($orX)->setParameters($paramsX);
             }
 
-            if (array_key_exists('status', $filters) && $filters['status']) {
+            if (array_key_exists('status', $filters) && $filters['status'] !== null) {
                 $status = $filters['status'];
 //                $status = $this->getEntityManager()->getRepository(ProductStatus::class)->find($status);
 
@@ -116,27 +120,4 @@ class UserRepository extends ServiceEntityRepository
         return $query;
     }
 
-    /**
-     * Helper function for permutations. Returns an array with all permutations
-     *
-     * @param $items
-     * @param array $perms
-     * @return array            # Returns an array with all permutations
-     */
-    function pc_permute($items, $perms = [])
-    {
-        if (empty($items)) {
-            $return = array($perms);
-        } else {
-            $return = array();
-            for ($i = count($items) - 1; $i >= 0; --$i) {
-                $newitems = $items;
-                $newperms = $perms;
-                list($foo) = array_splice($newitems, $i, 1);
-                array_unshift($newperms, $foo);
-                $return = array_merge($return, $this->pc_permute($newitems, $newperms));
-            }
-        }
-        return $return;
-    }
 }

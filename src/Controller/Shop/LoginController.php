@@ -51,7 +51,7 @@ class LoginController extends AbstractController
          */
         $this->saveTargetPath($request->getSession(), 'main', $request->headers->get('referer') ? $request->headers->get('referer') : '');
         
-        return $this->render('webshop/site/user-login-register.html.twig', [
+        return $this->render('webshop/user/user-login-register.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
             'title' => 'Bejelentkezés',
@@ -111,7 +111,7 @@ class LoginController extends AbstractController
             return new Response($html,400);
         }
 
-        return $this->render('webshop/site/user-register.html.twig', [
+        return $this->render('webshop/user/user-register.html.twig', [
             'title' => 'Fiók létrehozása',
             'registrationForm' => $form->createView(),
         ]);

@@ -311,6 +311,15 @@ class User implements UserInterface, Serializable
     /**
      * @return null|string
      */
+    public function getInitials(): ?string
+    {
+        $fullnameInitial = $this->firstname[0].$this->lastname[0];
+        return $this->ucWords($fullnameInitial);
+    }
+
+    /**
+     * @return null|string
+     */
     public function getImage()
     {
         return $this->image;

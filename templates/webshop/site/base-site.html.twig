@@ -38,27 +38,15 @@
     </div>
 
 	<header class="header">
-        {{ include('webshop/site/navbar-impersonate-user.html.twig') }}
+        {{ include('webshop/widgets/_navbar-impersonate-user.html.twig') }}
 
         {% block underNavbar %}
-            <div class="announcement-bar announcement-bar-primary">
-                <div class="container">
-                    <div class="">Ingyenes szállítás Budapesten! <a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></div>
-                </div>
-            </div>
+{#            <div class="announcement-bar announcement-bar-primary">#}
+{#                <div class="container">#}
+{#                    <div class="">Ingyenes szállítás Budapesten! <a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></div>#}
+{#                </div>#}
+{#            </div>#}
         {% endblock %}
-{#		<div class="top-bar text-sm d-none d-lg-block">#}
-{#			<div class="container-fluid">#}
-{#				<div class="row d-flex align-items-center">#}
-{#					<div class="col-sm-12 text-center">#}
-{#						<ul class="list-inline mb-0">#}
-{#							<li class="list-inline-item px-3 border-leftX d-none d-lg-inline-block">Ingyenes szállítás Budapesten!#}
-{#								<a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></li>#}
-{#						</ul>#}
-{#					</div>#}
-{#				</div>#}
-{#			</div>#}
-{#		</div>#}
 
         {% block navbar %}
 		<nav class="navbar px-0 navbar-expand-lg navbar-sticky navbar-light navbar-stulipan flex-column">
@@ -242,9 +230,9 @@
                     <div class="footer-body">
                         <div class="row text-center text-sm-left">
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
-                                <h6 class="text-uppercase  mb-2">Elérhetőségek</h6>
+                                <h5 class="text-uppercase mb-3">Elérhetőségek</h5>
 {#                                <p>{{ storeSettings.get('company.zip') }} {{ storeSettings.get('company.city') }}, {{ storeSettings.get('company.address') }}</p>#}
-                                <p>{{ storeSettings.get('store.email') }}</p>
+                                <p class="mb-2">{{ storeSettings.get('store.email') }}</p>
                                 <ul class="list-inline">
                                     {% if storeSettings.get('social.facebook') and storeSettings.get('social.facebook') is not null %}
                                     <li class="list-inline-item"><a href="{{ storeSettings.get('social.facebook') }}" target="_blank" title="facebook" class="h3"><i class="fab fa-facebook"></i></a></li>
@@ -264,18 +252,19 @@
                                 </ul>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
-                                <h6 class="text-uppercase  mb-2">Termékek</h6>
+                                <h5 class="text-uppercase mb-3">Termékek</h5>
                                 <ul class="list-unstyled">
-                                    <li> <a href="/termekek/kopogtatok" class="text-decoration-none" title="Virágcsokrok">Kopogtatók, ajtódíszek</a></li>
-                                    <li> <a href="/termekek/viragdobozok" class="text-decoration-none" title="Virágboxok">Virágdobozok</a></li>
+                                    <li class="mb-2"> <a href="/termekek/kopogtatok" class="text-decoration-none" title="Virágcsokrok">Kopogtatók, ajtódíszek</a></li>
+                                    <li class="mb-2"> <a href="/termekek/viragdobozok" class="text-decoration-none" title="Virágboxok">Virágdobozok</a></li>
                                 </ul>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
-                                <h6 class="text-uppercase  mb-2">Információk</h6>
+                                <h5 class="text-uppercase mb-3">Információk</h5>
                                 <ul class="list-unstyled">
-                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="text-decoration-none">Rólunk</a></li>
-                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="text-decoration-none">Szállítási díjak</a></li>
-                                    <li> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="text-decoration-none">ÁSZF</a></li>
+                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="text-decoration-none">Rólunk</a></li>
+                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="text-decoration-none">Szállítási díjak</a></li>
+                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="text-decoration-none">ÁSZF</a></li>
+                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'privacy'}) }}" class="text-decoration-none">Adatvédelmi szabályzat</a></li>
                                 </ul>
                             </div>
 {#                            <div class="col-sm-6 col-md-12 col-lg-3">#}

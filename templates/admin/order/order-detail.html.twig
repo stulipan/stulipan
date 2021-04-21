@@ -433,7 +433,7 @@
         </div>
         <div class="card mt-20px">
             <div class="card-body">
-                {% include 'admin/customer-card.html.twig' with {'customer': order.customer} %}
+                {% include 'admin/customer-card.html.twig' with {'customer': order.customer, 'orderCount': order.customer.ordersPlaced.count} %}
             </div>
             <div class="d-print-none">
                 <div class="card-footer">

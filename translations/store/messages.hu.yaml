@@ -1,3 +1,12 @@
+product:
+    bestseller: Legkeresettebb
+    sold-out: Mind elkelt
+
+collection:
+    products: Termékek
+    no-products: Nincs termék.
+    no-products-in-collection: Nincs termék ebben a kategóriában.
+
 navbar:
     search: Keresés
     login: Bejelentkezés

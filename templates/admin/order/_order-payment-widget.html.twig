@@ -18,7 +18,7 @@
     <div class="mt-3">{{ order.paymentMethod.short() }} </div>
     {% if order.paymentMethod.image %}
         <div class="mt-3">
-            <img class="border-0X h-20px d-noneX d-md-inlineX" src="{{ asset('/uploads/images/termekek/' ~ order.paymentMethod.image) }}" />
+            <img class="border-0X h-20px d-noneX d-md-inlineX" src="{{ asset('/uploads/images/icons/' ~ order.paymentMethod.image) }}" />
         </div>
     {% endif %}
     {% if order.isBankTransfer is defined and order.isBankTransfer == true %}

@@ -239,8 +239,10 @@ class CmsPage implements JsonSerializable
     }
     
     /**
-     * Return full URL: http://stulipan.dfr/media/cache/resolve/product_thumbnail/uploads/images/products/ethan-haddox-484912-unsplash-5ceea70235e84.jpeg
+     * Return full URL: http://stulipan.dfr/media/cache/resolve/product_small/uploads/images/products/ethan-haddox-484912-unsplash-5ceea70235e84.jpeg
      * This is to be used API
+     *
+     *      This is generated in the ImageSetFullPath.php event (!!)
      *
      * @return null|string
      */
@@ -258,7 +260,7 @@ class CmsPage implements JsonSerializable
     public function getImagePath(): ?string
     {
         if ($this->getImage()) {
-            return FileUploader::PRODUCT_FOLDER.'/'.$this->getImage()->getFile();
+            return FileUploader::WEBSITE_FOLDER_NAME .'/'. $this->getImage()->getFile();
         }
         return null;
     }
@@ -290,7 +292,7 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @return CmsPage
+     * @return CmsPage|null
      */
     public function getParent(): ?CmsPage
     {
@@ -298,7 +300,7 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @param CmsPage $parent
+     * @param CmsPage|null $parent
      */
     public function setParent(?CmsPage $parent)
     {

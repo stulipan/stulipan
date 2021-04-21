@@ -21,6 +21,15 @@
 #           order > 'customer'
 #           etc
 
+product:
+    bestseller: Bestseller
+    sold-out: Sold out
+
+collection:
+    products: Products
+    no-products: There are no products.
+    no-products-in-collection: There are no products in this collection.
+
 navbar:
     search: Search
     login: Login

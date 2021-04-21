@@ -2,8 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\BaseController;
 use App\Entity\Product\Product;
 use App\Entity\Price;
+use App\Entity\Product\ProductBadge;
+use App\Entity\Product\ProductCategory;
+use App\Entity\Product\ProductKind;
 use App\Entity\Product\ProductStatus;
 use App\Entity\VatRate;
 use App\Form\ProductFilterType;
@@ -11,14 +15,24 @@ use App\Form\ProductFormType;
 use App\Form\ProductQuantityFormType;
 use App\Services\FileUploader;
 use App\Services\StoreSettings;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * @Route("/admin")
@@ -31,9 +45,35 @@ class ProductController extends AbstractController
     ///                                  Product                                       ///
     ///                                                                                ///
     //////////////////////////////////////////////////////////////////////////////////////
-    
+
     /**
-     * @ Route("/termek/", name="product-list")
+     * @Route("/products/filter", name="product-list-filter")
+     */
+    public function handleFilterForm(Request $request)
+    {
+        $form = $this->createForm(ProductFilterType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $filters = $form->getData();
+            $searchTerm = null;
+            $status = null;
+
+            if ($filters['searchTerm']) {
+                $searchTerm = $filters['searchTerm'];
+            }
+            if ($filters['status']) {
+                $status = $this->getDoctrine()->getRepository(ProductStatus::class)->find($filters['status'])->getShortcode();
+            }
+            return $this->redirectToRoute('product-list',[
+                'searchTerm' => $searchTerm,
+                'status' => $status,
+            ]);
+        }
+        return $this->redirectToRoute('product-list');
+    }
+
+    /**
      * @Route("/products", name="product-list",
      *     requirements={"page"="\d+"},
      *     )
@@ -185,34 +225,6 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/products/filter", name="product-list-filter")
-     */
-    public function handleFilterForm(Request $request)
-    {
-        $form = $this->createForm(ProductFilterType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $filters = $form->getData();
-            $searchTerm = null;
-            $status = null;
-
-            if ($filters['searchTerm']) {
-                $searchTerm = $filters['searchTerm'];
-            }
-            if ($filters['status']) {
-                $status = $this->getDoctrine()->getRepository(ProductStatus::class)->find($filters['status'])->getShortcode();
-            }
-            return $this->redirectToRoute('product-list',[
-                'searchTerm' => $searchTerm,
-                'status' => $status,
-            ]);
-        }
-        return $this->redirectToRoute('product-list');
-    }
-
-
-    /**
      * @Route("/product/new", name="product-new")
      */
     public function newProduct(Request $request, FileUploader $fileUploader)
@@ -247,23 +259,36 @@ class ProductController extends AbstractController
                 $product->setImage($newFilename);
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($product);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
 
             $this->addFlash('success', 'Sikeresen elmentetted az új terméket!');
             return $this->redirectToRoute('product-list');
         }
 
+        $product->setBackToList($this->generateUrl('product-list'));
+
+        $em = $this->getDoctrine()->getManager();
+        $categories = $em->getRepository(ProductCategory::class)->findAll();
+        $badges = $em->getRepository(ProductBadge::class)->findAll();
+        $statuses = $em->getRepository(ProductStatus::class)->findAll();
+        $kinds = $em->getRepository(ProductKind::class)->findAll();
+
         return $this->render('admin/product/product_edit.html.twig', [
 //            'form' => $form->createView(),
-
+            'product' => $product,
+            'productJson' => $this->createJson($product, ['groups' => 'productView']),
+            'statusesJson' => $this->createJsonNormalized($statuses),
+            'categoriesJson' => $this->createJsonNormalized($categories),
+            'badgesJson' => $this->createJsonNormalized($badges),
+            'kindsJson' => $this->createJson($kinds, ['groups' => 'productView']),
         ]);
     }
 
-
     /**
-     * @Route("/product/edit/{id}", name="product-edit")
+     * @Route("/products/edit/{id}", name="product-edit")
+     *  requirements={"id"="\d+"}
      */
     public function editProduct(Request $request, Product $product, FileUploader $fileUploader)
     {
@@ -282,132 +307,127 @@ class ProductController extends AbstractController
             }
 //            dd($product);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($product);
-            $entityManager->flush();  // PriceVersioning::onFlush() event is triggered, see service.yaml
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();  // PriceVersioning::onFlush() event is triggered, see service.yaml
 
             $this->addFlash('success', 'Sikeresen módosítottad a terméket!');
 
 //            return $this->redirectToRoute('product-edit',['id' => $product->getId()]);
         }
 
+        $product->setBackToList($this->generateUrl('product-list'));
+
+        $em = $this->getDoctrine()->getManager();
+        $categories = $em->getRepository(ProductCategory::class)->findAll();
+        $badges = $em->getRepository(ProductBadge::class)->findAll();
+        $statuses = $em->getRepository(ProductStatus::class)->findAll();
+        $kinds = $em->getRepository(ProductKind::class)->findAll();
+
         return $this->render('admin/product/product_edit.html.twig', [
 //            'form' => $form->createView(),
             'product' => $product,
+            'productJson' => $this->createJson($product, ['groups' => 'productView']),
+            'statusesJson' => $this->createJsonNormalized($statuses),
+            'categoriesJson' => $this->createJsonNormalized($categories),
+            'badgesJson' => $this->createJsonNormalized($badges),
+            'kindsJson' => $this->createJson($kinds, ['groups' => 'productView']),
         ]);
     }
-    
-    /**
-     * @Route("/product/delete/{id}", name="product-delete", methods={"GET"})
-     */
-    public function deleteProduct(Product $product)
-    
+
+    private function createJson($data, array $context = [])
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($product);
-        $em->flush();
-        
-        return $this->redirectToRoute('product-list');
-    }
-
-    /**
-     * @Route("/product/editStock/{id}", name="product-edit-stock")
-     */
-    public function editStock(Request $request, Product $product)
-    {
-        $form = $this->createForm(ProductQuantityFormType::class, $product);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $product = $form->getData();
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($product);
-            $entityManager->flush();
-
-            /**
-             * If AJAX request, renders and returns an HTML with the value
-             */
-            if ($request->isXmlHttpRequest()) {
-                return $this->render('admin/item.html.twig', [
-                    'item' => $product->getStock(),
-                ]);
-            }
-//            $this->addFlash('success', 'A mennyiség sikeresen frissítve.');
-            return $this->redirectToRoute('product-list');
-        }
-
-        /**
-         * If AJAX request and the form was submitted, renders the form, fills it with data
-         * Also renders errors!
-         * (!?, there is a validation error)
-         */
-        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
-            $html = $this->renderView('admin/product/_stock_inline_form.html.twig', [
-                'form' => $form->createView()
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $objNormalizer = new ObjectNormalizer($classMetadataFactory,null,null, new PhpDocExtractor(),
+            null,null,
+            [
+                ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $content) {
+                    return $object->getName();
+//                    if ($object instanceof ProductCategory) { return ['id' => $object->getId(), 'name' => $object->getName()]; }
+//                    return $object->getId();
+                }
             ]);
-            return new Response($html,400);
-
-        }
-        /**
-         * Renders form initially with data
-         */
-        return $this->render('admin/product/_stock_inline_form.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        $serializer = new Serializer([$objNormalizer], [new JsonEncoder()]);
+        $json = $serializer->serialize($data, 'json', $context);
+        return $json;
     }
 
+    protected function createJsonNormalized($data, array $context = [])
+    {
+        $jsonNormalizer = new JsonSerializableNormalizer(
+            null,
+            null,
+            array(JsonSerializableNormalizer::CIRCULAR_REFERENCE_HANDLER=>function ($object) {
+                if ($object instanceof ProductCategory) {
+                    return ['id' => $object->getId(), 'name' => $object->getName()];
+                }
+                return $object->getId();
 
-
-//        $data = json_decode($request->getContent(), true);
-//        if ($data === null) {
-//            throw new BadRequestHttpException('Invalid JSON');
-//        }
-//
-//        $product = new Product();
-//        $form = $this->createForm(ProductFormType::class, null, [
-//            'csrf_protection' => false,
-//        ]);
-//        $form->submit($data);
-//        if (!$form->isValid()) {
-//            $errors = $this->getErrorsFromForm($form);
-//            return $this->serializeIntoJsonResponse([
-//                'errors' => $errors
-//            ], 400);
-//        }
-//
-//        /** @var Product $product */
-//        $product = $form->getData();
-////        $product->setUser($this->getUser());
-//        $em = $this->getDoctrine()->getManager();
-//        $em->persist($product);
-//        $em->flush();
-//        $productModel = $this->createProductApiModel($product);
-//        $response = $this->serializeIntoJsonResponse($productModel);
-//        // setting the Location header... it's a best-practice
-//        $response->headers->set(
-//            'Location',
-//            $this->generateUrl('api-product-get', ['id' => $product->getId()])
-//        );
-//        return $response;
-
-
+            })
+        );
+        $serializer = new Serializer([$jsonNormalizer], [new JsonEncoder()]);
+        $json = $serializer->serialize($data, 'json', $context);
+        return $json;
+    }
+    
 //    /**
-//     * @Route("/api/getProduct/{id}", name="api-product-get", methods={"GET"})
-//     */
-//    public function getProduct(Product $product)
-//    {
-//        $productModel = $this->createProductApiModel($product);
-//        return $this->serializeIntoJsonResponse($productModel);
-//    }
-//    /**
-//     * @Route("/api/deleteProduct/{id}", name="api-product-delete", methods={"DELETE"})
+//     * @Route("/product/delete/{id}", name="product-delete", methods={"GET"})
 //     */
 //    public function deleteProduct(Product $product)
+//
 //    {
 //        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 //        $em = $this->getDoctrine()->getManager();
 //        $em->remove($product);
 //        $em->flush();
-//        return new Response(null, 204);
+//
+//        return $this->redirectToRoute('product-list');
 //    }
+//
+//    /**
+//     * @Route("/product/editStock/{id}", name="product-edit-stock")
+//     */
+//    public function editStock(Request $request, Product $product)
+//    {
+//        $form = $this->createForm(ProductQuantityFormType::class, $product);
+//        $form->handleRequest($request);
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $product = $form->getData();
+//            $em = $this->getDoctrine()->getManager();
+//            $em->persist($product);
+//            $em->flush();
+//
+//            /**
+//             * If AJAX request, renders and returns an HTML with the value
+//             */
+//            if ($request->isXmlHttpRequest()) {
+//                return $this->render('admin/item.html.twig', [
+//                    'item' => $product->getStock(),
+//                ]);
+//            }
+////            $this->addFlash('success', 'A mennyiség sikeresen frissítve.');
+//            return $this->redirectToRoute('product-list');
+//        }
+//
+//        /**
+//         * If AJAX request and the form was submitted, renders the form, fills it with data
+//         * Also renders errors!
+//         * (!?, there is a validation error)
+//         */
+//        if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
+//            $html = $this->renderView('admin/product/_stock_inline_form.html.twig', [
+//                'form' => $form->createView()
+//            ]);
+//            return new Response($html,400);
+//
+//        }
+//        /**
+//         * Renders form initially with data
+//         */
+//        return $this->render('admin/product/_stock_inline_form.html.twig', [
+//            'form' => $form->createView(),
+//        ]);
+//    }
+
 }

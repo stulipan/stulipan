@@ -150,6 +150,12 @@ $sidenav-link-selected-color:       initial !default;
   }
 }
 
+.sidenav .sidenav-item.sidenav-item-open {
+  & .sidenav-dropdown-menu {
+    display: block;
+  }
+}
+
 .sidenav .sidenav-item.sidenav-item-show {
   & .sidenav-dropdown-menu {
     display: block;

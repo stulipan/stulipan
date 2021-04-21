@@ -10,6 +10,7 @@ use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\OrderStatus;
 use App\Entity\PaymentStatus;
+use App\Services\HelperFunction;
 use App\Services\Localization;
 use App\Services\StoreSettings;
 use DateTime;
@@ -23,20 +24,22 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
 {
     private $settings;
     private $localization;
+    private $helper;
 
     public function __construct(ManagerRegistry $registry, StoreSettings $settings,
-                                Localization $localization)
+                                Localization $localization, HelperFunction $helper)
     {
         parent::__construct($registry, Order::class);
         $this->settings = $settings;
         $this->localization = $localization;
+        $this->helper = $helper;
     }
 
     /**
      * Return all Orders in the last X period of time. Only REAL orders --> status shortcode == 'created'
      * @return array
      * @return Query
-     *@throws Exception
+     * @throws Exception
      */
     public function findAllLast($period)
     {
@@ -227,7 +230,7 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
                 // If $searchTerms contains several words (Eg: renata jr fazekas)
                 // then we will search id db for every permutation of it.
                 $words = explode( ' ', $searchTerm);
-                $searchTermPermutations = $this->pc_permute($words);
+                $searchTermPermutations = $this->helper->pc_permute($words);
 
                 foreach ($searchTermPermutations as $key => $item) {
                     // The following line executes $qb->expr()->orX() with arguments from the array $comparisonsX
@@ -393,29 +396,5 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
         }
 
         return null;
-    }
-
-    /**
-     * Helper function for permutations. Returns an array with all permutations
-     *
-     * @param $items
-     * @param array $perms
-     * @return array            # Returns an array with all permutations
-     */
-    function pc_permute($items, $perms = [])
-    {
-        if (empty($items)) {
-            $return = array($perms);
-        } else {
-            $return = array();
-            for ($i = count($items) - 1; $i >= 0; --$i) {
-                $newitems = $items;
-                $newperms = $perms;
-                list($foo) = array_splice($newitems, $i, 1);
-                array_unshift($newperms, $foo);
-                $return = array_merge($return, $this->pc_permute($newitems, $newperms));
-            }
-        }
-        return $return;
     }
 }

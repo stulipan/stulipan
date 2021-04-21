@@ -60,7 +60,15 @@ class ProductImage //implements \JsonSerializable
      *     "orderView"})
      */
     private $imageUrl;
-    
+
+    /**
+     * @var string|null
+     * @Groups({"productView", "productList",
+     *     "orderView"})
+     */
+    private $thumbnailUrl;
+
+
     /**
      * @var string
      * @ORM\Column(name="alt", type="string", length=255, nullable=true)
@@ -166,7 +174,7 @@ class ProductImage //implements \JsonSerializable
     }
     
     /**
-     * Return full URL: http://stulipan.dfr/media/cache/resolve/product_thumbnail/uploads/images/products/ethan-haddox-484912-unsplash-5ceea70235e84.jpeg
+     * Return full URL: http://stulipan.dfr/media/cache/resolve/product_small/uploads/images/products/ethan-haddox-484912-unsplash-5ceea70235e84.jpeg
      * This is to be used API
      *
      * @return null|string
@@ -175,6 +183,23 @@ class ProductImage //implements \JsonSerializable
     {
         return $this->imageUrl;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getThumbnailUrl(): ?string
+    {
+        return $this->thumbnailUrl;
+    }
+
+    /**
+     * @param string|null $thumbnailUrl
+     */
+    public function setThumbnailUrl(?string $thumbnailUrl): void
+    {
+        $this->thumbnailUrl = $thumbnailUrl;
+    }
+
     
     /**
      * Returns "products/image_filename.jpeg"
@@ -185,11 +210,12 @@ class ProductImage //implements \JsonSerializable
     public function getImagePath(): ?string
     {
         if ($this->getImage()) {
-            return FileUploader::PRODUCT_FOLDER.'/'.$this->getImage()->getFile();
+            return FileUploader::PRODUCTS_FOLDER_NAME.'/'.$this->getImage()->getFile();
         }
         return null;
     }
-    
+
+
     /**
      * @return int
      */

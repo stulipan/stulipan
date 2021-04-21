@@ -5,7 +5,7 @@
                     <div class="col-lg-3 col-md-3 col-4">
                             <div class="product position-relative">
                                 <div class="product-image">
-                                    <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ product.productName}}" class="img-fluid">
+                                    <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_medium') }}" alt="{{ product.productName}}" class="img-fluid">
     {#                                            <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link product-hover-overlay-link">#}
     {#                                            </a>#}
                                 </div>

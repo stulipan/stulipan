@@ -25,7 +25,7 @@ Encore
 
     .addEntry('v-admin', './assets/vue/admin/v-admin.js')
     .addEntry('ProductEdit', './assets/vue/admin/product/ProductEdit.js')
-    .addEntry('CmsImageUpload', './assets/vue/admin/_components/CmsImageUpload.js')
+    .addEntry('StoreImageUpload', './assets/vue/admin/_components/StoreImageUpload.js')
     .addEntry('SmartLabelEdit', './assets/vue/admin/smart-label/SmartLabelEdit.js')
 
 

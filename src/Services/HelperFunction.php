@@ -49,9 +49,6 @@ class HelperFunction //extends AbstractController
     }
 
     /**
-     * NOT IN USE !!!!!
-     *
-     *
      * Helper function for permutations. Returns an array with all permutations
      *
      * @param $items

@@ -65,6 +65,10 @@ services:
     App\Event\SetOrderNumber:
         tags:
             - { name: doctrine.event_listener, event: postPersist }
+    App\Event\SetSlugProduct:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\Product\Product' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: 'App\Entity\Product\Product' }
     App\Event\TimestampableModel:
         tags:
             - { name: doctrine.event_listener, event: prePersist }

@@ -4,7 +4,7 @@
                 <div class="badge-quantity-wrapper">
                     <span class="badge-quantity">{{ item.quantity }}</span>
                     <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}">
-                        <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_thumbnail') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
+                        <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_small') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
                     </a>
                 </div>
 

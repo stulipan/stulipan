@@ -12,6 +12,7 @@ use App\Entity\Product\ProductKind;
 use App\Entity\Product\ProductOption;
 use App\Entity\Product\ProductStatus;
 use App\Entity\Product\ProductVariant;
+use Cocur\Slugify\Slugify;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,6 +28,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Product denormalizer
@@ -36,9 +38,12 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
     use DenormalizerAwareTrait;
     
     private $em;
+    private $uuid;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
+//        $this->uuid = $uuid;
     }
     
 //    private $normalizer;
@@ -82,7 +87,11 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
         $object->setDescription($data['description']);
         $object->setSku($data['sku']);
         $object->setStock($data['stock']);
-        $object->setName($data['name']);
+
+//        $slugify = new Slugify();
+//        $slugify->slugify($object->getName());
+//        dd($slugify);
+//        $object->setSlug($slugify->slugify($object->getName()));   ///// //////////
 
         $context = array_merge($context, ['product' => $object]);
 
@@ -129,7 +138,7 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
                 }
             }
         }
-        if (isset($data['options'])) {
+        if (isset($data['options']) && count($data['options']) > 0) {
             $initialOptions = $object->getOptions();
             $options = $this->denormalizer->denormalize($data['options'],ProductOption::class.'[]', $format, $context);
             foreach ($options as $option) {

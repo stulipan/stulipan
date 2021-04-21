@@ -42,7 +42,7 @@ class CmsController extends AbstractController
 //            dd($form);
             if ($form['image']) {$file = $form['image']->getData();}
             if (!is_null($file)) {
-                $newFilename = $fileUploader->uploadFile($file, null, FileUploader::IMAGE_OF_CATEGORY_TYPE);
+                $newFilename = $fileUploader->uploadFile($file, null, ImageUsage::WEBSITE_IMAGE);
                 $img = new ImageEntity();
                 $img->setFile($newFilename);
                 $page->setImage($img);
@@ -78,7 +78,7 @@ class CmsController extends AbstractController
              */
 //            $file = $form['imageFile']->getData();
 //            if (!is_null($file)) {
-//                $newFilename = $fileUploader->uploadFile($file, $page->getImage(), FileUploader::IMAGE_OF_PAGE_TYPE); //2nd param = null, else deletes prev image
+//                $newFilename = $fileUploader->uploadFile($file, $page->getImage(), ImageUsage::WEBSITE_IMAGE); //2nd param = null, else deletes prev image
 //                $img = new ImageEntity();
 //                $img->setFile($newFilename);
 //                $page->setImage($img);

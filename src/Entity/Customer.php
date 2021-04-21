@@ -14,8 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="customer")
- * @ORM\Entity
-// * @ ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  * @ UniqueEntity("email", message="Az email címet elgépelted, vagy már regisztráltál vele!")
  */
 class Customer
@@ -511,21 +510,20 @@ class Customer
      */
     public function countOrders(): int
     {
+
         return $this->orders->count();
     }
     
     /**
      * @return int
      */
-    public function countRealOrders(): int
+    public function getPlacedOrdersCount(): int
     {
-        $realOrders = new ArrayCollection();
-        foreach ($this->orders as $order) {
-            if ($order->getStatus() !== null) {
-                $realOrders->add($order);
-            }
+        $placedOrders = $this->getOrdersPlaced();
+        if ($placedOrders) {
+            return $placedOrders->count();
         }
-        return $realOrders->count();
+        return 0;
     }
 
     /**

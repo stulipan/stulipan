@@ -38,7 +38,6 @@ class SmartLabelController extends AbstractController
     //////////////////////////////////////////////////////////////////////////////////////
     
     /**
-     * @ Route("/termek/", name="product-list")
      * @Route("/labels", name="smart-label-list",
      *     requirements={"page"="\d+"},
      *     )
@@ -163,7 +162,7 @@ class SmartLabelController extends AbstractController
     }
 
     /**
-     * @Route("/products/filter", name="product-list-filter")
+     * @Route("/labels/filter", name="samrt-label-list-filter")
      */
     public function handleFilterForm(Request $request)
     {
@@ -242,9 +241,9 @@ class SmartLabelController extends AbstractController
 
 
     /**
-     * @Route("/product/edit/{id}", name="product-edit")
+     * @Route("/labels/edit/{id}", name="smart-label-edit")
      */
-    public function editProduct(Request $request, Product $product, FileUploader $fileUploader)
+    public function editSmartLabel(Request $request, Product $product, FileUploader $fileUploader)
     {
         $form = $this->createForm(ProductFormType::class, $product); //, ['id' => $formAdatok->getKind()->getId()]
         $form->handleRequest($request);
@@ -278,7 +277,7 @@ class SmartLabelController extends AbstractController
     }
     
     /**
-     * @Route("/product/delete/{id}", name="product-delete", methods={"GET"})
+     * @Route("/labels/delete/{id}", name="smart-label-delete", methods={"GET"})
      */
     public function deleteProduct(Product $product)
     

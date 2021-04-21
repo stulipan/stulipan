@@ -1,0 +1,138 @@
+{% extends 'admin/template-with-sidebar.html.twig' %}
+
+{% set activeMenu = 'orders' %}
+{% set pageTitle = customer.fullname %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+    1: {
+        'url': path('customer-list'),
+        'text': 'customer.customers'|trans,
+    }
+} %}
+
+{% if order.isClosed is defined and order.isClosed == false %}
+    {% set isEditEnabled = true %}
+{% else %}
+    {% set isEditEnabled = false %}
+{% endif %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block headerActionsWrapper %}
+    <nav class="w-100 adaptive-tabs adaptive-tabs-right">
+        <ul class="nav nav-tabs adaptive-primary">
+            <li class="nav-item adaptive-item">
+                <a class="nav-link" href="#"><i class="far fa-envelope mr-2"></i>{{ 'customer.send-account-invite'|trans }}</a>
+            </li>
+        </ul>
+        <ul class="adaptive-template">
+            <li class="nav-item adaptive-item adaptive-more">
+                <a href="" type="button" class="adaptive-button nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">{{ 'generic.more-actions'|trans }}</a>
+                <ul class="adaptive-secondary">
+                </ul>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="card tilebox-one mb-20px">
+                        <div class="card-body">
+                            <div class="float-right text-muted">
+                                <i class="fas fa-shopping-basket"></i>
+                            </div>
+                            <span class="h6 quickinfo-title">{{ 'customer.orders'|trans }}</span>
+                            <span class="h5 quickinfo-highlight">{{ orderCount }} </span>
+                            <span class="text-sm font-weight-normal">&nbsp;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="card tilebox-one mb-20px">
+                        <div class="card-body">
+                            <div class="float-right text-muted">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <span class="h6 quickinfo-title">{{ 'customer.spent-total'|trans }}</span>
+                            <span class="h5 quickinfo-highlight">{{ totalRevenue|money }} </span>
+                            <div class="text-muted">{{ 'customer.average-cart-value'|trans }}:&nbsp;{{ orderCount != 0 ? (totalRevenue/orderCount)|money : 0|money }}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="card mb-20px">
+        <div class="card-body">
+            <div class="h5 mb-0">{{ 'customer.previous-orders'|trans }}</div>
+        </div>
+        {% if orders is defined and orders is not empty %}
+        <div class="table-responsive">
+            <table class="table table-hover table-centered mb-0">
+                <thead>
+                <tr>
+                    <th>Rendelés</th>
+                    <th>Dátum</th>
+                    <th>Címzett</th>
+                    <th>Termékek</th>
+                    <th>Összesen</th>
+{#                        <th>Állapot</th>#}
+                </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td><a href="{{ path('order-detail', {'id': order.id}) }}" class="font-weight-boldX">#{{ order.number|number_format(0, '', '') }}</a></td>
+                            <td class="text-nowrap">{{ order.createdAt|date('Y-m-d')}}</td>
+
+                            <td class="text-nowrap">{{ order.shippingFullname ? order.shippingFullname : '' }}</td>
+                            <td>
+                                {% for item in order.items %}
+                                    <a class="mr-1" href="{{ path('site-product-show', {'slug': item.product.slug}) }}" target="_blank">
+                                        <img class="img-thumbnail mb-1" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_small') }}" width="30px;" />
+                                    </a>
+                                {% endfor %}
+                            </td>
+                            <td class="text-nowrap text-right">
+                                <div>{{ order.summary.totalAmountToPay|money }}</div>
+                                <div class="badge badge-sm badge-{{ order.status.css }}">{{ order.status }}</div>
+                            </td>
+{#                                <td><span class="badge badge-sm badge-{{ order.status.css }}">{{ order.status }}</span></td>#}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        {% if orders is defined and orders is empty %}
+            <div class="h-100 text-center p-4">
+                <div class="h1 text-muted-extra">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="font-18 mt-3 mb-2">{{ 'customer.no-previous-orders'|trans }}</div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    <div class="card card-sidebar mb-20px">
+        <div class="card-body card-sidebar">
+            {% include 'admin/customer-card.html.twig' with {'customer': customer, 'orderCount': orderCount} %}
+        </div>
+    </div>
+{% endblock %}

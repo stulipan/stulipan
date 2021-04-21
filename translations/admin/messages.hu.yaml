@@ -1,5 +1,41 @@
+collection:
+    collections: Kategóriák
+    new-collection: 'Új kategória'
+    collections-not-found: 'Nem talált kategóriákat!'
+    collections-not-found-suggestion: 'Próbáld módosítani a szűrőket.'
+    new-collection-created-successfully: 'Kategória sikeresen elmentve!'
+    name: 'Kategória neve'
+    description: Leírás
+    image: Kép
+    slug: 'URL slug'
+    slug-help: 'Ne használj ékezeteket, pl: ''szepseg-es-kozmetika''. Ez az adott kategória URL-jében lesz látható: ''www.example.com/termekek/szepseg-es-kozmetika'''
+    enabled: Engedélyezve
+    parent-collection: 'Szülő kategória'
+    name-is-missing: 'Nevezd el a kategóriát.'
+    slug-is-missing: 'A slug nem lehet üres. Pl: ''szuletesnapi-kellekek'''
+    slug-already-in-use: 'Ez már használatban van. Megoldás:  tegyél egy ''-1'' a végére.'
+product:
+    products: Termékek
+    new-product: 'Új termék'
+page:
+    pages: Oldalak
+    new-page: Új oldal
+    pages-not-found: Nem talált oldalakat!
+    pages-not-found-suggestion: 'Próbáld módosítani a szűrőket.'
+    new-collection-created-successfully: 'Oldal sikeresen elmentve!'
+    name: Oldal neve
+    content: Tartalom
+    image: Kép
+    slug: 'URL slug'
+    slug-help: 'Ne használj ékezeteket, pl: ''szepseg-es-kozmetika''. Ez az adott kategória URL-jében lesz látható: ''www.example.com/termekek/szepseg-es-kozmetika'''
+    enabled: Engedélyezve
+    parent-page: 'Szülő oldal'
+    name-is-missing: 'Nevezd el az oldalt.'
+    slug-is-missing: 'A slug nem lehet üres. Pl: ''szuletesnapi-kellekek'''
+    slug-already-in-use: 'Ez már használatban van. Megoldás:  tegyél egy ''-1'' a végére.'
 order:
     orders: Rendelések
+    abandoned-orders: Elhagyott kosarak
     order: 'Rendelés:'
     order-id: 'Belső azonosító:'
     delivery-date-overdue: 'Határidő túllépés!'
@@ -110,27 +146,63 @@ customer:
     customer: Vásárló
     customers: Vásárlók
     new-customer: 'Új vásárló'
-    all-customers: 'Összes vásárló'
-    search: Keresés
-    search-button: Keres
-    search-placeholder: Keresés...
-    search-result: 'Keresés:'
-    choose-status: Állapot
     filter:
         all-customers: 'Összes vásárló'
-        active-customers: Aktív
+        accepts-marketing: 'Email feliratkozók'
         custom-filter: 'Egyedi keresés'
+        search: 'Keresés'
+        search-button: 'Ok'
+        search-placeholder: 'Keresés...'
+        search-result: 'Keresés:'
+        filter-by-accepts-marketing-choose: 'Email feliratkozás...'
+        filter-by-accepts-marketing-subscribed: 'Feliratkozott'
+        filter-by-accepts-marketing-no: 'Nem'
         not-found: 'Nem talált vásárlókat!'
         not-found-suggestion: 'Próbáld módosítani a szűrőket vagy a keresési kifejezést.'
     send-account-invite: 'Meghívó email küldése'
     previous-orders: 'Előző rendelések'
+    no-previous-orders: 'Nincsenek leadott rendelések.'
     view-profile: 'Vásárlói részletek'
     orders: Rendelések
     spent-total: 'Össz költés'
     average-cart-value: 'Átlag kosár'
     order-count: '{{ count }} rendelés'
     orders-count: '{{ count }} rendelés'
+    accepts-marketing: 'Feliratkozott'
+user:
+    users: Felhasználók
+    user: Felhasználó
+    email-address: Email cím
+    account-created-at: Regisztrált ekkor
+    avatar-photo: Avatárkép
+    avatar-change-replace: Kép cseréje
+    avatar-remove-photo: Kép törlése
+    send-account-invite: Meghívó email kiküldése
+    view-customer-profile: Vásárlói profil megtekintése
+    name: Név
+    role: Szerepkör
+    permissions: Jogosultságok
+    users-not-found: Nem talált felhasználókat.
+    users-not-found-suggestion: 'Próbáld módosítani a szűrőket.'
+    filter:
+        filters: 'Felhasználók szűrése'
+        more-filters: 'Felhasználók szűrése'
+        search: Keresés
+        search-button: OK
+        search-placeholder: Keresés...
+        search-result: 'Keresés:'
+        filter-by-date: 'Szűrés dátumra...'
+        filter-by-date-result: 'Idősáv'
+        filter-by-status: 'Felhasználó engedélyezve'
+        filter-by-status-status: 'Engedélyezve...'
+        all-users: 'Összes felhasználó'
+        active-users: 'Aktív'
+        custom-filter: 'Egyedi keresés'
+        not-found: 'Nem talált felhasználókat!'
+        not-found-suggestion: 'Próbáld módosítani a szűrőket vagy a keresési kifejezést.'
+
 generic:
+    id: '#'
     not-available: nincs
     prev: Előző
     next: Következő
@@ -140,6 +212,7 @@ generic:
     open: Megnyit
     save: Mentés
     save-changes: 'Módosítások mentése'
+    changes-saved: 'Módosítások elmentve'
     cancel: Mégse
     close: Bezár
     more-actions: Műveletek
@@ -150,3 +223,5 @@ generic:
     search-button: Keres
     search-title: Keresés
     search-placeholder: Keresés...
+    created-at: Létrehozva
+    updated-at: Frissítve

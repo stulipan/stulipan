@@ -2,36 +2,72 @@
 liip_imagine:
 #    # valid drivers options include "gd" or "gmagick" or "imagick"
 #    driver: "gd"
+    resolvers:
+        default:
+            web_path: ~
 
 #
 #    # define your filter sets under this option
     filter_sets:
+        cache: ~
 #
 #        # an example thumbnail transformation definition
 #        # https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html#create-thumbnails
-        category_thumbnail:
+        unscaled:
+            jpeg_quality: 85
+            png_compression_level: 8
             filters:
-                thumbnail:
-                    size:          [160, 40]
-                    mode:          outbound
-                    allow_upscale: true
-        category_image:
+                scale:
+                    to: 1
+
+        # available, but I'm not using it
+        size_1200:
+            jpeg_quality: 85
+            png_compression_level: 8
+            filters:
+                scale:
+                    dim:          [1200, 1200]
+
+        # available, but I'm not using it
+        size_600:
             jpeg_quality:          85
             png_compression_level: 8
             filters:
                 thumbnail:
-                    size:          [1200, 300]
+                    size:          [600, 600]
                     mode:          outbound
                     allow_upscale: true
 
-        product_thumbnail:
+        size_200:
+            jpeg_quality: 85
+            png_compression_level: 8
+            filters:
+                thumbnail:
+                    size:          [200, 200]
+                    mode:          outbound
+                    allow_upscale: true
+#                scale:
+#                    dim: [ 200, 200 ]
+
+        product_small:
+            jpeg_quality:          85
+            png_compression_level: 8
             filters:
                 thumbnail:
                     size:          [200, 200]
                     mode:          outbound
                     allow_upscale: true
 
-        product_image:
+        product_medium:
+            jpeg_quality:          85
+            png_compression_level: 8
+            filters:
+                thumbnail:
+                    size:          [600, 600]
+                    mode:          outbound
+                    allow_upscale: true
+
+        product_large:
             jpeg_quality:          85
             png_compression_level: 8
             filters:

@@ -2,7 +2,7 @@
 
 import Repository from './Repository';
 
-const resource = '/images/product/';
+const resource = '/upload/productImage/';
 
 export default ({
     uploadImage(payload) {

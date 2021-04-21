@@ -1,7 +1,7 @@
 {% extends 'admin/template-listing.html.twig' %}
 
 {% set activeMenu = 'products' %}
-{% set pageTitle = title %}
+{% set pageTitle = 'product.products'|trans %}
 {% set breadcrumb = {
 	0: {
 		'url': path('dashboard'),
@@ -15,8 +15,8 @@
 {% endblock %}
 
 {% block headerActionsWrapper %}
-	<a href="{{ path('product-new') }}" class="btn btn-primary">Új termék</a>
-	<a href="{{ path('product-listCategories') }}" class="btn btn-secondary ml-2">Kategóriák</a>
+	<a href="{{ path('product-new') }}" class="btn btn-primary">{{ 'product.new-product'|trans }}</a>
+	<a href="{{ path('collection-list') }}" class="btn btn-secondary ml-2">{{ 'collection.collections'|trans }}</a>
 {% endblock %}
 
 {% block contentFilter %}
@@ -123,7 +123,7 @@
 				<td class="align-middle">
 					{% if product.coverImage is defined and product.coverImage %}
 						<a href="{{ path('product-edit', {'id': product.id}) }}" class="">
-							<img class="img-thumbnail" src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_thumbnail') }}" style="width: 50px; width: 50px;" />
+							<img class="img-thumbnail" src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_small') }}" style="width: 50px; width: 50px;" />
 						</a>
 					{% endif %}
 				</td>

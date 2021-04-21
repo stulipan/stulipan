@@ -25,7 +25,7 @@ class MyAccountController extends AbstractController
      */
     public function showMyAccount()
     {
-        return $this->render('webshop/site/user-myAccount.html.twig', [
+        return $this->render('webshop/user/user-myAccount.html.twig', [
             'customer' => $this->getUser(),
         ]);
     }
@@ -38,9 +38,13 @@ class MyAccountController extends AbstractController
     public function showMyOrders(Request $request, $page = 1, StoreSettings $settings)
     {
         $page = $request->query->get('page') ? $request->query->get('page') : $page;
-        $orders = $this->getUser()->getCustomer()->getOrdersPlaced();
+        $customer = $this->getUser()->getCustomer();
+        $orders = [];
+        if ($customer) {
+            $orders = $customer->getOrdersPlaced();
+        }
 
-        $pagerfanta = new Pagerfanta(new ArrayAdapter($orders->getValues()));
+        $pagerfanta = new Pagerfanta(new ArrayAdapter($orders));
 //        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         $pagerfanta->setMaxPerPage(5);
 
@@ -55,7 +59,7 @@ class MyAccountController extends AbstractController
             $orders[] = $result;
         }
 
-        return $this->render('webshop/site/user-myOrders.html.twig', [
+        return $this->render('webshop/user/user-myOrders.html.twig', [
             'orders' => $orders,
             'paginator' => $pagerfanta,
         ]);
@@ -73,7 +77,7 @@ class MyAccountController extends AbstractController
             $this->addFlash('danger', 'Nem talált ilyen rendelést!');
             return $this->redirect('site-user-myAccount');
         }
-        return $this->render('webshop/site/user-myOrder.html.twig', [
+        return $this->render('webshop/user/user-myOrder.html.twig', [
             'order' => $order,
         ]);
     }
@@ -112,7 +116,7 @@ class MyAccountController extends AbstractController
             $em->flush();
         }
 
-        return $this->render('webshop/site/user-myDetails.html.twig', [
+        return $this->render('webshop/user/user-myDetails.html.twig', [
 //            'customer' => $this->getUser(),
             'customerForm' => $form->createView(),
         ]);

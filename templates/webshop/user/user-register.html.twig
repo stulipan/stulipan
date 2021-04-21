@@ -1,0 +1,77 @@
+{% extends 'webshop/site/template-account.html.twig' %}
+
+{% set pageTitle = 'registration.registration-meta-title'|trans %}
+
+{% block underNavbar %}
+{% endblock %}
+
+{% block page_content %}
+    <div id="user_registration" class="JS--Wrapper-registration" data-section-id="registration" data-section-type="registration-section">
+        <div class="container my-3 my-lg-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-md-7">
+                            <div class="card">
+                                <div class="card-body col-lg-12">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            {{ include('webshop/user/_registration-form.html.twig') }}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var registrationConstraints = {
+            '{{ registrationForm.email.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'registration.email-is-missing'|trans}}'
+                },
+                // email: true,
+                email: {
+                    message: '{{ 'registration.email-is-invalid'|trans}}'
+                }
+            },
+            {#'{{ registrationForm.firstname.vars.full_name }}': {#}
+            {#    presence: {#}
+            {#        allowEmpty: false,#}
+            {#        message: '{{ 'registration.firstname-is-missing'|trans}}'#}
+            {#    }#}
+            {#},#}
+            {#'{{ registrationForm.lastname.vars.full_name }}': {#}
+            {#    presence: {#}
+            {#        allowEmpty: false,#}
+            {#        message: '{{ 'registration.lastname-is-missing'|trans}}'#}
+            {#    }#}
+            {#},#}
+            '{{ registrationForm.password.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'registration.password-is-missing'|trans}}'
+                }
+            },
+            '{{ registrationForm.terms.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'registration.terms.accept-terms-error'|trans}}'
+                },
+                inclusion: {
+                    within: [true],
+                    message: '{{ 'registration.terms.accept-terms-error'|trans}}'
+                },
+            },
+        };
+    </script>
+	{{ parent() }}
+{% endblock %}

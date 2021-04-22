@@ -1,6 +1,10 @@
 product:
     bestseller: Legkeresettebb
     sold-out: Mind elkelt
+    add-to-cart-button: Kosárba rakom
+    product-id: 'Termékkód'
+    quantity: Mennyiség
+    no-longer-available: 'A termék már nem áll forgalmazásban.'
 
 collection:
     products: Termékek

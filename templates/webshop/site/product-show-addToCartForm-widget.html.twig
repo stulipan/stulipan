@@ -1,6 +1,6 @@
 {{ form_start(form) }}
     <div class="product-variants">
-        <div class="product-variant-selector-label">Product ID: {{ product.sku }}</div>
+        <div class="product-variant-selector-label">{{ 'product.product-id'|trans }}: {{ product.sku }}</div>
     </div>
 
     {% if product.isFlower %}
@@ -168,10 +168,10 @@
         {% do form.options.setRendered() %}
         {% do form.deliveryDate.deliveryDate.setRendered() %}
 
-        <div class="row">
-            <div class="col-12 detail-option mb-4">
+        <div class="product-variants row">
+            <div class="col-12 mb-4">
                 <div class="product-variant-selector-label">
-                    Items <span>(required)</span>
+                    {{ 'product.quantity'|trans }}
                 </div>
                 {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
                 {{ form_errors(form.quantity) }}

@@ -167,7 +167,7 @@
                                             {% if product.isPubliclyAvailable %}
                                                 {% include 'webshop/site/product-show-addToCartForm-widget.html.twig' %}
                                             {% else %}
-                                                <div class="alert alert-warning mt-3"><i class="fas fa-info-circle mr-2"></i>A termék már nem áll forgalmazásban.</div>
+                                                <div class="alert alert-warning mt-3"><i class="fas fa-info-circle mr-2"></i>{{ 'product.no-longer-available'|trans }}</div>
                                             {% endif %}
 
                                             <div class="product-button">
@@ -177,7 +177,7 @@
                                                         <svg class="svg-icon svg-icon-heavy addtocart">
                                                             <use xlink:href="#cart-1"> </use>
                                                         </svg>
-                                                        Kosárba rakom
+                                                        {{ 'product.add-to-cart-button'|trans }}
                                                     </span>
                                                         <div class="loading-spinner" role="status"></div>
                                                     </button>
@@ -214,27 +214,27 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="list-group-item">
-                                                        <span class="text-sm mr-2"><i class="far fa-credit-card"></i></span>
-                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--CreditCardPayment">Fizess online bankkártyáddal</a>
-                                                        <div class="modal fade" id="modal--CreditCardPayment" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.rolunk.name }}</h3>
-                                                                        <div class="mt-4">
-                                                                            {{ pages.rolunk.content|raw }}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+{#                                                    <div class="list-group-item">#}
+{#                                                        <span class="text-sm mr-2"><i class="far fa-credit-card"></i></span>#}
+{#                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--CreditCardPayment">Fizess online bankkártyáddal</a>#}
+{#                                                        <div class="modal fade" id="modal--CreditCardPayment" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">#}
+{#                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">#}
+{#                                                                <div class="modal-content">#}
+{#                                                                    <div class="modal-header">#}
+{#                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                                                                            <span aria-hidden="true">&times;</span>#}
+{#                                                                        </button>#}
+{#                                                                    </div>#}
+{#                                                                    <div class="modal-body">#}
+{#                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.rolunk.name }}</h3>#}
+{#                                                                        <div class="mt-4">#}
+{#                                                                            {{ pages.rolunk.content|raw }}#}
+{#                                                                        </div>#}
+{#                                                                    </div>#}
+{#                                                                </div>#}
+{#                                                            </div>#}
+{#                                                        </div>#}
+{#                                                    </div>#}
                                                 </div>
                                             </div>
                                         </div>
@@ -255,6 +255,7 @@
 {% endblock %}
 
 {% block contentWide %}
+    {% if true is same as false %}
     <div class="bg-secondary py-5">
         <div class="container">
             <div class="row">
@@ -314,6 +315,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
     <div class="py-5">
         <div class="container">
             <div class="row">
@@ -322,63 +324,62 @@
                         <div class="col-md-12 col-lg-6 mx-auto">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="h3 general-info-title">Miért válaszd a Tulipánfutárt?</div>
+                                    <div class="h3 general-info-title">Hasznos infók</div>
                                 </div>
                                 <div class="col-sm-12 mt-3">
                                     <div class="accordion mb-4" id="accordionMiertDobozok">
                                         <div class="card">
                                             <div  class="card-header border-bottom-0" id="miertDoboz1">
-                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapseOne">INGYENES szállítás Budapesten!</a>
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapseOne">Országos házhozszállítás</a>
                                             </div>
                                             <div id="collapse1" class="collapse" aria-labelledby="miertDoboz1" data-parent="#accordionMiertDobozok">
                                                 <div class="card-body pt-2">
-                                                    <p class="general-info-item-description">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+                                                    <p class="general-info-item-description">Rendelj bizalommal, ugyanis a Rafina termékeket most Magyarország teljes területére kézbesítjük. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card">
-                                            <div  class="card-header border-bottom-0" id="miertDoboz2">
-                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapseOne">Virágküldés a nap 24 órájában</a>
-                                            </div>
-                                            <div id="collapse2" class="collapse" aria-labelledby="miertDoboz2" data-parent="#accordionMiertDobozok">
-                                                <div class="card-body pt-2">
-                                                    <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+{#                                        <div class="card">#}
+{#                                            <div  class="card-header border-bottom-0" id="miertDoboz2">#}
+{#                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapseOne">Virágküldés a nap 24 órájában</a>#}
+{#                                            </div>#}
+{#                                            <div id="collapse2" class="collapse" aria-labelledby="miertDoboz2" data-parent="#accordionMiertDobozok">#}
+{#                                                <div class="card-body pt-2">#}
+{#                                                    <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;#}
+{#                                                    </p>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
                                         <div class="card">
                                             <div  class="card-header border-bottom-0" id="miertDoboz3">
                                                 <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapseOne">Magas vásárlói elégedettség</a>
                                             </div>
                                             <div id="collapse3" class="collapse" aria-labelledby="miertDoboz3" data-parent="#accordionMiertDobozok">
                                                 <div class="card-body pt-2">
-                                                    <p class="general-info-item-description">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
+                                                    <p class="general-info-item-description">A Rafinánál minden termék kézzel készül, így nagy figyelmet fordítunk minden egyes termék elkészítésére, hogy te mindig a legjobbat kapd.
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card">
-                                            <div  class="card-header border-bottom-0" id="miertDoboz4">
-                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseOne">Egyedi terméket szeretnél?</a>
-                                            </div>
-                                            <div id="collapse4" class="collapse" aria-labelledby="miertDoboz4" data-parent="#accordionMiertDobozok">
-                                                <div class="card-body pt-2">
-                                                    <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+{#                                        <div class="card">#}
+{#                                            <div  class="card-header border-bottom-0" id="miertDoboz4">#}
+{#                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseOne">Egyedi terméket szeretnél?</a>#}
+{#                                            </div>#}
+{#                                            <div id="collapse4" class="collapse" aria-labelledby="miertDoboz4" data-parent="#accordionMiertDobozok">#}
+{#                                                <div class="card-body pt-2">#}
+{#                                                    <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.#}
+{#                                                    </p>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
                                         <div class="card">
                                             <div  class="card-header border-bottom-0" id="miertDoboz5">
-                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapseOne">Ügyfélszolgálat</a>
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapseOne">Lépj kapcsolatba velünk!</a>
                                             </div>
                                             <div id="collapse5" class="collapse" aria-labelledby="miertDoboz5" data-parent="#accordionMiertDobozok">
                                                 <div class="card-body pt-2">
                                                     <p class="general-info-item-description">
-                                                        Telefon: 06 1 466 6286<br>
-                                                        Email: info@difiori.hu
+                                                        Ha kérdésed van a Rafina termékeivel kapcsolatosan vagy érdeklődni szeretnél a rendelés és szállításról, írj bátran. Email címünk: <a href="mailto:rafinadekor@rafina.hu">rafinadekor@rafina.hu</a>
                                                     </p>
                                                 </div>
                                             </div>

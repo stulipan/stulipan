@@ -90,6 +90,7 @@
             },
             
             saveForm (productData) {
+                this.resetErrosInForm();
                 if (this.productId > 0) {
                     this.formIsPosting = true;
                     this.$http.put('/hu/admin/api/products/'+ productData.id, productData)
@@ -124,6 +125,8 @@
                                 this.formIsPosting = false;
                                 if (response.status === 422) {
                                     for (let value of Object.values(response.body.errors)) {
+                                        // this.formErrors.push(value);
+                                        
                                         this.formErrors.push(value);
                                     }
                                 }

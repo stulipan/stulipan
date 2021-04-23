@@ -65,6 +65,9 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return [
             'pages' => $this->getPages(),
             'copyrightYear' => $this->createCopyrightYear(),
+            'storeUrl' => $this->storeSettings->get('store.url'),
+            'storeName' => $this->storeSettings->get('store.name'),
+            'storeEmail' => $this->storeSettings->get('store.email'),
         ];
     }
 
@@ -110,14 +113,18 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function createCopyrightYear()
     {
-        $launchDate = DateTime::createFromFormat($this->storeSettings->getDateFormat(), $this->storeSettings->get('general.launch-date'));
         $present = new DateTime('now');
-        $diff = $launchDate->diff($present)->y;
 
-        if ($diff > 0) {
-            return $launchDate->format('Y') . '-' . $present->format('Y'); // Eg. 2020-2021
+        if ($this->storeSettings->get('general.launch-date') !== null) {
+            $launchDate = DateTime::createFromFormat($this->storeSettings->getDateFormat(), $this->storeSettings->get('general.launch-date'));
+            $diff = $launchDate->diff($present)->y;
+
+            if ($diff > 0) {
+                return $launchDate->format('Y') . '-' . $present->format('Y'); // Eg. 2020-2021
+            }
+            return $launchDate->format('Y'); // Eg. 2021
         }
-        return $launchDate->format('Y'); // Eg. 2021
+        return $present->format('Y');
     }
 
     /**

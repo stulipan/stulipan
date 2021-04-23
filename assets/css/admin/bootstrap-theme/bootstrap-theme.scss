@@ -18,6 +18,11 @@
 @import "_font-size-mobile-reboot";
 
 
+.group-validation .invalid-feedback {
+  display: block;
+}
+
+
 iframe {
   border: 0;
 }

@@ -29,8 +29,9 @@ class ProductCategoryDenormalizer implements DenormalizerInterface, Denormalizer
     {
         if (isset($data['id'])) {
             $object = $this->em->find(ProductCategory::class, $data['id']);
+            return $object;
         }
-        return $object;
+        return null;
     }
     
     /**

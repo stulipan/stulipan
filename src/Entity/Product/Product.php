@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as CustomAssert;
 
 /**
  * @ ApiResource(
@@ -26,8 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * ORM\EntityListeners({"App\Event\SetSlugProduct"})
- * @UniqueEntity("sku", message="Ez az SKU kód már használatban!")
- * @UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
+ * @UniqueEntity("sku", message="product.sku-already-in-use")
+ * @UniqueEntity("slug", message="product.slug-already-in-use")
  */
 class Product //implements \JsonSerializable
 {
@@ -54,7 +55,7 @@ class Product //implements \JsonSerializable
      * @Groups({"productView", "productList",
      *     "orderView"})
      *
-     * @Assert\NotBlank(message="Adj nevet a terméknek.")
+     * @Assert\NotBlank(message="product.name-is-missing")
      * @ORM\Column(name="product_name", type="string", length=100, nullable=true)
      */
     private $name;
@@ -66,6 +67,9 @@ class Product //implements \JsonSerializable
      *
      * @ORM\Column(name="slug", type="string", length=255, nullable=false, unique=true)
      * @ Assert\NotBlank(message="A slug nem lehet üres. Pl: ez-egy-termek")
+     *      --> The slug is created in 2 steps with SetSlugProduct event:
+     *      --> First: a temporary slug on prePersist, which is then replaced with the permanent one upon postPersist
+     *      --> Therefore the NotBlank validation isn't required.
      */
     private $slug;
     
@@ -82,7 +86,7 @@ class Product //implements \JsonSerializable
      * @Groups({"productView", "productList",
      *     "orderView"})
      *
-     * @Assert\NotBlank(message="Nem adtál meg SKU-t.")
+     * @Assert\NotBlank(message="product.sku-is-missing")
      * @ORM\Column(name="sku", type="string", length=100, nullable=false)
      */
     private $sku;
@@ -103,7 +107,7 @@ class Product //implements \JsonSerializable
      * @ORM\JoinColumn(name="price_id", referencedColumnName="id", nullable=false)
      * @Assert\Type(type="App\Entity\Price")
      * @Assert\Valid
-     * @ Assert\NotNull(message="Adj árat a terméknek.")
+     * @CustomAssert\PriceExist(message="product.price-is-missing")
      */
     private $price;
 
@@ -137,8 +141,8 @@ class Product //implements \JsonSerializable
      * @Groups({"productView", "productList",
      *     "orderView"})
      *
-     * @Assert\NotBlank()
-     * @Assert\Range(min=0, max="1000000", minMessage="Nem lehet negatív.")
+     * @Assert\NotBlank(message="product.stock-is-missing")
+     * @Assert\Range(min=0, max="1000000", minMessage="product.stock-is-negative")
      * @ORM\Column(name="stock", type="smallint", nullable=true)
      */
     private $stock;
@@ -178,7 +182,7 @@ class Product //implements \JsonSerializable
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Product\ProductStatus", cascade={"persist"})
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Válassz egy állapotot.")
+     * @Assert\NotBlank(message="product.status-is-missing")
      */
     private $status;
 
@@ -201,7 +205,8 @@ class Product //implements \JsonSerializable
      *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}
      *      )
      * @ORM\OrderBy({"name": "ASC"})
-     * @Assert\NotBlank(message="Válassz kategóriát.")
+     * @Assert\NotBlank(message="product.collection-is-missing")
+     * @Assert\Count(min = "1", minMessage = "product.collection-is-missing")
      */
     private $categories;
     
@@ -260,7 +265,7 @@ class Product //implements \JsonSerializable
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Product\ProductKind", inversedBy="products", fetch="EAGER")
      * @ORM\JoinColumn(name="kind_id", referencedColumnName="id", nullable=true)
-     * Assert\NotBlank(message="Válassz egy terméktípust.")
+     * @Assert\NotBlank(message="product.type-is-missing")
      */
     private $kind;
 

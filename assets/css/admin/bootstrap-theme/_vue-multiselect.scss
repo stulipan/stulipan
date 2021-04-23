@@ -177,7 +177,7 @@ $multiselect-content-shadow:                      $dropdown-shadow !default;
 .multiselect__single {
   position: relative;
   display: inline-block;
-  min-height: 20px;
+  //min-height: 20px;
   border: 1px solid transparent;
   border-radius: $multiselect-border-radius;
   background: transparent;
@@ -223,8 +223,13 @@ $multiselect-content-shadow:                      $dropdown-shadow !default;
 }
 
 .multiselect__single {
-  padding-left: 5px;
-  margin-bottom: $multiselect-tags-padding-bottom-y;
+  //padding-left: 5px;
+  //margin-bottom: $multiselect-tags-padding-bottom-y;
+  color: $multiselect-input-placeholder-color;
+  display: inline-block;
+  margin-top: calc(1px + 2px); // correction because when the input is displayed, the input has border of 1 px
+  margin-left: 1px;
+  border: none;
 }
 
 

@@ -1,6 +1,6 @@
 // Footer
 
-$footer-bg:                       $gray-700 !default;
+$footer-bg:                       #5B6377 !default; //$gray-700 !default;
 $footer-color:                    $gray-300 !default;
 $footer-font-size:                $font-size-base !default;
 $footer-body-padding-y:           2rem !default;
@@ -8,7 +8,7 @@ $footer-body-padding-x:           1.25rem !default;
 
 $footer-link-line-height:         1.5 !default;
 
-$footer-nav-copyright-bg:         $gray-800 !default;
+$footer-nav-copyright-bg:         #404756 !default //$gray-800 !default;
 $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
 
 .main-footer {

@@ -25,17 +25,17 @@
         </div>
 
         <form novalidate="true" ref="form" enctype="multipart/form-data">
-            <div v-if="localErrors.length" class="alert alert-danger mb-2">
+            <div v-if="localErrors.length" class="alert alert-danger mb-3">
                 <b>Please correct the following error(s):</b>
                 <ul>
                     <li v-for="error in localErrors">{{ error }}</li>
                 </ul>
             </div>
-            <div v-else-if="errors.length" class="alert alert-danger mb-2">
-                <b>Please correct the following error(s):</b>
-                <ul>
-                    <li v-for="error in errors">{{ error }}</li>
-                </ul>
+            <div v-else-if="errors.length" class="alert alert-danger mb-3">
+                Javítsd a lenti hibákat.
+<!--                <ul>-->
+<!--                    <li v-for="error in errors">{{ error }}</li>-->
+<!--                </ul>-->
             </div>
 
             <fieldset :disabled="formIsPosting" :class="{ disabled: formIsPosting }">
@@ -45,9 +45,10 @@
                         <!--    NAME___AND___DESCRIPTION  -->
                         <div class="card mb-20px">
                             <div class="card-body">
-                                <div class="form-group">
+                                <div class="form-group" :class="{ 'group-validation': showError('name') }">
                                     <label class="" for="productName">Termék neve</label>
                                     <input v-model="product.name" type="text" id="productName" required="required" maxlength="100" class="form-control">
+                                    <span class="invalid-feedback">{{ showError('name') }}</span>
                                     <div v-if="product.slug" class="form-text">
                                         Product's slug: <code>{{product.slug}}</code>
                                     </div>
@@ -128,7 +129,8 @@
                                                 </template>
                                                 <template v-else>
                                                         <!--    TERMEK ARA    -->
-                                                        <div class="form-group">
+                                                        <div class="form-group" :class="{ 'group-validation': showError('price') }"
+                                                        >
                                                             <label class="required" for="price_grossPrice">Termék ár</label>
                                                             <div class="field-item">
                                                                 <div class="field-prepend">
@@ -136,6 +138,7 @@
                                                                 </div>
                                                                 <input v-model="product.price.numericValue" type="number" id="price_grossPrice" required="required" placeholder="0.00" class="form-control pl-addon-sm">
                                                             </div>
+                                                            <span class="invalid-feedback">{{ showError('price') }}</span>
                                                             <div class="form-text text-muted mt-2">
                                                                 Ez lesz a Standard méret ára, amennyiben 3 meretű termékről van szó.
                                                             </div>
@@ -189,16 +192,18 @@
                         <div class="card mb-20px">
                             <div class="card-body">
                                     <div class="h5 mb-0">Készlet</div>
-                                    <div class="form-group row mt-3">
+                                    <div class="form-group row mt-3" :class="{ 'group-validation': showError('sku') }">
                                         <div class="col-sm-12">
                                             <label class="required" for="sku">SKU (Stock Keeping Unit)</label>
                                             <input v-model="product.sku" type="text" id="sku" required="required" placeholder="Pl: DF100172" class="form-control">
+                                            <span class="invalid-feedback">{{ showError('sku') }}</span>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <div class="form-group row" :class="{ 'group-validation': showError('stock') }">
                                         <div class="col-sm-12">
                                             <label class="required" for="stock">Készlet a raktáron</label>
                                             <input v-model="product.stock" type="number" id="stock" required="required" placeholder="" class="form-control">
+                                            <span class="invalid-feedback">{{ showError('stock') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +214,7 @@
                         <div class="card mb-20px">
                             <div class="card-body">
                                 <div class="h5 mb-0">Kategorizálás</div>
-                                <div class="form-group mt-3">
+                                <div class="form-group mt-3" :class="{ 'group-validation': showError('status') }">
                                     <legend class="col-form-label">Állapot</legend>
                                     <ul class="list-group list-group-flush list-group--status">
                                         <li v-for="status in statuses" :key="status.id" class="list-group-item">
@@ -221,13 +226,14 @@
                                             </div>
                                         </li>
                                     </ul>
+                                    <span class="invalid-feedback">{{ showError('status') }}</span>
                                     <div class="form-text">
                                         <em>Kifutott</em> állapotban a termék továbbra is látszik a weboldalon, csupán nem lesz neki <em>Kosárba rakom</em> gomb.
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <div class="form-group">
+                                <div class="form-group" :class="{ 'group-validation': showError('categories') }">
                                     <label class="">Kategóriák</label>
                                     <multiselect-bellow
                                             v-model="product.categories"
@@ -244,56 +250,56 @@
                                             :max-height="150"
                                     >
                                     </multiselect-bellow>
+                                    <span class="invalid-feedback">{{ showError('categories') }}</span>
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <div class="form-group">
+                                <div class="form-group" :class="{ 'group-validation': showError('kind') }">
                                     <label class="">Termék típus</label>
                                     <multiselect
                                             v-model="productKind"
                                             placeholder="Válassz..."
-                                            :label="name"
-                                            :custom-label="showProductKindName"
+                                            label="name"
+                                            
                                             track-by="id"
                                             :options="productKinds"
                                             :multiple="false"
                                             :close-on-select="true"
                                             :show-labels="false"
+                                            :show-no-results="false"
                                             :class="[ {'detached': true}, {'mb-2': true}]"
                                             open-direction="bottom"
                                             :max-height="150"
+                                            :allow-empty="false"
                                     >
-                                        <span slot="noResult">Nincs ilyen opció...</span>
-<!--                                        <template slot="singleLabel" slot-scope="props">-->
-<!--                                            <span class="multiselect__single">"Válassz..."</span>-->
-<!--                                        </template>-->
+<!--                                        <span slot="noResult">Nincs ilyen opció...</span>-->
+                                        <!--    A showLabels=false miatt kell ez, valamiert ez esetben nem mutatja a placeholdert.     -->
+                                        <template slot="singleLabel" slot-scope="props">Válassz...</template>
                                     </multiselect>
+                                    <span class="invalid-feedback">{{ showError('kind') }}</span>
+                                    
                                 </div>
                             </div>
                             <div class="card-footer">
-
-                                        <div class="form-group row">
-                                            <div class="col-sm-12">
-                                                <label class="required" for="badge">Matricák</label>
-                                                <multiselect-bellow
-                                                        v-model="product.badges"
-                                                        :options="badges"
-                                                        :multiple="true"
-                                                        :close-on-select="false"
-                                                        :custom-label="showBadgeName"
-                                                        placeholder="Válassz..."
-                                                        track-by="id"
-                                                        :showLabels="false"
-                                                        myClass="detached"
-                                                        open-direction="bottom"
-                                                        no-result-label="Nincs ilyen opció..."
-                                                        :max-height="150"
-                                                >
-                                                </multiselect-bellow>
-                                            </div>
-                                        </div>
-<!--                                    </div>-->
+                                <div class="form-group">
+                                    <label class="required" for="badge">Matricák</label>
+                                    <multiselect-bellow
+                                            v-model="product.badges"
+                                            :options="badges"
+                                            :multiple="true"
+                                            :close-on-select="false"
+                                            :custom-label="showBadgeName"
+                                            placeholder="Válassz..."
+                                            track-by="id"
+                                            :showLabels="false"
+                                            myClass="detached"
+                                            open-direction="bottom"
+                                            no-result-label="Nincs ilyen opció..."
+                                            :max-height="150"
+                                    >
+                                    </multiselect-bellow>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -406,6 +412,15 @@
             showProductKindName(obj) {
                 return `${obj.name}`
             },
+            showError(field) {
+                const index = this.errors.findIndex( (el) => el.propertyName === field );
+                if (index !== -1) {
+                    console.log(index);
+                    console.log(this.errors[index].message);
+                    return this.errors[index].message;
+                }
+                return null;
+            },
             onSubmit(e) {
                 // Array.prototype.push.apply(this.product.variants, this.variants);
                 // this.product.variants.splice(0, this.product.variants.length, ...this.variants);
@@ -413,6 +428,7 @@
                 // this.removeEmptyOptions();
                 this.product.options.splice(0, this.product.options.length, ...this.productOptions);
                 this.product.status = this.productStatus;
+                this.product.kind = this.productKind;
 //                if (this.validatedForm(e)) {
                 this.$emit('submit', this.product);
 //                }

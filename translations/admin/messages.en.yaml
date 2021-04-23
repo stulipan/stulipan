@@ -41,6 +41,18 @@ collection:
 product:
     products: Products
     new-product: New product
+    correct-errors: 'Javítsd a lenti hibákat.'
+    name-is-missing: 'Adj nevet a terméknek.'
+    slug-is-missing: 'A slug nem lehet üres. Pl: ''szuletesnapi-lufi'''
+    slug-already-in-use: 'Ez az SKU kód már használatban!'
+    sku-is-missing: 'Nem adtál meg SKU-t.'
+    sku-already-in-use: 'Ez az SKU kód már használatban!'
+    price-is-missing: 'Árazd be a terméket.'
+    stock-is-missing: 'Nem adtálg meg készletet.'
+    stock-is-negative: 'Nem lehet negatív készlet.'
+    status-is-missing: 'Válassz egy állapotot.'
+    collection-is-missing: 'Válassz kategóriát.'
+    type-is-missing: 'Válassz egy terméktípust.'
 
 page:
     pages: Pages

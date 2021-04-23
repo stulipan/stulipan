@@ -144,8 +144,7 @@ class ProductApiController extends BaseController
         if (!empty($errors)) {
             return $this->jsonNormalized(['errors' => $errors], 422);
         }
-//        dd($product);
-    
+
         $em->persist($product);
         $em->flush();
     

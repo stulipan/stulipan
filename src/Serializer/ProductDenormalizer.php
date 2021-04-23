@@ -38,35 +38,11 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
     use DenormalizerAwareTrait;
     
     private $em;
-    private $uuid;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-//        $this->uuid = $uuid;
     }
-    
-//    private $normalizer;
-//
-//    public function __construct() //ObjectNormalizer $normalizer
-//    {
-//        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-//        $objNormalizer = new ObjectNormalizer(
-//            $classMetadataFactory,
-//            null,
-//            null,
-////            new ReflectionExtractor(),
-//            new PhpDocExtractor(),
-//            null,
-//            null,
-//            [ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
-//        );
-//        $normalizer = [
-//            $objNormalizer,
-//        ];
-//        $serializer = new Serializer($normalizer, [new JsonEncoder()]);
-//        $this->normalizer = $serializer;
-//    }
     
     /**
      * {@inheritdoc}
@@ -74,10 +50,6 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
      */
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-//        $object = $this->denormalizer->denormalize($data, $class);
-//        $clasa = json_decode(json_encode($data));
-//        dd($data);
-        
         if (isset($data['id'])) {
             $object = $this->em->find(Product::class, $data['id']);
         } else {
@@ -87,11 +59,6 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
         $object->setDescription($data['description']);
         $object->setSku($data['sku']);
         $object->setStock($data['stock']);
-
-//        $slugify = new Slugify();
-//        $slugify->slugify($object->getName());
-//        dd($slugify);
-//        $object->setSlug($slugify->slugify($object->getName()));   ///// //////////
 
         $context = array_merge($context, ['product' => $object]);
 

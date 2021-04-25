@@ -1,7 +1,7 @@
 {% extends 'webshop/site/template-general.html.twig' %}
 
 {% block title %}
-    Kosár | {{ parent() }}
+    {{ 'cart.cart'|trans }} | {{ parent() }}
 {% endblock %}
 
 
@@ -139,7 +139,7 @@
                                 <div class="col-lg-12 mb-4">
                                     <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
                                         <button class="JS--Button-gotoStep1 btn btn-success btn-lg btn-goto order-1 order-lg-2 py-3" data-url="{{ path('site-checkout-step1-pickDeliveryAddress') }}">
-                                            <span class="loading-spinner-invisible">{{ 'checkout.continue-to-recipient-address-button'|trans }}</span>
+                                            <span class="loading-spinner-invisible">{{ flowerShop ? 'checkout.flower-shop.continue-to-recipient-button'|trans : 'checkout.continue-to-shipping-address-button'|trans }}</span>
                                             <span class="loading-spinner" role="status"></span>
                                         </button>
                                         <div></div>

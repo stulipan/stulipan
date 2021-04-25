@@ -46,15 +46,34 @@
                         </div>
                         <div class="settings-option">
                             <div>
-                                <span class="text-primary">Szállítás és fizetés</span>
+                                <span class="text-primary">{{ 'settings.shipping.shipping'|trans }}</span>
                             </div>
                             <div>
-                                Szállítás és fizetési módok beállítása.
+                                {{ 'settings.shipping.shipping-description'|trans }}
                             </div>
                         </div>
                     </div>
                 </a>
             </li>
+            {% endif %}
+            {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
+                <li class="settings-item">
+                    <a href="{{ path('payment-list') }}" class="w-100 h-100">
+                        <div class="settings-item-body">
+                            <div class="settings-icon">
+                                <i class="far fa-credit-card"></i>
+                            </div>
+                            <div class="settings-option">
+                                <div>
+                                    <span class="text-primary">{{ 'settings.payment.payment'|trans }}</span>
+                                </div>
+                                <div>
+                                    {{ 'settings.payment.payment-description'|trans }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
             {% endif %}
             {% if is_granted('ROLE_DELIVERY_SETTINGS') %}
             <li class="settings-item">

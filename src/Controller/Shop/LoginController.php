@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginController extends AbstractController
 {
@@ -54,7 +55,6 @@ class LoginController extends AbstractController
         return $this->render('webshop/user/user-login-register.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
-            'title' => 'Bejelentkezés',
             'registrationForm' => $registrationForm->createView(),
         ]);
     }
@@ -62,7 +62,7 @@ class LoginController extends AbstractController
     /**
      * @Route("/register", name="site-register")
      */
-    public function siteRegister(Request $request, UserPasswordEncoderInterface $encoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator) //AuthenticationUtils $authenticationUtils,
+    public function siteRegister(Request $request, UserPasswordEncoderInterface $encoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('homepage');
@@ -70,7 +70,6 @@ class LoginController extends AbstractController
         $form = $this->createForm(UserRegistrationFormType::class);
         $form->handleRequest($request);
 
-//        dd($form->isValid());
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $user = new User();

@@ -10,3 +10,21 @@ import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';
+
+
+import Notify from "./js/alerts/notify";
+import Sidebar from "./js/sidebar";
+import FloatingInput from "./js/floating-input";
+
+if (AlertMessages.SUCCESS) {
+    Notify.success(AlertMessages.SUCCESS);
+}
+if (AlertMessages.ERROR) {
+    Notify.error(AlertMessages.ERROR);
+}
+if (AlertMessages.WARNING) {
+    Notify.warning(AlertMessages.WARNING);
+}
+if (AlertMessages.INFO) {
+    Notify.info(AlertMessages.INFO);
+}

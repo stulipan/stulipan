@@ -72,7 +72,9 @@ class ImageController extends BaseController
     {
         /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
         $file = $request->files->get('imageFile');
-        
+
+//        dd($request->files);
+//        dd($file);
         $violations = $validator->validate(
             $file, [
             new NotBlank(),

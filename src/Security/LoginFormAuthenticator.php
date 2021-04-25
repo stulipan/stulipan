@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -25,6 +26,7 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
@@ -77,12 +79,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $requestStack;
 
     private $orderSession;
+    private $translator;
 
     public function __construct(UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager,
                                 UserPasswordEncoderInterface $passwordEncoder,
                                 Security $security, OrderBuilder $orderBuilder, EntityManagerInterface $em,
                                 CustomerBuilder $customerBuilder, OrderSessionStorage $orderSession,
-                                AbandonedOrderRetriever $abandonedOrderRetriever)
+                                AbandonedOrderRetriever $abandonedOrderRetriever, TranslatorInterface $translator)
     {
         $this->router = $router;
         $this->userRepository = $userRepository;
@@ -94,6 +97,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->customerBuilder = $customerBuilder;
         $this->orderSession = $orderSession;
         $this->abandonedOrderRetriever = $abandonedOrderRetriever;
+        $this->translator = $translator;
     }
 
     /**
@@ -161,6 +165,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        $this->orderSession->add('success', $this->translator->trans('registration.login-success'));
+//        $session->getFlashBag()->add('success', $translator->trans('registration.login-success'));
+
         $orderInSession = $this->orderSession->getOrderById();  // extract Order from session, if any
         $customer = $this->customerBuilder->retrieveCustomer($orderInSession);  // build Customer object
         $abandonedOrder = $this->abandonedOrderRetriever->getOrder();

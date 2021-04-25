@@ -16,7 +16,7 @@
                     <div class="d-flex flex-row flex-sm-column h-100">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <a href="{{ path('cart-pickRecipient', {id: recipient.id}) }}" class="JS--Button-pickRecipient btn btn-primary btn-sm mb-0 mb-sm-2">
-                                <span class="loading-spinner-invisible">{{ 'checkout.recipient.select-recipient'|trans }}</span>
+                                <span class="loading-spinner-invisible">{{ flowerShop ? 'checkout.flower-shop.select-recipient'|trans : 'checkout.recipient.select-recipient'|trans }}</span>
                                 <div class="loading-spinner" role="status"></div>
                             </a>
                         {% endif %}

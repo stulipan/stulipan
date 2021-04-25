@@ -14,7 +14,7 @@
     <div class="container-fluid p-0">
         <div class="jumbotron jumbotron-fluid">
             <div class="position-relative text-dark">
-                <div class="jumbotron--cover jumbotron--cover-collection light-overlay" {% if category.image is defined and category.image is not empty %} style="background-image: url({{ uploaded_asset(category.imagePath)|imagine_filter('unscaled') }});" {% endif %}>
+                <div class="jumbotron--cover jumbotron--cover-collection light-overlay" {% if category.image is defined and category.image is not empty %} style="background-image: url({{ uploaded_asset(category.imagePath)|imagine_filter('unscaled') }});" {% else %}style="background-image: url('/uploads/images/ajtodisz-hero-banner.jpg');" {% endif %}>
                 </div>
                 <div class="container card-img-overlay d-flex align-items-center">
                     <div class="text-center w-100">

@@ -86,13 +86,19 @@ class CheckoutController extends AbstractController
     private $des;
     private $gateway;
 
+    private $storeSettings;
+    private $checkoutSettings;
+
     public function __construct(OrderBuilder $orderBuilder, TranslatorInterface $translator, EntityManagerInterface $entityManager,
+                                StoreSettings $storeSettings, CheckoutSettings $checkoutSettings,
                                 UrlGeneratorInterface $urlGenerator, PaymentBuilder $gateway)
     {
         $this->orderBuilder = $orderBuilder;
         $this->translator = $translator;
         $this->em = $entityManager;
         $this->urlGenerator = $urlGenerator;
+        $this->storeSettings = $storeSettings;
+        $this->checkoutSettings = $checkoutSettings;
         $this->gateway = $gateway;
 
 //        // Barion init
@@ -393,7 +399,6 @@ class CheckoutController extends AbstractController
             $senderForm = $this->createForm(SenderType::class, $sender);
 
             return $this->render('webshop/cart/checkout-step3-pickPayment.html.twig', [
-                'title' => 'Szállítás és fizetés',
                 'order' => $orderBuilder->getCurrentOrder(),
                 'shippingMethods' => $shippingMethods,
                 'paymentMethods' => $paymentMethods,
@@ -409,7 +414,6 @@ class CheckoutController extends AbstractController
         }
 
         return $this->render('webshop/cart/checkout-step3-pickPayment.html.twig', [
-            'title' => 'Szállítás és fizetés',
             'order' => $orderBuilder->getCurrentOrder(),
             'shippingMethods' => $shippingMethods,
             'paymentMethods' => $paymentMethods,
@@ -800,9 +804,12 @@ class CheckoutController extends AbstractController
                 $validOrder = false;
                 $this->addFlash('shipping-missing', $this->translator->trans('checkout.shipping.shipping-method-missing'));
             }
-            if (!$orderBuilder->hasDeliveryDate()) {
-                $validOrder = false;
-                $this->addFlash('date-missing', $this->translator->trans('checkout.delivery-date.delivery-date-missing'));
+
+            if ($this->storeSettings->get('general.flower-shop-mode')) {
+                if (!$orderBuilder->hasDeliveryDate()) {
+                    $validOrder = false;
+                    $this->addFlash('date-missing', $this->translator->trans('checkout.delivery-date.delivery-date-missing'));
+                }
             }
 //            if ($orderBuilder->isDeliveryDateInPast()) {
 //                $validOrder = false;

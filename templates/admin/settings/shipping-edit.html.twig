@@ -1,0 +1,38 @@
+{% extends 'admin/template-editing.html.twig' %}
+
+{% set activeMenu = 'settings' %}
+
+{% if form.vars.data is defined and form.vars.data.name is defined and form.vars.data.name is not empty %}
+	{% set pageTitle = form.vars.data.name %}
+{% else %}
+	{% set pageTitle = 'settings.shipping.new-shipping-method'|trans %}
+{% endif %}
+
+{% set breadcrumb = {
+	0: {
+		'url': path('settings-home'),
+		'text': 'settings.settings'|trans,
+	},
+	1: {
+		'url': path('shipping-list'),
+		'text': 'settings.shipping.shipping-methods'|trans,
+	}
+} %}
+{% set cancelUrl = path('shipping-list') %}
+
+{% block title %}
+	{{ pageTitle }}
+{% endblock %}
+
+{% block moduleTitle %}
+	{{ 'settings.shipping.shipping-method'|trans }}
+{% endblock %}
+
+{% block moduleDescription %}
+	{{ 'settings.shipping.new-shipping-method-description'|trans }}
+{% endblock %}
+
+
+{% block contentInner %}
+	{% include '/admin/settings/shipping-form.html.twig' with {'cancelUrl': cancelUrl} %}
+{% endblock %}

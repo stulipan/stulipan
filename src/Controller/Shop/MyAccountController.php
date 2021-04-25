@@ -42,6 +42,10 @@ class MyAccountController extends AbstractController
         $orders = [];
         if ($customer) {
             $orders = $customer->getOrdersPlaced();
+
+            if ($orders) {
+                $orders = $orders->getValues();
+            }
         }
 
         $pagerfanta = new Pagerfanta(new ArrayAdapter($orders));
@@ -71,12 +75,22 @@ class MyAccountController extends AbstractController
     public function showMyOrder(Request $request, ?Order $order, $id = null)
     {
         if (!$order) {
-            throw $this->createNotFoundException('STUPID: Nincs ilyen rendelés!' );
-        }
-        if (!$this->getUser()->hasOrder($order)) {
             $this->addFlash('danger', 'Nem talált ilyen rendelést!');
-            return $this->redirect('site-user-myAccount');
+            return $this->redirectToRoute('site-user-myAccount');
         }
+
+        /** @var Customer $customer*/
+        $customer = $this->getUser()->getCustomer();
+        if (!$customer) {
+            $this->addFlash('danger', 'Nem talált ilyen rendelést!');
+            return $this->redirectToRoute('site-user-myAccount');
+        }
+
+        if ($customer->getPlacedOrdersCount() === 0) {
+            $this->addFlash('danger', 'Nem talált ilyen rendelést!');
+            return $this->redirectToRoute('site-user-myAccount');
+        }
+
         return $this->render('webshop/user/user-myOrder.html.twig', [
             'order' => $order,
         ]);

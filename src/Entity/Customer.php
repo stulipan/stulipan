@@ -506,6 +506,14 @@ class Customer
     }
 
     /**
+     * @return bool
+     */
+    public function hasOrderPlaced(Order $order)
+    {
+        return $this->getOrdersPlaced()->contains($order);
+    }
+
+    /**
      * @return int
      */
     public function countOrders(): int

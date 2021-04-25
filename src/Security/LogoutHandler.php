@@ -11,6 +11,9 @@ class LogoutHandler implements LogoutSuccessHandlerInterface
     public function onLogoutSuccess(Request $request)
     {
         $referer = $request->headers->get('referer');
-        return new RedirectResponse($referer);
+        if ($referer) {
+            return new RedirectResponse($referer);
+        }
+        return new RedirectResponse('/');
     }
 }

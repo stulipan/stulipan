@@ -2,7 +2,7 @@
 {% extends 'webshop/site/template-checkout-shopi.html.twig' %}
 
 {% block title %}
-    {{ 'checkout.recipient-page-title'|trans }} | {{ parent() }}
+    {{ flowerShop ? 'checkout.flower-shop.recipient-page-title'|trans : 'checkout.recipient-page-title'|trans }} | {{ parent() }}
 {% endblock %}
 
 
@@ -22,10 +22,10 @@
                         <div class="JS--Wrapper-recipient">
                             <div class="JS--Wrapper-alert">
                                 <div class="checkout-block-header">
-                                    <h4 class="checkout-block-title">{{ 'checkout.recipient.recipient-title'|trans }}</h4>
+                                    <h4 class="checkout-block-title">{{ flowerShop ? 'checkout.flower-shop.recipient-title'|trans : 'checkout.recipient.recipient-title'|trans }}</h4>
                                 </div>
                                 <div class="checkout-block-text">
-                                    <span class="">{{ 'checkout.recipient.recipient-description'|trans }}</span>
+                                    <span class="">{{ flowerShop ? 'checkout.flower-shop.recipient-description'|trans : 'checkout.recipient.recipient-description'|trans }}</span>
                                 </div>
                             </div>
 
@@ -34,13 +34,12 @@
                                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                {#                                    <h3 class="checkout-block-title modal-title" id="modalLabel">{{ 'checkout.recipient.previously-saved-recipients-modal-title'|trans}}</h3>#}
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <h3 class="modal-title" id="modalLabel">{{ 'checkout.recipient.previously-saved-recipients-modal-title'|trans}}</h3>
+                                                <h3 class="modal-title" id="modalLabel">{{ flowerShop ? 'checkout.flower-shop.previously-saved-recipients-modal-title'|trans : 'checkout.recipient.previously-saved-recipients-modal-title'|trans }}</h3>
                                                 <div class="JS--Wrapper-recipientList">
                                                     {% if recipients is defined %}
                                                         {% include('webshop/cart/recipient_list.html.twig') %}
@@ -66,13 +65,13 @@
                                                 <div class="vertical-form-row">
                                                     <div class="vertical-col mr-3">
                                                         <a href="#" class="JS--Button-showRecipientForm text-link-checkout" data-url="{{ path('cart-editRecipient') }}">
-                                                            <span class="loading-spinner-invisible">{{ 'checkout.recipient.new-recipient'|trans }}</span>
+                                                            <span class="loading-spinner-invisible">{{ flowerShop ? 'checkout.flower-shop.new-recipient'|trans : 'checkout.recipient.new-recipient'|trans }}</span>
                                                             <div class="loading-spinner" role="status"></div>
                                                         </a>
                                                     </div>
                                                     <div class="vertical-col">
                                                         <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--recipientList">
-                                                            <span class="loading-spinner-invisible">{{ 'checkout.recipient.previously-saved-recipients'|trans }}</span>
+                                                            <span class="loading-spinner-invisible">{{ flowerShop ? 'checkout.flower-shop.previously-saved-recipients'|trans : 'checkout.recipient.previously-saved-recipients'|trans }}</span>
                                                             <div class="loading-spinner" role="status"></div>
                                                         </a>
                                                     </div>
@@ -98,7 +97,7 @@
                         <div class="JS--Wrapper-customer">
                             <div class="JS--Wrapper-alert">
                                 <div class="checkout-block-header">
-                                    <h4 class="checkout-block-title">{{ 'checkout.customer.customer-information-title'|trans }}</h4>
+                                    <h4 class="checkout-block-title">{{ flowerShop ? 'checkout.flower-shop.customer-information-title'|trans : 'checkout.customer.customer-information-title'|trans }}</h4>
                                 </div>
                                 <div class="checkout-block-text">
                                     <span class="">{{ 'checkout.customer.customer-information-description'|trans }}</span>

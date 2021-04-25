@@ -28,10 +28,12 @@
                                 <span class="JS--summaryDeliveryFee">{{ order.deliveryFee|money }}</span>
                             </span>
                         </li>
+                        {% if false == true %}
                         <li class="order-summary-item">
                             <span class="order-summary-item-label">{{ 'cart.discount'|trans }}</span>
                             <span>25%:</span>
                         </li>
+                        {% endif %}
                         <li class="order-summary-item border-0">
                             <span class="order-summary-item-label">{{ 'cart.total-amount-to-pay'|trans }}</span>
                             <span class="JS--summaryTotalPos order-summary-total" data-summary-total="{{ order.summary.totalAmountToPay }}">

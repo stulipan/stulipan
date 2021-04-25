@@ -66,7 +66,7 @@
                     limit: 5,
                     message: 'You can only upload a max of 5 files'
                 },
-                // uploadMultiple: false, // Lásd a mounted() részt, ott van egy kötelező kódrész
+                uploadMultiple: true, // Lásd a mounted() részt, ott van egy kötelező kódrész
                 acceptedFiles: {
                     extensions: ['image/*'],
                     message: 'You are uploading an invalid file'

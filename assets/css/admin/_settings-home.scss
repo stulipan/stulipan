@@ -15,7 +15,7 @@ $settings-option-color:       $settings-item-color;
 .settings-item-list {
   --min-width-rows: 10;
   --med-width-rows: 5;
-  --max-width-rows: 3;
+  --max-width-rows: 4;
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -23,6 +23,7 @@ $settings-option-color:       $settings-item-color;
   grid-column-gap: 1.6rem;
   grid-auto-flow: column;
   grid-template-rows: repeat(var(--max-width-rows),auto);
+  grid-template-columns: repeat(3,auto);
 
   @include media-breakpoint-down(md) {
     grid-template-rows: repeat(var(--med-width-rows),auto);

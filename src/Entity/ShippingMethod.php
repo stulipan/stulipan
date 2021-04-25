@@ -72,7 +72,7 @@ class ShippingMethod
     private $enabled;
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -80,7 +80,7 @@ class ShippingMethod
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getName(): ?string
     {
@@ -88,7 +88,7 @@ class ShippingMethod
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      */
     public function setName(?string $name): void
     {
@@ -101,7 +101,7 @@ class ShippingMethod
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription(): ?string
     {
@@ -109,7 +109,7 @@ class ShippingMethod
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      */
     public function setDescription(?string $description): void
     {
@@ -117,7 +117,7 @@ class ShippingMethod
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getPrice(): ?float
     {
@@ -125,7 +125,7 @@ class ShippingMethod
     }
 
     /**
-     * @param float $price
+     * @param float|null $price
      */
     public function setPrice(?float $price): void
     {
@@ -133,7 +133,7 @@ class ShippingMethod
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getOrdering(): ?int
     {
@@ -141,7 +141,7 @@ class ShippingMethod
     }
 
     /**
-     * @param int $ordering
+     * @param int|null $ordering
      */
     public function setOrdering(?int $ordering): void
     {

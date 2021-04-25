@@ -274,7 +274,7 @@
                                     >
 <!--                                        <span slot="noResult">Nincs ilyen opció...</span>-->
                                         <!--    A showLabels=false miatt kell ez, valamiert ez esetben nem mutatja a placeholdert.     -->
-                                        <template slot="singleLabel" slot-scope="props">Válassz...</template>
+<!--                                        <template slot="singleLabel" slot-scope="props">Válassz...</template>-->
                                     </multiselect>
                                     <span class="invalid-feedback">{{ showError('kind') }}</span>
                                     

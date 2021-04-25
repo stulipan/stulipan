@@ -26,7 +26,7 @@
                                             <div class="checkout-summary-item-grid">
                                                 <div class="checkout-summary-item-label">
                                                     <div class="checkout-summary-item-title">
-                                                        Címzett
+                                                        {{ flowerShop ? 'checkout.summary.recipient-to'|trans : 'checkout.summary.recipient'|trans }}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-summary-item-data">
@@ -39,7 +39,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="checkout-summary-item-action">
-                                                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">Módosítás</a>
+                                                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -47,7 +47,7 @@
                                             <div class="checkout-summary-item-grid">
                                                 <div class="checkout-summary-item-label">
                                                     <div class="checkout-summary-item-title">
-                                                        Aki küldi
+                                                        {{ flowerShop ? 'checkout.summary.customer-from'|trans : 'checkout.summary.customer'|trans }}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-summary-item-data">
@@ -56,7 +56,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="checkout-summary-item-action">
-                                                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">Módosítás</a>
+                                                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -64,16 +64,16 @@
                                             <div class="checkout-summary-item-grid">
                                                 <div class="checkout-summary-item-label">
                                                     <div class="checkout-summary-item-title">
-                                                        Szállítás
+                                                        {{ 'checkout.summary.shipping'|trans }}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-summary-item-data">
                                                     <div class="checkout-summary-item-description">
-                                                        {{ order.shippingMethod }}, {{ order.deliveryDate|localizedDate('Y M j.')|lower }}, {{ order.deliveryInterval }}
+                                                        {{ order.shippingMethod }}, {%- if flowerShop -%}{{ order.deliveryDate|localizedDate('Y M j.')|lower }}, {{ order.deliveryInterval }}{%- endif -%}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-summary-item-action">
-                                                    <a href="{{ path('site-checkout-step2-pickShipping') }}" class="text-sm text-nowrap">Módosítás</a>
+                                                    <a href="{{ path('site-checkout-step2-pickShipping') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
                                                 </div>
                                             </div>
                                         </div>

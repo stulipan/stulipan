@@ -20,6 +20,7 @@ registration:
     login-title: Bejelentkezés
     login-button: Bejelentkezek
     login-meta-title: Bejelentkezés
+    login-success: Sikeresen bejelentkeztél
     registration-meta-title: Regisztráció
     create-account: 'Új fiók'
     create-account-title: 'Fiók létrehozása'
@@ -48,11 +49,14 @@ account:
     my-account: 'Saját fiókom'
     logout: Kijelentkezés
     my-orders: Rendeléseim
+    previous-orders: Előző rendeléseid
+    no-previous-orders-yet: 'Még nincs rendelésed.'
     welcome: 'Helló, {{ user }}'
     account-information: Adataim
     change-password: 'Jelszó módosítás'
     last-orders: 'Utolsó rendeléseid'
 cart:
+    cart: Kosár
     cart-content: 'Kosár tartalma'
     continue-to-checkout: Tovább a pénztárhoz
     continue-shopping: 'Vásárlás folytatása'
@@ -87,21 +91,21 @@ cart:
         error-missing-greeting-message: 'Az üzenet lemaradt...'
         error-missing-greeting-author: 'Nem írtad alá az üzenetet.'
 checkout:
-    recipient-page-title: 'A címzet adatai'
-    shipping-method-page-title: Szállítás
+    recipient-page-title: 'Szállítási cim'
+    shipping-method-page-title: Szállítási mód
     payment-method-page-title: Fizetés
     cart-progress-bar: Kosár
-    recipient-progress-bar: Címzet
+    recipient-progress-bar: Címzett
     shipping-progress-bar: Szállítás
     payment-progress-bar: Fizetés
     already-registered: 'Jártál már nálunk? Ha már van fiókod, <a href="{{ link }}" class="">itt tudsz bejelentkezni.</a>'
     recipient:
-        recipient-title: 'Kinek küldöd?'
-        recipient-description: 'A sikeres kézbesítéshez add meg a címzett személy nevét, címét, telefonszámát.'
-        new-recipient: 'Új címzett hozáadása'
-        previously-saved-recipients: 'Előzőleg megadott címzettek'
-        previously-saved-recipients-modal-title: 'Előzőleg megadott címzettek'
-        previously-saved-recipients-modal-description: 'Előzőleg megadott címzettek'
+        recipient-title: 'Szállítási cím'
+        recipient-description: 'A sikeres kézbesítéshez szükséges szállítási adatokat itt add meg.'
+        new-recipient: 'Új szállítási cím hozáadása'
+        previously-saved-recipients: 'Előzőleg megadott címek'
+        previously-saved-recipients-modal-title: 'Előzőleg megadott szállítási címek'
+        previously-saved-recipients-modal-description: 'Előzőleg megadott szállítási címek'
         select-recipient: 'Szállítás erre a címre'
         firstname: Keresztnév
         lastname: Vezetéknév
@@ -124,12 +128,25 @@ checkout:
         missing-country: 'Válasszd ki az országot.'
         missing-phone: 'Add meg a telefonszámot.'
         invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
-        missing-recipient: 'Nem adtál még meg címzettet.'
+        missing-recipient: 'Nem adtál még meg szállítási címet.'
         last-used: 'Legutóbb használt'
     sender:
         last-used: 'Legutóbb használt'
-    customer:
+    flower-shop:
+        recipient-page-title: 'A címzett adatai'
+        recipient-title: 'Kinek küldöd?'
+        recipient-description: 'A sikeres kézbesítéshez add meg a címzett személy nevét, címét, telefonszámát.'
+        new-recipient: 'Új címzett hozáadása'
+        previously-saved-recipients: 'Előzőleg megadott címzettek'
+        previously-saved-recipients-modal-title: 'Előzőleg megadott címzettek'
+        previously-saved-recipients-modal-description: 'Előzőleg megadott címzettek'
+        select-recipient: 'Szállítás erre a címre'
+        missing-recipient: 'Nem adtál még meg címzettet.'
         customer-information-title: 'Aki küldi'
+        continue-to-recipient-button: 'Tovább a címzett megadásához'
+        back-to-recipient-button: 'Vissza a címzett megadásához'
+    customer:
+        customer-information-title: 'Vásárló adatai'
         customer-information-description: 'Email címeden és telefonszámodon fogunk értesíteni a rendelés teljesítéséről.'
         firstname: Keresztnév
         lastname: Vezetéknév
@@ -152,15 +169,19 @@ checkout:
         delivery-date-missing: 'Válassz egy szállítási időt.'
     payment:
         payment-method-missing: 'Válassz fizetési módot!'
+    summary:
+        recipient: Szállítási cím
+        recipient-to: Neki küldöd
+        customer: Vásárló
+        customer-from: Aki küldi
+        shipping: Szállítás mód
     terms:
         accept-terms-label: 'A rendelés leadásával kijelented, hogy elolvastad és elfogadod az <a {{ terms }}>ÁSZF</a> illetve az <a {{ privacy }}>Adatvédelemben</a> foglaltakat és hozzájárulsz, hogy az itt megadott adatokat felhasználjuk a rendelés teljesítéséhez.'
         accept-terms-error: 'A rendelés leadásához kérjük fogadd el az ÁSZF-et.'
     continue-to-shipping-address-button: 'Tovább a szállítási címhez'
-    continue-to-recipient-address-button: 'Tovább a címzett megadásához'
     continue-to-shipping-method-button: 'Tovább a szállítási módhoz'
     continue-to-payment-method-button: 'Tovább a címzett megadásához'
     back-to-cart-button: 'Vissza a kosárhoz'
-    back-to-recipient-button: 'Vissza a címzett megadásához'
     back-to-shipping-address-button: 'Vissza a szállítási címhez'
     back-to-shipping-method-button: 'Vissza a szállítási módhoz'
     phone-number-tooltip: 'A telefonszámot így írd be: +36... vagy 06... és ne használj szóközt illetve egyéb karaktereket.'

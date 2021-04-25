@@ -68,6 +68,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'storeUrl' => $this->storeSettings->get('store.url'),
             'storeName' => $this->storeSettings->get('store.name'),
             'storeEmail' => $this->storeSettings->get('store.email'),
+            'flowerShop' => $this->storeSettings->get('general.flower-shop-mode')
         ];
     }
 
@@ -247,8 +248,8 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $string;
     }
 
-    public function formatLocalizedDate($dateTime, string $format=null) {
-
+    public function formatLocalizedDate($dateTime, string $format=null)
+    {
         if ($format == null || $format == '') {
             $format = $this->locale->getDateFormat();
         }

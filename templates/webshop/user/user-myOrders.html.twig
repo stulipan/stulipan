@@ -20,24 +20,29 @@
     <div class="card">
         <div class="">
             <div class="card-body">
-                <div class="card-title h3 mb-0">Előző rendeléseid</div>
+                <div class="card-title h3 mb-0">{{ 'account.previous-orders'|trans }}</div>
+                {% if orders is defined and orders is empty %}
+                <div class="mt-3">
+                    <span class="">{{ 'account.no-previous-orders-yet'|trans }}</span>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
-                <div class="previous-orders list-group">
-                    {% if orders is defined and orders is not empty %}
-                        {% for order in orders %}
-                        <div class="card mt-20px">
-                            <div class="card-body">
-                            {% include('webshop/user/user-myOrders-list-widget.html.twig') %}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
+    <div class="previous-orders list-group">
+        {% if orders is defined and orders is not empty %}
+            {% for order in orders %}
+            <div class="card mt-20px">
+                <div class="card-body">
+                {% include('webshop/user/user-myOrders-list-widget.html.twig') %}
                 </div>
-                <div class="pagerfanta mt-3">
-                    {% if paginator is defined and paginator is not empty %}
-                        {{ pagerfanta(paginator, 'twitter_bootstrap4', { 'prev_message': 'generic.prev'|trans, 'next_message': 'generic.next'|trans }) }}
-                    {% endif %}
-                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="pagerfanta mt-3">
+        {% if paginator is defined and paginator is not empty %}
+            {{ pagerfanta(paginator, 'twitter_bootstrap4', { 'prev_message': 'generic.prev'|trans, 'next_message': 'generic.next'|trans }) }}
+        {% endif %}
+    </div>
 {% endblock %}

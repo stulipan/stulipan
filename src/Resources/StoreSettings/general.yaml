@@ -114,6 +114,10 @@ parameters:
         default-vat-rate:
             content: 1
             type: VatRate
+        flower-shop-mode:
+            content: false
+            type: Boolean
+            label: 'Enabled this if you want your store to act like a flower shop. The difference is at the checkout where the recipient is different from the customer placing the order.'
         giftCategory:
             content: 2
             type: ProductCategory

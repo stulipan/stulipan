@@ -187,6 +187,26 @@ settings:
         customer-support: Customer support
         business-name: Business name
         business-address: Business address
+    shipping:
+        shipping: Shipping
+        shipping-description: Shipping methods settings.
+        shipping-method: Shipping method
+        shipping-methods: Shipping methods
+        shipping-method-not-found: No shipping method was found!
+        new-shipping-method: New shipping method
+        edit-shipping-method: Edit shipping method
+        new-shipping-method-description: Feel free to add and set up new shipping methods.
+        shipping-methods-description: Manage your shipping methods, by adding new one or editing existing methods.
+    payment:
+        payment: Payment
+        payment-description: Payment methods settings.
+        payment-method: Payment method
+        payment-methods: Payment methods
+        payment-method-not-found: No payment method was found!
+        new-payment-method: New payment method
+        edit-payment-method: Edit payment method
+        new-payment-method-description: Feel free to add and set up new payment methods.
+        payment-methods-description: Manage your payment methods, by adding new one or editing existing methods.
 
 customer:
     customer: Customer
@@ -273,4 +293,6 @@ generic:
     search-placeholder: Search...
     created-at: Created at
     updated-at: Updated at
+    enabled: Enabled
+    disabled: Disabled
 

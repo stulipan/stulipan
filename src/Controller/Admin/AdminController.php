@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AdminController extends AbstractController
 {
-
     /**
      * @Route("/", name="admin")
      */
@@ -92,76 +91,4 @@ class AdminController extends AbstractController
 
         ]);
     }
-
-    /**
-     * @IsGranted("ROLE_MANAGE_SHIPPING")
-     * @Route("/shipping", name="shipping-list")
-     */
-    public function listShippingMethods()
-    {
-        $shippings = $this->getDoctrine()
-            ->getRepository(ShippingMethod::class)
-            ->findAll();
-        $payments = $this->getDoctrine()
-            ->getRepository(PaymentMethod::class)
-            ->findAll();
-
-        $noResult = '';
-        if (!$shippings || !$payments) {
-            //throw $this->createNotFoundException('Nem talált egy terméket sem!');
-            $noResult = 'Nem talált ilyen adatot!';
-        }
-
-        return $this->render('admin/delivery-methods-list.html.twig', [
-            'title' => 'Szállítási és fizetési módok',
-            'shippings' => $shippings,
-            'payments' => $payments,
-            'noResult' => $noResult,
-        ]);
-    }
-
-    /**
-     * @IsGranted("ROLE_MANAGE_SHIPPING")
-     * @Route("/shipping/edit/{id}", name="shipping-edit")
-     */
-    public function editShipping(Request $request, ?ShippingMethod $shipping, $id = null)
-    {
-        if (!$shipping) {
-            /**
-             * new Shipping
-             */
-            $form = $this->createForm(ShippingFormType::class);
-            $title = 'Új szállítási mód';
-        } else {
-            /**
-             * edit existing Shipping
-             */
-            $form = $this->createForm(ShippingFormType::class, $shipping);
-            $title = 'Szállítási mód módosítása';
-        }
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $shipping = $form->getData();
-            $shipping->setUpdatedAt(new DateTime('NOW'));
-            $shipping->setCreatedAt(new DateTime('NOW'));
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($shipping);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Szállítási mód sikeresen elmentve!');
-
-            return $this->redirectToRoute('shipping-list');
-
-        }
-
-        return $this->render('admin/shipping-edit.html.twig', [
-            'form' => $form->createView(),
-            'title' => $title,
-        ]);
-    }
-
-
 }

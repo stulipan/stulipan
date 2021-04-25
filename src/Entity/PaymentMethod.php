@@ -115,17 +115,17 @@ class PaymentMethod
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
@@ -136,7 +136,7 @@ class PaymentMethod
     }
     
     /**
-     * @return string
+     * @return string|null
      */
     public function getShortcode(): ?string
     {
@@ -144,7 +144,7 @@ class PaymentMethod
     }
     
     /**
-     * @param string $shortcode
+     * @param string|null $shortcode
      */
     public function setShortcode(?string $shortcode)
     {
@@ -152,7 +152,7 @@ class PaymentMethod
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getShort(): ?string
     {
@@ -160,15 +160,15 @@ class PaymentMethod
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      */
-    public function setShort(string $description): void
+    public function setShort(?string $description): void
     {
         $this->short = $description;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription(): ?string
     {
@@ -176,9 +176,9 @@ class PaymentMethod
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -200,7 +200,7 @@ class PaymentMethod
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getPrice(): float
     {
@@ -208,23 +208,23 @@ class PaymentMethod
     }
 
     /**
-     * @param float $price
+     * @param float|null $price
      */
-    public function setPrice(float $price): void
+    public function setPrice(?float $price): void
     {
         $this->price = $price;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getOrdering(): ?int
     {
-        return $this->ordering;
+        return (int) $this->ordering;
     }
 
     /**
-     * @param int $ordering
+     * @param int|null $ordering
      */
     public function setOrdering(?int $ordering): void
     {

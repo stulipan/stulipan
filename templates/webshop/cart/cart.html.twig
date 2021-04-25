@@ -12,14 +12,16 @@
     {% else %}
         {% include('/webshop/cart/cart-list.html.twig') %}
 
-        {% if showMessage is defined and showMessage %}
-        <div class="cart-item">
-            <div class="row d-flex align-items-center text-center">
-                <div class="col-12 pr-0">
-                    {% include 'webshop/cart/_cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
+        {% if checkoutSettings.get('cart.greetings-card') %}
+            {% if showMessage is defined and showMessage %}
+            <div class="cart-item">
+                <div class="row d-flex align-items-center text-center">
+                    <div class="col-12 pr-0">
+                        {% include 'webshop/cart/_cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
+                    </div>
                 </div>
             </div>
-        </div>
+            {% endif %}
         {% endif %}
 
         {% if showTotal is defined and showTotal %}

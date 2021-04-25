@@ -44,6 +44,7 @@ registration:
     login-title: Returning customer
     login-button: Login
     login-meta-title: Login
+    login-success: Successfully logged in
     registration-meta-title: Registration
     create-account: Create account
     create-account-title: New customer
@@ -73,12 +74,15 @@ account:
     my-account: My account
     logout: Logout
     my-orders: My orders
+    previous-orders: Your previous orders
+    no-previous-orders-yet: You don't have orders yet.
     welcome: 'Welcome, {{ user }}'
     account-information: Account information
     change-password: Change password
     last-orders: Your last orders
 
 cart:
+    cart: Cart
     cart-content: Your cart
     continue-to-checkout: Continue to checkout
     continue-shopping: Continue shopping
@@ -126,13 +130,13 @@ checkout:
 
 
     recipient:
-        recipient-title: Recipient details
-        recipient-description: For successful delivery, enter recipient's name, address, and phone number.
-        new-recipient: Add new recipient
-        previously-saved-recipients: Previously saved recipients
-        previously-saved-recipients-modal-title: Previously saved recipients
-        previously-saved-recipients-modal-description: Select one these recipients
-        select-recipient: Deliver to this address
+        recipient-title: Shipping information
+        recipient-description: For a successful delivery, enter shipping information.
+        new-recipient: Add new shipping address
+        previously-saved-recipients: Previously saved addresses
+        previously-saved-recipients-modal-title: Previously saved addresses
+        previously-saved-recipients-modal-description: Pick one form previously saved addresses
+        select-recipient: Ship to this address
         firstname: First name
         lastname: Last name
         address: Address
@@ -154,12 +158,23 @@ checkout:
         missing-country: Please select a country.
         missing-phone: Please enter recipient's phone number.
         invalid-phone: 'A valid phone number is required. Valid format: +36... or 06...'
-        missing-recipient: "Don't forget to enter recipient's information."
+        missing-recipient: "Don't forget to enter the shipping information."
         last-used: 'Last used'
 
     sender:
         last-used: 'Last used'
-
+    flower-shop:
+        recipient-title: Recipient details
+        recipient-description: For successful delivery, enter recipient's name, address, and phone number.
+        new-recipient: Add new recipient
+        previously-saved-recipients: Previously saved recipients
+        previously-saved-recipients-modal-title: Previously saved recipients
+        previously-saved-recipients-modal-description: Select one these recipients
+        select-recipient: Deliver to this address
+        missing-recipient: "Don't forget to enter recipient's information."
+        customer-information-title: Customer details
+        continue-to-recipient-button: 'Continue to recipient''s address'
+        back-to-recipient-button: Back to recipient's address
     customer:
         customer-information-title: Customer details
         customer-information-description: Your email and phone number are used to keep you updated of the order delivery status.
@@ -184,15 +199,19 @@ checkout:
         delivery-date-missing: Please pick a delivery date!
     payment:
         payment-method-missing: Please select a payment method!
+    summary:
+        recipient: Ship to
+        recipient-to: Ship to
+        customer: Customer
+        customer-from: Customer
+        shipping: Shipping
     terms:
         accept-terms-label: 'By placing this order you accept and agree to our <a {{ terms }}>Terms and conditions</a> and <a {{ privacy }}>Privacy policy</a> and you acknowledge that we will use the information you provided to fulfill the order.'
         accept-terms-error: 'Please accept the Terms and conditions before placing your order.'
     continue-to-shipping-address-button: 'Continue to shipping address'
-    continue-to-recipient-address-button: 'Continue to recipient''s address'
     continue-to-shipping-method-button: Continue to shipping method
     continue-to-payment-method-button: 'Continue to payment method'
     back-to-cart-button: Back to cart
-    back-to-recipient-button: Back to recipient's address
     back-to-shipping-address-button: Back to shipping address
     back-to-shipping-method-button: Back to shipping method
 

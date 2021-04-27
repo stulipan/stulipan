@@ -69,7 +69,7 @@
                                                 </div>
                                                 <div class="checkout-summary-item-data">
                                                     <div class="checkout-summary-item-description">
-                                                        {{ order.shippingMethod }}, {%- if flowerShop -%}{{ order.deliveryDate|localizedDate('Y M j.')|lower }}, {{ order.deliveryInterval }}{%- endif -%}
+                                                        {{ order.shippingMethod }}{%- if flowerShop -%}, {{ order.deliveryDate|localizedDate('Y M j.')|lower }}, {{ order.deliveryInterval }}{%- endif -%}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-summary-item-action">

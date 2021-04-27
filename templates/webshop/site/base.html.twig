@@ -21,16 +21,14 @@
         <link href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}" rel="stylesheet" >
 
         {{ encore_entry_link_tags('store-theme') }}
-        {{ encore_entry_link_tags('app') }}
-        {{ encore_entry_link_tags('app-style') }}
-
-        <link href="{{ asset('webshop/site/v-style.css') }}" rel="stylesheet" />
 
         <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css" rel="stylesheet" >
         <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >
 
 {#        JS scripts with defer                 #}
-        {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_script_tags('store-app') }}
+
+        {% include 'webshop/widgets/tracking-codes.html.twig' %}
     {% endblock %}
 </head>
 
@@ -82,9 +80,6 @@
     <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>
     <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/smooth-scroll/smooth-scroll.polyfills.min.js"></script>
     <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>
-
-{#    {{ encore_entry_script_tags('sidebar') }}#}
-{#    {{ encore_entry_script_tags('floating-input') }}#}
 
     <script src="{{ asset('webshop/lodash.core.min.js') }}"></script>
 

@@ -30,8 +30,10 @@ class PaymentMethodType extends AbstractType
             ->add('paymentMethod', EntityType::class, [
                 'class' => PaymentMethod::class,
                 'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('s')
-                        ->orderBy('s.ordering', 'ASC');
+                    return $er->createQueryBuilder('p')
+                        ->andWhere('p.enabled = :enabled')
+                        ->setParameter('enabled', true)
+                        ->orderBy('p.ordering', 'ASC');
                 },
                 'choice_label' => 'name',
 //                'choice_label' => function($v) {

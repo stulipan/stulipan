@@ -66,7 +66,12 @@
                     limit: 5,
                     message: 'You can only upload a max of 5 files'
                 },
-                uploadMultiple: true, // Lásd a mounted() részt, ott van egy kötelező kódrész
+                // uploadMultiple: true
+                // The uploadMultiple options works a little different. If set to true multiple files will be sent at once
+                // in a single request and also user will be able to select multiple files.
+                //
+                // If you set it to false the user can still select multiple files, but each file will be sent as a
+                // single request. Which means for 5 files 5 HTTP requests will fire.
                 acceptedFiles: {
                     extensions: ['image/*'],
                     message: 'You are uploading an invalid file'
@@ -87,6 +92,7 @@
                 imageUrl: null,
                 options: initialData().options,
                 uploadedFiles: [],
+                errors: [],
 
                 componentKey: 0,  // can be somethingElse, whatever
             }
@@ -128,18 +134,21 @@
                     this.$emit('success', imageEntity);
                 } else {
                     let json = JSON.parse(xhr.response);
-                    // console.log(json.errors.imageFile)
-
-                    this.$emit('error', json.errors.imageFile);
+                    // console.log(json.errors)
+                    
+                    this.errors.push(json.errors);
+                    this.$emit('error', json.errors);
                 }
             },
             addedFile (file) {
                 this.uploadedFiles.push(file);
             },
         },
-        // This is necessary, because of a bug in Dropzone, which ignores options: { uploadMultiple: false, }
+        
        mounted() {
-           this.$refs.vueclip.uploader._uploader.hiddenFileInput.removeAttribute("multiple")
+           // This is necessary for single file upload (which is not this case), because of a bug in Dropzone,
+           // which ignores options: { uploadMultiple: false, }
+           // this.$refs.vueclip.uploader._uploader.hiddenFileInput.removeAttribute("multiple")
          }
     }
 </script>

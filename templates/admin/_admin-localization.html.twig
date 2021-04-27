@@ -1,0 +1,21 @@
+<script>
+    var AlertMessages = {
+        {#PRODUCT_ADDED                       : '{{ 'cart.product.product-added-successfully'|trans }}',#}
+        {#PRODUCT_NOT_ENOUGH_STOCK            : '{{ 'cart.product.not-enough-stock'|trans }}',#}
+        {#ERROR_UNKNOWN                       : '{{ 'checkout.unknown-error'|trans }}',#}
+        {#ERROR_AJAX_FAILED                   : '{{ 'checkout.ajax-failed'|trans }}',#}
+    };
+
+    {% for msg in app.flashes('success')|slice(0,1) %}
+        AlertMessages.SUCCESS = '{{ msg }}';
+    {% endfor %}
+    {% for msg in app.flashes('danger')|slice(0,1) %}
+        AlertMessages.ERROR = '{{ msg }}';
+    {% endfor %}
+    {% for msg in app.flashes('warning')|slice(0,1) %}
+        AlertMessages.WARNING = '{{ msg }}';
+    {% endfor %}
+    {% for msg in app.flashes('info')|slice(0,1) %}
+        AlertMessages.INFO = '{{ msg }}';
+    {% endfor %}
+</script>

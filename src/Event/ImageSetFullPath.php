@@ -72,12 +72,34 @@ class ImageSetFullPath implements ServiceSubscriberInterface
     {
         $entity = $args->getEntity();
 
-        if ($entity instanceof ProductImage || $entity instanceof ProductCategory) {
-            $publicPath = $this->container->get(FileUploader::class)->getPublicPath($entity->getImagePath());
-            $entity->setImageUrl(
-                $this->cacheManager->getBrowserPath($publicPath, 'product_large')
-            );
+        if ($entity instanceof ProductImage) {
+            if ($entity->getImage()) {
+                $publicPath = $this->fileUploader->getPublicPath($entity->getImagePath());
+                $entity->setImageUrl(
+                    $this->cacheManager->getBrowserPath($publicPath, 'product_large')
+                );
+                $entity->setThumbnailUrl(
+                    $this->cacheManager->getBrowserPath($publicPath, 'product_medium')
+                );
+            }
         }
+
+        if ($entity instanceof ProductCategory) {
+            if ($entity->getImage()) {
+                $publicPath = $this->fileUploader->getPublicPath($entity->getImagePath());
+                $entity->setImageUrl(
+                    $this->cacheManager->getBrowserPath($publicPath, 'unscaled')
+                );
+            }
+        }
+//        $entity = $args->getEntity();
+//
+//        if ($entity instanceof ProductImage || $entity instanceof ProductCategory) {
+//            $publicPath = $this->container->get(FileUploader::class)->getPublicPath($entity->getImagePath());
+//            $entity->setImageUrl(
+//                $this->cacheManager->getBrowserPath($publicPath, 'product_large')
+//            );
+//        }
     }
     
     public static function getSubscribedServices()

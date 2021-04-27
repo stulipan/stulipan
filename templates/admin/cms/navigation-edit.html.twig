@@ -1,0 +1,59 @@
+{% extends 'admin/template-with-sidebar.html.twig' %}
+
+{% set activeMenu = 'cms' %}
+
+{% if form.vars.data is defined and form.vars.data.name is defined and form.vars.data.name is not empty %}
+	{% set pageTitle = form.vars.data.name %}
+{% else %}
+	{% set pageTitle = 'page.new-page'|trans %}
+{% endif %}
+
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+	1: {
+		'url': path('cms-navigation-list'),
+		'text': 'page.pages'|trans,
+	},
+} %}
+{% set cancelUrl = path('cms-navigation-list') %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block headerActionsWrapper %}
+{% endblock %}
+
+{% block mainContent %}
+	<div class="row mt-3">
+		<div class="col-md-12">
+			{% include '/admin/cms/navigation-form.html.twig' with {'cancelUrl': cancelUrl}  %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		jQuery(document).ready(function() {
+			var $wrapper = $('.JS--Wrapper-collection');
+			var $collectionList = $('.JS--Wrapper-collectionList');
+			var $button = $wrapper.find('a');
+
+			$collectionList.data('index', $collectionList.find(':input').length);  // count input fields in wrapper
+			$wrapper.on('click', '.JS--Button-addNewInterval', function(e) {
+				e.preventDefault();
+				var prototype = $collectionList.data('prototype');
+				var index = $collectionList.data('index') || 0;   // get the new index
+				// Replace '__name__' in the prototype's HTML to
+				// instead be a number based on how many items we have
+				var newForm = prototype.replace(/__name__/g, index);
+				$collectionList.data('index', index + 1); // increase the index with one for the next item
+				$collectionList.append(newForm); // Display the form in the page before the "new" link
+			});
+		});
+	</script>
+{% endblock %}

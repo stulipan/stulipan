@@ -2,12 +2,15 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\CmsNavigation;
 use App\Entity\CmsPage;
 use App\Entity\ImageEntity;
+use App\Form\Cms\CmsNavigationFormType;
 use App\Form\Cms\CmsPageFormType;
 use App\Services\FileUploader;
 use App\Services\StoreSettings;
 use Error;
+use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -179,6 +182,98 @@ class CmsController extends AbstractController
             'paginator' => $pagerfanta,
             'total' => $pagerfanta->getNbResults(),
             'count' => count($pages),
+        ]);
+    }
+
+    /**
+     * @Route("/navigation/new/", name="cms-navigation-new")
+     */
+    public function newCmsNavigation(Request $request, FileUploader $fileUploader)
+    {
+        $form = $this->createForm(CmsNavigationFormType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $navigation = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($navigation);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Oldal sikeresen elmentve!');
+
+            return $this->redirectToRoute('cms-navigation-edit', ['id' => $navigation->getId()]);
+        }
+        return $this->render('admin/cms/navigation-edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/navigation/edit/{id}", name="cms-navigation-edit")
+     */
+    public function editNavigation(Request $request, CmsNavigation $navigation, FileUploader $fileUploader)
+    {
+        $form = $this->createForm(CmsNavigationFormType::class, $navigation);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $navigation = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($navigation);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Oldal sikeresen elmentve!');
+
+            return $this->redirectToRoute('cms-navigation-edit', ['id' => $navigation->getId()]);
+        }
+        return $this->render('admin/cms/navigation-edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/navigation/list/{page}", name="cms-navigation-list", requirements={"page"="\d+"})
+     */
+    public function listCmsNavigation($page = 1, StoreSettings $settings)
+    {
+//        $queryBuilder = $this->getDoctrine()
+//            ->getRepository(CmsNavigation::class)
+//            ->findAllQueryBuilder()
+//        ;
+//
+//        $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
+
+        $navigations = $this->getDoctrine()->getRepository(CmsNavigation::class)->findAll();
+
+        $pagerfanta = new Pagerfanta(new ArrayAdapter($navigations));
+        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
+        //$pagerfanta->setCurrentPage($page);
+
+        try {
+            $pagerfanta->setCurrentPage($page);
+        } catch(NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        $navigations = [];
+        foreach ($pagerfanta->getCurrentPageResults() as $result) {
+            $navigations[] = $result;
+        }
+
+        if (!$navigations) {
+//            throw $this->createNotFoundException(
+//                'Nem talált egy szállítmányt sem!'
+//            );
+            $this->addFlash('danger', 'Nem talált egy CMS oldalt sem!');
+        }
+
+        return $this->render('admin/cms/navigation-list.html.twig', [
+            'navigations' => $navigations,
+            'paginator' => $pagerfanta,
+            'total' => $pagerfanta->getNbResults(),
+            'count' => count($navigations),
         ]);
     }
 }

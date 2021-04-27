@@ -1,0 +1,102 @@
+{% import _self as myOwnMacro %}
+{% macro printIntervalRow(item) %}
+    <div class="form-group form-row mb-2">
+        <div class="col-sm-6 col-md-5 col-6 mb-1">
+{#            {{ form_label(item.name, item.name, {'label_attr': {'class': ''}, 'label': 'cms.navigation.navigation-item-name'|trans}) }}#}
+            {{ form_widget(item.name, {'attr': {'placeholder': 'cms.navigation.navigation-item-name'|trans }} ) }}
+            {{ form_errors(item.name) }}
+        </div>
+        <div class="col-sm-6 col-md-5 col-6 mb-1">
+{#            {{ form_label(item.url, item.url, {'label_attr': {'class': ''}, 'label': 'cms.navigation.navigation-item-url'|trans}) }}#}
+            {{ form_widget(item.url, {'attr': {'placeholder': 'cms.navigation.navigation-item-url'|trans }} ) }}
+            {{ form_errors(item.url) }}
+        </div>
+    </div>
+{% endmacro %}
+
+{#        <div class="col-sm-6 col-md-3 col-lg-2 col-6 mb-1">#}
+{#            {{ form_widget(item.ordering) }}#}
+{#            {{ form_errors(item.ordering) }}#}
+{#        </div>#}
+{#        <div class="col-sm-6 col-md-3  col-lg-3 col-6 mb-1">#}
+{#            {{ form_widget(item.deliveryLimit) }}#}
+{#            {{ form_errors(item.deliveryLimit) }}#}
+{#        </div>#}
+
+{{ form_start(form, { 'attr': {'class': ' ' }}) }}
+    <div class="row">
+        <div class="col-md-8 correction-no-padding">
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            {{ form_label(form.name, form.name, { 'label_attr': {'class': '' }, 'label': 'cms.navigation.name'|trans}) }}
+                            {{ form_widget(form.name) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+
+                    {% if form.navigationItems is defined %}
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="{{ form.navigationItems.vars.full_name }}" class="">{{ 'cms.navigation.navigation-items'|trans }}</label>
+                                <div class="JS--Wrapper-collection">
+                                    <div class="JS--Wrapper-collectionList" data-prototype="{{ myOwnMacro.printIntervalRow(form.navigationItems.vars.prototype)|e('html_attr') }}" data-index="{{ form.navigationItems|length }}">
+                                        {% if form.navigationItems is not empty %}
+                                            {% for item in form.navigationItems %}
+                                                {{ myOwnMacro.printIntervalRow(item) }}
+                                            {% endfor %}
+                                            {% do form.navigationItems.setRendered() %}
+                                        {{ form_errors(form.navigationItems) }}
+                                        {% endif %}
+                                    </div>
+                                    <a href="javascript:void(0)" class="JS--Button-addNewInterval btn btn-secondary mb-2"><i class="fas fa-plus mr-2"></i> {{ 'cms.navigation.new-navigation-item'|trans }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4 correction-no-padding">
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <label class="form-control-label">{{ 'cms.navigation.enabled'|trans }}</label>
+                                </div>
+                                <div class="d-flex">
+                                    {{ form_widget(form.enabled, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
+                                </div>
+                            </div>
+                            {{ form_errors(form.enabled) }}
+                            {% do form.enabled.setRendered() %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-sm-12">
+            {# Render CSRF token etc .#}
+            <div style="display:none">
+                {{ form_rest(form) }}
+            </div>
+
+            <div class="form-group row mb-0">
+                <div class="col-sm-12">
+                    <input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-lgg btn-primary mr-1" formnovalidate>
+                    <a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{{ form_end(form) }}

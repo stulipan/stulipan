@@ -75,8 +75,8 @@ $colors: map-merge(
   $colors
 );
 
-$primary:         #404756 !default; //$gray-800 !default; //$blue !default;
-$primary-lighten: #5B6377 !default //$gray-600 !default; //$blue-lighten !default;
+$primary:         $gray-800 !default; //$blue !default;
+$primary-lighten: $gray-600 !default; //$blue-lighten !default;
 $secondary:       #eee !default; //$gray-100 !default;
 $success:         $green !default;
 $success-lighten: $green-lighten !default;
@@ -87,8 +87,8 @@ $warning-lighten: $yellow-lighten !default;
 $danger:          $red !default;
 $danger-lighten:$red-lighten !default;
 $light:           $gray-300 !default; //#eee !default;
-$dark:            #404756 !default //$gray-800 !default;
-$dark-lighten:    #5B6377 !default //$gray-600 !default;
+$dark:            $gray-800 !default;
+$dark-lighten:    $gray-600 !default;
 
 $muted:           $gray-700 !default;  // Added by Stulipan
 $hover-bg:        $gray-100 !default;  // Added by Stulipan

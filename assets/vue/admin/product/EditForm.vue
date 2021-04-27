@@ -322,6 +322,7 @@
     import SaveToolbar from './../_components/save-toolbar/SaveToolbar.vue'
     import ProductImageUpload from "./../_components/ProductImageUpload";
     import VariantList from "./VariantList";
+    import Notify from "../../../js/alerts/notify";
 
     const initialData = () => {
         return {
@@ -456,8 +457,10 @@
                 }
                 this.product.images.push(productImage);
             },
-            onImageUploadError(error) {
-                this.localErrors.push(error);
+            onImageUploadError(errors) {
+                errors.forEach(function (error, index) {
+                    this.localErrors.push(error);
+                }.bind(this));
             },
             validatedForm(e) {
                 this.localErrors = [];

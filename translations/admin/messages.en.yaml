@@ -268,6 +268,23 @@ user:
         not-found: No users were found
         not-found-suggestion: Try changing the filters or search term
 
+cms:
+    navigation:
+        navigation: Navigation
+        navigations: Navigation list
+        new-navigation: New navigation
+        navigations-not-found: No navigation was found!
+        navigations-not-found-suggestion: Try modifying the filters.
+        name: Name
+        enabled: Enabled
+        navigation-item: Navigation item
+        navigation-items: Navigation items
+        new-navigation-item: New navigation item
+        navigation-item-name: Navigation item name
+        navigation-item-url: Navigation item URL
+
+
+
 
 generic:
     id: '#'

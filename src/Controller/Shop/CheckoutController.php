@@ -309,6 +309,7 @@ class CheckoutController extends AbstractController
      */
     public function step3PickPayment()
     {
+
         $orderBuilder = $this->orderBuilder;
         $validation = $this->validatePreviousStep($orderBuilder, self::STEP_SHIPPING_METHOD);
         if (!$validation['isValid']) {
@@ -324,7 +325,6 @@ class CheckoutController extends AbstractController
         $user->setLastname($orderBuilder->getCustomer()->getLastname());
         $registrationForm = $this->createForm(UserRegistrationFormType::class, $user);
 
-        $shippingMethods = $this->em->getRepository(ShippingMethod::class)->findAll();
         $paymentMethods = $this->em->getRepository(PaymentMethod::class)->findAllOrdered();
         $acceptTermsForm = $this->createForm(AcceptTermsType::class, ['isAcceptedTerms' => $orderBuilder->getCurrentOrder()->isAcceptedTerms()]);
 
@@ -400,7 +400,7 @@ class CheckoutController extends AbstractController
 
             return $this->render('webshop/cart/checkout-step3-pickPayment.html.twig', [
                 'order' => $orderBuilder->getCurrentOrder(),
-                'shippingMethods' => $shippingMethods,
+//                'shippingMethods' => $shippingMethods,
                 'paymentMethods' => $paymentMethods,
                 'hasShipping' => $orderBuilder->getCurrentOrder()->getShippingMethod() ? 'true' : 'false',
                 'hasPayment' => $orderBuilder->getCurrentOrder()->getPaymentMethod() ? 'true' : 'false',
@@ -415,7 +415,7 @@ class CheckoutController extends AbstractController
 
         return $this->render('webshop/cart/checkout-step3-pickPayment.html.twig', [
             'order' => $orderBuilder->getCurrentOrder(),
-            'shippingMethods' => $shippingMethods,
+//            'shippingMethods' => $shippingMethods,
             'paymentMethods' => $paymentMethods,
             'hasShipping' => $orderBuilder->getCurrentOrder()->getShippingMethod() ? 'true' : 'false',
             'hasPayment' => $orderBuilder->getCurrentOrder()->getPaymentMethod() ? 'true' : 'false',

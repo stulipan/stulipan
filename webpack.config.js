@@ -21,8 +21,9 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
 
-    .addEntry('app', './assets/app.js')
+    .addEntry('store-app', './assets/store-app.js')
 
+    .addEntry('admin-app', './assets/admin-app.js')
     .addEntry('v-admin', './assets/vue/admin/v-admin.js')
     .addEntry('ProductEdit', './assets/vue/admin/product/ProductEdit.js')
     .addEntry('StoreImageUpload', './assets/vue/admin/_components/StoreImageUpload.js')
@@ -30,19 +31,13 @@ Encore
 
 
     .addEntry('v-shop', './assets/vue/shop/v-shop.js')
-    .addEntry('sidebar', './assets/js/sidebar.js')
-    .addEntry('floating-input', './assets/js/floating-input.js')
-    .addEntry('adaptive-tabs', './assets/js/adaptive-tabs.js')
 
     .addEntry('store', './assets/js/store.js')
 
     // .addEntry('admin/init', './assets/js/admin/init.js')
 
-    .addStyleEntry('app-style', './assets/styles/app-style.scss')
-    .addStyleEntry('daterangepicker', './assets/css/admin/daterangepicker.scss')
-
-    .addStyleEntry('admin-theme', './assets/css/admin/admin-theme.scss')
-    .addStyleEntry('store-theme', './assets/css/store/stulipan-theme/store-theme.scss')
+    .addStyleEntry('admin-theme', './assets/styles/admin/admin-theme.scss')
+    .addStyleEntry('store-theme', './assets/styles/store/stulipan-theme/store-theme.scss')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

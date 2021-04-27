@@ -95,9 +95,10 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
         if (isset($data['images'])) {
             $initialImages = $object->getImages();
             $images = $this->denormalizer->denormalize($data['images'],ProductImage::class.'[]', $format, $context);
+
             // normalisan ide kene egy: $object->addImage() foreach loop-ban
             // de nem kell, mivel az uj kepek a ProductImageDenormalizerben vannak hozzaadva!
-            
+
             // delete ProductImages that are not common
             foreach ($initialImages as $image) {
                 if (! (new ArrayCollection($images))->contains($image) ) {

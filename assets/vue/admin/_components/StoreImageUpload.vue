@@ -68,6 +68,7 @@
         }
     };
     
+    import Notify from "../../../js/alerts/notify";
     export default {
         props: [
         ],
@@ -79,6 +80,7 @@
                 imageUrl: null,
                 options: initialData().options,
                 uploadedFiles: [],
+                errors: [],
 
                 componentKey: 0,  // can be somethingElse, whatever
             }
@@ -120,16 +122,20 @@
                     // console.log(file.customAttributes.id);   ////////////
                 } else {
                     let json = JSON.parse(xhr.response);
-                    this.errors.push(json.errors.imageFile);
-                    // console.log(json.errors.imageFile)
+                    console.log(json.errors);
+                    json.errors.forEach(function (error, index) {
+                        Notify.error(error.imageFile)
+                    });
+                    this.uploadedFiles.length = 0;  // reset
                 }
             },
             addedFile (file) {
                 this.uploadedFiles.push(file);
             },
         },
-        // This is necessary, because of a bug in Dropzone, which ignores options: { uploadMultiple: false, }
        mounted() {
+           // This is necessary for single file upload (which IS our case here), because of a bug in Dropzone,
+           // which ignores options: { uploadMultiple: false, } which is set above in the options.
            this.$refs.vueclip.uploader._uploader.hiddenFileInput.removeAttribute("multiple")
          }
     }

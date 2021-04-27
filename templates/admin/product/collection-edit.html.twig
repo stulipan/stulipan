@@ -63,24 +63,24 @@
 {% endblock %}
 
 {% block headerActionsWrapper %}
-	{% if form.vars.data.id is defined and form.vars.data.id is not null %}
-	<nav class="w-100 adaptive-tabs adaptive-tabs-right">
-		<ul class="nav nav-tabs adaptive-primary">
-			<li class="nav-item adaptive-item">
-				<a class="nav-link" href="{{ path('cms-page-duplicate', {'id': form.vars.data.id}) }}"><i class="far fa-clone mr-2"></i>Másolat készítése</a>
-			</li>
-		</ul>
-		<ul class="adaptive-template">
-			<li class="nav-item adaptive-item adaptive-more">
-				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
-					<span>{{ 'generic.more-actions'|trans }}</span>
-				</a>
-				<ul class="adaptive-secondary">
-				</ul>
-			</li>
-		</ul>
-	</nav>
-	{% endif %}
+{#	{% if form.vars.data.id is defined and form.vars.data.id is not null %}#}
+{#	<nav class="w-100 adaptive-tabs adaptive-tabs-right">#}
+{#		<ul class="nav nav-tabs adaptive-primary">#}
+{#			<li class="nav-item adaptive-item">#}
+{#				<a class="nav-link" href="{{ path('cms-page-duplicate', {'id': form.vars.data.id}) }}"><i class="far fa-clone mr-2"></i>Másolat készítése</a>#}
+{#			</li>#}
+{#		</ul>#}
+{#		<ul class="adaptive-template">#}
+{#			<li class="nav-item adaptive-item adaptive-more">#}
+{#				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">#}
+{#					<span>{{ 'generic.more-actions'|trans }}</span>#}
+{#				</a>#}
+{#				<ul class="adaptive-secondary">#}
+{#				</ul>#}
+{#			</li>#}
+{#		</ul>#}
+{#	</nav>#}
+{#	{% endif %}#}
 {% endblock %}
 
 {% block mainContent %}

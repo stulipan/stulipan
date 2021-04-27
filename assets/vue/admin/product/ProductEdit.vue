@@ -29,6 +29,7 @@
 </template>
 
 <script>
+    import Notify from "../../../js/alerts/notify";
     import Multiselect from 'vue-multiselect'
     import EditForm from './EditForm'
 
@@ -96,14 +97,14 @@
                     this.$http.put('/hu/admin/api/products/'+ productData.id, productData)
                         .then(
                             response => {
-                                // this.showToast('A módosítások sikeresen elmentve.', 'success');
+                                Notify.success('A módosítások sikeresen elmentve.', 'success');
                                 this.productInForm = response.data.products[0];  /// ITT CELSZERU BETOLTENI A VISSZAJOVO objektumot
                                 this.formIsPosting = false;
                             },
                             response => {
                                 this.formIsPosting = false;
                                 if (response.status === 422) {
-                                    this.showToast('Upsz... valami hiba történt. Ellenőrizd az adatokat.', 'danger');
+                                    Notify.error('Upsz... valami hiba történt. Ellenőrizd az adatokat.', 'danger');
                                     for (let value of Object.values(response.body.errors)) {
                                         this.formErrors.push(value);
                                     }
@@ -119,11 +120,14 @@
                         .then(
                             response => {
                                 this.formIsPosting = false;
+                                Notify.success('A módosítások sikeresen elmentve.', 'success');
 //                                this.products.push(response.body);
+                            
                             },
                             response => {
                                 this.formIsPosting = false;
                                 if (response.status === 422) {
+                                    Notify.error('Upsz... valami hiba történt. Ellenőrizd az adatokat.', 'danger');
                                     for (let value of Object.values(response.body.errors)) {
                                         // this.formErrors.push(value);
                                         
@@ -142,30 +146,6 @@
             },
             resetErrosInForm () {
                 this.formErrors = initialData().formErrors;
-            },
-            showToast (message, type) {
-                let title = '';
-                switch (type) {
-                    case 'success':
-                        title = 'SIKERES MŰVELET';
-                        break;
-                    case 'danger':
-                        title = 'HIBA!';
-                        break;
-                    case 'warning':
-                        title = 'FIGYELEM!';
-                        break;
-                    default:
-                        title = 'FIGYELEM!';
-                        break;
-                }
-                this.$bvToast.toast(message, {
-                    title: title,
-                    autoHideDelay: 5000,
-                    appendToast: true,
-                    variant: type,
-                    toaster: "b-toaster-top-right",
-                });
             },
         },
         created () {
@@ -191,17 +171,17 @@
             // }, ([r3, r4, r5]) => {
             //   if (r3.status === 422) {
             //     for (let item of Object.values(r3.body.errors)) {
-            //       this.showToast(item.message, 'danger');
+            //       Notify.error(item.message, 'danger');
             //     }
             //   }
             //   if (r4.status === 422) {
             //     for (let item of Object.values(r4.body.errors)) {
-            //       this.showToast(item.message, 'danger');
+            //       Notify.error(item.message, 'danger');
             //     }
             //   }
             //   if (r5.status === 422) {
             //     for (let item of Object.values(r5.body.errors)) {
-            //       this.showToast(item.message, 'danger');
+            //       Notify.error(item.message, 'danger');
             //     }
             //   }
             // }).finally(() => {
@@ -230,22 +210,22 @@
             //   }, ([r1, r3, r4, r5]) => {
             //     if (r1.status === 422) {
             //       for (let item of Object.values(r1.body.errors)) {
-            //         this.showToast(item.message, 'danger');
+            //         Notify.error(item.message, 'danger');
             //       }
             //     }
             //     if (r3.status === 422) {
             //       for (let item of Object.values(r3.body.errors)) {
-            //         this.showToast(item.message, 'danger');
+            //         Notify.error(item.message, 'danger');
             //       }
             //     }
             //     if (r4.status === 422) {
             //       for (let item of Object.values(r4.body.errors)) {
-            //         this.showToast(item.message, 'danger');
+            //         Notify.error(item.message, 'danger');
             //       }
             //     }
             //     if (r5.status === 422) {
             //       for (let item of Object.values(r5.body.errors)) {
-            //         this.showToast(item.message, 'danger');
+            //         Notify.error(item.message, 'danger');
             //       }
             //     }
             //   }).finally(() => {
@@ -261,17 +241,17 @@
             //       }, ([r3, r4, r5]) => {
             //         if (r3.status === 422) {
             //           for (let item of Object.values(r3.body.errors)) {
-            //             this.showToast(item.message, 'danger');
+            //             Notify.error(item.message, 'danger');
             //           }
             //         }
             //         if (r4.status === 422) {
             //           for (let item of Object.values(r4.body.errors)) {
-            //             this.showToast(item.message, 'danger');
+            //             Notify.error(item.message, 'danger');
             //           }
             //         }
             //         if (r5.status === 422) {
             //           for (let item of Object.values(r5.body.errors)) {
-            //             this.showToast(item.message, 'danger');
+            //             Notify.error(item.message, 'danger');
             //           }
             //         }
             //       }).finally(() => {

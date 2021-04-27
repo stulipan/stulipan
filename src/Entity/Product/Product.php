@@ -434,11 +434,12 @@ class Product //implements \JsonSerializable
     }
     
     /**
-     * @return ProductImage[]|Collection
+     * @ return ProductImage[]|Collection
      */
-    public function getImages(): Collection
+    public function getImages()//: Collection
     {
-        return $this->images;
+        return $this->images ? $this->images->getValues(): $this->images;
+//        return $this->images->getValues();
     }
     
     public function addImage(ProductImage $image): void
@@ -634,13 +635,13 @@ class Product //implements \JsonSerializable
      */
     public function getCategories() //: Collection
     {
-        return $this->categories->getValues();
+        return $this->categories ? $this->categories->getValues(): $this->categories;
+//        return $this->categories->getValues();
     }
     
     public function addCategory(ProductCategory $category): void
     {
         if (!$this->categories->contains($category)) {
-//            $category->setProduct($this);
             $this->categories->add($category);
         }
     }
@@ -664,13 +665,13 @@ class Product //implements \JsonSerializable
      */
     public function getBadges() //: Collection
     {
-        return $this->badges->getValues();
+        return $this->badges ? $this->badges->getValues(): $this->badges;
+//        return $this->badges->getValues();
     }
     
     public function addBadge(ProductBadge $badge): void
     {
         if (!$this->badges->contains($badge)) {
-//            $category->setProduct($this);
             $this->badges->add($badge);
         }
     }
@@ -681,12 +682,15 @@ class Product //implements \JsonSerializable
     }
 
     /**
-     * @return ProductOption[]|Collection
+     * @ return ProductOption[]|Collection
      */
-    public function getOptions(): Collection
+    public function getOptions()//: Collection
     {
         $criteria = Criteria::create()->orderBy(['position' => Criteria::ASC]);
-        return $this->options->matching($criteria);
+        $options = $this->options->matching($criteria);
+
+        return $options ? $options->getValues(): $options;
+//        return $options->getValues();
     }
 
     public function addOption(ProductOption $option): void
@@ -711,11 +715,11 @@ class Product //implements \JsonSerializable
     }
 
     /**
-     * @return ProductVariant[]|Collection
+     * @ return ProductVariant[]|Collection
      */
     public function getVariants()
     {
-        return $this->variants;
+        return $this->variants ? $this->variants->getValues(): $this->variants;
     }
 
     /**

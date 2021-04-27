@@ -69,9 +69,9 @@
                             </div>
                             {{ 'order.orders'|trans }}
                         </div>
-                        <div class="d-flex align-items-center">
-                            {#                                    <span class="badge badge-warning float-right">NEW</span>#}
-                        </div>
+{#                        <div class="d-flex align-items-center">#}
+{#                            <span class="badge badge-warning float-right">NEW</span>#}
+{#                        </div>#}
                     </div>
                 </a>
                 <div class="sidenav-dropdown-menu" aria-labelledby="topnavOrders_">
@@ -149,7 +149,7 @@
                 </div>
             </li>
 
-            <li class="sidenav-item mt-3X mt-md-5X {% if activeMenu is defined and activeMenu == 'cms' %}sidenav-item-show{% endif %}">
+            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'cms' %}sidenav-item-show{% endif %}">
                 <a href="{{ path('cms-page-list') }}" class="sidenav-link">
                     <div class="sidenav-item-content">
                         <div class="d-flex align-items-center">
@@ -164,19 +164,22 @@
                         </div>
                     </div>
                 </a>
-            </li>
-            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'smartLabels' %}sidenav-item-show{% endif %}">
-                <a href="{{ path('smart-label-list') }}" class="sidenav-link">
-                    <div class="sidenav-item-content">
-                        <div class="d-flex align-items-center">
-                            <div class="sidenav-icon">
-                                <i class="fas fa-tags"></i>
-                            </div>
-                            Matricák
+                <div class="sidenav-dropdown-menu" aria-labelledby="topnavOrders_">
+                    <a href="{{ path('cms-page-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'cms-page-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-shopping-cart"></i>
                         </div>
-                    </div>
-                </a>
+                        <span>CMS oldalak</span>
+                    </a>
+                    <a href="{{ path('cms-navigation-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'cms-navigation-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <span>Navigation</span>
+                    </a>
+                </div>
             </li>
+
         </ul>
 
 

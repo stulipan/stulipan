@@ -20,6 +20,8 @@ use App\Serializer\ProductOptionValueDenormalizer;
 use App\Serializer\ProductSelectedOptionDenormalizer;
 use App\Serializer\ProductStatusDenormalizer;
 use App\Serializer\ProductVariantDenormalizer;
+use App\Services\FileUploader;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,11 +37,15 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ProductApiController extends BaseController
 {
     private $targetDirectory;
+    private $fileUploader;
+    private $cacheManager;
     
-    public function __construct(string $targetDirectory)
+    public function __construct(string $targetDirectory, FileUploader $fileUploader, CacheManager $cacheManager)
     {
         parent::__construct();
         $this->targetDirectory = $targetDirectory;
+        $this->fileUploader = $fileUploader;
+        $this->cacheManager = $cacheManager;
     }
     
     //////////////////////////////////////////////////////////////////////////////////////
@@ -147,6 +153,16 @@ class ProductApiController extends BaseController
 
         $em->persist($product);
         $em->flush();
+
+        foreach ($product->getImages() as $image) {
+            $publicPath = $this->fileUploader->getPublicPath($image->getImagePath());
+            $image->setImageUrl(
+                $this->cacheManager->getBrowserPath($publicPath, 'product_large')
+            );
+            $image->setThumbnailUrl(
+                $this->cacheManager->getBrowserPath($publicPath, 'product_medium')
+            );
+        }
     
         //CELSZERUBB csak a termeket visszaadni, es nem reloadolni a teljes oldalt
         return $this->jsonObjNormalized(['products' => [$product]], 200, ['groups' => 'productView']);
@@ -191,21 +207,23 @@ class ProductApiController extends BaseController
 //            'skip_null_values' => true,
         ]);
 
-//        $variants = $serializer->denormalize()
-//        dd($product->findOptionBy(['name'=> 'Color'])->findValueBy(['value' => 'Red']));
-//        dd($product->findOptionBy(['name'=> 'Color']));
-
         $errors = $this->getValidationErrors($product, $validator);
         if (!empty($errors)) {
             return $this->jsonNormalized(['errors' => $errors], 422);
         }
 
-
-//        foreach ($product->getVariants() as $variant) {
-//            $em->persist($variant);
-//        }
         $em->persist($product);
         $em->flush();
+
+        foreach ($product->getImages() as $image) {
+            $publicPath = $this->fileUploader->getPublicPath($image->getImagePath());
+            $image->setImageUrl(
+                $this->cacheManager->getBrowserPath($publicPath, 'product_large')
+            );
+            $image->setThumbnailUrl(
+                $this->cacheManager->getBrowserPath($publicPath, 'product_medium')
+            );
+        }
         return $this->jsonObjNormalized(['products' => [$product]],200, ['groups' => 'productView']);
     }
     

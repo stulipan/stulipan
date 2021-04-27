@@ -9,13 +9,13 @@
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">
         {{ encore_entry_link_tags('admin-theme') }}
-        {{ encore_entry_link_tags('daterangepicker') }}
-        {{ encore_entry_link_tags('v-admin') }}
+{#        {{ encore_entry_link_tags('v-admin') }}#}
 
         <link href="{{ asset('webshop/admin/custom-select2.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('webshop/admin/v-style.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" />
 
+        {{ encore_entry_script_tags('admin-app') }}
     {% endblock %}
 </head>
 <body class="admin{% block bodyClass %}{% endblock %}">
@@ -34,6 +34,7 @@
     <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('webshop/admin/js/select2.min.js') }}"></script>
 
+    {% include('admin/_admin-localization.html.twig') %}
     <script>
         // Innen: https://momentjs.com/docs/#/i18n/
         moment.locale("{{ app.request.locale }}", {
@@ -68,7 +69,6 @@
                 "{{ 'datetime.december'|trans }}",
             ]
         });
-        {#console.log("{{ storeSettings.getDateFormatInMomentJsFormat }}");#}
         const drpBaseConfig = {
             locale: {
                 format: "{{ storeSettings.getDateFormatInMomentJsFormat }}",
@@ -121,10 +121,7 @@
 
     <script src="{{ asset('webshop/admin/js/order.detail.js') }}"></script>
 
-    {{ encore_entry_script_tags('v-admin') }}
-    {{ encore_entry_script_tags('sidebar') }}
-    {{ encore_entry_script_tags('floating-input') }}
-    {{ encore_entry_script_tags('adaptive-tabs') }}
+{#    {{ encore_entry_script_tags('v-admin') }}#}
 {% endblock %}
 </body>
 </html>

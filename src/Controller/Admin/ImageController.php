@@ -33,7 +33,7 @@ class ImageController extends BaseController
     {
         /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
         $file = $request->files->get('imageFile');
-        
+
         $violations = $validator->validate(
             $file, [
                 new NotBlank(),
@@ -46,7 +46,7 @@ class ImageController extends BaseController
             foreach ($violations as $violation) {
                 $errors['imageFile'] = $violation->getMessage();
             }
-            return $this->jsonNormalized(['errors' => $errors], 422);
+            return $this->jsonNormalized(['errors' => [$errors]], 422);
         }
         
         if (!is_null($file)) {
@@ -73,8 +73,6 @@ class ImageController extends BaseController
         /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
         $file = $request->files->get('imageFile');
 
-//        dd($request->files);
-//        dd($file);
         $violations = $validator->validate(
             $file, [
             new NotBlank(),
@@ -88,7 +86,7 @@ class ImageController extends BaseController
             foreach ($violations as $violation) {
                 $errors['imageFile'] = $violation->getMessage();
             }
-            return $this->jsonNormalized(['errors' => $errors], 422);
+            return $this->jsonNormalized(['errors' => [$errors]], 422);
         }
         
         if (!is_null($file)) {

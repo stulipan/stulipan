@@ -1,3 +1,7 @@
+// NINCS HASZNALVA !!!!!
+
+
+
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 

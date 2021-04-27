@@ -13,13 +13,17 @@
 @import "_variant-picker";
 @import "_vertical-ribbon";
 @import "_vue-multiselect";
-@import "_notyf";
 
+@import "sweetalert2/sweetalert2";
 @import "_font-size-mobile-reboot";
 
 
 .group-validation .invalid-feedback {
   display: block;
+}
+.img-preview {
+  width: 100%;
+  overflow-y: hidden;
 }
 
 

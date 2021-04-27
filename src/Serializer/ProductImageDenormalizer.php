@@ -17,6 +17,7 @@ class ProductImageDenormalizer implements DenormalizerInterface, DenormalizerAwa
     use DenormalizerAwareTrait;
     
     private $em;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
@@ -29,7 +30,7 @@ class ProductImageDenormalizer implements DenormalizerInterface, DenormalizerAwa
     {
         $product = $context['product'];  // this is passed on from ProductDenormalizer
         
-        if (isset($data['id'])) {
+        if (isset($data['id']) && $data['id'] !== null) {
             $object = $this->em->find(ProductImage::class, $data['id']);
             $object->setOrdering($data['ordering']);
         } else {
@@ -38,6 +39,7 @@ class ProductImageDenormalizer implements DenormalizerInterface, DenormalizerAwa
             $object->setImage($imageEntity);
             $object->setProduct($product);
             $object->setOrdering($data['ordering']);
+
             $context['product']->addImage($object);
         }
         return $object;

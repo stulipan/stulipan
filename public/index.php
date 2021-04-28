@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 require dirname(__DIR__).'/config/bootstrap.php';
 require_once __DIR__.'/../barion/BarionClient.php';
+require_once __DIR__.'/../barion/phpEkiCrypt.php';
 
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);

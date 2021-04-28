@@ -18,7 +18,7 @@ import FloatingInput from "./js/floating-input";
 import AdaptiveTabs from "./js/adaptive-tabs";
 
 if (AlertMessages.SUCCESS) {
-    Notify.success(AlertMessages.SUCCESS);
+    Notify.info(AlertMessages.SUCCESS);
 }
 if (AlertMessages.ERROR) {
     Notify.error(AlertMessages.ERROR);

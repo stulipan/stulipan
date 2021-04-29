@@ -33,7 +33,7 @@
 }
 
 //@include media-breakpoint-down(xs) {
-@media (max-height: 735.98px) {
+@media (max-width: 399.98px) and (max-height: 735.98px) {
   .product-details-imageWrapper {
     overflow-y: hidden;
     max-height: 450px;

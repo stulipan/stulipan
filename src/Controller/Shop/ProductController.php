@@ -51,7 +51,7 @@ class ProductController extends AbstractController
             $products = $category->getProducts();
         }
         if (!$products) {
-            $this->addFlash('livSuccess', 'Nem talált egy terméket sem! ');
+            $this->addFlash('error', 'Nem talált egy terméket sem! ');
         }
 
         return $this->render('webshop/site/product-list.html.twig', [

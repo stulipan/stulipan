@@ -127,6 +127,7 @@ class ProductCategory implements JsonSerializable
      *
      *
      * @ORM\ManyToMany(targetEntity="Product", mappedBy="categories")
+     * @ORM\OrderBy({"rank"="ASC"})
      */
     private $products;
 

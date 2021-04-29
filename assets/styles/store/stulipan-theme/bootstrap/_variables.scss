@@ -920,7 +920,7 @@ $pagination-disabled-border-color:  $pagination-disabled-bg !default;
 
 $jumbotron-padding:                 0 !default; //2rem !default;
 $jumbotron-color:                   null !default;
-$jumbotron-bg:                      $gray-200 !default;
+$jumbotron-bg:                      transparent !default; //$gray-200 !default;
 
 
 // Cards

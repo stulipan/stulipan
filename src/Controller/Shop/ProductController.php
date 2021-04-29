@@ -21,7 +21,7 @@ class ProductController extends AbstractController
      */
     public function showProductsAll()
     {
-        $products= $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $products= $this->getDoctrine()->getRepository(Product::class)->findAllOrdered();
 
         if (!$products) {
             $this->addFlash('success', 'Nem talált egy terméket sem! ');

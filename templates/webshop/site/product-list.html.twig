@@ -13,10 +13,10 @@
 
     <div class="container-fluid p-0">
         <div class="jumbotron jumbotron-fluid">
-            <div class="position-relative text-dark">
-                <div class="jumbotron--cover jumbotron--cover-collection light-overlay" {% if category.image is defined and category.image is not empty %} style="background-image: url({{ uploaded_asset(category.imagePath)|imagine_filter('unscaled') }});" {% else %}style="background-image: url('/uploads/images/ajtodisz-hero-banner.jpg');" {% endif %}>
+            <div class="position-relative text-white">
+                <div class="jumbotron--cover jumbotron--cover-collection dark-overlay" {% if category.image is defined and category.image is not empty %} style="background-image: url({{ uploaded_asset(category.imagePath)|imagine_filter('unscaled') }});" {% else %}style="background-image: url('/uploads/images/ajtodisz-hero-banner.jpg');" {% endif %}>
                 </div>
-                <div class="container card-img-overlay d-flex align-items-center">
+                <div class="container card-img-overlay d-flex align-items-center px-md-6">
                     <div class="text-center w-100">
                         <h1 class="font-weight-bold">{{ category is defined ? category : 'collection.products'|trans }}</h1>
                         <span class="lead">{{ category.description is defined ? category.description|raw : '' }}</span>

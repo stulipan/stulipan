@@ -125,4 +125,17 @@ class ProductRepository extends ServiceEntityRepository
         return $qb->execute();
 	}
 
+    /**
+     * @return\Doctrine\ORM\Query
+     */
+    public function findAllOrdered()
+    {
+        $qb = $this->createQueryBuilder('p')
+//            ->andWhere('p.enabled = :enabled')
+//            ->setParameter('enabled', 1)
+             ->orderBy('p.rank', 'ASC')
+        ;
+        return $qb->getQuery()->execute();
+    }
+
 }

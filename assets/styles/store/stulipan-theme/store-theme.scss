@@ -118,31 +118,6 @@ input[type=number] {
 }
 
 
-//
-//  Custom classes
-//
-
-// Hero banners
-.light-overlay, .dark-overlay {
-  position: relative;
-
-  & .overlay-content {
-    position: relative;
-    z-index: 20;
-  }
-
-  &::after {
-    content: ' ';
-    width: 100%;
-    height: 100%;
-    background: #000;
-    opacity: .3;
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
-}
-
 .heroBanner h1,
 .heroBanner-title {
   font-family: 'Archivo Black', sans-serif;

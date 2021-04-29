@@ -32,6 +32,16 @@
   border-bottom: solid 2px #495057
 }
 
+//@include media-breakpoint-down(xs) {
+@media (max-height: 735.98px) {
+  .product-details-imageWrapper {
+    overflow-y: hidden;
+    max-height: 450px;
+    display: flex !important;
+    align-items: center;
+  }
+}
+
 .product-details {
   & .product-name h1 {
     font-size: 1.35rem;

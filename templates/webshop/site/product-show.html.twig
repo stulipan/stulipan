@@ -22,6 +22,8 @@
     {{ parent() }}
     {#<link rel="stylesheet" href="{{ asset('build/v-shop.css') }}"/>#}
 {#    {{ encore_entry_link_tags('daterangepicker') }}#}
+    <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css" rel="stylesheet" >
+    <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >
 {% endblock %}
 
 {% block bodyClass %} product-details{% endblock %}
@@ -52,7 +54,7 @@
                                         <div data-slider-id="1" class="owl-thumbs">
                                             {% for image in product.images %}
                                                 <button class="owl-thumb-item detail-thumb-item mb-10px">
-                                                    <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_small') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
+                                                    <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_small') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image" width="99" height="132">
                                                 </button>
                                             {% endfor %}
                                         </div>
@@ -86,7 +88,7 @@
                                                     {% for image in product.images %}
                                                         <div class="item">
                                                             <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
-                                                                <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="img-fluid">
+                                                                <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="img-fluid" width="534" height="712">
                                                             </a>
                                                         </div>
                                                     {% endfor %}
@@ -237,6 +239,73 @@
 {#                                                    </div>#}
                                                 </div>
                                             </div>
+                                            <div class="product-quickinfo">
+                                                <div class="row">
+{#                                                    <div class="col-sm-12">#}
+{#                                                        <div class="h4 general-info-titleX">Hasznos infók</div>#}
+{#                                                    </div>#}
+                                                    <div class="col-sm-12 mt-3X">
+                                                        <div class="accordion mb-4" id="accordionMiertDobozok">
+                                                            <div class="card">
+                                                                <div  class="card-header border-bottom-0" id="miertDoboz1">
+                                                                    <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapseOne">Országos házhozszállítás</a>
+                                                                </div>
+                                                                <div id="collapse1" class="collapse" aria-labelledby="miertDoboz1" data-parent="#accordionMiertDobozok">
+                                                                    <div class="card-body pt-2">
+                                                                        <p class="general-info-item-description">Rendelj bizalommal, ugyanis a Rafina termékeket most Magyarország teljes területére kézbesítjük. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {#                                        <div class="card">#}
+                                                            {#                                            <div  class="card-header border-bottom-0" id="miertDoboz2">#}
+                                                            {#                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapseOne">Virágküldés a nap 24 órájában</a>#}
+                                                            {#                                            </div>#}
+                                                            {#                                            <div id="collapse2" class="collapse" aria-labelledby="miertDoboz2" data-parent="#accordionMiertDobozok">#}
+                                                            {#                                                <div class="card-body pt-2">#}
+                                                            {#                                                    <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;#}
+                                                            {#                                                    </p>#}
+                                                            {#                                                </div>#}
+                                                            {#                                            </div>#}
+                                                            {#                                        </div>#}
+                                                            <div class="card">
+                                                                <div  class="card-header border-bottom-0" id="miertDoboz3">
+                                                                    <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapseOne">Magas vásárlói elégedettség</a>
+                                                                </div>
+                                                                <div id="collapse3" class="collapse" aria-labelledby="miertDoboz3" data-parent="#accordionMiertDobozok">
+                                                                    <div class="card-body pt-2">
+                                                                        <p class="general-info-item-description">A Rafinánál minden termék kézzel készül, így nagy figyelmet fordítunk minden egyes termék elkészítésére, hogy te mindig a legjobbat kapd.
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {#                                        <div class="card">#}
+                                                            {#                                            <div  class="card-header border-bottom-0" id="miertDoboz4">#}
+                                                            {#                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseOne">Egyedi terméket szeretnél?</a>#}
+                                                            {#                                            </div>#}
+                                                            {#                                            <div id="collapse4" class="collapse" aria-labelledby="miertDoboz4" data-parent="#accordionMiertDobozok">#}
+                                                            {#                                                <div class="card-body pt-2">#}
+                                                            {#                                                    <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.#}
+                                                            {#                                                    </p>#}
+                                                            {#                                                </div>#}
+                                                            {#                                            </div>#}
+                                                            {#                                        </div>#}
+                                                            <div class="card">
+                                                                <div  class="card-header border-bottom-0" id="miertDoboz5">
+                                                                    <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapseOne">Lépj kapcsolatba velünk!</a>
+                                                                </div>
+                                                                <div id="collapse5" class="collapse" aria-labelledby="miertDoboz5" data-parent="#accordionMiertDobozok">
+                                                                    <div class="card-body pt-2">
+                                                                        <p class="general-info-item-description">
+                                                                            Ha kérdésed van a Rafina termékeivel kapcsolatosan vagy érdeklődni szeretnél a rendelés és szállításról, írj bátran. Email címünk: <a href="mailto:{{ storeSettings.get('store.email') }}">{{ storeSettings.get('store.email') }}</a>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                 </div>
 
@@ -316,6 +385,7 @@
         </div>
     </div>
     {% endif %}
+    {% if false == true %}
     <div class="py-5">
         <div class="container">
             <div class="row">
@@ -393,26 +463,17 @@
             </div>
         </div>
     </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
-    <script src="{{ asset('build/v-shop.js') }}"></script>
-
-    <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
-    <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/owl.carousel.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/smooth-scroll/smooth-scroll.polyfills.min.js"></script>
+    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>
+{#    <script src="{{ asset('build/v-shop.js') }}"></script>#}
     <script>
-        // ------------------------------------------------------- //
-        // Detail Carousel with thumbs
-        // ------------------------------------------------------ //
-        // $('.detail-slider').owlCarousel({
-        //     loop: true,
-        //     items: 1,
-        //     thumbs: true,
-        //     thumbsPrerendered: true,
-        //     dots: true,
-        //     responsiveClass: false
-        // });
         $('.detail-slider').owlCarousel({
             loop: true,
             thumbs: true,
@@ -436,10 +497,6 @@
             }
         });
 
-        // ------------------------------------------------------- //
-        //   Ekko Lightbox
-        // ------------------------------------------------------ //
-
         $(document).on('click', '[data-toggle="lightbox"]', function (event) {
             event.preventDefault();
             $(this).ekkoLightbox({
@@ -447,166 +504,6 @@
 //                leftArrow: '<span><img src="img/prev.svg" class="nav-arrow nav-arrow-left" alt="" width="50"></span>',
 //                rightArrow: '<span><img src="img/next.svg" class="nav-arrow nav-arrow-right" alt="" width="50"></span>'
             });
-        });
-    </script>
-
-
-    <script>
-        $(function() {
-            $('.JS--Button-clickDate').daterangepicker({
-                opens: 'left',
-                autoApply: true,
-                autoUpdateInput: false,
-                singleDatePicker: true,
-    //            alwaysShowCalendars: true,
-                minDate: moment().add(4, 'hours'),
-                maxDate: moment().add(2, 'months'),
-                locale: {
-                    format: 'YYYY-MM-DD',
-                    separator: ' / ',
-                    applyLabel: 'Alkalmaz',
-                    cancelLabel: 'Mégse',
-                    daysOfWeek: [
-                        'V',
-                        'H',
-                        'K',
-                        'Sz',
-                        'Cs',
-                        'P',
-                        'Sz'
-                    ],
-                    monthNames: [
-                        'Január',
-                        'Február',
-                        'Március',
-                        'Április',
-                        'Május',
-                        'Június',
-                        'Július',
-                        'Augusztus',
-                        'Szeptember',
-                        'Október',
-                        'November',
-                        'December'
-                    ],
-                    firstDay: 1,
-                }
-            });
-        //     $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {
-        //         ev.preventDefault();
-        //         $pickerDate = picker.startDate.format('YYYY-MM-DD');
-        //
-        //         $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
-        //         $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
-        //         /**
-        //          * Csak az első 3 rádió opcióba keresi a pickerDate-et. És ha benne van, akkor a Calendárt mutatja.
-        //          */
-        //         $selectedRadio = $(this).closest('.JS--dateWrapper').find('input[type="radio"][value="' + $pickerDate + '"]:not(".JS--Button-clickDate")');
-        //         if ($selectedRadio.val()) {
-        //             console.log($selectedRadio);
-        //             $selectedRadio.prop('checked', true);
-        //             $dateValueWrapper.hide();
-        //             $calendarIconWrapper.show();
-        //         }
-        //         /**
-        //          * Ha nincs benne, akkor negyedik rádió inputhoz rendeli a pickerDate-et és elrejti a Calendárt.
-        //          */
-        //         else {
-        //             $(this).val($pickerDate);  // az input, amihez kötve van a gomb, megkapja a daterangepicker értékét (dátumot)
-        //             $html = '<span class="font-weight-bold my-0">' + picker.startDate.format('MMM D') + '</span><br> <span class="price--gross text-nowrap">' + picker.startDate.format('ddd') + '</span>';
-        //             $dateValueWrapper.html($html);
-        //             $calendarIconWrapper.hide();
-        //             $dateValueWrapper.show();
-        //         }
-        //     });
-        //     $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
-        //         $(this).val('');
-        //     });
-        //     /**
-        //      * Amikor nem a Daterangepicker-re klikkel, akkor biztos a Calendárt kell mutatnia.
-        //      */
-        //     $('.JS--dateWrapper input[type="radio"]:not(".JS--Button-clickDate")').on('click', function () {
-        //         $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
-        //         $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
-        //         $dateValueWrapper.hide();
-        //         $calendarIconWrapper.show();
-        //     });
-        });
-    </script>
-    <script>
-        $(function() {
-            let $wrapper = $('.JS--deliveryDateContainer');
-            let $vp = $wrapper.find('.vp-checked');
-            // let $currentValue = $vp.find('input').val();
-            // console.log($currentValue);
-
-            // $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);
-
-            /**
-             * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.
-             */
-            $("[class*='JS--generatedDate-']").click(function () {
-                $dateWrapper = $wrapper.find('.JS--dateWrapper');
-
-                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
-                $(this).find('.vp').find('input').prop('checked', true);
-                $(this).find('.vp').addClass('vp-checked');
-
-                // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
-                // amugy visszallitja (ujra mutatja) a CalendarIcont
-                if (! ($(this).hasClass('d-temporary')) ) {
-                    $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                    $dateWrapper.find('.JS--showCalendarIcon').show();
-                }
-
-            });
-            /**
-             * Kezeli a kalendáriumra kattintást.
-             */
-            $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {
-                ev.preventDefault();
-                $pickerDate = picker.startDate.format('YYYY-MM-DD');
-                $wrapper = $(this).closest('.JS--deliveryDateContainer');
-                $dateWrapper = $(this).closest('.JS--dateWrapper');
-
-                $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                $dateWrapper.find('.vp-checked').find('input').prop('checked', false);
-                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
-
-                $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
-
-                if ($dateModule.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon
-                    $wrapper.find('.JS--showCalendarIcon').hide();
-                    $dateModule.removeClass('d-none').addClass('d-temporary');
-                }
-                $dateModule.find('.vp').find('input').prop('checked', true);
-                $dateModule.find('.vp').addClass('vp-checked');
-
-                if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
-                    $wrapper.find('.JS--showCalendarIcon').show();
-                }
-            });
-            $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            });
-        });
-    </script>
-    <script>
-        // Displays the loading circle
-        $(function() {
-            // let _proceed = false;
-            // $(document).on('click', '.JS--Button-addToCart', function (e) {
-            //     if (_proceed) {
-            //         _proceed = false;
-            //         return;
-            //     }
-            //     e.preventDefault();
-            //     var el = $(e.currentTarget);
-            //
-            //     el.addClass('loading-spinner');
-            //     _proceed = true;
-            //     el.trigger('click');
-            // });
         });
     </script>
 {% endblock %}

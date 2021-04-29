@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\Entity\Product\Product;
+use App\Services\Localization;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -24,7 +25,7 @@ class SetSlugProduct
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->slug = new Slugify();
+        $this->slug = new Slugify(['rulesets' => Localization::SLUGIFY_RULES]);
     }
     
     /**

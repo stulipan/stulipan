@@ -1,4 +1,4 @@
-					<div class="row mt-4">
+					<div class="form-row mt-4">
                         {% if products is defined and products is not empty %}
                             {% for product in products %}
 
@@ -19,7 +19,7 @@
                                                         {% endif %}
                                                     {% endfor %}
                                                 {% endif %}
-                                                <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid">
+                                                <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="300" height="400">
                                                 {% if bestseller %}
                                                     <div class="ribbon ribbon-bottom">
                                                         <i class="fas fa-trophy"></i> {{ 'product.bestseller'|trans }}

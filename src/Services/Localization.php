@@ -20,6 +20,8 @@ final class Localization
         'en' => 'H:i',
     ];
 
+    public const SLUGIFY_RULES = ['default', 'hungarian'];
+
 
     /**
      * @var Locale[]|ArrayCollection|null

@@ -254,17 +254,23 @@
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
                                 <h5 class="text-uppercase mb-3">Termékek</h5>
                                 <ul class="list-unstyled">
-                                    <li class="mb-2"> <a href="/termekek/kopogtatok" class="text-decoration-none" title="Virágcsokrok">Kopogtatók, ajtódíszek</a></li>
-                                    <li class="mb-2"> <a href="/termekek/viragdobozok" class="text-decoration-none" title="Virágboxok">Virágdobozok</a></li>
+                                    {% for item in navigations.footerTermekek.navigationItems %}
+                                        <li class="mb-2"> <a href="{{ item.url }}" class="text-decoration-none" title="{{ item.name }}">{{ item.name }}</a></li>
+                                    {% endfor %}
+{#                                    <li class="mb-2"> <a href="/termekek/kopogtatok" class="text-decoration-none" title="Virágcsokrok">Kopogtatók, ajtódíszek</a></li>#}
+{#                                    <li class="mb-2"> <a href="/termekek/viragdobozok" class="text-decoration-none" title="Virágboxok">Virágdobozok</a></li>#}
                                 </ul>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
                                 <h5 class="text-uppercase mb-3">Információk</h5>
                                 <ul class="list-unstyled">
-                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="text-decoration-none">Rólunk</a></li>
-                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="text-decoration-none">Szállítási díjak</a></li>
-                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="text-decoration-none">ÁSZF</a></li>
-                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'privacy'}) }}" class="text-decoration-none">Adatvédelmi szabályzat</a></li>
+                                    {% for item in navigations.footerInformaciok.navigationItems %}
+                                        <li class="mb-2"> <a href="{{ item.url }}" class="text-decoration-none" title="{{ item.name }}">{{ item.name }}</a></li>
+                                    {% endfor %}
+{#                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="text-decoration-none">Rólunk</a></li>#}
+{#                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="text-decoration-none">Szállítási díjak</a></li>#}
+{#                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="text-decoration-none">ÁSZF</a></li>#}
+{#                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'privacy'}) }}" class="text-decoration-none">Adatvédelmi szabályzat</a></li>#}
                                 </ul>
                             </div>
 {#                            <div class="col-sm-6 col-md-12 col-lg-3">#}

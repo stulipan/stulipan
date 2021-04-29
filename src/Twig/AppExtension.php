@@ -2,12 +2,14 @@
 
 namespace App\Twig;
 
+use App\Entity\CmsNavigation;
 use App\Entity\CmsPage;
 use App\Entity\CmsPage4Twig;
 use App\Services\DateFormatConvert;
 use App\Services\FileUploader;
 use App\Services\Localization;
 use App\Services\StoreSettings;
+use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -68,7 +70,8 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'storeUrl' => $this->storeSettings->get('store.url'),
             'storeName' => $this->storeSettings->get('store.name'),
             'storeEmail' => $this->storeSettings->get('store.email'),
-            'flowerShop' => $this->storeSettings->get('general.flower-shop-mode')
+            'flowerShop' => $this->storeSettings->get('general.flower-shop-mode'),
+            'navigations' => $this->getNavigations(),
         ];
     }
 
@@ -104,12 +107,34 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     {
         $cmsPages = $this->em->getRepository(CmsPage::class)->findAll();
 
-        $pages = [];
-        foreach ($cmsPages as $page => $value) {
-            $pages[$value->getSlug()] = $value;
+        if ($cmsPages) {
+            $pages = [];
+            foreach ($cmsPages as $page => $value) {
+                $pages[$value->getSlug()] = $value;
+            }
+            $pages = $this->convertToObject($pages);
+            return $pages;
         }
-        $pages = $this->convertToObject($pages);
-        return $pages;
+        return null;
+    }
+
+    public function getNavigations()
+    {
+        $navigations = $this->em->getRepository(CmsNavigation::class)->findAllOrdered();
+
+        if ($navigations) {
+            $navigations = $navigations->execute();
+
+            $navs = [];
+            foreach ($navigations as $navigation => $value) {
+                $slug = new Slugify(['rulesets' => Localization::SLUGIFY_RULES]);
+                $slug = $slug->slugify($value->getName());
+                $navs[$slug] = $value;
+            }
+            $navs = $this->convertToObject($navs);
+            return $navs;
+        }
+        return null;
     }
 
     public function createCopyrightYear()

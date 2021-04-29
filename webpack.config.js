@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+// const CompressionPlugin = require("compression-webpack-plugin");
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -93,4 +94,15 @@ Encore
     //.autoProvidejQuery()
 ;
 
+    // Ez volt az eredeti:
 module.exports = Encore.getWebpackConfig();
+
+//     // ezt utolag, hogy a gzip compressiont is elvegezze:
+// // fetch the config, then modify it!
+// const config = Encore.getWebpackConfig();
+//
+// // add an extension
+// config.plugins.push(new CompressionPlugin());
+//
+// // export the final config
+// module.exports = config;

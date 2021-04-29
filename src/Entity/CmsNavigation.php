@@ -16,8 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
- * /( repositoryClass="App\Repository\CmsPageRepository" )
+ * @ORM\Entity(repositoryClass="App\Repository\CmsNavigationRepository")
  * @ORM\Table(name="cms_navigation")
  * @ UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
  */

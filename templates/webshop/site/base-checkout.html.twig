@@ -2,7 +2,6 @@
 
 {% block stylesheets %}
     {{ parent() }}
-{#    {{ encore_entry_link_tags('daterangepicker') }}#}
     <link href="{{ asset('webshop/site/js/easy-autocomplete.css') }}" rel="stylesheet" />
     <link href="{{ asset('webshop/site/js/easy-autocomplete.themes.css') }}" rel="stylesheet" />
 {% endblock %}
@@ -28,5 +27,76 @@
                 window.location.reload();
             }
         });
+    </script>
+    <script>
+        // Innen: https://momentjs.com/docs/#/i18n/
+        moment.locale("{{ app.request.locale }}", {
+            monthsShort : [
+                "{{ 'datetime.jan'|trans }}",
+                "{{ 'datetime.feb'|trans }}",
+                "{{ 'datetime.mar'|trans }}",
+                "{{ 'datetime.apr'|trans }}",
+                "{{ 'datetime.may'|trans }}",
+                "{{ 'datetime.jun'|trans }}",
+                "{{ 'datetime.jul'|trans }}",
+                "{{ 'datetime.aug'|trans }}",
+                "{{ 'datetime.sep'|trans }}",
+                "{{ 'datetime.oct'|trans }}",
+                "{{ 'datetime.nov'|trans }}",
+                "{{ 'datetime.dec'|trans }}",
+            ]
+        });
+        moment.locale("{{ app.request.locale }}", {
+            months: [
+                "{{ 'datetime.january'|trans }}",
+                "{{ 'datetime.february'|trans }}",
+                "{{ 'datetime.march'|trans }}",
+                "{{ 'datetime.april'|trans }}",
+                "{{ 'datetime.mayy'|trans }}",
+                "{{ 'datetime.june'|trans }}",
+                "{{ 'datetime.july'|trans }}",
+                "{{ 'datetime.august'|trans }}",
+                "{{ 'datetime.september'|trans }}",
+                "{{ 'datetime.october'|trans }}",
+                "{{ 'datetime.november'|trans }}",
+                "{{ 'datetime.december'|trans }}",
+            ]
+        });
+        {#console.log("{{ storeSettings.getDateFormatInMomentJsFormat }}");#}
+        const drpBaseConfig = {
+            locale: {
+                format: "{{ storeSettings.getDateFormatInMomentJsFormat }}",
+                // format: 'YYYY-MM-DD',
+                separator: ' - ',
+                dropdownRangeLabel: "{{ 'datetime.date-range'|trans }}",
+                customRangeLabel: "{{ 'datetime.custom-range'|trans }}",
+                applyLabel: "{{ 'generic.apply'|trans }}",
+                cancelLabel: "{{ 'generic.delete'|trans }}",
+                daysOfWeek: [
+                    "{{ 'datetime.sun'|trans }}",
+                    "{{ 'datetime.mon'|trans }}",
+                    "{{ 'datetime.tue'|trans }}",
+                    "{{ 'datetime.wed'|trans }}",
+                    "{{ 'datetime.thu'|trans }}",
+                    "{{ 'datetime.fri'|trans }}",
+                    "{{ 'datetime.sat'|trans }}",
+                ],
+                monthNames: [
+                    "{{ 'datetime.january'|trans }}",
+                    "{{ 'datetime.february'|trans }}",
+                    "{{ 'datetime.march'|trans }}",
+                    "{{ 'datetime.april'|trans }}",
+                    "{{ 'datetime.mayy'|trans }}",
+                    "{{ 'datetime.june'|trans }}",
+                    "{{ 'datetime.july'|trans }}",
+                    "{{ 'datetime.august'|trans }}",
+                    "{{ 'datetime.september'|trans }}",
+                    "{{ 'datetime.october'|trans }}",
+                    "{{ 'datetime.november'|trans }}",
+                    "{{ 'datetime.december'|trans }}",
+                ],
+                firstDay: 1,
+            },
+        };
     </script>
 {% endblock %}

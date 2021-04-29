@@ -50,29 +50,29 @@ liip_imagine:
 #                    dim: [ 200, 200 ]
 
         product_small:
-            jpeg_quality:          85
+            jpeg_quality:          75
             png_compression_level: 8
             filters:
                 thumbnail:
-                    size:          [200, 200]
+                    size:          [150, 200]
                     mode:          outbound
                     allow_upscale: true
 
         product_medium:
-            jpeg_quality:          85
+            jpeg_quality:          75
             png_compression_level: 8
             filters:
                 thumbnail:
-                    size:          [600, 600]
+                    size:          [300, 400]
                     mode:          outbound
                     allow_upscale: true
 
         product_large:
-            jpeg_quality:          85
+            jpeg_quality:          75
             png_compression_level: 8
             filters:
                 thumbnail:
-                    size:          [1024, 1024]
+                    size:          [768, 1024]
                     mode:          outbound
                     allow_upscale: true
 

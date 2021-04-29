@@ -18,9 +18,14 @@
     {% block stylesheets %}
         <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" >
         <link href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}" rel="stylesheet" >
-        <link href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}" rel="stylesheet" >
+        <script src="https://kit.fontawesome.com/469d83575c.js" crossorigin="anonymous"></script>
+{#        <link href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}" rel="stylesheet" >#}
 
+        <link rel="preload" as="style" href="{{ asset('build/store-theme.css') }}">
         {{ encore_entry_link_tags('store-theme') }}
+
+{#        <link rel="preload" as="style" href="{{ asset('build/store-plugins.css') }}">#}
+        {{ encore_entry_link_tags('store-plugins') }}
 
         <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css" rel="stylesheet" >
         <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >
@@ -82,83 +87,12 @@
     <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>
 
     <script src="{{ asset('webshop/lodash.core.min.js') }}"></script>
-
-    <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
-    <script src="{{ asset('webshop/site/js/daterangepicker.min.js') }}"></script>
     <script src="{{ asset('webshop/validate.min.js') }}"></script>
 
     {% include('webshop/widgets/_store-localization.html.twig') %}
-    <script>
-        // Innen: https://momentjs.com/docs/#/i18n/
-        moment.locale("{{ app.request.locale }}", {
-            monthsShort : [
-                "{{ 'datetime.jan'|trans }}",
-                "{{ 'datetime.feb'|trans }}",
-                "{{ 'datetime.mar'|trans }}",
-                "{{ 'datetime.apr'|trans }}",
-                "{{ 'datetime.may'|trans }}",
-                "{{ 'datetime.jun'|trans }}",
-                "{{ 'datetime.jul'|trans }}",
-                "{{ 'datetime.aug'|trans }}",
-                "{{ 'datetime.sep'|trans }}",
-                "{{ 'datetime.oct'|trans }}",
-                "{{ 'datetime.nov'|trans }}",
-                "{{ 'datetime.dec'|trans }}",
-            ]
-        });
-        moment.locale("{{ app.request.locale }}", {
-            months: [
-                "{{ 'datetime.january'|trans }}",
-                "{{ 'datetime.february'|trans }}",
-                "{{ 'datetime.march'|trans }}",
-                "{{ 'datetime.april'|trans }}",
-                "{{ 'datetime.mayy'|trans }}",
-                "{{ 'datetime.june'|trans }}",
-                "{{ 'datetime.july'|trans }}",
-                "{{ 'datetime.august'|trans }}",
-                "{{ 'datetime.september'|trans }}",
-                "{{ 'datetime.october'|trans }}",
-                "{{ 'datetime.november'|trans }}",
-                "{{ 'datetime.december'|trans }}",
-            ]
-        });
-        {#console.log("{{ storeSettings.getDateFormatInMomentJsFormat }}");#}
-        const drpBaseConfig = {
-            locale: {
-                format: "{{ storeSettings.getDateFormatInMomentJsFormat }}",
-                // format: 'YYYY-MM-DD',
-                separator: ' - ',
-                dropdownRangeLabel: "{{ 'datetime.date-range'|trans }}",
-                customRangeLabel: "{{ 'datetime.custom-range'|trans }}",
-                applyLabel: "{{ 'generic.apply'|trans }}",
-                cancelLabel: "{{ 'generic.delete'|trans }}",
-                daysOfWeek: [
-                    "{{ 'datetime.sun'|trans }}",
-                    "{{ 'datetime.mon'|trans }}",
-                    "{{ 'datetime.tue'|trans }}",
-                    "{{ 'datetime.wed'|trans }}",
-                    "{{ 'datetime.thu'|trans }}",
-                    "{{ 'datetime.fri'|trans }}",
-                    "{{ 'datetime.sat'|trans }}",
-                ],
-                monthNames: [
-                    "{{ 'datetime.january'|trans }}",
-                    "{{ 'datetime.february'|trans }}",
-                    "{{ 'datetime.march'|trans }}",
-                    "{{ 'datetime.april'|trans }}",
-                    "{{ 'datetime.mayy'|trans }}",
-                    "{{ 'datetime.june'|trans }}",
-                    "{{ 'datetime.july'|trans }}",
-                    "{{ 'datetime.august'|trans }}",
-                    "{{ 'datetime.september'|trans }}",
-                    "{{ 'datetime.october'|trans }}",
-                    "{{ 'datetime.november'|trans }}",
-                    "{{ 'datetime.december'|trans }}",
-                ],
-                firstDay: 1,
-            },
-        };
-    </script>
+
+    <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
+    <script src="{{ asset('webshop/site/js/daterangepicker.min.js') }}"></script>
     {{ encore_entry_script_tags('store') }}
 {% endblock %}
 </body>

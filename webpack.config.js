@@ -38,6 +38,7 @@ Encore
 
     .addStyleEntry('admin-theme', './assets/styles/admin/admin-theme.scss')
     .addStyleEntry('store-theme', './assets/styles/store/stulipan-theme/store-theme.scss')
+    .addStyleEntry('store-plugins', './assets/styles/store/stulipan-theme/store-plugins.scss')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

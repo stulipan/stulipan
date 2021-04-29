@@ -127,7 +127,6 @@ theme.LoadingOverlay = (function() {
     el.addClass('loading-spinner-show');
     theme.proceed = true;
     el.trigger(eventText);
-    // notyf.dismissAll();
   }
 
   function hide(el) {
@@ -147,25 +146,6 @@ class FormValidation {
     this.constraints = constraints;
     this.isWithError = false;
     this.formElements = 'input:not([type=hidden]), textarea, select';
-
-    // validate.validators.linkedInputNotEmpty = function (value, options, key) {
-    //   // let form = document.querySelector(this.formWrapper);
-    //   let linkedInput = document.getElementsByName(options.linkedInput);
-    //   // let field = document.querySelectorAll('input[name$="'+linkedInput+'"]');
-    //
-    //   console.log('linkedInput field: '+options.linkedInput);
-    //   console.log('linkedInput value: '+linkedInput.value);
-    //   console.log(validate.isEmpty(linkedInput.value))
-    //
-    //   // console.log('currentInput field: '+key);
-    //   console.log('currentInput value: '+value);
-    //   console.log(validate.isEmpty(value));
-    //   console.log('if: '+!validate.isEmpty(linkedInput.value) && validate.isEmpty(value))
-    //   if (!validate.isEmpty(linkedInput.value) && validate.isEmpty(value)) {
-    //     return options.message;
-    //   }
-    //   return;
-    // };
 
     // Listen for the event.
     document.addEventListener('initFormValidation', function (e) {
@@ -246,7 +226,7 @@ class FormValidation {
   }
 }
 
-const datePicker = (function () {
+theme.DatePicker = (function () {
   const selectors = {
     DELIVERY_DATE_WRAPPER: '.JS--Wrapper-deliveryDate',
     DELIVERY_DATE_FORM: '.JS--Wrapper-deliveryDateForm',
@@ -257,108 +237,166 @@ const datePicker = (function () {
     DELIVERY_DATE_GENERATED_DATE: "[class*='JS--generatedDate-']",
   };
 
-  // Initiliaze DateRangePicker
-  const drpConfig = Object.assign({}, drpBaseConfig, {
-    // parentEl: ".JS--dateWrapper",
-    // displayInline: true,
-    opens: 'left',
-    drops: 'auto',
-    singleDatePicker: true,
-    autoApply: true,
-    autoUpdateInput: false,
-    minDate: moment().add(4, 'hours'),
-    maxDate: moment().add(2, 'months'),
-  });
-  $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
+  function DatePicker(container) {
+    this.$container = $(container);
 
-  let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
-  let $vp = $wrapper.find('.vp-checked');
-  let hiddenForm = {
-    date: {
-      element: $wrapper.find('#hidden_deliveryDate'),
-      value: $wrapper.find('#hidden_deliveryDate').val(),
-      setDateValue: function (value) {
-        this.element.val(value);
-      },
-    },
-    interval: {
-      element: $wrapper.find('#hidden_deliveryInterval'),
-      value: $wrapper.find('#hidden_deliveryInterval').val(),
-      setIntervalValue: function (value) {
-        this.element.val(value);
-      },
-    },
-    fee: {
-      element: $wrapper.find('#hidden_deliveryFee'),
-      value: $wrapper.find('#hidden_deliveryFee').val(),
-      setFeeValue: function (value) {
-        this.element.val(value);
-      },
-    },
+    this.$container
+        .on('ready', this.handleDatePicker.bind(this))
+    ;
+    this.handleDatePicker(selectors);
   }
 
-  // Set initial value in DRP
-  if (hiddenForm.date.value) {
-    $('.JS--Button-clickDate').data('daterangepicker').setStartDate(hiddenForm.date.value);
-    $('.JS--Button-clickDate').data('daterangepicker').setEndDate(hiddenForm.date.value);
-  }
+  $.extend(DatePicker.prototype, {
 
-  let $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);
-  let $selectedInterval = $wrapper.find('.JS--generatedInterval-' + hiddenForm.date.value);
-  let $intervalDropdown = $selectedInterval.find('.JS--intervalDropdown');
+    handleDatePicker: function(selectors) {
+      // Initiliaze DateRangePicker
+      const drpConfig = Object.assign({}, drpBaseConfig, {
+        // parentEl: ".JS--dateWrapper",
+        // displayInline: true,
+        opens: 'left',
+        drops: 'auto',
+        singleDatePicker: true,
+        autoApply: true,
+        autoUpdateInput: false,
+        minDate: moment().add(4, 'hours'),
+        maxDate: moment().add(2, 'months'),
+      });
+      $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
 
-  if ($selectedDate.hasClass('d-none')) {
-    $selectedDate.removeClass('d-none').addClass('d-temporary');
-    $wrapper.find('.JS--showCalendarIcon').hide();
-  }
-  if ($selectedInterval.hasClass('d-none')) {
-    $selectedInterval.removeClass('d-none').addClass('d-temporary');
-  }
+      let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
+      let $vp = $wrapper.find('.vp-checked');
+      let hiddenForm = {
+        date: {
+          element: $wrapper.find('#hidden_deliveryDate'),
+          value: $wrapper.find('#hidden_deliveryDate').val(),
+          setDateValue: function (value) {
+            this.element.val(value);
+          },
+        },
+        interval: {
+          element: $wrapper.find('#hidden_deliveryInterval'),
+          value: $wrapper.find('#hidden_deliveryInterval').val(),
+          setIntervalValue: function (value) {
+            this.element.val(value);
+          },
+        },
+        fee: {
+          element: $wrapper.find('#hidden_deliveryFee'),
+          value: $wrapper.find('#hidden_deliveryFee').val(),
+          setFeeValue: function (value) {
+            this.element.val(value);
+          },
+        },
+      }
 
-  let cart = $('.JS--cartWrapper');
-  let summaryDeliveryFeePos = cart.find('.JS--summaryDeliveryFee');
-  let summaryTotal = cart.find('.JS--summaryTotal');
-  let summaryTotalPos = cart.find('.JS--summaryTotalPos');
+      // Set initial value in DRP
+      if (hiddenForm.date.value) {
+        $('.JS--Button-clickDate').data('daterangepicker').setStartDate(hiddenForm.date.value);
+        $('.JS--Button-clickDate').data('daterangepicker').setEndDate(hiddenForm.date.value);
+      }
 
-  $wrapper
-    .on('keydown click', selectors.DELIVERY_DATE_GENERATED_DATE, pickDeliveryDate.bind(this))
-    .on('apply.daterangepicker', selectors.DELIVERY_DATE_DRP_BUTTON, function(e, picker) {
-      applySelectedDate(e, picker);
-    }.bind(this))
-    .on('cancel.daterangepicker', selectors.DELIVERY_DATE_DRP_BUTTON, function(e, picker) {
-      cancelSelectedDate(e, picker);
-    }.bind(this))
-  ;
+      let $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);
+      let $selectedInterval = $wrapper.find('.JS--generatedInterval-' + hiddenForm.date.value);
+      let $intervalDropdown = $selectedInterval.find('.JS--intervalDropdown');
 
-  // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
-  // Ez akkor triggerelődik, amikor nem kattintunk sem dátumboxra, sem kalendáriumra.
-  onSelectInterval($intervalDropdown);
+      if ($selectedDate.hasClass('d-none')) {
+        $selectedDate.removeClass('d-none').addClass('d-temporary');
+        $wrapper.find('.JS--showCalendarIcon').hide();
+      }
+      if ($selectedInterval.hasClass('d-none')) {
+        $selectedInterval.removeClass('d-none').addClass('d-temporary');
+      }
 
-  // $.extend(Checkout.prototype, {
-    /**
-     * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.
-     * Továbbá mutatja a dátumhoz tartozó idősávot.
-     */
-    function pickDeliveryDate(e) {
-      if (e.keyCode === 13 || e.type === 'click') {
+      let cart = $('.JS--cartWrapper');
+      let summaryDeliveryFeePos = cart.find('.JS--summaryDeliveryFee');
+      let summaryTotal = cart.find('.JS--summaryTotal');
+      let summaryTotalPos = cart.find('.JS--summaryTotalPos');
+
+      $wrapper
+          .on('keydown click', selectors.DELIVERY_DATE_GENERATED_DATE, pickDeliveryDate.bind(this))
+          .on('apply.daterangepicker', selectors.DELIVERY_DATE_DRP_BUTTON, function(e, picker) {
+            applySelectedDate(e, picker);
+          }.bind(this))
+          .on('cancel.daterangepicker', selectors.DELIVERY_DATE_DRP_BUTTON, function(e, picker) {
+            cancelSelectedDate(e, picker);
+          }.bind(this))
+      ;
+
+      // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
+      // Ez akkor triggerelődik, amikor nem kattintunk sem dátumboxra, sem kalendáriumra.
+      onSelectInterval($intervalDropdown);
+
+      // $.extend(Checkout.prototype, {
+      /**
+       * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.
+       * Továbbá mutatja a dátumhoz tartozó idősávot.
+       */
+      function pickDeliveryDate(e) {
+        if (e.keyCode === 13 || e.type === 'click') {
+          let $el = $(e.currentTarget);
+          $wrapper = $el.closest('.JS--deliveryDateContainer');
+          let $dateWrapper = $el.closest('.JS--dateWrapper');
+          let $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
+
+          $dateWrapper.find('.vp-checked').removeClass('vp-checked');
+          $el.find('.vp').addClass('vp-checked');
+          let $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $el.data('date-value'));
+
+          hiddenForm.date.setDateValue($el.data('date-value'));
+
+          // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
+          // amugy visszallitja (ujra mutatja) a CalendarIcont
+          if (!($el.hasClass('d-temporary'))) {
+            $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
+            $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
+            $intervalModule.removeClass('d-none').addClass('d-temporary');
+            $dateWrapper.find('.JS--showCalendarIcon').show();
+          }
+
+          //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
+          $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);
+          hiddenForm.interval.setIntervalValue('');
+
+          // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
+          // Ez akkor triggerelődik, amikor kattintunk a dátumboxra (ami nem a kallendárium).
+          onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
+
+          // Set daterangepicker to current value
+          $('.JS--Button-clickDate').data('daterangepicker').setStartDate($el.data('date-value'));
+          $('.JS--Button-clickDate').data('daterangepicker').setEndDate($el.data('date-value'));
+
+        }
+      }
+
+      /**
+       * Kezeli a kalendáriumra kattintást.
+       */
+      function applySelectedDate(e, picker) {
+        e.preventDefault();
+        let $pickerDate = picker.startDate.format('YYYY-MM-DD');
         let $el = $(e.currentTarget);
         $wrapper = $el.closest('.JS--deliveryDateContainer');
         let $dateWrapper = $el.closest('.JS--dateWrapper');
         let $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
 
+        hiddenForm.date.setDateValue($pickerDate);
+
+        $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
         $dateWrapper.find('.vp-checked').removeClass('vp-checked');
-        $el.find('.vp').addClass('vp-checked');
-        let $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $el.data('date-value'));
+        $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
 
-        hiddenForm.date.setDateValue($el.data('date-value'));
+        let $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
+        let $intervalModule = $wrapper.find('.JS--generatedInterval-' + $pickerDate);
 
-        // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
-        // amugy visszallitja (ujra mutatja) a CalendarIcont
-        if (!($el.hasClass('d-temporary'))) {
-          $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-          $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-          $intervalModule.removeClass('d-none').addClass('d-temporary');
-          $dateWrapper.find('.JS--showCalendarIcon').show();
+        if ($dateModule.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon
+          $wrapper.find('.JS--showCalendarIcon').hide();
+          $dateModule.removeClass('d-none').addClass('d-temporary');
+        }
+        $dateModule.find('.vp').addClass('vp-checked');
+        $intervalModule.removeClass('d-none').addClass('d-temporary');
+
+        if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
+          $wrapper.find('.JS--showCalendarIcon').show();
         }
 
         //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
@@ -366,83 +404,41 @@ const datePicker = (function () {
         hiddenForm.interval.setIntervalValue('');
 
         // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
-        // Ez akkor triggerelődik, amikor kattintunk a dátumboxra (ami nem a kallendárium).
+        // Ez akkor triggerelődik, amikor kattintunk a kalendáriumra.
         onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
-
-        // Set daterangepicker to current value
-        $('.JS--Button-clickDate').data('daterangepicker').setStartDate($el.data('date-value'));
-        $('.JS--Button-clickDate').data('daterangepicker').setEndDate($el.data('date-value'));
-
-      }
-    }
-
-    /**
-     * Kezeli a kalendáriumra kattintást.
-     */
-    function applySelectedDate(e, picker) {
-      e.preventDefault();
-      let $pickerDate = picker.startDate.format('YYYY-MM-DD');
-      let $el = $(e.currentTarget);
-      $wrapper = $el.closest('.JS--deliveryDateContainer');
-      let $dateWrapper = $el.closest('.JS--dateWrapper');
-      let $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
-
-      hiddenForm.date.setDateValue($pickerDate);
-
-      $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-      $dateWrapper.find('.vp-checked').removeClass('vp-checked');
-      $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-
-      let $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
-      let $intervalModule = $wrapper.find('.JS--generatedInterval-' + $pickerDate);
-
-      if ($dateModule.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon
-        $wrapper.find('.JS--showCalendarIcon').hide();
-        $dateModule.removeClass('d-none').addClass('d-temporary');
-      }
-      $dateModule.find('.vp').addClass('vp-checked');
-      $intervalModule.removeClass('d-none').addClass('d-temporary');
-
-      if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
-        $wrapper.find('.JS--showCalendarIcon').show();
+        // $el.find('.vp-checked')[0].focus();
+        $el.closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
       }
 
-      //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
-      $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);
-      hiddenForm.interval.setIntervalValue('');
+      function cancelSelectedDate(e, picker) {
+        let $el = $(e.currentTarget);
+        $el.val('');
+        $el.closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
+      }
 
-      // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
-      // Ez akkor triggerelődik, amikor kattintunk a kalendáriumra.
-      onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
-      // $el.find('.vp-checked')[0].focus();
-      $el.closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
-    }
+      function onSelectInterval(dropdown) {
+        dropdown.on('change', function () {
+          hiddenForm.interval.setIntervalValue($(this).val());
+          // retrieve delivery fee from 'data-' attribute
+          let dropdownValue = $(this).children('option:selected').data('fee'); //.toString()
+          hiddenForm.fee.setFeeValue(dropdownValue);
 
-    function cancelSelectedDate(e, picker) {
-      let $el = $(e.currentTarget);
-      $el.val('');
-      $el.closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
-    }
+          summaryDeliveryFeePos.html(
+              dropdownValue.toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
+          );
+          summaryTotal.html(
+              (summaryTotalPos.data('summary-total') - hiddenForm.fee.value + dropdownValue).toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
+          );
+          // $('.JS--deliveryDateContainer').find('.JS--alertMessage').replaceWith('');
+          // alert.deliveryDate.hasError = false;
+        });
+      }
 
-    function onSelectInterval(dropdown) {
-      dropdown.on('change', function () {
-        hiddenForm.interval.setIntervalValue($(this).val());
-        // retrieve delivery fee from 'data-' attribute
-        let dropdownValue = $(this).children('option:selected').data('fee'); //.toString()
-        hiddenForm.fee.setFeeValue(dropdownValue);
+    },
+  });
 
-        summaryDeliveryFeePos.html(
-            dropdownValue.toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
-        );
-        summaryTotal.html(
-            (summaryTotalPos.data('summary-total') - hiddenForm.fee.value + dropdownValue).toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
-        );
-        // $('.JS--deliveryDateContainer').find('.JS--alertMessage').replaceWith('');
-        // alert.deliveryDate.hasError = false;
-      });
-    }
+    return DatePicker;
 
-  // });
 })();
 
 /**
@@ -910,44 +906,44 @@ theme.CheckoutSection = (function () {
     }
     if ($(selectors.DELIVERY_DATE_FORM).length) {
       // Initiliaze DateRangePicker
-      const drpConfig = Object.assign({}, drpBaseConfig, {
-        // parentEl: ".JS--dateWrapper",
-        // displayInline: true,
-        opens: 'left',
-        drops: 'auto',
-        singleDatePicker: true,
-        autoApply: true,
-        autoUpdateInput: false,
-        minDate: moment().add(4, 'hours'),
-        maxDate: moment().add(2, 'months'),
-      });
-      $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
-
-      let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
-      let $vp = $wrapper.find('.vp-checked');
-      let hiddenForm = {
-        date: {
-          element: $wrapper.find('#hidden_deliveryDate'),
-          value: $wrapper.find('#hidden_deliveryDate').val(),
-          setDateValue: function (value) {
-            this.element.val(value);
-          },
-        },
-        interval: {
-          element: $wrapper.find('#hidden_deliveryInterval'),
-          value: $wrapper.find('#hidden_deliveryInterval').val(),
-          setIntervalValue: function (value) {
-            this.element.val(value);
-          },
-        },
-        fee: {
-          element: $wrapper.find('#hidden_deliveryFee'),
-          value: $wrapper.find('#hidden_deliveryFee').val(),
-          setFeeValue: function (value) {
-            this.element.val(value);
-          },
-        },
-      }
+      // const drpConfig = Object.assign({}, drpBaseConfig, {
+      //   // parentEl: ".JS--dateWrapper",
+      //   // displayInline: true,
+      //   opens: 'left',
+      //   drops: 'auto',
+      //   singleDatePicker: true,
+      //   autoApply: true,
+      //   autoUpdateInput: false,
+      //   minDate: moment().add(4, 'hours'),
+      //   maxDate: moment().add(2, 'months'),
+      // });
+      // $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
+      //
+      // let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
+      // let $vp = $wrapper.find('.vp-checked');
+      // let hiddenForm = {
+      //   date: {
+      //     element: $wrapper.find('#hidden_deliveryDate'),
+      //     value: $wrapper.find('#hidden_deliveryDate').val(),
+      //     setDateValue: function (value) {
+      //       this.element.val(value);
+      //     },
+      //   },
+      //   interval: {
+      //     element: $wrapper.find('#hidden_deliveryInterval'),
+      //     value: $wrapper.find('#hidden_deliveryInterval').val(),
+      //     setIntervalValue: function (value) {
+      //       this.element.val(value);
+      //     },
+      //   },
+      //   fee: {
+      //     element: $wrapper.find('#hidden_deliveryFee'),
+      //     value: $wrapper.find('#hidden_deliveryFee').val(),
+      //     setFeeValue: function (value) {
+      //       this.element.val(value);
+      //     },
+      //   },
+      // }
 
 
 
@@ -979,47 +975,47 @@ theme.CheckoutSection = (function () {
       }
     },
 
-    initDatePicker() {
-      // Initiliaze DateRangePicker
-      const drpConfig = Object.assign({}, drpBaseConfig, {
-        // parentEl: ".JS--dateWrapper",
-        // displayInline: true,
-        opens: 'left',
-        drops: 'auto',
-        singleDatePicker: true,
-        autoApply: true,
-        autoUpdateInput: false,
-        minDate: moment().add(4, 'hours'),
-        maxDate: moment().add(2, 'months'),
-      });
-      $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
-
-      let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
-      let $vp = $wrapper.find('.vp-checked');
-      let hiddenForm = {
-        date: {
-          element: $wrapper.find('#hidden_deliveryDate'),
-          value: $wrapper.find('#hidden_deliveryDate').val(),
-          setDateValue: function (value) {
-            this.element.val(value);
-          },
-        },
-        interval: {
-          element: $wrapper.find('#hidden_deliveryInterval'),
-          value: $wrapper.find('#hidden_deliveryInterval').val(),
-          setIntervalValue: function (value) {
-            this.element.val(value);
-          },
-        },
-        fee: {
-          element: $wrapper.find('#hidden_deliveryFee'),
-          value: $wrapper.find('#hidden_deliveryFee').val(),
-          setFeeValue: function (value) {
-            this.element.val(value);
-          },
-        },
-      };
-    },
+    // initDatePicker() {
+    //   // Initiliaze DateRangePicker
+    //   const drpConfig = Object.assign({}, drpBaseConfig, {
+    //     // parentEl: ".JS--dateWrapper",
+    //     // displayInline: true,
+    //     opens: 'left',
+    //     drops: 'auto',
+    //     singleDatePicker: true,
+    //     autoApply: true,
+    //     autoUpdateInput: false,
+    //     minDate: moment().add(4, 'hours'),
+    //     maxDate: moment().add(2, 'months'),
+    //   });
+    //   $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
+    //
+    //   let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
+    //   let $vp = $wrapper.find('.vp-checked');
+    //   let hiddenForm = {
+    //     date: {
+    //       element: $wrapper.find('#hidden_deliveryDate'),
+    //       value: $wrapper.find('#hidden_deliveryDate').val(),
+    //       setDateValue: function (value) {
+    //         this.element.val(value);
+    //       },
+    //     },
+    //     interval: {
+    //       element: $wrapper.find('#hidden_deliveryInterval'),
+    //       value: $wrapper.find('#hidden_deliveryInterval').val(),
+    //       setIntervalValue: function (value) {
+    //         this.element.val(value);
+    //       },
+    //     },
+    //     fee: {
+    //       element: $wrapper.find('#hidden_deliveryFee'),
+    //       value: $wrapper.find('#hidden_deliveryFee').val(),
+    //       setFeeValue: function (value) {
+    //         this.element.val(value);
+    //       },
+    //     },
+    //   };
+    // },
 
     submitRecipientAndCustomer: function (e) {
       e.preventDefault();
@@ -1667,6 +1663,7 @@ $(document).ready(function() {
 
   // Used on the Checkout pages
   sections.register('checkout-template', theme.CheckoutSection);
+  sections.register('datePicker-block', theme.DatePicker);
 
   // Used on the Registration pages
   sections.register('registration-section', theme.RegistrationSection);

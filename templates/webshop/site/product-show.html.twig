@@ -24,6 +24,15 @@
 {#    {{ encore_entry_link_tags('daterangepicker') }}#}
     <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css" rel="stylesheet" >
     <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >
+
+    <meta property="og:title" content="{{ product.name }} - {{ storeSettings.get('meta.title')}}">
+    <meta property="og:description" content="{{ product.name }}. {{ storeSettings.get('meta.description')}}">
+    {% if product.coverImage %}
+        <meta property="og:image" content="{{ uploaded_asset(product.coverImage)|imagine_filter('size_facebook') }}">
+        <meta property="og:image:width" content="1000" />
+        <meta property="og:image:height" content="1000" />
+    {% endif %}
+    <meta property="og:url" content="{{ url('site-product-show', {'slug': product.slug}) }}" />
 {% endblock %}
 
 {% block bodyClass %} product-details{% endblock %}
@@ -200,13 +209,13 @@
                                                         <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Szállítási díjak</a>
                                                         <div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                                                             <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
-                                                                <div class="modal-content cms-page-body">
+                                                                <div class="modal-content">
                                                                     <div class="modal-header">
                                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                             <span aria-hidden="true">&times;</span>
                                                                         </button>
                                                                     </div>
-                                                                    <div class="modal-body">
+                                                                    <div class="modal-body cms-page-body">
                                                                         <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
                                                                         <div class="mt-4">
                                                                             {{ pages.szallitasiDijak.content|raw }}

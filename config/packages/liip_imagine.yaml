@@ -49,6 +49,15 @@ liip_imagine:
 #                scale:
 #                    dim: [ 200, 200 ]
 
+        size_facebook:
+            jpeg_quality: 85
+            png_compression_level: 8
+            filters:
+                thumbnail:
+                    size: [ 960, 960 ]
+                    mode: outbound
+                    allow_upscale: true
+
         product_small:
             jpeg_quality:          75
             png_compression_level: 8

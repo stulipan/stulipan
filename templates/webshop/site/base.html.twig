@@ -13,7 +13,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <title>{% block title %}{{ storeSettings.get('meta.title') }} | {{ storeSettings.get('meta.name') }}{% endblock %}</title>
+    <title>{%- block title -%}{{ storeSettings.get('meta.title') }} | {{ storeSettings.get('meta.name') }}{%- endblock -%}</title>
 
     {% block stylesheets %}
         <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" >

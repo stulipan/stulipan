@@ -17,8 +17,8 @@
   // sweetalert2/issues/905
   -webkit-overflow-scrolling: touch;
 
-  max-width: fit-content;
-  width: 100%;
+  //max-width: fit-content;
+  min-width: fit-content;
 
   &.swal2-backdrop-show,
   &.swal2-noanimation {

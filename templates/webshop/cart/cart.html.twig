@@ -5,9 +5,6 @@
                 <h6 class="text-uppercase">{{ 'cart.your-cart-is-empty'|trans }}</h6>
                 <p class="mb-0">{{ 'cart.but-not-for-long'|trans({ '{{ link }}': path('site-product-listall') })|raw }}</p>
             </div>
-            <div class="mt-4 mb-6">
-                <a href="{{ path('site-product-listall') }}" class="btn btn-primary">{{ 'cart.continue-shopping'|trans }}</a>
-            </div>
         </div>
     {% else %}
         {% include('/webshop/cart/cart-list.html.twig') %}

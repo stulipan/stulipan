@@ -63,7 +63,7 @@ cart:
     edit-cart-content: 'Kosár módosítása'
     your-cart: 'A kosarad'
     your-cart-is-empty: 'A kosarad jelenleg üres'
-    but-not-for-long: '...de nem sokáig! Válogass a több mint 100 gyönyörű <a href="{{ link }}">csokor és virágdoboz</a> közül.'
+    but-not-for-long: '...de ez nem kell, hogy így maradjon. Nézd meg a <a href="{{ link }}">Rafina termékeit</a> és válogass kedvedre.'
     quantity: Mennyiség
     pieces: db
     remove-item: Eltávolítás

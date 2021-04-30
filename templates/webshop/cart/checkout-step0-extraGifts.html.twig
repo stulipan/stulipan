@@ -38,6 +38,11 @@
                                                     'showRemove': true,
                                                     'showSummary': true,
                                                 } %}
+                                                {% if order.items is defined and order.items is empty %}
+                                                    <div class="mt-4 mb-6 text-center">
+                                                        <a href="{{ path('site-product-listall') }}" class="btn btn-primary">{{ 'cart.continue-shopping'|trans }}</a>
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         {% if checkoutSettings.get('cart.gift-upsell') %}

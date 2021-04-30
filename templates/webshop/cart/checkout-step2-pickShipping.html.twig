@@ -19,17 +19,17 @@
             <div class="col-lg-12 correction-no-padding">
                 <div class="card">
                     <div class="card-body">
-                            <div class="checkout-summary">
+                            <div class="checkout-overview">
                                     <div class="">
-                                        <div class="w-100 checkout-summary-item">
-                                            <div class="checkout-summary-item-grid">
-                                                <div class="checkout-summary-item-label">
-                                                    <div class="checkout-summary-item-title">
-                                                        {{ flowerShop ? 'checkout.summary.recipient-to'|trans : 'checkout.summary.recipient'|trans }}
+                                        <div class="w-100 checkout-overview-item">
+                                            <div class="checkout-overview-item-grid">
+                                                <div class="checkout-overview-item-label">
+                                                    <div class="checkout-overview-item-title">
+                                                        {{ flowerShop ? 'checkout.overview.recipient-to'|trans : 'checkout.overview.recipient'|trans }}
                                                     </div>
                                                 </div>
-                                                <div class="checkout-summary-item-data">
-                                                    <div class="checkout-summary-item-description">
+                                                <div class="checkout-overview-item-data">
+                                                    <div class="checkout-overview-item-description">
                                                         {{ order.recipient.fullname }},
                                                         {{ order.recipient.address.street }},
                                                         {{ order.recipient.address.zip }} {{ order.recipient.address.city }},
@@ -37,24 +37,24 @@
                                                         {{ order.recipient.phone }}
                                                     </div>
                                                 </div>
-                                                <div class="checkout-summary-item-action">
+                                                <div class="checkout-overview-item-action">
                                                     <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="w-100 checkout-summary-item">
-                                            <div class="checkout-summary-item-grid">
-                                                <div class="checkout-summary-item-label">
-                                                    <div class="checkout-summary-item-title">
-                                                        {{ flowerShop ? 'checkout.summary.customer-from'|trans : 'checkout.summary.customer'|trans }}
+                                        <div class="w-100 checkout-overview-item">
+                                            <div class="checkout-overview-item-grid">
+                                                <div class="checkout-overview-item-label">
+                                                    <div class="checkout-overview-item-title">
+                                                        {{ flowerShop ? 'checkout.overview.customer-from'|trans : 'checkout.overview.customer'|trans }}
                                                     </div>
                                                 </div>
-                                                <div class="checkout-summary-item-data">
-                                                    <div class="checkout-summary-item-description">
+                                                <div class="checkout-overview-item-data">
+                                                    <div class="checkout-overview-item-description">
                                                         {{ order.fullname }}, {{ order.email }}, {{ order.phone }}
                                                     </div>
                                                 </div>
-                                                <div class="checkout-summary-item-action">
+                                                <div class="checkout-overview-item-action">
                                                     <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
                                                 </div>
                                             </div>

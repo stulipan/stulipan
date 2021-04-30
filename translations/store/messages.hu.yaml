@@ -50,11 +50,22 @@ account:
     logout: Kijelentkezés
     my-orders: Rendeléseim
     previous-orders: Előző rendeléseid
+    all-previous-orders: Összes rendelésed
     no-previous-orders-yet: 'Még nincs rendelésed.'
     welcome: 'Helló, {{ user }}'
     account-information: Adataim
     change-password: 'Jelszó módosítás'
     last-orders: 'Utolsó rendeléseid'
+    order:
+        order: Rendelés
+        order-number: Rendelésszám
+        order-details: Rendelés részletei
+        order-placed-at: Rendelés leadva
+        waiting-for-payment: Fizetésre vár
+        shipped: Kiszállítás alatt
+        fulfilled: Rendelés teljesítve
+        fulfilled-at: Teljesítés dátuma
+        products: Termékek
 cart:
     cart: Kosár
     cart-content: 'Kosár tartalma'
@@ -100,6 +111,7 @@ checkout:
     payment-progress-bar: Fizetés
     already-registered: 'Jártál már nálunk? Ha már van fiókod, <a href="{{ link }}" class="">itt tudsz bejelentkezni.</a>'
     recipient:
+        recipient: 'Szállítási cím'
         recipient-title: 'Szállítási cím'
         recipient-description: 'A sikeres kézbesítéshez szükséges szállítási adatokat itt add meg.'
         new-recipient: 'Új szállítási cím hozáadása'
@@ -131,8 +143,10 @@ checkout:
         missing-recipient: 'Nem adtál még meg szállítási címet.'
         last-used: 'Legutóbb használt'
     sender:
+        sender: Számlázási cím
         last-used: 'Legutóbb használt'
     flower-shop:
+        recipient: Címzett
         recipient-page-title: 'A címzett adatai'
         recipient-title: 'Kinek küldöd?'
         recipient-description: 'A sikeres kézbesítéshez add meg a címzett személy nevét, címét, telefonszámát.'
@@ -162,19 +176,21 @@ checkout:
         newsletter-optin: 'Pipáld be és értesíteni fogunk akcióinkról. Kizárólag vásárlóink részére!'
         missing-customer: 'Nem adtad meg az adataidat vagy valamelyik mezőt nem tölötted ki.'
     shipping:
+        shipping-method: Szállítási mód
         shipping-method-missing: 'Válassz szállítási módot!'
     delivery-date:
         missing-date: 'Jelöld meg a szállítási napot.'
         missing-interval: 'Válaszd ki, mely napszakban történjen meg a kiszállítás.'
         delivery-date-missing: 'Válassz egy szállítási időt.'
     payment:
+        payment-method: 'Fizetési mód'
         payment-method-missing: 'Válassz fizetési módot!'
-    summary:
+    overview:
         recipient: Szállítási cím
         recipient-to: Neki küldöd
         customer: Vásárló
         customer-from: Aki küldi
-        shipping: Szállítás mód
+        shipping-method: Szállítás mód
     terms:
         accept-terms-label: 'A rendelés leadásával kijelented, hogy elolvastad és elfogadod az <a {{ terms }}>ÁSZF</a> illetve az <a {{ privacy }}>Adatvédelemben</a> foglaltakat és hozzájárulsz, hogy az itt megadott adatokat felhasználjuk a rendelés teljesítéséhez.'
         accept-terms-error: 'A rendelés leadásához kérjük fogadd el az ÁSZF-et.'

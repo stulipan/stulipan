@@ -19,15 +19,15 @@
         <div class="">
             <div class="card-body">
                 <div class="card-title h3">{{ 'account.last-orders'|trans }}</div>
-                <div class="previous-orders list-group">
+                <div class="previous-orders list-group mt-4">
                     {% if customer.ordersPlaced is defined and customer.ordersPlaced is not empty %}
-                        {% for order in customer.ordersPlaced|slice(0,1) %}
+                        {% for order in customer.ordersPlaced|slice(0,3) %}
                             {% include('webshop/user/user-myOrders-list-widget.html.twig') %}
                         {% endfor %}
                     {% endif %}
                 </div>
-                <div class="mt-4">
-                    <a href="{{ path('site-user-myOrders') }}" class="btn btn-secondary w-100"><svg class="svg-icon svg-icon-heavy"><use xlink:href="#retail-bag-2"></use></svg>Összes rendelésed</a>
+                <div class="mt-4 pt-3 border-top text-center">
+                    <a href="{{ path('site-user-myOrders') }}" class="btn btn-secondary">{{ 'account.all-previous-orders'|trans }}</a>
                 </div>
             </div>
         </div>

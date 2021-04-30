@@ -25,8 +25,19 @@ class MyAccountController extends AbstractController
      */
     public function showMyAccount()
     {
+        $customer = $this->getUser()->getCustomer();
+        $orders = [];
+        if ($customer) {
+            $orders = $customer->getOrdersPlaced();
+
+            if ($orders) {
+                $orders = $orders->getValues();
+            }
+        }
+
         return $this->render('webshop/user/user-myAccount.html.twig', [
-            'customer' => $this->getUser(),
+            'customer' => $customer,
+            'orders' => $orders,
         ]);
     }
 

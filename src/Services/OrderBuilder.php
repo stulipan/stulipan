@@ -658,6 +658,9 @@ class OrderBuilder
     public function setToken(?string $token): void
     {
         $this->order->setToken($token);
+
+        $this->em->persist($this->order);
+        $this->em->flush();
     }
 
     /**

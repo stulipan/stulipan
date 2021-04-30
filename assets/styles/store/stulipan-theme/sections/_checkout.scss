@@ -200,14 +200,14 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 ///////////////////////////////////
 // Summary
 
-.checkout-summary {
+.checkout-overview {
   border: $border-width solid $border-color;
   @include border-radius($border-radius);
   @include font-size($font-size-sm);
   line-height: $line-height-sm;
   color: $gray-700;
 
-  & .checkout-summary-item {
+  & .checkout-overview-item {
     padding: .75rem .75rem;
     border-bottom: $border-width solid $border-color;
 
@@ -222,33 +222,33 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
     }
   }
 
-  & .checkout-summary-item-title {
+  & .checkout-overview-item-title {
     text-transform: uppercase;
     letter-spacing: $letter-spacing;
   }
-  & .checkout-summary-item-description {
+  & .checkout-overview-item-description {
     color: $yiq-text-dark;
   }
 
-  .checkout-summary-item-grid {
+  .checkout-overview-item-grid {
     display: grid;
     grid-template-columns: 2fr 6fr 2fr;
     grid-template-areas: "label data action";
     column-gap: .75rem;
     flex-grow: 1;
 
-    .checkout-summary-item-label {
+    .checkout-overview-item-label {
       grid-area: label;
       align-self: flex-start;
     }
-    .checkout-summary-item-data {
+    .checkout-overview-item-data {
       grid-area: data;
       align-self: flex-start;
       word-break: break-word;
       overflow-wrap: break-word;
       text-align: left;
     }
-    .checkout-summary-item-action {
+    .checkout-overview-item-action {
       grid-area: action;
       align-self: flex-start;
       word-wrap: break-word;
@@ -358,11 +358,11 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 // Corrections
 
 .checkout-page.checkout-asos {
-  & .checkout-summary,
+  & .checkout-overview,
   & .checkout-method-selection {
     border: none;
   }
-  & .checkout-summary .checkout-summary-item {
+  & .checkout-overview .checkout-overview-item {
     padding: .75rem 0;
   }
 }

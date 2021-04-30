@@ -1,13 +1,15 @@
 
-    <h6 class="checkout-block-title">{{ 'order.delivery-date'|trans }}</h6>
+    <h5 class="checkout-block-title">{{ 'checkout.shipping.shipping-method'|trans }}</h5>
 
+    {% if flowerShop == false %}
     <div class="mt-2">
         {% if order.deliveryDate is defined and order.deliveryDate is not null %}
-            <div class="">{{ order.deliveryDate|date('Y M j.')|lower }}</div>
-            <div class="">{{ order.deliveryInterval is defined and order.deliveryInterval ? order.deliveryInterval ~ ' óra között': '' }}</div>
+            <div class="">{{ order.deliveryDate|localizedDate('Y F j')|lower }}</div>
+            <div class="">{{ order.deliveryInterval is defined and order.deliveryInterval ? order.deliveryInterval : '' }}</div>
         {% endif %}
     </div>
+    {% endif %}
 
-    {% if order.deliveryDate is defined and order.deliveryDate is not null %}
-        <div class="">{{ order.shippingMethod.getName() }}</div>
+    {% if order.shippingMethod is defined and order.shippingMethod is not null %}
+        <div class="">{{ order.shippingMethod.name }}</div>
     {% endif %}

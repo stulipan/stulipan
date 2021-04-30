@@ -49,12 +49,12 @@
                 {% if showRemove is defined and showRemove %}
                     <div class="pl-1 pl-sm-4 d-flex justify-content-end mt-2 mt-sm-0">
                         <button class="JS--Button-removeItem btn btn-link-secondary"
-                                {{ stimulus_controller('submit-confirm', {
-                                    text: 'Remove this item?',
-                                    confirmButtonText: 'Yes, remove it',
-                                    isAjaxCall: true
-                                }) }}
-                                data-action="submit-confirm#submitForm"
+{#                                {{ stimulus_controller('submit-confirm', {#}
+{#                                    text: 'Remove this item?',#}
+{#                                    confirmButtonText: 'Yes, remove it',#}
+{#                                    isAjaxCall: true#}
+{#                                }) }}#}
+{#                                data-action="submit-confirm#submitForm"#}
 
                                 data-url="{{ path('cart-removeItem', {'id': item.id, 'showQuantity': showQuantity is defined ? showQuantity : false}) }}" title="{{ 'cart.remove-item'|trans }}"
                         >

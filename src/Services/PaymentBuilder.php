@@ -30,6 +30,7 @@ class PaymentBuilder
 {
     public const GATEWAY_BARION = 'barion';
     public const GATEWAY_CIB = 'cib';
+    public const MANUAL_BANK = 'bank';
 
     private $processor;
     private $urlGenerator;

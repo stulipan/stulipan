@@ -531,7 +531,7 @@ theme.CartSection = (function () {
 
     this.$container
         .on('click', selectors.ADD_GIFT_TO_CART_BUTTON, this.addGiftToCart.bind(this))
-        // .on('click', selectors.REMOVE_ITEM_BUTTON, this.removeItem.bind(this))
+        .on('click', selectors.REMOVE_ITEM_BUTTON, this.removeItem.bind(this))
         .on('change', selectors.ITEM_QUANTITY_SELECT, this.setItemQuantity.bind(this))
         .on('click', selectors.GOTO_STEP1_BUTTON, this.submitGreetingCardForm.bind(this))
 

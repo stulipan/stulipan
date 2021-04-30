@@ -16,7 +16,7 @@
     },
     3: {
         'url': path('site-user-myOrder', {'id': order.id}),
-        'text': 'Rendelés #' ~ order.number,
+        'text': 'account.order.order'|trans ~ ' #' ~ order.number,
     },
 } %}
 
@@ -24,13 +24,13 @@
     <div class="card mb-20px">
         <div class="">
             <div class="card-body">
-                <div class="card-tile h3">Rendelés #{{ order.number }}</div>
+                <div class="card-tile h3">{{ 'account.order.order'|trans}} #{{ order.number }}</div>
                 {% if order.isUnpaid %}
 {#                    <div class="text-sm text-danger mt-2">Fizetésre vár</div>#}
-                    <div class="badge badge-danger">Fizetésre vár</div>
+                    <div class="badge badge-danger">{{ 'account.order.waiting-for-payment'|trans }}</div>
                 {% endif %}
                 {% if order.isFulfilled %}
-                    <div class="badge badge-success">It's delivered!</div>
+                    <div class="badge badge-success">{{ 'account.order.fulfilled'|trans }}</div>
                 {% endif %}
             </div>
         </div>
@@ -40,9 +40,9 @@
         <div class="">
             <div class="card-body">
                 <div class="cart">
-                    {% include 'webshop/cart/_order-items-widget.html.twig' %}
+                    {% include '/webshop/user/_myorder-items-widget.html.twig' %}
                 </div>
-                {% include 'webshop/cart/_order-summary-widget.html.twig' %}
+                {% include 'webshop/user/_myorder-summary-widget.html.twig' %}
             </div>
         </div>
     </div>

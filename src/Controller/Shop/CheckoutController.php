@@ -452,13 +452,18 @@ class CheckoutController extends AbstractController
         $orderBuilder->setPaymentStatus($paymentStatus);
         $orderBuilder->setToken((Uuid::v4())->toRfc4122());
 
-        $event = new OrderEvent($orderBuilder->getCurrentOrder(), [
-            'channel' => OrderLog::CHANNEL_CHECKOUT,
-        ]);
-        $eventDispatcher->dispatch($event, OrderEvent::DELIVERY_DATE_UPDATED);
+        if ($this->storeSettings->get('general.flower-shop-mode')) {
+            $event = new OrderEvent($orderBuilder->getCurrentOrder(), [
+                'channel' => OrderLog::CHANNEL_CHECKOUT,
+            ]);
+            $eventDispatcher->dispatch($event, OrderEvent::DELIVERY_DATE_UPDATED);
+        }
 
         $order = $orderBuilder->getCurrentOrder();
 
+        if ($order->getPaymentMethod()->getShortcode() === PaymentBuilder::MANUAL_BANK) {
+            return $this->redirectToRoute('site-checkout-payment-success');
+        }
         $payment = $this->gateway->createPayment(null, $order);
         if ($payment->isCreated()) {
             return $this->redirect($payment->getPaymentPageUrl(), 302);

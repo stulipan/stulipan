@@ -1,5 +1,5 @@
 <div class="">
-    <h6 class="checkout-block-title">Vásárló adatai</h6>
+    <h5 class="checkout-block-title">{{ 'checkout.customer.customer-information-title'|trans }}</h5>
 </div>
 <div class="mt-2">
     <div class="h-100">
@@ -7,7 +7,7 @@
             {{ order.fullname }} <br>
             {{ order.phone }}, {{ order.email }} <br>
             <div class="mt-2 text-size-secondary text-muted">
-                Számlázási adatok: <br>
+                {{ 'checkout.sender.sender'|trans }} <br>
                 {% if order.billingFullname is defined and order.billingFullname is not null %}
                     {{ order.billingFullname }} {{ order.billingCompany is defined and order.billingCompany ? ' / ' ~ order.billingCompany : ''}}
                 {% else %}

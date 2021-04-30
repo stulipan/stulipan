@@ -1,0 +1,43 @@
+$item-grid-gap:         .75rem !default;
+
+.cart-item-detail--wrapper {
+  display: grid;
+  grid-template-columns: 6fr minmax(9rem,auto) minmax(7rem,auto);
+  grid-template-areas: "title calculation total";
+  column-gap: $item-grid-gap;
+  flex-grow: 1;
+  margin-left: 1.5rem;
+
+  @include media-breakpoint-down(sm) {
+    grid-template-columns: auto minmax(7rem,auto);
+    grid-template-areas:
+            "title total"
+            "calculation .";
+    margin-left: 1rem;
+  }
+}
+
+.cart-item-detail--title {
+  grid-area: title;
+  align-self: flex-start;
+}
+.cart-item-detail--calculation {
+  grid-area: calculation;
+  align-self: flex-start;
+
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: right;
+
+  @include media-breakpoint-down(sm) {
+    text-align: left;
+  }
+}
+.cart-item-detail--total {
+  grid-area: total;
+  align-self: flex-start;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: right;
+}

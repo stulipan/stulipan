@@ -1,24 +1,24 @@
 <div class="pt-1">
     <ul class="order-summary mb-0 list-unstyled">
         <li class="order-summary-item">
-            <span class="order-summary-item-label">{{ 'cart.subtotal'|trans }} </span>
-            <span>{{  order.summary.totalBeforeDiscount|money }}</span>
+            <div class="order-summary-item-label">{{ 'cart.subtotal'|trans }} </div>
+            <div>{{  order.summary.totalBeforeDiscount|money }}</div>
         </li>
         <li class="order-summary-item">
-            <span class="order-summary-item-label">{{ 'cart.shipping-fee'|trans }}</span>
-            <span>
-                                    <span class="JS--summaryDeliveryFee">{{ order.deliveryFee|money }}</span>
-                                </span>
+            <div class="order-summary-item-label">{{ 'cart.shipping-fee'|trans }}</div>
+            <div>
+                                    <div class="JS--summaryDeliveryFee">{{ order.deliveryFee|money }}</div>
+                                </div>
         </li>
-        <li class="order-summary-item">
-            <span class="order-summary-item-label">{{ 'cart.discount'|trans }}</span>
-            <span>25%:</span>
-        </li>
+{#        <li class="order-summary-item">#}
+{#            <div class="order-summary-item-label">{{ 'cart.discount'|trans }}</div>#}
+{#            <div>25%:</div>#}
+{#        </li>#}
         <li class="order-summary-item border-0">
-            <span class="order-summary-item-label">{{ 'cart.total-amount-paid'|trans }}</span>
-            <span class="JS--summaryTotalPos order-summary-total" data-summary-total="{{ order.summary.totalAmountToPay }}">
-                                    <span class="JS--summaryTotal text-nowrap">{{ order.summary.totalAmountToPay|money }}</span>
-                                </span>
+            <div class="order-summary-item-label">{{ 'cart.total-amount-paid'|trans }}</div>
+            <div class="JS--summaryTotalPos order-summary-total" data-summary-total="{{ order.summary.totalAmountToPay }}">
+                <div class="JS--summaryTotal text-nowrap">{{ order.summary.totalAmountToPay|money }}</div>
+            </div>
         </li>
-</ul>
+    </ul>
 </div>

@@ -151,7 +151,7 @@ class Customer
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="customer", cascade={"persist"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"id" = "DESC"})
      * @ Assert\NotBlank(message="Egy felhasználónak több rendelése lehet.")
      */
     private $orders = [];

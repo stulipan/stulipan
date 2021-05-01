@@ -49,6 +49,8 @@ registration:
     create-account: Create account
     create-account-title: New customer
     register-button: Register
+    registration-success: You have successfully registered.
+    already-registered-please-login: 'Already registered? Please <a href="{{ link }}" class="{{ class }}">login</a>.'
     email-address: Email address
     password: Password
     confirm-password: Confirm password

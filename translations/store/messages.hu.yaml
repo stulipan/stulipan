@@ -25,6 +25,8 @@ registration:
     create-account: 'Új fiók'
     create-account-title: 'Fiók létrehozása'
     register-button: Regisztrálok
+    registration-success: Sikeresen regisztráltál.
+    already-registered-please-login: 'Ha már van fiókod, <a href="{{ link }}" class="{{ class }}">itt tudsz bejelentkezni</a>.'
     email-address: 'Email cím'
     password: Jelszó
     confirm-password: 'Jelszó újra'

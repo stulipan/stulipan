@@ -62,7 +62,9 @@ class LoginController extends AbstractController
     /**
      * @Route("/register", name="site-register")
      */
-    public function siteRegister(Request $request, UserPasswordEncoderInterface $encoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator)
+    public function siteRegister(Request $request, UserPasswordEncoderInterface $encoder,
+                                 GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator,
+                                 TranslatorInterface $translator)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('homepage');
@@ -86,6 +88,7 @@ class LoginController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->addFlash('success', $translator->trans('registration.registration-success'));
             /**
              * Instead of redirecting to a normal route use return $guardHandler->authenticateUserAndHandleSuccess()
              * This needs a few arguments: the $user that's being logged in, the $request object,
@@ -111,7 +114,6 @@ class LoginController extends AbstractController
         }
 
         return $this->render('webshop/user/user-register.html.twig', [
-            'title' => 'Fiók létrehozása',
             'registrationForm' => $form->createView(),
         ]);
     }

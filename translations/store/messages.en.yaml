@@ -124,8 +124,8 @@ cart:
     quantity: Quantity
     pieces: ''
     remove-item: Remove from cart
-    shipping-fee-calculated: The shipping fee has been calculated according to your information.
     shipping-fee: Shipping fee
+    shipping-fee-calculated-at-checkout: Will be calculated at checkout.
     shipping-fee-calculated-in-next-step: Calculated at next step
     scheduling-fee: Scheduled delivery
     discount: Discount

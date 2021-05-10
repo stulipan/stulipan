@@ -1292,9 +1292,10 @@ theme.CheckoutSection = (function () {
 
       let input = $formWrapper.find('input')[0];
       if (input.checked) {
-        $senderBody.hide();
+        $senderBody.removeClass('--active');
+        errors.sender = false;
       } else {
-        $senderBody.show();
+        $senderBody.addClass('--active');
       }
     },
 

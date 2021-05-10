@@ -100,8 +100,8 @@ cart:
     quantity: Mennyiség
     pieces: db
     remove-item: Eltávolítás
-    shipping-fee-calculated: 'A szállítási díj a megadott adataid szerint került kiszámításra.'
     shipping-fee: 'Szállítási díj'
+    shipping-fee-calculated-at-checkout: 'A szállítási díj a pénztárban lesz kiszámolva.'
     shipping-fee-calculated-in-next-step: 'A következő lépésben lesz kiszámolva'
     scheduling-fee: 'Szállítás időpontra'
     discount: Kedvezmény

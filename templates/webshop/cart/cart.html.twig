@@ -33,9 +33,13 @@
                 <div class="col-12 col-md-6 ml-auto mt-3">
                     <ul class="order-summary mb-0 list-unstyled">
                         <li class="order-summary-item">
-                            <span>{{ 'cart.shipping-fee-calculated'|trans }}</span>
+                            <span>{{ 'cart.shipping-fee'|trans }}</span>
                             <span class="text-nowrap">
-                                <span class="JS--summaryDeliveryFee">{{ order.shippingPriceToPay|money }}</span>
+                                {%- if order.hasShippingPrice is defined and order.hasShippingPrice -%}
+                                    {{ order.shippingPriceToPay|money }}
+                                {%- else -%}
+                                    {{ 'cart.shipping-fee-calculated-at-checkout'|trans }}
+                                {%- endif -%}
                             </span>
                         </li>
                         <li class="order-summary-item border-0">

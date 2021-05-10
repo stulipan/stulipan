@@ -45,12 +45,12 @@
                         </div>
                         {{ 'collection.collections'|trans }}
                     </a>
-                    <a href="{{ path('product-listCategories') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'product-listCategories' %}nav-subitem-selected{% endif %}">
-                        <div class="sidenav-icon">
-                            <i class="fas fa-list-ul"></i>
-                        </div>
-                        Kategóriák (react)
-                    </a>
+{#                    <a href="{{ path('product-listCategories') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'product-listCategories' %}nav-subitem-selected{% endif %}">#}
+{#                        <div class="sidenav-icon">#}
+{#                            <i class="fas fa-list-ul"></i>#}
+{#                        </div>#}
+{#                        Kategóriák (react)#}
+{#                    </a>#}
                     <a href="{{ path('smart-label-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'smart-label-list' %}nav-subitem-selected{% endif %}">
                         <div class="sidenav-icon">
                             <i class="fas fa-tags"></i>

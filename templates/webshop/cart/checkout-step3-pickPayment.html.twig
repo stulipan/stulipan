@@ -156,7 +156,7 @@
                                     <div class="checkout-method-selection content-body-thick-border">
                                         {% include 'webshop/cart/sender-same-as-recipient.html.twig' %}
 
-                                        <div class="JS--Wrapper-senderBody checkout-sender-form" {% if sameAsRecipientForm.sameAsRecipient is defined and sameAsRecipientForm.sameAsRecipient[0] == true %}style="display: none;"{% endif %}>
+                                        <div class="JS--Wrapper-senderBody checkout-sender-form">
                                             {% if senderForm is defined %}
                                                 {% include('webshop/cart/sender_form.html.twig') %}
                                             {% endif %}

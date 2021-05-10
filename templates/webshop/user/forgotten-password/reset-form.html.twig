@@ -1,0 +1,24 @@
+{% extends 'webshop/site/template-reset-password.html.twig' %}
+
+{% set pageTitle = 'registration.forgot-password.forgot-your-password-title'|trans %}
+
+{% block underNavbar %}
+{% endblock %}
+
+{% block resetPassword %}
+    <div class="mb-4">
+        <h3 class="font-weight-normal">{{ 'registration.forgot-password.reset-password-title'|trans }}</h3>
+    </div>
+
+    {{ form_start(form, { 'attr': {'class': '', 'novalidate' : 'novalidate' }}) }}
+        <div class="form-group">
+            {% for error in form.vars.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error.message }}
+                </div>
+            {% endfor %}
+        </div>
+            {{ form_row(form.plainPassword) }}
+        <button class="btn btn-primary">{{ 'registration.forgot-password.save-password'|trans }}</button>
+    {{ form_end(form) }}
+{% endblock %}

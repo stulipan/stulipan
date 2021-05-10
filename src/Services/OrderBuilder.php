@@ -274,10 +274,21 @@ class OrderBuilder
     }
 
     /**
-     * @param float $deliveryFee
+     * Elvileg nincs hasznalva, lasd a setShippingMethod
+     * @param float $shippingPrice
      */
-    public function setDeliveryFee(?float $deliveryFee) {
-        $this->order->setDeliveryFee($deliveryFee);
+    public function setShippingPrice(?float $shippingPrice) {
+        $this->order->setShippingPrice($shippingPrice);
+
+        $this->em->persist($this->order);
+        $this->em->flush();
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setSchedulingPrice(?float $price) {
+        $this->order->setSchedulingPrice($price);
 
         $this->em->persist($this->order);
         $this->em->flush();
@@ -605,6 +616,7 @@ class OrderBuilder
     {
         if ($this->order) {
             $this->order->setShippingMethod($shippingMethod);
+            $this->order->setShippingPrice($shippingMethod->getPrice());
 
             $this->em->persist($this->order);
             $this->em->flush();

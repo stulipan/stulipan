@@ -16,28 +16,31 @@
     <title>{%- block title -%}{{ storeSettings.get('meta.title') }} | {{ storeSettings.get('meta.name') }}{%- endblock -%}</title>
 
     {% block stylesheets %}
-        <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" >
-        <link rel="preload" as="font" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}" crossorigin>
-        <link rel="stylesheet" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet">
+    <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" >
+    <link rel="preload" as="font" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}" crossorigin>
+    <link rel="stylesheet" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet">
 
 
 {#        <script src="https://kit.fontawesome.com/469d83575c.js" crossorigin="anonymous"></script>#}
-        <link rel="preload" as="font" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">
-        <link rel="stylesheet" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">
+    <link rel="preload" as="font" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">
+    <link rel="stylesheet" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">
 
-        <link rel="preload" as="style" href="{{ asset('build/store-theme.css') }}">
-        {{ encore_entry_link_tags('store-theme') }}
+    <link rel="preload" as="style" href="{{ asset('build/store-theme.css') }}">
+    {{ encore_entry_link_tags('store-theme') }}
 
 {#        <link rel="preload" as="style" href="{{ asset('build/store-plugins.css') }}">#}
-        {{ encore_entry_link_tags('store-plugins') }}
+    {{ encore_entry_link_tags('store-plugins') }}
 
 {#        JS scripts with defer                 #}
-        {{ encore_entry_script_tags('store-app') }}
-
-        {% include 'webshop/widgets/tracking-codes.html.twig' %}
+    {{ encore_entry_script_tags('store-app') }}
     {% endblock %}
+
+    {% block trackingCodes %}
+    {% include 'webshop/widgets/tracking-codes.html.twig' %}
+    {% endblock %}
+
 </head>
 
 <body class="{% block bodyClass %}{% endblock %}">

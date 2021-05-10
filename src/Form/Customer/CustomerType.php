@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Customer;
 
 use App\Entity\Customer;
+use App\Services\StoreSettings;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -20,11 +21,13 @@ class CustomerType extends AbstractType
 {
     private $urlGenerator;
     private $authorization;
+    private $storeSettings;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $authorization)
+    public function __construct(UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $authorization, StoreSettings $storeSettings)
     {
         $this->urlGenerator = $urlGenerator;
         $this->authorization = $authorization;
+        $this->storeSettings = $storeSettings;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -51,32 +54,35 @@ class CustomerType extends AbstractType
 //        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
 
         $builder->add('lastname', TextType::class,[
-                'required' => true,
-                'attr' => [
-                    'placeholder' => '',
-                    'autocomplete' => 'lastname'
-                ],
-            ])
-            ->add('firstname', TextType::class,[
-                'required' => true,
-                'attr' => [
-                    'placeholder' => '',
-                    'autocomplete' => 'firstname'
-                ],
-            ])
-            ->add('phone',TelType::class,[
-                'required' => false,
+//            'mapped' => false,
+            'required' => true,
+            'attr' => [
+                'placeholder' => '',
+                'autocomplete' => 'lastname'
+            ],
+        ])
+        ->add('firstname', TextType::class,[
+//            'mapped' => false,
+            'required' => true,
+            'attr' => [
+                'placeholder' => '',
+                'autocomplete' => 'firstname'
+            ],
+        ])
+        ->add('phone',TelType::class,[
+//            'mapped' => false,
+            'required' => false,
 //                'constraints' => [
 //                    new NotNull(['message' => "Add meg a telefonszámot!"]),
 //                    new PhoneNumber(['regionCode' => 'HU']),
 //                ],
-            ])
-            ->add('acceptsMarketing', CheckboxType::class, [
-                'required' => false,
-                'mapped' => true,
+        ])
+        ->add('acceptsMarketing', CheckboxType::class, [
+            'required' => false,
+            'mapped' => true,
 //                'constraints' => new IsTrue(['message' => 'Biztosan nem akarsz feliratkozni a hírlevélre?']),
-            ])
-            ->getForm();
+        ])
+        ->getForm();
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -5,7 +5,15 @@
     Sikeres rendelés | {{ parent() }}
 {%- endblock -%}
 
-{% block bodyClass %} {{ parent() }} thank-you-page{% endblock %}
+
+{% block trackingCodes %}
+    {% if isConversionTracked == false %}
+        {% include 'webshop/widgets/tracking-codes.html.twig' with { 'isPurchase': true } %}
+    {% endif %}
+{% endblock %}
+
+
+{% block bodyClass %}{{ parent() }} thank-you-page{% endblock %}
 
 {% block underNavbar %}
 {% endblock %}

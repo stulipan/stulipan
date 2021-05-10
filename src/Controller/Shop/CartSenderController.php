@@ -4,7 +4,6 @@ namespace App\Controller\Shop;
 
 use App\Entity\Address;
 use App\Entity\Geo\GeoCountry;
-use App\Entity\Order;
 use App\Services\OrderBuilder;
 use App\Entity\Sender;
 use App\Form\SenderType;
@@ -33,10 +32,14 @@ class CartSenderController extends AbstractController
     /**
      * Handles the Sender form. It is used to create and submit the form from JS.
      *
-     * @Route("/cart/editSender/{id}", name="cart-editSender")
+     * @Route("/cart/editSender/{id}", name="cart-editSender", methods={"POST"})
      */
     public function editSenderForm(Request $request, ?Sender $sender, $id = null, ValidatorInterface $validator)
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/editSender/{id}');
+        }
+
         $orderBuilder = $this->orderBuilder;
         $customer = $orderBuilder->getCurrentOrder()->getCustomer();
         if (!$sender) {
@@ -72,34 +75,16 @@ class CartSenderController extends AbstractController
             $entityManager->flush();
 
             $orderBuilder->setSender($sender);
-
-            /** If AJAX request, returns the current Sender */
-            if ($request->isXmlHttpRequest()) {
-                //                return $this->redirectToRoute('cart-getSender');
-                return $this->render('webshop/cart/sender_form.html.twig', [
-                    'order' => $orderBuilder->getCurrentOrder(),
-                    'senderForm' => $form->createView(),
-                ]);
-            }
         }
-        /**
-         * Renders form with errors
-         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
-         * (!?, there is a validation error)
-         */
-        if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
+        // Renders form with errors
+        if ($form->isSubmitted() && !$form->isValid()) {
             $html = $this->renderView('webshop/cart/sender_form.html.twig', [
-                'order' => $orderBuilder->getCurrentOrder(),
                 'senderForm' => $form->createView(),
             ]);
             return new Response($html, 400);
-
         }
-        /**
-         * Renders form initially with data
-         */
+
         return $this->render('webshop/cart/sender_form.html.twig', [
-            'order' => $orderBuilder->getCurrentOrder(),
             'senderForm' => $form->createView(),
         ]);
     }
@@ -113,6 +98,10 @@ class CartSenderController extends AbstractController
     {
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/getSenders');
+        }
+
         $orderBuilder = $this->orderBuilder;
         /** If the Order has a Customer, returns the list of the customer's Senders */
         if ($orderBuilder->getCurrentOrder()->getCustomer()) {
@@ -124,19 +113,6 @@ class CartSenderController extends AbstractController
             if ($orderBuilder->hasSender()) {
                 $senders->add($orderBuilder->getCurrentOrder()->getSender());
             }
-        }
-        if (!$senders || $senders->isEmpty()) {
-            $sender = new Sender();
-            // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
-            $address = new Address();
-            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
-            $sender->setAddress($address);
-            $form = $this->createForm(SenderType::class, $sender);
-
-            return $this->render('webshop/cart/sender_form.html.twig', [
-                'order' => $orderBuilder->getCurrentOrder(),
-                'senderForm' => $form->createView(),
-            ]);
         }
 
         return $this->render('webshop/cart/sender_list.html.twig', [
@@ -150,6 +126,12 @@ class CartSenderController extends AbstractController
      */
     public function getSender(Request $request)
     {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/getSender');
+        }
+
         $orderBuilder = $this->orderBuilder;
         if ($orderBuilder->hasSender()) {
             $sender = $orderBuilder->getCurrentOrder()->getSender();
@@ -159,23 +141,14 @@ class CartSenderController extends AbstractController
             $address = new Address();
             $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
             $sender->setAddress($address);
-            $form = $this->createForm(SenderType::class, $sender);
-
-            return $this->render('webshop/cart/sender_form.html.twig', [
-                'order' => $orderBuilder->getCurrentOrder(),
-                'senderForm' => $form->createView(),
-            ]);
         }
-        return $this->render('webshop/cart/sender-current.html.twig', [
-            'senderForm' => $this->createForm(SenderType::class, $sender)->createView(),
-            'selectedSender' => $orderBuilder->getCurrentOrder()->getSender() ? $orderBuilder->getCurrentOrder()->getSender()->getId() : null,
-        ]);
-//        return $this->render('webshop/cart/sender-current.html.twig', [
-//            'sender' => $sender,
-//            'selectedSender' => $orderBuilder->getCurrentOrder()->getSender() ? $orderBuilder->getCurrentOrder()->getSender()->getId() : null,
-//        ]);
-    }
 
+        $form = $this->createForm(SenderType::class, $sender);
+
+        return $this->render('webshop/cart/sender_form.html.twig', [
+            'senderForm' => $form->createView(),
+        ]);
+    }
     /**
      * Picks a Sender from the sender list and assigns it to the current Order.
      * It is used in JS.
@@ -186,14 +159,14 @@ class CartSenderController extends AbstractController
     {
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/pickSender/{id}');
+        }
+
         if ($this->orderBuilder->getCustomer() === $sender->getCustomer()) {
             $orderBuilder = $this->orderBuilder;
             $orderBuilder->setSender($sender);
 
-            //            return $this->render('webshop/cart/sender-current.html.twig', [
-            //                'sender' => $sender,
-            //                'selectedSender' => $orderBuilder->getCurrentOrder()->getSender() ? $orderBuilder->getCurrentOrder()->getSender()->getId() : null,
-            //            ]);
             return $this->render('webshop/cart/sender_form.html.twig', [
                 'senderForm' => $this->createForm(SenderType::class, $sender)->createView(),
                 'selectedSender' => $orderBuilder->getCurrentOrder()->getSender() ? $orderBuilder->getCurrentOrder()->getSender()->getId() : null,
@@ -210,13 +183,16 @@ class CartSenderController extends AbstractController
     {
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/deleteSender/{id}');
+        }
+
         // If User from session is equal to User in Recipient
         if ($this->orderBuilder->getCustomer() === $sender->getCustomer()) {
             $this->orderBuilder->getCustomer()->removeSender($sender);
             if ($this->orderBuilder->getCurrentOrder()->getSender() == $sender) {
                 $this->orderBuilder->removeSender();
             }
-            //            $this->orderBuilder->setFallbackSender();
             $this->getDoctrine()->getManager()->remove($sender);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('cart-getSender');

@@ -12,7 +12,7 @@ use App\Entity\DeliverySpecialDate;
 use App\Entity\Geo\GeoPlace;
 use App\Entity\Model\CustomerBasic;
 use App\Entity\Model\HiddenDeliveryDate;
-use App\Form\AcceptTermsType;
+use App\Form\Checkout\AcceptTermsType;
 use App\Form\Customer\CustomerType;
 use App\Model\CartGreetingCard;
 use App\Model\CheckoutPaymentMethod;
@@ -32,6 +32,7 @@ use App\Entity\PaymentMethod;
 use App\Form\DeliveryDate\CartHiddenDeliveryDateFormType;
 use App\Form\Checkout\PaymentMethodType;
 use App\Repository\GeoPlaceRepository;
+use App\Services\StoreSettings;
 use App\Validator\Constraints as AssertApp;
 
 use App\Entity\User;
@@ -56,6 +57,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\HttpCache\Store;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,7 +87,7 @@ class CartController extends AbstractController
      *
      * @Route("/cart/setCustomer/{id}", name="cart-setCustomer", methods={"POST", "GET"})
      */
-    public function setCustomer(Request $request, ?Customer $customer, $id = null)
+    public function setCustomer(Request $request, ?Customer $customer, $id = null, StoreSettings $storeSettings)
     {
         $orderBuilder = $this->orderBuilder;
         $form = $this->createForm(CustomerType::class, $customer); //,
@@ -93,6 +95,13 @@ class CartController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Customer $data */
             $data = $form->getData();
+
+//            if ($storeSettings->get('general.flower-shop-mode') === true) {
+//                $data->setFirstname($orderBuilder->getCurrentOrder()->getRecipient()->getFirstname());
+//                $data->setLastname($orderBuilder->getCurrentOrder()->getRecipient()->getLastname());
+//                $data->setPhone($orderBuilder->getCurrentOrder()->getRecipient()->getPhone());
+//            }
+//            dd($data);
 
             // If object has Id, it's already saved into db, and is not a new object.
             if (!$data->getId()) {
@@ -120,23 +129,23 @@ class CartController extends AbstractController
 
             $customer->addOrder($orderBuilder->getCurrentOrder());
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($customer);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($customer);
+            $em->flush();
 
             $orderBuilder->setCustomer($customer);
         }
 
         /** Renders the form with errors */
         if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
-            $html = $this->renderView('webshop/cart/user-basicDetails-form.html.twig', [
+            $html = $this->renderView('webshop/cart/customer-form.html.twig', [
                 'customerForm' => $form->createView(),
             ]);
             return new Response($html,400);
         }
 
         if ($form->isSubmitted() && $form->isValid() && $request->isXmlHttpRequest()) {
-            $html = $this->renderView('webshop/cart/user-basicDetails-form.html.twig', [
+            $html = $this->renderView('webshop/cart/customer-form.html.twig', [
                 'customerForm' => $form->createView(),
             ]);
             return new Response($html,200);
@@ -149,18 +158,22 @@ class CartController extends AbstractController
         /**
          * Renders form initially with data
          */
-        return $this->render('webshop/cart/user-basicDetails-form.html.twig', [
+        return $this->render('webshop/cart/customer-form.html.twig', [
             'customerForm' => $form->createView(),
         ]);
     }
 
 
     /**
-     * @Route("/cart/setDeliveryDate", name="cart-setDeliveryDate", methods={"POST", "GET"})
+     * @Route("/cart/setDeliveryDate", name="cart-setDeliveryDate", methods={"POST"})
      *
      */
     public function setDeliveryDate(Request $request, HiddenDeliveryDate $date) //: Response
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/setDeliveryDate');
+        }
+
         $orderBuilder = $this->orderBuilder;
         $form = $this->createForm(CartHiddenDeliveryDateFormType::class, $date);
         $form->handleRequest($request);
@@ -168,29 +181,19 @@ class CartController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $orderBuilder->setDeliveryDate($data->getDeliveryDate(), $data->getDeliveryInterval());
-//            dd($data->getDeliveryFee());
-            $orderBuilder->setDeliveryFee($data->getDeliveryFee());
+            $orderBuilder->setSchedulingPrice($data->getDeliveryFee());
 
-            /**
-             * If AJAX request, and because at this point the form data is processed, it returns Success (code 200)
-             */
-            if ($request->isXmlHttpRequest()) {
-//                return $this->redirectToRoute('site-checkout-step3-pickPayment');
-                return $this->render('webshop/cart/hidden-delivery-date-form.html.twig', [
-                    'hiddenDateForm' => $form->createView(),
-                ]);
-            }
+             // it returns Success (code 200)
+            return $this->render('webshop/cart/hidden-delivery-date-form.html.twig', [
+                'hiddenDateForm' => $form->createView(),
+            ]);
         }
-        /**
-         * Renders form with errors
-         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
-         */
-        if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
+        // Renders form with errors
+        if ($form->isSubmitted() && !$form->isValid()) {
             $html = $this->renderView('webshop/cart/hidden-delivery-date-form.html.twig', [
                 'hiddenDateForm' => $form->createView(),
             ]);
             return new Response($html,400);
-//            return new Response($html,200);
         }
     }
 
@@ -199,6 +202,10 @@ class CartController extends AbstractController
      */
     public function setShippingMethod(Request $request, CheckoutShippingMethod $shippingMethod): Response
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/setShippingMethod');
+        }
+
         $orderBuilder = $this->orderBuilder;
         $form = $this->createForm(ShippingMethodType::class, $shippingMethod);
         $form->handleRequest($request);
@@ -207,30 +214,18 @@ class CartController extends AbstractController
             $orderBuilder->setShippingMethod($form->getData()->getShippingMethod());
         }
         /** Renders form with errors */
-        if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
+        if ($form->isSubmitted() && !$form->isValid()) {
             $html = $this->renderView('webshop/cart/shipping-method-form.html.twig', [
                 'shippingMethodForm' => $form->createView(),
-//                'shippingMethods' => $this->getDoctrine()->getRepository(Shipping::class)->findAll(),
                 'shippingMethods' => $this->getDoctrine()->getRepository(ShippingMethod::class)->findBy(['enabled' => true], ['ordering' => 'ASC']),
             ]);
             return new Response($html,400);
         }
+
         return $this->render('webshop/cart/shipping-method-form.html.twig', [
             'shippingMethodForm' => $form->createView(),
             'shippingMethods' => $this->getDoctrine()->getRepository(ShippingMethod::class)->findBy(['enabled' => true], ['ordering' => 'ASC']),
         ]);
-
-
-//        if ($request->isXmlHttpRequest()) {
-//            $orderBuilder = $this->orderBuilder;
-//            $orderBuilder->setShippingMethod($shipping);
-//            $html = "All good";
-//            return new Response($html,200);
-//        } else {
-//            throw $this->createNotFoundException(
-//                'setShipping not allowed!'
-//            );
-//        }
     }
 
     /**
@@ -238,32 +233,29 @@ class CartController extends AbstractController
      */
     public function setPaymentMethod(Request $request, CheckoutPaymentMethod $paymentMethod): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $orderBuilder = $this->orderBuilder;
-            $form = $this->createForm(PaymentMethodType::class, $paymentMethod);
-            $form->handleRequest($request);
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/setPaymentMethod');
+        }
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $orderBuilder->setPaymentMethod($form->getData()->getPaymentMethod());
-            }
-            /** Renders form with errors */
-            if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
-                $html = $this->renderView('webshop/cart/payment-method-form.html.twig', [
-                    'paymentMethodForm' => $form->createView(),
-//                    'paymentMethods' => $this->getDoctrine()->getRepository(Shipping::class)->findAll(),
-                    'paymentMethods' => $this->getDoctrine()->getRepository(PaymentMethod::class)->findBy(['enabled' => true], ['ordering' => 'ASC']),
-                ]);
-                return new Response($html,400);
-            }
-            return $this->render('webshop/cart/payment-method-form.html.twig', [
+        $orderBuilder = $this->orderBuilder;
+        $form = $this->createForm(PaymentMethodType::class, $paymentMethod);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $orderBuilder->setPaymentMethod($form->getData()->getPaymentMethod());
+        }
+        /** Renders form with errors */
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $html = $this->renderView('webshop/cart/payment-method-form.html.twig', [
                 'paymentMethodForm' => $form->createView(),
                 'paymentMethods' => $this->getDoctrine()->getRepository(PaymentMethod::class)->findBy(['enabled' => true], ['ordering' => 'ASC']),
             ]);
-        } else {
-            throw $this->createNotFoundException(
-                'setPaymentMethod not allowed!'
-            );
+            return new Response($html,400);
         }
+        return $this->render('webshop/cart/payment-method-form.html.twig', [
+            'paymentMethodForm' => $form->createView(),
+            'paymentMethods' => $this->getDoctrine()->getRepository(PaymentMethod::class)->findBy(['enabled' => true], ['ordering' => 'ASC']),
+        ]);
     }
 
     /**
@@ -271,35 +263,68 @@ class CartController extends AbstractController
      */
     public function setAcceptTerms(Request $request, ?bool $isAcceptedTerms = null): Response  //, ?Order $order
     {
-        if ($request->isXmlHttpRequest()) {
-            $orderBuilder = $this->orderBuilder;
-            $form = $this->createForm(AcceptTermsType::class, [ 'isAcceptedTerms' => $isAcceptedTerms]);
-            $form->handleRequest($request);
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/setAcceptTerms/{isAcceptedTerms}');
+        }
 
-//            dd($isAcceptedTerms);
-//            dd($form->isValid());
-            if ($form->isSubmitted() && $form->isValid()) {
-                $orderBuilder->setIsAcceptedTerms($form->get('isAcceptedTerms')->getData());
-            }
-            /** Renders form with errors */
-            if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
-                $html = $this->renderView('webshop/cart/accept-terms-form.html.twig', [
-                    'acceptTermsForm' => $form->createView(),
-                ]);
-                return new Response($html,400);
-            }
+        $orderBuilder = $this->orderBuilder;
+        $form = $this->createForm(AcceptTermsType::class, [ 'isAcceptedTerms' => $isAcceptedTerms]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $orderBuilder->setIsAcceptedTerms($form->get('isAcceptedTerms')->getData());
+        }
+        /** Renders form with errors */
+        if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
             $html = $this->renderView('webshop/cart/accept-terms-form.html.twig', [
                 'acceptTermsForm' => $form->createView(),
             ]);
-            return new Response($html,200);
-//            return $this->render('webshop/cart/accept-terms-form.html.twig', [
-//                'acceptTermsForm' => $form->createView(),
-//            ]);
-        } else {
+            return new Response($html,400);
+        }
+        $html = $this->renderView('webshop/cart/accept-terms-form.html.twig', [
+            'acceptTermsForm' => $form->createView(),
+        ]);
+        return new Response($html,200);
+    }
+
+    /**
+     * @Route("/cart/setSameAsRecipient", name="cart-setSameAsRecipient", methods={"POST"})
+     */
+    public function setSameAsRecipient(Request $request, ?bool $isAcceptedTerms = null, ValidatorInterface $validator): Response  //, ?Order $order
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/setSameAsRecipient');
+        }
+
+        $orderBuilder = $this->orderBuilder;
+
+        $recipient = $orderBuilder->getCurrentOrder()->getRecipient();
+        $sender = new Sender();
+        $sender->setFirstname($recipient->getFirstname());
+        $sender->setLastname($recipient->getLastname());
+        $senderAddress = new Address();
+        $senderAddress->setAddressTypeToBilling();
+        $senderAddress->setStreet($recipient->getAddress()->getStreet());
+        $senderAddress->setCity($recipient->getAddress()->getCity());
+        $senderAddress->setZip($recipient->getAddress()->getZip());
+        $senderAddress->setProvince($recipient->getAddress()->getProvince());
+        $senderAddress->setCountry($recipient->getAddress()->getCountry());
+        $sender->setAddress($senderAddress);
+        $sender->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
+
+        $errors = $validator->validate($sender);
+        if (count($errors) > 0) {
             throw $this->createNotFoundException(
-                'setAcceptTerms not allowed!'
+                'HIBA: setSameAsRecipient failed. The new Sender could not be validated.'
             );
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($sender);
+        $em->flush();
+
+        $orderBuilder->setSender($sender);
+        return new Response('',200);
     }
 
     /**
@@ -313,6 +338,10 @@ class CartController extends AbstractController
      */
     public function addItem(Request $request, Product $product): Response
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/addItem/{id}');
+        }
+
         $orderBuilder = $this->orderBuilder;
         $form = $this->createForm(CartAddItemType::class, $product);
         $form->handleRequest($request);
@@ -334,7 +363,7 @@ class CartController extends AbstractController
         }
 
         // Renders form with errors
-        if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
+        if ($form->isSubmitted() && !$form->isValid()) {
             $html = $this->renderView('webshop/site/product-show-addToCartForm-widget.html.twig', [
                 'product' => $product,
                 'form' => $form->createView(),
@@ -342,13 +371,11 @@ class CartController extends AbstractController
             return new Response($html, Response::HTTP_BAD_REQUEST); //400
         }
 
-        if ($request->isXmlHttpRequest()) {
-            $html = $this->renderView('webshop/site/product-show-addToCartForm-widget.html.twig', [
-                'product' => $product,
-                'form' => $form->createView(),
-            ]);
-            return new Response($html);
-        }
+        $html = $this->renderView('webshop/site/product-show-addToCartForm-widget.html.twig', [
+            'product' => $product,
+            'form' => $form->createView(),
+        ]);
+        return new Response($html);
     }
     
     /**
@@ -358,16 +385,21 @@ class CartController extends AbstractController
      */
     public function addGiftItem(Request $request, Product $product) //, $id = null
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/addGift/{id}');
+        }
+
         $orderBuilder = $this->orderBuilder;
         try {
             $orderBuilder->addItem($product, 1);
         } catch (\Exception $e) {
             $error = $e->getMessage();
-            if ($request->isXmlHttpRequest() && $error) {
+            if ($error) {
                 $json = json_encode($error, JSON_UNESCAPED_UNICODE);
                 return new JsonResponse($json,400, [], true);
             }
         }
+
         $clientDetails = new ClientDetails($request->getClientIp(), $request->headers->get('user-agent'), $request->headers->get('accept-language'));
         $orderBuilder->setClientDetails($clientDetails);
 
@@ -386,19 +418,16 @@ class CartController extends AbstractController
      */
     public function removeItemFromCart(Request $request, $id = null, bool $showQuantity = false): Response //OrderItem $item,
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/removeItemFromCart/{id}/{showQuantity}');
+        }
+
         $orderBuilder = $this->orderBuilder;
         $item = $this->getDoctrine()->getRepository(OrderItem::class)->find($id);
         if ($item) {
             $orderBuilder->removeItem($item);
         }
-        if ($request->isXmlHttpRequest()) {
-            return $this->render('webshop/cart/cart.html.twig', [
-                'order' => $orderBuilder->getCurrentOrder(),
-                'showQuantity' => true,
-                'showRemove' => true,
-                'showSummary' => true,
-            ]);
-        }
+
         return $this->render('webshop/cart/cart.html.twig', [
             'order' => $orderBuilder->getCurrentOrder(),
             'showQuantity' => true,
@@ -427,6 +456,10 @@ class CartController extends AbstractController
      */
     public function setItemQuantity(Request $request, OrderItem $item, TranslatorInterface $translator): Response
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/setItemQuantity/{id}');
+        }
+
         $orderBuilder = $this->orderBuilder;
         $quantityBeforeSubmit = $item->getQuantity();
         $form = $this->createForm(SetItemQuantityType::class, $item);
@@ -439,7 +472,7 @@ class CartController extends AbstractController
             }
 
             // If AJAX request, renders and returns an HTML form with the value
-            if ($form->isValid() && $request->isXmlHttpRequest()) {
+            if ($form->isValid()) {
                 $html = $this->renderView('webshop/cart/cart.html.twig', [
                     'order' => $orderBuilder->getCurrentOrder(),
                     'showQuantity' => true,
@@ -450,10 +483,8 @@ class CartController extends AbstractController
             }
         }
 
-        /**
-         * If AJAX, renders a new form, with the original, pre-submit data, then renders a Response with 400 error code.
-         */
-        if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
+        // If AJAX, renders a new form, with the original, pre-submit data, then renders a Response with 400 error code.
+        if ($form->isSubmitted() && !$form->isValid()) {
 
             // change quantity back to pre-submit value
             $item->setQuantity($quantityBeforeSubmit);
@@ -465,13 +496,6 @@ class CartController extends AbstractController
             ]);
             return new Response($html,400);
         }
-
-//        /**
-//         * Renders form initially with data
-//         */
-//        return $this->render('webshop/cart/cart-item-quantity.html.twig', [
-//            'quantityForm' => $form->createView(),
-//        ]);
     }
 
     /**
@@ -482,15 +506,15 @@ class CartController extends AbstractController
      */
     public function getItemsCount(Request $request, Session $session): JsonResponse
     {
-        $orderBuilder = $this->orderBuilder;
-
-        if ($request->isXmlHttpRequest()) {
-            if ($session->get('orderId') != null && $orderBuilder->getCurrentOrder()->getId() == $session->get('orderId')) {
-                $json = json_encode($orderBuilder->getCurrentOrder()->itemsCount(), JSON_UNESCAPED_UNICODE);
-                return new JsonResponse($json,200, [], true);
-            }
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/getItemsCount');
         }
-//        return new JsonResponse('error', 400);
+
+        $orderBuilder = $this->orderBuilder;
+        if ($session->get('orderId') != null && $orderBuilder->getCurrentOrder()->getId() == $session->get('orderId')) {
+            $json = json_encode($orderBuilder->getCurrentOrder()->itemsCount(), JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,200, [], true);
+        }
     }
 
     /**
@@ -500,17 +524,38 @@ class CartController extends AbstractController
      */
     public function getCart(Request $request, Session $session): Response
     {
-        $orderBuilder = $this->orderBuilder;
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/getCart');
+        }
 
-        if ($request->isXmlHttpRequest()) {
-            if ($session->get('orderId') != null && $orderBuilder->getCurrentOrder()->getId() == $session->get('orderId')) {
-                return $this->render('webshop/cart/cart.html.twig', [
-                    'order' => $orderBuilder->getCurrentOrder(),
-                    'showQuantity'=> false,
-                    'showRemove'=> false,
-                    'showTotal'=> true,
-                ]);
-            }
+        $orderBuilder = $this->orderBuilder;
+        if ($session->get('orderId') != null && $orderBuilder->getCurrentOrder()->getId() == $session->get('orderId')) {
+            return $this->render('webshop/cart/cart.html.twig', [
+                'order' => $orderBuilder->getCurrentOrder(),
+                'showQuantity'=> false,
+                'showRemove'=> false,
+                'showTotal'=> true,
+            ]);
+        }
+    }
+
+    /**
+     * NOT IN USE !!!
+     * Gets the Summary which is displayed in the Checkout sidebar. To be used in AJAX calls.
+     *
+     * @Route("/cart/getSummary", name="cart-getSummary", methods={"GET"})
+     */
+    public function getSummary(Request $request, Session $session): Response
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/getSummary');
+        }
+
+        $orderBuilder = $this->orderBuilder;
+        if ($session->get('orderId') != null && $orderBuilder->getCurrentOrder()->getId() == $session->get('orderId')) {
+            return $this->render('webshop/cart/sidebar-summary.html.twig', [
+                'order' => $orderBuilder->getCurrentOrder(),
+            ]);
         }
     }
 

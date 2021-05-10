@@ -25,7 +25,7 @@
                                             <div class="checkout-overview-item-grid">
                                                 <div class="checkout-overview-item-label">
                                                     <div class="checkout-overview-item-title">
-                                                        {{ flowerShop ? 'checkout.overview.recipient-to'|trans : 'checkout.overview.recipient'|trans }}
+                                                        {{ flowerShopMode ? 'checkout.overview.recipient-to'|trans : 'checkout.overview.recipient'|trans }}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-overview-item-data">
@@ -46,7 +46,7 @@
                                             <div class="checkout-overview-item-grid">
                                                 <div class="checkout-overview-item-label">
                                                     <div class="checkout-overview-item-title">
-                                                        {{ flowerShop ? 'checkout.overview.customer-from'|trans : 'checkout.overview.customer'|trans }}
+                                                        {{ flowerShopMode ? 'checkout.overview.customer-from'|trans : 'checkout.overview.customer'|trans }}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-overview-item-data">
@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    {% if flowerShop %}
+    {% if flowerShopMode %}
     <div id="shipping_deliveryDate" class="shipping-deliveryDate" data-section-id="datePicker-template" data-section-type="datePicker-block">
         <div class="row">
             <div class="col-lg-12 correction-no-padding">
@@ -277,7 +277,7 @@
             <span class="loading-spinner-invisible">Tovább a fizetéshez</span>
             <div class="loading-spinner" role="status"></div>
         </button>
-        <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="order-2 order-md-1 text-center mt-3 mt-md-0"><i class="fas fa-chevron-left text-sm mr-2"></i>{{ flowerShop ? 'checkout.flower-shop.back-to-recipient-button'|trans : 'checkout.back-to-shipping-address-button'|trans }}
+        <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="order-2 order-md-1 text-center mt-3 mt-md-0"><i class="fas fa-chevron-left text-sm mr-2"></i>{{ flowerShopMode ? 'checkout.flower-shop.back-to-recipient-button'|trans : 'checkout.back-to-shipping-address-button'|trans }}
         </a>
     </div>
 {% endblock %}

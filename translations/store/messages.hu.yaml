@@ -33,6 +33,7 @@ registration:
     firstname: Keresztnév
     lastname: Vezetéknév
     remember-me: 'Maradjak bejelentkezve'
+    forgot-your-password: 'Elfelejtetted a jelszavad?'
     newsletter-sign-up: 'Feliratkozom a hírlevélre, hogy elsőként értesüljek az akciókról, újdonságokról.'
 
     email-is-missing: 'Írd be az email címedet.'
@@ -46,6 +47,25 @@ registration:
     terms:
         accept-terms-label: 'Kijelentem, hogy az <a {{ terms }}>Általános Szerződési Feltételeket</a> és az <a {{ privacy }}>Adatvédelmi nyilatkozatot</a> megismertem és elfogadom, az abban szereplő adatkezelésekhez hozzájárulok.'
         accept-terms-error: 'Kérjük olvasd el és fogadd el az ÁSZF-et.'
+    forgot-password:
+        forgot-your-password-title: 'Elfelejtett jelszó'
+        enter-your-details: 'Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.'
+        email-address: Email cím
+        reset-password-button: Jelszó visszaállítása
+        back-to-login: Vissza a bejelentkezéshez
+        email-address-missing: Add meg az email címet.
+        email-address-not-found: Nem talált felhasználót ezzel az email címmel. Ellenőrizd, hogy helyesen adtad meg az email címet vagy, ha még nem regisztráltál, hozz létre egy fiókot.
+        email-sent-with-reset-password-link: 'Kiküldtünk egy emailt, amely tartalmaz egy linket, amelyre kattintva visszaállíthatod jelszavad.'
+        email-not-received-verify-spam: 'Ha nem kaptál emailt, ellenőrizd a spam mappát, vagy <a href="{{ link }}">próbálkozz újra</a>.'
+        reset-link-expired: A jelszó módosításának időkerete lejárt. Kérjük, próbáld meg újra beállítani a jelszavad.
+        reset-password-title: Új jelszó
+        save-password: Jelszó mentése
+        enter-new-password: Új jelsó
+        repeat-new-password: Jelszó újra
+        password-is-missing: Írd be az új jelszót
+        passwords-must-match: 'A beírt jelszavaknak egyezniük kell.'
+        password-length-is-invalid: 'A jelszó legalább {{ limit }} karakter hosszú kell legyen.'
+
 
 account:
     my-account: 'Saját fiókom'
@@ -82,6 +102,8 @@ cart:
     remove-item: Eltávolítás
     shipping-fee-calculated: 'A szállítási díj a megadott adataid szerint került kiszámításra.'
     shipping-fee: 'Szállítási díj'
+    shipping-fee-calculated-in-next-step: 'A következő lépésben lesz kiszámolva'
+    scheduling-fee: 'Szállítás időpontra'
     discount: Kedvezmény
     total: Összesen
     subtotal: Részösszeg
@@ -120,6 +142,7 @@ checkout:
         previously-saved-recipients: 'Előzőleg megadott címek'
         previously-saved-recipients-modal-title: 'Előzőleg megadott szállítási címek'
         previously-saved-recipients-modal-description: 'Előzőleg megadott szállítási címek'
+        no-previously-saved-recipients: 'Még nincs szállítási címed.'
         select-recipient: 'Szállítás erre a címre'
         firstname: Keresztnév
         lastname: Vezetéknév
@@ -147,6 +170,11 @@ checkout:
     sender:
         sender: Számlázási cím
         last-used: 'Legutóbb használt'
+        same-as-shipping-address: 'A számlázási cím megegyezik a szállítási címmel'
+        use-different-shipping-address: 'Másik számlázási címet adok meg'
+
+        no-previously-saved-senders: 'Még nincs számlázási címed.'
+
     flower-shop:
         recipient: Címzett
         recipient-page-title: 'A címzett adatai'
@@ -156,6 +184,7 @@ checkout:
         previously-saved-recipients: 'Előzőleg megadott címzettek'
         previously-saved-recipients-modal-title: 'Előzőleg megadott címzettek'
         previously-saved-recipients-modal-description: 'Előzőleg megadott címzettek'
+        no-previously-saved-recipients: 'Még nincs címzetted.'
         select-recipient: 'Szállítás erre a címre'
         missing-recipient: 'Nem adtál még meg címzettet.'
         customer-information-title: 'Aki küldi'
@@ -171,8 +200,8 @@ checkout:
         phone-placeholder: 'Telefonszámod, pl: +36... vagy 06...'
         missing-email-address: 'Add meg az email címedet!'
         invalid-email-address: 'Ellenőrizd, hogy helyesen írtad be az email címet!'
-        missing-firstname: 'Add meg a keresztnevedet!'
-        missing-lastname: 'Add meg a nevedet!'
+        missing-firstname: 'Add meg a keresztneved!'
+        missing-lastname: 'Add meg a neved!'
         missing-phone: 'Add meg a telefonszámot.'
         invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
         newsletter-optin: 'Pipáld be és értesíteni fogunk akcióinkról. Kizárólag vásárlóink részére!'
@@ -294,3 +323,7 @@ generic:
     delete: Törlés
     close: Bezár
     home: Főoldal
+    page-not-found-meta: 'Rafina: 404'
+    page-not-found: A keresett oldal nem található
+    page-not-found-description: Olyan oldalra tévedtél, ami valójában nincs. Hogy ez a mi hibánk, vagy a tiéd, azt nem tudjuk, mindenesetre biztosan nem itt van, amit keresel.
+    back-to-homepage: Vissza a főoldalra

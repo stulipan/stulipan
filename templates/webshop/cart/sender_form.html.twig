@@ -61,18 +61,18 @@
         </div>
         <div class="form-row">
             <div class="col-sm-5">
-                <div class="form-group input-float input-float-select {% if senderForm.address.country.vars.value is defined and senderForm.address.country.vars.value %}active{% endif %}">
-                    <label for="{{ senderForm.address.country.vars.full_name }}" class="form-label">Ország</label>
-                    {{ form_widget(senderForm.address.country, {'attr': {'class': '', 'placeholder': 'Ország' }}) }}
-                    {{ form_errors(senderForm.address.country) }}
-                </div>
+            <div class="form-group input-float input-float-select mb-sm-0 {% if senderForm.address.country.vars.value is defined and senderForm.address.country.vars.value %}active{% endif %}">
+                <label for="{{ senderForm.address.country.vars.full_name }}" class="form-label">Ország</label>
+                {{ form_widget(senderForm.address.country, {'attr': {'class': '', 'placeholder': 'Ország' }}) }}
+                {{ form_errors(senderForm.address.country) }}
             </div>
-            <div class="form-group input-float col-sm-4 {% if senderForm.address.province.vars.value is defined and senderForm.address.province.vars.value %}active{% endif %}">
+            </div>
+            <div class="form-group input-float col-sm-4 mb-sm-0 {% if senderForm.address.province.vars.value is defined and senderForm.address.province.vars.value %}active{% endif %}">
                 <label for="{{ senderForm.address.province.vars.full_name }}" class="form-label">Megye</label>
                 {{ form_widget(senderForm.address.province, {'attr': {'class': 'JS--senderForm-province', 'placeholder': 'Megye' }}) }}
                 {{ form_errors(senderForm.address.province) }}
             </div>
-            <div class="form-group input-float col-sm-3 {% if senderForm.address.zip.vars.value is defined and senderForm.address.zip.vars.value %}active{% endif %}">
+            <div class="form-group input-float col-sm-3 mb-0 {% if senderForm.address.zip.vars.value is defined and senderForm.address.zip.vars.value %}active{% endif %}">
                 <label for="{{ senderForm.address.zip.vars.full_name }}" class="form-label">Irányítószám</label>
                 {{ form_widget(senderForm.address.zip, {'attr': {'class': 'JS--senderForm-zip', 'placeholder': 'Irányítószám', 'data-url' : path('cart-getPlaceByZip') }}) }}
                 {{ form_errors(senderForm.address.zip) }}

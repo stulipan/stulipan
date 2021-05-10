@@ -1,0 +1,11 @@
+{% extends 'webshop/site/template-reset-password.html.twig' %}
+
+{% set pageTitle = 'registration.forgot-password.forgot-your-password-title'|trans %}
+
+{% block underNavbar %}
+{% endblock %}
+
+{% block resetPassword %}
+    <p>{{ 'registration.forgot-password.email-sent-with-reset-password-link'|trans }}</p>
+    <p>{{ 'registration.forgot-password.email-not-received-verify-spam'|trans({ '{{ link }}' : path('site-reset-password') })|raw }}</p>
+{% endblock %}

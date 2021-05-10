@@ -1,9 +1,85 @@
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K0TW2891BW"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K0TW2891BW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-K0TW2891BW');
 
-    gtag('config', 'G-K0TW2891BW');
-</script>
+        {% if isInitiateCheckout is defined and isInitiateCheckout is not empty %}
+        gtag('event', 'begin_checkout', {
+            affiliation: '{{ storeName }}',
+            currency: 'HUF',
+            items: [
+                {%- for item in order.items -%}
+                {
+                    item_id: '{{ item.product.sku }}',
+                    item_name: '{{ item.product.name }}',
+                    item_brand: '{{ storeBrand }}',
+                    item_category: '{{ item.product.categories|first }}',
+                    price: {{ item.unitPrice }},
+                    currency: 'HUF',
+                    quantity: {{ item.quantity }}
+                }
+                {%- if loop.last == false -%}
+                    ,
+                {%- endif -%}
+                {%- endfor -%}
+            ],
+            value: {{ order.summary.totalAmountToPay }}
+        });
+        {% endif %}
+        {% if isPurchase is defined and isPurchase is not empty %}
+        gtag('event', 'purchase', {
+            affiliation: '{{ storeName }}',
+            currency: 'HUF',
+            items: [
+                {%- for item in order.items -%}
+                {
+                    item_id: '{{ item.product.sku }}',
+                    item_name: '{{ item.product.name }}',
+                    item_brand: '{{ storeBrand }}',
+                    item_category: '{{ item.product.categories|first }}',
+                    price: {{ item.unitPrice }},
+                    currency: 'HUF',
+                    quantity: {{ item.quantity }}
+                }
+                {%- if loop.last == false -%}
+                ,
+                {%- endif -%}
+                {%- endfor -%}
+            ],
+            transaction_id: '{{ order.number }}',
+            shipping: 0,
+            value: {{ order.summary.totalAmountToPay }},
+            tax: 0
+        })
+        {% endif %}
+
+    </script>
+
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window,document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '591301158497864');
+            fbq('track', 'PageView');
+            {% if isPurchase is defined and isPurchase is not empty %}
+            fbq('track', 'Purchase', {value: {{ order.summary.totalAmountToPay }}, currency: 'HUF'});
+            {% endif %}
+            {% if isInitiateCheckout is defined and isInitiateCheckout is not empty %}
+            fbq('track', 'InitiateCheckout', { num_items: {{ order.itemsCount }}, value: {{ order.summary.totalAmountToPay }}, currency: 'HUF' });
+            {% endif %}
+
+    </script>
+
+    <noscript>
+        <img height="1" width="1" src="https://www.facebook.com/tr?id=591301158497864&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->

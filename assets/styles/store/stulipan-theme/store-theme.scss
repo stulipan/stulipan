@@ -4,32 +4,7 @@
 @import "_font-size-mobile-reboot";
 
 
-$svg-icon-size-width:           $font-size-base !default;
-$svg-icon-line-height:          $line-height-base * 1rem !default;
 
-
-.svg-icon {
-  --font-size: #{$svg-icon-size-width};
-  --line-height: #{$toggle-arrow-line-height};
-  width: var(--font-size);
-  height: var(--font-size);
-  margin-right: .5rem;
-  stroke: currentColor;
-  stroke-width: 3px;
-  --layer1: currentColor;
-  --layer2: currentColor;
-  margin-bottom: calc((var(--line-height) - var(--font-size)) / 2);
-}
-
-.svg-icon.svg-icon-heavy {
-  stroke-width: 5
-}
-
-.checkout-customer .svg-icon {
-  --font-size: 2.5rem;
-  --line-height: 2.5rem;
-  opacity: .7;
-}
 
 // Custom correction by Stulipan
 // VP (VARIANT PICKER) used on daterangepicker
@@ -158,60 +133,4 @@ input[type=number] {
   letter-spacing: 0.1rem;
   margin-bottom: 0.5rem;
   font-weight: normal;
-}
-
-// Ekko lightbox
-.ekko-lightbox .modal-header {
-  padding: 0
-}
-
-.ekko-lightbox .modal-title {
-  display: none
-}
-
-.ekko-lightbox .ekko-lightbox-nav-overlay span {
-  padding: 0 .5rem
-}
-
-.ekko-lightbox .nav-arrow {
-  -ms-flex-positive: 0;
-  flex-grow: 0
-}
-
-.ekko-lightbox .nav-arrow-right {
-  justify-self: right
-}
-
-.ekko-lightbox .close {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  line-height: 50px;
-  vertical-align: top;
-  background: #343a40;
-  color: #fff;
-  top: -5px;
-  right: -5px;
-  padding: 0;
-  margin: 0;
-  opacity: 1;
-  font-size: 2rem;
-  z-index: 999;
-  cursor: pointer;
-  outline: none
-}
-
-.ekko-lightbox .close span {
-  display: inline-block;
-  position: relative;
-  top: -2px;
-  text-shadow: none;
-  font-weight: normal
-}
-
-.ekko-lightbox .modal-footer {
-  -ms-flex-pack: center;
-  justify-content: center;
-  padding-top: 0
 }

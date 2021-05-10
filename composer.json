@@ -24,6 +24,7 @@
         "symfony/flex": "^1.2",
         "symfony/form": "^5.2",
         "symfony/framework-bundle": "^5.2",
+        "symfony/mailer": "5.2.*",
         "symfony/monolog-bundle": "^3.1",
         "symfony/orm-pack": "^1.0",
         "symfony/process": "^5.2",
@@ -39,7 +40,8 @@
         "symfony/validator": "^5.2",
         "symfony/web-link": "^5.2",
         "symfony/webpack-encore-bundle": "^1.11",
-        "symfony/yaml": "^5.2"
+        "symfony/yaml": "^5.2",
+        "symfonycasts/reset-password-bundle": "^1.7"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

@@ -440,7 +440,7 @@ class OrderController extends AbstractController
     
         $selectedDate = null === $order->getDeliveryDate() ? null : $order->getDeliveryDate();
         $selectedInterval = null === $order->getDeliveryInterval() ? null : $order->getDeliveryInterval();
-        $selectedIntervalFee = null === $order->getDeliveryFee() ? null : $order->getDeliveryFee();
+        $selectedIntervalFee = null === $order->getShippingPrice() ? null : $order->getShippingPrice();
     
         $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
         $hiddenDateForm = $this->createForm(CartHiddenDeliveryDateFormType::class, $hiddenDates);
@@ -525,7 +525,7 @@ class OrderController extends AbstractController
 
         $selectedDate = null === $order->getDeliveryDate() ? null : $order->getDeliveryDate();
         $selectedInterval = null === $order->getDeliveryInterval() ? null : $order->getDeliveryInterval();
-        $selectedIntervalFee = null === $order->getDeliveryFee() ? null : $order->getDeliveryFee();
+        $selectedIntervalFee = null === $order->getShippingPrice() ? null : $order->getShippingPrice();
 
         $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
         $hiddenDateForm = $this->createForm(CartHiddenDeliveryDateFormType::class, $hiddenDates);
@@ -694,7 +694,7 @@ class OrderController extends AbstractController
             $data = $form->getData();
             $order->setDeliveryDate(DateTime::createFromFormat('!Y-m-d', $data->getDeliveryDate()));
             $order->setDeliveryInterval($data->getDeliveryInterval());
-            $order->setDeliveryFee($data->getDeliveryFee());
+            $order->setShippingPrice($data->getDeliveryFee());
 
             $event = new OrderEvent($order, [
                 'channel' => OrderLog::CHANNEL_ADMIN,

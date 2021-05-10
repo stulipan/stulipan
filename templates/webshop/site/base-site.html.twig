@@ -17,20 +17,23 @@
         <div class="sidebar-dialog sidebar-dialog-scrollable sidebar-dialog-centered" role="document">
             <div class="sidebar-content">
                 <div class="sidebar-header p-2X">
+                    <a href="{{ path('homepage') }}" class="ml-1">
+                        <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo" style="height: 25px;">
+                    </a>
 {#                    <h3 class="sidebar-title" id="mobileMenuLabel">Rendelés: <span class="font-weight-bold">#21043523</span></h4>#}
-                        <button type="button" class="close modal-close" data-dismiss="sidebar" aria-label="Close">
+                        <button type="button" class="close modal-close" data-dismiss="sidebar" aria-label="Close" style="height: 50px;">
                             <span aria-hidden="true">&times;</span>
                         </button>
                 </div>
                 <div class="sidebar-body sidebar-header-noneX p-0">
-                    <ul class="navbar-nav mx-auto px-3 px-lg-0 flex-grow-1X justify-content-center">
+                    <ul class="navbar-nav mx-auto px-3 px-lg-0 flex-grow-1X justify-content-center border-top">
                         {% include 'webshop/site/navbar-menu-items.html.twig' %}
-                        <li class="nav-item dropdown">
-                            <a href="#" id="langsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Nyelvek</a>
-                            <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right">
-                                {% include 'webshop/site/navbar-language-dropdown.html.twig' %}
-                            </div>
-                        </li>
+{#                        <li class="nav-item dropdown">#}
+{#                            <a href="#" id="langsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Nyelvek</a>#}
+{#                            <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right">#}
+{#                                {% include 'webshop/site/navbar-language-dropdown.html.twig' %}#}
+{#                            </div>#}
+{#                        </li>#}
                     </ul>
                 </div>
             </div>
@@ -78,14 +81,14 @@
                         <div class="navbar-custom justify-content-end pl-0 order-md-4 order-4">
                             <ul class="navbar-nav mb-0 flex-row">
 
-                                <li class="nav-item dropdown h-100 pr-3 border-right d-none d-md-flex">
-                                    <a id="langsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle login-cart-link">
-                                        <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="topbar-flag topbar-flag-selected">
-                                    </a>
-                                    <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown--flownX mt-0">
-                                        {% include 'webshop/site/navbar-language-dropdown.html.twig' %}
-                                    </div>
-                                </li>
+{#                                <li class="nav-item dropdown h-100 pr-3 border-right d-none d-md-flex">#}
+{#                                    <a id="langsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle login-cart-link">#}
+{#                                        <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="topbar-flag topbar-flag-selected">#}
+{#                                    </a>#}
+{#                                    <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown--flownX mt-0">#}
+{#                                        {% include 'webshop/site/navbar-language-dropdown.html.twig' %}#}
+{#                                    </div>#}
+{#                                </li>#}
 
                                 <li class="nav-item pl-0 pl-md-2">
                                     <div class="login-cart-link">

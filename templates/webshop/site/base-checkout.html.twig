@@ -7,11 +7,9 @@
 {% endblock %}
 
 {% block body %}
-    {{ include('webshop/widgets/_navbar-impersonate-user.html.twig') }}
-
+    {% include 'webshop/widgets/_navbar-impersonate-user.html.twig' %}
     {% block page_content %}
     {% endblock %}
-
 {% endblock %}
 
 {% block javascripts %}

@@ -33,12 +33,12 @@ class User implements UserInterface, Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=64, unique=true)
+     * @ORM\Column(name="username", type="string", length=255, unique=true)
      */
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="registration.password-is-missing")
      */
     private $password;
@@ -144,7 +144,12 @@ class User implements UserInterface, Serializable
     public function getRoles(): array
     {
         $roles = $this->roles;
-        $roles[] = 'ROLE_USER';  // guarantees every user at least has ROLE_USER
+
+        // guarantees that a user always has at least one role for security
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+
         return array_unique($roles);
     }
 
@@ -194,11 +199,15 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @see UserInterface
+     * Returns the salt that was originally used to encode the password.
+     *
+     * {@inheritdoc}
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
-        // not needed when using bcrypt or argon
+        // We're using bcrypt in security.yaml to encode the password, so
+        // the salt value is built-in and and you don't have to generate one
+        // See https://en.wikipedia.org/wiki/Bcrypt
         return null;
     }
     
@@ -252,7 +261,7 @@ class User implements UserInterface, Serializable
      */
     public function isAcceptsMarketing(): bool
     {
-        return 1 !== $this->acceptsMarketing ? false : true;
+        return null === $this->acceptsMarketing ? false : $this->acceptsMarketing;
     }
 
     /**
@@ -341,28 +350,32 @@ class User implements UserInterface, Serializable
         $this->isActive = $isActive;
     }
 
-    /** @see \Serializable::serialize() */
-    public function serialize()
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
     {
-        return serialize(array(
+        // add $this->salt too if you don't use Bcrypt or Argon2i
+        return serialize([
             $this->id,
             $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt,
-        ));
+            $this->email,
+            $this->password
+        ]);
     }
 
-    /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized): void
     {
-        list (
+        // add $this->salt too if you don't use Bcrypt or Argon2i
+        [
             $this->id,
             $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt
-            ) = unserialize($serialized, array('allowed_classes' => false));
+            $this->email,
+            $this->password
+        ] = unserialize($serialized, ['allowed_classes' => false]);
     }
 
     public function getIsActive(): ?bool

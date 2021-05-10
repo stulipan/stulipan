@@ -1,36 +1,42 @@
     <div class="">
         <span class="">Válassz az elmentett számlázási címeid közűl</span>
     </div>
-{% for sender in senders %}
-    <div class="checkout-sender-item mt-4">
-        <div class="JS--item h-100">
-            <div class="d-flex flex-column flex-sm-row justify-content-between h-100">
-                <div class="">
-                    <span class="address-title mb-1">{{ sender.fullname }}</span> {% if selectedSender is defined and selectedSender == sender.id %}<span class="badge badge-warning font-italic text-uppercase">{{ 'checkout.sender.last-used'|trans }}</span>{% endif %}<br>
-                    {% if sender.company is defined and sender.company %}
-                        <span class="address-title mb-1">{{ sender.company }}</span> {{ sender.companyVatNumber is defined and sender.companyVatNumber ? '('~sender.companyVatNumber~')' : '' }} <br>
-                    {% endif %}
-                    <span class="address-details">{{ sender.address.street }}</span> <br>
-                    <span class="address-details">{{ sender.address.zip }} {{ sender.address.city }}</span> <br>
-                    <span class="address-details">{{ sender.address.province }}, {{ sender.address.country }}</span> <br>
-{#                                <span class="address-details">{{ sender.phone }}</span>#}
-                </div>
+    {% if senders is defined and senders is not empty %}
+        {% for sender in senders %}
+            <div class="checkout-sender-item mt-4">
+                <div class="JS--item h-100">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between h-100">
+                        <div class="">
+                            <span class="address-title mb-1">{{ sender.fullname }}</span> {% if selectedSender is defined and selectedSender == sender.id %}<span class="badge badge-warning font-italic text-uppercase">{{ 'checkout.sender.last-used'|trans }}</span>{% endif %}<br>
+                            {% if sender.company is defined and sender.company %}
+                                <span class="address-title mb-1">{{ sender.company }}</span> {{ sender.companyVatNumber is defined and sender.companyVatNumber ? '('~sender.companyVatNumber~')' : '' }} <br>
+                            {% endif %}
+                            <span class="address-details">{{ sender.address.street }}</span> <br>
+                            <span class="address-details">{{ sender.address.zip }} {{ sender.address.city }}</span> <br>
+                            <span class="address-details">{{ sender.address.province }}, {{ sender.address.country }}</span> <br>
+        {#                                <span class="address-details">{{ sender.phone }}</span>#}
+                        </div>
 
-                <div class="d-flex align-items-center h-100 mt-2 mt-sm-0">
-                    <div class="d-flex flex-row flex-sm-column h-100">
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            <a href="{{ path('cart-pickSender', {id: sender.id}) }}" class="JS--Button-pickSender btn btn-primary btn-sm mb-0 mb-sm-2">
-                                <span class="loading-spinner-invisible">Kiválaszt</span>
-                                <div class="loading-spinner" role="status"></div>
-                            </a>
-                        {% endif %}
-                        <button class="JS--Button-deleteSender btn btn-sm btn-secondary ml-2 ml-sm-0" data-url="{{ path('cart-deleteSender', {id: sender.id}) }}">
-                            <span class="loading-spinner-invisible">Töröl</span>
-                            <span class="loading-spinner" role="status"></span>
-                        </button>
+                        <div class="d-flex align-items-center h-100 mt-2 mt-sm-0">
+                            <div class="d-flex flex-row flex-sm-column h-100">
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <a href="{{ path('cart-pickSender', {id: sender.id}) }}" class="JS--Button-pickSender btn btn-primary btn-sm mb-0 mb-sm-2">
+                                        <span class="loading-spinner-invisible">Kiválaszt</span>
+                                        <div class="loading-spinner" role="status"></div>
+                                    </a>
+                                {% endif %}
+                                <button class="JS--Button-deleteSender btn btn-sm btn-secondary ml-2 ml-sm-0" data-url="{{ path('cart-deleteSender', {id: sender.id}) }}">
+                                    <span class="loading-spinner-invisible">Töröl</span>
+                                    <span class="loading-spinner" role="status"></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        {% endfor %}
+    {% else %}
+        <div class="mt-4">
+            {{ 'checkout.sender.no-previously-saved-senders'|trans }}
         </div>
-    </div>
-{% endfor %}
+    {% endif %}

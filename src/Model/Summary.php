@@ -36,7 +36,7 @@ final class Summary
      */
     public function getTotalAmountToPay(): float
     {
-        return $this->getPriceTotal() + $this->order->getDeliveryFee();
+        return $this->getPriceTotal() + $this->order->getShippingPriceToPay();
     }
 
     /**

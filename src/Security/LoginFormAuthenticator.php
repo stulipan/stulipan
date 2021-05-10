@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\Customer;
+use App\Entity\User;
 use App\Services\OrderBuilder;
 use App\Services\OrderSessionStorage;
 use App\Repository\UserRepository;
@@ -18,6 +19,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,10 +39,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     private $router;
     /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
      * @var CsrfTokenManagerInterface
      */
     private $csrfTokenManager;
@@ -53,10 +51,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @var Customer
      */
     private $customer;
-    /**
-     * @var Security
-     */
-    private $security;
     /**
      * @var OrderBuilder
      */
@@ -73,25 +67,18 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @var EntityManagerInterface
      */
     private $em;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
 
     private $orderSession;
     private $translator;
 
-    public function __construct(UserRepository $userRepository, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager,
-                                UserPasswordEncoderInterface $passwordEncoder,
-                                Security $security, OrderBuilder $orderBuilder, EntityManagerInterface $em,
+    public function __construct(EntityManagerInterface $em, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager,
+                                UserPasswordEncoderInterface $passwordEncoder, OrderBuilder $orderBuilder,
                                 CustomerBuilder $customerBuilder, OrderSessionStorage $orderSession,
                                 AbandonedOrderRetriever $abandonedOrderRetriever, TranslatorInterface $translator)
     {
         $this->router = $router;
-        $this->userRepository = $userRepository;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
-        $this->security = $security;
         $this->em = $em;
         $this->orderBuilder = $orderBuilder;
         $this->customerBuilder = $customerBuilder;
@@ -122,7 +109,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getCredentials(Request $request)
     {
-//        dd($request->request->all());
         $credentials = [
             'email' => $request->request->get('_username'),
             'password' => $request->request->get('_password'),
@@ -141,15 +127,19 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * if the user isn't found. Because we're storing our users in the database, we need to query
      * for the user via their email.
      */
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider): ?User
     {
-//        dd($credentials);
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
-//        dd($this->userRepository->findOneBy(['email' => $credentials['email']]));
-        return $this->userRepository->findOneBy(['email' => $credentials['email']]);
+//        return $this->userRepository->findOneBy(['email' => $credentials['email']]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        if (!$user) {
+            // fail authentication with a custom error
+            throw new CustomUserMessageAuthenticationException('Email could not be found.');
+        }
+        return $user;
     }
 
     /**
@@ -160,7 +150,22 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        $isPasswordValid = $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+
+        if (!$isPasswordValid) {
+            throw new CustomUserMessageAuthenticationException('Password is incorrect.');
+        }
+
+        return $isPasswordValid;
+//        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+    }
+
+    /**
+     * Used to upgrade (rehash) the user's password automatically over time.
+     */
+    public function getPassword($credentials): ?string
+    {
+        return $credentials['password'];
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
@@ -260,11 +265,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
          * If login was initiated by going to the Login page, redirects to Homepage
          */
         if ($request->getPathInfo() === $this->router->generate('site-login')) {
-//            return new RedirectResponse($request->headers->get('referer') ? $request->headers->get('referer') : $this->router->generate('homepage'));
             return new RedirectResponse($this->router->generate('homepage'));
         }
 
-        return new Response('OK',200);
+//        return new Response('OK',200);
+        return new RedirectResponse($this->router->generate('homepage'));
     }
 
     /**

@@ -105,6 +105,10 @@
     & .nav-item.show {
       height: auto;
     }
+    & .nav-item .dropdown-menu {
+      padding-top: .25rem;
+      padding-bottom: .25rem;
+    }
     & .nav-item .dropdown-menu.show {
       position: static;
       background-color: transparent;
@@ -115,6 +119,12 @@
       flex-wrap: wrap;
       padding-left: 1rem;
       padding-right: 1rem;
+
+      //display: block;
+      width: 100%;
+      height: auto;
+      position: relative !important;
+      transform: translateY(0) !important;
     }
 
     & .nav-item .dropdown-toggle:after {

@@ -70,7 +70,8 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'storeUrl' => $this->storeSettings->get('store.url'),
             'storeName' => $this->storeSettings->get('store.name'),
             'storeEmail' => $this->storeSettings->get('store.email'),
-            'flowerShop' => $this->storeSettings->get('general.flower-shop-mode'),
+            'storeBrand' => $this->storeSettings->get('store.brand'),
+            'flowerShopMode' => $this->storeSettings->get('general.flower-shop-mode'),
             'navigations' => $this->getNavigations(),
         ];
     }

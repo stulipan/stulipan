@@ -37,7 +37,7 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
       --line-height: #{$__mobile-line-height};
     }
   }
-  .svg-icon {
+  .svg-icon:not(.svg-icon-md):not(.svg-icon-lg) {
     --font-size: #{$mobile-font-size-base};
     --line-height: #{$__mobile-line-height};
   }

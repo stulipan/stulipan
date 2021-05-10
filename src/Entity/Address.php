@@ -198,7 +198,7 @@ class Address
      */
     public function isBillingAddress(): bool
     {
-        if ($this->getAddressType() == BILLING_ADDRESS) {
+        if ($this->getAddressType() == self::BILLING_ADDRESS) {
             return true;
         } else {
             return false;
@@ -210,7 +210,7 @@ class Address
      */
     public function isDeliveryAddress(): bool
     {
-        if ($this->getAddressType() == DELIVERY_ADDRESS) {
+        if ($this->getAddressType() == self::DELIVERY_ADDRESS) {
             return true;
         } else {
             return false;
@@ -222,12 +222,12 @@ class Address
      */
     public function setAddressTypeToBilling()
     {
-        $this->addressType = BILLING_ADDRESS;
+        $this->addressType = self::BILLING_ADDRESS;
     }
 
     public function setAddressTypeToDelivery()
     {
-        $this->addressType = DELIVERY_ADDRESS;
+        $this->addressType = self::DELIVERY_ADDRESS;
     }
 
 

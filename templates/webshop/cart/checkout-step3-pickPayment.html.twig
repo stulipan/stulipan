@@ -26,7 +26,7 @@
                                             <div class="checkout-overview-item-grid">
                                                 <div class="checkout-overview-item-label">
                                                     <div class="checkout-overview-item-title">
-                                                        {{ flowerShop ? 'checkout.overview.recipient-to'|trans : 'checkout.overview.recipient'|trans }}
+                                                        {{ flowerShopMode ? 'checkout.overview.recipient-to'|trans : 'checkout.overview.recipient'|trans }}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-overview-item-data">
@@ -47,7 +47,7 @@
                                             <div class="checkout-overview-item-grid">
                                                 <div class="checkout-overview-item-label">
                                                     <div class="checkout-overview-item-title">
-                                                        {{ flowerShop ? 'checkout.overview.customer-from'|trans : 'checkout.overview.customer'|trans }}
+                                                        {{ flowerShopMode ? 'checkout.overview.customer-from'|trans : 'checkout.overview.customer'|trans }}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-overview-item-data">
@@ -69,7 +69,7 @@
                                                 </div>
                                                 <div class="checkout-overview-item-data">
                                                     <div class="checkout-overview-item-description">
-                                                        {{ order.shippingMethod }}{%- if flowerShop -%}, {{ order.deliveryDate|localizedDate('Y M j.')|lower }}, {{ order.deliveryInterval }}{%- endif -%}
+                                                        {{ order.shippingMethod }}{%- if flowerShopMode -%}, {{ order.deliveryDate|localizedDate('Y M j.')|lower }}, {{ order.deliveryInterval }}{%- endif -%}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-overview-item-action">
@@ -152,34 +152,42 @@
                                     </div>
                                 </div>
 
-                                <div class="JS--Wrapper-senderBody">
-                                    {% if senderForm is defined %}
-                                        {% include('webshop/cart/sender_form.html.twig') %}
-                                    {% endif %}
-                                </div>
-                                {% if senders.count >= 1 %}
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                                <div class="vertical-form-row">
-                                                    <div class="vertical-col mr-3">
-                                                        <a href="#" class="JS--Button-showSenderForm text-link-checkout" data-url="{{ path('cart-editSender') }}">
-                                                            <span class="loading-spinner-invisible">Új számlázási cím</span>
-                                                            <div class="loading-spinner" role="status"></div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="vertical-col">
-                                                        <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--senderList">
-                                                            <span class="loading-spinner-invisible">Számlázási címeid</span>
-                                                            <div class="loading-spinner" role="status"></div>
-                                                        </a>
-                                                    </div>
-                                                </div>
+                                <div class="">
+                                    <div class="checkout-method-selection content-body-thick-border">
+                                        {% include 'webshop/cart/sender-same-as-recipient.html.twig' %}
+
+                                        <div class="JS--Wrapper-senderBody checkout-sender-form" {% if sameAsRecipientForm.sameAsRecipient is defined and sameAsRecipientForm.sameAsRecipient[0] == true %}style="display: none;"{% endif %}>
+                                            {% if senderForm is defined %}
+                                                {% include('webshop/cart/sender_form.html.twig') %}
                                             {% endif %}
+
+                                            {% if is_granted('IS_AUTHENTICATED_FULLY') and senders.count >= 1 %}
+{#                                                <div class="row">#}
+{#                                                    <div class="col-md-12">#}
+{#                                                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}#}
+                                                            <div class="vertical-form-row mt-3">
+                                                                <div class="vertical-col mr-3">
+                                                                    <a href="#" class="JS--Button-showSenderForm text-link-checkout" data-url="{{ path('cart-editSender') }}">
+                                                                        <span class="loading-spinner-invisible">Új számlázási cím</span>
+                                                                        <div class="loading-spinner" role="status"></div>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="vertical-col">
+                                                                    <a href="#" class="text-link-checkout" data-toggle="modal" data-target="#modal--senderList">
+                                                                        <span class="loading-spinner-invisible">Számlázási címeid</span>
+                                                                        <div class="loading-spinner" role="status"></div>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+{#                                                        {% endif %}#}
+{#                                                    </div>#}
+{#                                                </div>#}
+                                            {% endif %}
+                                            <button class="JS--Button-refreshSenderList d-none" data-url="{{ path('cart-getSenders') }}"></button>
                                         </div>
                                     </div>
-                                {% endif %}
-                                <button class="JS--Button-refreshSenderList d-none" data-url="{{ path('cart-getSenders') }}"></button>
+                                </div>
+
                             </div>
                         </div>
                     </div>

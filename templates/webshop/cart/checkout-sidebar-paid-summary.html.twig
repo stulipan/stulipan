@@ -7,7 +7,7 @@
         <li class="order-summary-item">
             <div class="order-summary-item-label">{{ 'cart.shipping-fee'|trans }}</div>
             <div>
-                                    <div class="JS--summaryDeliveryFee">{{ order.deliveryFee|money }}</div>
+                                    <div class="JS--summaryDeliveryFee">{{ order.shippingPriceToPay|money }}</div>
                                 </div>
         </li>
 {#        <li class="order-summary-item">#}

@@ -16,7 +16,7 @@ class Munkatars
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="smallint", name="munkatars_id", length=3)
+     * @ORM\Column(type="integer")
      */
     private $id;
 

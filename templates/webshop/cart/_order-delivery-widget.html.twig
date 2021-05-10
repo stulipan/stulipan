@@ -1,7 +1,7 @@
 
     <h5 class="checkout-block-title">{{ 'checkout.shipping.shipping-method'|trans }}</h5>
 
-    {% if flowerShop == false %}
+    {% if flowerShopMode == false %}
     <div class="mt-2">
         {% if order.deliveryDate is defined and order.deliveryDate is not null %}
             <div class="">{{ order.deliveryDate|localizedDate('Y F j')|lower }}</div>

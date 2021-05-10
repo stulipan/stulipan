@@ -42,9 +42,9 @@ security:
         # Ez volt az eredeti loginnál használt encoder beállítás, plaintext értékkel
         # Symfony\Component\Security\Core\User\User: plaintext
         # ezt váltja ki a loading users from database, ami ez esetben a User entitásban található
-        App\Entity\User:
-            algorithm: auto
-            #cost: 12
+        App\Entity\User: auto
+#            algorithm: 'auto'
+#            cost: 12
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -102,14 +102,24 @@ security:
             pattern: ^/
             provider: store_user_provider_from_sajat_db
             anonymous: true
+#            lazy: true
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+#                entry_point: App\Security\LoginFormAuthenticator
             form_login:
-                login_path: site-login
+                # The route name that the login form submits to
                 check_path: site-login
+                # The name of the route where the login form lives
+                # When the user tries to access a protected page, they are redirected here
+                login_path: site-login
+                # Secure the login form against CSRF
+                # Reference: https://symfony.com/doc/current/security/csrf.html#csrf-protection-in-login-forms
+#                csrf_token_generator: security.csrf.token_manager
+#                login_path: site-login
+#                check_path: site-login
                 use_referer: true
-                require_previous_session: false  # ??? jan 21, 2021
+#                require_previous_session: false  # ??? jan 21, 2021
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 2592000 # 30 days in seconds, if missing, default is one year.

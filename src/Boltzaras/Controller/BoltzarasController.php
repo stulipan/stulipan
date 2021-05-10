@@ -106,8 +106,8 @@ class BoltzarasController extends AbstractController
             $subject = 'Napi boltzárás';
             $email = (new Swift_Message())
                 ->setSubject($subject)
-                ->setFrom(['info@tulipanfutar.hu' => 'Difiori boltzárás'])
-                ->setTo('info@difiori.hu')
+                ->setFrom(['rafinadekor@gmail.com' => 'Napi boltzárás'])
+                ->setTo('rafinadekor@gmail.com')
                 ->setBody(
                     $this->renderView('admin/emails/boltzaras-napi-riport.html.twig', [
                             'kassza' => $boltzaras->getKassza(),

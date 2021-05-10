@@ -57,6 +57,7 @@ registration:
     firstname: Firstname
     lastname: Lastname
     remember-me: Remember me
+    forgot-your-password: Forgot your password?
     newsletter-sign-up: I want to be informed first hand about promotions and news.
 
     email-is-missing: 'Enter your email address!'
@@ -70,7 +71,24 @@ registration:
     terms:
         accept-terms-label: 'I have read and accept the <a {{ terms }}>Terms and conditions</a> and agree to the use my personal data as laid out in the <a {{ privacy }}>Privacy policy</a>.'
         accept-terms-error: 'Please make sure you have read the Terms and conditions.'
-
+    forgot-password:
+        forgot-your-password-title: Forgotten password
+        enter-your-details: Enter your email address and we we will send you a link to reset your password.
+        email-address: Email address
+        reset-password-button: Reset password
+        back-to-login: Back to login
+        email-address-missing: Add meg az email címet.
+        email-address-not-found: No user was found with this email address. Verify that you entered correctly the email address or if you haven't registered yet, create an account.
+        email-sent-with-reset-password-link: An email has been sent that contains a link that you can click to reset your password.
+        email-not-received-verify-spam: 'If you didn''t receive an email please check your spam folder or <a href="{{ link }}">try again</a>.'
+        reset-link-expired: The reset password link has expired. Please try to reset your password again.
+        reset-password-title: New password
+        save-password: Save password
+        enter-new-password: New password
+        repeat-new-password: Repeat password
+        password-is-missing: Enter a password
+        passwords-must-match: 'The password fields must match.'
+        password-length-is-invalid: 'Your password should be at least {{ limit }} characters.'
 
 account:
     my-account: My account
@@ -108,6 +126,8 @@ cart:
     remove-item: Remove from cart
     shipping-fee-calculated: The shipping fee has been calculated according to your information.
     shipping-fee: Shipping fee
+    shipping-fee-calculated-in-next-step: Calculated at next step
+    scheduling-fee: Scheduled delivery
     discount: Discount
     total: Total
     subtotal: Subtotal
@@ -150,6 +170,7 @@ checkout:
         previously-saved-recipients: Previously saved addresses
         previously-saved-recipients-modal-title: Previously saved addresses
         previously-saved-recipients-modal-description: Pick one form previously saved addresses
+        no-previously-saved-recipients: No shipping address yet.
         select-recipient: Ship to this address
         firstname: First name
         lastname: Last name
@@ -176,8 +197,12 @@ checkout:
         last-used: 'Last used'
 
     sender:
-        sender: Számlázási cím
+        sender: Billing address
         last-used: 'Last used'
+        same-as-shipping-address: Same as shipping address
+        use-different-shipping-address: Use different billing address
+
+        no-previously-saved-senders: No billing address yet.
     flower-shop:
         recipient: Recipient
         recipient-title: Recipient's details
@@ -186,6 +211,7 @@ checkout:
         previously-saved-recipients: Previously saved recipients
         previously-saved-recipients-modal-title: Previously saved recipients
         previously-saved-recipients-modal-description: Select one these recipients
+        no-previously-saved-recipients: You have no recipient yet.
         select-recipient: Deliver to this address
         missing-recipient: "Don't forget to enter recipient's information."
         customer-information-title: Customer details
@@ -337,3 +363,7 @@ generic:
     delete: Delete
     close: Close
     home: Home
+    page-not-found-meta: 'Rafina: 404'
+    page-not-found: The page you were looking for could not be found
+    page-not-found-description: You’ve got to a page that doesn’t really exist. Whether it’s our fault or yours, we don’t know, but it’s definitely not here what you were looking for.
+    back-to-homepage: Back to homepage

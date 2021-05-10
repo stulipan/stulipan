@@ -20,6 +20,10 @@ parameters:
             content: ' '
             type: Text
             label: 'Ügyfélszolgálati telefonszám'
+        brand:
+            content: RAFINA
+            type: Text
+            label: 'Saját termékek forgalmazása esetén, ez lesz a termékeid brandje. Pl: Apple vagy Zara Home'
     company:
         label:
             content: 'Vállalkozás neve és címe'

@@ -42,7 +42,10 @@ class CartRecipientController extends AbstractController
      */
     public function searchPlacesApi(GeoPlaceRepository $geoRep, Request $request)
     {
-//        $geoPlace = $geoRep->findAllOrdered();
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /search');
+        }
+
         $geoPlaces = $geoRep->findAllMatching($request->query->get('query'));
 
         return $this->json($geoPlaces,200, [], [
@@ -59,6 +62,10 @@ class CartRecipientController extends AbstractController
      */
     public function editRecipientForm(Request $request, ?Recipient $recipient, $id = null, ValidatorInterface $validator)
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/editRecipient/{id}');
+        }
+
         // If User from session is equal to User in Recipient
         $orderBuilder = $this->orderBuilder;
         $customer = $orderBuilder->getCurrentOrder()->getCustomer();
@@ -92,34 +99,16 @@ class CartRecipientController extends AbstractController
             $entityManager->flush();
 
             $orderBuilder->setRecipient($recipient);
-
-            /** If AJAX request, returns the current Recipient */
-            if ($request->isXmlHttpRequest()) {
-//                    return $this->redirectToRoute('cart-getRecipient');
-                return $this->render('webshop/cart/recipient_form.html.twig', [
-                    'order' => $orderBuilder->getCurrentOrder(),
-                    'recipientForm' => $form->createView(),
-                ]);
-            }
         }
-        /**
-         * Renders form with errors
-         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
-         * (!?, there is a validation error)
-         */
-        if ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
+        // Renders form with errors
+        if ($form->isSubmitted() && !$form->isValid()) {
             $html = $this->renderView('webshop/cart/recipient_form.html.twig', [
-                'order' => $orderBuilder->getCurrentOrder(),
                 'recipientForm' => $form->createView(),
             ]);
             return new Response($html, 400);
         }
 
-        /**
-         * Renders form initially with data
-         */
         return $this->render('webshop/cart/recipient_form.html.twig', [
-            'order' => $orderBuilder->getCurrentOrder(),
             'recipientForm' => $form->createView(),
         ]);
     }
@@ -136,6 +125,10 @@ class CartRecipientController extends AbstractController
      */
     public function getPlaceByZip(Request $request, int $zip = null)
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/getPlaceByZip/{zip}');
+        }
+
         if (!$zip) {
             $zip = $request->query->get('zip');
         }
@@ -178,6 +171,10 @@ class CartRecipientController extends AbstractController
     {
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/getRecipients');
+        }
+
         $orderBuilder = $this->orderBuilder;
         /** If the Order has a Customer, returns the list of the customer's Recipients */
         if ($orderBuilder->getCurrentOrder()->getCustomer()) {
@@ -190,19 +187,19 @@ class CartRecipientController extends AbstractController
                 $recipients->add($orderBuilder->getCurrentOrder()->getRecipient());
             }
         }
-        if (!$recipients || $recipients->isEmpty()) {
-            $recipient = new Recipient();
-            // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
-            $address = new Address();
-            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
-            $recipient->setAddress($address);
-            $form = $this->createForm(RecipientType::class, $recipient);
-
-            return $this->render('webshop/cart/recipient_form.html.twig', [
-                'order' => $orderBuilder->getCurrentOrder(),
-                'recipientForm' => $form->createView(),
-            ]);
-        }
+//        if (!$recipients || $recipients->isEmpty()) {
+//            $recipient = new Recipient();
+//            // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
+//            $address = new Address();
+//            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
+//            $recipient->setAddress($address);
+//            $form = $this->createForm(RecipientType::class, $recipient);
+//
+//            return $this->render('webshop/cart/recipient_form.html.twig', [
+//                'order' => $orderBuilder->getCurrentOrder(),
+//                'recipientForm' => $form->createView(),
+//            ]);
+//        }
         return $this->render('webshop/cart/recipient_list.html.twig', [
             'recipients' => $recipients,
             'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
@@ -214,6 +211,12 @@ class CartRecipientController extends AbstractController
      */
     public function getRecipient(Request $request)
     {
+        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/getRecipient');
+        }
+
         $orderBuilder = $this->orderBuilder;
         if ($orderBuilder->hasRecipient()) {
             $recipient = $orderBuilder->getCurrentOrder()->getRecipient();
@@ -223,21 +226,13 @@ class CartRecipientController extends AbstractController
             $address = new Address();
             $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
             $recipient->setAddress($address);
-            $form = $this->createForm(RecipientType::class, $recipient);
-
-            return $this->render('webshop/cart/recipient_form.html.twig', [
-//                'order' => $orderBuilder->getCurrentOrder(),
-                'recipientForm' => $form->createView(),
-            ]);
         }
+
+        $form = $this->createForm(RecipientType::class, $recipient);
+
         return $this->render('webshop/cart/recipient_form.html.twig', [
-            'recipientForm' => $this->createForm(RecipientType::class, $recipient)->createView(),
-            'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
+            'recipientForm' => $form->createView(),
         ]);
-//        return $this->render('webshop/cart/recipient-current.html.twig', [
-//            'recipient' => $recipient,
-//            'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
-//        ]);
     }
 
     /**
@@ -249,6 +244,10 @@ class CartRecipientController extends AbstractController
     public function pickRecipient(Request $request, Recipient $recipient)
     {
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
+
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/pickRecipient/{id}');
+        }
 
         // If User from session is equal to User in Recipient
         if ($this->orderBuilder->getCustomer() === $recipient->getCustomer()) {
@@ -271,13 +270,16 @@ class CartRecipientController extends AbstractController
     {
         $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /cart/deleteRecipient/{id}');
+        }
+
         // If User from session is equal to User in Recipient
         if ($this->orderBuilder->getCustomer() === $recipient->getCustomer()) {
             $this->orderBuilder->getCustomer()->removeRecipient($recipient);
             if ($this->orderBuilder->getCurrentOrder()->getRecipient() == $recipient) {
                 $this->orderBuilder->removeRecipient();
             }
-            //            $this->orderBuilder->setFallbackRecipient();
             $this->getDoctrine()->getManager()->remove($recipient);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('cart-getRecipient');

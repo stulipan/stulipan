@@ -1,0 +1,30 @@
+{% extends 'webshop/site/base-site.html.twig' %}
+
+{% block bodyClass %}not-found{% endblock %}
+
+{% set pageTitle = 'generic.page-not-found-meta'|trans %}
+
+{% block page_content %}
+    <div id="user_forgotten_password">
+        <div class="container my-3 my-lg-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 col-md-6 mb-3">
+                            <div class="cms-page-title">
+                                <svg class="svg-icon svg-icon-light svg-icon-lg"><use xlink:href="#search-1"></use></svg>
+                                <h1>{{ 'generic.page-not-found'|trans }}</h1>
+                            </div>
+                            <div class="cms-page-body pb-5">
+                                <p>{{ 'generic.page-not-found-description'|trans }}</p>
+                            </div>
+                            <div class="mb-4">
+                                <a href="{{ path('homepage') }}" class="btn btn-primary">{{ 'generic.back-to-homepage'|trans }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

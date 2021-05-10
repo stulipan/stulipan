@@ -17,7 +17,7 @@ class Boltzaras
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="smallint", name="zaras_id", length=5)
+     * @ORM\Column(type="integer")
      */
     private $id;
 
@@ -57,7 +57,7 @@ class Boltzaras
     /**
      * @Assert\NotBlank(message="Válassz munkatársat.")
      * @ORM\ManyToOne(targetEntity="App\Entity\Boltzaras\Munkatars")
-     * @ORM\JoinColumn(name="munkatars_id", referencedColumnName="munkatars_id")
+     * @ORM\JoinColumn(name="munkatars_id", referencedColumnName="id")
      */
     private $munkatars;
 

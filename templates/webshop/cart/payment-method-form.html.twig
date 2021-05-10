@@ -15,7 +15,7 @@
                 <div class="JS--Button-pickChoice loading-spinner-has-bg">
                     <div class="loading-spinner-invisible">
                         <div class="custom-control custom-radio">
-                            <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {% if choice.vars.checked is defined and choice.vars.checked %}checked{% endif %}/>
+                            <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {% if choice.vars.checked is defined and choice.vars.checked or paymentMethods|length == 1 %}checked{% endif %}/>
                             <label class="custom-control-label w-100" for="{{ choice.vars.id }}">
                                 <div class="d-flex justify-content-start justify-content-sm-between">
                                     <div class="checkout-payment-item-title pr-2 pr-sm-0">{{ choice.vars.label }}</div>

@@ -8,8 +8,8 @@ use App\Services\OrderBuilder;
 use App\Entity\User;
 use App\Form\Customer\CustomerType;
 use App\Services\StoreSettings;
+use DateTime;
 use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,12 +19,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MyAccountController extends AbstractController
 {
-
     /**
-     * @Route("/my-account", name="site-user-myAccount")
+     * @Route("/myaccount", name="site-user-myAccount")
      */
     public function showMyAccount()
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $customer = $this->getUser()->getCustomer();
         $orders = [];
         if ($customer) {
@@ -42,12 +45,16 @@ class MyAccountController extends AbstractController
     }
 
     /**
-     * @Route("/my-account/orders/", name="site-user-myOrders",
+     * @Route("/myaccount/orders/", name="site-user-myOrders",
      *     requirements={"page"="\d+"},
      *     )
      */
     public function showMyOrders(Request $request, $page = 1, StoreSettings $settings)
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $page = $request->query->get('page') ? $request->query->get('page') : $page;
         $customer = $this->getUser()->getCustomer();
         $orders = [];
@@ -81,10 +88,14 @@ class MyAccountController extends AbstractController
     }
 
     /**
-     * @Route("/my-account/orders/{id}", name="site-user-myOrder")
+     * @Route("/myaccount/orders/{id}", name="site-user-myOrder")
      */
     public function showMyOrder(Request $request, ?Order $order, $id = null)
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
         if (!$order) {
             $this->addFlash('danger', 'Nem talált ilyen rendelést!');
             return $this->redirectToRoute('site-user-myAccount');
@@ -108,16 +119,18 @@ class MyAccountController extends AbstractController
     }
 
     /**
-     * @Route("/my-account/my-details/{id}", name="site-user-myDetails")
+     * @Route("/myaccount/details/{id}", name="site-user-myDetails")
      */
     public function showMyDetails(Request $request, ?Customer $customer, $id=null, OrderBuilder $orderBuilder)
     {
-        if (!$customer) {
-            $customer = $orderBuilder->getCustomer();
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
         }
+
         if (!$customer) {
             $customer = $this->getUser()->getCustomer();
         }
+
         $form = $this->createForm(CustomerType::class, $customer, ['urlName' => 'site-user-myDetails']);
 
         $form->handleRequest($request);
@@ -131,8 +144,12 @@ class MyAccountController extends AbstractController
                 $user->setFirstname($data->getFirstname());
                 $user->setLastname($data->getLastname());
                 $user->setAcceptsMarketing($data->isAcceptsMarketing());
-
-                // TODO implement acceptsMarketingUpdatedAt
+                $data->setAcceptsMarketingUpdatedAt(new DateTime('now'));
+                if ($data->isAcceptsMarketing()) {
+                    $data->setMarketingOptinLevel(Customer::OPTIN_LEVEL_SINGLE_OPTIN);
+                } else {
+                    $data->setMarketingOptinLevel(Customer::OPTIN_LEVEL_OPT_OUT);
+                }
             }
 
             $em = $this->getDoctrine()->getManager();
@@ -142,9 +159,7 @@ class MyAccountController extends AbstractController
         }
 
         return $this->render('webshop/user/user-myDetails.html.twig', [
-//            'customer' => $this->getUser(),
             'customerForm' => $form->createView(),
         ]);
     }
-
 }

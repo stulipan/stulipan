@@ -43,7 +43,7 @@ class Order
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -233,9 +233,28 @@ class Order
      * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="delivery_fee", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
+     * @ORM\Column(name="shipping_price", type="decimal", precision=10, scale=2, nullable=true)
      */
-    private $deliveryFee = 0;
+    private $shippingPrice;
+
+    /**
+     * @var float|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @Assert\NotBlank()
+     * @ORM\Column(name="scheduling_price", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $schedulingPrice;
+
+    /**
+     * @var float|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @Assert\NotBlank()
+     * @ORM\Column(name="shipping_price_discount", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $shippingPriceDiscount;
+
 
     /**
      * @var string|null
@@ -830,23 +849,74 @@ class Order
     {
         return new Summary($this);
     }
-    
+
     /**
      * @return float|null
      */
-    public function getDeliveryFee(): ?float
+    public function getShippingPrice(): ?float
     {
-        if ($this->deliveryFee === null) { return (float) 0; }
-        return (float) $this->deliveryFee;
+        if ($this->shippingPrice === null) { return (float) 0; }
+        return (float) $this->shippingPrice;
     }
-    
+
     /**
-     * @param float|null $deliveryFee
+     * @param float|null $shippingPrice
      */
-    public function setDeliveryFee(?float $deliveryFee)
+    public function setShippingPrice($shippingPrice): void
     {
-        $this->deliveryFee = $deliveryFee;
+        $this->shippingPrice = $shippingPrice;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasShippingPrice(): bool
+    {
+        if ($this->shippingPrice !== null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getShippingPriceDiscount(): ?float
+    {
+        if ($this->shippingPriceDiscount === null) { return (float) 0; }
+        return (float) $this->shippingPriceDiscount;
+    }
+
+    public function getShippingPriceToPay(): ?float
+    {
+        return (float) ($this->getShippingPrice() - $this->getShippingPriceDiscount());
+    }
+
+    /**
+     * @param float|null $shippingPriceDiscount
+     */
+    public function setShippingPriceDiscount($shippingPriceDiscount): void
+    {
+        $this->shippingPriceDiscount = $shippingPriceDiscount;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getSchedulingPrice(): ?float
+    {
+        if ($this->schedulingPrice === null) { return (float) 0; }
+        return (float) $this->schedulingPrice;
+    }
+
+    /**
+     * @param float|null $schedulingPrice
+     */
+    public function setSchedulingPrice(?float $schedulingPrice): void
+    {
+        $this->schedulingPrice = $schedulingPrice;
+    }
+
 
     /**
      * @return int

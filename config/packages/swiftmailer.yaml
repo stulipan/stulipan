@@ -3,21 +3,21 @@ swiftmailer:
 
 #   Ez működik a Szerverről is !!
     transport: smtp
-    host:      mail.tulipanfutar.hu
-    username:  info@tulipanfutar.hu
-    password:  Columbusz2010
+    host:      mail.rafina.hu
+    username:  info@rafina.hu
+    password:  Kopogtato2021
     encryption: ssl
     auth_mode: login
     port: 465
 
 #    Ez csak localisan működik
 #
-#    transport: smtp
-#    host:      smtp.gmail.com
-#    username:  difiorivirag@gmail.com
-#    password:  reklamtabla
+#    transport:  smtp
+#    host:       smtp.gmail.com
+#    username:   rafinadekor@gmail.com
+#    password:   Kopogtato2021
 #    encryption: ssl
-#    auth_mode: login
-#    port: 465
+#    auth_mode:  login
+#    port:       465
 
     spool: { type: 'memory' }

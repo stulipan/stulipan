@@ -12,7 +12,8 @@ use App\Entity\Model\GeneratedDates;
 use App\Entity\Model\DeliveryDateWithIntervals;
 use App\Entity\Model\HiddenDeliveryDate;
 use App\Entity\Transaction;
-use App\Form\AcceptTermsType;
+use App\Form\Checkout\AcceptTermsType;
+use App\Form\Checkout\SameAsRecipientType;
 use App\Form\Customer\CustomerType;
 use App\Model\CartGreetingCard;
 
@@ -327,6 +328,7 @@ class CheckoutController extends AbstractController
 
         $paymentMethods = $this->em->getRepository(PaymentMethod::class)->findAllOrdered();
         $acceptTermsForm = $this->createForm(AcceptTermsType::class, ['isAcceptedTerms' => $orderBuilder->getCurrentOrder()->isAcceptedTerms()]);
+        $sameAsRecipient = $this->createForm(SameAsRecipientType::class);
 
 //        $customer = $this->getUser();
         $customer = $orderBuilder->getCustomer();
@@ -407,6 +409,7 @@ class CheckoutController extends AbstractController
                 'paymentMethodForm' => $this->createForm(PaymentMethodType::class, (new CheckoutPaymentMethod($orderBuilder->getCurrentOrder()->getPaymentMethod())))->createView(),
                 'senders' => $senders,
                 'senderForm' => $senderForm->createView(),
+                'sameAsRecipientForm' => $sameAsRecipient->createView(),
                 'progressBar' => 'pickPayment',
                 'acceptTermsForm' => $acceptTermsForm->createView(),
                 'registrationForm' => $registrationForm->createView(),
@@ -423,6 +426,7 @@ class CheckoutController extends AbstractController
             'senders' => $senders,
             'sender' => $sender,
             'senderForm' => $this->createForm(SenderType::class, $sender)->createView(),
+            'sameAsRecipientForm' => $sameAsRecipient->createView(),
             'selectedSender' => null !== $orderBuilder->getCurrentOrder()->getSender() ? $orderBuilder->getCurrentOrder()->getSender()->getId() : null,
             'progressBar' => 'pickPayment',
             'acceptTermsForm' => $acceptTermsForm->createView(),
@@ -902,7 +906,7 @@ class CheckoutController extends AbstractController
         $order = $this->orderBuilder->getCurrentOrder();
         $selectedDate = null === $order->getDeliveryDate() ? null : $order->getDeliveryDate();
         $selectedInterval = null === $order->getDeliveryInterval() ? null : $order->getDeliveryInterval();
-        $selectedIntervalFee = null === $order->getDeliveryFee() ? null : $order->getDeliveryFee();
+        $selectedIntervalFee = null === $order->getShippingPrice() ? null : $order->getShippingPrice();
 
         $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
         return $this->createForm(CartHiddenDeliveryDateFormType::class,$hiddenDates);

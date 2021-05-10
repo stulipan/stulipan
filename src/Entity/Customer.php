@@ -21,6 +21,7 @@ class Customer
 {
     const OPTIN_LEVEL_SINGLE_OPTIN = "single_opt_in";
     const OPTIN_LEVEL_CONFIRMED_OPTIN = "confirmed_opt_in";
+    const OPTIN_LEVEL_OPT_OUT = "opt_out";
     const OPTIN_LEVEL_UNKNOWN = "unknown";
 
     use TimestampableTrait;
@@ -95,7 +96,7 @@ class Customer
      * @Groups({"orderView"})
      *
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="!")
+     * @Assert\NotBlank(message="Add meg a keresztneved.")
      */
     private $firstname;
 
@@ -104,7 +105,7 @@ class Customer
      * @Groups({"orderView"})
      *
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="!")
+     * @Assert\NotBlank(message="Add meg a neved.")
      */
     private $lastname;
 

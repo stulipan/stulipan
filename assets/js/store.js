@@ -307,10 +307,10 @@ theme.DatePicker = (function () {
         $selectedInterval.removeClass('d-none').addClass('d-temporary');
       }
 
-      let cart = $('.JS--cartWrapper');
-      let summaryDeliveryFeePos = cart.find('.JS--summaryDeliveryFee');
-      let summaryTotal = cart.find('.JS--summaryTotal');
-      let summaryTotalPos = cart.find('.JS--summaryTotalPos');
+      let cart = $('.JS--Wrapper-summary');
+      let $schedulingPriceBody = cart.find('.JS--Wrapper-schedulingPrice');
+      let $amountToPayBody = cart.find('.JS--Wrapper-amountToPayBody');
+      let $amountToPayWrapper = cart.find('.JS--Wrapper-amountToPay');
 
       $wrapper
           .on('keydown click', selectors.DELIVERY_DATE_GENERATED_DATE, pickDeliveryDate.bind(this))
@@ -423,14 +423,9 @@ theme.DatePicker = (function () {
           let dropdownValue = $(this).children('option:selected').data('fee'); //.toString()
           hiddenForm.fee.setFeeValue(dropdownValue);
 
-          summaryDeliveryFeePos.html(
-              dropdownValue.toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
-          );
-          summaryTotal.html(
-              (summaryTotalPos.data('summary-total') - hiddenForm.fee.value + dropdownValue).toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
-          );
-          // $('.JS--deliveryDateContainer').find('.JS--alertMessage').replaceWith('');
-          // alert.deliveryDate.hasError = false;
+          $('body').trigger('checkout.summary.updated', [{
+            schedulingPrice: dropdownValue
+          }]);
         });
       }
 
@@ -844,8 +839,16 @@ theme.CheckoutSection = (function () {
     PICK_SENDER_BUTTON: '.JS--Button-pickSender',
     DELETE_SENDER: '.JS--Button-deleteSender',
 
+    SAME_AS_RECIPIENT: '.JS--Wrapper-sameAsRecipientForm',
+
     ACCEPT_TERMS_WRAPPER: '.JS--Wrapper-acceptTerms',
     ACCEPT_TERMS_FORM: '.JS--Wrapper-acceptTermsForm',
+
+    SUMMARY_WRAPPER: '.JS--Wrapper-summary',
+    SUMMARY_SHIPPING_PRICE: '.JS--Wrapper-shippingPrice',
+    SUMMARY_SCHEDULING_PRICE: '.JS--Wrapper-schedulingPrice',
+    SUMMARY_AMOUNT_TO_PAY_WRAPPER: '.JS--Wrapper-amountToPay',
+    SUMMARY_AMOUNT_TO_PAY_BODY: '.JS--Wrapper-amountToPayBody',
 
   };
   const scrollUp = { block: 'start', behavior: 'smooth'};
@@ -877,6 +880,7 @@ theme.CheckoutSection = (function () {
         .on('click', selectors.REFRESH_SENDER_LIST_BUTTON, this.refreshSenderList.bind(this))
         .on('click', selectors.PICK_SENDER_BUTTON, this.pickSender.bind(this))
         .on('click', selectors.DELETE_SENDER, this.deleteSender.bind(this))
+        .on('change', selectors.SAME_AS_RECIPIENT, this.handleSenderForm.bind(this))
 
         .on('change', selectors.SHIPPING_CHOICE_BUTTON, this.markShippingAsSelected.bind(this))
         .on('change', selectors.PAYMENT_CHOICE_BUTTON, this.markPaymentAsSelected.bind(this))
@@ -884,6 +888,10 @@ theme.CheckoutSection = (function () {
         .on('click change', selectors.CHECKOUT_WRAPPER, this.preventInteraction.bind(this))
 
     ;
+    $(selectors.BODY).on(
+        'checkout.summary.updated', this.updateSummary.bind(this)
+    );
+
     $(document).ajaxStart(function() {
       ajaxLoading = true;
       document.dispatchEvent(new Event('disposeTooltip'));
@@ -905,49 +913,6 @@ theme.CheckoutSection = (function () {
       this.shippingValidator = new FormValidation(selectors.SHIPPING_FORM, shippingConstraints);
     }
     if ($(selectors.DELIVERY_DATE_FORM).length) {
-      // Initiliaze DateRangePicker
-      // const drpConfig = Object.assign({}, drpBaseConfig, {
-      //   // parentEl: ".JS--dateWrapper",
-      //   // displayInline: true,
-      //   opens: 'left',
-      //   drops: 'auto',
-      //   singleDatePicker: true,
-      //   autoApply: true,
-      //   autoUpdateInput: false,
-      //   minDate: moment().add(4, 'hours'),
-      //   maxDate: moment().add(2, 'months'),
-      // });
-      // $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
-      //
-      // let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
-      // let $vp = $wrapper.find('.vp-checked');
-      // let hiddenForm = {
-      //   date: {
-      //     element: $wrapper.find('#hidden_deliveryDate'),
-      //     value: $wrapper.find('#hidden_deliveryDate').val(),
-      //     setDateValue: function (value) {
-      //       this.element.val(value);
-      //     },
-      //   },
-      //   interval: {
-      //     element: $wrapper.find('#hidden_deliveryInterval'),
-      //     value: $wrapper.find('#hidden_deliveryInterval').val(),
-      //     setIntervalValue: function (value) {
-      //       this.element.val(value);
-      //     },
-      //   },
-      //   fee: {
-      //     element: $wrapper.find('#hidden_deliveryFee'),
-      //     value: $wrapper.find('#hidden_deliveryFee').val(),
-      //     setFeeValue: function (value) {
-      //       this.element.val(value);
-      //     },
-      //   },
-      // }
-
-
-
-
       this.deliveryDateValidator = new FormValidation(selectors.DELIVERY_DATE_FORM, deliveryDateConstraints);
     }
     if ($(selectors.SENDER_FORM).length) {
@@ -974,48 +939,6 @@ theme.CheckoutSection = (function () {
         e.preventDefault();
       }
     },
-
-    // initDatePicker() {
-    //   // Initiliaze DateRangePicker
-    //   const drpConfig = Object.assign({}, drpBaseConfig, {
-    //     // parentEl: ".JS--dateWrapper",
-    //     // displayInline: true,
-    //     opens: 'left',
-    //     drops: 'auto',
-    //     singleDatePicker: true,
-    //     autoApply: true,
-    //     autoUpdateInput: false,
-    //     minDate: moment().add(4, 'hours'),
-    //     maxDate: moment().add(2, 'months'),
-    //   });
-    //   $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
-    //
-    //   let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
-    //   let $vp = $wrapper.find('.vp-checked');
-    //   let hiddenForm = {
-    //     date: {
-    //       element: $wrapper.find('#hidden_deliveryDate'),
-    //       value: $wrapper.find('#hidden_deliveryDate').val(),
-    //       setDateValue: function (value) {
-    //         this.element.val(value);
-    //       },
-    //     },
-    //     interval: {
-    //       element: $wrapper.find('#hidden_deliveryInterval'),
-    //       value: $wrapper.find('#hidden_deliveryInterval').val(),
-    //       setIntervalValue: function (value) {
-    //         this.element.val(value);
-    //       },
-    //     },
-    //     fee: {
-    //       element: $wrapper.find('#hidden_deliveryFee'),
-    //       value: $wrapper.find('#hidden_deliveryFee').val(),
-    //       setFeeValue: function (value) {
-    //         this.element.val(value);
-    //       },
-    //     },
-    //   };
-    // },
 
     submitRecipientAndCustomer: function (e) {
       e.preventDefault();
@@ -1179,7 +1102,6 @@ theme.CheckoutSection = (function () {
       }).done(function(data) {
         $recipientListBody.html(data);
         theme.LoadingOverlay.hide($el);
-        // this.recipient.hideAlert();
       }).fail(function() {
         theme.LoadingOverlay.hide($el);
         Notify.error(AlertMessages.ERROR_UNKNOWN);
@@ -1323,6 +1245,10 @@ theme.CheckoutSection = (function () {
       $choiceWrapper.addClass('selected');
       $(selectors.SHIPPING_FORM).addClass('was-validated');
 
+      $(selectors.BODY).trigger('checkout.summary.updated', [{
+        shippingPrice: $choiceWrapper.data('shippingPrice')
+      }]);
+
       errors.shipping = false;
       // if ($wrapper.find(selectors.ALERT)) {
       //   $wrapper.find(selectors.ALERT).hide();
@@ -1339,14 +1265,14 @@ theme.CheckoutSection = (function () {
       theme.LoadingOverlay.show($el, 'click');
 
       let url = $el.data('url');
-      let $senderBody = $(selectors.SENDER_BODY);
+      let $senderForm = $(selectors.SENDER_FORM);
 
       $.ajax({
         url: url,
         method: 'POST',
         context: this
       }).done(function(data) {
-        $senderBody.html(data);
+        $senderForm.replaceWith(data);
         theme.LoadingOverlay.hide($el);
         errors.sender = true;
       }).fail(function() {
@@ -1354,6 +1280,22 @@ theme.CheckoutSection = (function () {
         theme.LoadingOverlay.hide($el);
         // this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
       });
+    },
+
+    handleSenderForm(e) {
+      e.preventDefault();
+      if (ajaxLoading) return;
+
+      let $el = $(e.currentTarget);
+      let $formWrapper = $(selectors.SAME_AS_RECIPIENT);
+      let $senderBody = $(selectors.SENDER_BODY);
+
+      let input = $formWrapper.find('input')[0];
+      if (input.checked) {
+        $senderBody.hide();
+      } else {
+        $senderBody.show();
+      }
     },
 
     // Picks a Sender from the recipient list (modal) and updates the Sender form with it.
@@ -1366,7 +1308,7 @@ theme.CheckoutSection = (function () {
       if (theme.proceed) { theme.proceed = false; return; }
       theme.LoadingOverlay.show($el, 'click');
 
-      let $senderBody = $(selectors.SENDER_BODY);
+      let $senderForm = $(selectors.SENDER_FORM);
       let url = $el.attr('href');
 
       $.ajax({
@@ -1375,7 +1317,7 @@ theme.CheckoutSection = (function () {
         context: this
       }).done(function(data) {
         $(selectors.REFRESH_SENDER_LIST_BUTTON).trigger('click');
-        $senderBody.html(data);
+        $senderForm.replaceWith(data);
         errors.sender = false;
       }).fail(function () {
         Notify.error(AlertMessages.ERROR_AJAX_FAILED);
@@ -1400,7 +1342,6 @@ theme.CheckoutSection = (function () {
       }).done(function(data) {
         $senderListBody.html(data);
         theme.LoadingOverlay.hide($el);
-        this.sender.hideAlert();
       }).fail(function() {
         theme.LoadingOverlay.hide($el);
         Notify.error(AlertMessages.ERROR_UNKNOWN);
@@ -1417,7 +1358,7 @@ theme.CheckoutSection = (function () {
       theme.LoadingOverlay.show($el, 'click');
 
       let url = $el.data('url');
-      let $senderBody = $(selectors.SENDER_BODY);
+      let $senderForm = $(selectors.SENDER_FORM);
 
       let confirm = window.confirm('Biztosan szeretnéd törölni?');
       if (confirm) {
@@ -1427,7 +1368,7 @@ theme.CheckoutSection = (function () {
           context: this
         }).done(function(data) {
           $(selectors.REFRESH_SENDER_LIST_BUTTON).trigger('click');
-          $senderBody.html(data);
+          $senderForm.replaceWith(data);
           $(selectors.SENDER_MODAL).modal('hide');
           theme.LoadingOverlay.hide($el);
         }).fail(function() {
@@ -1445,11 +1386,14 @@ theme.CheckoutSection = (function () {
       e.preventDefault();
       if (ajaxLoading) return;
 
-      // let $wrapper = $(selectors.PAYMENT_WRAPPER);
+      let $sameAsRecipient = $(selectors.SAME_AS_RECIPIENT);
+      let sameAsRecipientInput = $sameAsRecipient.find('input')[0];
 
-      if (typeof this.senderValidator !== 'undefined') {
-        this.senderValidator.validateForm();
-        errors.sender = this.senderValidator.hasError();
+      if (!sameAsRecipientInput.checked) {
+        if (typeof this.senderValidator !== 'undefined') {
+          this.senderValidator.validateForm();
+          errors.sender = this.senderValidator.hasError();
+        }
       }
 
       if (typeof this.acceptTermsValidator !== 'undefined') {
@@ -1489,12 +1433,27 @@ theme.CheckoutSection = (function () {
           data: $paymentForm.serialize(),
           context: this
         });
-        let a2 = $.ajax({
-          url: $senderForm.attr('action'),
-          method: 'POST',
-          data: $senderForm.serialize(),
-          context: this
-        });
+
+        let a2 = null;
+        if (!sameAsRecipientInput.checked) {
+          console.log('senderForm');
+          a2 = $.ajax({
+            url: $senderForm.attr('action'),
+            method: 'POST',
+            data: $senderForm.serialize(),
+            context: this
+          });
+        }
+        if (sameAsRecipientInput.checked) {
+          console.log('sameAsRecipient');
+          a2 = $.ajax({
+            url: $sameAsRecipient.attr('action'),
+            method: 'POST',
+            // data: $senderForm.serialize(),
+            context: this
+          });
+        }
+
 
         let a3 = $.ajax({
           url: $acceptTermsForm.attr('action'),
@@ -1514,11 +1473,17 @@ theme.CheckoutSection = (function () {
           .always(function() {
 
             a2.done(function(data){
-              $senderForm.replaceWith(data);
+              if (!sameAsRecipientInput.checked) {
+                $senderForm.replaceWith(data);
+              }
             })
               .fail(function(jqXHR){
-                senderForm = jqXHR.responseText;
-                errors.sender = true;
+                if (!sameAsRecipientInput.checked) {
+                  senderForm = jqXHR.responseText;
+                  errors.sender = true;
+                } else {
+                  console.log(jqXHR.responseText)
+                }
               })
               .always(function() {
 
@@ -1531,7 +1496,9 @@ theme.CheckoutSection = (function () {
                   })
                   .always(function() {
                     $paymentForm.replaceWith(paymentForm);
-                    $senderForm.replaceWith(senderForm);
+                    if (!sameAsRecipientInput.checked) {
+                      $senderForm.replaceWith(senderForm);
+                    }
                     $acceptTermsForm.replaceWith(acceptTermsForm);
                     document.dispatchEvent(new Event('initFloatingInput'));
                     document.dispatchEvent(new Event('initFormValidation'));
@@ -1575,6 +1542,57 @@ theme.CheckoutSection = (function () {
       // if ($wrapper.find(selectors.ALERT)) {
       //   $wrapper.find(selectors.ALERT).hide();
       // }
+    },
+
+    updateSummary: function(e, summary) {
+      e.preventDefault();
+
+      // let url = '/hu/cart/getSummary';
+      let $wrapper = $(selectors.SUMMARY_WRAPPER);
+      let $shippingPrice = $(selectors.SUMMARY_SHIPPING_PRICE);
+      let $schedulingPriceBody = $(selectors.SUMMARY_SCHEDULING_PRICE);
+      let $amountToPayWrapper = $(selectors.SUMMARY_AMOUNT_TO_PAY_WRAPPER);
+      let $amountToPayBody = $(selectors.SUMMARY_AMOUNT_TO_PAY_BODY);
+
+      let updatedAmountToPay =  $amountToPayWrapper.data('priceTotal');
+      console.log(updatedAmountToPay);
+      let shippingPrice = $shippingPrice.data('shippingPrice');
+
+      // If flowerShopMode, there's no $schedulingPriceBody. We set the schedulingPrice to 0.
+      let schedulingPrice = $schedulingPriceBody.length ? $schedulingPriceBody.data('schedulingPrice') : 0;
+
+      if ("undefined" !== typeof summary.shippingPrice) {
+        $shippingPrice.html(summary.shippingPrice.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $shippingPrice.data('shippingPrice', summary.shippingPrice);
+        updatedAmountToPay += summary.shippingPrice + schedulingPrice;
+      }
+      if ("undefined" !== typeof summary.schedulingPrice) {
+        $schedulingPriceBody.html(summary.schedulingPrice.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $schedulingPriceBody.data('schedulingPrice', summary.schedulingPrice);
+        updatedAmountToPay += shippingPrice + summary.schedulingPrice;
+      }
+
+      console.log(updatedAmountToPay)
+      $amountToPayBody.html(updatedAmountToPay.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+
+      // $wrapper.addClass('loading-spinner-show');
+
+      // $.ajax({
+      //   url: url,
+      //   method: 'GET',
+      //   context: this,
+      // }).done(function (data) {
+      //   $wrapper.replaceWith(data);
+      //   $wrapper.removeClass('loading-spinner-show');
+      // }).fail(function (jqXHR) {
+      //   console.log(jqXHR);
+      //   // $el.append(jqXHR.responseText);
+      //   // theme.LoadingOverlay.hide($el);
+      //   Notify.error(jqXHR.responseText);
+      //   $wrapper.removeClass('loading-spinner-show');
+      // })
+      // ;
+
     },
 
   });

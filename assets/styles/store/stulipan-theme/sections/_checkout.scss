@@ -57,6 +57,9 @@ $checkout-shopi-collapse-header-border-width:   $border-width !default;
 $checkout-shopi-collapse-header-border-color:   $gray-300 !default;
 $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !default;
 
+$checkout-border-color:                 #eee !default;
+$checkout-border-width:                 3px !default;
+
 .checkout-page.checkout-shopi {
   & .container {
     max-width: $checkout-shopi-container-width;
@@ -198,10 +201,10 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 
 
 ///////////////////////////////////
-// Summary
+// Overview
 
 .checkout-overview {
-  border: $border-width solid $border-color;
+  border: $checkout-border-width solid $checkout-border-color;
   @include border-radius($border-radius);
   @include font-size($font-size-sm);
   line-height: $line-height-sm;
@@ -209,15 +212,15 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 
   & .checkout-overview-item {
     padding: .75rem .75rem;
-    border-bottom: $border-width solid $border-color;
+    border-bottom: $border-width solid $checkout-border-color;
 
     &:first-of-type {
-      border-top-right-radius: $border-radius;
-      border-top-left-radius: $border-radius;
+      @include border-top-right-radius($border-radius);
+      @include border-top-left-radius($border-radius);
     }
     &:last-of-type {
-      border-bottom-right-radius: $border-radius;
-      border-bottom-left-radius: $border-radius;
+      @include border-bottom-right-radius($border-radius);
+      @include border-bottom-left-radius($border-radius);
       border-bottom: none;
     }
   }
@@ -270,6 +273,12 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 ///////////////////////////////////
 // Shipping and Payment methods
 
+.content-body-thick-border {
+  //padding: .5rem;
+  padding: $checkout-border-width;
+  background-color: $checkout-border-color;
+}
+
 .checkout-method-selection {
   //border: $border-width solid $border-color;
   @include border-radius($border-radius);
@@ -287,12 +296,12 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
   }
 
   &:first-of-type {
-    border-top-right-radius: $border-radius;
-    border-top-left-radius: $border-radius;
+    @include border-top-right-radius($border-radius);
+    @include border-top-left-radius($border-radius);
   }
   &:last-of-type {
-    border-bottom-right-radius: $border-radius;
-    border-bottom-left-radius: $border-radius;
+    @include border-bottom-right-radius($border-radius);
+    @include border-bottom-left-radius($border-radius);
     border-bottom: none;
   }
 }
@@ -305,7 +314,8 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 }
 
 .checkout-shipping-item-title,
-.checkout-payment-item-title {
+.checkout-payment-item-title,
+.checkout-sameas-item-title {
   font-weight: $font-weight-bold;
   color: $yiq-text-dark;
 }
@@ -313,6 +323,16 @@ $checkout-shopi-collapse-body-bg:               $checkout-shopi-right-bg !defaul
 .checkout-payment-item-description {
   color: $gray-700;
   //font-size: $font-size-base-secondary;
+}
+
+.checkout-sender-form {
+  padding: .75rem .75rem;
+  //background-color: #eee;
+  margin-top: .25rem;
+
+  @include media-breakpoint-up(lg) {
+    padding: 1rem 1rem;
+  }
 }
 
 
@@ -418,3 +438,9 @@ h1, h2, h3, h4, h5, h6 {
 //  text-transform: initial;
 //  letter-spacing: 0;
 //}
+
+.checkout-customer .svg-icon {
+  --font-size: 2.5rem;
+  --line-height: 2.5rem;
+  opacity: .7;
+}

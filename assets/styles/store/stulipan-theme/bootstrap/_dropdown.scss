@@ -179,7 +179,7 @@
   }
 }
 
-.dropdown:hover .dropdown-menu,
+//.dropdown:hover .dropdown-menu,
 .dropdown-menu.show {
   display: block;
 
@@ -216,3 +216,4 @@
 .dropdown-menu-topbar {
   min-width: $dropdown-menu-min-width;
 }
+

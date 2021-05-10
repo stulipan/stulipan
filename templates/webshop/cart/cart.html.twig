@@ -35,7 +35,7 @@
                         <li class="order-summary-item">
                             <span>{{ 'cart.shipping-fee-calculated'|trans }}</span>
                             <span class="text-nowrap">
-                                <span class="JS--summaryDeliveryFee">{{ order.deliveryFee|money }}</span>
+                                <span class="JS--summaryDeliveryFee">{{ order.shippingPriceToPay|money }}</span>
                             </span>
                         </li>
                         <li class="order-summary-item border-0">

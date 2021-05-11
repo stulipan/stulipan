@@ -84,6 +84,10 @@ liip_imagine:
                     size:          [768, 1024]
                     mode:          outbound
                     allow_upscale: true
+                watermark_image:
+                    image: "/public/uploads/images/icons/watermark.png"
+                    size: 0.25
+                    position: bottomleft
 
 #            # set your image quality defaults
 #            jpeg_quality:          85

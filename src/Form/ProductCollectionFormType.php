@@ -66,6 +66,9 @@ class ProductCollectionFormType extends AbstractType
             ->add('description', TextareaType::class,[
                 'label' => 'Leírás',
                 'attr' => ['rows' => '5']
+            ])
+            ->add('seoContent', TextareaType::class,[
+                'attr' => ['rows' => '5']
             ]);
         $imageConstraints = [
             new Image([

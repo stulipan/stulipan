@@ -1,11 +1,5 @@
 {% extends 'webshop/site/base.html.twig' %}
 
-{%- block title -%}
-    {% if pageTitle is defined and pageTitle is not empty %}
-    {{ pageTitle }} |
-    {% endif %} {{ storeSettings.get('meta.name') }}
-{%- endblock -%}
-
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}

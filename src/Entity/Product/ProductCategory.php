@@ -64,6 +64,13 @@ class ProductCategory implements JsonSerializable
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
     private $description;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="seo_content", type="text", length=65535, nullable=true)
+     */
+    private $seoContent;
     
     /**
      * @var ImageEntity|null
@@ -236,6 +243,22 @@ class ProductCategory implements JsonSerializable
     {
         $this->description = $description;
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSeoContent(): ?string
+    {
+        return $this->seoContent;
+    }
+
+    /**
+     * @param string|null $seoContent
+     */
+    public function setSeoContent(?string $seoContent): void
+    {
+        $this->seoContent = $seoContent;
     }
 
     /**

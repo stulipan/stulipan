@@ -48,7 +48,17 @@
                     </div>
                 </div>
             </div>
-
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row mb-0">
+                        <div class="col-sm-12">
+                            {{ form_label(form.seoContent, form.seoContent, { 'label_attr': {'class': '' }, 'label': 'collection.seo-content'|trans}) }}
+                            {{ form_widget(form.seoContent, {'attr': {'class': 'JS--TinyMce-description', rows: 4}}) }}
+                            {{ form_errors(form.seoContent) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-4 correction-no-padding">
 

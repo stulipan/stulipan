@@ -1,7 +1,9 @@
 {% extends 'webshop/site/base-site.html.twig' %}
 
+{% set pageTitle = storeSettings.get('meta.title') %}
+
 {%- block title -%}
-    {{ parent() }}
+    {{ pageTitle }}
 {%- endblock -%}
 
 {% block stylesheets %}

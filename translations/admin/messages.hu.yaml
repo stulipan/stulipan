@@ -6,6 +6,7 @@ collection:
     new-collection-created-successfully: 'Kategória sikeresen elmentve!'
     name: 'Kategória neve'
     description: Leírás
+    seo-content: SEO szöveges tartalom
     image: Kép
     slug: 'URL slug'
     slug-help: 'Ne használj ékezeteket, pl: ''szepseg-es-kozmetika''. Ez az adott kategória URL-jében lesz látható: ''www.example.com/termekek/szepseg-es-kozmetika'''

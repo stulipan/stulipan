@@ -29,6 +29,7 @@ collection:
     new-collection-created-successfully: New collection was successfully created!
     name: Collection name
     description: Description
+    seo-content: SEO content
     image: Collection image
     slug: Slug
     slug-help: 'Eg.: ''beauty-and-cosmetics''. This will be visible in the collection''s URL like this: www.example.com/collection/szepseg-es-kozmetika'

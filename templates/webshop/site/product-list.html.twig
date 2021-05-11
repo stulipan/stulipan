@@ -93,6 +93,11 @@
                     {% include '/webshop/site/product-list-widget.html.twig' %}
 
                 </div>
+                {% if category.seoContent is defined and category.seoContent is not empty %}
+                <div class="mt-4 mb-4">
+                    {{ category.seoContent|raw }}
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

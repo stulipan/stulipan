@@ -63,13 +63,18 @@ parameters:
             type: Text
             label: 'Meta boltnév'
         title:
-            content: 'Rafina lakás és otthon dekor, ajtódíszek, kopogtatók, rózsaboxok'
+            content: 'Rafina.hu | Otthon dekor, ajtódíszek, kopogtatók, rózsaboxok'
             type: Text
             label: 'Meta title'
         description:
             content: 'Rafina lakás és otthon dekor, ajtódíszek, kopogtatók, rózsaboxok'
             type: Text
             label: 'Meta leírás'
+        footer:
+            content: 'Rafina lakás és otthon dekor, ajtódíszek, kopogtatók, rózsaboxok'
+            type: Text
+            label: 'Meta footer'
+
     social:
         label:
             content: 'Közösségi elérhetőségek'

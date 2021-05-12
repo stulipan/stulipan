@@ -236,6 +236,20 @@ customer:
     order-count: '{{ count }} order'
     orders-count: '{{ count }} orders'
     accepts-marketing: Subscribed
+cms:
+    navigation:
+        navigation: Navigation
+        navigations: Navigation list
+        new-navigation: New navigation
+        navigations-not-found: No navigation was found!
+        navigations-not-found-suggestion: Try modifying the filters.
+        name: Name
+        enabled: Enabled
+        navigation-item: Navigation item
+        navigation-items: Navigation items
+        new-navigation-item: New navigation item
+        navigation-item-name: Navigation item name
+        navigation-item-url: Navigation item URL
 
 user:
     users: Users
@@ -268,22 +282,13 @@ user:
         custom-filter: Custom filter
         not-found: No users were found
         not-found-suggestion: Try changing the filters or search term
-
-cms:
-    navigation:
-        navigation: Navigation
-        navigations: Navigation list
-        new-navigation: New navigation
-        navigations-not-found: No navigation was found!
-        navigations-not-found-suggestion: Try modifying the filters.
-        name: Name
-        enabled: Enabled
-        navigation-item: Navigation item
-        navigation-items: Navigation items
-        new-navigation-item: New navigation item
-        navigation-item-name: Navigation item name
-        navigation-item-url: Navigation item URL
-
+login:
+    login-meta: Login
+    login-title: Login
+    email: Email
+    password: Password
+    remember-me: Stay logged in
+    login-button: Login
 
 
 

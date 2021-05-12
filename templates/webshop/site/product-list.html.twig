@@ -93,10 +93,33 @@
                     {% include '/webshop/site/product-list-widget.html.twig' %}
 
                 </div>
-                {% if category.seoContent is defined and category.seoContent is not empty %}
-                <div class="mt-4 mb-4">
-                    {{ category.seoContent|raw }}
-                </div>
+                {% if category is defined and category %}
+                    {% if category.seoContent is defined and category.seoContent is not empty %}
+                    <div class="row mt-4 mb-4">
+                        <div class="col-lg-9">
+                            <div class="cms-page-title">
+                                <h2 class="font-weight-bold text-reset">{{ category.name }}</h2>
+                            </div>
+                            <div class="cms-page-body">
+                                {{ category.seoContent|raw }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="row mt-4 mb-4">
+                        <div class="col-lg-9">
+                            <div class="cms-page-title">
+                                <h2 class="font-weight-bold text-reset">Alakíts ki egy élhető és kényelmes életteret</h2>
+                            </div>
+                            <div class="cms-page-body">
+                                <p>Az életünk nagy részét az irodában és otthon töltjük. Az iroda az az hely ahol a legjobban akarunk teljesíteni, míg otthon a munka fáradalmait próbáljuk kipihenni. De mi törtenik akkor, ha egyik sem megy valami fényesen?</p>
+                                <p>Hogyan alakítsunk ki kellemes élettereket? Inspirálódj a Rafinával! Ráadásul, kopogtatóink, asztadíszeink a költségvetésedben sem fognak nagy éket verni.</p>
+                                <p>A Rafina kopogtatói, asztaldíszei egytől egyig mind kézzel készül, nem sorozatgyártottak. A Rafina virágdobozok selyem virágok felhasználásával, míg a rózsaboxok szappan rózsából készülnek. Előfordulhat, hogy egy-egy termék limitált számban kapható, ezért érdemes a kiszemelt darabot minél hamarabb megrendelni. Az elkészítésük során, minden termékre nagy figyelmet fordítunk és gondosan ügyelünk a végeredmény minőségi darab legyen.</p>
+                                <p>Az ajtódíszek és kopogtatók esetén, tudd, hogy rendelkeznek egy akasztóval, úgy ahogy egy képkeretnél az megszokott. Továbbá minden kopogtatót, egy dekorativ akasztó szalaggal is ellátunk, hogy kézhezvétel után a kopogtatót azonnal fel tudd lógatni az ajtóra.</p>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
         </div>

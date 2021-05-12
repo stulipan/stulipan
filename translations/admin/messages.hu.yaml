@@ -233,7 +233,13 @@ user:
         custom-filter: 'Egyedi keresés'
         not-found: 'Nem talált felhasználókat!'
         not-found-suggestion: 'Próbáld módosítani a szűrőket vagy a keresési kifejezést.'
-
+login:
+    login-meta: Bejelentkezés
+    login-title: Bejelentkezés
+    email: Email cím
+    password: Jelszó
+    remember-me: Emlékezz rám
+    login-button: Bejelentkezek
 generic:
     id: '#'
     not-available: nincs

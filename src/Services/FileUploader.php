@@ -40,14 +40,14 @@ class FileUploader
      * Handles uploading of a file, and returns the uploaded file's name as a string
      * 2nd param = null, else deletes prev. image file passed on in $existingImage
      */
-    public function uploadFile(UploadedFile $file, ?ImageEntity $existingImage, int $purpose = null): string  //?string $existingFilename,
+    public function uploadFile(UploadedFile $file, ?ImageEntity $existingImage, string $purpose = null): string  //?string $existingFilename,
     {
         // Based on kind of the image to be uploaded, pick the appropriate target folder
         switch ($purpose) {
-            case ImageUsage::WEBSITE_IMAGE:
+            case ImageEntity::STORE_IMAGE:
                 $folder = self::WEBSITE_FOLDER_NAME;
                 break;
-            case ImageUsage::PRODUCT_IMAGE:
+            case ImageEntity::PRODUCT_IMAGE:
                 $folder = self::PRODUCTS_FOLDER_NAME;
                 break;
             default:

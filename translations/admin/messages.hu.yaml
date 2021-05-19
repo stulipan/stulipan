@@ -202,6 +202,41 @@ customer:
     order-count: '{{ count }} rendelés'
     orders-count: '{{ count }} rendelés'
     accepts-marketing: 'Feliratkozott'
+
+cms:
+    section:
+        sections: Modulok
+        new-section: 'Új modul'
+        sections-not-found: 'Nem talált modulokat!'
+        sections-not-found-suggestion: 'Próbáld módosítani a szűrőket.'
+        new-section-created-successfully: 'Modul sikeresen elmentve!'
+        name: 'Modul neve'
+        content: Modul tartalma
+        slug: 'Slug'
+        slug-help: 'Ne használj ékezeteket, pl: ''szepseg-es-kozmetika'''
+        enabled: Engedélyezve
+        parent-page: 'Szülő oldal'
+        name-is-missing: 'Nevezd el a modult.'
+        slug-is-missing: 'A slug nem lehet üres. Pl: ''szuletesnapi-kellekek'''
+        slug-already-in-use: 'Ez már használatban van. Megoldás:  tegyél egy ''-1'' a végére.'
+        page-is-missing: Válassz egy oldalt, amihez ez a modul tartozni fog.
+        section-saved-successfully: Oldal sikeresen elmentve!
+        homepage: Kezdőlap
+        product-page: Termékoldal
+        collection-page: Kategória oldal
+    navigation:
+        navigation: Navigation
+        navigations: Navigation list
+        new-navigation: New navigation
+        navigations-not-found: No navigation was found!
+        navigations-not-found-suggestion: Try modifying the filters.
+        name: Name
+        enabled: Enabled
+        navigation-item: Navigation item
+        navigation-items: Navigation items
+        new-navigation-item: New navigation item
+        navigation-item-name: Navigation item name
+        navigation-item-url: Navigation item URL
 user:
     users: Felhasználók
     user: Felhasználó

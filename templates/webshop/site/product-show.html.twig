@@ -20,9 +20,9 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {#<link rel="stylesheet" href="{{ asset('build/v-shop.css') }}"/>#}
-{#    {{ encore_entry_link_tags('daterangepicker') }}#}
-    <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css" rel="stylesheet" >
+
+    {{ encore_entry_link_tags('owlcarousel') }}
+{#    <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css" rel="stylesheet" >#}
     <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >
 
     <meta property="og:title" content="{{ product.name }} - {{ storeSettings.get('meta.title')}}">
@@ -38,8 +38,8 @@
 {% block bodyClass %} product-details{% endblock %}
 
 {% block content %}
-    <div class="row mt-0 mt-sm-3">
-        <div class="col-lg-11X col-xl-12 mx-auto">
+    <div class="row mt-0 mt-sm-3 mb-4">
+        <div class="col-xl-12 mx-auto">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="row">
@@ -78,7 +78,7 @@
                                     </div>
                                     {% endif %}
                                     {% if product.images is defined %}
-                                    <div class="detail-carousel position-relative">
+                                    <div class="product-detail-carousel position-relative">
                                         {% set bestseller = false %}
                                         {% if product.isUnavailable %}
                                             <div class="ribbon ribbon-dark">MIND ELKELT</div>
@@ -91,17 +91,24 @@
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}
-                                        <div class="">
-                                            <div data-slider-id="1" class="owl-carousel detail-slider owl-theme product-details-imageWrapper">
-                                                {% if product.images is defined %}
-                                                    {% for image in product.images %}
-                                                        <div class="item">
-                                                            <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
-                                                                <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="img-fluid" width="534" height="712">
-                                                            </a>
-                                                        </div>
-                                                    {% endfor %}
-                                                {% endif %}
+                                        <div class="position-relative w-100">
+                                            <div>
+                                                <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="w-100 img-fluid" width="534" height="712">
+                                            </div>
+                                            <div class="position-absolute w-100" style="top: 0;">
+                                                <div class="position-relative">
+                                                    <div data-slider-id="1" class="JS--Wrapper-productDetail owl-product-detail owl-carousel owl-theme product-details-imageWrapper">
+                                                        {% if product.images is defined %}
+                                                            {% for image in product.images %}
+                                                                <div class="item">
+                                                                    <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
+                                                                        <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="img-fluid" width="534" height="712">
+                                                                    </a>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         {% if bestseller %}
@@ -126,7 +133,7 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-5 order-2 mt-3 mt-md-0">
+                        <div class="col-md-6 col-lg-5 order-2 mt-3 mt-md-0 pl-sm-3">
                             <div class="row">
                                 <div class="col-12">
 {#                                    <div class="product-reviews">#}
@@ -146,7 +153,7 @@
 {#                                        </div>#}
 {#                                    </div>#}
                                 </div>
-                                <div class="col-12 mt-2">
+                                <div class="col-12">
                                     <div class="product-name">
                                         <h1 class="">{{ product.name }}</h1>
                                     </div>
@@ -337,6 +344,63 @@
             </div>
         </div>
     </div>
+
+    <div class="row mt-0 mt-sm-3 mb-6">
+        <div class="products-grid col-xl-12 mx-auto">
+            <div class="">
+                <h3 class="hero-recommended">Mások ezeket is megnézték</h3>
+            </div>
+            <div class="products-carousel mt-4">
+                <div class="carousel-nav prev">
+                    <button class="JS--Carousel-prev btn carousel-btn"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div class="JS--Wrapper-recommendedProducts owl-products owl-carousel owl-theme">
+                {% if recommendedProducts is defined and recommendedProducts is not empty %}
+                    {% for product in recommendedProducts %}
+
+                        {% if product.isEnabled or product.isUnavailable %}
+                            <div class="product">
+                                <div class="product-image-wrapper">
+                                    <div class="product-image">
+                                        {% set bestseller = false %}
+                                        {% if product.isUnavailable() %}
+                                            <div class="ribbon ribbon-dark">{{ 'product.sold-out'|trans }}</div>
+                                        {% elseif product.hasBadges %}
+                                            {% for badge in product.badges %}
+                                                {% if badge.css is defined and badge.css != 'bestseller' %}
+                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                                {% else %}
+                                                    {% set bestseller = true %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="300" height="400">
+                                        {% if bestseller %}
+                                            <div class="ribbon ribbon-bottom">
+                                                <i class="fas fa-trophy"></i> {{ 'product.bestseller'|trans }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link"></a>
+                                </div>
+                                <div class="product-title-wrapper">
+                                    <p class="productList--name"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.name }}</a></p>
+                                    <div class="productList--price-gross mt-1">{{ product.price.grossPrice|money }}</div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                {% endif %}
+            </div>
+                <div class="carousel-nav next">
+                    <button class="JS--Carousel-next btn carousel-btn"><i class="fas fa-chevron-right"></i></button>
+{#                    <button class="JS--Carousel-next btn btn-secondary">NEXT</button>#}
+                </div>
+
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block contentWide %}
@@ -484,41 +548,94 @@
 
 {% block javascripts %}
 	{{ parent() }}
-    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/owl.carousel.js"></script>
-    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>
-    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/smooth-scroll/smooth-scroll.polyfills.min.js"></script>
+    <script src="{{ asset('webshop/site/js/owl.carousel.min.js') }}" ></script>
+    <script src="{{ asset('webshop/site/js/owl.carousel2.thumbs.min.js') }}" ></script>
+{#    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/owl.carousel.js"></script>#}
+{#    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>#}
+{#    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/smooth-scroll/smooth-scroll.polyfills.min.js"></script>#}
     <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>
 {#    <script src="{{ asset('build/v-shop.js') }}"></script>#}
     <script>
-        $('.detail-slider').owlCarousel({
-            loop: true,
-            thumbs: true,
-            thumbsPrerendered: true,
-            margin: 0,
-            nav: false,
-            dots: true,
-            navText: ['<img src="img/prev.svg" alt="" width="50">', '<img src="img/next.svg" alt="" width="50">'],
-            smartSpeed: 400,
-            responsiveClass: true,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                600: {
-                    items: 1
-                },
-                1000: {
-                    items: 1
+        $(function() {
+            $('.JS--Wrapper-productDetail').owlCarousel({
+                loop: true,
+                thumbs: true,
+                thumbsPrerendered: true,
+                margin: 0,
+                nav: false,
+                dots: true,
+                // navText: ['<img src="img/prev.svg" alt="" width="50">', '<img src="img/next.svg" alt="" width="50">'],
+                navText: ['<span>❮</span>', '<span>❯</span>'],
+                smartSpeed: 400,
+                responsiveClass: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 1
+                    },
+                    1000: {
+                        items: 1
+                    }
                 }
-            }
-        });
+            });
 
-        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
-            event.preventDefault();
-            $(this).ekkoLightbox({
-                alwaysShowClose: true,
-//                leftArrow: '<span><img src="img/prev.svg" class="nav-arrow nav-arrow-left" alt="" width="50"></span>',
-//                rightArrow: '<span><img src="img/next.svg" class="nav-arrow nav-arrow-right" alt="" width="50"></span>'
+            $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true,
+                    //                leftArrow: '<span><img src="img/prev.svg" class="nav-arrow nav-arrow-left" alt="" width="50"></span>',
+                    //                rightArrow: '<span><img src="img/next.svg" class="nav-arrow nav-arrow-right" alt="" width="50"></span>'
+                });
+            });
+            let $recommendedProducts = $('.JS--Wrapper-recommendedProducts');
+            $recommendedProducts.owlCarousel({
+                loop: true,
+                margin: 0,
+                rewind: false,
+                slideBy: 'page',
+                responsiveClass: true,
+                // stageOuterClass: 'owl-stage-outer row mx-n5px mx-xl-n10px',
+                responsive: {
+                    0: {
+                        items: 2.3,
+                        nav: false
+                    },
+                    576: {
+                        items: 3.3,
+                        nav: false
+                    },
+                    768: {
+                        items: 4,
+                        nav: false
+                    },
+                    992: {
+                        items: 5,
+                        nav: false,
+                        loop: true,
+                    }
+                },
+                onInitialized: addFormatingClasses,
+            });
+            function addFormatingClasses(e) {
+                $carousel = $(e.target);  // .owl-carousel
+                console.log($carousel);
+                $carousel.addClass('row mx-n5px mx-xl-n10px');
+                $items = $carousel.find('.owl-item').addClass('col-12 px-5px px-xl-10px');
+            }
+            // $recommendedProducts.on('initialized.owl.carousel', function (e) {
+            //     $carousel = $(e.target);  // .owl-carousel
+            //     console.log($carousel);
+            //     $carousel.find('owl-stage').addClass('row');
+            //     $items = $carousel.find('.owl-item').addClass('col-12');
+            // });
+            // Custom Navigation Events
+            $('.JS--Carousel-next').click(function () {
+                $recommendedProducts.trigger('next.owl.carousel');
+            })
+            $('.JS--Carousel-prev').click(function () {
+                $recommendedProducts.trigger('prev.owl.carousel');
             });
         });
     </script>

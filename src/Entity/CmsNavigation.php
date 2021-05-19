@@ -2,25 +2,18 @@
 
 namespace App\Entity;
 
-use JsonSerializable;
-use phpDocumentor\Reflection\Types\This;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
-use App\Entity\ImageEntity;
-use App\Services\FileUploader;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CmsNavigationRepository")
  * @ORM\Table(name="cms_navigation")
- * @ UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
+ * @UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
  */
-class CmsNavigation implements JsonSerializable
+class CmsNavigation
 {
     /**
      * @var int
@@ -33,22 +26,31 @@ class CmsNavigation implements JsonSerializable
 
     /**
      * @var string
+     * @Groups({
+     *     "view", "list"
+     * })
      *
-     * @ORM\Column(name="navigation_name", type="string", length=100, nullable=false)
+     * @ORM\Column(name="navigation_name", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Adj nevet a CMS oldalnak.")
      */
     private $name;
 
-//    /**
-//     * @var string
-//     *
-//     * @ORM\Column(name="slug", type="string", length=100, nullable=false, unique=true)
-//     * @Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
-//     */
-//    private $slug;
+    /**
+     * @var string
+     * @Groups({
+     *     "view", "list"
+     * })
+     *
+     * @ORM\Column(name="slug", type="string", length=255, nullable=false, unique=true)
+     * @ Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
+     */
+    private $slug;
 
     /**
      * @var bool
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false, options={"default"=true})
      */
@@ -56,6 +58,9 @@ class CmsNavigation implements JsonSerializable
 
     /**
      * @var CmsNavigationItem[]|ArrayCollection|null
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * ==== One CMS Page has many product HTML blocks ====
      *
@@ -68,19 +73,6 @@ class CmsNavigation implements JsonSerializable
     public function __construct()
     {
         $this->navigationItems = new ArrayCollection();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id'                => $this->getId(),
-            'name'              => $this->getName(),
-            'enabled'           => $this->getEnabled(),
-            'navigationItems'   => $this->getNavigationItems(),
-        ];
     }
 
     /**
@@ -101,7 +93,7 @@ class CmsNavigation implements JsonSerializable
     {
         $this->id = $id;
     }
-    
+
     /**
      * @return string|null
      */
@@ -120,6 +112,22 @@ class CmsNavigation implements JsonSerializable
     public function __toString(): ?string
     {
         return $this->getName();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string|null $slug
+     */
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
     }
     
     /**
@@ -169,7 +177,7 @@ class CmsNavigation implements JsonSerializable
     }
 
     /**
-     * @param CmsHtmlBlock $item
+     * @param CmsSection $item
      */
     public function removeNavigationItem(CmsNavigationItem $item)
     {

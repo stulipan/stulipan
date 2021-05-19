@@ -1,0 +1,181 @@
+@import '../../bootstrap/functions';
+@import '../../bootstrap/variables';
+@import '../../bootstrap/mixins';
+/*
+ * 	Default theme - Owl Carousel CSS File
+ */
+
+$color-base:			#869791 !default;
+$color-white:			#FFF !default;
+$color-gray:			#adb5bd !default;
+
+//nav
+
+$nav-color: 			$color-white !default;
+$nav-color-hover:		$color-white !default;
+$nav-font-size: 		14px !default;
+$nav-rounded: 			3px !default;
+$nav-margin: 			5px !default;
+$nav-padding: 			4px 7px !default;
+$nav-background: 		$color-gray !default;
+$nav-background-hover:	$color-base !default;
+$nav-disabled-opacity: 	0.5 !default;
+
+//dots
+
+$dot-width:				14px !default;
+$dot-height:			14px !default;
+$dot-rounded:			30px !default;
+$dot-margin: 			0px 5px !default;
+$dot-background:		$color-white !default; // $color-gray !default;
+$dot-background-active:	$color-white !default; // $color-base !default;
+
+// Added by Stulipan
+$dot-active-width:		    18px !default;
+$dot-active-height:			18px !default;
+
+@import 'theme';
+
+
+//.product-detail-carousel {
+//  min-height: 600px;
+//}
+
+.owl-product-detail {
+  &.owl-theme .owl-nav.disabled + .owl-dots {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 40px;
+  }
+}
+
+
+.products-carousel {
+  --product-carousel-btn-width: 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 390px;
+
+  & .carousel-nav {
+    position: absolute;
+    //display: none;
+    display: block;
+    z-index: 10;
+
+    &.prev {
+      left: 0;
+      margin-left: calc(-1 * var(--product-carousel-btn-width)/2);
+
+      @include media-breakpoint-down(sm) {
+        margin-left: -10px;
+      }
+
+      & i {
+        margin-left: -2px;
+      }
+    }
+    &.next {
+      right: 0;
+      margin-right: calc(-1 * var(--product-carousel-btn-width)/2);
+
+      @include media-breakpoint-down(sm) {
+        margin-right: -10px;
+      }
+
+      & i {
+        margin-right: -2px;
+      }
+    }
+
+  }
+  //&:hover {
+  //  & .carousel-nav {
+  //    display: block;
+  //  }
+  //}
+
+  & .carousel-btn {
+    --btn-width: var(--product-carousel-btn-width);
+    --btn-height: var(--product-carousel-btn-width);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--btn-width);
+    height: var(--btn-width);
+    background-color: $white;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    border: 1px solid $gray-900;
+    padding: 0;
+    @include border-radius($border-radius);
+
+    &:hover,
+    &:focus {
+      outline: none;
+      background-color: $gray-900;
+      color: white;
+      box-shadow: none;
+    }
+  }
+
+}
+
+.owl-products.owl-carousel {
+  //& .owl-stage-outer {
+  //  margin: 0 40px;
+  //}
+  //& .owl-nav {
+  //  position: absolute;
+  //  top: 0;
+  //  /* zoom: 5; */
+  //  display: flex;
+  //  justify-content: space-between;
+  //  width: 100%;
+  //  height: 100%;
+  //  margin-top: 0;
+  //  z-index: -1;
+  //
+  //  & button.owl-prev,
+  //  & button.owl-next {
+  //    font-size: 5rem;
+  //    //background: rgb(225 229 233 / 50%);
+  //
+  //    &:hover {
+  //      background: transparent;
+  //      color: inherit;
+  //      text-decoration: none;
+  //    }
+  //  }
+  //}
+
+
+
+  & button.owl-dot {
+    padding: 10px 0 !important;
+  }
+
+  & .owl-dot,
+  & .owl-dot.active {
+    & span {
+      width: 30px;
+      height: 0;
+      border-width: 2px;
+      border-radius: 0;
+    }
+  }
+
+  & .owl-dot.active {
+    span {
+      border-color: $gray-900;
+    }
+  }
+}
+
+.owl-theme .owl-nav,
+.owl-theme .owl-dots {
+  & button:focus {
+    outline: none;
+  }
+}

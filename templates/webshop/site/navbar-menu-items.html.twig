@@ -1,7 +1,10 @@
-{% for item in navigations.fomenu.navigationItems %}
+{% set nav = navigation|fetchNavigationBySlug('fomenu') %}
+{% if nav is defined and nav %}
+{% for item in nav.navigationItems %}
     <li class="nav-item"><a href="{{ item.url }}" class="nav-link">{{ item.name }}</a>
     </li>
 {% endfor %}
+{% endif %}
 
 {#    <li class="nav-item"><a href="/" class="nav-link">Nyitóoldal</a>#}
 {#    </li>#}

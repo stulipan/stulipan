@@ -95,7 +95,7 @@
                 </div>
                 {% if category is defined and category %}
                     {% if category.seoContent is defined and category.seoContent is not empty %}
-                    <div class="row mt-4 mb-4">
+                    <div class="row mt-4 mb-5">
                         <div class="col-lg-9">
                             <div class="cms-page-title">
                                 <h2 class="font-weight-bold text-reset">{{ category.name }}</h2>
@@ -107,7 +107,7 @@
                     </div>
                     {% endif %}
                 {% else %}
-                    <div class="row mt-4 mb-4">
+                    <div class="row mt-4 mb-5">
                         <div class="col-lg-9">
                             <div class="cms-page-title">
                                 <h2 class="font-weight-bold text-reset">Alakíts ki egy élhető és kényelmes életteret</h2>
@@ -126,6 +126,6 @@
     </div>
 {% endblock %}
 
-{% block footerHighlights %}
-{% endblock %}
+{#{% block footerHighlights %}#}
+{#{% endblock %}#}
 

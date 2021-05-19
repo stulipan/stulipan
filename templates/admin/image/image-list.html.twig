@@ -1,0 +1,81 @@
+{% extends 'admin/template-listing.html.twig' %}
+{#{% extends 'admin/template-with-sidebar.html.twig' %}#}
+
+{% set activeMenu = 'cms' %}
+{% set pageTitle = 'Kepek' %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+} %}
+
+{%- block title -%}
+	{{ pageTitle }}
+{%- endblock -%}
+
+{% block headerActionsWrapper %}
+{% endblock %}
+
+
+{% block contentInner %}
+	<div class="card-body">
+		<div class="card-columns">
+			<div class="card mb-20px">
+				<div class="card-body">
+					<div class="h5 mb-0">Képfeltöltés</div>
+					{{ form_start(form, { 'attr': {'class': ' ' }}) }}
+					<div class="form-group row mt-3">
+						<div class="col-sm-12">
+							{{ form_widget(form.imageId, { 'attr': {'class': 'V--imageId' }}) }}
+							{{ form_errors(form.imageId) }}
+							<div id="v--imageUpload" class="d-flex justify-content-center align-items-center" style="border-radius: 6px; background-color: #f4f4f5; height:100px; width: 100%;">
+								<div class="spinner-border text-light" role="status"></div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row mb-0">
+						<div class="col-sm-12">
+							<input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-lgg btn-primary mr-1" formnovalidate>
+							{#						<a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>#}
+						</div>
+					</div>
+					{# Render CSRF token etc .#}
+					<div style="display:none">
+						{{ form_rest(form) }}
+					</div>
+					{{ form_end(form) }}
+				</div>
+			</div>
+
+			{% if images is defined %}
+				{% for image in images %}
+					<div class="card">
+						<img class="card-img-top" src="{{ uploaded_asset(image.path)|imagine_filter('unscaled_w200') }}" />
+						<div class="card-body">
+							<div class="card-text"><small class="text-muted">ID: {{ image.id }}</small></div>
+							<div class="d-flex mt-2">
+								<p class="card-text mr-2"><small class="text-muted">URL:</small></p>
+								<input type="text" id="image_{{ loop.index }}" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.url }}">
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+		{#	{% else %}#}
+		{#		<tr>#}
+		{#			<td><li><em>Nem talált CMS oldalakat!</em></li></td>#}
+		{#		</tr>#}
+			{% endif %}
+		</div>
+		{% if paginator is defined and paginator is not empty %}
+			<div class="pagerfanta">
+				{{ pagerfanta(paginator, 'twitter_bootstrap4', { 'prev_message': '← ' ~ 'generic.prev'|trans, 'next_message': 'generic.next'|trans ~ ' →'}) }}
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('StoreImageUpload') }}
+{% endblock %}

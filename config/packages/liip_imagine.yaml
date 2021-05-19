@@ -20,6 +20,13 @@ liip_imagine:
                 scale:
                     to: 1
 
+        unscaled_w200:
+            jpeg_quality: 85
+            png_compression_level: 8
+            filters:
+                relative_resize:
+                    widen: 200
+
         # available, but I'm not using it
         size_1200:
             jpeg_quality: 85

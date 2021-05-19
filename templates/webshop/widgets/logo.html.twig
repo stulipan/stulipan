@@ -1,0 +1,8 @@
+<a href="{{ path('homepage') }}" class="ml-1X">
+{#    <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo" style="height: 25px;">#}
+    {% if storeLogo is defined and storeLogo %}
+        <img src="{{ storeLogo }}" class="store-logo" height="50">
+    {% else %}
+        <span class="h4 font-weight-bold text-uppercase">{{ storeName is defined and storeName ? storeName : 'Store name' }}</span>
+    {% endif %}
+</a>

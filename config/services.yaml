@@ -69,6 +69,10 @@ services:
         tags:
             - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\Product\Product' }
             - { name: doctrine.orm.entity_listener, event: postPersist, entity: 'App\Entity\Product\Product' }
+    App\Event\SetSlugCmsNavigation:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\CmsNavigation' }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\CmsNavigation' }
     App\Event\TimestampableModel:
         tags:
             - { name: doctrine.event_listener, event: prePersist }

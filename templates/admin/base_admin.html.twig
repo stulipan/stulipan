@@ -17,7 +17,7 @@
                     </button>
                 </div>
                 <div class="sidebar-body pb-0">
-                    {% include '/admin/settings/home-widget.html.twig' %}
+                    {% include 'admin/settings/home-widget.html.twig' %}
                 </div>
 {#                <div class="sidebar-footer">#}
 {#                    <div class="loadingWrapper loadingWrapper-secondary">#}
@@ -52,10 +52,9 @@
     <div class="topnav navbar-sticky sticky-top">
         <div class="container-fluid px-0">
             <nav class="navbar navbar-dark navbar-expand-lg topnav-menu">
-
-                    <a href="/" class="navbar-brand order-lg-1 order-2 mr-4" target="_blank">
-                        <span class="h4 font-weight-bold text-uppercase text-white ml-0">tulipan<span class="text-danger">.</span>futar  </span>
-                    </a>
+                    <div class="navbar-brand order-lg-1 order-2 mr-4">
+                        {% include 'admin/widgets/logo.html.twig' with {'isBgDark': true} %}
+                    </div>
 {#                    <button class="navbar-toggler order-1" type="button" data-toggle="sidebar" data-target="#burgerMenuContent">#}
 {#                        #}{#<span class="navbar-toggler-icon"></span>#}
 {#                        <i class="fas fa-bars"></i>#}
@@ -182,7 +181,7 @@
                         </ul>
                     </div>
                     <div class="order-lg-3 order-3 d-flex">
-                        {{ include('/admin/navbar-widget.html.twig') }}
+                        {% include 'admin/navbar-widget.html.twig' %}
                     </div>
                     {#<button class="button-menu-mobile open-left disable-btn">#}
 

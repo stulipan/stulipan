@@ -2,33 +2,26 @@
 
 namespace App\Entity;
 
-use JsonSerializable;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
-use App\Entity\ImageEntity;
-use App\Services\FileUploader;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ ApiResource(
- *
- * )
- * @ORM\Entity
- * @ ORM\Entity(repositoryClass="App\Repository\CmsPageRepository")
- * @ORM\Table(name="cms_html_block")
+ * @ORM\Entity(repositoryClass="App\Repository\CmsSectionRepository")
+ * @ORM\Table(name="cms_section")
  * @UniqueEntity("slug", message="Ilyen slug már létezik!")
  */
-class CmsHtmlBlock implements JsonSerializable
+class CmsSection
 {
+    public const HOMEPAGE = 'homepage';
+    public const PRODUCT_PAGE = 'product';
+    public const COLLECTION_PAGE = 'collection';
+
     /**
      * @var int
      *
-     * @ORM\Column(type="integer", name="id", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(type="integer", name="id", length=11, nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -36,6 +29,9 @@ class CmsHtmlBlock implements JsonSerializable
 
     /**
      * @var string
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="block_name", type="string", length=100, nullable=false)
      * @Assert\NotBlank(message="Adj nevet a HTML modulnak.")
@@ -44,6 +40,9 @@ class CmsHtmlBlock implements JsonSerializable
 
     /**
      * @var string
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="slug", type="string", length=100, nullable=false, unique=true)
      * @Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
@@ -66,38 +65,31 @@ class CmsHtmlBlock implements JsonSerializable
 
     /**
      * @var string|null
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="content", type="text", length=65535, nullable=true)
      */
     private $content;
 
     /**
-     * @var CmsPage|null
+     * @var string|null
      *
-     * ==== Many HTML blocks in one CMS Page ====
-     *
-     * @ORM\ManyToOne(targetEntity="CmsPage", inversedBy="htmlBlocks")
-     * @ORM\JoinColumn(name="block_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @ Assert\NotBlank(message="Rendelj legalább egy HTML modult a CMS oldalhoz.")
+     * @ORM\Column(name="belongs_to", type="text", length=65535, nullable=true)
      */
-    private $page;
+    private $belongsTo;
 
-    /**
-     * {@inheritdoc}
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id'                => $this->getId(),
-            'name'              => $this->getName(),
-            'slug'              => $this->getSlug(),
-            'description'       => $this->getDescription(),
-            'enabled'           => $this->getEnabled(),
-            'content'           => $this->getContent(),
-            'page'              => $this->getPage(),
-//            'subpages'     => $this->getSubpages(),
-        ];
-    }
+//    /**
+//     * @var CmsPage|null
+//     *
+//     * ==== Many HTML blocks in one CMS Page ====
+//     *
+//     * @ORM\ManyToOne(targetEntity="CmsPage", inversedBy="htmlBlocks")
+//     * @ORM\JoinColumn(name="block_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+//     * @ Assert\NotBlank(message="Rendelj legalább egy HTML modult a CMS oldalhoz.")
+//     */
+//    private $page;
 
     /**
      * @return int
@@ -106,19 +98,12 @@ class CmsHtmlBlock implements JsonSerializable
     {
         return $this->id;
     }
-    
-//    /**
-//     * The setId is required for the Serializer/Normalizer to be able to create
-//     * the subentities, and it must return the current entity !!
-//     *
-//     * @param int $id
-//     * @return CmsPage
-//     */
-//    public function setId(int $id): CmsPage
-//    {
-//        $this->id = $id;
-//        return $this;
-//    }
+
+    public function setId(int $id): CmsSection
+    {
+        $this->id = $id;
+        return $this;
+    }
     
     /**
      * @return string
@@ -217,18 +202,36 @@ class CmsHtmlBlock implements JsonSerializable
     }
 
     /**
-     * @return CmsPage|null
+     * @return string|null
      */
-    public function getPage(): ?CmsPage
+    public function getBelongsTo(): ?string
     {
-        return $this->page;
+        return $this->belongsTo;
     }
 
     /**
-     * @param CmsPage|null $page
+     * @param string|null $belongsTo
      */
-    public function setPage(?CmsPage $page): void
+    public function setBelongsTo(?string $belongsTo): void
     {
-        $this->page = $page;
+        $this->belongsTo = $belongsTo;
     }
+
+
+
+//    /**
+//     * @return CmsPage|null
+//     */
+//    public function getPage(): ?CmsPage
+//    {
+//        return $this->page;
+//    }
+//
+//    /**
+//     * @param CmsPage|null $page
+//     */
+//    public function setPage(?CmsPage $page): void
+//    {
+//        $this->page = $page;
+//    }
 }

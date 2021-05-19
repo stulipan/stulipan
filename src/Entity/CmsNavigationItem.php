@@ -2,24 +2,16 @@
 
 namespace App\Entity;
 
-use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
-use App\Entity\ImageEntity;
-use App\Services\FileUploader;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="cms_navigation_item")
  * @ UniqueEntity("slug", message="Ilyen slug már létezik!")
  */
-class CmsNavigationItem implements JsonSerializable
+class CmsNavigationItem
 {
     /**
      * @var int
@@ -32,6 +24,9 @@ class CmsNavigationItem implements JsonSerializable
 
     /**
      * @var string
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="item_name", type="string", length=100, nullable=false)
      * @Assert\NotBlank(message="Adj nevet a HTML modulnak.")
@@ -40,14 +35,20 @@ class CmsNavigationItem implements JsonSerializable
 
     /**
      * @var string
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=false, unique=true)
-     * @Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
+     * @ Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
      */
     private $url;
 
     /**
      * @var bool
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false, options={"default"=true})
      */
@@ -63,18 +64,6 @@ class CmsNavigationItem implements JsonSerializable
      * @ Assert\NotBlank(message="Rendelj legalább egy HTML modult a CMS oldalhoz.")
      */
     private $navigation;
-
-    /**
-     * {@inheritdoc}
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id'                => $this->getId(),
-            'name'              => $this->getName(),
-            'url'               => $this->getSlug(),
-        ];
-    }
 
     /**
      * @return int

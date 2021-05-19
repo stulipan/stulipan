@@ -149,7 +149,7 @@
                 </div>
             </li>
 
-            <li class="sidenav-item {% if activeMenu is defined and activeMenu == 'cms' %}sidenav-item-show{% endif %}">
+            <li class="sidenav-item sidenav-item-open {% if activeMenu is defined and activeMenu == 'cms' %}sidenav-item-show{% endif %}">
                 <a href="{{ path('cms-page-list') }}" class="sidenav-link">
                     <div class="sidenav-item-content">
                         <div class="d-flex align-items-center">
@@ -157,7 +157,7 @@
 {#                                <i class="far fa-file-code"></i>#}
                                 <i class="fas fa-columns"></i>
                             </div>
-                            <span>CMS oldalak</span>
+                            <span>{{ 'page.pages'|trans }}</span>
                         </div>
                         <div class="d-flex align-items-center">
                             <span class="badge badge-warning float-right">NEW</span>
@@ -169,13 +169,25 @@
                         <div class="sidenav-icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
-                        <span>CMS oldalak</span>
+                        <span>{{ 'page.pages'|trans }}</span>
+                    </a>
+                    <a href="{{ path('cms-section-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'cms-page-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="far fa-file-code"></i>
+                        </div>
+                        <span>{{ 'cms.section.sections'|trans }}</span>
                     </a>
                     <a href="{{ path('cms-navigation-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'cms-navigation-list' %}nav-subitem-selected{% endif %}">
                         <div class="sidenav-icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
-                        <span>Navigation</span>
+                        <span>{{ 'cms.navigation.navigations'|trans }}</span>
+                    </a>
+                    <a href="{{ path('image-list') }}" class="sidenav-dropdown-item {% if app.request.get('_route') == 'image-list' %}nav-subitem-selected{% endif %}">
+                        <div class="sidenav-icon">
+                            <i class="far fa-images"></i>
+                        </div>
+                        <span>Képek</span>
                     </a>
                 </div>
             </li>

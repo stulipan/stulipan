@@ -11,9 +11,7 @@
         <div class="sidebar-dialog sidebar-dialog-scrollable sidebar-dialog-centered" role="document">
             <div class="sidebar-content">
                 <div class="sidebar-header p-2X">
-                    <a href="{{ path('homepage') }}" class="ml-1">
-                        <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo" style="height: 25px;">
-                    </a>
+                    {% include 'webshop/widgets/logo.html.twig' %}
 {#                    <h3 class="sidebar-title" id="mobileMenuLabel">Rendelés: <span class="font-weight-bold">#21043523</span></h4>#}
                         <button type="button" class="close modal-close" data-dismiss="sidebar" aria-label="Close" style="height: 50px;">
                             <span aria-hidden="true">&times;</span>
@@ -65,10 +63,7 @@
 
                         <!-- Navbar Logo -->
                         <div class="navbar--logo d-flex justify-content-md-start flex-grow-1 order-md-2 order-3 ml-2X ml-md-0">
-                            <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
-                                <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">
-{#                                <span class="h3 font-weight-bold text-uppercase text-dark">tulipan<span class="text-danger">.</span>futar  </span>#}
-                            </a>
+                            {% include 'webshop/widgets/logo.html.twig' %}
                         </div>
 
                         <!-- Navbar Login Cart -->
@@ -153,6 +148,42 @@
             </div>
         </div>
     </main>
+
+    {% block footerHighlights %}
+        <div class="bg-light py-4 py-lg-6">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 service-column">
+                        <svg class="svg-icon svg-icon-light svg-icon-md mr-3 mr-sm-4">
+                            <use xlink:href="#label-tag-1"></use>
+                        </svg>
+                        <div class="service-text">
+                            <h6 class="text-uppercase">Kézzel készült</h6>
+                            <p class="text-muted font-weight-light text-sm mb-0">Minden terméket kézzel állítunk össze.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 service-column">
+                        <svg class="svg-icon svg-icon-light svg-icon-md mr-3 mr-sm-4">
+                            <use xlink:href="#money-1"> </use>
+                        </svg>
+                        <div class="service-text">
+                            <h6 class="text-uppercase">Kockázatmentes vásárlás</h6>
+                            <p class="text-muted font-weight-light text-sm mb-0">30 napos visszaküldési garancia</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 service-column">
+                        <svg class="svg-icon svg-icon-light svg-icon-md mr-3 mr-sm-4">
+                            <use xlink:href="#delivery-time-1"> </use>
+                        </svg>
+                        <div class="service-text">
+                            <h6 class="text-uppercase">Országos szállítás</h6>
+                            <p class="text-muted font-weight-light text-sm mb-0">Az egész országba szállítunk.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
 
 {#    {% block footerHighlights %}#}
 {#        <div class="bg-secondary py-5">#}
@@ -251,23 +282,23 @@
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
                                 <h5 class="text-uppercase mb-3">Termékek</h5>
                                 <ul class="list-unstyled">
-                                    {% for item in navigations.footerTermekek.navigationItems %}
+                                    {% set nav = navigation|fetchNavigationBySlug('footer-termekek') %}
+                                    {% if nav is defined and nav %}
+                                    {% for item in nav.navigationItems %}
                                         <li class="mb-2"> <a href="{{ item.url }}" class="text-decoration-none" title="{{ item.name }}">{{ item.name }}</a></li>
                                     {% endfor %}
-{#                                    <li class="mb-2"> <a href="/termekek/kopogtatok" class="text-decoration-none" title="Virágcsokrok">Kopogtatók, ajtódíszek</a></li>#}
-{#                                    <li class="mb-2"> <a href="/termekek/viragdobozok" class="text-decoration-none" title="Virágboxok">Virágdobozok</a></li>#}
+                                    {% endif %}
                                 </ul>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 mb-3 mb-lg-0">
                                 <h5 class="text-uppercase mb-3">Információk</h5>
                                 <ul class="list-unstyled">
-                                    {% for item in navigations.footerInformaciok.navigationItems %}
+                                    {% set nav = navigation|fetchNavigationBySlug('footer-informaciok') %}
+                                    {% if nav is defined and nav %}
+                                    {% for item in nav.navigationItems %}
                                         <li class="mb-2"> <a href="{{ item.url }}" class="text-decoration-none" title="{{ item.name }}">{{ item.name }}</a></li>
                                     {% endfor %}
-{#                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="text-decoration-none">Rólunk</a></li>#}
-{#                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" class="text-decoration-none">Szállítási díjak</a></li>#}
-{#                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'aszf'}) }}" class="text-decoration-none">ÁSZF</a></li>#}
-{#                                    <li class="mb-2"> <a href="{{ path ('site-page-show', { 'slug': 'privacy'}) }}" class="text-decoration-none">Adatvédelmi szabályzat</a></li>#}
+                                    {% endif %}
                                 </ul>
                             </div>
 {#                            <div class="col-sm-6 col-md-12 col-lg-3">#}

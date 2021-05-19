@@ -86,11 +86,6 @@ class CmsPageFormType extends AbstractType
 //                'placeholder' => 'Képfeltöltés...',
 //            ]
 //        ]);
-        $builder->add('image', TextType::class, [
-            'mapped' => false,
-            'required' => false,
-//            'data' => $options['data']->getImagePath(),
-        ]);
         $builder->add('imageId', HiddenType::class, [
             'mapped' => false,
             'required' => false,

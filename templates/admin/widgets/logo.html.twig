@@ -1,3 +1,15 @@
-        <span class="logo-lg">
-                <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">
-        </span>
+<a href="{{ path('homepage') }}" class="ml-1X">
+    {% if storeLogo is defined and storeLogo %}
+        {% if isBgDark is defined and isBgDark == true %}
+                <img src="{{ storeLogoInverted is defined and storeLogoInverted ? storeLogoInverted : storeLogo }}" class="store-logo" height="40">
+        {% else %}
+                <img src="{{ storeLogo }}" class="store-logo" height="40">
+        {% endif %}
+    {% else %}
+        {% if isBgDark is defined and isBgDark == true %}
+            <span class="h4 font-weight-bold text-uppercase text-white">{{ storeName is defined and storeName ? storeName : 'Store name' }}</span>
+        {% else %}
+            <span class="h4 font-weight-bold text-uppercase">{{ storeName is defined and storeName ? storeName : 'Store name' }}</span>
+        {% endif %}
+    {% endif %}
+</a>

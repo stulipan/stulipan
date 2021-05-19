@@ -2,29 +2,20 @@
 
 namespace App\Entity;
 
-//use ApiPlatform\Core\Annotation\ApiResource;
-use JsonSerializable;
-use phpDocumentor\Reflection\Types\This;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
-use App\Entity\ImageEntity;
 use App\Services\FileUploader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ ApiResource(
- *
- * )
  * @ORM\Entity(repositoryClass="App\Repository\CmsPageRepository")
  * @ORM\Table(name="cms_page")
  * @UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
  */
-class CmsPage implements JsonSerializable
+class CmsPage
 {
     /**
      * @var int
@@ -37,6 +28,9 @@ class CmsPage implements JsonSerializable
 
     /**
      * @var string
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="page_name", type="string", length=100, nullable=false)
      * @Assert\NotBlank(message="Adj nevet a CMS oldalnak.")
@@ -45,6 +39,9 @@ class CmsPage implements JsonSerializable
 
     /**
      * @var string
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="slug", type="string", length=100, nullable=false, unique=true)
      * @Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
@@ -53,6 +50,9 @@ class CmsPage implements JsonSerializable
 
     /**
      * @var string|null
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="content", type="text", length=65535, nullable=true)
      */
@@ -103,11 +103,11 @@ class CmsPage implements JsonSerializable
     private $enabled = 0;
 
     /**
-     * @var CmsHtmlBlock[]|ArrayCollection|null
+     * @var CmsSection[]|ArrayCollection|null
      *
      * ==== One CMS Page has many product HTML blocks ====
      *
-     * @ORM\OneToMany(targetEntity="CmsHtmlBlock", mappedBy="page", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="CmsSection", mappedBy="page", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="id", referencedColumnName="block_id", nullable=false)
      * @ Assert\NotBlank(message="Egy HTML modulnak legalább egy CMS oldalhoz tartozik.")
      */
@@ -119,23 +119,6 @@ class CmsPage implements JsonSerializable
         $this->htmlBlocks = new ArrayCollection();
     }
     
-    /**
-     * {@inheritdoc}
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id'                => $this->getId(),
-            'name'              => $this->getName(),
-            'slug'              => $this->getSlug(),
-            'content'           => $this->getContent(),
-            'parent'            => $this->getParent(),
-            'enabled'           => $this->getEnabled(),
-            'image'             => $this->getImage(),
-            'imageUrl'          => $this->getImageUrl(),
-//            'subpages'     => $this->getSubpages(),
-        ];
-    }
 
     /**
      * @return int
@@ -336,7 +319,7 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @return CmsHtmlBlock[]|Collection|null
+     * @return CmsSection[]|Collection|null
      */
     public function getHtmlBlocks(): ?Collection
     {
@@ -344,9 +327,9 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @param CmsHtmlBlock $item
+     * @param CmsSection $item
      */
-    public function addHtmlBlock(CmsHtmlBlock $item)
+    public function addHtmlBlock(CmsSection $item)
     {
         if (!$this->htmlBlocks->contains($item)) {
             $item->setPage($this);
@@ -355,9 +338,9 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @param CmsHtmlBlock $item
+     * @param CmsSection $item
      */
-    public function removeHtmlBlock(CmsHtmlBlock $item)
+    public function removeHtmlBlock(CmsSection $item)
     {
         $item->setPage(null);
         $this->htmlBlocks->removeElement($item);

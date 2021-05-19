@@ -1,0 +1,9 @@
+// Logo
+
+.store-logo {
+  height: 50px;
+
+  @include media-breakpoint-down(md) {
+    height: 25px;
+  }
+}

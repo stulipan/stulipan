@@ -6,6 +6,7 @@ namespace App\Event;
 
 use App\Entity\Product\Product;
 use App\Services\Localization;
+use App\Services\SlugBuilder;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -20,12 +21,15 @@ class SetSlugProduct
      * @var EntityManagerInterface
      */
     private $em;
-    private $slug;
+    /**
+     * @var SlugBuilder
+     */
+    private $slugBuilder;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, SlugBuilder $slugBuilder)
     {
         $this->em = $em;
-        $this->slug = new Slugify(['rulesets' => Localization::SLUGIFY_RULES]);
+        $this->slugBuilder = $slugBuilder;
     }
     
     /**
@@ -48,7 +52,7 @@ class SetSlugProduct
      */
     public function postPersist(Product $product, LifeCycleEventArgs $args)
     {
-        $slug = $this->slug->slugify($product->getName());
+        $slug = $this->slugBuilder->slugify($product->getName());
         $product->setSlug($slug . '-p' . $product->getId());  // adds a '-p37432'
 
         $em = $args->getObjectManager();

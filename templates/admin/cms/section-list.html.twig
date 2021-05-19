@@ -1,0 +1,95 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set activeMenu = 'cms' %}
+{% set pageTitle = 'cms.section.sections'|trans %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+} %}
+
+{% block headerActionsWrapper %}
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">
+		<ul class="nav nav-tabs adaptive-primary">
+			<li class="nav-item adaptive-item">
+				<a href="{{ path('cms-section-list') }}" class="nav-link">{{ '' }}</a>
+			</li>
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	<a href="{{ path('cms-section-new') }}" class="btn btn-primary">{{ 'cms.section.new-section'|trans }}</a>
+{% endblock %}
+
+{% block tableHeader %}
+	<tr>
+		<th scope="col">Név</th>
+		<th scope="col">Slug</th>
+		<th scope="col">Aktív</th>
+		<th scope="col">Szülő</th>
+		<th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+	</tr>
+{% endblock %}
+
+{% block tableBody %}
+	{% if sections is defined and sections is not empty %}
+		{% for section in sections %}
+			<tr>
+				<td class="align-middle">
+					<a href="{{ path('cms-section-edit', {'id': section.id}) }}" class="">
+						{{ section.name }}
+					</a>
+				</td>
+				<td class="align-middle">
+					{{ section.slug }}
+				</td>
+				<td class="align-middle">
+					{% if section.enabled is defined and section.enabled == true %}
+						<span class="badge badge-success">&nbsp;</span>
+					{% else %}
+						<span class="badge badge-secondary">&nbsp;</span>
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					{% if section.belongsTo is defined and section.belongsTo is not null %}
+						{{ section.belongsTo }}
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					<div class="w-100">
+						{#                            <a href="{{ path('product-edit', {'id': product.id}) }}" class="btn btn-sm btn-secondary" title="Módosít">#}
+						<i class="far fa-edit"></i>
+						{#							</a>#}
+						{#                            <a href="{{ path('site-product-show', {'id': product.id}) }}" class="btn btn-sm btn-secondary" target="_blank" title="Megtekinti a weboldalon">#}
+						{#                                <i class="fas fa-external-link-alt"></i>#}
+						{#							</a>#}
+						{#                            <a href="{{ path('product-delete', {'id': product.id}) }}" onclick="alert('Biztosan törölni akarod?')" class="btn btn-sm btn-secondary" title="Töröl">#}
+						{#                                <i class="far fa-trash-alt"></i>#}
+						{#							</a>#}
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+{% endblock %}
+
+
+{% block tableEmpty %}
+	{% if sections is defined and sections is empty %}
+		<div class="h-100 text-center p-4">
+			<div class="h1 text-muted-extra">
+				<i class="fas fa-search"></i>
+			</div>
+			<div class="font-18 mt-3 mb-2">{{ 'cms.section.sections-not-found'|trans }}</div>
+			<div class="text-muted-extra">{{ 'cms.section.sections-not-found-suggestion'|trans }}</div>
+		</div>
+	{% endif %}
+{% endblock %}

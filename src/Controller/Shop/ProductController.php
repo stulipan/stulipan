@@ -4,6 +4,7 @@ namespace App\Controller\Shop;
 
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductCategory;
+use App\Entity\Product\ProductStatus;
 use App\Form\AddToCart\CartAddItemType;
 use App\Services\StoreSettings;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,14 +75,19 @@ class ProductController extends AbstractController
         $product = $this->getDoctrine()->getRepository(Product::class)->findOneBy(['slug' => $slug]);
         if (!$product) {
             throw $this->createNotFoundException('Nem talált egy terméket sem, ezzel az ID-vel');
-            //return $this->redirectToRoute('404');
         }
 //        $form = $this->createForm(CartAddItemType::class, $product, ['subproducts' => $product->getSubproducts()]);
         $form = $this->createForm(CartAddItemType::class, $product, ['options' => $product->getOptions()]);
 
-        // render a template and print things with {{ termek.productName }}
+        $productStatus = $this->getDoctrine()->getRepository(ProductStatus::class)->findBy(['shortcode' => ProductStatus::STATUS_ENABLED]);
+        $recommendedProducts = $this->getDoctrine()->getRepository(Product::class)->findBy(
+            ['status' => $productStatus],
+            [],
+            12
+        );
         return $this->render('webshop/site/product-show.html.twig', [
             'product' => $product,
+            'recommendedProducts' => $recommendedProducts,
             'form' => $form->createView(),
         ]);
     }

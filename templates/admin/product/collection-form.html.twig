@@ -23,9 +23,9 @@
 
             <div class="card mb-20px">
                 <div class="card-body">
-                    <div class="form-group row mb-0">
+                    <div class="h5 mb-0">{{ 'collection.image'|trans }}</div>
+                    <div class="form-group row mb-0 mt-3">
                         <div class="col-sm-12">
-                            <div class="mb-1">{{ 'collection.image'|trans }}</div>
                             {{ form_widget(form.imageId, { 'attr': {'class': 'V--imageId' }}) }}
                             {{ form_errors(form.imageId) }}
                             <div id="v--imageUpload" class="d-flex justify-content-center align-items-center" style="border-radius: 6px; background-color: #f4f4f5; height:100px; width: 100%;">
@@ -38,23 +38,20 @@
 
             <div class="card mb-20px">
                 <div class="card-body">
+                    <div class="h5 mb-0">SEO</div>
+                    <div class="form-group row mt-3">
+                        <div class="col-sm-12">
+                            {{ form_label(form.seoContent, form.seoContent, { 'label_attr': {'class': '' }, 'label': 'collection.seo-content'|trans}) }}
+                            {{ form_widget(form.seoContent, {'attr': {'class': 'JS--TinyMce-description', rows: 4}}) }}
+                            {{ form_errors(form.seoContent) }}
+                        </div>
+                    </div>
                     <div class="form-group row mb-0">
                         <div class="col-sm-12">
                             {{ form_label(form.slug, form.slug, { 'label_attr': {'class': '' }, 'label': 'collection.slug'|trans}) }}
                             {{ form_widget(form.slug) }}
                             {{ form_errors(form.slug) }}
                             <div class="form-text">{{ 'collection.slug-help'|trans }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-20px">
-                <div class="card-body">
-                    <div class="form-group row mb-0">
-                        <div class="col-sm-12">
-                            {{ form_label(form.seoContent, form.seoContent, { 'label_attr': {'class': '' }, 'label': 'collection.seo-content'|trans}) }}
-                            {{ form_widget(form.seoContent, {'attr': {'class': 'JS--TinyMce-description', rows: 4}}) }}
-                            {{ form_errors(form.seoContent) }}
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 //use ApiPlatform\Core\Annotation\ApiResource;
+use App\Services\FileUploader;
 use Doctrine\ORM\Mapping as ORM;
 use Imagine\Gd\Image;
 use JsonSerializable;
@@ -11,12 +12,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ImageEntityRepository")
  * @ORM\Table(name="image")
  */
 
 class ImageEntity implements JsonSerializable
 {
+    const PRODUCT_IMAGE = 'product';
+    const STORE_IMAGE = 'store';
+
     /**
      * @var int
      * @Groups({
@@ -49,6 +53,28 @@ class ImageEntity implements JsonSerializable
      * @Assert\File(mimeTypes={ "image/png", "image/jpeg", "image/jpg" }, mimeTypesMessage="blabla")
      */
     private $file;
+
+    /**
+     * @var string
+     * @Groups({
+     *     "main",
+     *     "productView", "productList"
+     * })
+     *
+     * @ORM\Column(name="type", type="string", nullable=false)
+     *
+     * @Assert\NotBlank(message="Add meg a kép típusát.")
+     */
+    private $type;
+
+    /**
+     * @var string|null
+     * @Groups({
+     *     "main",
+     *     "productView", "productList"
+     * })
+     */
+    private $url;
     
     /**
      * {@inheritdoc}
@@ -111,5 +137,60 @@ class ImageEntity implements JsonSerializable
     public function setFile(?string $file)
     {
         $this->file = $file;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string|null $type
+     */
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Returns "store/image_filename.jpeg"
+     * Constructs the relative path string.
+     *
+     * @return string
+     */
+    public function getPath(): ?string
+    {
+        if ($this->getFile()) {
+            if ($this->type === self::STORE_IMAGE) {
+                return FileUploader::WEBSITE_FOLDER_NAME.'/'.$this->getFile();
+            }
+            if ($this->type === self::PRODUCT_IMAGE) {
+                return FileUploader::PRODUCTS_FOLDER_NAME.'/'.$this->getFile();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * This is used in App\Event\ImageSetFullPath service/event. The service calls setImageUrl to set full URL to the image (eg: https://www....../image_filename.jpeg )
+     * @param null|string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * Return full URL: http://stulipan.dfr/media/cache/resolve/product_small/uploads/images/products/ethan-haddox-484912-unsplash-5ceea70235e84.jpeg
+     * This is to be used API
+     *
+     * @return null|string
+     */
+    public function getUrl(): ?string
+    {
+        return $this->url;
     }
 }

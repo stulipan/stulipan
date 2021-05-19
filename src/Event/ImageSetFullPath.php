@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Event;
 
+use App\Entity\ImageEntity;
 use App\Entity\Product\ProductCategory;
 use App\Entity\Product\ProductImage;
 use App\Services\FileUploader;
@@ -62,6 +63,15 @@ class ImageSetFullPath implements ServiceSubscriberInterface
                     $this->cacheManager->getBrowserPath($publicPath, 'unscaled')
                 );
             }
+        }
+
+        if ($entity instanceof ImageEntity) {
+//            if ($entity->getType() == ImageEntity::STORE_IMAGE) {
+                $publicPath = $this->fileUploader->getPublicPath($entity->getPath());
+                $entity->setUrl(
+                    $this->cacheManager->getBrowserPath($publicPath, 'unscaled')
+                );
+//            }
         }
     }
 

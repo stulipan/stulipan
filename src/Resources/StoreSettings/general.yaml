@@ -20,6 +20,14 @@ parameters:
             content: ' '
             type: Text
             label: 'Ügyfélszolgálati telefonszám'
+        logo:
+            content: 'http://www.stulipan.dfr/media/cache/resolve/unscaled/uploads/images/store/rafina-budapest-logo-324x100-60a0d964b7c51.png'
+            type: Text
+            label: Logó
+        logo-inverted:
+            content: 'http://www.stulipan.dfr/media/cache/resolve/unscaled/uploads/images/store/rafina-budapest-logo-WHITE-324x100-60a13e8f20d61.png'
+            type: Text
+            label: 'Fordított logó (Pl. ha az alap logó fekete, akkor ez fehér lesz. És fordítva)'
         brand:
             content: RAFINA
             type: Text
@@ -74,7 +82,6 @@ parameters:
             content: 'Rafina lakás és otthon dekor, ajtódíszek, kopogtatók, rózsaboxok'
             type: Text
             label: 'Meta footer'
-
     social:
         label:
             content: 'Közösségi elérhetőségek'

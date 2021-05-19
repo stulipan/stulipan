@@ -208,7 +208,6 @@ settings:
         edit-payment-method: Edit payment method
         new-payment-method-description: Feel free to add and set up new payment methods.
         payment-methods-description: Manage your payment methods, by adding new one or editing existing methods.
-
 customer:
     customer: Customer
     customers: Customers
@@ -237,6 +236,27 @@ customer:
     orders-count: '{{ count }} orders'
     accepts-marketing: Subscribed
 cms:
+    section:
+        sections: Sections
+        new-section: New section
+        sections-not-found: No section was found!
+        sections-not-found-suggestion: Try modifying the filters.
+        new-section-created-successfully: New section was successfully created!
+        name: section name
+        content: Content
+        slug: Slug
+        slug-help: 'Eg.: ''beauty-and-cosmetics''.'
+        enabled: Enabled
+        parent-page: Parent page
+        name-is-missing: Enter the section name.
+        slug-is-missing: 'The slug can''t be empty. Slug example: ''beauty-and-cosmetics'''
+        slug-already-in-use: 'Slug already in use. The slug must be unique. Possible solution: Add a ''-1'' to the end.'
+        page-is-missing: Select a page this section belongs to.
+        section-saved-successfully: Section saved successfully.
+        homepage: Homepage
+        product-page: Product page
+        collection-page: Collection page
+
     navigation:
         navigation: Navigation
         navigations: Navigation list

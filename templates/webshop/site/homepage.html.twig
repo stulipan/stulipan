@@ -34,6 +34,54 @@
         </div>
     </div>
 
+    {{ homepage.bannerTrio.content|raw }}
+{#    <div class="container">#}
+{#        <div class="row mt-6">#}
+{#            <div class="col-xl-8 mx-auto text-center">#}
+{#                <h2 class="hero-2 text-uppercase">Nyári kollekció</h2>#}
+{#                <p class="lead text-muted">Alakíts ki egy élhető és kényelmes életteret. Lehet meghitt vagy játékos, színes vagy egy színű, de ami számít, az az, hogy neked vibráljon, érzékeidre hasson, legyen neked való.</p>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row mt-5">#}
+{#            <div class="col-md-6 d-flex align-items-md-stretch mb-20px mb-md-0">#}
+{#                <div class="d-flex position-relative align-items-center text-white dark-overlay w-100 text-center py-6 py-md-0" style="background: center center url(http://www.stulipan.dfr/media/cache/resolve/unscaled/uploads/images/store/IMG_7080-609f26820469d.jpg) no-repeat; background-size: cover;">#}
+{#                    <a href="category.html" class="tile-link"> </a>#}
+{#                    <div class="card-img-overlay w-100 overlay-content">#}
+{#                        <h2 class="display-3 font-weight-bold text-uppercase mb-0">BeachVibe</h2>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="col-md-6">#}
+{#                <div class="card border-0 text-white text-center mb-20px dark-overlay">#}
+{#                    <div class="d-flex align-items-center img-thumbnail img-preview" style="height: 350px;">#}
+{#                        <div class="w-100">#}
+{#                            <img src="http://www.stulipan.dfr/media/cache/resolve/unscaled/uploads/images/store/IMG_7110-609f2a6410f5a.jpg" alt="Kopogtatók, ajtódíszek" class="card-img">#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <a href="{{ path('site-product-list', {'slug': 'kopogtatok'}) }}" class="tile-link"> </a>#}
+{#                    <div class="card-img-overlay d-flex align-items-center">#}
+{#                        <div class="text-center w-100 overlay-content">#}
+{#                            <h2 class="display-4 font-weight-bold text-uppercase text-center mb-0">PinkUp!</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="card border-0 text-white text-center dark-overlay">#}
+{#                    <div class="d-flex align-items-center img-thumbnail img-preview" style="height: 350px;">#}
+{#                        <div class="w-100">#}
+{#                            <img src="http://www.stulipan.dfr/media/cache/unscaled/uploads/images/store/IMG_6843-6086832e729d3.jpg" alt="Rafina" class="card-img">#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <a href="category.html" class="tile-link"> </a>#}
+{#                    <div class="card-img-overlay d-flex align-items-center">#}
+{#                        <div class="text-center w-100 overlay-content">#}
+{#                            <h2 class="display-4 font-weight-bold text-uppercase text-center mb-0">Candy</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
 	<!-- Banner area -->
 {#    <div class="container py-3 pb-5 mt-2">#}
 {#        <div class="row">#}
@@ -78,14 +126,14 @@
 	<!-- /Banner area -->
 
     <!-- Product list -->
-    <div class="container pb-5 mt-5">
+    <div class="container pb-5 mt-6">
         <div class="row">
             <div class="products-grid col-12 sidebar-none">
                 <div class="hero-content text-center">
-                    <h2 class="">Termékeink</h2>
+                    <h2 class="hero-2">Újdonságok</h2>
                 </div>
 
-                {{ include('/webshop/site/product-list-widget.html.twig') }}
+                {{ include('webshop/site/product-list-widget.html.twig') }}
 
             </div>
         </div>

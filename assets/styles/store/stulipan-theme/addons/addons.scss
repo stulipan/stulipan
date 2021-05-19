@@ -5,6 +5,7 @@
 @import "_collapse-show-toggle";
 @import "_field-group";
 @import "_input-float";
+@import "_logo";
 @import "_review";
 @import "_ribbon";
 @import "_switch";
@@ -166,36 +167,6 @@ iframe {
   background-color: #F3EED9;
 }
 
-$service-icon-width:                  75px;
-$service-icon-height:                 50px;
-
-.service-icon {
-  display: block;
-  width: $service-icon-width;
-  margin-right: 1.5rem;
-
-  @include media-breakpoint-up(sm) {
-    width: 40%;
-    margin-right: 0;
-  }
-
-  img {
-    width: auto;
-    max-height: $service-icon-height;
-  }
-}
-
-.service-text {
-  width: auto;
-  text-align: left;
-  margin-top: 0;
-
-  @include media-breakpoint-up(sm) {
-    width: 100%;
-    text-align: center;
-    margin-top: 1.5rem;
-  }
-}
 
 .jumbotron--cover {
   background-repeat: no-repeat;
@@ -206,24 +177,6 @@ $service-icon-height:                 50px;
   &.jumbotron--cover-collection {
     min-height: 300px;
   }
-}
-
-.light-overlay:after,
-.dark-overlay:after {
-  content: ' ';
-  width: 100%;
-  height: 100%;
-  background: #000;
-  background: linear-gradient(#848484, #000000);
-  opacity: .3;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.light-overlay:after {
-  background: #fff !important;
-  opacity: .3 !important;
 }
 
 .img-unavailable {

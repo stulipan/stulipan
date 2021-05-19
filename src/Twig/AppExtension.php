@@ -4,21 +4,25 @@ namespace App\Twig;
 
 use App\Entity\CmsNavigation;
 use App\Entity\CmsPage;
-use App\Entity\CmsPage4Twig;
+use App\Entity\CmsSection;
 use App\Services\DateFormatConvert;
 use App\Services\FileUploader;
 use App\Services\Localization;
+use App\Services\SlugBuilder;
 use App\Services\StoreSettings;
-use Cocur\Slugify\Slugify;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use phpDocumentor\Reflection\Types\This;
 use Psr\Container\ContainerInterface;
 use stdClass;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
@@ -40,11 +44,15 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     private $convert;
 
     private $storeSettings;
+    /**
+     * @var SlugBuilder
+     */
+    private $slugBuilder;
 
     public function __construct(ContainerInterface $container, SessionInterface $session,
                                 Localization $localization, TranslatorInterface $translator,
                                 EntityManagerInterface $em, DateFormatConvert $convert,
-                                StoreSettings $storeSettings)
+                                StoreSettings $storeSettings, SlugBuilder $slugBuilder)
     {
         $this->container = $container;
         $this->locale = $localization->getLocale($session->get('_locale', 'hu'));
@@ -52,6 +60,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         $this->em = $em;
         $this->convert = $convert;
         $this->storeSettings = $storeSettings;
+        $this->slugBuilder = $slugBuilder;
     }
 
     public function getFunctions(): array
@@ -65,14 +74,18 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     public function getGlobals(): array
     {
         return [
-            'pages' => $this->getPages(),
             'copyrightYear' => $this->createCopyrightYear(),
             'storeUrl' => $this->storeSettings->get('store.url'),
             'storeName' => $this->storeSettings->get('store.name'),
             'storeEmail' => $this->storeSettings->get('store.email'),
+            'storeLogo' => $this->storeSettings->get('store.logo'),
+            'storeLogoInverted' => $this->storeSettings->get('store.logo-inverted'),
             'storeBrand' => $this->storeSettings->get('store.brand'),
             'flowerShopMode' => $this->storeSettings->get('general.flower-shop-mode'),
-            'navigations' => $this->getNavigations(),
+
+            'pages' => $this->getPages(),
+            'navigation' => $this->getNavigations(),
+            'homepage' => $this->getHomepageSections(),
         ];
     }
 
@@ -100,40 +113,45 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFilter('money', [$this, 'formatMoney']),
             new TwigFilter('number', [$this, 'formatNumber']),
             new TwigFilter('momentJsFormat', [$this, 'convertDateFormatFromPhpToMomentJs']),
+            new TwigFilter('castToArray', [$this, 'castStdObjectToAssociativeArray']),
+            new TwigFilter('fetchNavigationBySlug', [$this, 'fetchNavigationBySlug']),
         ];
     }
 
 
     public function getPages()
     {
-        $cmsPages = $this->em->getRepository(CmsPage::class)->findAll();
-
+//        $cmsPages = $this->em->getRepository(CmsPage::class)->findAll();
+        $cmsPages = $this->em->getRepository(CmsPage::class)->findBy(['enabled' => true]);
         if ($cmsPages) {
-            $pages = [];
-            foreach ($cmsPages as $page => $value) {
-                $pages[$value->getSlug()] = $value;
-            }
-            $pages = $this->convertToObject($pages);
-            return $pages;
+            return $this->convertAssociativeArrayToStdObject($cmsPages, ['groups' => 'view']);
         }
         return null;
     }
 
     public function getNavigations()
     {
-        $navigations = $this->em->getRepository(CmsNavigation::class)->findAllOrdered();
-
+        $navigations = $this->em->getRepository(CmsNavigation::class)->findBy(['enabled' => true]);
         if ($navigations) {
-            $navigations = $navigations->execute();
+//            return $this->convertAssociativeArrayToStdObject($navigations, ['groups' => 'view']);
+            return $navigations;
+        }
+        return null;
+    }
 
-            $navs = [];
-            foreach ($navigations as $navigation => $value) {
-                $slug = new Slugify(['rulesets' => Localization::SLUGIFY_RULES]);
-                $slug = $slug->slugify($value->getName());
-                $navs[$slug] = $value;
-            }
-            $navs = $this->convertToObject($navs);
-            return $navs;
+    public function getHomepageSections()
+    {
+        $parentPages[CmsSection::HOMEPAGE] = CmsSection::HOMEPAGE;
+        $parentPages[CmsSection::PRODUCT_PAGE] = CmsSection::PRODUCT_PAGE;
+        $parentPages[CmsSection::COLLECTION_PAGE] = CmsSection::COLLECTION_PAGE;
+
+        $sections = $this->em->getRepository(CmsSection::class)->findAll([
+            'enabled' => true,
+            'belongsTo' => CmsSection::HOMEPAGE,
+            ]);
+
+        if ($sections) {
+            return $this->convertAssociativeArrayToStdObject($sections, ['groups' => 'view']);
         }
         return null;
     }
@@ -159,17 +177,101 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
      * @param $array
      * @return stdClass
      */
-    public function convertToObject($array)
+    private function convertAssociativeArrayToStdObject($array, array $context = [])
     {
         $object = new stdClass();
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $value = $this->convertToObject($value);
+
+        if (!is_array($array)) {
+            return $array;
+        }
+
+        if ($this->isAssociativeArray($array)) {
+            foreach ($array as $key => $value) {
+                $convertedArray = null;
+                $convertedValue = null;
+//                $slug = $this->slugBuilder->slugify($key);
+//                $camelCase = $this->slugBuilder->convertSlugToCamelCase($slug);
+                $camelCase = $key;
+
+                if (is_object($value)) {
+                    $convertedArray = $this->convertObjectToAssociativeArray($value, $context);
+//                    dd($this->slugBuilder->convertSlugToCamelCase(((string) 3.9032)));
+//                    dd($convertedArray);
+//                    dd($this->isAssociativeArray($convertedArray));
+                    $convertedValue = $this->convertAssociativeArrayToStdObject($convertedArray, $context);
+//                    dd($convertedValue);
+                }
+                if (is_array($value)) {
+                    $convertedValue = $this->convertAssociativeArrayToStdObject($value, $context);
+                }
+
+//                if (!isset($convertedValue)) {
+                if (!$convertedValue) {
+                    $convertedValue = $value;
+                }
+                $object->$camelCase = $convertedValue; //$this->convertAssociativeArrayToStdObject($convertedValue);
             }
-            $camelCaseKey = lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $key))));
-            $object->$camelCaseKey = $value;
+        } else {
+            // creates an associative array from the simple array
+            $convertedArray = [];
+            foreach ($array as $key => $value) {
+                $slug = null;
+                if (is_array($value)) {
+                    $slug = $this->slugBuilder->slugify($value['name']);
+                }
+                if (is_object($value)) {
+                    $slug = $this->slugBuilder->slugify($value->getName());
+                }
+                if (!$slug) {
+                    // at this point the value is some ordinary value (int, float, bool, etc)
+                    // we convert it to string (slug must be string)
+                    $slug = (string) $value;
+                }
+                $camelCase = $this->slugBuilder->convertSlugToCamelCase($slug);
+                $convertedArray[$camelCase] = $value;
+            }
+//            dd($convertedArray);
+            $convertedValue = $this->convertAssociativeArrayToStdObject($convertedArray, $context);
+            return $convertedValue;
         }
         return $object;
+    }
+
+    private function isAssociativeArray(array $array) // has_string_keys
+    {
+        return count(array_filter(array_keys($array), 'is_string')) > 0;
+    }
+
+    protected function convertObjectToAssociativeArray($data, array $context = [])
+    {
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $normalizer = new ObjectNormalizer($classMetadataFactory,null,null, new PhpDocExtractor(),
+            null,null,
+            [
+                ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $content) {
+                    return $object->getName();  ////????
+                }
+            ]);
+        $serializer = new Serializer([$normalizer]);
+        $normalizedArray = $serializer->normalize($data, null, $context);
+//        dd($normalizedArray);
+        return $normalizedArray;
+    }
+
+    public function castStdObjectToAssociativeArray($stdClassObject)
+    {
+        $response = [];
+        foreach ($stdClassObject as $key => $value) {
+            $response[$key] = $value;
+        }
+        return $response;
+    }
+
+    public function fetchNavigationBySlug($navigation, $navigationSlug): ?CmsNavigation
+    {
+        $navigation = $this->em->getRepository(CmsNavigation::class)->findOneBy(['slug' => $navigationSlug]);
+        return $navigation;
     }
 
     public function formatMoney($amount)

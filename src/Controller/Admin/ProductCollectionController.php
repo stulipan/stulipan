@@ -81,9 +81,10 @@ class ProductCollectionController extends AbstractController
 //            dd($form);
             if ($form['image']) {$file = $form['image']->getData();}
             if (!is_null($file)) {
-                $newFilename = $fileUploader->uploadFile($file, null, ImageUsage::WEBSITE_IMAGE);
+                $newFilename = $fileUploader->uploadFile($file, null, ImageEntity::STORE_IMAGE);
                 $img = new ImageEntity();
                 $img->setFile($newFilename);
+                $img->setType(ImageEntity::STORE_IMAGE);
                 $collection->setImage($img);
             }
             $em = $this->getDoctrine()->getManager();
@@ -115,7 +116,7 @@ class ProductCollectionController extends AbstractController
              */
 //            $file = $form['imageFile']->getData();
 //            if (!is_null($file)) {
-//                $newFilename = $fileUploader->uploadFile($file, $page->getImage(), ImageUsage::WEBSITE_IMAGE); //2nd param = null, else deletes prev image
+//                $newFilename = $fileUploader->uploadFile($file, $page->getImage(), ImageEntity::STORE_IMAGE); //2nd param = null, else deletes prev image
 //                $img = new ImageEntity();
 //                $img->setFile($newFilename);
 //                $page->setImage($img);
@@ -162,7 +163,7 @@ class ProductCollectionController extends AbstractController
 
             $file = $form['imageFile']->getData();
             if (!is_null($file)) {
-                $newFilename = $fileUploader->uploadFile($file, null, ImageUsage::WEBSITE_IMAGE);
+                $newFilename = $fileUploader->uploadFile($file, null, ImageEntity::STORE_IMAGE);
                 $img = new ImageEntity();
                 $img->setFile($newFilename);
                 $category->setImage($img);
@@ -198,7 +199,7 @@ class ProductCollectionController extends AbstractController
             $file = $form['imageFile']->getData();
 
             if (!is_null($file)) {
-                $newFilename = $fileUploader->uploadFile($file, $category->getImage(), ImageUsage::WEBSITE_IMAGE); //2nd param = null, else deletes prev image
+                $newFilename = $fileUploader->uploadFile($file, $category->getImage(), ImageEntity::STORE_IMAGE); //2nd param = null, else deletes prev image
                 $img = new ImageEntity();
                 $img->setFile($newFilename);
                 $category->setImage($img);

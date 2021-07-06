@@ -128,6 +128,19 @@ $theme-colors-light: map-merge(
   $theme-colors-light
 );
 
+// Added by Stulipan
+$button-colors: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$button-colors: map-merge(
+  (
+    "primary":          $primary,
+    "secondary":        $secondary,
+    "success":          $success,
+),
+  $button-colors
+);
+
+
 // Set a specific jump point for requesting color jumps
 $theme-color-interval:      8% !default;
 
@@ -280,7 +293,7 @@ $grid-gutter-width:           20px !default; // 30px !default;
 // Define common padding and border radius sizes and more.
 
 $line-height-lg:              1.5 !default;
-$line-height-sm:              1.25 !default;
+$line-height-sm:              1 !default; //1.25 !default;
 
 $border-width:                1px !default;
 $border-color:                $gray-400 !default; // $gray-400

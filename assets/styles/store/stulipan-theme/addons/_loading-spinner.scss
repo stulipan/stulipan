@@ -1,6 +1,28 @@
 // Button loader
 // To be used as loading animation
 
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+
+//@-webkit-keyframes rotate {
+//  0% {
+//    transform: rotate(0deg)
+//  }
+//  100% {
+//    transform: rotate(360deg)
+//  }
+//}
+//
+//@keyframes rotate {
+//  0% {
+//    transform: rotate(0deg)
+//  }
+//  100% {
+//    transform: rotate(360deg)
+//  }
+//}
+
 .loading-spinner-show {
   position: relative;
   pointer-events: none;
@@ -34,10 +56,6 @@
     top: calc(50% - #{$line-height-base}rem/2);
     left: calc(50% - #{$line-height-base}rem/2);
   }
-
-  //&.loading-spinner-has-bg .btn-content {
-  //  opacity: .5;
-  //}
 
   &.loading-spinner-has-bg .loading-spinner {
     border-color: lighten($gray-700, 10%);

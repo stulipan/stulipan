@@ -22,7 +22,7 @@
                                                 <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="300" height="400">
                                                 {% if bestseller %}
                                                     <div class="ribbon ribbon-bottom">
-                                                        <i class="fas fa-trophy"></i> {{ 'product.bestseller'|trans }}
+                                                        <svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}
                                                     </div>
                                                 {% endif %}
                                             </div>

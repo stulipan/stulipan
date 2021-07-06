@@ -1,3 +1,7 @@
+// NOT IN USE !!! !!! !!!
+// I use custom checkbox from Bootstrap !!! !!!
+
+
 // Switch
 // To be used instead of standard checkbox
 
@@ -83,14 +87,6 @@ input[data-switch]+label {
   }
 }
 
-//input[data-switch]+label:before {
-//
-//}
-//
-//input[data-switch]+label:after {
-//
-//}
-
 input[data-switch]:checked+label {
   background: $switch-checked-background;
   border-color: $switch-checked-border-color;
@@ -108,53 +104,32 @@ input[data-switch]:checked+label {
   }
 }
 
-//input[data-switch]:checked+label:before {
-//
-//}
-//
-//input[data-switch]:checked+label:after {
-//
-//}
-
-//input[data-switch=bool]+label {
-//  background-color: #dc3545
-//}
-//
-//input[data-switch=bool]+label:before,
-//input[data-switch=bool]:checked+label:before {
-//  color: #fff!important
-//}
-//
-//input[data-switch=bool]+label:after {
-//  background-color: $switch-bullet-color;
-//}
-
 // Color variations
-@each $color, $value in $theme-colors {
-  input[data-switch=#{$color}]:checked+label {
-    background: $value;
-    border-color: darken($value, 5%);
-
-    &:before {
-      color: color-yiq($value);
-    }
-    &:after {
-      background-color: color-yiq($value);
-    }
-  }
-
-  input[data-switch=#{$color}] {
-    &:focus+label,
-    &.focus+label {
-      // Avoid using mixin so we can pass custom focus shadow properly
-      @if $enable-shadows {
-        // Ez tőlem:
-        //box-shadow: 0 0 0 $switch-focus-width darken($value, 10%);
-        border-color: darken($value, 10%);
-      } @else {
-        // Ez tőlem:
-        border-color: darken($value, 10%);
-      }
-    }
-  }
-}
+//@each $color, $value in $theme-colors {
+//  input[data-switch=#{$color}]:checked+label {
+//    background: $value;
+//    border-color: darken($value, 5%);
+//
+//    &:before {
+//      color: color-yiq($value);
+//    }
+//    &:after {
+//      background-color: color-yiq($value);
+//    }
+//  }
+//
+//  input[data-switch=#{$color}] {
+//    &:focus+label,
+//    &.focus+label {
+//      // Avoid using mixin so we can pass custom focus shadow properly
+//      @if $enable-shadows {
+//        // Ez tőlem:
+//        //box-shadow: 0 0 0 $switch-focus-width darken($value, 10%);
+//        border-color: darken($value, 10%);
+//      } @else {
+//        // Ez tőlem:
+//        border-color: darken($value, 10%);
+//      }
+//    }
+//  }
+//}

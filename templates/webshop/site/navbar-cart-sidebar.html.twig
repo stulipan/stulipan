@@ -20,16 +20,11 @@
             </div>
             <div class="sidebar-footer">
                 <div class="d-flex flex-column justify-content-between flex-grow-1">
-                        <a href="{{ path('site-checkout-step0-pickExtraGift') }}" class="btn btn-primary w-100" data-urlX="{{ path('site-checkout-step0-pickExtraGift') }}" >
-                            <span class="loading-spinner-invisible">{{ 'cart.continue-to-checkout'|trans }}</span>
-                            <div class="loading-spinner" role="status"></div>
-                        </a>
-
-                        <div class="mt-3">
-                            <div class="">
-                                <button role="button" class="btn btn-secondary w-100" data-dismiss="sidebar" aria-label="Close">{{ 'cart.continue-shopping'|trans }}</button>
-                            </div>
-                        </div>
+                    <a href="{{ path('site-checkout-step0-pickExtraGift') }}" class="btn btn-primary">
+                        <span class="loading-spinner-invisible">{{ 'cart.continue-to-checkout'|trans }}</span>
+                        <div class="loading-spinner" role="status"></div>
+                    </a>
+                    <button role="button" class="btn btn-secondary mt-3" data-dismiss="sidebar" aria-label="Close">{{ 'cart.continue-shopping'|trans }}</button>
                 </div>
             </div>
         </div>

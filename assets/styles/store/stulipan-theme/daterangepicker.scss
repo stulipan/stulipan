@@ -1,29 +1,27 @@
-/************************  Works with this template:  ***************************/
-/********************  Template is in daterangepicker.js:  **********************/
-/*                                                                              */
-/*<div class="daterangepicker">                                                 */
-/*	<div class="ranges"></div>                                                  */
-/*	<div class="drp-body">                                                      */
-/*		<div class="drp-calendars">                                             */
-/*			<div class="drp-calendar left">                                     */
-/*				<div class="calendar-table"></div>                              */
-/*				<div class="calendar-time"></div>                               */
-/*			</div>                                                              */
-/*			<div class="drp-calendar right">                                    */
-/*				<div class="calendar-table"></div>                              */
-/*				<div class="calendar-time"></div>                               */
-/*			</div>                                                              */
-/*		</div>                                                                  */
-/*		<div class="drp-buttons">                                               */
-/*			<span class="drp-selected"></span>                                  */
-/*			<button class="cancelBtn" type="button"></button>                   */
-/*			<button class="applyBtn" disabled="disabled" type="button"></button>*/
-/*		</div>                                                                  */
-/*	</div>                                                                      */
-/*</div>                                                                        */
-/********************************************************************************/
-
-// It has a FontAwesome dependency !!!
+///************************  Works with this template:  ***************************/
+///********************  Template is in daterangepicker.js:  **********************/
+///*                                                                              */
+///*<div class="daterangepicker">                                                 */
+///*	<div class="ranges"></div>                                                  */
+///*	<div class="drp-body">                                                      */
+///*		<div class="drp-calendars">                                             */
+///*			<div class="drp-calendar left">                                     */
+///*				<div class="calendar-table"></div>                              */
+///*				<div class="calendar-time"></div>                               */
+///*			</div>                                                              */
+///*			<div class="drp-calendar right">                                    */
+///*				<div class="calendar-table"></div>                              */
+///*				<div class="calendar-time"></div>                               */
+///*			</div>                                                              */
+///*		</div>                                                                  */
+///*		<div class="drp-buttons">                                               */
+///*			<span class="drp-selected"></span>                                  */
+///*			<button class="cancelBtn" type="button"></button>                   */
+///*			<button class="applyBtn" disabled="disabled" type="button"></button>*/
+///*		</div>                                                                  */
+///*	</div>                                                                      */
+///*</div>                                                                        */
+///********************************************************************************/
 
 // Import these if you use DRP as stand-alone app
 @import "bootstrap/functions";
@@ -152,21 +150,29 @@ $drp-cell-in-range-color:                           initial !default;
         color: #202a36;
         border-width: 0 2px 2px 0;
         @include border-radius($drp-cell-border-radius, 0);
+        width: 100%;
+        height: 100%;
         display: inline-block;
         padding: 3px;
-        font-family: "Font Awesome 5 Free";
-        -webkit-font-smoothing: antialiased;
         font-style: normal;
         font-variant: normal;
         text-rendering: auto;
         line-height: 1;
         font-weight: 900;
+        background-repeat: no-repeat;
+        background-position: center;
     }
-    & .next span:before {
-        content: "\f061";
+    //& .next span:before {
+    //    content: '»';
+    //}
+    //& .prev span:before {
+    //    content: '«';
+    //}
+    & .next span {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-right' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
     }
-    & .prev span:before {
-        content: "\f060";
+    & .prev span {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-left' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
     }
 }
 
@@ -225,10 +231,6 @@ $drp-cell-in-range-color:                           initial !default;
             @include border-radius($drp-cell-border-radius, 0);
 
         }
-        //&:hover span {
-        //    border-radius: .25rem !important;
-        //    background-color: $drp-cell-hover-bg !important;
-        //}
 
         &.week {
             color: $drp-week-color;
@@ -391,11 +393,7 @@ $drp-cell-in-range-color:                           initial !default;
         }
 
         & .drp-buttons {
-            //display: flex;
-            //justify-content: space-between;
-            //text-align: right;
             line-height: 12px;
-            //vertical-align: middle;
             width: 100%;
             padding: 0;
 
@@ -476,7 +474,7 @@ $drp-cell-in-range-color:                           initial !default;
 }
 
 .modal-open .daterangepicker,
-.sidebar-open .daterangepicker{
+.sidebar-open .daterangepicker {
     z-index: 1055;
 }
 
@@ -485,86 +483,86 @@ $drp-cell-in-range-color:                           initial !default;
     .daterangepicker {
         max-width: $drp-width;
 
-        &.show-ranges {
-            max-width: $drp-ranges-width;
-        }
-        &.show-ranges.show-ranges-dropdown {
-            max-width: $drp-ranges-dropdown-width;
-        }
+        //&.show-ranges {
+        //    max-width: $drp-ranges-width;
+        //}
+        //&.show-ranges.show-ranges-dropdown {
+        //    max-width: $drp-ranges-dropdown-width;
+        //}
         &.single {
             max-width: $drp-single-width;
 
-            &.show-ranges {
-                max-width: $drp-single-ranges-width;
-            }
-            &.show-ranges.show-ranges-dropdown {
-                max-width: $drp-single-ranges-dropdown-width;
-            }
+            //&.show-ranges {
+            //    max-width: $drp-single-ranges-width;
+            //}
+            //&.show-ranges.show-ranges-dropdown {
+            //    max-width: $drp-single-ranges-dropdown-width;
+            //}
         }
     }
 
-    .daterangepicker:not(.drp-inline) .drp-col.left:not(.single),
-    .daterangepicker:not(.drp-inline) .drp-col.right {
-        flex: 0 0 50%;
-        max-width: 50%
-    }
+    //.daterangepicker:not(.drp-inline) .drp-col.left:not(.single),
+    //.daterangepicker:not(.drp-inline) .drp-col.right {
+    //    flex: 0 0 50%;
+    //    max-width: 50%
+    //}
 }
 
-.daterangepicker.drp-inline {
-    display: block;
-    width: 100%;
-    max-width: 100% !important;
-    position: relative;
-    box-shadow: none;
-    right: auto !important;
-    top: 0 !important;
-    margin-bottom: 0;
-    border: 1px solid $drp-border-color;
-
-    & .drp-calendars-wrapper {
-        width: 100%;
-    }
-
-    & .drp-body {
-        flex-direction: column;
-
-        @include media-breakpoint-down(xs) {
-            & .drp-calendars {
-
-                & .drp-col.left:not(.single),
-                & .drp-col.right {
-                    width: 100%;
-                }
-            }
-        }
-    }
-    &:not(.single) .drp-body .drp-calendars {
-        @include media-breakpoint-down(xs) {
-            flex-direction: column;
-        }
-    }
-    &:not(.show) {
-        display: none !important;
-    }
-
-    &.show-ranges:not(.show-ranges-dropdown) {
-        & .drp-body {
-            flex-direction: row;
-
-            @include media-breakpoint-down(xs) {
-                flex-direction: column;
-            }
-        }
-        & .drp-calendars-wrapper {
-            width: calc(100% - 130px);
-
-            @include media-breakpoint-down(xs) {
-                width: 100%;
-            }
-        }
-    }
-
-}
+//.daterangepicker.drp-inline {
+//    display: block;
+//    width: 100%;
+//    max-width: 100% !important;
+//    position: relative;
+//    box-shadow: none;
+//    right: auto !important;
+//    top: 0 !important;
+//    margin-bottom: 0;
+//    border: 1px solid $drp-border-color;
+//
+//    & .drp-calendars-wrapper {
+//        width: 100%;
+//    }
+//
+//    & .drp-body {
+//        flex-direction: column;
+//
+//        @include media-breakpoint-down(xs) {
+//            & .drp-calendars {
+//
+//                & .drp-col.left:not(.single),
+//                & .drp-col.right {
+//                    width: 100%;
+//                }
+//            }
+//        }
+//    }
+//    &:not(.single) .drp-body .drp-calendars {
+//        @include media-breakpoint-down(xs) {
+//            flex-direction: column;
+//        }
+//    }
+//    &:not(.show) {
+//        display: none !important;
+//    }
+//
+//    &.show-ranges:not(.show-ranges-dropdown) {
+//        & .drp-body {
+//            flex-direction: row;
+//
+//            @include media-breakpoint-down(xs) {
+//                flex-direction: column;
+//            }
+//        }
+//        & .drp-calendars-wrapper {
+//            width: calc(100% - 130px);
+//
+//            @include media-breakpoint-down(xs) {
+//                width: 100%;
+//            }
+//        }
+//    }
+//
+//}
 
 @media (max-width: 575.98px) {
     .daterangepicker {
@@ -574,98 +572,98 @@ $drp-cell-in-range-color:                           initial !default;
 }
 
 // Show ranges
-.daterangepicker.show-ranges {
-    &.show-ranges-dropdown {
-        & .drp-body {
-            flex-direction: column;
-        }
-        & .drp-ranges-wrapper {
-            padding: $drp-ranges-padding-y $drp-ranges-padding-x 0 $drp-ranges-padding-x;
-            box-shadow: none;
-
-            & .drp-ranges {
-                width: 100%;
-            }
-        }
-    }
-    &:not(.show-ranges-dropdown) .drp-ranges-wrapper {
-        display: flex;
-        width: 130px;
-        padding: 0;
-        box-shadow: $drp-ranges-shadow;
-
-        @media (max-width: 575.98px) {
-            width: 100%;
-            padding: $drp-ranges-padding-y $drp-ranges-padding-x 0 $drp-ranges-padding-x;
-            box-shadow: none;
-        }
-
-        & .drp-ranges {
-            width: 100%;
-            overflow-x: hidden;
-            padding: $drp-ranges-padding-y 0;
-
-            @media (max-width:575.98px) {
-                overflow-x: scroll;
-                padding-bottom: .25rem;
-            }
-
-            & ul {
-                list-style: none;
-                margin: 0 auto;
-                padding: $drp-ranges-ul-padding-y;
-                width: 100%;
-
-                @media (max-width: 575.98px) {
-                    width: calc(960px - 20px);
-                }
-            }
-            & li {
-                font-size: $drp-ranges-li-font-size;
-                padding: $drp-ranges-li-padding-y $drp-ranges-li-padding-x $drp-ranges-li-padding-y $drp-ranges-li-padding-x;
-                margin: 0.25rem $drp-ranges-padding-x;
-                cursor: pointer;
-                border: 2px solid transparent;
-                @include border-radius($drp-ranges-li-border-radius, 0);
-
-                &:hover {
-                    background-color: $drp-ranges-li-hover-bg;
-                }
-                &.selected {
-                    background-color: $drp-ranges-li-active-bg;
-                    color: $drp-ranges-li-active-color;
-
-                    //&:before {
-                    //    content: "\f00c";
-                    //    font-family: "Font Awesome 5 Free";
-                    //    font-size: 10px;
-                    //    -webkit-font-smoothing: antialiased;
-                    //    display: inline-block;
-                    //    font-weight: bold;
-                    //    margin-right: .25rem;
-                    //    position: absolute;
-                    //    left: .45rem;
-                    //}
-                }
-                &.next {
-                    //border-color: $drp-ranges-li-active-bg;
-                }
-                &:focus {
-                    outline: none;
-                    //border-color: $drp-ranges-li-focus-border-color;
-                    box-shadow: $drp-ranges-li-focus-box-shadow;
-                }
-                @media (max-width: 575.98px) {
-                    display: inline-block;
-                    @include border-radius($drp-ranges-li-border-radius, 0);
-                    padding: .25rem .5rem;
-                    background-color: $drp-ranges-li-bg-mobile;
-                    margin: 0 .25rem .25rem 0;
-                }
-            }
-        }
-    }
-}
+//.daterangepicker.show-ranges {
+//    &.show-ranges-dropdown {
+//        & .drp-body {
+//            flex-direction: column;
+//        }
+//        & .drp-ranges-wrapper {
+//            padding: $drp-ranges-padding-y $drp-ranges-padding-x 0 $drp-ranges-padding-x;
+//            box-shadow: none;
+//
+//            & .drp-ranges {
+//                width: 100%;
+//            }
+//        }
+//    }
+//    &:not(.show-ranges-dropdown) .drp-ranges-wrapper {
+//        display: flex;
+//        width: 130px;
+//        padding: 0;
+//        box-shadow: $drp-ranges-shadow;
+//
+//        @media (max-width: 575.98px) {
+//            width: 100%;
+//            padding: $drp-ranges-padding-y $drp-ranges-padding-x 0 $drp-ranges-padding-x;
+//            box-shadow: none;
+//        }
+//
+//        & .drp-ranges {
+//            width: 100%;
+//            overflow-x: hidden;
+//            padding: $drp-ranges-padding-y 0;
+//
+//            @media (max-width:575.98px) {
+//                overflow-x: scroll;
+//                padding-bottom: .25rem;
+//            }
+//
+//            & ul {
+//                list-style: none;
+//                margin: 0 auto;
+//                padding: $drp-ranges-ul-padding-y;
+//                width: 100%;
+//
+//                @media (max-width: 575.98px) {
+//                    width: calc(960px - 20px);
+//                }
+//            }
+//            & li {
+//                font-size: $drp-ranges-li-font-size;
+//                padding: $drp-ranges-li-padding-y $drp-ranges-li-padding-x $drp-ranges-li-padding-y $drp-ranges-li-padding-x;
+//                margin: 0.25rem $drp-ranges-padding-x;
+//                cursor: pointer;
+//                border: 2px solid transparent;
+//                @include border-radius($drp-ranges-li-border-radius, 0);
+//
+//                &:hover {
+//                    background-color: $drp-ranges-li-hover-bg;
+//                }
+//                &.selected {
+//                    background-color: $drp-ranges-li-active-bg;
+//                    color: $drp-ranges-li-active-color;
+//
+//                    //&:before {
+//                    //    content: "\f00c";
+//                    //    font-family: "Font Awesome 5 Free";
+//                    //    font-size: 10px;
+//                    //    -webkit-font-smoothing: antialiased;
+//                    //    display: inline-block;
+//                    //    font-weight: bold;
+//                    //    margin-right: .25rem;
+//                    //    position: absolute;
+//                    //    left: .45rem;
+//                    //}
+//                }
+//                &.next {
+//                    //border-color: $drp-ranges-li-active-bg;
+//                }
+//                &:focus {
+//                    outline: none;
+//                    //border-color: $drp-ranges-li-focus-border-color;
+//                    box-shadow: $drp-ranges-li-focus-box-shadow;
+//                }
+//                @media (max-width: 575.98px) {
+//                    display: inline-block;
+//                    @include border-radius($drp-ranges-li-border-radius, 0);
+//                    padding: .25rem .5rem;
+//                    background-color: $drp-ranges-li-bg-mobile;
+//                    margin: 0 .25rem .25rem 0;
+//                }
+//            }
+//        }
+//    }
+//}
 
 // Adjustments for the opening direction
 .daterangepicker {
@@ -723,51 +721,51 @@ $drp-cell-in-range-color:                           initial !default;
     width: 100%;
 }
 
-.daterangepicker {
-    & option.disabled {
-        color: #e3e3e3;
-        cursor: not-allowed;
-        //text-decoration: line-through;
-    }
-    & select {
-        &.monthselect {
-            margin-right: .25rem;
-            width: 56%;
-            display: inline-block;
-        }
-        &.yearselect {
-            width: 40%;
-            display: inline-block;
-        }
-        &.hourselect,
-        &.minuteselect,
-        &.secondselect,
-        &.ampmselect {
-            display: inline-block;
-            width: 50px;
-        }
-    }
-}
+//.daterangepicker {
+//    & option.disabled {
+//        color: #e3e3e3;
+//        cursor: not-allowed;
+//        //text-decoration: line-through;
+//    }
+//    & select {
+//        &.monthselect {
+//            margin-right: .25rem;
+//            width: 56%;
+//            display: inline-block;
+//        }
+//        &.yearselect {
+//            width: 40%;
+//            display: inline-block;
+//        }
+//        &.hourselect,
+//        &.minuteselect,
+//        &.secondselect,
+//        &.ampmselect {
+//            display: inline-block;
+//            width: 50px;
+//        }
+//    }
+//}
 
-.daterangepicker .calendar-time {
-    text-align: center;
-    margin: 5px auto 0 auto;
-    position: relative;
+//.daterangepicker .calendar-time {
+//    text-align: center;
+//    margin: 5px auto 0 auto;
+//    position: relative;
+//
+//    & select.disabled {
+//        color: #ccc;
+//        cursor: not-allowed;
+//    }
+//}
 
-    & select.disabled {
-        color: #ccc;
-        cursor: not-allowed;
-    }
-}
-
-@media (max-width: 575.98px) {
-    .daterangepicker-overflow-hidden {
-        overflow: hidden;
-    }
-    .daterangepicker:not(.single) .drp-calendars .drp-calendar.left {
-        margin-bottom: 1.25rem;
-    }
-}
+//@media (max-width: 575.98px) {
+//    .daterangepicker-overflow-hidden {
+//        overflow: hidden;
+//    }
+//    .daterangepicker:not(.single) .drp-calendars .drp-calendar.left {
+//        margin-bottom: 1.25rem;
+//    }
+//}
 
 .drp-form-group {
     width: 100%;
@@ -777,25 +775,25 @@ $drp-cell-in-range-color:                           initial !default;
     margin-bottom: .25rem;
 }
 
-.drp-ranges {
-    // Firefox formatting
-    scrollbar-width: thin;          /* "auto" or "thin"  */
-    scrollbar-color: $gray-500 $gray-200;   /* scroll thumb & track */
-
-    // Webkit formatting, Chrome/Edge/Safari
-    &::-webkit-scrollbar {
-        //width: 8px;               /* width of the entire scrollbar */
-        height: 8px;
-    }
-    &::-webkit-scrollbar-track {
-        background: $gray-200;        /* color of the tracking area */
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: $gray-500;    /* color of the scroll thumb */
-        border-radius: 20px;       /* roundness of the scroll thumb */
-        //border: 3px solid orange;  /* creates padding around scroll thumb */
-    }
-}
+//.drp-ranges {
+//    // Firefox formatting
+//    scrollbar-width: thin;          /* "auto" or "thin"  */
+//    scrollbar-color: $gray-500 $gray-200;   /* scroll thumb & track */
+//
+//    // Webkit formatting, Chrome/Edge/Safari
+//    &::-webkit-scrollbar {
+//        //width: 8px;               /* width of the entire scrollbar */
+//        height: 8px;
+//    }
+//    &::-webkit-scrollbar-track {
+//        background: $gray-200;        /* color of the tracking area */
+//    }
+//    &::-webkit-scrollbar-thumb {
+//        background-color: $gray-500;    /* color of the scroll thumb */
+//        border-radius: 20px;       /* roundness of the scroll thumb */
+//        //border: 3px solid orange;  /* creates padding around scroll thumb */
+//    }
+//}
 
 
 // DRP backdrop

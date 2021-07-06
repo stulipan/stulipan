@@ -92,10 +92,10 @@
                                             {% endfor %}
                                         {% endif %}
                                         <div class="position-relative w-100">
-                                            <div>
-                                                <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="w-100 img-fluid" width="534" height="712">
-                                            </div>
-                                            <div class="position-absolute w-100" style="top: 0;">
+{#                                            <div>#}
+{#                                                <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="w-100 img-fluid" width="534" height="712">#}
+{#                                            </div>#}
+                                            <div class="position-absoluteX w-100" style="top: 0;">
                                                 <div class="position-relative">
                                                     <div data-slider-id="1" class="JS--Wrapper-productDetail owl-product-detail owl-carousel owl-theme product-details-imageWrapper">
                                                         {% if product.images is defined %}
@@ -112,7 +112,7 @@
                                             </div>
                                         </div>
                                         {% if bestseller %}
-                                            <div class="ribbon ribbon-bottom"><i class="fas fa-trophy"></i> Bestseller</div>
+                                            <div class="ribbon ribbon-bottom"><svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}</div>
                                         {% endif %}
                                     </div>
                                     {% endif %}
@@ -185,15 +185,19 @@
                                             {% if product.isPubliclyAvailable %}
                                                 {% include 'webshop/site/product-show-addToCartForm-widget.html.twig' %}
                                             {% else %}
-                                                <div class="alert alert-warning mt-3"><i class="fas fa-info-circle mr-2"></i>{{ 'product.no-longer-available'|trans }}</div>
+                                                <div class="alert alert-warning mt-3">
+                                                    <svg class="icon">
+                                                        <use xlink:href="#info-circle"> </use>
+                                                    </svg>
+                                                    {{ 'product.no-longer-available'|trans }}</div>
                                             {% endif %}
 
                                             <div class="product-button">
                                                 <div class="">
-                                                    <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-uppercase w-100" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
+                                                    <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-block" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
                                                     <span class="loading-spinner-invisible">
-                                                        <svg class="svg-icon svg-icon-heavy addtocart">
-                                                            <use xlink:href="#cart-1"> </use>
+                                                        <svg class="icon addtocart">
+                                                            <use xlink:href="#bag"> </use>
                                                         </svg>
                                                         {{ 'product.add-to-cart-button'|trans }}
                                                     </span>
@@ -212,7 +216,9 @@
                                             <div class="product-quickinfo">
                                                 <div class="product-list-group list-group">
                                                     <div class="list-group-item">
-                                                        <span class="text-sm mr-2"><i class="fas fa-shipping-fast"></i></span>
+                                                        <svg class="icon">
+                                                            <use xlink:href="#truck"></use>
+                                                        </svg>
                                                         <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Szállítási díjak</a>
                                                         <div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                                                             <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -352,7 +358,11 @@
             </div>
             <div class="products-carousel mt-4">
                 <div class="carousel-nav prev">
-                    <button class="JS--Carousel-prev btn carousel-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="JS--Carousel-prev btn carousel-btn">
+                        <svg class="icon">
+                            <use xlink:href="#chevron-left"></use>
+                        </svg>
+                    </button>
                 </div>
                 <div class="JS--Wrapper-recommendedProducts owl-products owl-carousel owl-theme">
                 {% if recommendedProducts is defined and recommendedProducts is not empty %}
@@ -377,7 +387,7 @@
                                         <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="300" height="400">
                                         {% if bestseller %}
                                             <div class="ribbon ribbon-bottom">
-                                                <i class="fas fa-trophy"></i> {{ 'product.bestseller'|trans }}
+                                                <svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}
                                             </div>
                                         {% endif %}
                                     </div>
@@ -394,8 +404,11 @@
                 {% endif %}
             </div>
                 <div class="carousel-nav next">
-                    <button class="JS--Carousel-next btn carousel-btn"><i class="fas fa-chevron-right"></i></button>
-{#                    <button class="JS--Carousel-next btn btn-secondary">NEXT</button>#}
+                    <button class="JS--Carousel-next btn carousel-btn">
+                        <svg class="icon">
+                            <use xlink:href="#chevron-right"></use>
+                        </svg>
+                    </button>
                 </div>
 
             </div>
@@ -550,9 +563,6 @@
 	{{ parent() }}
     <script src="{{ asset('webshop/site/js/owl.carousel.min.js') }}" ></script>
     <script src="{{ asset('webshop/site/js/owl.carousel2.thumbs.min.js') }}" ></script>
-{#    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/owl.carousel.js"></script>#}
-{#    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>#}
-{#    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/smooth-scroll/smooth-scroll.polyfills.min.js"></script>#}
     <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>
 {#    <script src="{{ asset('build/v-shop.js') }}"></script>#}
     <script>
@@ -596,7 +606,6 @@
                 rewind: false,
                 slideBy: 'page',
                 responsiveClass: true,
-                // stageOuterClass: 'owl-stage-outer row mx-n5px mx-xl-n10px',
                 responsive: {
                     0: {
                         items: 2.3,
@@ -624,13 +633,6 @@
                 $carousel.addClass('row mx-n5px mx-xl-n10px');
                 $items = $carousel.find('.owl-item').addClass('col-12 px-5px px-xl-10px');
             }
-            // $recommendedProducts.on('initialized.owl.carousel', function (e) {
-            //     $carousel = $(e.target);  // .owl-carousel
-            //     console.log($carousel);
-            //     $carousel.find('owl-stage').addClass('row');
-            //     $items = $carousel.find('.owl-item').addClass('col-12');
-            // });
-            // Custom Navigation Events
             $('.JS--Carousel-next').click(function () {
                 $recommendedProducts.trigger('next.owl.carousel');
             })

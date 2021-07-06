@@ -123,12 +123,10 @@
                                                             <div class="vp vp-md choose-date mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}" tabindex="0">
                                                                 <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
                                                                     <span class="vp-content">
-                                                                        <span class="tile tile-lg">
-                                                                            {% include('/webshop/site/vp-label-date.html.twig') with {
-                                                                                'item1': date.deliveryDate,
-                                                                                'item2': date.deliveryDate
-                                                                            } %}
-                                                                        </span>
+                                                                        {% include('/webshop/site/vp-label-date.html.twig') with {
+                                                                            'item1': date.deliveryDate,
+                                                                            'item2': date.deliveryDate
+                                                                        } %}
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -138,39 +136,40 @@
                                                         <div class="position-relative">
                                                             <a href="" class="tile-link JS--Button-clickDate" role="button" tabindex="0"></a>
                                                             <div class="">
+                                                                <div class="JS--showCalendarIcon">
+                                                                    <div class="vp vp-md choose-date mr-2">
+                                                                        <div class="vp-figure justify-content-lg-center justify-content-center align-items-center required px-2">
+                                                                            <span class="vp-content">
+{#                                                                                <i class="far fa-calendar-alt fa-2x"></i>#}
+                                                                                <svg class="icon icon-calendar m-0">
+                                                                                    <use xlink:href="#calendar-plus"></use>
+                                                                                </svg>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                                 {% for date in generatedDates.dates|slice(3) %}
                                                                     <div class="JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }} d-none" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
                                                                         <div class="vp choose-date mr-2 {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %}">
                                                                             <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
                                                                                 <div class="wrapper-absolute">
                                                                                     <div class="icon-wrapper">
-                                                                                        <i class="far fa-calendar-alt fa-2x icon-bg"></i>
+{#                                                                                        <i class="far fa-calendar-alt fa-2x icon-bg"></i>#}
+                                                                                        <svg class="icon icon-calendar m-0">
+                                                                                            <use xlink:href="#calendar-plus"></use>
+                                                                                        </svg>
                                                                                     </div>
                                                                                 </div>
                                                                                 <span class="vp-content">
-                                                                                    <span class="tile tile-lg">
-                                                                                        {% include('/webshop/site/vp-label-date.html.twig') with {
-                                                                                            'item1': date.deliveryDate,
-                                                                                            'item2': date.deliveryDate
-                                                                                        } %}
-                                                                                    </span>
+                                                                                    {% include('/webshop/site/vp-label-date.html.twig') with {
+                                                                                        'item1': date.deliveryDate,
+                                                                                        'item2': date.deliveryDate
+                                                                                    } %}
                                                                                 </span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 {% endfor %}
-
-                                                                <div class="JS--showCalendarIcon">
-                                                                    <div class="vp vp-md choose-date mr-2">
-                                                                        <div class="vp-figure justify-content-lg-center justify-content-center align-items-center required px-2">
-                                                                            <span class="vp-content">
-                                                                                <span class="tile tile-lg">
-                                                                                    <i class="far fa-calendar-alt fa-2x"></i>
-                                                                                </span>
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -182,21 +181,21 @@
                                 </div>
 
                                 <div class="d-none JS--hiddenContainer">
-                                    <div class="btn p-0 vp choose-date JS--showCalendarIcon">
-                                        <div class="vp-figure">
-                                            <div class="vp-content">
-                                                <div class="tile tile-lg">
-                                                    <i class="far fa-calendar-alt fa-2x"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+{#                                    <div class="btn p-0 vp choose-date JS--showCalendarIcon">#}
+{#                                        <div class="vp-figure">#}
+{#                                            <div class="vp-content">#}
+{#                                                <i class="far fa-calendar-alt fa-2x"></i>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
                                     {% for date in generatedDates.dates|slice(3) %}
                                         <div class="btn p-0 vp choose-date {% if selectedDate is defined and selectedDate is not null and selectedDate|date('Y-m-d') == date.deliveryDate|date('Y-m-d') %}vp-checked{% endif %} JS--generatedDate-{{ date.deliveryDate|date('Y-m-d') }}" data-date-value="{{ date.deliveryDate|date('Y-m-d') }}" data-chosen="false">
                                             <div class="vp-figure">
                                                 <div class="wrapper-absolute">
                                                     <div class="icon-wrapper">
-                                                        <i class="far fa-calendar-alt fa-2x icon-bg"></i>
+                                                        <svg class="icon icon-calendar m-0">
+                                                            <use xlink:href="#calendar-plus"></use>
+                                                        </svg>
                                                     </div>
                                                 </div>
                                                 <div class="vp-content">
@@ -277,7 +276,7 @@
             <span class="loading-spinner-invisible">Tovább a fizetéshez</span>
             <div class="loading-spinner" role="status"></div>
         </button>
-        <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="order-2 order-md-1 text-center mt-3 mt-md-0"><i class="fas fa-chevron-left text-sm mr-2"></i>{{ flowerShopMode ? 'checkout.flower-shop.back-to-recipient-button'|trans : 'checkout.back-to-shipping-address-button'|trans }}
+        <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="order-2 order-md-1 text-center mt-3 mt-md-0"><svg class="icon"><use xlink:href="#chevron-left"></use></svg>{{ flowerShopMode ? 'checkout.flower-shop.back-to-recipient-button'|trans : 'checkout.back-to-shipping-address-button'|trans }}
         </a>
     </div>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Entity\CmsNavigation;
 use App\Entity\CmsPage;
 use App\Entity\CmsSection;
+use App\Entity\ImageEntity;
 use App\Services\DateFormatConvert;
 use App\Services\FileUploader;
 use App\Services\Localization;
@@ -14,6 +15,7 @@ use DateTime;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Imagine\Gd\Image;
 use Psr\Container\ContainerInterface;
 use stdClass;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -67,6 +69,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     {
         return [
             new TwigFunction('uploaded_asset', [$this, 'getPathOfUploadedAsset']),
+            new TwigFunction('find_image_by_id', [$this, 'findImageById']),
 //            new TwigFunction('pages', [$this, 'getCmsPageContent']),
         ];
     }
@@ -84,6 +87,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'flowerShopMode' => $this->storeSettings->get('general.flower-shop-mode'),
 
             'pages' => $this->getPages(),
+            'policies' => $this->getPolicies(),
             'navigation' => $this->getNavigations(),
             'homepage' => $this->getHomepageSections(),
         ];
@@ -94,6 +98,17 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $this->container
             ->get(FileUploader::class)
             ->getPublicPath($path);
+    }
+
+    public function findImageById($id): ?ImageEntity
+    {
+        /** @var ImageEntity $image */
+        $image = $this->em->getRepository(ImageEntity::class)->find($id);
+        return $image;
+//        if ($image) {
+//            $path = $image->getPath();
+//            return $path;
+//        }
     }
 
     public static function getSubscribedServices()
@@ -125,6 +140,20 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         $cmsPages = $this->em->getRepository(CmsPage::class)->findBy(['enabled' => true]);
         if ($cmsPages) {
             return $this->convertAssociativeArrayToStdObject($cmsPages, ['groups' => 'view']);
+        }
+        return null;
+    }
+
+    public function getPolicies()
+    {
+        $policies = [];
+        $terms = $this->em->getRepository(CmsPage::class)->findOneBy(['enabled' => true, 'slug' => 'terms']);
+        $policies['terms'] = $terms;
+        $privacy = $this->em->getRepository(CmsPage::class)->findOneBy(['enabled' => true, 'slug' => 'privacy']);
+        $policies['privacy'] = $privacy;
+
+        if (count($policies) > 0) {
+            return $this->convertAssociativeArrayToStdObject($policies, ['groups' => 'view']);
         }
         return null;
     }

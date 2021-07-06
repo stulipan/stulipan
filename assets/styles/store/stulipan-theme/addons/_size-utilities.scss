@@ -7,16 +7,17 @@
 }
 
 $text-sm-font-size:  $font-size-sm !default;
-$text-sm-line-height: 1rem !default; //1.125rem !default;
+$text-sm-line-height: $line-height-sm !default; //1.125rem !default;
 
 .text-sm {
   font-size: $text-sm-font-size;
   line-height: $text-sm-line-height;
   //font-weight: 300;
 }
-.text-size-secondary {
-  //font-size: $font-size-base-secondary;
-}
+
+//.text-size-secondary {
+//  //font-size: $font-size-base-secondary;
+//}
 
 .h-10px { max-height: 10px; }
 .h-15px { max-height: 15px; }

@@ -1,34 +1,38 @@
-$svg-icon-size-width:           $font-size-base !default;
+$svg-icon-size-width:           1.125rem !default; //$font-size-base !default;
 $svg-icon-line-height:          $line-height-base * 1rem !default;
 
-
-.svg-icon {
-  --font-size: #{$svg-icon-size-width};
-  --line-height: #{$toggle-arrow-line-height};
-  width: var(--font-size);
-  height: var(--font-size);
+.icon {
+  --icon-font-size: #{$svg-icon-size-width};
+  --icon-line-height: #{$svg-icon-line-height};
+  width: var(--icon-font-size);
+  height: var(--icon-font-size);
   margin-right: .5rem;
   stroke: currentColor;
-  stroke-width: 3px;
+  stroke-width: .025; //3px;
   --layer1: currentColor;
   --layer2: currentColor;
-  margin-bottom: calc((var(--line-height) - var(--font-size)) / 2);
+  margin-bottom: calc((var(--icon-line-height) - var(--icon-font-size)) / 2);
 }
 
-.svg-icon-light {
-  stroke-width: 2
+.icon-light {
+  stroke-width: .0125; //2;
 }
 
 .svg-icon-heavy {
-  stroke-width: 5
+  stroke-width: .5; // 5
 }
 
-.svg-icon-md {
-  --font-size: 3rem;
-  --line-height: 4rem;
+.icon-sm {
+  --icon-font-size: #{$font-size-sm};
+  --icon-line-height: #{$line-height-sm} * 1rem;
 }
 
-.svg-icon-lg {
-  --font-size: 6rem;
-  --line-height: 8rem;
+.icon-md {
+  --icon-font-size: 2rem;
+  --icon-line-height: 3rem;
+}
+
+.icon-lg {
+  --icon-font-size: 6rem;
+  --icon-line-height: 8rem;
 }

@@ -6,7 +6,7 @@
         <div class="">
             {{ order.fullname }} <br>
             {{ order.phone }}, {{ order.email }} <br>
-            <div class="mt-2 text-size-secondary text-muted">
+            <div class="mt-2 text-muted">
                 {{ 'checkout.sender.sender'|trans }} <br>
                 {% if order.billingFullname is defined and order.billingFullname is not null %}
                     {{ order.billingFullname }} {{ order.billingCompany is defined and order.billingCompany ? ' / ' ~ order.billingCompany : ''}}

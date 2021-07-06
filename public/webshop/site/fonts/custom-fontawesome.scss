@@ -1,0 +1,199 @@
+//fa-envelope-open
+//fa-exclamation-circle
+//fa-question-circle
+//fa-trash-alt
+//fa-info-circle
+//fa-calendar-alt
+//fa-chevron-left
+//fa-chevron-right
+//fa-eye-slash
+//fa-eye
+//fa-shopping-cart
+//fa-shipping-fast
+//fa-angle-right
+//fa-trophy
+//fa-clipboard-list
+//fa-bars
+// search, user, logout
+//
+//fa-facebook
+//fa-instagram
+//fa-pinterest
+
+
+/*!
+ * Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ */
+.fa,
+.fab,
+.fad,
+.fal,
+.far,
+.fas {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+.fa-lg {
+    font-size: 1.33333em;
+    line-height: 0.75em;
+    vertical-align: -0.0667em;
+}
+.fa-xs {
+    font-size: 0.75em;
+}
+.fa-sm {
+    font-size: 0.875em;
+}
+.fa-1x {
+    font-size: 1em;
+}
+.fa-2x {
+    font-size: 2em;
+}
+.fa-3x {
+    font-size: 3em;
+}
+.fa-4x {
+    font-size: 4em;
+}
+.fa-5x {
+    font-size: 5em;
+}
+.fa-6x {
+    font-size: 6em;
+}
+.fa-7x {
+    font-size: 7em;
+}
+.fa-8x {
+    font-size: 8em;
+}
+.fa-9x {
+    font-size: 9em;
+}
+.fa-10x {
+    font-size: 10em;
+}
+
+
+.fa-eye:before {
+    content: "\f06e";
+}
+.fa-eye-slash:before {
+    content: "\f070";
+}
+.fa-envelope-open:before {
+    content: "\f2b6";
+}
+.fa-exclamation-circle:before {
+    content: "\f06a";
+}
+.fa-question-circle:before {
+    content: "\f059";
+}
+.fa-trash-alt:before {
+    content: "\f2ed";
+}
+.fa-info-circle:before {
+    content: "\f05a";
+}
+.fa-calendar-alt:before {
+    content: "\f073";
+}
+.fa-chevron-left:before {
+    content: "\f053";
+}
+.fa-chevron-right:before {
+    content: "\f054";
+}
+.fa-shopping-cart:before {
+    content: "\f07a";
+}
+.fa-shipping-fast:before {
+    content: "\f48b";
+}
+.fa-angle-right:before {
+    content: "\f105";
+}
+.fa-trophy:before {
+    content: "\f091";
+}
+.fa-clipboard-list:before {
+    content: "\f46d";
+}
+.fa-bars:before {
+    content: "\f0c9";
+}
+.fa-facebook:before {
+    content: "\f09a";
+}
+.fa-instagram:before {
+    content: "\f16d";
+}
+.fa-pinterest:before {
+    content: "\f0d2";
+}
+.sr-only {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+@font-face {
+    font-family: "Font Awesome 5 Brands";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(/webshop/site/fonts/fontawesome/fa-brands-400.eot);
+    src: url(/webshop/site/fonts/fontawesome/fa-brands-400.eot?#iefix) format("embedded-opentype"), url(/webshop/site/fonts/fontawesome/fa-brands-400.woff2) format("woff2"), url(/webshop/site/fonts/fontawesome/fa-brands-400.woff) format("woff"), url(/webshop/site/fonts/fontawesome/fa-brands-400.ttf) format("truetype"),
+    url(/webshop/site/fonts/fontawesome/fa-brands-400.svg#fontawesome) format("svg");
+}
+.fab {
+    font-family: "Font Awesome 5 Brands";
+    font-weight: 400;
+}
+@font-face {
+    font-family: "Font Awesome 5 Free";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(/webshop/site/fonts/fontawesome/fa-regular-400.eot);
+    src: url(/webshop/site/fonts/fontawesome/fa-regular-400.eot?#iefix) format("embedded-opentype"), url(/webshop/site/fonts/fontawesome/fa-regular-400.woff2) format("woff2"), url(/webshop/site/fonts/fontawesome/fa-regular-400.woff) format("woff"), url(/webshop/site/fonts/fontawesome/fa-regular-400.ttf) format("truetype"),
+    url(/webshop/site/fonts/fontawesome/fa-regular-400.svg#fontawesome) format("svg");
+}
+.far {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 400;
+}
+@font-face {
+    font-family: "Font Awesome 5 Free";
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url(/webshop/site/fonts/fontawesome/fa-solid-900.eot);
+    src: url(/webshop/site/fonts/fontawesome/fa-solid-900.eot?#iefix) format("embedded-opentype"), url(/webshop/site/fonts/fontawesome/fa-solid-900.woff2) format("woff2"), url(/webshop/site/fonts/fontawesome/fa-solid-900.woff) format("woff"), url(/webshop/site/fonts/fontawesome/fa-solid-900.ttf) format("truetype"), url(/webshop/site/fonts/fontawesome/fa-solid-900.svg#fontawesome) format("svg");
+}
+.fa,
+.fas {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}

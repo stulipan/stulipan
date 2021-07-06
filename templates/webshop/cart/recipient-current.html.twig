@@ -7,7 +7,7 @@
                         <div class="address-title">{{ recipient.name }}</div>
                     </div>
                     <div class="">
-                        <a href="#" class="text-sm btn-btn-outline-dark-btn-sm" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient', {id: recipient.id}) }}">
+                        <a href="#" class="text-sm" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient', {id: recipient.id}) }}">
                             <span class="loading-spinner-invisible">Módosít</span>
                             <div class="loading-spinner" role="status"></div>
                         </a>
@@ -23,7 +23,7 @@
     <div class="col-md-12">
         <div class="navbar--toolbar mt-1">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <button class="btn btn-link btn-sm Xbtn-outline-primary" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient') }}">
+                <button class="btn btn-link btn-sm" data-selector="button" data-eval="showRecipientForm" data-url="{{ path('cart-editRecipient') }}">
                     <span class="loading-spinner-invisible">Új címzett hozáadása</span>
                     <div class="loading-spinner" role="status"></div>
                 </button>

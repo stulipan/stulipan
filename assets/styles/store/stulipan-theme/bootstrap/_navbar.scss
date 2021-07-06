@@ -140,6 +140,7 @@
   //border: $border-width solid transparent; // remove default button style
   border: 0 solid transparent; // remove default button style
   @include border-radius($navbar-toggler-border-radius);
+  text-decoration: none;
 
   @include hover-focus {
     outline: none;
@@ -478,10 +479,11 @@ $navbar-login-cart-badge-bg-mobile:        $white !default;
     display: none
   }
 
-  & .svg-icon {
-    width: 25px;
-    height: 25px;
-    margin-right: 0;
+  & .icon {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    stroke-width: .025;
   }
 
   & .login-cart-text {

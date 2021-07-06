@@ -1,0 +1,60 @@
+@import "_badge-quantity";
+@import "_blockquote";
+@import "_loading-spinner";
+@import "_collapse-show-toggle";
+@import "_field-group";
+@import "_input-float";
+@import "_review";
+@import "_size-utilities";
+@import "_variant-picker";
+
+.content-body-thick-border {
+  padding: .5rem;
+  background-color: $secondary;
+}
+
+.radio-validation .invalid-feedback {
+  display: block;
+}
+
+.my-account {
+  background-color: $body-bg-secondary;
+}
+
+.pagerfanta {
+  & .pagination {
+    margin-bottom: 0;
+  }
+}
+
+//.accordion .list-group-item:not(.collapsed) {
+//  //border-bottom: 0;
+//}
+
+.img-unavailable {
+  --img-width: 50px;
+  --img-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--img-width);
+  //height: var(--img-height);
+  background-color: $gray-100;
+  color: $gray-400;
+  border: 1px solid $gray-300;
+  font-size: 1.2rem;
+
+  &.img-unavailable-lg {
+    font-size: 6rem;
+  }
+
+  &.img-unavailable-square {
+    width: 100%;
+
+    &:after {
+      content: "";
+      display: block;
+      padding-bottom: 100%;
+    }
+  }
+}

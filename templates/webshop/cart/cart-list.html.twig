@@ -58,7 +58,11 @@
 
                                 data-url="{{ path('cart-removeItem', {'id': item.id, 'showQuantity': showQuantity is defined ? showQuantity : false}) }}" title="{{ 'cart.remove-item'|trans }}"
                         >
-                            <span class="loading-spinner-faded"><i class="far fa-trash-alt"></i></span>
+                            <span class="loading-spinner-faded">
+                                <svg class="icon mr-0">
+                                    <use xlink:href="#trash"> </use>
+                                </svg>
+                            </span>
                             <div class="loading-spinner" role="status"></div>
                         </button>
                     </div>

@@ -1,17 +1,7 @@
 @import "_announcement-bar";
-@import "_badge-quantity";
-@import "_blockquote";
-@import "_button-loader";
-@import "_collapse-show-toggle";
-@import "_field-group";
-@import "_input-float";
 @import "_logo";
-@import "_review";
 @import "_ribbon";
-//@import "_switch";
-@import "_variant-picker";
 @import "_sidebar";
-@import "_size-utilities";
 @import "_svg-icon";
 
 .vertical-row,
@@ -99,52 +89,6 @@
   }
 }
 
-@-webkit-keyframes rotate {
-  0% {
-    transform: rotate(0deg)
-  }
-  100% {
-    transform: rotate(360deg)
-  }
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg)
-  }
-  100% {
-    transform: rotate(360deg)
-  }
-}
-
-.content-body-thick-border {
-  padding: .5rem;
-  background-color: $secondary;
-}
-
-.radio-validation .invalid-feedback {
-  display: block;
-}
-
-.my-account {
-  background-color: $body-bg-secondary;
-}
-
-.pagerfanta {
-  //font-size: $font-size-base-secondary;
-  /* text-transform: uppercase; */
-
-  & .pagination {
-    margin-bottom: 0;
-  }
-}
-
-//:focus:not(:focus-visible) { outline: none }
-
-.accordion .list-group-item:not(.collapsed) {
-  //border-bottom: 0;
-}
-
 .tile-link {
   position: absolute;
   cursor: pointer;
@@ -155,14 +99,13 @@
   z-index: 30
 }
 
-.bg-custom-gray {
-  background-color: #e4e8ea;
-}
+//.bg-custom-gray {
+//  background-color: #e4e8ea;
+//}
 
-.bg-custom-yellow {
-  background-color: #F3EED9;
-}
-
+//.bg-custom-yellow {
+//  background-color: #F3EED9;
+//}
 
 .jumbotron--cover {
   background-repeat: no-repeat;
@@ -170,12 +113,22 @@
   background-position: center center;
   min-height: 350px;
 
-  @include media-breakpoint-up(sm) {
-    &.mobile {
-      display: none;
-    }
+  &.mobile {
+    display: none;
   }
-  @include media-breakpoint-down(sm) {
+  &.desktop {
+    display: block;
+  }
+
+  //@include media-breakpoint-up(xs) {
+  //  &.mobile {
+  //    display: none;
+  //  }
+  //}
+  @include media-breakpoint-down(xs) {
+    &.mobile {
+      display: block;
+    }
     &.desktop {
       display: none;
     }
@@ -183,33 +136,5 @@
 
   &.jumbotron--cover-collection {
     min-height: 300px;
-  }
-}
-
-.img-unavailable {
-  --img-width: 50px;
-  --img-height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: var(--img-width);
-  //height: var(--img-height);
-  background-color: $gray-100;
-  color: $gray-400;
-  border: 1px solid $gray-300;
-  font-size: 1.2rem;
-
-  &.img-unavailable-lg {
-    font-size: 6rem;
-  }
-
-  &.img-unavailable-square {
-    width: 100%;
-
-    &:after {
-      content: "";
-      display: block;
-      padding-bottom: 100%;
-    }
   }
 }

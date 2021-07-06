@@ -2,6 +2,9 @@
 @import "bootstrap/variables";
 @import "bootstrap/mixins";
 
+@import "addons/addons-remaining-paint.scss";
+@import "sections/sections-remaining-paint.scss";
+
 @import "sweetalert2/sweetalert2";
 @import "daterangepicker";
 

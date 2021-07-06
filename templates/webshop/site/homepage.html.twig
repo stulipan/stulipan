@@ -10,7 +10,7 @@
     {{ parent() }}
     <meta property="og:title" content="{{ storeSettings.get('meta.title') }}">
     <meta property="og:description" content="{{ storeSettings.get('meta.description') }}">
-    <meta property="og:image" content="http://rafina.hu/media/cache/unscaled/uploads/images/store/szappan-rozsa-box-6657-608385608ad84.jpg">
+    <meta property="og:image" content="https://rafina.hu/media/cache/unscaled/uploads/images/store/szappan-rozsa-box-6657-608385608ad84.jpg">
     <meta property="og:image:width" content="1000" />
     <meta property="og:image:height" content="300" />
     <meta property="og:url" content="{{ url(app.request.attributes.get('_route')) }}" />
@@ -21,8 +21,10 @@
     <div class="container-fluid p-0">
         <div class="jumbotron jumbotron-fluid">
             <div class="position-relative text-dark">
-                <div class="jumbotron--cover light-overlay" style="background-image: url(http://rafina.hu/media/cache/unscaled/uploads/images/store/szappan-rozsa-box-6657-608385608ad84.jpg);">
-                </div>
+{#                <div class="jumbotron--cover light-overlay" style="background-image: url(https://rafina.hu/media/cache/unscaled/uploads/images/store/szappan-rozsa-box-6657-608385608ad84.jpg);">#}
+                {% set jumboImg = find_image_by_id(71) %}
+                <div class="jumbotron--cover desktop light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_1200') }}{% else %}''{% endif %});"></div>
+                <div class="jumbotron--cover mobile light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_600') }}{% else %}''{% endif %});"></div>
                 <div class="container card-img-overlay d-flex align-items-md-end align-items-center pb-0 pb-md-6">
                     <div class="text-center w-100">
                         <h1 class="display-4 font-weight-bold">Rafina otthon dekor</h1>
@@ -44,8 +46,8 @@
 {#        </div>#}
 {#        <div class="row mt-5">#}
 {#            <div class="col-md-6 d-flex align-items-md-stretch mb-20px mb-md-0">#}
-{#                <div class="d-flex position-relative align-items-center text-white dark-overlay w-100 text-center py-6 py-md-0" style="background: center center url(http://www.stulipan.dfr/media/cache/resolve/unscaled/uploads/images/store/IMG_7080-609f26820469d.jpg) no-repeat; background-size: cover;">#}
-{#                    <a href="category.html" class="tile-link"> </a>#}
+{#                <div class="d-flex position-relative align-items-center text-white dark-overlay w-100 text-center py-6 py-md-0" style="background: center center url(/media/cache/resolve/unscaled/uploads/images/store/IMG_7080-60a582fdb5cca.jpg) no-repeat; background-size: cover;">#}
+{#                    <a href="/hu/kategoria/kopogtatok" class="tile-link"> </a>#}
 {#                    <div class="card-img-overlay w-100 overlay-content">#}
 {#                        <h2 class="display-3 font-weight-bold text-uppercase mb-0">BeachVibe</h2>#}
 {#                    </div>#}
@@ -55,10 +57,10 @@
 {#                <div class="card border-0 text-white text-center mb-20px dark-overlay">#}
 {#                    <div class="d-flex align-items-center img-thumbnail img-preview" style="height: 350px;">#}
 {#                        <div class="w-100">#}
-{#                            <img src="http://www.stulipan.dfr/media/cache/resolve/unscaled/uploads/images/store/IMG_7110-609f2a6410f5a.jpg" alt="Kopogtatók, ajtódíszek" class="card-img">#}
+{#                            <img src="/media/cache/resolve/unscaled/uploads/images/store/pink-kopogtato-hero-60a586ddd0047.jpg" alt="Kopogtatók, ajtódíszek" class="card-img">#}
 {#                        </div>#}
 {#                    </div>#}
-{#                    <a href="{{ path('site-product-list', {'slug': 'kopogtatok'}) }}" class="tile-link"> </a>#}
+{#                    <a href="https://rafina.hu/hu/kategoria/kopogtatok" class="tile-link"> </a>#}
 {#                    <div class="card-img-overlay d-flex align-items-center">#}
 {#                        <div class="text-center w-100 overlay-content">#}
 {#                            <h2 class="display-4 font-weight-bold text-uppercase text-center mb-0">PinkUp!</h2>#}
@@ -68,10 +70,10 @@
 {#                <div class="card border-0 text-white text-center dark-overlay">#}
 {#                    <div class="d-flex align-items-center img-thumbnail img-preview" style="height: 350px;">#}
 {#                        <div class="w-100">#}
-{#                            <img src="http://www.stulipan.dfr/media/cache/unscaled/uploads/images/store/IMG_6843-6086832e729d3.jpg" alt="Rafina" class="card-img">#}
+{#                            <img src="/media/cache/resolve/unscaled/uploads/images/store/candy-kopogtato-hero-60a588440a117.jpg" alt="Rafina" class="card-img">#}
 {#                        </div>#}
 {#                    </div>#}
-{#                    <a href="category.html" class="tile-link"> </a>#}
+{#                    <a href="/hu/termekek/fagyis-kopogtato-p8" class="tile-link"> </a>#}
 {#                    <div class="card-img-overlay d-flex align-items-center">#}
 {#                        <div class="text-center w-100 overlay-content">#}
 {#                            <h2 class="display-4 font-weight-bold text-uppercase text-center mb-0">Candy</h2>#}

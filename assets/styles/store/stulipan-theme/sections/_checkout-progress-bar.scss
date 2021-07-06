@@ -1,12 +1,19 @@
 // Progress bar in the Checkout pages
 
 .progress--bar {
+  --progbar-font-size: #{$font-size-sm};
   display: flex;
   list-style: none;
   justify-content: center;
   margin: 0;
   padding: 0;
-  @include font-size($font-size-sm);
+  //@include font-size($font-size-sm);
+  @include font-size(var(--progbar-font-size));
+
+  & .icon {
+    --icon-font-size: calc( var(--progbar-font-size) * .85 );
+    margin-bottom: 0;
+  }
 }
 
 .progress--bar-item {

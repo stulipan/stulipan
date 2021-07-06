@@ -44,70 +44,70 @@ theme.Sections.prototype = _.assignIn({}, theme.Sections.prototype, {
     this.instances.push(instance);
   },
 
-  _onSectionLoad: function(evt) {
-    var container = $('[data-section-id]', evt.target)[0];
-    if (container) {
-      this._createInstance(container);
-    }
-  },
-
-  _onSectionUnload: function(evt) {
-    this.instances = _.filter(this.instances, function(instance) {
-      var isEventInstance = instance.id === evt.detail.sectionId;
-
-      if (isEventInstance) {
-        if (_.isFunction(instance.onUnload)) {
-          instance.onUnload(evt);
-        }
-      }
-
-      return !isEventInstance;
-    });
-  },
-
-  _onSelect: function(evt) {
-    // eslint-disable-next-line no-shadow
-    var instance = _.find(this.instances, function(instance) {
-      return instance.id === evt.detail.sectionId;
-    });
-
-    if (!_.isUndefined(instance) && _.isFunction(instance.onSelect)) {
-      instance.onSelect(evt);
-    }
-  },
-
-  _onDeselect: function(evt) {
-    // eslint-disable-next-line no-shadow
-    var instance = _.find(this.instances, function(instance) {
-      return instance.id === evt.detail.sectionId;
-    });
-
-    if (!_.isUndefined(instance) && _.isFunction(instance.onDeselect)) {
-      instance.onDeselect(evt);
-    }
-  },
-
-  _onBlockSelect: function(evt) {
-    // eslint-disable-next-line no-shadow
-    var instance = _.find(this.instances, function(instance) {
-      return instance.id === evt.detail.sectionId;
-    });
-
-    if (!_.isUndefined(instance) && _.isFunction(instance.onBlockSelect)) {
-      instance.onBlockSelect(evt);
-    }
-  },
-
-  _onBlockDeselect: function(evt) {
-    // eslint-disable-next-line no-shadow
-    var instance = _.find(this.instances, function(instance) {
-      return instance.id === evt.detail.sectionId;
-    });
-
-    if (!_.isUndefined(instance) && _.isFunction(instance.onBlockDeselect)) {
-      instance.onBlockDeselect(evt);
-    }
-  },
+  // _onSectionLoad: function(evt) {
+  //   var container = $('[data-section-id]', evt.target)[0];
+  //   if (container) {
+  //     this._createInstance(container);
+  //   }
+  // },
+  //
+  // _onSectionUnload: function(evt) {
+  //   this.instances = _.filter(this.instances, function(instance) {
+  //     var isEventInstance = instance.id === evt.detail.sectionId;
+  //
+  //     if (isEventInstance) {
+  //       if (_.isFunction(instance.onUnload)) {
+  //         instance.onUnload(evt);
+  //       }
+  //     }
+  //
+  //     return !isEventInstance;
+  //   });
+  // },
+  //
+  // _onSelect: function(evt) {
+  //   // eslint-disable-next-line no-shadow
+  //   var instance = _.find(this.instances, function(instance) {
+  //     return instance.id === evt.detail.sectionId;
+  //   });
+  //
+  //   if (!_.isUndefined(instance) && _.isFunction(instance.onSelect)) {
+  //     instance.onSelect(evt);
+  //   }
+  // },
+  //
+  // _onDeselect: function(evt) {
+  //   // eslint-disable-next-line no-shadow
+  //   var instance = _.find(this.instances, function(instance) {
+  //     return instance.id === evt.detail.sectionId;
+  //   });
+  //
+  //   if (!_.isUndefined(instance) && _.isFunction(instance.onDeselect)) {
+  //     instance.onDeselect(evt);
+  //   }
+  // },
+  //
+  // _onBlockSelect: function(evt) {
+  //   // eslint-disable-next-line no-shadow
+  //   var instance = _.find(this.instances, function(instance) {
+  //     return instance.id === evt.detail.sectionId;
+  //   });
+  //
+  //   if (!_.isUndefined(instance) && _.isFunction(instance.onBlockSelect)) {
+  //     instance.onBlockSelect(evt);
+  //   }
+  // },
+  //
+  // _onBlockDeselect: function(evt) {
+  //   // eslint-disable-next-line no-shadow
+  //   var instance = _.find(this.instances, function(instance) {
+  //     return instance.id === evt.detail.sectionId;
+  //   });
+  //
+  //   if (!_.isUndefined(instance) && _.isFunction(instance.onBlockDeselect)) {
+  //     instance.onBlockDeselect(evt);
+  //   }
+  // },
 
   register: function(type, constructor) {   // 'constructor' is a function
     this.constructors[type] = constructor;

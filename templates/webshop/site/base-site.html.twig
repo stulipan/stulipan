@@ -349,8 +349,9 @@
                     $('#sidebar--mobileMenu').sidebar('hide');
                 }
             };
-            var debounceHide = _.debounce(hideSidebar, 1000);
-            window.addEventListener("resize", debounceHide);
+            // var debounceHide = _.debounce(hideSidebar, 1000);
+            // window.addEventListener("resize", debounceHide);
+            window.addEventListener("resize", hideSidebar);
         });
     </script>
 {% endblock %}

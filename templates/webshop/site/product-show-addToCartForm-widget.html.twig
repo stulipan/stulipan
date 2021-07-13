@@ -1,10 +1,11 @@
 {{ form_start(form) }}
-    <div class="product-variants">
-        <div class="product-variant-selector-label">{{ 'product.product-id'|trans }}: {{ product.sku }}</div>
+    <div class="product-part">
+        <span class="product-variant-selector-label">{{ 'product.product-id'|trans }}:</span>
+        {{ product.sku }}
     </div>
 
     {% if product.isFlower %}
-        <div class="product-variants">
+        <div class="product-part">
             <div class="product-variant-selector-label">Méret</div>
 
             {% if form.options is defined and form.options is not empty %}
@@ -87,7 +88,7 @@
         </div>
 
         {% if flowerShopMode %}
-        <div class="product-delivery">
+        <div class="product-part">
             <div class="product-variant-selector-label">Szállítás</div>
 
             <div class="product-variant-selector-content mb-4 JS--deliveryDateContainer">
@@ -159,7 +160,7 @@
         {% do form.options.setRendered() %}
         {% do form.deliveryDate.deliveryDate.setRendered() %}
 
-        <div class="product-variants">
+        <div class="product-part">
             <div class="product-variant-selector-label">
                 {{ 'product.quantity'|trans }}
             </div>

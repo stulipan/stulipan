@@ -51,6 +51,7 @@
 			{% if images is defined %}
 				{% for image in images %}
 					<div class="card">
+{#						{{ dump(image) }}#}
 						<img class="card-img-top" src="{{ uploaded_asset(image.path)|imagine_filter('unscaled_w200') }}" />
 						<div class="card-body">
 							<div class="card-text"><small class="text-muted">ID: {{ image.id }}</small></div>

@@ -40,6 +40,8 @@ $ribbon-offset-y-mobile:          0px !default; //4px !default;
     background-color: #FAF1CB;
     color: #7b6b47;
     opacity: .9;
+    overflow: hidden;
+    white-space: nowrap;
   }
 }
 

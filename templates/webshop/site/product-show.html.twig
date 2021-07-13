@@ -38,173 +38,171 @@
 {% block bodyClass %} product-details{% endblock %}
 
 {% block content %}
-    <div class="row mt-0 mt-sm-3 mb-4">
-        <div class="col-xl-12 mx-auto">
+    <div class="row mt-0 mt-sm-3">
+        <div class="col-md-12 col-xl-12 mx-auto">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-md-6 col-lg-7 order-1 correction-product-image-no-padding">
-                            <div class="row">
-                                <!-- Thumbnails lef to the  Main Image -->
-                                {% if isThumbnailsLeft == true %}
-                                <div class="d-none d-sm-flex col-sm-2 pr-0 order-2 order-sm-1">
-                                    {% if product.images is defined and product.images is empty %}
-                                        <div class="owl-thumbs w-100">
-                                        {% for i in range (1, 3) %}
-                                            <div class="owl-thumb-item detail-thumb-item mb-10px w-100">
-                                                <div class="img-thumbnail img-unavailable img-unavailable-square">
-                                                    <i class="far fa-image mr-0"></i>
+                            <div class="product-images">
+                                <div class="row">
+                                    <!-- Thumbnails lef to the  Main Image -->
+                                    {% if isThumbnailsLeft == true %}
+                                    <div class="d-none d-sm-flex col-sm-2 pr-0 order-2 order-sm-1">
+                                        {% if product.images is defined and product.images is empty %}
+                                            <div class="owl-thumbs w-100">
+                                            {% for i in range (1, 3) %}
+                                                <div class="owl-thumb-item detail-thumb-item mb-10px w-100">
+                                                    <div class="img-thumbnail img-unavailable img-unavailable-square">
+                                                        <i class="far fa-image mr-0"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                    {% if product.images is defined and product.images is not empty %}
-                                        <div data-slider-id="1" class="owl-thumbs">
-                                            {% for image in product.images %}
-                                                <button class="owl-thumb-item detail-thumb-item mb-10px">
-                                                    <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_small') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image" width="99" height="132">
-                                                </button>
                                             {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                {% endif %}
-                                <!-- MAIN IMAGE -->
-                                <div class="order-1 order-sm-2 {% if isThumbnailsLeft == true %}col-12 col-sm-10{% else %}col-12{% endif %}">
-                                    {% if product.images is defined and product.images is empty %}
-                                    <div class="img-thumbnail img-unavailable img-unavailable-square img-unavailable-lg">
-                                        <i class="far fa-image mr-0"></i>
+                                            </div>
+                                        {% endif %}
+                                        {% if product.images is defined and product.images is not empty %}
+                                            <div data-slider-id="1" class="owl-thumbs">
+                                                {% for image in product.images %}
+                                                    <button class="owl-thumb-item detail-thumb-item mb-10px">
+                                                        <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_small') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image" width="99" height="132">
+                                                    </button>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     {% endif %}
-                                    {% if product.images is defined %}
-                                    <div class="product-detail-carousel position-relative">
-                                        {% set bestseller = false %}
-                                        {% if product.isUnavailable %}
-                                            <div class="ribbon ribbon-dark">MIND ELKELT</div>
-                                        {% elseif product.hasBadges %}
-                                            {% for badge in product.badges %}
-                                                {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
-                                                {% else %}
-                                                    {% set bestseller = true %}
-                                                {% endif %}
-                                            {% endfor %}
+                                    <!-- MAIN IMAGE -->
+                                    <div class="order-1 order-sm-2 {% if isThumbnailsLeft == true %}col-12 col-sm-10{% else %}col-12{% endif %}">
+                                        {% if product.images is defined and product.images is empty %}
+                                        <div class="img-thumbnail img-unavailable img-unavailable-square img-unavailable-lg">
+                                            <i class="far fa-image mr-0"></i>
+                                        </div>
                                         {% endif %}
-                                        <div class="position-relative w-100">
-{#                                            <div>#}
-{#                                                <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="w-100 img-fluid" width="534" height="712">#}
-{#                                            </div>#}
-                                            <div class="position-absoluteX w-100" style="top: 0;">
-                                                <div class="position-relative">
-                                                    <div data-slider-id="1" class="JS--Wrapper-productDetail owl-product-detail owl-carousel owl-theme product-details-imageWrapper">
-                                                        {% if product.images is defined %}
-                                                            {% for image in product.images %}
-                                                                <div class="item">
-                                                                    <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
-                                                                        <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="img-fluid" width="534" height="712">
-                                                                    </a>
-                                                                </div>
-                                                            {% endfor %}
-                                                        {% endif %}
+                                        {% if product.images is defined %}
+                                        <div class="product-detail-carousel position-relative">
+                                            {% set bestseller = false %}
+                                            {% if product.isUnavailable %}
+                                                <div class="ribbon ribbon-dark">MIND ELKELT</div>
+                                            {% elseif product.hasBadges %}
+                                                {% for badge in product.badges %}
+                                                    {% if badge.css is defined and badge.css != 'bestseller' %}
+                                                        <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                                    {% else %}
+                                                        {% set bestseller = true %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <div class="position-relative w-100">
+    {#                                            <div>#}
+    {#                                                <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="w-100 img-fluid" width="534" height="712">#}
+    {#                                            </div>#}
+                                                <div class="position-absoluteX w-100" style="top: 0;">
+                                                    <div class="position-relative">
+                                                        <div data-slider-id="1" class="JS--Wrapper-productDetail owl-product-detail owl-carousel owl-theme product-details-imageWrapper">
+                                                            {% if product.images is defined %}
+                                                                {% for image in product.images %}
+                                                                    <div class="item">
+    {#                                                                    <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">#}
+                                                                            <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="img-fluid" width="534" height="712">
+    {#                                                                    </a>#}
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            {% if bestseller %}
+                                                <div class="ribbon ribbon-bottom"><svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}</div>
+                                            {% endif %}
                                         </div>
-                                        {% if bestseller %}
-                                            <div class="ribbon ribbon-bottom"><svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}</div>
                                         {% endif %}
+                                    </div>
+                                    {% if isThumbnailsLeft == false %}
+                                    <!-- Thumbnails bellow Main Image -->
+                                    <div class="col-12">
+                                        <div data-slider-id="1" class="owl-thumbs row">
+                                            {% if product.images is defined %}
+                                                {% for image in product.images %}
+                                                    <button class="owl-thumb-item detail-thumb-item col-2 mt-3 mb-3 ml-3">
+                                                        <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_small') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
+                                                    </button>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
                                     {% endif %}
                                 </div>
-                                {% if isThumbnailsLeft == false %}
-                                <!-- Thumbnails bellow Main Image -->
-                                <div class="col-12">
-                                    <div data-slider-id="1" class="owl-thumbs row">
-                                        {% if product.images is defined %}
-                                            {% for image in product.images %}
-                                                <button class="owl-thumb-item detail-thumb-item col-2 mt-3 mb-3 ml-3">
-                                                    <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_small') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
-                                                </button>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {% endif %}
                             </div>
-                        </div>
-                        <div class="col-md-6 col-lg-5 order-2 mt-3 mt-md-0 pl-sm-3">
-                            <div class="row">
-                                <div class="col-12">
-{#                                    <div class="product-reviews">#}
-{#                                        <div class="d-flex align-items-center justify-content-between mb-1">#}
-{#                                            <div class="d-flex align-items-center">#}
-{#                                                <ul class="review-stars-group mr-2 mb-0">#}
-{#                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
-{#                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
-{#                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
-{#                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
-{#                                                    <li class="review-stars-item"><i class="fa fa-star"></i></li>#}
-{#                                                </ul>#}
-{#                                            </div>#}
-{#                                            <div class="">#}
-{#                                                <a href="#" class="text-sm">25 értékelés <i class="fas fa-long-arrow-alt-right ml-1"></i></a>#}
-{#                                            </div>#}
+{#                            <div class="mt-3 mt-sm-6">#}
+{#                                <div class="row">#}
+{#                                    <div class="col-12">#}
+{#                                        <div class="">#}
+{#                                            <h4 class="hero-recommended">Néhány szó a termékeinkről</h4>#}
+{#                                        </div>#}
+{#                                        <div>#}
+{#                                            {{ product.categories[0].seoContent|raw }}#}
 {#                                        </div>#}
 {#                                    </div>#}
-                                </div>
-                                <div class="col-12">
-                                    <div class="product-name">
-                                        <h1 class="">{{ product.name }}</h1>
-                                    </div>
-                                </div>
+{#                                </div>#}
+{#                            </div>#}
+                        </div>
 
-                                <div class="col-12">
-                                    {% if product.isPubliclyAvailable %}
-                                        {% if product.isFlower %}
-
-                                        {% else %}
-                                            <div class="product-price">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <ul class="list-inline mb-0">
+                        <div class="col-md-6 col-lg-5 order-2 mt-3 mt-md-0 pl-sm-3">
+                            <div class="sticky-top" style="top: 2rem;">
+                                <div class="product-name">
+                                    <h1 class="">{{ product.name }}</h1>
+                                </div>
+                                {% if product.isPubliclyAvailable %}
+                                    {% if product.isFlower %}
+                                    {% else %}
+                                        <div class="product-part mt-1">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <ul class="list-inline mb-0">
 {#                                                        <li class="list-inline-item price">#}
 {#                                                            <del>{{ (product.price.numericValue*4)|money }}</del>#}
 {#                                                        </li>#}
 {#                                                        <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>#}
-                                                        <li class="list-inline-item price">{{ product.price.numericValue|money }}</li>
+                                                    <li class="list-inline-item price">{{ product.price.numericValue|money }}</li>
 
-                                                    </ul>
-                                                </div>
+                                                </ul>
                                             </div>
-                                        {% endif %}
+                                        </div>
+                                    {% endif %}
+                                    <div class="product-part">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            {{ product.description|raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <!-- Add to cart form -->
+                                <div data-section-id="addToCart-template" data-section-type="addToCart-template">
+
+                                    {% if product.isPubliclyAvailable %}
+                                        {% include 'webshop/site/product-show-addToCartForm-widget.html.twig' %}
+                                    {% else %}
+                                        <div class="alert alert-warning mt-3">
+                                            <svg class="icon">
+                                                <use xlink:href="#info-circle"> </use>
+                                            </svg>
+                                            {{ 'product.no-longer-available'|trans }}
+                                        </div>
                                     {% endif %}
 
-                                    <!-- Add to cart form -->
-                                        <div data-section-id="addToCart-template" data-section-type="addToCart-template">
-
-                                            {% if product.isPubliclyAvailable %}
-                                                {% include 'webshop/site/product-show-addToCartForm-widget.html.twig' %}
-                                            {% else %}
-                                                <div class="alert alert-warning mt-3">
-                                                    <svg class="icon">
-                                                        <use xlink:href="#info-circle"> </use>
-                                                    </svg>
-                                                    {{ 'product.no-longer-available'|trans }}</div>
-                                            {% endif %}
-
-                                            <div class="product-button">
-                                                <div class="">
-                                                    <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-block" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
-                                                    <span class="loading-spinner-invisible">
-                                                        <svg class="icon addtocart">
-                                                            <use xlink:href="#bag"> </use>
-                                                        </svg>
-                                                        {{ 'product.add-to-cart-button'|trans }}
-                                                    </span>
-                                                        <div class="loading-spinner" role="status"></div>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                    <div class="product-part">
+                                        <div class="">
+                                            <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-block" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
+                                            <span class="loading-spinner-invisible">
+                                                <svg class="icon addtocart">
+                                                    <use xlink:href="#bag"> </use>
+                                                </svg>
+                                                {{ 'product.add-to-cart-button'|trans }}
+                                            </span>
+                                                <div class="loading-spinner" role="status"></div>
+                                            </button>
+                                        </div>
+                                    </div>
 {#                                            <div class="product-credit-card">#}
 {#                                                <div class="text-center">#}
 {#                                                    <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">#}
@@ -213,156 +211,62 @@
 {#                                                        Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>#}
 {#                                                </div>#}
 {#                                            </div>#}
-                                            <div class="product-quickinfo">
-                                                <div class="product-list-group list-group">
-                                                    <div class="list-group-item">
-                                                        <svg class="icon">
-                                                            <use xlink:href="#truck"></use>
-                                                        </svg>
-                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Szállítási díjak</a>
-                                                        <div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body cms-page-body">
-                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
-                                                                        <div class="mt-4">
-                                                                            {{ pages.szallitasiDijak.content|raw }}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-{#                                                    <div class="list-group-item">#}
-{#                                                        <span class="text-sm mr-2"><i class="far fa-credit-card"></i></span>#}
-{#                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--CreditCardPayment">Fizess online bankkártyáddal</a>#}
-{#                                                        <div class="modal fade" id="modal--CreditCardPayment" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">#}
-{#                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">#}
-{#                                                                <div class="modal-content">#}
-{#                                                                    <div class="modal-header">#}
-{#                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#                                                                            <span aria-hidden="true">&times;</span>#}
-{#                                                                        </button>#}
-{#                                                                    </div>#}
-{#                                                                    <div class="modal-body">#}
-{#                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.rolunk.name }}</h3>#}
-{#                                                                        <div class="mt-4">#}
-{#                                                                            {{ pages.rolunk.content|raw }}#}
-{#                                                                        </div>#}
-{#                                                                    </div>#}
-{#                                                                </div>#}
-{#                                                            </div>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
+                                    <div class="product-part">
+                                        <div class="product-list-group list-group">
+                                            <div class="list-group-item d-flex align-items-center">
+                                                <div class="mr-2">
+                                                    <svg class="icon">
+                                                        <use xlink:href="#truck"></use>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Az egész országba szállítunk. Szállítási díjak itt.</a>
                                                 </div>
                                             </div>
-                                            <div class="product-quickinfo">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        {{ product.categories[0].seoContent|raw }}
-                                                    </div>
+                                            <div class="list-group-item d-flex align-items-center">
+                                                <div class="mr-2">
+                                                    <svg class="icon">
+                                                        <use xlink:href="#person-check"></use>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--MagasElmeny">Magas vásárlói elégedettség és 30 napos visszaküldési garancia!</a>
                                                 </div>
                                             </div>
-                                            <div class="product-quickinfo">
-                                                <div class="row">
-{#                                                    <div class="col-sm-12">#}
-{#                                                        <div class="h4 general-info-titleX">Hasznos infók</div>#}
-{#                                                    </div>#}
-                                                    <div class="col-sm-12 mt-3X">
-                                                        <div class="accordion mb-4" id="accordionMiertDobozok">
-                                                            <div class="card">
-                                                                <div  class="card-header border-bottom-0" id="miertDoboz1">
-                                                                    <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapseOne">Országos házhozszállítás</a>
-                                                                </div>
-                                                                <div id="collapse1" class="collapse" aria-labelledby="miertDoboz1" data-parent="#accordionMiertDobozok">
-                                                                    <div class="card-body pt-2">
-                                                                        <p class="general-info-item-description">Rendelj bizalommal, ugyanis a Rafina termékeket most Magyarország teljes területére kézbesítjük. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            {#                                        <div class="card">#}
-                                                            {#                                            <div  class="card-header border-bottom-0" id="miertDoboz2">#}
-                                                            {#                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapseOne">Virágküldés a nap 24 órájában</a>#}
-                                                            {#                                            </div>#}
-                                                            {#                                            <div id="collapse2" class="collapse" aria-labelledby="miertDoboz2" data-parent="#accordionMiertDobozok">#}
-                                                            {#                                                <div class="card-body pt-2">#}
-                                                            {#                                                    <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;#}
-                                                            {#                                                    </p>#}
-                                                            {#                                                </div>#}
-                                                            {#                                            </div>#}
-                                                            {#                                        </div>#}
-                                                            <div class="card">
-                                                                <div  class="card-header border-bottom-0" id="miertDoboz3">
-                                                                    <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapseOne">Magas vásárlói elégedettség</a>
-                                                                </div>
-                                                                <div id="collapse3" class="collapse" aria-labelledby="miertDoboz3" data-parent="#accordionMiertDobozok">
-                                                                    <div class="card-body pt-2">
-                                                                        <p class="general-info-item-description">A Rafinánál minden termék kézzel készül, így nagy figyelmet fordítunk minden egyes termék elkészítésére, hogy te mindig a legjobbat kapd.
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            {#                                        <div class="card">#}
-                                                            {#                                            <div  class="card-header border-bottom-0" id="miertDoboz4">#}
-                                                            {#                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseOne">Egyedi terméket szeretnél?</a>#}
-                                                            {#                                            </div>#}
-                                                            {#                                            <div id="collapse4" class="collapse" aria-labelledby="miertDoboz4" data-parent="#accordionMiertDobozok">#}
-                                                            {#                                                <div class="card-body pt-2">#}
-                                                            {#                                                    <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.#}
-                                                            {#                                                    </p>#}
-                                                            {#                                                </div>#}
-                                                            {#                                            </div>#}
-                                                            {#                                        </div>#}
-                                                            <div class="card">
-                                                                <div  class="card-header border-bottom-0" id="miertDoboz5">
-                                                                    <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapseOne">Lépj kapcsolatba velünk!</a>
-                                                                </div>
-                                                                <div id="collapse5" class="collapse" aria-labelledby="miertDoboz5" data-parent="#accordionMiertDobozok">
-                                                                    <div class="card-body pt-2">
-                                                                        <p class="general-info-item-description">
-                                                                            Ha kérdésed van a Rafina termékeivel kapcsolatosan vagy érdeklődni szeretnél a rendelés és szállításról, írj bátran. Email címünk: <a href="mailto:{{ storeSettings.get('store.email') }}">{{ storeSettings.get('store.email') }}</a>
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                            <div class="list-group-item d-flex align-items-center">
+                                                <div class="mr-2">
+                                                    <svg class="icon">
+                                                        <use xlink:href="#envelope"></use>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--Kapcsolat">Egyedi terméket szeretnél? Lépj kapcsolatba velünk!</a>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
-
                             </div>
-
-
-                            {#<p class="mb-2">{{ product.description }}</p>#}
-
+                            {% include 'webshop/site/product-show-modals-widget.html.twig' %}
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12 mt-3 mb-3"></div>
             </div>
         </div>
     </div>
 
-    <div class="row mt-0 mt-sm-3 mb-6">
-        <div class="products-grid col-xl-12 mx-auto">
+    <div class="row mt-4 mt-sm-6 mb-6">
+        <div class="products-grid col-md-12 col-xl-12 mx-auto">
             <div class="">
-                <h3 class="hero-recommended">Mások ezeket is megnézték</h3>
+                <h4 class="hero-recommended">Mások ezeket is megnézték</h4>
             </div>
             <div class="products-carousel mt-4">
-                <div class="carousel-nav prev">
-                    <button class="JS--Carousel-prev btn carousel-btn">
+                <div class="JS--Carousel-prev carousel-nav prev" role="button" tabindex="0">
+                    <div class="carousel-btn">
                         <svg class="icon">
                             <use xlink:href="#chevron-left"></use>
                         </svg>
-                    </button>
+                    </div>
                 </div>
                 <div class="JS--Wrapper-recommendedProducts owl-products owl-carousel owl-theme">
                 {% if recommendedProducts is defined and recommendedProducts is not empty %}
@@ -403,12 +307,12 @@
                     {% endfor %}
                 {% endif %}
             </div>
-                <div class="carousel-nav next">
-                    <button class="JS--Carousel-next btn carousel-btn">
+                <div class="JS--Carousel-next carousel-nav next" role="button" tabindex="0">
+                    <div class="carousel-btn">
                         <svg class="icon">
                             <use xlink:href="#chevron-right"></use>
                         </svg>
-                    </button>
+                    </div>
                 </div>
 
             </div>
@@ -563,8 +467,7 @@
 	{{ parent() }}
     <script src="{{ asset('webshop/site/js/owl.carousel.min.js') }}" ></script>
     <script src="{{ asset('webshop/site/js/owl.carousel2.thumbs.min.js') }}" ></script>
-    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>
-{#    <script src="{{ asset('build/v-shop.js') }}"></script>#}
+{#    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>#}
     <script>
         $(function() {
             $('.JS--Wrapper-productDetail').owlCarousel({
@@ -591,28 +494,28 @@
                 }
             });
 
-            $(document).on('click', '[data-toggle="lightbox"]', function (event) {
-                event.preventDefault();
-                $(this).ekkoLightbox({
-                    alwaysShowClose: true,
-                    //                leftArrow: '<span><img src="img/prev.svg" class="nav-arrow nav-arrow-left" alt="" width="50"></span>',
-                    //                rightArrow: '<span><img src="img/next.svg" class="nav-arrow nav-arrow-right" alt="" width="50"></span>'
-                });
-            });
+            // $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+            //     event.preventDefault();
+            //     $(this).ekkoLightbox({
+            //         alwaysShowClose: true,
+            //         //                leftArrow: '<span><img src="img/prev.svg" class="nav-arrow nav-arrow-left" alt="" width="50"></span>',
+            //         //                rightArrow: '<span><img src="img/next.svg" class="nav-arrow nav-arrow-right" alt="" width="50"></span>'
+            //     });
+            // });
             let $recommendedProducts = $('.JS--Wrapper-recommendedProducts');
             $recommendedProducts.owlCarousel({
                 loop: true,
-                margin: 0,
+                margin: 10,
                 rewind: false,
                 slideBy: 'page',
                 responsiveClass: true,
                 responsive: {
                     0: {
-                        items: 2.3,
+                        items: 2,
                         nav: false
                     },
                     576: {
-                        items: 3.3,
+                        items: 3,
                         nav: false
                     },
                     768: {
@@ -625,14 +528,14 @@
                         loop: true,
                     }
                 },
-                onInitialized: addFormatingClasses,
+                // onInitialized: addFormatingClasses,
             });
-            function addFormatingClasses(e) {
-                $carousel = $(e.target);  // .owl-carousel
-                console.log($carousel);
-                $carousel.addClass('row mx-n5px mx-xl-n10px');
-                $items = $carousel.find('.owl-item').addClass('col-12 px-5px px-xl-10px');
-            }
+            // function addFormatingClasses(e) {
+            //     $carousel = $(e.target);  // .owl-carousel
+            //     console.log($carousel);
+            //     // $carousel.addClass('row mx-n5px mx-xl-n10px');
+            //     // $items = $carousel.find('.owl-item').addClass('col-12 px-5px px-xl-10px');
+            // }
             $('.JS--Carousel-next').click(function () {
                 $recommendedProducts.trigger('next.owl.carousel');
             })

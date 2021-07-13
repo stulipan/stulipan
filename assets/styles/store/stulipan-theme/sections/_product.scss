@@ -1,6 +1,6 @@
 .hero-recommended {
-  letter-spacing: 0;
-  text-transform: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .product-grid-header {
@@ -60,10 +60,7 @@
     }
   }
 
-  & .product-price,
-  & .product-variants,
-  & .product-delivery,
-  & .product-button {
+  & .product-part {
     margin-top: map_get($spacers,3);
   }
   & .product-credit-card {
@@ -125,7 +122,7 @@
   .product-list-group {
     .list-group-item {
       border: none;
-      padding: .25rem 0;
+      padding: .5rem 0;
 
     }
   }

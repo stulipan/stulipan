@@ -27,7 +27,7 @@ class AdminController extends AbstractController
      */
     public function showAdmin()
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('dashboard');
         }
         return $this->redirectToRoute('admin-login');

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\Order;
+use App\Entity\PaymentStatus;
 
 final class Summary
 {
@@ -55,6 +56,14 @@ final class Summary
             // $priceTotal += $item->getPrice() * $item->getQuantity();
         }
         return $priceTotal;
+    }
+
+    public function getAmountPaidByCustomer(): float
+    {
+        if ($this->order->getPaymentStatus()->getShortcode() === PaymentStatus::STATUS_PAID) {
+            return $this->getTotalAmountToPay();
+        }
+        return 0;
     }
 
     /**

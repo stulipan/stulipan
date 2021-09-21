@@ -48,7 +48,7 @@ class OrderSubscriber implements EventSubscriberInterface
         return [
             // az 'onPaymentStatusUpdate' egy method ami lefuttat és amit nekem kell definialni. Lasd lent, ott van definialva
             OrderEvent::PRODUCT_ADDED_TO_CART => 'onCartCreate',
-            OrderEvent::ORDER_CREATED => 'onOrderCreate',
+//            OrderEvent::ORDER_CREATED => 'onOrderCreate',
             OrderEvent::ORDER_UPDATED => 'onOrderCreate',
             OrderEvent::PAYMENT_UPDATED => 'onPaymentStatusUpdate',
             OrderEvent::DELIVERY_DATE_UPDATED => 'onDeliveryDateUpdate',
@@ -138,17 +138,30 @@ class OrderSubscriber implements EventSubscriberInterface
         }
 
         $messages = [
+//            'pending' => 'A {{amount}} payment is pending on {{payment}}.',
+//            'success' => '',
+//            'failure' => '',
+//            'error' => '',
+//            'canceled' => '',
+//
+//            'paid' => 'A {{amount}} payment was processed on {{payment}}.',
+//            'partially_paid' => 'A partial payment of {{amount}} has been paid by the customer.',
+//            'partially_refunded' => 'A partial refund of {{amount}} has been issue to the customer.',
+//            'refunded' => 'A {{amount}} has been refunded to the customer.',
+
             'pending' => 'A {{amount}} payment is pending on {{payment}}.',
-            'paid' => 'A payment of {{amount}} has been paid by the customer.',
+            'paid' => 'A {{amount}} payment was processed on {{payment}}.',
             'partially_paid' => 'A partial payment of {{amount}} has been paid by the customer.',
             'partially_refunded' => 'A partial refund of {{amount}} has been issue to the customer.',
             'refunded' => 'A {{amount}} has been refunded to the customer.',
         ];
         $descriptions = [
-            'pending' => $this->twig->render('admin/order/_history-pending.html.twig', [
-                'order' => $order,
-            ]),
-//            'paid' => '',
+//            'pending' => $this->twig->render('admin/order/_history-pending.html.twig', [
+//                'order' => $order,
+//            ]),
+//            'paid' => $this->twig->render('admin/order/_history-paid.html.twig', [
+//                'order' => $order,
+//            ]),
 //            'partially_paid' => '',
 //            'partially_refunded' => '',
 //            'refunded' => '',
@@ -164,11 +177,18 @@ class OrderSubscriber implements EventSubscriberInterface
                     '{{amount}}' => $money($order->getSummary()->getTotalAmountToPay()),
                     '{{payment}}' => $order->getPaymentMethod(),
                 ]);
-                $description = $descriptions[$shortcode];
+                $description = $this->twig->render('admin/order/_history-pending.html.twig', [
+                    'order' => $order,
+//                    'paymentGateway' => $order->getPaymentMethod()->getShortcode(),
+                ]);
                 break;
             case PaymentStatus::STATUS_PAID:
                 $message = $this->translator->trans($messages[$shortcode], [
                     '{{amount}}' => $money($order->getSummary()->getTotalAmountToPay()),
+                    '{{payment}}' => $order->getPaymentMethod(),
+                ]);
+                $description = $this->twig->render('admin/order/_history-paid.html.twig', [
+                    'order' => $order,
                 ]);
                 break;
 //            case PaymentStatus::STATUS_PARTIALLY_PAID:

@@ -11,6 +11,8 @@
 
 {% set cancelUrl = path('settings-home') %}
 
+{% block bodyClass %} settings{% endblock %}
+
 {% block content %}
     {% include 'admin/settings/_form.html.twig' %}
 {% endblock %}

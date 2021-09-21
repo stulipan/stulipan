@@ -22,20 +22,27 @@
     <div class="mt-2 mt-md-3">
         {% if isConversionTracked == false %}
         <div class="alert alert-success">
-            <span class="mb-0"><i class="fas fa-check-circle mr-1"></i> Köszönjük, {{ order.fullname }}. A rendelést sikeresen leadtad.</span>
+            <span class="mb-0"><i class="fas fa-check-circle mr-1"></i> {{ 'checkout.thank-you.order-submitted-with-success'|trans({ '{{ name }}' : order.fullname }) }}</span>
         </div>
         {% endif %}
         <div class="row">
             <div class="col-lg-12 correction-no-padding">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body pb-0">
                         {% if isConversionTracked == false %}
-                        <div>
-                            <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
-                        </div>
+                            <div>
+                                <p class="">{{ 'checkout.thank-you.order-is-being-processed'|trans({ '{{ orderNumber }}' : order.number })|raw }}</p>
+                            </div>
                         {% else %}
-                            <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelésed állapota: {{ order.status }} </p>
+                            <p class="">{{ 'checkout.thank-you.order-status-is'|trans({ '{{ orderNumber }}' : order.number, '{{ orderStatus }}' : order.status })|raw }}</p>
                         {% endif %}
+{#                        {% if isConversionTracked == false %}#}
+{#                        <div>#}
+{#                            <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailben fogunk tájékoztatni. </p>#}
+{#                        </div>#}
+{#                        {% else %}#}
+{#                            <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelésed állapota: {{ order.status }} </p>#}
+{#                        {% endif %}#}
                         <div class="shipping-address">
                             <div class="content-body-thick-border">
                                 <div class="bg-white p-3">
@@ -82,7 +89,7 @@
             'hasProductLink': false,
         } %}
     </div>
-    {% include('/webshop/cart/checkout-sidebar-paid-summary.html.twig') %}
+    {% include('webshop/cart/checkout-sidebar-paid-summary.html.twig') %}
 {% endblock %}
 
 {%  block rightColumn %}
@@ -95,12 +102,12 @@
             'hasProductLink': false,
         } %}
     </div>
-    {% include('/webshop/cart/checkout-sidebar-paid-summary.html.twig') %}
+    {% include('webshop/cart/checkout-sidebar-paid-summary.html.twig') %}
 {% endblock %}
 
 {% block gotoNext %}
-    <div class="mt-20px mt-md-4 mb-5 mb-5 d-flex flex-column flex-md-row justify-content-center">
-        <a href="{{ path('homepage') }}" class="btn btn-primary">Tovább a webáruházba</a>
+    <div class="mt-20px mb-5 mb-5 d-flex flex-column flex-md-row justify-content-center">
+        <a href="{{ path('homepage') }}" class="btn btn-primary btn-lg btn-block">{{ 'checkout.continue-to-store-button'|trans }}</a>
     </div>
 {% endblock %}
 

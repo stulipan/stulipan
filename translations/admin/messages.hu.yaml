@@ -64,6 +64,7 @@ order:
     recipient: Címzett
     edit-recipient: 'Címzett módosítása'
     new-delivery-date: 'Új szállítási idő'
+    archive-order: 'Arhíválás'
     cart-products: Termékek
     message: Üzenet
     sender: Feladó
@@ -76,15 +77,27 @@ order:
     free-delivery: 'Ingyenes szállítás'
     choose-the-timeframe-when-the-recipient-will-available-at-delivery-address: 'Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.'
     save-delivery-time: 'Időpont mentése'
-    payment: Fizetés
+    archive-order-title: 'Rendelés arhíválása'
+    archive-order-description: 'Ez a rendelés arhiválásra fog kerülni.'
+    archive-order-proceed: Mehet
+    payment-method: Fizetési mód
+    paid-by-customer: Vásárló ennyit fizetett
     instructions-for-bank-transfer: 'Banki utaláshoz szükséges adatok'
     payment-status: 'Fizetés állapota'
     mark-as-paid: 'Jelöld meg fizetettként'
     history:
         history-timeline: Előzmények
+        leave-a-comment-here: Ide írd az megjegyzésed...
+        only-you-can-see-comments: Csak te és az adminok látjátok a kommenteket.
         order-id: 'Rendelés ID'
         amount: Összeg
         payment-method: 'Fizetési mód'
+        authorization-key: 'Autorizációs kulcs / Tranzakció azonosító'
+        payment-gateway: 'Fizetési átjáró (gateway)'
+        transaction-status: Állapot
+        transaction-type: Típus
+        transaction-created-at: Létrehozva
+        transaction-processed-at: Feldolgozva
     user-agent:
         user-agent-details: null
         see-more: null

@@ -1,15 +1,20 @@
 {% import _self as myOwnMacro %}
 {% macro printIntervalRow(item) %}
     <div class="form-group form-row mb-2">
-        <div class="col-sm-6 col-md-5 col-6 mb-1">
+        <div class="col-md-5 col-6 mb-1">
 {#            {{ form_label(item.name, item.name, {'label_attr': {'class': ''}, 'label': 'cms.navigation.navigation-item-name'|trans}) }}#}
             {{ form_widget(item.name, {'attr': {'placeholder': 'cms.navigation.navigation-item-name'|trans }} ) }}
             {{ form_errors(item.name) }}
         </div>
-        <div class="col-sm-6 col-md-5 col-6 mb-1">
+        <div class="col-md-5 col-5 mb-1">
 {#            {{ form_label(item.url, item.url, {'label_attr': {'class': ''}, 'label': 'cms.navigation.navigation-item-url'|trans}) }}#}
             {{ form_widget(item.url, {'attr': {'placeholder': 'cms.navigation.navigation-item-url'|trans }} ) }}
             {{ form_errors(item.url) }}
+        </div>
+        <div class="col-md-2 col-1 mb-1">
+            {{ form_widget(item.enabled, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
+            {{ form_errors(item.enabled) }}
+            {% do item.enabled.setRendered() %}
         </div>
     </div>
 {% endmacro %}

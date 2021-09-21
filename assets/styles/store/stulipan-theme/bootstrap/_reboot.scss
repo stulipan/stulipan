@@ -184,7 +184,7 @@ a {
   color: $link-color;
   text-decoration: $link-decoration;
   background-color: transparent; // Remove the gray background on active links in IE 10.
-  letter-spacing: .05rem;
+  letter-spacing: $link-letter-spacing; // Added by Stulipan
 
   @include hover {
     color: $link-hover-color;

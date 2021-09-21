@@ -10,6 +10,5 @@ framework:
             - '%kernel.project_dir%/translations/admin'
             - '%kernel.project_dir%/translations/store'
         fallbacks:
-#            - '%locale%'
             - 'hu'
             - 'en'

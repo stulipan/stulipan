@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block body %}
+    {{ parent() }}
     {% include 'webshop/widgets/_navbar-impersonate-user.html.twig' %}
     {% block page_content %}
     {% endblock %}

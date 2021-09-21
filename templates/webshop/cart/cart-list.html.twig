@@ -24,7 +24,7 @@
                                     <span class="d-block cart-item-price">{{ (item.unitPrice * item.quantity) |money }}</span>
                                 {% endif %}
                                 {% if not item.product.isPubliclyAvailable %}
-                                    <em class="d-block cart-item-missing">*A termék már nem áll forgalmazásban </em>
+                                    <em class="d-block cart-item-missing">{{ 'cart.product-no-longer-available'|trans }}</em>
                                 {% endif %}
                             </div>
                         </div>

@@ -184,9 +184,9 @@ class Customer
 
     public function getEmail(): ?string
     {
-        if ($this->user && $this->user->getEmail()) {
-            return $this->user->getEmail();
-        }
+//        if ($this->user && $this->user->getEmail()) {
+//            return $this->user->getEmail();
+//        }
         return $this->email;
     }
 

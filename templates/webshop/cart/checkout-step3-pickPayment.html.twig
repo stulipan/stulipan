@@ -52,7 +52,7 @@
                                                 </div>
                                                 <div class="checkout-overview-item-data">
                                                     <div class="checkout-overview-item-description">
-                                                        {{ order.fullname }}, {{ order.email }}, {{ order.phone }}
+                                                        {{ order.customer.fullname }}, {{ order.customer.email }}, {{ order.customer.phone }}
                                                     </div>
                                                 </div>
                                                 <div class="checkout-overview-item-action">
@@ -125,9 +125,6 @@
                             <div class="JS--Wrapper-alert">
                                 <div class="checkout-block-header">
                                     <h4 class="checkout-block-title">Számlázási adataid</h4>
-                                </div>
-                                <div class="checkout-block-text">
-                                    <span class="">Add meg a számlázási adataidat vagy válassz az előzőleg használtak közül.</span>
                                 </div>
                             </div>
 
@@ -253,11 +250,11 @@
 {% endblock %}
 
 {% block cartCollapse %}
-    {% include('/webshop/cart/sidebar-summary.html.twig') %}
+    {% include('webshop/cart/sidebar-summary.html.twig') %}
 {% endblock %}
 
 {% block rightColumn %}
-    {% include('/webshop/cart/sidebar-summary.html.twig') %}
+    {% include('webshop/cart/sidebar-summary.html.twig') %}
 {% endblock %}
 
 

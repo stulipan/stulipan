@@ -5,7 +5,7 @@ parameters:
             type: Hidden
             label: Blabla...
         gift-upsell:
-            content: false
+            content: true
             type: Boolean
             label: 'Ajándék modul megjelenítése a Kosár oldalon'
             description: ''
@@ -24,7 +24,11 @@ parameters:
             type: Boolean
             label: 'ÁSZF elfogadása kötelező'
             description: 'A vásárló köteles bepipálni a ''Megértettem és elfogadom az ÁSZF-et'' mezőt a rendelés leadása előtt.'
-    test-mode:
+    testing:
+        label:
+            content: Testing
+            type: Hidden
+            label: 'Teszteléshez szükséges beállítások'
         test-mode:
             content: true
             type: Boolean

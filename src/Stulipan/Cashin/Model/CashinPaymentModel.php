@@ -5,7 +5,7 @@ namespace App\Stulipan\Cashin\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PaymentModel
+class CashinPaymentModel
 {
     /**
      * @var mixed|null
@@ -15,15 +15,20 @@ class PaymentModel
     /**
      * @var string|null
      * @Assert\Length(max: 255)
+     * @Assert\Regex('http[s]?://.+\..+/')
      */
-    private $errorRoute;
+    private $paymentPageUrl;
 
     /**
      * @var string|null
      * @Assert\Length(max: 255)
-     * @Assert\Regex('http[s]?://.+\..+/')
      */
-    private $paymentPageUrl;
+    private $errorRoute;
+
+    /**
+     * @var CashinErrorModel|null
+     */
+    private $error;
 
 
 
@@ -45,10 +50,14 @@ class PaymentModel
 
     public function isCreated(): bool
     {
-        if ($this->payment !== null) {
-            return true;
+//        if ($this->payment !== null) {
+//            return true;
+//        }
+//        return false;
+        if ($this->getError() !== null) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -81,6 +90,22 @@ class PaymentModel
     public function setPaymentPageUrl(?string $paymentPageUrl): void
     {
         $this->paymentPageUrl = $paymentPageUrl;
+    }
+
+    /**
+     * @return CashinErrorModel|null
+     */
+    public function getError(): ?CashinErrorModel
+    {
+        return $this->error;
+    }
+
+    /**
+     * @param CashinErrorModel|null $error
+     */
+    public function setError(?CashinErrorModel $error): void
+    {
+        $this->error = $error;
     }
 
 }

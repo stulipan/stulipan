@@ -11,6 +11,11 @@ $footer-link-line-height:         1.5 !default;
 $footer-nav-copyright-bg:         #404756 !default //$gray-800 !default;
 $footer-nav-copyright-padding-y:  map_get($spacers, 3) !default;
 
+.footer-highlights {
+  --fh-bg: var(--yellow-lighten);
+  background-color: var(--fh-bg);
+}
+
 .main-footer {
   //font-size: $footer-font-size;
   background-color: $footer-bg;

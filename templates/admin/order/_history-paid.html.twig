@@ -1,0 +1,24 @@
+<dl>
+        <dt>{{ 'order.history.order-id'|trans }}</dt>
+        <dd>#{{ order.number }}</dd>
+        <dt>{{ 'order.history.authorization-key'|trans }}</dt>
+        <dd>{{ order.transaction.authorization }}</dd>
+        <dt>{{ 'order.history.amount'|trans }}</dt>
+        <dd>
+                {%- if order.summary.totalAmountToPay is defined and order.summary.totalAmountToPay is not null -%}
+                        {{  order.summary.totalAmountToPay|money }}
+                {%- else -%}
+                        -
+                {%- endif -%}
+        </dd>
+        <dt>{{ 'order.history.payment-gateway'|trans }}</dt>
+        <dd>{{ order.transaction.gateway }}</dd>
+        <dt>{{ 'order.history.transaction-status'|trans }}</dt>
+        <dd>{{ order.transaction.status }}</dd>
+        <dt>{{ 'order.history.transaction-type'|trans }}</dt>
+        <dd>{{ order.transaction.kind }}</dd>
+        <dt>{{ 'order.history.transaction-created-at'|trans }}</dt>
+        <dd>{{ order.transaction.createdAt|rawDateTime }}</dd>
+        <dt>{{ 'order.history.transaction-processed-at'|trans }}</dt>
+        <dd>{{ order.transaction.processedAt|rawDateTime }}</dd>
+</dl>

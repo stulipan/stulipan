@@ -71,7 +71,6 @@ page:
     name-is-missing: Enter the collection name.
     slug-is-missing: 'The slug can''t be empty. Slug example: ''beauty-and-cosmetics'''
     slug-already-in-use: 'Slug already in use. The slug must be unique. Possible solution: Add a ''-1'' to the end.'
-
 order:
     orders: Orders
     abandoned-orders: Abandoned orders
@@ -90,6 +89,7 @@ order:
     recipient: Recipient
     edit-recipient: Edit recipient
     new-delivery-date: New delivery date
+    archive-order: Archive order
     cart-products: Products
     message: Message
     sender: Sender:
@@ -102,17 +102,28 @@ order:
     free-delivery: Ingyenes szállítás
     choose-the-timeframe-when-the-recipient-will-available-at-delivery-address: Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.
     save-delivery-time: Save date
-
-    payment: Payment
+    archive-order-title: Archive order
+    archive-order-description: The order will be archived.
+    archive-order-proceed: Proceed
+    payment-method: Payment method
+    paid-by-customer: Paid by customer
     instructions-for-bank-transfer: Instructions for bank transfer
     payment-status: Fizetés állapota
     mark-as-paid: Jelöld meg fizetettként
 
     history:
         history-timeline: Timeline
+        leave-a-comment-here: Leave a comment...
+        only-you-can-see-comments: Only you and the admins can see the comments.
         order-id: Order ID
         amount: Amount:
         payment-method: Payment:
+        authorization-key: Authorization key
+        payment-gateway: Gateway
+        transaction-status: Status
+        transaction-type: Type
+        transaction-created-at: Created at
+        transaction-processed-at: Processed at
 
     user-agent:
         user-agent-details: Rendelés helye

@@ -6,9 +6,9 @@
         {% else %}
             {% include 'admin/_missing-data-insert.html.twig' %}
         {% endif %}
-        <div class="text-muted mt-1">
+        <div class="mt-1">
         {% if order.paymentMethod is defined and order.paymentMethod %}
-            <div>
+            <div class="text-muted">
                 <p>{{ order.paymentMethod.short() }} </p>
                 {% if order.paymentMethod.image %}
                     <div class="mt-2">

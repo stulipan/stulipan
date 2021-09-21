@@ -5,7 +5,7 @@
                                 {% if product.isEnabled or product.isUnavailable %}
                                 <div class="col-lg-3 col-sm-4 col-6 px-5px px-xl-10px">
                                     <div class="product">
-                                        <div class="product-image-wrapper">
+                                        <div class="product-wrapper">
                                             <div class="product-image">
                                                 {% set bestseller = false %}
                                                 {% if product.isUnavailable() %}
@@ -27,10 +27,10 @@
                                                 {% endif %}
                                             </div>
                                             <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link"></a>
-                                        </div>
-                                        <div class="product-title-wrapper">
-                                            <p class="productList--name"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.name }}</a></p>
-                                            <div class="productList--price-gross mt-1">{{ product.price.grossPrice|money }}</div>
+                                            <div class="product-title">
+                                                <p class="productList--name"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.name }}</a></p>
+                                                <div class="productList--price-gross mt-1">{{ product.price.grossPrice|money }}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

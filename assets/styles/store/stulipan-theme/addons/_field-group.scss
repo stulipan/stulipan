@@ -21,6 +21,7 @@ $addon-content-width-lg:     3.5rem !default;  // 56px
   display: flex;
   flex: 1 1 auto;
   width: auto;
+  flex-wrap: wrap;
 
   &:not(:first-child) {
     margin-left: -$input-border-width;

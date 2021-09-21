@@ -2,6 +2,7 @@ product:
     bestseller: Legkeresettebb
     sold-out: Mind elkelt
     add-to-cart-button: Kosárba rakom
+    add-to-cart-short-button: Kosárba
     product-id: 'Termékkód'
     quantity: Mennyiség
     no-longer-available: 'A termék már nem áll forgalmazásban.'
@@ -93,6 +94,7 @@ cart:
     cart-content: 'Kosár tartalma'
     continue-to-checkout: Tovább a pénztárhoz
     continue-shopping: 'Vásárlás folytatása'
+    view-cart: 'Kosár megtekintése'
     edit-cart-content: 'Kosár módosítása'
     your-cart: 'A kosarad'
     your-cart-is-empty: 'A kosarad jelenleg üres'
@@ -100,6 +102,7 @@ cart:
     quantity: Mennyiség
     pieces: db
     remove-item: Eltávolítás
+    product-no-longer-available: '*A termék már nem áll forgalmazásban'
     shipping-fee: 'Szállítási díj'
     shipping-fee-calculated-at-checkout: 'A szállítási díj a pénztárban lesz kiszámolva.'
     shipping-fee-calculated-in-next-step: 'A következő lépésben lesz kiszámolva'
@@ -111,12 +114,14 @@ cart:
     total-amount-paid: Összesen
     show-order-summary: 'Rendelés összesítése'
     product:
-        product-added-successfully: 'A terméket sikeresen hozzáadtad a kosárhoz!'
+        product-added-successfully: 'Termék hozzáadva a kosárhoz!'
         not-enough-stock: 'Nincs elegendő készlet.'
     gift:
-        choose-gift-title: 'A virág mellé válassz ajándékot'
+        choose-gift-title: 'Válassz egy ajándékot is neki'
         choose-gift: Kiválaszt
         gift-added-successfully: 'Az ajándékot sikeresen hozzáadtad a kosárhoz!'
+    upsell:
+        our-recommendations-for-you: Ajánlásaink neked
     greeting-card:
         send-message-title: 'Üzenet a címzettnek'
         free-card-good-to-know: 'Jó tudni!'
@@ -216,6 +221,13 @@ checkout:
     payment:
         payment-method: 'Fizetési mód'
         payment-method-missing: 'Válassz fizetési módot!'
+        payment-session-expired: 'Sikertelen fizetés! A fizetésre szánt idő lejárt.'
+        payment-failed: 'Sikertelen fizetés! Kérjük, próbáld újra, és győződj meg arról, hogy helyesen adod meg a bankkártya adatait.'
+        payment-processing-error: 'Hiba a fizetés feldolgozásakor. Kérlek, próbáld újra! Ha a hiba továbbra is fennáll, lépj kapcsolatba velünk!'
+    thank-you:
+        order-submitted-with-success: 'Köszönjük, {{ name }}. A rendelést sikeresen leadtad.'
+        order-is-being-processed: 'A <strong>#{{ orderNumber }}</strong> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailben fogunk tájékoztatni.'
+        order-status-is: 'A <strong>#{{ orderNumber }}</strong> számú rendelésed állapota: {{ orderStatus }}'
     overview:
         recipient: Szállítási cím
         recipient-to: Neki küldöd
@@ -231,6 +243,7 @@ checkout:
     back-to-cart-button: 'Vissza a kosárhoz'
     back-to-shipping-address-button: 'Vissza a szállítási címhez'
     back-to-shipping-method-button: 'Vissza a szállítási módhoz'
+    continue-to-store-button: 'Tovább a webáruházba'
     phone-number-tooltip: 'A telefonszámot így írd be: +36... vagy 06... és ne használj szóközt illetve egyéb karaktereket.'
     missing-recipient-information: 'Töltsd ki a hiányzó mezőket.'
     missing-sender-information: 'Töltsd ki a hiányzó mezőket.'

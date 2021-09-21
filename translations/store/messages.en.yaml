@@ -25,6 +25,7 @@ product:
     bestseller: Bestseller
     sold-out: Sold out
     add-to-cart-button: Add to cart
+    add-to-cart-short-button: Add to cart
     product-id: 'Product ID'
     quantity: Quantity
     no-longer-available: 'The product is no longer available.'
@@ -117,6 +118,7 @@ cart:
     cart-content: Your cart
     continue-to-checkout: Continue to checkout
     continue-shopping: Continue shopping
+    view-cart: View cart
     edit-cart-content: Edit cart content
     your-cart: Your cart
     your-cart-is-empty: Your cart is empty
@@ -124,6 +126,7 @@ cart:
     quantity: Quantity
     pieces: ''
     remove-item: Remove from cart
+    product-no-longer-available: '*This product is no longer available'
     shipping-fee: Shipping fee
     shipping-fee-calculated-at-checkout: Will be calculated at checkout.
     shipping-fee-calculated-in-next-step: Calculated at next step
@@ -133,16 +136,17 @@ cart:
     subtotal: Subtotal
     total-amount-to-pay: Total amount to pay
     total-amount-paid: Total
-    show-order-summary: Show order summary
+    show-order-summary: Order summary
 
     product:
-        product-added-successfully: You have successfully added the product to your cart!
+        product-added-successfully: Product added to the cart!
         not-enough-stock: 'Not enough stock is available.'
     gift:
-        choose-gift-title: Choose a gift to send along with the flowers
+        choose-gift-title: Choose a gift to send along
         choose-gift: Choose gift
         gift-added-successfully: You have successfully added the gift to your cart!
-
+    upsell:
+        our-recommendations-for-you: Our recommendations for you
     greeting-card:
         send-message-title: Send a message
         free-card-good-to-know: Good to know!
@@ -243,6 +247,13 @@ checkout:
     payment:
         payment-method: Payment method
         payment-method-missing: Please select a payment method!
+        payment-session-expired: The payment has failed! The time to complete the transaction has expired.
+        payment-failed: The payment has failed! Please try again and make sure you enter correct credit card information.
+        payment-processing-error: Processing error, please try again. If the error persists, please contact us!
+    thank-you:
+        order-submitted-with-success: 'Thank you, {{ name }}. You successfully placed an order.'
+        order-is-being-processed: 'The order <strong>#{{ orderNumber }}</strong> has been received and processing has begun.'
+        order-status-is: '<strong>#{{ orderNumber }}</strong> order status is: {{ orderStatus }}'
     overview:
         recipient: Ship to
         recipient-to: Ship to
@@ -258,6 +269,7 @@ checkout:
     back-to-cart-button: Back to cart
     back-to-shipping-address-button: Back to shipping address
     back-to-shipping-method-button: Back to shipping method
+    continue-to-store-button: Go to the store
 
     phone-number-tooltip: 'Enter phone number in either of this formats: +36... or 06... and do not use blank spaces or any other characters.'
 

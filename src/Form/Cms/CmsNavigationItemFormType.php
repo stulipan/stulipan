@@ -7,6 +7,7 @@ namespace App\Form\Cms;
 use App\Entity\CmsNavigationItem;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,6 +38,9 @@ class CmsNavigationItemFormType extends AbstractType
                 'attr' => ['placeholder' => '', 'autocomplete' => 'off',],
                 'required' => true,
                 'constraints' => [new NotBlank()],
+            ])
+            ->add('enabled', CheckboxType::class, [
+                'label' => 'Engedélyezve',
             ])
 //            ->add('ordering', NumberType::class,[
 //                'label' => 'Sorrend',

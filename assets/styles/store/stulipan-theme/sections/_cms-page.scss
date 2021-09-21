@@ -18,7 +18,8 @@
 }
 
 .cms-page-body {
-  color: $gray-800;
+  color: var(--body-color);
+  text-align: left;
 
   & h1,
   & h2,
@@ -42,7 +43,7 @@
   & ul,
   & li {
     font-size: $font-size-base * 1.125;
-    line-height: 1.5;
+    line-height: 1.4;
   }
 
   & p:last-of-type {

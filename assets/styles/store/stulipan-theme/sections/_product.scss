@@ -71,8 +71,8 @@
   }
   & .text-link-quickinfo {
     width: 100%;
-    color: $gray-900;
     text-decoration: underline;
+    letter-spacing: 0;
   }
 
   & .product-variant-selector-label {
@@ -364,12 +364,6 @@ $price-font-size-sm:             $font-size-base; //$font-size-base-secondary;
     -ms-overflow-x: hidden !important;
     overflow-x: hidden !important;
   }
-}
-
-/// List page
-.productList--name,
-.productList--price-gross {
-  @include font-size($font-size-base);
 }
 
 .reviewbox {

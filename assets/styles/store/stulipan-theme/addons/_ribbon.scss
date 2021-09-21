@@ -33,12 +33,17 @@ $ribbon-offset-y-mobile:          0px !default; //4px !default;
   @include border-radius($border-radius);
   height: $ribbon-height;
 
+  $ribbon-bottom-color: color-yiq($yellow-lighten) !default;
+
   &.ribbon-bottom {
+    --r-bottom-bg: var(--yellow-lighten);
+    --r-bottom-color: #{$ribbon-bottom-color};
     top: auto;
     bottom: 0;
     width: 100%;
-    background-color: #FAF1CB;
-    color: #7b6b47;
+    //background-color: #F7E9D8;
+    color: var(--r-bottom-color);
+    background-color: var(--r-bottom-bg);
     opacity: .9;
     overflow: hidden;
     white-space: nowrap;

@@ -111,7 +111,7 @@
                                                             <div class="vp-figure justify-content-lg-center justify-content-center required px-2">
                                                                 <span class="vp-content">
                                                                     <span class="tile tile-lg">
-                                                                        {% include('/webshop/site/vp-label-date.html.twig') with {
+                                                                        {% include('webshop/site/vp-label-date.html.twig') with {
                                                                             'item1': date.deliveryDate,
                                                                             'item2': date.deliveryDate
                                                                         } %}
@@ -136,7 +136,7 @@
                                                                             </div>
                                                                             <span class="vp-content">
                                                                                 <span class="tile tile-lg">
-                                                                                    {% include('/webshop/site/vp-label-date.html.twig') with {
+                                                                                    {% include('webshop/site/vp-label-date.html.twig') with {
                                                                                         'item1': date.deliveryDate,
                                                                                         'item2': date.deliveryDate
                                                                                     } %}
@@ -211,7 +211,7 @@
                                         </div>
                                     {% endfor %}
                                     <div class="col-md-12 col-12 mb-1X">
-                                        {% include('/webshop/cart/hidden-delivery-date-form.html.twig') %}
+                                        {% include('webshop/cart/hidden-delivery-date-form.html.twig') %}
                                     </div>
                                 </div>
                             </div>
@@ -286,6 +286,28 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="modal--ArchiveOrder" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content JS--archiveOrderWrapper">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalLabel">{{ 'order.archive-order-title'|trans }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body JS--archiveOrderContentBlock">
+                        <div class="modal-body-content">
+                            {{ 'order.archive-order-description'|trans }}
+                        </div>
+                        <div class="modal-footer">
+                            <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
+                                <button data-controller="order-archive" type="submit" class="btn btn-primary">{{ 'order.archive-order-proceed'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
     {% endblock %}
 
     {% block headerTitle %}
@@ -330,6 +352,12 @@
                         <a class="nav-link" href="" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static">
                             <i class="far fa-clock mr-2"></i>
                             {{ 'order.new-delivery-date'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item adaptive-item">
+                        <a class="nav-link" href="" data-toggle="modal" data-target="#modal--ArchiveOrder" data-backdrop="static">
+                            <i class="fas fa-archive mr-2"></i>
+                            {{ 'order.archive-order'|trans }}
                         </a>
                     </li>
                 {% endif %}
@@ -402,8 +430,6 @@
             {% if isEditEnabled is defined and isEditEnabled == true and order.isBankTransfer is defined and order.isBankTransfer == true %}
             <div class="edit-block d-print-none">
                 <div class="card-footer text-right">
-                    {#                                    <a href="" class="btn btn-smX btn-primary" data-toggle="modal" data-target="#modal--Status"  data-dismiss="modal">Megjelöli, hogy a banki utalás teljesült</a>#}
-
                     {% if order.paymentStatus is defined and order.paymentStatus.shortcode == constant('App\\Entity\\PaymentStatus::STATUS_PENDING') %}
                         <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal--paymentStatus" data-backdrop="static">{{ 'order.mark-as-paid'|trans }}</a>
                     {% else %}
@@ -416,22 +442,25 @@
     {% endblock %}
 
     {% block sidebar %}
-        <div class="card mt-20px mt-md-0">
-            {% include 'admin/order/_order-delivery-overdue-widget.html.twig' %}
-            <div class="card-body">
-                <div class="">
-                    {% include 'admin/order/_order-delivery-widget.html.twig' %}
+        <div class="mt-20px mt-md-0">
+            <div class="card mb-20px">
+                {% include 'admin/order/_order-delivery-overdue-widget.html.twig' %}
+                <div class="card-body">
+                    <div class="">
+                        {% include 'admin/order/_order-delivery-widget.html.twig' %}
+                    </div>
                 </div>
+                {% if flowerShopMode %}
+                    {% if isEditEnabled is defined and isEditEnabled == true %}
+                    <div class="edit-block d-print-none">
+                        <div class="card-footer text-right">
+                            <a href="" class="btn btn-secondary" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit mr-2"></i>{{ 'generic.modify'|trans }}</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
             </div>
-            {% if isEditEnabled is defined and isEditEnabled == true %}
-            <div class="edit-block d-print-none">
-                <div class="card-footer text-right">
-                    <a href="" class="btn btn-smX btn-secondary" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit mr-2"></i>{{ 'generic.modify'|trans }}</a>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-        <div class="card mt-20px">
+            <div class="card">
             <div class="card-body">
                 {% include 'admin/customer-card.html.twig' with {'customer': order.customer, 'orderCount': order.customer.ordersPlaced.count} %}
             </div>
@@ -505,20 +534,21 @@
                 </div>
             </div>
         </div>
+        </div>
     {% endblock %}
 
     {% block additionalContent %}
-        <div class="row d-print-none mt-20px">
+        <div class="row d-print-none mt-20px mb-5">
             <div class="col-md-8 px-0 px-md-10px">
                 <div class="card shadow-none bg-transparent">
-                    <div class="card-body border-bottom">
+                    <div class="card-body border-bottom px-lg-0">
                         <div class="">
                             <div class="h5 mb-0">{{ 'order.history.history-timeline'|trans }}</div>
                         </div>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body p-0 border-bottom pb-20px">
                             <div class="">
-                                <div class="timeline-alt">
+                                <div class="timeline-alt mt-3">
                                     <div class="">
                                         <div class="timeline-item timeline-input">
                                             <div class="timeline-icon">
@@ -531,7 +561,18 @@
                                             </div>
                                         </div>
                                         {% if order.logs is defined and order.logs is not null %}
+                                            {% set prevDate = null %}
                                             {% for log in order.logs %}
+                                                {% set currentDate = log.createdAt|localizedDate('F d') %}
+                                                {% if prevDate != currentDate %}
+                                                    {% set prevDate = log.createdAt|localizedDate('F d') %}
+                                                    <div class="timeline-item">
+                                                        <div class="timeline-item-info d-flex flex-column flex-sm-row justify-content-start justify-content-sm-between">
+                                                            <span class="text-muted">{{ prevDate|upper }}</span>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+
                                                 <div class="timeline-item {% if log.isComment is defined and log.isComment == true %}timeline-comment{% endif %}">
                                                     <div class="timeline-icon">
                                                         {% if log.channel is defined and log.channel.shortcode == constant('App\\Entity\\OrderLog::CHANNEL_ADMIN') %}
@@ -541,29 +582,34 @@
                                                         {% endif %}
                                                     </div>
                                                     <div class="timeline-item-info d-flex flex-column flex-sm-row justify-content-start justify-content-sm-between">
-                                                        {#                                                        <a href="/" class="text-primary font-weight-bold mb-1 d-block">You sold an item</a>#}
                                                         <div>
+{#                                                            {% if log.channel is defined and log.channel.shortcode is not null %}#}
+{#                                                                <div>#}
+{#                                                                    <small class="text-muted">{{ log.channel|capitalize }}</small>#}
+{#                                                                </div>#}
+{#                                                            {% endif %}#}
                                                             {% if log.description is defined and log.description is not null %}
                                                                 <a class="btn-link-timeline" data-toggle="collapse" href="#collapseLog_{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapseLog_{{ loop.index }}">
                                                                     {{ log.message }} <i class="fas fa-angle-down ml-1"></i>
                                                                 </a>
+                                                                {% if log.channel is defined and log.channel.shortcode is not null %}
+                                                                    <div class="d-inline-block ml-2">
+                                                                    (<small class="text-muted">{{ log.channel|capitalize }}</small>)
+                                                                    </div>
+                                                                {% endif %}
                                                                 <div class="collapse" id="collapseLog_{{ loop.index }}">
-                                                                    {{ log.description|raw }}
+                                                                    <div class="mt-3">
+                                                                        {{ log.description|raw }}
+                                                                    </div>
                                                                 </div>
                                                             {% else %}
                                                                 {{ log.message }}
                                                             {% endif %}
-
-                                                            {% if log.channel is defined and log.channel.shortcode is not null %}
-                                                                <div>
-                                                                    <small class="text-muted">{{ log.channel }}</small>
-                                                                </div>
-                                                            {% endif %}
                                                         </div>
                                                         <div class="d-flex flex-row flex-sm-column text-nowrap ml-0 ml-sm-3 mt-1 mt-sm-0 align-items-end">
-                                                            <div class="d-flex mr-2 mr-sm-0">
-                                                                <div class="text-muted">{{ log.createdAt|localizedDate|lower }}</div>
-                                                            </div>
+{#                                                            <div class="d-flex mr-2 mr-sm-0">#}
+{#                                                                <div class="text-muted">{{ log.createdAt|localizedDate|lower }}</div>#}
+{#                                                            </div>#}
                                                             <div class="d-flex">
                                                                 <div class="text-muted">{{ log.createdAt|localizedTime }}</div>
                                                             </div>

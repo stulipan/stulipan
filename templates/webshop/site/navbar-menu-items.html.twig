@@ -1,8 +1,10 @@
 {% set nav = navigation|fetchNavigationBySlug('fomenu') %}
 {% if nav is defined and nav %}
 {% for item in nav.navigationItems %}
+    {% if item.enabled is same as true %}
     <li class="nav-item"><a href="{{ item.url }}" class="nav-link">{{ item.name }}</a>
     </li>
+    {% endif %}
 {% endfor %}
 {% endif %}
 

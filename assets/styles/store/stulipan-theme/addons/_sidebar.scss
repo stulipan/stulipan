@@ -19,7 +19,7 @@ $sidebar-content-box-shadow-xs:       0 .25rem .5rem rgba($black, .5) !default;
 $sidebar-content-box-shadow-sm-up:    0 0 0 1px rgba($gray-800, .05), 0 1px 11px 0 rgba($gray-800, 0.15) !default; //0 .5rem 1rem rgba($black, .5) !default;
 
 $sidebar-backdrop-bg:                 $gray-900 !default;
-$sidebar-backdrop-opacity:            .1 !default;
+$sidebar-backdrop-opacity:            .4 !default;
 $sidebar-header-border-color:         $gray-200 !default;
 $sidebar-footer-border-color:         $sidebar-header-border-color !default;
 $sidebar-header-border-width:         $sidebar-content-border-width !default;
@@ -27,12 +27,6 @@ $sidebar-footer-border-width:         $sidebar-header-border-width !default;
 $sidebar-header-padding-y:            1rem !default;
 $sidebar-header-padding-x:            1rem !default;
 $sidebar-header-padding:              $sidebar-header-padding-y $sidebar-header-padding-x !default; // Keep this for backwards compatibility
-
-//$sidebar-xl:                          1140px !default;
-//$sidebar-lg:                          800px !default;
-//$sidebar-md:                          550px !default;
-//$sidebar-md-2:                        620px !default;
-//$sidebar-sm:                          300px !default; //300px !default;
 
 $sidebar-fade-transform:              none !default; // translateX(100%) !default;
 $sidebar-show-transform:              none !default; //translateX(0) !default;
@@ -46,9 +40,11 @@ $sidebar-default:                     380px !default;
 
 $sidebar-close-font-size:             2rem !default;
 $sidebar-close-line-height:           $line-height-base !default;
-$sidebar-close-bg:                    $gray-800 !default;
-$sidebar-close-hover-bg:              $gray-900 !default;
-$sidebar-close-color:                 $white !default;
+$sidebar-close-bg:                    $gray-close-button !default;
+$sidebar-close-hover-bg:              darken($gray-close-button, 5%) !default;
+$sidebar-close-color:                 $gray-800 !default;
+$sidebar-close-hover-color:           $gray-900 !default;
+$sidebar-close-focus-shadow:          $btn-focus-box-shadow !default;
 
 
 // .sidebar-open      - body class for killing the scroll
@@ -111,12 +107,12 @@ $sidebar-close-color:                 $white !default;
         width: $sidebar-sm;
         left: -1 * $sidebar-sm;
       }
-      &.sidebar-md,
-      &.sidebar-lg,
-      &.sidebar-xl {
-        width: calc(100%);
-        left: calc(-1 * 100%);
-      }
+      //&.sidebar-md,
+      //&.sidebar-lg,
+      //&.sidebar-xl {
+      //  width: calc(100%);
+      //  left: calc(-1 * 100%);
+      //}
     }
   }
   .sidebar.sidebar-right {
@@ -128,12 +124,12 @@ $sidebar-close-color:                 $white !default;
         width: $sidebar-sm;
         right: -1 * $sidebar-sm;
       }
-      &.sidebar-md,
-      &.sidebar-lg,
-      &.sidebar-xl {
-        width: calc(100%);
-        right:  calc(-1 * 100%);
-      }
+      //&.sidebar-md,
+      //&.sidebar-lg,
+      //&.sidebar-xl {
+      //  width: calc(100%);
+      //  right:  calc(-1 * 100%);
+      //}
     }
   }
 }
@@ -148,15 +144,15 @@ $sidebar-close-color:                 $white !default;
         width: $sidebar-default;
         left: -1 * $sidebar-default;
       }
-      &.sidebar-md {
-        width: $sidebar-md;
-        left: -1 * $sidebar-md;
-      }
-      &.sidebar-lg,
-      &.sidebar-xl {
-        width: $sidebar-md;
-        left: -1 * $sidebar-md;
-      }
+      //&.sidebar-md {
+      //  width: $sidebar-md;
+      //  left: -1 * $sidebar-md;
+      //}
+      //&.sidebar-lg,
+      //&.sidebar-xl {
+      //  width: $sidebar-md;
+      //  left: -1 * $sidebar-md;
+      //}
     }
   }
   .sidebar.sidebar-right {
@@ -168,70 +164,70 @@ $sidebar-close-color:                 $white !default;
         width: $sidebar-default;
         right: -1 * $sidebar-default;
       }
-      &.sidebar-md {
-        width: $sidebar-md;
-        right: -1 * $sidebar-md;
-      }
-      &.sidebar-lg,
-      &.sidebar-xl {
-        width: $sidebar-md;
-        right: -1 * $sidebar-md;
-      }
+      //&.sidebar-md {
+      //  width: $sidebar-md;
+      //  right: -1 * $sidebar-md;
+      //}
+      //&.sidebar-lg,
+      //&.sidebar-xl {
+      //  width: $sidebar-md;
+      //  right: -1 * $sidebar-md;
+      //}
     }
   }
 }
 
-@include media-breakpoint-up(md) {
-  // Automatically set sidebar's width for larger viewports
-  .sidebar.sidebar-left {
-    & {
-      &.sidebar-lg,
-      &.sidebar-xl {
-        width: $sidebar-lg;
-        left: -1 * $sidebar-lg;
-      }
-    }
-  }
-
-  .sidebar.sidebar-right {
-    & {
-      &.sidebar-lg,
-      &.sidebar-xl {
-        width: $sidebar-lg;
-        right: -1 * $sidebar-lg;
-      }
-    }
-  }
-}
-
-@include media-breakpoint-up(lg) {
-  // Automatically set sidebar's width for larger viewports
-  .sidebar.sidebar-left {
-    & {
-      &.sidebar-lg {
-        width: $sidebar-lg;
-        left: -1 * $sidebar-lg;
-      }
-      &.sidebar-xl {
-        width: $sidebar-xl;
-        left: -1 * $sidebar-xl;
-      }
-    }
-  }
-
-  .sidebar.sidebar-right {
-    & {
-      &.sidebar-lg {
-        width: $sidebar-lg;
-        right: -1 * $sidebar-lg;
-      }
-      &.sidebar-xl {
-        width: $sidebar-xl;
-        right: -1 * $sidebar-xl;
-      }
-    }
-  }
-}
+//@include media-breakpoint-up(md) {
+//  // Automatically set sidebar's width for larger viewports
+//  .sidebar.sidebar-left {
+//    & {
+//      &.sidebar-lg,
+//      &.sidebar-xl {
+//        width: $sidebar-lg;
+//        left: -1 * $sidebar-lg;
+//      }
+//    }
+//  }
+//
+//  .sidebar.sidebar-right {
+//    & {
+//      &.sidebar-lg,
+//      &.sidebar-xl {
+//        width: $sidebar-lg;
+//        right: -1 * $sidebar-lg;
+//      }
+//    }
+//  }
+//}
+//
+//@include media-breakpoint-up(lg) {
+//  // Automatically set sidebar's width for larger viewports
+//  .sidebar.sidebar-left {
+//    & {
+//      &.sidebar-lg {
+//        width: $sidebar-lg;
+//        left: -1 * $sidebar-lg;
+//      }
+//      &.sidebar-xl {
+//        width: $sidebar-xl;
+//        left: -1 * $sidebar-xl;
+//      }
+//    }
+//  }
+//
+//  .sidebar.sidebar-right {
+//    & {
+//      &.sidebar-lg {
+//        width: $sidebar-lg;
+//        right: -1 * $sidebar-lg;
+//      }
+//      &.sidebar-xl {
+//        width: $sidebar-xl;
+//        right: -1 * $sidebar-xl;
+//      }
+//    }
+//  }
+//}
 
 .sidebar.sidebar-left.show {
   left: 0;
@@ -338,29 +334,34 @@ $sidebar-close-color:                 $white !default;
 // Top section of the sidebar w/ title and dismiss
 .sidebar-header {
   display: flex;
-  align-items: flex-start; // so the close btn always stays on the upper right corner
+  height: $navbar-stulipan-height;
+  align-items: center;
   justify-content: space-between; // Put sidebar header elements (title and dismiss) on opposite ends
-  padding: $sidebar-header-padding-y $sidebar-header-padding-x;
+  padding: 0 $sidebar-header-padding-x;
   border-bottom: $sidebar-header-border-width solid $sidebar-header-border-color;
   @include border-top-radius($sidebar-content-border-radius);
 
   .close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(#{$navbar-stulipan-height} * 0.66) ;
+    height: calc(#{$navbar-stulipan-height} * 0.66);
+    overflow: hidden;
     font-size: $sidebar-close-font-size;
-    line-height: calc(#{$line-height-base} * 1rem + #{$sidebar-header-padding-y} * 2);
-    //font-weight: $font-weight-light;
     opacity: 1;
-    min-width: 2.5rem;
-    min-height: 2.5rem;
     background-color: $sidebar-close-bg;
     color: $sidebar-close-color;
-    //padding: $sidebar-header-padding-y $sidebar-header-padding-x;
-    // auto on the left force icon to the right even when there is no .sidebar-title
-    margin: (-$sidebar-header-padding-y) (-$sidebar-header-padding-x) (-$sidebar-header-padding-y) auto;
 
     &:hover,
     &:focus {
       opacity: 1 !important;
       background-color: $sidebar-close-hover-bg;
+      color: $sidebar-close-hover-color;
+    }
+    &:focus {
+      outline: 0;
+      box-shadow: $sidebar-close-focus-shadow;
     }
   }
 }

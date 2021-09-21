@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\TimestampableTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,13 +15,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  *     repositoryClass="App\Repository\OrderTransactionRepository")
  */
-class Transaction
+class PaymentTransaction
 {
-    public const KIND_AUTHORIZATION = 'authorization';
-    public const KIND_CAPTURE       = 'capture';
-    public const KIND_SALE          = 'sale';
-    public const KIND_VOID          = 'void';
-    public const KIND_REFUND        = 'refund';
+    public const KIND_AUTHORIZATION = 'authorization';  // An amount reserved against the cardholder's funding source. Money does not change hands until the authorization is captured.
+    public const KIND_CAPTURE       = 'capture';        // A transfer of the money that was reserved during the authorization stage.
+    public const KIND_SALE          = 'sale';           // An authorization and capture performed together in a single step.
+    public const KIND_VOID          = 'void';           // A cancellation of a pending authorization or capture.
+    public const KIND_REFUND        = 'refund';         // A partial or full return of captured funds to the cardholder. A refund can happen only after a capture is processed.
 
     public const ERROR_INCORRECT_NUMBER      = 'incorrect_number';
     public const ERROR_INVALID_NUMBER        = 'invalid_number';
@@ -41,10 +36,11 @@ class Transaction
     public const ERROR_CALL_ISSUER           = 'call_issuer';
     public const ERROR_PICK_UP_CARD          = 'pick_up_card';
 
-    public const STATUS_PENDING      = 'pending';
-    public const STATUS_FAILURE      = 'failure';
-    public const STATUS_ERROR        = 'error';
+    public const STATUS_PENDING      = 'pending';   // amikor egy tranzakcio bejegyzes krealodik
     public const STATUS_SUCCESS      = 'success';
+    public const STATUS_FAILURE      = 'failure';   // amikor egy tranzakcio nem sikerul (insufficient funds, card declined / expired, incorrect number, valid expiry, etc)
+    public const STATUS_ERROR        = 'error';     // amikor tehnikai problema va (nem valaszol a gateway, hibas GW login info, etc)
+    public const STATUS_CANCELED     = 'canceled';  // By Stulipan: a user feladja
 
     public const SOURCE_WEB         = 'web';
     public const SOURCE_POS         = 'pos';
@@ -86,6 +82,14 @@ class Transaction
     private $kind;
 
     /**
+     * @var string
+     * @Groups({"orderView"})
+     *
+     * @ORM\Column(name="status", type="string", length=10, nullable=false)
+     */
+    private $status;
+
+    /**
      * @var string|null
      * @Groups({"orderView"})
      *
@@ -97,17 +101,17 @@ class Transaction
      * @var string|null
      * @Groups({"orderView"})
      *
-     * @ORM\Column(name="error_code", type="string", length=255, nullable=true)
+     * @ORM\Column(name="gateway", type="string", length=255, nullable=true)
      */
-    private $errorCode;
+    private $gateway;
 
     /**
      * @var string|null
      * @Groups({"orderView"})
      *
-     * @ORM\Column(name="gateway", type="string", length=255, nullable=true)
+     * @ORM\Column(name="error_code", type="string", length=255, nullable=true)
      */
-    private $gateway;
+    private $errorCode;
 
     /**
      * @var string|null
@@ -132,12 +136,20 @@ class Transaction
     private $order;
 
     /**
-     * @var Transaction|null
+     * @var PaymentTransaction|null
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\Transaction")
+     * @ORM\OneToOne(targetEntity="App\Entity\PaymentTransaction")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
     private $parent;
+
+    /**
+     * @var PaymentFundingDetail|null
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\PaymentFundingDetail")
+     * @ORM\JoinColumn(name="funding_detail_id", referencedColumnName="id", nullable=true)
+     */
+    private $fundingDetail;
 
     /**
      * @var DateTime|null
@@ -156,20 +168,36 @@ class Transaction
     private $source_name;
 
     /**
-     * @var string
-     * @Groups({"orderView"})
-     *
-     * @ORM\Column(name="status", type="string", length=10, nullable=false)
-     */
-    private $status;
-
-    /**
      * @var bool
      * @Groups({"productView"})
      *
      * @ORM\Column(name="is_test", type="boolean", nullable=false, options={"default"=false})
      */
     private $test = 0;
+
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="gateway_error_code", type="string", length=255, nullable=true)
+     */
+    private $gatewayErrorCode;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="gateway_error_title", type="string", length=255, nullable=true)
+     */
+    private $gatewayErrorTitle;
+
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="gateway_error_message", type="string", length=255, nullable=true)
+     * @ Assert\NotBlank(message="Hiányzik a vásárló keresztneve!")
+     */
+    private $gatewayErrorMessage;
 
 
 
@@ -310,17 +338,17 @@ class Transaction
     }
 
     /**
-     * @return Transaction|null
+     * @return PaymentTransaction|null
      */
-    public function getParent(): ?Transaction
+    public function getParent(): ?PaymentTransaction
     {
         return $this->parent;
     }
 
     /**
-     * @param Transaction|null $parent
+     * @param PaymentTransaction|null $parent
      */
-    public function setParent(?Transaction $parent): void
+    public function setParent(?PaymentTransaction $parent): void
     {
         $this->parent = $parent;
     }
@@ -395,5 +423,69 @@ class Transaction
     public function hasError(): bool
     {
         return null === $this->errorCode ? false : true;
+    }
+
+    /**
+     * @return PaymentFundingDetail|null
+     */
+    public function getFundingDetail(): ?PaymentFundingDetail
+    {
+        return $this->fundingDetail;
+    }
+
+    /**
+     * @param PaymentFundingDetail|null $fundingDetail
+     */
+    public function setFundingDetail(?PaymentFundingDetail $fundingDetail): void
+    {
+        $this->fundingDetail = $fundingDetail;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGatewayErrorCode(): ?string
+    {
+        return $this->gatewayErrorCode;
+    }
+
+    /**
+     * @param string|null $gatewayErrorCode
+     */
+    public function setGatewayErrorCode(?string $gatewayErrorCode): void
+    {
+        $this->gatewayErrorCode = $gatewayErrorCode;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGatewayErrorTitle(): ?string
+    {
+        return $this->gatewayErrorTitle;
+    }
+
+    /**
+     * @param string|null $gatewayErrorTitle
+     */
+    public function setGatewayErrorTitle(?string $gatewayErrorTitle): void
+    {
+        $this->gatewayErrorTitle = $gatewayErrorTitle;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getGatewayErrorMessage(): ?string
+    {
+        return $this->gatewayErrorMessage;
+    }
+
+    /**
+     * @param string|null $gatewayErrorMessage
+     */
+    public function setGatewayErrorMessage(?string $gatewayErrorMessage): void
+    {
+        $this->gatewayErrorMessage = $gatewayErrorMessage;
     }
 }

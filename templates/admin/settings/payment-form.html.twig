@@ -61,12 +61,14 @@
                 </div>
                 <div class="col-sm-8 col-lg-6 ">
                     <div class="field-group">
-                        <div class="field-item field-prepend">
-                            <div class="field-addon-prepend w-addon-smX">HUF</div>
+                        <div class="field-item">
+                            <div class="field-prepend">
+                                <div class="field-addon-prepend w-addon-smX">HUF</div>
+                            </div>
+                            {{ form_widget(form.price) }}
+                            {{ form_errors(form.price) }}
                         </div>
-                        {{ form_widget(form.price) }}
                     </div>
-                    {{ form_errors(form.price) }}
                 </div>
             </div>
 

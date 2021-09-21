@@ -138,10 +138,11 @@ ul ol {
 
 dt {
   font-weight: $dt-font-weight;
+  margin-bottom: .25rem; // Added by Stulipan
 }
 
 dd {
-  margin-bottom: .5rem;
+  margin-bottom: 1rem; //.5rem;
   margin-left: 0; // Undo browser default
 }
 

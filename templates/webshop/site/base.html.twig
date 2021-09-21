@@ -9,17 +9,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
-{#    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">#}
-{#    <meta http-equiv="Pragma" content="no-cache">#}
-{#    <meta http-equiv="Expires" content="0">#}
-
     <title>{% block title %}{% if pageTitle is defined and pageTitle is not empty %}{{ pageTitle }} | {% endif %} {{ storeSettings.get('meta.name') }}{% endblock %}</title>
 
     {% block stylesheets %}
-    <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" >
+{#        <!-- 48×48 -->#}
+        <link rel="shortcut icon" href="{{ storeFavicon }}" type="image/png">
+        {#        <link rel="icon" href="{{ asset('webshop/site/favicon/icon.svg')}}" type="image/svg+xml">#}
+{#        <!-- 180×180 -->#}
+        <link rel="apple-touch-icon" href="{{ storeSettings.get('store.apple-touch-icon') }}">
+        <link rel="manifest" href="{{ asset('webshop/site/favicon/manifest.webmanifest')}}">
+
 {#    <link rel="preload" as="font" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}" crossorigin>#}
 {#    <link rel="stylesheet" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}">#}
-{#    <link rel="preconnect" href="https://fonts.gstatic.com">#}
+
+{#    <link rel="dns-prefetch" href="//fonts.googleapis.com">#}
+{#    <link rel="preconnect" href="https://fonts.googleapis.com">#}
 {#    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet">#}
 
 
@@ -28,7 +32,6 @@
 {#    <link rel="stylesheet" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">#}
 
     {{ encore_entry_link_tags('store-theme') }}
-
     <link rel="preload" href="{{ asset('build/store-plugins.css') }}" as="style" onload="this.rel='stylesheet'">
 
 {#        <link rel="preload" as="style" href="{{ asset('build/store-plugins.css') }}">#}
@@ -63,6 +66,10 @@
 {#</div>#}
 
 {% block body %}
+    {% block trackingCodesBody %}
+        {% include 'webshop/widgets/tracking-codes-body.html.twig' %}
+    {% endblock %}
+
 {% endblock %}
 
 

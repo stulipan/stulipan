@@ -22,8 +22,7 @@
     {{ parent() }}
 
     {{ encore_entry_link_tags('owlcarousel') }}
-{#    <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css" rel="stylesheet" >#}
-    <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >
+{#    <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >#}
 
     <meta property="og:title" content="{{ product.name }} - {{ storeSettings.get('meta.title')}}">
     <meta property="og:description" content="{{ product.name }}. {{ storeSettings.get('meta.description')}}">
@@ -44,8 +43,7 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-md-6 col-lg-7 order-1 correction-product-image-no-padding">
-                            <div class="product-images">
-                                <div class="row">
+                            <div class="row">
                                     <!-- Thumbnails lef to the  Main Image -->
                                     {% if isThumbnailsLeft == true %}
                                     <div class="d-none d-sm-flex col-sm-2 pr-0 order-2 order-sm-1">
@@ -133,7 +131,6 @@
                                     </div>
                                     {% endif %}
                                 </div>
-                            </div>
 {#                            <div class="mt-3 mt-sm-6">#}
 {#                                <div class="row">#}
 {#                                    <div class="col-12">#}
@@ -149,7 +146,8 @@
                         </div>
 
                         <div class="col-md-6 col-lg-5 order-2 mt-3 mt-md-0 pl-sm-3">
-                            <div class="sticky-top" style="top: 2rem;">
+{#                            <div class="sticky-top" style="top: 2rem;">#}
+                            <div>
                                 <div class="product-name">
                                     <h1 class="">{{ product.name }}</h1>
                                 </div>
@@ -192,7 +190,7 @@
 
                                     <div class="product-part">
                                         <div class="">
-                                            <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-block" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
+                                            <button type="submit" class="JS--Button-addToCart btn btn-lg btn-success btn-block" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
                                             <span class="loading-spinner-invisible">
                                                 <svg class="icon addtocart">
                                                     <use xlink:href="#bag"> </use>
@@ -203,6 +201,45 @@
                                             </button>
                                         </div>
                                     </div>
+
+{#                                    <div class="product-part mt-3">#}
+{#                                        <div class="p-3X" style="color: #adb5bd;">#}
+{#                                            <div class="h3 d-none">Biztonságos fizetés</div>#}
+{#                                            <div class="d-flex justify-content-between align-items-start">#}
+{#                                                <div class="service-columnX">#}
+{#                                                    <div class="service-textX text-nowrap">#}
+{#                                                        <div class="text-uppercase font-weight-normal">#}
+{#                                                            <svg class="icon mr-0">#}
+{#                                                                <use xlink:href="#check2-circle"> </use>#}
+{#                                                            </svg>#}
+{#                                                            Utánvét</div>#}
+{#                                                        <div class="d-none">A csomag átvételekor fizetsz.</div>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                                <div class="service-columnX">#}
+{#                                                    <div class="service-textX text-nowrap">#}
+{#                                                        <div class="text-uppercase font-weight-normal">#}
+{#                                                            <svg class="icon mr-0">#}
+{#                                                                <use xlink:href="#check2-circle"> </use>#}
+{#                                                            </svg>#}
+{#                                                            Bankkártya</div>#}
+{#                                                        <div class="d-none">Biztonságos és megbízható.</div>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                                <div class="service-columnX">#}
+{#                                                    <div class="service-textX text-nowrap">#}
+{#                                                        <div class="text-uppercase font-weight-normal">#}
+{#                                                            <svg class="icon mr-0">#}
+{#                                                                <use xlink:href="#check2-circle"> </use>#}
+{#                                                            </svg>#}
+{#                                                            Banki utalás</div>#}
+{#                                                        <div class="d-none">Online bankon keresztül.</div>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+
 {#                                            <div class="product-credit-card">#}
 {#                                                <div class="text-center">#}
 {#                                                    <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">#}
@@ -220,7 +257,7 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Az egész országba szállítunk. Szállítási díjak itt.</a>
+                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Az egész országba szállítunk. Részletek és díjak itt.</a>
                                                 </div>
                                             </div>
                                             <div class="list-group-item d-flex align-items-center">
@@ -230,7 +267,7 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--MagasElmeny">Magas vásárlói elégedettség és 30 napos visszaküldési garancia!</a>
+                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--MagasElmeny">30 napos visszaküldési garancia.</a>
                                                 </div>
                                             </div>
                                             <div class="list-group-item d-flex align-items-center">
@@ -240,7 +277,56 @@
                                                     </svg>
                                                 </div>
                                                 <div>
-                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--Kapcsolat">Egyedi terméket szeretnél? Lépj kapcsolatba velünk!</a>
+                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--Kapcsolat">Egyedi terméket szeretnél?</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-part">
+                                        <div class="row">
+                                            <div class="col-12 col-sm-9 col-md-9">
+                                                <div class="p-4" style="background-color: #f0f3f5;">
+                                                    <div class="h3 d-none mb-0">Biztonságos fizetés</div>
+                                                    <div class="text-mutedX">Fizess kényelmesen és biztonságosan, ahogy neked a legegyszerűbb.</div>
+                                                    <div class="mt-3 d-flex justify-content-between align-items-start flex-column">
+                                                        <div class="mb-1">
+                                                            <div class="text-nowrap">
+                                                                <div class="text-uppercase font-weight-normal">
+                                                                    <svg class="icon">
+                                                                        <use xlink:href="#check2-circle"> </use>
+                                                                    </svg>
+                                                                    Utánvét</div>
+                                                                <div class="d-none">A csomag átvételekor fizetsz.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-1">
+                                                            <div class="text-nowrap">
+                                                                <div class="text-uppercase font-weight-normal">
+                                                                    <svg class="icon">
+                                                                        <use xlink:href="#check2-circle"> </use>
+                                                                    </svg>
+                                                                    Banki utalás</div>
+                                                                <div class="d-none">Online bankon keresztül.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="service-columnX">
+                                                            <div class="text-nowrap">
+                                                                <div class="text-uppercase font-weight-normal">
+                                                                    <svg class="icon">
+                                                                        <use xlink:href="#check2-circle"> </use>
+                                                                    </svg>
+                                                                    Bankkártya</div>
+                                                                <div class="d-none">Biztonságos és megbízható.</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2 text-left">
+                                                        <div class="row">
+                                                            <div class="col-9 col-md-12">
+                                                                <img src="/uploads/images/icons/barion-card.svg" alt="..." class="w-100 h-25pxX" style="filter: grayscale(100%);">
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -261,8 +347,8 @@
                 <h4 class="hero-recommended">Mások ezeket is megnézték</h4>
             </div>
             <div class="products-carousel mt-4">
-                <div class="JS--Carousel-prev carousel-nav prev" role="button" tabindex="0">
-                    <div class="carousel-btn">
+                <div class="JS--Carousel-prev carousel-nav prev">
+                    <div class="carousel-btn" role="button" tabindex="0">
                         <svg class="icon">
                             <use xlink:href="#chevron-left"></use>
                         </svg>
@@ -274,7 +360,7 @@
 
                         {% if product.isEnabled or product.isUnavailable %}
                             <div class="product">
-                                <div class="product-image-wrapper">
+                                <div class="product-wrapper">
                                     <div class="product-image">
                                         {% set bestseller = false %}
                                         {% if product.isUnavailable() %}
@@ -307,8 +393,8 @@
                     {% endfor %}
                 {% endif %}
             </div>
-                <div class="JS--Carousel-next carousel-nav next" role="button" tabindex="0">
-                    <div class="carousel-btn">
+                <div class="JS--Carousel-next carousel-nav next">
+                    <div class="carousel-btn" role="button" tabindex="0">
                         <svg class="icon">
                             <use xlink:href="#chevron-right"></use>
                         </svg>
@@ -504,7 +590,7 @@
             // });
             let $recommendedProducts = $('.JS--Wrapper-recommendedProducts');
             $recommendedProducts.owlCarousel({
-                loop: true,
+                loop: false,
                 margin: 10,
                 rewind: false,
                 slideBy: 'page',
@@ -519,11 +605,11 @@
                         nav: false
                     },
                     768: {
-                        items: 4,
+                        items: 3,
                         nav: false
                     },
                     992: {
-                        items: 5,
+                        items: 4,
                         nav: false,
                         loop: true,
                     }

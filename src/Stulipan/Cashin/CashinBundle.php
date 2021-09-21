@@ -6,7 +6,7 @@ use App\Entity\Order;
 use App\Entity\PaymentMethod;
 use App\Entity\Transaction;
 use App\Stulipan\Cashin\Model\Enumerations\CashinEnvironment;
-use App\Stulipan\Cashin\Model\PaymentModel;
+use App\Stulipan\Cashin\Model\CashinPaymentModel;
 use App\Stulipan\GatewayCib\GatewayCibBundle;
 use App\Stulipan\GatewayCib\Model\Enumerations\CibEnvironment;
 use App\Stulipan\GatewayCib\Model\PaymentRequest;
@@ -84,7 +84,7 @@ class CashinBundle extends Bundle
     
     public function createPayment(string $gateway, Order $order)
     {
-        $payment = new PaymentModel();
+        $payment = new CashinPaymentModel();
         
         if ($order->getPaymentMethod()->getShortcode() === self::GATEWAY_BARION) {
             $barionPayment = $this->createBarionPayment($order);
@@ -129,8 +129,8 @@ class CashinBundle extends Bundle
             $trans->AddItem($item);
         }
 
-        $urlRedirect = $this->urlGenerator->generate('site-checkout-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $urlCallback = $this->urlGenerator->generate('site-checkout-payment-callback', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $urlRedirect = $this->urlGenerator->generate('site-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $urlCallback = $this->urlGenerator->generate('site-payment-callback-barion', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $paymentRequest = new PreparePaymentRequestModel();
         $paymentRequest->GuestCheckout = true;
@@ -168,9 +168,9 @@ class CashinBundle extends Bundle
 
     private function createCibPayment(Order $order): ?PaymentResponse
     {
-//        $urlRedirect = $this->urlGenerator->generate('site-checkout-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
+//        $urlRedirect = $this->urlGenerator->generate('site-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $urlRedirect = $this->urlGenerator->generate('site-checkout-payment-cib', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $urlCallback = $this->urlGenerator->generate('site-checkout-payment-callback', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $urlCallback = $this->urlGenerator->generate('site-payment-callback-barion', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $paymentRequest = new PaymentRequest();
         $paymentRequest->uid = 'CIB12345678';

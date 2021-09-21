@@ -122,36 +122,36 @@
 }
 
 
-// Nincs HASZNALATBAN !!!!!!!!!!!!!
-.modal-dialog-bottom {
-  display: flex;
-  align-items: center;
-  min-height: calc(100% - #{$modal-dialog-margin * 1});
-  margin: $modal-dialog-margin 0 0 0;
-
-  // Ensure `modal-dialog-centered` extends the full height of the view (IE10/11)
-  &::before {
-    display: block; // IE10
-    height: calc(100vh - #{$modal-dialog-margin * 1});
-    content: "";
-  }
-
-  // Ensure `.modal-body` shows scrollbar (IE10/11)
-  &.modal-dialog-scrollable {
-    flex-direction: row;
-    justify-content: center;
-    height: 100%;
-
-    .modal-content {
-      max-height: calc(80% - #{$modal-dialog-margin * 1});
-      align-self: flex-end;
-    }
-
-    &::before {
-      content: none;
-    }
-  }
-}
+//// Nincs HASZNALATBAN !!!!!!!!!!!!!
+//.modal-dialog-bottom {
+//  display: flex;
+//  align-items: center;
+//  min-height: calc(100% - #{$modal-dialog-margin * 1});
+//  margin: $modal-dialog-margin 0 0 0;
+//
+//  // Ensure `modal-dialog-centered` extends the full height of the view (IE10/11)
+//  &::before {
+//    display: block; // IE10
+//    height: calc(100vh - #{$modal-dialog-margin * 1});
+//    content: "";
+//  }
+//
+//  // Ensure `.modal-body` shows scrollbar (IE10/11)
+//  &.modal-dialog-scrollable {
+//    flex-direction: row;
+//    justify-content: center;
+//    height: 100%;
+//
+//    .modal-content {
+//      max-height: calc(80% - #{$modal-dialog-margin * 1});
+//      align-self: flex-end;
+//    }
+//
+//    &::before {
+//      content: none;
+//    }
+//  }
+//}
 
 // Actual modal
 .modal-content {
@@ -169,6 +169,7 @@
   @include box-shadow($modal-content-box-shadow-xs);
   // Remove focus outline from opened modal
   outline: 0;
+  text-align: left;  // Added by Stulipan
 }
 
 // Modal background

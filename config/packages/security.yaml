@@ -91,7 +91,9 @@ security:
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 2592000 # 30 days in seconds, if missing, default is one year.
-                path: /%app_locales%/admin
+                path: /
+#                path: /%app_locales%/admin
+#                always_remember_me: true
             switch_user: true  # Add to any URL '?_switch_user=' and the email address of a user to impersonate
             logout:
                 path: admin-logout

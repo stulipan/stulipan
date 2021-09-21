@@ -16,9 +16,9 @@ $order-summary-total-font-size:   1.1rem !default;
   padding-bottom: $cart-item-padding-y;
   border-bottom: $cart-item-border-width solid $cart-item-border-color;
 
-  &:last-of-type {
-    border-bottom: none;
-  }
+  //&:last-of-type {
+  //  border-bottom: none;
+  //}
 
   & .cart-item-img {
     max-width: $cart-item-image-width;
@@ -134,11 +134,14 @@ $timeline-path-width:                       4px !default;
 
 $timeline-item-padding:                     $card-spacer-x !default;
 
-$timeline-icon-size:                        28px !default;
+$timeline-icon-size:                        1.25 * $font-size-base !default;
+$timeline-comment-icon-size:                3 * $font-size-base !default;
 $timeline-icon-border-width:                3px !default;
 $timeline-icon-border-color:                $body-bg !default;
 $timeline-icon-color:                       $white !default;
 $timeline-icon-bg:                          darken($gray-500, 10%) !default;
+
+$timeline-comment-border-radius:            $border-radius !default;
 
 
 .timeline-alt {
@@ -157,7 +160,8 @@ $timeline-icon-bg:                          darken($gray-500, 10%) !default;
 
   & .timeline-item {
     position: relative;
-    padding: $timeline-item-padding;
+    padding: 0 $timeline-item-padding $timeline-item-padding $timeline-item-padding;
+    margin-bottom: $timeline-item-padding;
 
     &:not(.timeline-comment):last-of-type {
       padding-bottom: 0;
@@ -167,6 +171,9 @@ $timeline-icon-bg:                          darken($gray-500, 10%) !default;
       background-color: #ffffff;
       -webkit-box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
       box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+      padding-top: $timeline-item-padding;
+      margin-bottom: calc(2 * #{$timeline-item-padding});
+      @include border-radius($timeline-comment-border-radius);
     }
 
     & .timeline-icon {
@@ -188,13 +195,17 @@ $timeline-icon-bg:                          darken($gray-500, 10%) !default;
 
     &.timeline-comment .timeline-icon,
     &.timeline-input .timeline-icon {
-      height: 40px;
-      width: 40px;
-      left: 12px;
+      height: $timeline-comment-icon-size;
+      width: $timeline-comment-icon-size;
+      left: $timeline-icon-border-width;
+    }
+    &.timeline-comment .timeline-icon {
+      top: calc(2 * #{$timeline-item-padding} + #{$timeline-comment-icon-size}/3 - #{$timeline-comment-icon-size})
     }
 
     & .timeline-item-info {
-      margin-left: 40px
+      margin-left: 40px;
+      min-height: $timeline-icon-size;
     }
 
     //&.timeline-input .timeline-item-info {

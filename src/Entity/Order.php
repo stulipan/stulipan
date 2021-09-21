@@ -406,13 +406,13 @@ class Order
     private $token;
 
     /**
-     * @var Transaction[]|ArrayCollection|null;
+     * @var PaymentTransaction[]|ArrayCollection|null;
      * @Groups({"orderView"})
      *
      * ==== One Order has several Transactions ====
      * ==== mappedBy="order" => a Transaction entitásban definiált 'order' attribútumról van szó ====
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="order", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\PaymentTransaction", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="order_id", nullable=true)
      * @ORM\OrderBy({"createdAt"="ASC", "id"="ASC"})
      * @Assert\NotBlank(message="Egy rendelésnek több tranzakciója lehet.")
@@ -1373,7 +1373,7 @@ class Order
     }
 
     /**
-     * @return Transaction[]|Collection|null
+     * @return PaymentTransaction[]|Collection|null
      */
     public function getTransactions()
     {
@@ -1381,9 +1381,9 @@ class Order
     }
 
     /**
-     * @param Transaction $transaction
+     * @param PaymentTransaction $transaction
      */
-    public function addTransaction(Transaction $transaction): void
+    public function addTransaction(PaymentTransaction $transaction): void
     {
         if (!$this->transactions->contains($transaction)) {
             $transaction->setOrder($this);
@@ -1392,9 +1392,9 @@ class Order
     }
 
     /**
-     * @param Transaction $transaction
+     * @param PaymentTransaction $transaction
      */
-    public function removeTransaction(Transaction $transaction): void
+    public function removeTransaction(PaymentTransaction $transaction): void
     {
         $this->transactions->removeElement($transaction);
     }
@@ -1405,6 +1405,19 @@ class Order
     public function hasTransactions(): bool
     {
         return !$this->transactions->isEmpty();
+    }
+
+    /**
+     * @return PaymentTransaction|null
+     */
+    public function getTransaction(): ?PaymentTransaction
+    {
+        /** @var PaymentTransaction $transaction */
+        $transaction = $this->getTransactions()->last();
+        if ($transaction === false) {
+            return null;
+        }
+        return $transaction;
     }
 
 

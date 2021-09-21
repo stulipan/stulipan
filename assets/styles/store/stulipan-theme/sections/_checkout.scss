@@ -85,20 +85,28 @@ $checkout-border-width:                 3px !default;
 
     & .shopi-left {
       display: flex;
+      flex-direction: column;
       width: 100%;
-      justify-content: center;
+      min-height: 100vh;
+      justify-content: flex-start;
       background-color: $checkout-shopi-left-bg;
       border-right: none;
-      padding-top: 1rem;
+      //padding-top: 1rem;
       padding-right: 0;
 
       & .shopi-left-body {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        justify-content: space-between;
         width: 100%;
         max-width: $checkout-shopi-body-width;
+        height: 100%;
         //padding-right: 10px;
         //padding-left: 10px;
         margin-left: auto;
         margin-right: auto;
+
       }
     }
 
@@ -121,7 +129,7 @@ $checkout-border-width:                 3px !default;
       & .shopi-left {
         width: 54.64%;
         min-height: 100vh;
-        justify-content: flex-end;
+        justify-content: flex-start;
         border-right: $border-width solid $border-color;
         padding-right: 1.5rem;
         padding-left: 1.5rem;
@@ -321,7 +329,7 @@ $checkout-border-width:                 3px !default;
 }
 .checkout-shipping-item-description,
 .checkout-payment-item-description {
-  color: $gray-700;
+  color: $muted;
   //font-size: $font-size-base-secondary;
 }
 

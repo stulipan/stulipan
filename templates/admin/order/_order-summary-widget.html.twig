@@ -9,13 +9,12 @@
                     <span>{{ 'order.shipping'|trans }}</span>
                     <span class="JS--summaryDeliveryFee">{{ order.shippingPriceToPay|money }}</span>
                 </li>
-                <li class="order-summary-item text-muted-extra">
-                    <span>{{ 'order.discount'|trans }}</span>
-                    <span>25%</span>
-                </li>
+{#                <li class="order-summary-item text-muted-extra">#}
+{#                    <span>{{ 'order.discount'|trans }}</span>#}
+{#                    <span>25%</span>#}
+{#                </li>#}
                 <li class="order-summary-item">
                     <span>{{ 'order.total-amount-to-pay'|trans }}</span>
-{#                    <span class="order-summary-total">{{ order.summary.totalAmountToPay|money }}</span>#}
                     <span class="order-summary-total">{{ order.summary.totalAmountToPay|money }}</span>
                 </li>
             </ul>

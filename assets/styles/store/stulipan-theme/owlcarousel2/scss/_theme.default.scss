@@ -30,6 +30,11 @@ $dot-margin: 			0px 5px !default;
 $dot-background:		$color-white !default; // $color-gray !default;
 $dot-background-active:	$color-white !default; // $color-base !default;
 
+//carousel-btn
+$carousel-btn-bg:             $gray-eee !default;
+$carousel-btn-hover-bg:       darken($gray-eee, 5%) !default;
+$carousel-btn-focus-shadow:   $btn-focus-box-shadow !default;
+
 // Added by Stulipan
 $dot-active-width:		    18px !default;
 $dot-active-height:			18px !default;
@@ -57,24 +62,27 @@ $dot-active-height:			18px !default;
 
 
 .products-carousel {
-  --product-carousel-nav-width: 100px;
-  --product-carousel-btn-width: 40px;
-  --product-carousel-padding-x: 10px;
+  --carousel-nav-width: 100px;
+  --carousel-padding-x: 10px;
+  --carousel-btn-width: 40px;
+  --carousel-btn-bg: #{$carousel-btn-bg};
+  --carousel-btn-hover-bg: #{$carousel-btn-hover-bg};
+  --carousel-dot-active-bg: #{$body-color};
   position: relative;
   display: flex;
   align-items: center;
   min-height: 390px;
 
   @include media-breakpoint-down(sm) {
-    --product-carousel-nav-width: 0.001rem;
-    --product-carousel-btn-width: 0.001rem;
-    --product-carousel-padding-x: 0;
+    --carousel-nav-width: 0.001rem;
+    --carousel-btn-width: 0.001rem;
+    --carousel-padding-x: 0;
   }
 
   & .carousel-nav {
     position: absolute;
     display: flex;
-    width: var(--product-carousel-nav-width);
+    width: var(--carousel-nav-width);
     height: 100%;
     justify-content: center;
     align-items: center;
@@ -104,39 +112,38 @@ $dot-active-height:			18px !default;
   }
 
   & .carousel-btn {
-    --btn-width: var(--product-carousel-btn-width);
-    --btn-height: var(--product-carousel-btn-width);
     display: flex;
     justify-content: center;
     align-items: center;
-    width: var(--btn-width);
-    height: var(--btn-width);
-    background-color: $white;
+    width: var(--carousel-btn-width);
+    height: var(--carousel-btn-width);
+    background-color: var(--carousel-btn-bg);
     font-size: 1.2rem;
-    border-radius: 50%;
-    border: 1px solid $gray-900;
     padding: 0;
     @include border-radius($border-radius);
 
     &:hover,
     &:focus {
       outline: none;
-      background-color: $gray-900;
-      color: white;
+      background-color: var(--carousel-btn-hover-bg);
       box-shadow: none;
+    }
+    &:focus {
+      outline: 0;
+      box-shadow: $carousel-btn-focus-shadow;
     }
 
     & .icon {
       margin: 0;
-      width: calc(var(--btn-width) / 2);
-      height: calc(var(--btn-width) / 2);
+      width: calc(var(--carousel-btn-width) / 2);
+      height: calc(var(--carousel-btn-width) / 2);
     }
   }
 
   & .owl-carousel {
-    width: calc(100% - 2 * var(--product-carousel-nav-width));
-    left: var(--product-carousel-nav-width);
-    padding: 0 var(--product-carousel-padding-x);
+    width: calc(100% - 2 * var(--carousel-nav-width));
+    left: var(--carousel-nav-width);
+    padding: 0 var(--carousel-padding-x);
 
     & button.owl-dot {
       padding: 10px 0 !important;
@@ -154,7 +161,7 @@ $dot-active-height:			18px !default;
 
     & .owl-dot.active {
       span {
-        border-color: $gray-900;
+        border-color: var(--carousel-dot-active-bg);
       }
     }
   }

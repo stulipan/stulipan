@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="cart_payment_status")
+ * @ORM\Table(name="cart_order_payment_status")
  * @UniqueEntity("shortcode", message="Ez a shortcode már használatban van!")
  */
 class PaymentStatus implements JsonSerializable

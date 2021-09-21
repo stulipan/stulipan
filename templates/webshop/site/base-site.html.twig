@@ -5,24 +5,43 @@
 {% endblock %}
 
 {% block body %}
-
+    {{ parent() }}
     <header class="header">
         {{ include('webshop/widgets/_navbar-impersonate-user.html.twig') }}
 
         {% block underNavbar %}
-{#            <div class="announcement-bar announcement-bar-primary">#}
-{#                <div class="container">#}
-{#                    <div class="">Ingyenes szállítás Budapesten! <a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></div>#}
-{#                </div>#}
-{#            </div>#}
+            {% if true is same as(false) %}
+            <div class="announcement-bar announcement-bar-dark">
+                <div class="container">
+                    <div class="">Ingyenes szállítás Budapesten! <a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></div>
+                </div>
+            </div>
+            {% endif %}
         {% endblock %}
 
         {% block navbar %}
-		<nav class="navbar px-0 navbar-expand-lg navbar-sticky navbar-light navbar-stulipan flex-column">
+		<nav class="navbar px-0 navbar-expand-lg navbar-sticky navbar-lightX navbar-stulipan flex-column">
 			<div class="container h-100">
                 <div class="d-flex justify-content-between align-items-center w-100 h-100 px-2 px-lg-0 py-0 py-lg-3">
                         <!-- Navbar Ted -->
-                        <div class="navbar--ted d-none d-md-flex justify-content-md-center mr-md-3 order-md-3 order-2">
+                        <div class="navbar--ted d-none d-lg-flex justify-content-md-start mr-md-3 order-md-1 order-2 w-md-25">
+{#                            <ul class="list-inline mb-0">#}
+                                {% if storeSettings.get('social.facebook') and storeSettings.get('social.facebook') is not null %}
+                                    <a href="{{ storeSettings.get('social.facebook') }}" target="_blank" title="facebook" class="login-cart-link"><svg class="icon mr-0"><use xlink:href="#facebook"></use></svg></a>
+                                {% endif %}
+                                {% if storeSettings.get('social.instagram') and storeSettings.get('social.instagram') is not null %}
+                                    <a href="{{ storeSettings.get('social.instagram') }}" target="_blank" title="instagram" class="login-cart-link"><svg class="icon mr-0"><use xlink:href="#instagram"></use></svg></a>
+                                {% endif %}
+                                {% if storeSettings.get('social.pinterest') and storeSettings.get('social.pinterest') is not null %}
+                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.pinterest') }}" target="_blank" title="pinterest" class="login-cart-link"><i class="fab fa-pinterest"></i></a></li>
+                                {% endif %}
+                                {% if storeSettings.get('social.twitter') and storeSettings.get('social.twitter') is not null %}
+                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.twitter') }}" target="_blank" title="vimeo" class="login-cart-link"><i class="fab fa-twitter"></i></a></li>
+                                {% endif %}
+                                {% if storeSettings.get('social.youtube') and storeSettings.get('social.youtube') is not null %}
+                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.youtube') }}" target="_blank" title="vimeo" class="login-cart-link"><i class="fab fa-youtube"></i></a></li>
+                                {% endif %}
+{#                            </ul>#}
                             {% if storeSettings.get('store.phone') is defined and storeSettings.get('store.phone') is not empty %}
                             <div class="nav-item login-cart-link">
                                 <svg class="icon">
@@ -40,12 +59,12 @@
                         </a>
 
                         <!-- Navbar Logo -->
-                        <div class="navbar--logo d-flex justify-content-md-start flex-grow-1 order-md-2 order-3 ml-md-0">
+                        <div class="navbar--logo d-flex justify-content-md-start flex-grow-1 flex-lg-grow-0 order-md-2 order-3 ml-md-0">
                             {% include 'webshop/widgets/logo.html.twig' %}
                         </div>
 
                         <!-- Navbar Login Cart -->
-                        <div class="navbar-custom justify-content-end pl-0 order-md-4 order-4">
+                        <div class="navbar-custom justify-content-end pl-0 order-md-4 order-4 w-md-25">
                             <ul class="navbar-nav mb-0 flex-row">
 
 {#                                <li class="nav-item dropdown h-100 pr-3 border-right d-none d-md-flex">#}
@@ -110,7 +129,7 @@
                 </div>
 			</div>
 
-            <div id="navbarCollapse" class="collapse navbar-collapse w-100 menu-stulipan order-lg-2 order-1">
+            <div id="navbarCollapse" class="collapse navbar-collapse w-100 menu-stulipan navbar-light order-lg-2 order-1">
                 <div class="container">
                     <div class="">
                         <ul class="navbar-nav mx-auto px-3 px-lg-0 justify-content-center">
@@ -124,16 +143,12 @@
     </header>
 
     <main>
-        <div class="content-pageX">
-            <div class="contentX">
-                {% block page_content %}
-                {% endblock %}
-            </div>
-        </div>
+        {% block page_content %}
+        {% endblock %}
     </main>
 
     {% block footerHighlights %}
-        <div class="bg-light py-4 py-lg-6">
+        <div class="footer-highlights py-4 py-lg-6">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4 service-column">
@@ -268,7 +283,9 @@
                                     {% set nav = navigation|fetchNavigationBySlug('footer-termekek') %}
                                     {% if nav is defined and nav %}
                                     {% for item in nav.navigationItems %}
+                                        {% if item.enabled is same as true %}
                                         <li class="mb-2"> <a href="{{ item.url }}" class="text-decoration-none" title="{{ item.name }}">{{ item.name }}</a></li>
+                                        {% endif %}
                                     {% endfor %}
                                     {% endif %}
                                 </ul>
@@ -301,7 +318,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mt-2 mt-md-0 text-center text-sm-left text-md-right">
-{#                                    <div class=""><img src="{{  asset('uploads/images/icons/CIB_logo.png') }}" alt="..." class="w-50"></div>#}
+                                    <div class=""><img src="{{  asset('uploads/images/icons/barion-card.svg') }}" alt="..." class="w-50"></div>
                                 </div>
                             </div>
                         </div>
@@ -318,12 +335,12 @@
                 <div class="sidebar-header">
                     {% include 'webshop/widgets/logo.html.twig' %}
                     {#                    <h3 class="sidebar-title" id="mobileMenuLabel">Rendelés: <span class="font-weight-bold">#21043523</span></h4>#}
-                    <button type="button" class="close modal-close" data-dismiss="sidebar" aria-label="Close" style="height: 50px;">
+                    <button type="button" class="close modal-close" data-dismiss="sidebar" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="sidebar-body p-0">
-                    <ul class="navbar-nav mx-auto px-3 px-lg-0 flex-grow-1X justify-content-center border-top">
+                    <ul class="navbar-nav mx-auto px-3 px-lg-0 justify-content-center border-top">
                         {% include 'webshop/site/navbar-menu-items.html.twig' %}
                         {#                        <li class="nav-item dropdown">#}
                         {#                            <a href="#" id="langsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Nyelvek</a>#}

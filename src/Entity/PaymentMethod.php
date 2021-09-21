@@ -84,10 +84,11 @@ class PaymentMethod
      * @var float
      * @Groups({"orderView", "orderList"})
      *
-     * @ Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
+     * @Assert\NotBlank(message="Adj meg egy összeget.")
+     * @Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
      */
-    private $price;
+    private $price = 0;
 
     /**
      * @var int

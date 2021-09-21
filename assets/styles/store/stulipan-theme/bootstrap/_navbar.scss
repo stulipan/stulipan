@@ -337,11 +337,9 @@
 // Added by Stulipan
 // ==================================================================
 
-$navbar-stulipan-height:                  50px !default;
-
 $navbar-login-cart-color:                  $gray-700 !default; // Added by Stulipan
 $navbar-login-cart-hover-color:            $white !default;
-$navbar-login-cart-badge-bg:               $primary !default;
+$navbar-login-cart-badge-bg:               $navbar-menu-bg !default;
 $navbar-login-cart-badge-bg-mobile:        $white !default;
 
 
@@ -350,8 +348,9 @@ $navbar-login-cart-badge-bg-mobile:        $white !default;
 
   @media (max-width: breakpoint-max(md)) {
     & {
-      background-color: $secondary;
-      border: none;
+      //background-color: $secondary;
+      //border: none;
+      border-bottom: 1px solid $border-color;
       height: $navbar-stulipan-height;
       min-height: $navbar-stulipan-height;
     }
@@ -359,8 +358,7 @@ $navbar-login-cart-badge-bg-mobile:        $white !default;
 }
 
 .menu-stulipan {
-  //background-color: $secondary;
-  background-color: #ffe6e1;
+  background-color: $navbar-menu-bg;
 }
 
 .navbar-custom {
@@ -502,7 +500,8 @@ $navbar-login-cart-badge-bg-mobile:        $white !default;
     line-height: 20px;
     border-radius: 50%;
     background-color: $navbar-login-cart-badge-bg;
-    color: $yiq-text-light;
+    border: 1px solid $gray-600;
+    color: color-yiq($navbar-login-cart-badge-bg);
     text-align: center;
     font-size: 0.6rem;
 

@@ -6,19 +6,16 @@
 // Color system
 
 $white:    #fff !default;
-//$gray-50:  #f0f3f5 !default;
 $gray-100: #f0f3f5 !default;
 $gray-200: #e8eaec !default; //#f6f6f9 !default; //e8eaec  //e9ecef  Javaslat: f6f6f9
 $gray-300: #E1E5E9 !default;  // new border !
 $gray-400: #c4cdd5 !default;  // ex-border
 $gray-500: #adb5bd !default;
 $gray-600: #6d7175 !default;
-//$gray-650: #637381 !default;  //muted 637381
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #121519 !default; //#212b36 !default;
 $black:    #000 !default;
-$gray-100-select:   #fcfcfd !default;
 
 $grays: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -37,9 +34,9 @@ $grays: map-merge(
   $grays
 );
 
-$blue:            #005fcc !default // #008CDE !default;
+$blue:            #9CDBF1 !default; // #005fcc !default
 $blue-lighten:    #ebf6fd !default;
-$blue-dark:       $gray-800 !default; //$blue !default; //#0070BD !default;
+//$blue-dark:       $gray-800 !default; //$blue !default; //#0070BD !default;
 $indigo:          #6610f2 !default;
 $purple:          #876EBD !default;
 $purple-lighten:  #d1bff8 !default;
@@ -47,35 +44,53 @@ $pink:            #e83e8c !default;
 $red:             #dc3545 !default;
 $red-lighten:     #FFC8C9 !default;
 $orange:          #fd7e14 !default;
-$yellow:          #f9d95f !default;
-$yellow-lighten:  #FAF1CB !default;
-$green:           #00aa5b !default;
+$yellow:          #FFF0CA !default; //#f9d95f !default;
+$yellow-lighten:  #F4EDDD !default; //#FAF1CB !default;
+$green:           #41AA9E !default; //#00aa5b !default;
 $green-lighten:   #bbe5b3 !default;
 $teal:            #20c997 !default;
 $cyan:            #469ab9 !default;
+
+$peach:           #ffedee !default;  // Added by Stulipan: #ffe6e1
+$purple-gray:     #5B6377 !default;
+$purple-gray-dark:#404756 !default;
+
+$gray-eee:            #eee !default;
+$gray-close-button:   $gray-eee !default;
+$gray-100-select:     #fcfcfd !default;
+
 
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
 $colors: map-merge(
   (
-    "blue":       $blue,
-    "indigo":     $indigo,
-    "purple":     $purple,
-    "pink":       $pink,
-    "red":        $red,
-    "orange":     $orange,
-    "yellow":     $yellow,
-    "green":      $green,
-    "teal":       $teal,
-    "cyan":       $cyan,
-    "white":      $white,
-    "gray":       $gray-600,
-    "gray-dark":  $gray-800,
+    "blue":           $blue,
+    "blue-lighten":   $blue-lighten,
+    "indigo":         $indigo,
+    "purple":         $purple,
+    "purple-lighten": $purple-lighten,
+    "pink":           $pink,
+    "red":            $red,
+    "red-lighten":    $red-lighten,
+    "orange":         $orange,
+    "yellow":         $yellow,
+    "yellow-lighten": $yellow-lighten,
+    "green":          $green,
+    "green-lighten":  $green-lighten,
+    "teal":           $teal,
+    "cyan":           $cyan,
+    "white":          $white,
+    "peach":          $peach,
+    "purple-gray":    $purple-gray,
+    "purple-gray-dark": $purple-gray-dark,
+    "gray-eee":       $gray-eee,
+    "gray":           $gray-600,
+    "gray-dark":      $gray-800,
   ),
   $colors
 );
 
-$primary:         $gray-800 !default; //$blue !default;
+$primary:         #3c3c3c !default; // $gray-800 !default; // #FFCFD0 !default; //$blue !default;
 $primary-lighten: $gray-600 !default; //$blue-lighten !default;
 $secondary:       #eee !default; //$gray-100 !default;
 $success:         $green !default;
@@ -90,11 +105,9 @@ $light:           $gray-300 !default; //#eee !default;
 $dark:            $gray-800 !default;
 $dark-lighten:    $gray-600 !default;
 
-$muted:           $gray-700 !default;  // Added by Stulipan
+$muted:           $gray-600 !default;  // Added by Stulipan
 $hover-bg:        $gray-100 !default;  // Added by Stulipan
-$peach:           #ffe6e1 !default;  // Added by Stulipan
-$purple-gray:     #5B6377 !default;
-$purple-gray-dark:#404756 !default;
+$navbar-menu-bg:  $peach !default;
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -223,15 +236,17 @@ $body-bg:                   $white !default;
 $body-bg-secondary:         #f6f6f7 !default;  // Added by Stulipan
 $body-color:                $gray-900 !default;
 
+$letter-spacing:            .05rem !default; //0.055rem !default;
 
 // Links
 //
 // Style anchor elements.
 
-$link-color:                              theme-color("primary") !default;
+$link-color:                              $gray-800 !default; // theme-color("primary") !default;
 $link-decoration:                         underline !default; //none !default;
 $link-hover-color:                        darken($link-color, 15%) !default;
 $link-hover-decoration:                   none !default;
+$link-letter-spacing:                     $letter-spacing !default; // Added by Stulipan
 
 $link-secondary-color:                    $muted !default;
 $link-secondary-decoration:               none !default;
@@ -293,7 +308,7 @@ $grid-gutter-width:           20px !default; // 30px !default;
 // Define common padding and border radius sizes and more.
 
 $line-height-lg:              1.5 !default;
-$line-height-sm:              1 !default; //1.25 !default;
+$line-height-sm:              1.2 !default; //1.25 !default;
 
 $border-width:                1px !default;
 $border-color:                $gray-400 !default; // $gray-400
@@ -356,8 +371,6 @@ $font-weight-bolder:          bolder !default;
 $font-weight-base:            $font-weight-normal !default;
 $line-height-base:            1.35 !default; //1.5 !default;
 
-$letter-spacing:              0rem !default; //0.055rem !default;
-
 $h1-font-size:                $font-size-base * 2.5 !default;
 $h2-font-size:                $font-size-base * 2 !default;
 $h3-font-size:                $font-size-base * 1.5 !default;
@@ -375,7 +388,7 @@ $headings-font-family:        null !default;
 $headings-font-weight:        600 !default; //600 !default;
 $headings-line-height:        1.3 !default;
 $headings-color:              null !default;
-$headings-letter-spacing:      $letter-spacing !default; //.02rem !default; // Added by Stulipan
+$headings-letter-spacing:     0 !default; //.02rem !default; // Added by Stulipan
 
 $display1-size:               6rem !default;
 $display2-size:               5.5rem !default;
@@ -401,13 +414,13 @@ $blockquote-font-size:        120% !default; //$font-size-base * 1.3 !default;
 $blockquote-margin-left:      0 !default;
 $blockquote-padding-y:        1.25rem !default;
 $blockquote-padding-x:        1.25rem !default;
-$blockquote-border-width:     .25rem !default;
+$blockquote-border-width:     10px !default;
 $blockquote-border-style:     solid !default;
 $blockquote-border-color:     $purple-gray !default;
 
 // Added by Stulipan
 $blockquote-font-family:      'Lora', serif !default;
-$blockquote-bg:               $peach !default;
+$blockquote-bg:               $gray-100 !default;
 $blockquote-line-height:      $line-height-base * 1.25 !default;
 
 
@@ -517,9 +530,9 @@ $btn-line-height-lg:          $input-btn-line-height-lg !default;
 
 $btn-border-width:            $input-btn-border-width !default;
 
-$btn-font-weight:             $font-weight-bold !default;
+$btn-font-weight:             $font-weight-base !default; // $font-weight-bold !default;
 $btn-text-transform:          uppercase !default;
-$btn-letter-spacing:          $letter-spacing !default;
+$btn-letter-spacing:          .075rem !default; //$letter-spacing !default;
 $btn-box-shadow:              inset 0 1px 0 0 rgba($gray-300, .15) !default; //, 0 1px 1px rgba($black, .075) !default;
 $btn-focus-width:             $input-btn-focus-width !default;
 $btn-focus-box-shadow:        $input-btn-focus-box-shadow !default;
@@ -832,7 +845,9 @@ $navbar-padding-x:                  0 !default;
 
 $navbar-nav-link-padding-x:         1rem !default;
 $navbar-nav-link-padding-y:         0 !default; // Added by Stulipan
+
 // Added by Stulipan
+$navbar-stulipan-height:            50px !default;
 $navbar-nav-font-size:              $font-size-base-secondary !default;
 $navbar-nav-font-weight:            $font-weight-base !default;
 $navbar-nav-letter-spacing:         $letter-spacing !default;
@@ -1113,7 +1128,7 @@ $modal-close-border-color:          $gray-900 !default;
 
 $alert-padding-y:                   .75rem !default;
 $alert-padding-x:                   1rem !default;
-$alert-margin-bottom:               1rem !default;
+$alert-margin-bottom:               0 !default; //1rem !default;
 $alert-border-radius:               $border-radius !default;
 $alert-link-font-weight:            $font-weight-bold !default;
 $alert-border-width:                $border-width !default;
@@ -1268,3 +1283,13 @@ $positions: static, relative, absolute, fixed, sticky !default;
 
 $print-page-size:                   a3 !default;
 $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
+
+// Added by Stulipan
+
+$colors: map-merge(
+    $colors,
+    (
+      "body-color":     $body-color,
+    ),
+
+);

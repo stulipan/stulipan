@@ -57,3 +57,17 @@ body {
     }
   }
 }
+
+@include media-breakpoint-down(md) {
+  .swal2-container {
+    padding: 0 0 0.625em 0;
+    width: 100%;
+  }
+  body.swal2-toast-column .swal2-toast {
+    min-height: $navbar-stulipan-height;
+  }
+  .swal2-popup.swal2-toast {
+    overflow-y: auto;
+  }
+}
+

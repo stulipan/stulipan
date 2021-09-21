@@ -37,8 +37,9 @@ class OrderLog
      * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="message", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="Az előzmény üzenete hiányzik!")
-     * @Assert\NotBlank(message="A komment üres!", groups={"hasznald_ezt_a_formban"})
+     * @ Assert\NotBlank(message="Az előzmény üzenete hiányzik!")
+     * @ Assert\NotBlank(message="A komment üres!", groups={"hasznald_ezt_a_formban"})
+     * @Assert\NotBlank(message="order.history.comment-is-missing", groups={"hasznald_ezt_a_formban"})
      */
     private $message;
 

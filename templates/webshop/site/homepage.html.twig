@@ -22,7 +22,7 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="position-relative text-dark">
 {#                <div class="jumbotron--cover light-overlay" style="background-image: url(https://rafina.hu/media/cache/unscaled/uploads/images/store/szappan-rozsa-box-6657-608385608ad84.jpg);">#}
-                {% set jumboImg = find_image_by_id(71) %}
+                {% set jumboImg = find_image_by_id(2) %}
                 <div class="jumbotron--cover desktop light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_1200') }}{% else %}''{% endif %});"></div>
                 <div class="jumbotron--cover mobile light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_600') }}{% else %}''{% endif %});"></div>
                 <div class="container card-img-overlay d-flex align-items-md-end align-items-center pb-0 pb-md-6">
@@ -37,6 +37,7 @@
     </div>
 
     {{ homepage.bannerTrio.content|raw }}
+
 {#    <div class="container">#}
 {#        <div class="row mt-6">#}
 {#            <div class="col-xl-8 mx-auto text-center">#}

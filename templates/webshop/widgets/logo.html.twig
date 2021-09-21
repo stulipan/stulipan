@@ -1,5 +1,4 @@
-<a href="{{ path('homepage') }}">
-{#    <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo" style="height: 25px;">#}
+<a href="{{ path('homepage') }}" class="{{ isShownAtCheckout is defined and isShownAtCheckout ? 'navbar-brand' : '' }}">
     {% if storeLogo is defined and storeLogo %}
         <img src="{{ storeLogo }}" class="store-logo" height="50">
     {% else %}

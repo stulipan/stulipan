@@ -83,6 +83,8 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'storeEmail' => $this->storeSettings->get('store.email'),
             'storeLogo' => $this->storeSettings->get('store.logo'),
             'storeLogoInverted' => $this->storeSettings->get('store.logo-inverted'),
+            'storeFavicon' => $this->storeSettings->get('store.favicon'),
+
             'storeBrand' => $this->storeSettings->get('store.brand'),
             'flowerShopMode' => $this->storeSettings->get('general.flower-shop-mode'),
 
@@ -129,6 +131,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFilter('timeAgo', [$this, 'formatTimeAgo']),
             new TwigFilter('localizedDate', [$this, 'formatLocalizedDate']),
             new TwigFilter('localizedTime', [$this, 'formatLocalizedTime']),
+            new TwigFilter('rawDateTime', [$this, 'formatRawDateTime']),
             new TwigFilter('money', [$this, 'formatMoney']),
             new TwigFilter('number', [$this, 'formatNumber']),
             new TwigFilter('momentJsFormat', [$this, 'convertDateFormatFromPhpToMomentJs']),
@@ -178,7 +181,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         $parentPages[CmsSection::PRODUCT_PAGE] = CmsSection::PRODUCT_PAGE;
         $parentPages[CmsSection::COLLECTION_PAGE] = CmsSection::COLLECTION_PAGE;
 
-        $sections = $this->em->getRepository(CmsSection::class)->findAll([
+        $sections = $this->em->getRepository(CmsSection::class)->findBy([
             'enabled' => true,
             'belongsTo' => CmsSection::HOMEPAGE,
             ]);
@@ -407,6 +410,13 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             return $string.' '.$lang['postfix'];
         }
         return $string;
+    }
+
+    public function formatRawDateTime($dateTime)
+    {
+        $format = 'M j, Y, h:i a';  // jan 5, 2021, 07:20 am
+        $dateTime = $dateTime->format($format);
+        return ucfirst($dateTime);
     }
 
     public function formatLocalizedDate($dateTime, string $format=null)

@@ -7,7 +7,7 @@
             </div>
         </div>
     {% else %}
-        {% include('/webshop/cart/cart-list.html.twig') %}
+        {% include 'webshop/cart/cart-list.html.twig' %}
 
         {% if checkoutSettings.get('cart.greetings-card') %}
             {% if showMessage is defined and showMessage %}
@@ -34,7 +34,7 @@
                     <ul class="order-summary mb-0 list-unstyled">
                         <li class="order-summary-item">
                             <span>{{ 'cart.shipping-fee'|trans }}</span>
-                            <span class="text-nowrap">
+                            <span class="w-50 text-right">
                                 {%- if order.hasShippingPrice is defined and order.hasShippingPrice -%}
                                     {{ order.shippingPriceToPay|money }}
                                 {%- else -%}

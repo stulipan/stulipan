@@ -5,6 +5,7 @@ namespace App\Controller\Shop;
 use App\Entity\User;
 use App\Form\UserRegistration\ChangePasswordFormType;
 use App\Form\UserRegistration\ResetPasswordRequestFormType;
+use App\Services\StoreSettings;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,9 +32,12 @@ class ResetPasswordController extends AbstractController
 
     private $resetPasswordHelper;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
+    private $storeSettings;
+
+    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, StoreSettings $storeSettings)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
+        $this->storeSettings = $storeSettings;
     }
 
     /**
@@ -170,7 +174,10 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('rafinadekor@gmail.com', 'Rafina.hu'))
+            ->from(new Address(
+                $this->storeSettings->get('notifications.sender-email'),
+                $this->storeSettings->get('notifications.sender-name')
+            ))
             ->to($user->getEmail())
             ->subject('Elfelejtett jelszó')
             ->htmlTemplate('webshop/emails/forgotten-password.html.twig')

@@ -1,16 +1,14 @@
 
             {{ form_start(commentForm, { 'attr': {'class': 'JS--form' }}) }}
                 <div class="form-group position-relative">
-                    {#<label for="{{ commentForm.message.vars.full_name }}" class="form-label">Üzenetet</label>#}
-                    {#<span class="product-variant-selector-label font-weight-bold"><span>(max 200 karakter)</span></span>#}
-                    {{ form_widget(commentForm.message, {'attr': {'class': 'input-area JS--commentForm-message', 'rows': 3, 'placeholder': commentForm.message.vars.label }} ) }}
+                    {{ form_widget(commentForm.message, {'attr': {'class': 'input-area JS--commentForm-message', 'rows': 3, 'placeholder': 'order.history.leave-a-comment-here'|trans }} ) }}
                     <div class="btn-input-area">
                         <div class="loadingWrapper">
                             <button type="submit" class="JS--btn-submitComment btn btn-primary "><i class="far fa-paper-plane"></i></button>
                             <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
                         </div>
                     </div>
-                    <span class="text-sm text-muted-extra float-right mt-2">Csak te és az adminok látjátok a kommenteket</span>
+                    <span class="text-sm text-muted float-right mt-2">{{ 'order.history.only-you-can-see-comments'|trans }}</span>
                     {{ form_errors(commentForm.message) }}
                 </div>
             <div class="form-group">
@@ -18,5 +16,4 @@
                 {{ form_widget(commentForm.channel, {'attr': {'class': 'd-none'}} ) }}
             </div>
             {{ form_end(commentForm) }}
-            {{ form_errors(commentForm) }}
             {% do commentForm.setRendered() %}

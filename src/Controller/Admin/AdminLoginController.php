@@ -13,7 +13,7 @@ class AdminLoginController extends AbstractController
      */
     public function adminLogin(AuthenticationUtils $authenticationUtils)
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('dashboard');
         }
         $error = $authenticationUtils->getLastAuthenticationError(); // get the login error if there is one

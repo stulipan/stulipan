@@ -8,35 +8,42 @@
     }
   }
 
-  & .product-name {
-  }
-
   & .text-link-product {
     color: $gray-800;
     text-decoration: none;
   }
-  & .product-image-wrapper {
+  & .product-wrapper {
     display: block;
     position: relative;
   }
+
   & .product-image {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    //border: 1px solid #e9ecef;
     transition: all .2s ease-in-out;
   }
-
   .product-image:hover .btn {
     -webkit-transform: none !important;
     transform: none !important;
     opacity: 1 !important
   }
 
-  & .product-title-wrapper {
+  & .product-title {
     margin-top: .5rem;
-    //text-align: center;
+  }
+  & .product-button {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .productList--name,
+  .productList--price-gross {
+    @include font-size($font-size-base);
+  }
+  .productList--name {
+    margin-bottom: 0.25rem;
   }
 }
 

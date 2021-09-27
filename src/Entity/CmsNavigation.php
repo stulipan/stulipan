@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CmsNavigationRepository")
  * @ORM\Table(name="cms_navigation")
- * @UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
+ * @UniqueEntity("slug", message="Ilyen 'slug' már létezik!")
  */
 class CmsNavigation
 {

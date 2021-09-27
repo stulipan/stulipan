@@ -2,20 +2,13 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Order;
-use App\Entity\OrderStatus;
-use App\Model\OrdersSummary;
-use App\Entity\PaymentMethod;
-use App\Entity\PaymentStatus;
 use App\Entity\ShippingMethod;
 use App\Form\ShippingFormType;
-use App\Services\HelperFunction;
-use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/admin/settings")
@@ -33,7 +26,6 @@ class SettingsShippingController extends AbstractController
             ->findAll();
 
         return $this->render('admin/settings/shipping-methods-list.html.twig', [
-            'title' => 'Szállítási és fizetési módok',
             'shippings' => $shippings,
         ]);
     }
@@ -42,20 +34,14 @@ class SettingsShippingController extends AbstractController
      * @IsGranted("ROLE_MANAGE_SHIPPING")
      * @Route("/shipping/edit/{id}", name="shipping-edit")
      */
-    public function editShipping(Request $request, ?ShippingMethod $shipping, $id = null)
+    public function editShipping(Request $request, ?ShippingMethod $shipping, $id = null, TranslatorInterface $translator)
     {
         if (!$shipping) {
-            /**
-             * new Shipping
-             */
+             // new Shipping
             $form = $this->createForm(ShippingFormType::class);
-            $title = 'Új szállítási mód';
         } else {
-            /**
-             * edit existing Shipping
-             */
+             // edit existing Shipping
             $form = $this->createForm(ShippingFormType::class, $shipping);
-            $title = 'Szállítási mód módosítása';
         }
 
         $form->handleRequest($request);
@@ -67,15 +53,12 @@ class SettingsShippingController extends AbstractController
             $em->persist($shipping);
             $em->flush();
 
-            $this->addFlash('success', 'Szállítási mód sikeresen elmentve!');
-
-            return $this->redirectToRoute('shipping-list');
-
+            $this->addFlash('success', $translator->trans('settings.shipping.shipping-saved-successfully'));
+            return $this->redirectToRoute('shipping-edit', ['id' => $shipping->getId()]);
         }
 
         return $this->render('admin/settings/shipping-edit.html.twig', [
             'form' => $form->createView(),
-            'title' => $title,
         ]);
     }
 }

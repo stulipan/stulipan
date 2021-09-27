@@ -52,15 +52,14 @@ class RouteLocaleRewriteSubscriber implements EventSubscriberInterface
 
         $context = new RequestContext('/');
         $matcher = new UrlMatcher($this->routeCollection, $context);
-//        dd($matcher->match('/'.$this->defaultLocale.$path));
 
         try {
             $matcher->match('/'.$this->defaultLocale.$path);
             $locale = $request->getPreferredLanguage();  // get locale from the user's browser, eg.: "en_US"
+
             if ($this->isLocaleSupported($locale)) {
-//                dd($this->supportedLocales[$locale]);
                 $locale = $this->supportedLocales[$locale];  // for "en_US" results in "en"
-            } else if ($locale == ""){
+            } else {
                 $locale = $request->getDefaultLocale();  // gets the locale set in services.yaml >> locale: 'hu'
             }
             $event->setResponse(new RedirectResponse('/'.$locale.$path));

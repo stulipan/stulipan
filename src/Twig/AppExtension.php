@@ -6,6 +6,7 @@ use App\Entity\CmsNavigation;
 use App\Entity\CmsPage;
 use App\Entity\CmsSection;
 use App\Entity\ImageEntity;
+use App\Entity\StorePolicy;
 use App\Services\DateFormatConvert;
 use App\Services\FileUploader;
 use App\Services\Localization;
@@ -90,7 +91,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
             'pages' => $this->getPages(),
             'policies' => $this->getPolicies(),
-            'navigation' => $this->getNavigations(),
+//            'navigation' => $this->getNavigations(),
             'homepage' => $this->getHomepageSections(),
         ];
     }
@@ -143,7 +144,6 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function getPages()
     {
-//        $cmsPages = $this->em->getRepository(CmsPage::class)->findAll();
         $cmsPages = $this->em->getRepository(CmsPage::class)->findBy(['enabled' => true]);
         if ($cmsPages) {
             return $this->convertAssociativeArrayToStdObject($cmsPages, ['groups' => 'view']);
@@ -153,11 +153,14 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function getPolicies()
     {
+        $rep = $this->em->getRepository(StorePolicy::class);
         $policies = [];
-        $terms = $this->em->getRepository(CmsPage::class)->findOneBy(['enabled' => true, 'slug' => 'terms']);
-        $policies['terms'] = $terms;
-        $privacy = $this->em->getRepository(CmsPage::class)->findOneBy(['enabled' => true, 'slug' => 'privacy']);
-        $policies['privacy'] = $privacy;
+        $policies[StorePolicy::SLUG_TERMS_AND_CONDITIONS] = $rep->findOneBy(['slug' => StorePolicy::SLUG_TERMS_AND_CONDITIONS]);
+        $policies[StorePolicy::SLUG_PRIVACY_POLICY] = $rep->findOneBy(['slug' => StorePolicy::SLUG_PRIVACY_POLICY]);
+        $policies[StorePolicy::SLUG_SHIPPING_INFORMATION] = $rep->findOneBy(['slug' => StorePolicy::SLUG_SHIPPING_INFORMATION]);
+        $policies[StorePolicy::SLUG_RETURN_POLICY] = $rep->findOneBy(['slug' => StorePolicy::SLUG_RETURN_POLICY]);
+        $policies[StorePolicy::SLUG_CONTACT_INFORMATION] = $rep->findOneBy(['slug' => StorePolicy::SLUG_CONTACT_INFORMATION]);
+        $policies[StorePolicy::SLUG_LEGAL_NOTICE] = $rep->findOneBy(['slug' => StorePolicy::SLUG_LEGAL_NOTICE]);
 
         if (count($policies) > 0) {
             return $this->convertAssociativeArrayToStdObject($policies, ['groups' => 'view']);
@@ -165,15 +168,15 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return null;
     }
 
-    public function getNavigations()
-    {
-        $navigations = $this->em->getRepository(CmsNavigation::class)->findBy(['enabled' => true]);
-        if ($navigations) {
+//    public function getNavigations()
+//    {
+//        $navigations = $this->em->getRepository(CmsNavigation::class)->findBy(['enabled' => true]);
+//        if ($navigations) {
 //            return $this->convertAssociativeArrayToStdObject($navigations, ['groups' => 'view']);
-            return $navigations;
-        }
-        return null;
-    }
+////            return $navigations;
+//        }
+//        return null;
+//    }
 
     public function getHomepageSections()
     {
@@ -225,23 +228,17 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             foreach ($array as $key => $value) {
                 $convertedArray = null;
                 $convertedValue = null;
-//                $slug = $this->slugBuilder->slugify($key);
-//                $camelCase = $this->slugBuilder->convertSlugToCamelCase($slug);
-                $camelCase = $key;
+                $slug = $this->slugBuilder->slugify($key);
+                $camelCase = $this->slugBuilder->convertSlugToUnderscoreCase($slug);
 
                 if (is_object($value)) {
                     $convertedArray = $this->convertObjectToAssociativeArray($value, $context);
-//                    dd($this->slugBuilder->convertSlugToCamelCase(((string) 3.9032)));
-//                    dd($convertedArray);
-//                    dd($this->isAssociativeArray($convertedArray));
                     $convertedValue = $this->convertAssociativeArrayToStdObject($convertedArray, $context);
-//                    dd($convertedValue);
                 }
                 if (is_array($value)) {
                     $convertedValue = $this->convertAssociativeArrayToStdObject($value, $context);
                 }
 
-//                if (!isset($convertedValue)) {
                 if (!$convertedValue) {
                     $convertedValue = $value;
                 }
@@ -263,10 +260,10 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
                     // we convert it to string (slug must be string)
                     $slug = (string) $value;
                 }
-                $camelCase = $this->slugBuilder->convertSlugToCamelCase($slug);
+                $camelCase = $slug;
+//                $camelCase = $this->slugBuilder->convertSlugToCamelCase($slug);
                 $convertedArray[$camelCase] = $value;
             }
-//            dd($convertedArray);
             $convertedValue = $this->convertAssociativeArrayToStdObject($convertedArray, $context);
             return $convertedValue;
         }
@@ -304,7 +301,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $response;
     }
 
-    public function fetchNavigationBySlug($navigation, $navigationSlug): ?CmsNavigation
+    public function fetchNavigationBySlug($obj, $navigationSlug): ?CmsNavigation
     {
         $navigation = $this->em->getRepository(CmsNavigation::class)->findOneBy(['slug' => $navigationSlug]);
         return $navigation;

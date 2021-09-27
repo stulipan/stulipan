@@ -40,7 +40,13 @@ navbar:
     login: Login
     my-account: My account
     cart: Cart
-
+footer:
+    terms-and-conditions: Terms and conditions
+    privacy-policy: Privacy policy
+    shipping-information: Shipping information
+    return-policy: Return policy
+    contact-information: Contact us
+    legal-notice: Legal notice
 registration:
     login-title: Returning customer
     login-button: Login

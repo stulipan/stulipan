@@ -10,9 +10,8 @@
                                     </div>
                                     <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link"></a>
                                     <div class="product-title text-center">
-                                        <p class="productList--name">
-                                            <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.productName }}</a>
-                                        </p>
+                                        <p class="productList--name">{{ product.productName }}</p>
+{#                                        <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.productName }}</a>#}
                                         <span class="productList--price-gross">{{ product.price.numericValue|money }}</span>
                                     </div>
                                 </div>

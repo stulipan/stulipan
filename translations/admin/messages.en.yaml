@@ -71,6 +71,7 @@ page:
     name-is-missing: Enter the collection name.
     slug-is-missing: 'The slug can''t be empty. Slug example: ''beauty-and-cosmetics'''
     slug-already-in-use: 'Slug already in use. The slug must be unique. Possible solution: Add a ''-1'' to the end.'
+    duplicate-page: Duplicate page
 order:
     orders: Orders
     abandoned-orders: Abandoned orders
@@ -180,8 +181,10 @@ dashboard:
 settings:
     settings: Settings
     dashboard:
-        general-settings-title: General settings
+        general-settings-title: General
         general-settings-description: View and update your store details
+        store-policy-title: Legal
+        store-policy-description: Manage your store's legal pages
         translation-title: Store languages
         translation-description: Manage the languages your customers can view on your store
         admin-general-settings-title: Admin
@@ -209,6 +212,7 @@ settings:
         edit-shipping-method: Edit shipping method
         new-shipping-method-description: Feel free to add and set up new shipping methods.
         shipping-methods-description: Manage your shipping methods, by adding new one or editing existing methods.
+        shipping-saved-successfully: Shipping method successfully saved.
     payment:
         payment: Payment
         payment-description: Payment methods settings.
@@ -219,6 +223,23 @@ settings:
         edit-payment-method: Edit payment method
         new-payment-method-description: Feel free to add and set up new payment methods.
         payment-methods-description: Manage your payment methods, by adding new one or editing existing methods.
+        additional-details: Additional details
+        additional-details-help: Displays to customers in Checkout when they’re choosing a payment method.
+        payment-instructions: Payment instructions
+        payment-instructions-help: Displays to customers after they place an order with this payment method.
+        payment-saved-successfully: Payment method successfully saved.
+    policy:
+        policy: Legal pages
+        legal-pages: Legal pages and policies
+        legal-pages-description: 'You can create your own legal (policy) pages. Your saved policies will be linked in the footer of your checkout. You may need to add your policies to menus in your online store.'
+        terms-and-conditions: Terms and conditions
+        privacy-policy: Privacy policy
+        shipping-information: Shipping information
+        return-policy: Return policy
+        contact-information: Contact information
+        legal-notice: Legal notice
+        name: Title
+        content: Content
 customer:
     customer: Customer
     customers: Customers
@@ -331,6 +352,7 @@ generic:
     edit: Edit
     modify: Modify
     preview: Preview
+    view: Page
     open: Open
     save: Save
     save-changes: Save changes

@@ -36,7 +36,7 @@ $grays: map-merge(
 
 $blue:            #9CDBF1 !default; // #005fcc !default
 $blue-lighten:    #ebf6fd !default;
-//$blue-dark:       $gray-800 !default; //$blue !default; //#0070BD !default;
+$blue-dark:       #0070BE !default; //#008CDE !default; //#0070BD !default;
 $indigo:          #6610f2 !default;
 $purple:          #876EBD !default;
 $purple-lighten:  #d1bff8 !default;
@@ -66,6 +66,7 @@ $colors: map-merge(
   (
     "blue":           $blue,
     "blue-lighten":   $blue-lighten,
+    "blue-dark":      $blue-dark,
     "indigo":         $indigo,
     "purple":         $purple,
     "purple-lighten": $purple-lighten,
@@ -489,7 +490,7 @@ $input-btn-font-size:         $font-size-base !default;
 $input-btn-line-height:       $line-height-base !default;
 
 $input-btn-focus-width:       .125rem !default; //7px !default //1px !default; //.125rem !default;
-$input-btn-focus-color:       rgba($blue, .20) !default; // rgba($component-active-bg, 25) !default;
+$input-btn-focus-color:       rgba(darken($blue-dark, 0%), .2) !default; // rgba($component-active-bg, 25) !default;
 $input-btn-focus-box-shadow:  0 0 0 $input-btn-focus-width $input-btn-focus-color !default; //$input-btn-focus-color 0 0 $input-btn-focus-width !default; //0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
 
 $input-btn-padding-y-sm:      .375rem !default; //.25rem !default;

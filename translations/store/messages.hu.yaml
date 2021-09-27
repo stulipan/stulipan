@@ -17,6 +17,13 @@ navbar:
     login: Bejelentkezés
     my-account: Fiókom
     cart: Kosár
+footer:
+    terms-and-conditions: ÁSZF
+    privacy-policy: Adatvédelmi szabályzat
+    shipping-information: Szállítási információ
+    return-policy: Visszaküldési garancia
+    contact-information: Kapcsolat
+    legal-notice: Jogi nyilatkozat
 registration:
     login-title: Bejelentkezés
     login-button: Bejelentkezek

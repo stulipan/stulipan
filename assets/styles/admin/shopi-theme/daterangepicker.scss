@@ -26,9 +26,10 @@
 // It has a FontAwesome dependency !!!
 
 
-@import "bootstrap-theme/bootstrap/functions";
-@import "bootstrap-theme/bootstrap/_variables.scss";
-@import "bootstrap-theme/bootstrap/mixins";
+// Import these if you use DRP as stand-alone app
+@import "bootstrap/functions";
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
 
 $zindex-drp-backdrop:                               1018 !default;
 $zindex-drp:                                        1019 !default; // It is bellow $zindex-sticky

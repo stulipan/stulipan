@@ -212,7 +212,7 @@ class UserAccountController extends AbstractController
     /**
      * @Route("/users/{id}", name="user-show")
      */
-    public function showUserProfiler(User $user)
+    public function showUserProfile(User $user)
     {
         if (!$user) {
             throw $this->createNotFoundException('Nincs ilyen felhasználó!');

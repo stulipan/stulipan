@@ -342,6 +342,14 @@ class User implements UserInterface, Serializable
         $this->image = $image;
     }
 
+    public function getAvatar()
+    {
+        if ($this->getImage() == null) {
+            return $this->getInitials();
+        }
+        return $this->getImage();
+    }
+
     /**
      * @param bool $isActive
      */

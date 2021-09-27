@@ -38,7 +38,7 @@ Encore
     // .addEntry('admin/init', './assets/js/admin/init.js')
 
     .addStyleEntry('owlcarousel', './assets/styles/store/stulipan-theme/owlcarousel2/scss/owl.carousel.scss')
-    .addStyleEntry('admin-theme', './assets/styles/admin/admin-theme.scss')
+    .addStyleEntry('admin-theme', './assets/styles/admin/shopi-theme/admin-theme.scss')
     .addStyleEntry('store-theme', './assets/styles/store/stulipan-theme/store-theme.scss')
     .addStyleEntry('store-plugins', './assets/styles/store/stulipan-theme/store-plugins.scss')
 

@@ -11,6 +11,11 @@ framework:
         cookie_secure: auto
         cookie_samesite: lax
 
+        # Hozzaadva: save_path es cookie_lifetime
+        # Inspiracio innen: https://stackoverflow.com/questions/54461108/symfony-4-session-expire-too-soon
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        cookie_lifetime: 2592000  # 30 days
+
     #esi: true
     #fragments: true
     php_errors:

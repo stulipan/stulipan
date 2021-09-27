@@ -192,7 +192,8 @@ security:
             ROLE_MANAGE_VAT,
             ROLE_MANAGE_SETTINGS,
             ROLE_MANAGE_CMS,
-            ROLE_MANAGE_TRANSLATION
+            ROLE_MANAGE_TRANSLATION,
+            ROLE_MANAGE_STORE_POLICY
             ] # pl: Mariann
         ROLE_POWER_ADMIN: [
             ROLE_ADMIN,

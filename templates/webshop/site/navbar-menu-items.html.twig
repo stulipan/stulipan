@@ -1,4 +1,4 @@
-{% set nav = navigation|fetchNavigationBySlug('fomenu') %}
+{% set nav = 0|fetchNavigationBySlug('fomenu') %}
 {% if nav is defined and nav %}
 {% for item in nav.navigationItems %}
     {% if item.enabled is same as true %}

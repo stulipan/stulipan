@@ -45,6 +45,21 @@
                                                 {% endif %}
                                             </div>
                                         </div>
+                                        {% if order.items is not empty %}
+                                            <div id="goto_checkout" class="col-md-12X col-lg-10X mx-auto mt-4 mt-md-5 mb-4XXmb-md-5">
+                                                <div class="row">
+                                                    <div class="col-lg-12 mb-4">
+                                                        <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
+                                                            <button class="JS--Button-gotoStep1 btn btn-success btn-lg w-md-50 btn-goto order-1 order-lg-2 py-3" data-url="{{ path('site-checkout-step1-pickDeliveryAddress') }}">
+                                                                <span class="loading-spinner-invisible">{{ flowerShopMode ? 'checkout.flower-shop.continue-to-recipient-button'|trans : 'checkout.continue-to-shipping-address-button'|trans }}</span>
+                                                                <span class="loading-spinner" role="status"></span>
+                                                            </button>
+                                                            <div></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
                                         {% if checkoutSettings.get('cart.gift-upsell') %}
                                         <div class="mt-4 mt-md-5">
                                             <div class="checkout-block-header">
@@ -147,7 +162,7 @@
                         </div>
 
                         {% if order.items is not empty %}
-                        <div id="goto_checkout" class="col-md-12 col-lg-10 mx-auto mt-20pxX mt-5 mb-4 mb-md-5">
+                        <div id="goto_checkout" class="col-md-12 col-lg-10 mx-auto mt-5 mb-4 mb-md-5">
                             <div class="row">
                                 <div class="col-lg-12 mb-4">
                                     <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">

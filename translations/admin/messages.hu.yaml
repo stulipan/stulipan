@@ -46,6 +46,7 @@ page:
     name-is-missing: 'Nevezd el az oldalt.'
     slug-is-missing: 'A slug nem lehet üres. Pl: ''szuletesnapi-kellekek'''
     slug-already-in-use: 'Ez már használatban van. Megoldás:  tegyél egy ''-1'' a végére.'
+    duplicate-page: Másolat készítése
 order:
     orders: Rendelések
     abandoned-orders: Elhagyott kosarak
@@ -149,8 +150,10 @@ dashboard:
 settings:
     settings: Beállítások
     dashboard:
-        general-settings-title: 'Webshop beállítások'
+        general-settings-title: 'Webáruház'
         general-settings-description: 'Webáruház adatainak megtekintése és frissítése'
+        store-policy-title: 'Jogi oldalak'
+        store-policy-description: 'Kezeld webáruházad jogi oldalait'
         translation-title: 'Webshop nyelvek'
         translation-description: 'Kezelje azokat a nyelveket, amelyeket ügyfelei megnézhetnek az üzletében'
         admin-general-settings-title: 'Admin oldal'
@@ -178,6 +181,7 @@ settings:
         edit-shipping-method: Szállítási mód módosítása
         new-shipping-method-description: Vegyél fel új szállítási módot.
         shipping-methods-description: Itt tudod menedzselni a szállítási módokat.
+        shipping-saved-successfully: 'Szállítási mód sikeresen elmentve.'
     payment:
         payment: Fizetés
         payment-description: Fizetési módok beállítása.
@@ -188,6 +192,23 @@ settings:
         edit-payment-method: Fizetési mód módosítása
         new-payment-method-description: Vegyél fel új fizetési módot.
         payment-methods-description: Itt tudod menedzselni a fizetési módokat.
+        additional-details: Rövid leirás
+        additional-details-help: Ez jelenik meg az ügyfeleket a Pénztárban, amikor fizetési módot választanak.
+        payment-instructions: Fizetési útmutató
+        payment-instructions-help: Ez jelenik meg az ügyfeleknek, miután leadta rendelését ezzel a fizetési móddal.
+        payment-saved-successfully: 'Fizetési mód sikeresen elmentve.'
+    policy:
+        policy: Jogi oldalak
+        legal-pages: Jogi szabályzat oldalak
+        legal-pages-description: 'Létrehozhatsz saját jogi oldalakat. A mentett jogi oldalak be lesznek illesztve a pénztár láblécébe. Ezenfelül, a webáruház menüibe neked kell hozzáadnod a jogi oldalakat.'
+        terms-and-conditions: Általános szerződési feltételek (ÁSZF)
+        privacy-policy: Adatvédelmi szabályzat
+        shipping-information: Szállítási információ
+        return-policy: Visszaküldési garancia
+        contact-information: Kapcsolat
+        legal-notice: Jogi nyilatkozat
+        name: Megnevezés
+        content: Tartalom
 customer:
     customer: Vásárló
     customers: Vásárlók
@@ -296,6 +317,7 @@ generic:
     edit: Szerkesztés
     modify: Módosít
     preview: Előnézet
+    view: Megtekint
     open: Megnyit
     save: Mentés
     save-changes: 'Módosítások mentése'

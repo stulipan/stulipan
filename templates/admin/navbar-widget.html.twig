@@ -4,7 +4,11 @@
             <a class="nav-link" id="userDropdown" data-toggle="dropdown" data-display="static" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <div class="nav-user">
                     <div class="account-user-avatar">
-                        <img src="{{ app.user.image is defined ? asset('/uploads/images/termekek/' ~ app.user.image) : '' }}" alt="" class="rounded-circle">
+                        <div class="avatar-wrapper">
+                            <div class="avatar">
+                                {{ app.user.avatar }}
+                            </div>
+                        </div>
                     </div>
                     <div class="account-user-detail">
                         <span class="account-user-name">Helló, {{ app.user.username|capitalize }}!</span>

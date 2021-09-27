@@ -67,7 +67,7 @@ class PaymentMethod
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
-     * @ Assert\NotBlank(message="A fizetési mód rövid leírása hiányzik!")
+     * @ Assert\NotBlank(message="A fizetési mód részletes leírása hiányzik!")
      */
     private $description;
 

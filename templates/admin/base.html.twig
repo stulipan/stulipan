@@ -17,9 +17,16 @@
         <link rel="shortcut icon" href="{{ storeFavicon }}" type="image/png">
 
         {{ encore_entry_script_tags('admin-app') }}
+{#        <script>#}
+{#            document.addEventListener('DOMContentLoaded', (event) => {#}
+{#                if (window.innerWidth>=992) {#}
+{#                    document.body.classList.add('sMenu-toggled');#}
+{#                }#}
+{#            })#}
+{#        </script>#}
     {% endblock %}
 </head>
-<body class="admin{% block bodyClass %}{% endblock %}">
+<body class="admin sMenu--enabled{% block bodyClass %}{% endblock %}">
 
 {% block body %}
 {% endblock %}

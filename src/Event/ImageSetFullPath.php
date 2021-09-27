@@ -44,8 +44,6 @@ class ImageSetFullPath implements ServiceSubscriberInterface
         if ($entity instanceof ProductImage) {
             if ($entity->getImage()) {
                 $publicPath = $this->fileUploader->getPublicPath($entity->getImagePath());
-                // Equivalent to this:
-//                $publicPath = $this->container->get(FileUploader::class)->getPublicPath($entity->getImagePath());
                 $entity->setImageUrl(
                     $this->cacheManager->getBrowserPath($publicPath, 'product_large')
                 );
@@ -57,8 +55,6 @@ class ImageSetFullPath implements ServiceSubscriberInterface
         if ($entity instanceof ProductCategory) {
             if ($entity->getImage()) {
                 $publicPath = $this->fileUploader->getPublicPath($entity->getImagePath());
-                // Equivalent to this:
-//                $publicPath = $this->container->get(FileUploader::class)->getPublicPath($entity->getImagePath());
                 $entity->setImageUrl(
                     $this->cacheManager->getBrowserPath($publicPath, 'unscaled')
                 );

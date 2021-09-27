@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\DateRange;
 use App\Entity\Product\Product;
+use App\Entity\Product\ProductCategory;
 use App\Entity\Product\ProductStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
@@ -109,17 +110,25 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $categoryId
-	 * return \Doctrine\ORM\Query
+     * @param ProductCategory $category
+     * @return mixed
      */
-    public function findByCategory($categoryId): array
+    public function retrieveByCategory(ProductCategory $category): array
     {
-        // automatically knows to select Products
-        // the "p" is an alias you'll use in the rest of the query
-        $qb = $this->createQueryBuilder('product')
-            ->andWhere('product.categoryId = :cat')
-            ->setParameter('cat', $categoryId)
-            ->orderBy('product.rank', 'ASC')
+        $rep = $this->getEntityManager()->getRepository(ProductStatus::class);
+        $enabled = $rep->findOneBy(['shortcode' => ProductStatus::STATUS_ENABLED]);
+        $unavailable = $rep->findOneBy(['shortcode' => ProductStatus::STATUS_UNAVAILABLE]);
+
+        $qb = $this->createQueryBuilder('p')
+            ->innerJoin('p.categories','c')
+            ->where('p.status = :status1')
+            ->orWhere('p.status = :status2')
+            ->andWhere('c.id = :categoryId')
+
+            ->setParameter('status1', $enabled)
+            ->setParameter('status2', $unavailable)
+            ->setParameter('categoryId',$category->getId())
+            ->orderBy('p.rank', 'ASC')
             ->getQuery();
 
         return $qb->execute();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Product;
 
+use Doctrine\Common\Collections\Criteria;
 use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Entity\ImageEntity;
@@ -406,7 +407,7 @@ class ProductCategory implements JsonSerializable
     {
         return $this->products->isEmpty() ? null : $this->products;
     }
-    
+
     /**
      * @param Product $item
      */

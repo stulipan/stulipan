@@ -118,7 +118,7 @@ fieldset:disabled a.btn {
   color: $link-secondary-color;
   text-decoration: $link-secondary-decoration;
   padding: $input-btn-secondary-padding-y $input-btn-secondary-padding-x;
-  border-radius: $border-radius;
+  @include border-radius($border-radius);
 
   @include hover {
     color: $link-secondary-hover-color;
@@ -130,7 +130,6 @@ fieldset:disabled a.btn {
     outline: 0;
     color: $link-secondary-color;
     text-decoration: $link-secondary-hover-decoration;
-    box-shadow: none;
     @include gradient-bg($link-secondary-focus-bg);
   }
 

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/admin/settings")
@@ -33,19 +34,14 @@ class SettingsPaymentController extends AbstractController
      * @IsGranted("ROLE_MANAGE_PAYMENT")
      * @Route("/payment/edit/{id}", name="payment-edit")
      */
-    public function editPaymentMethod(Request $request, ?PaymentMethod $payment, $id = null)
+    public function editPaymentMethod(Request $request, ?PaymentMethod $payment, $id = null, TranslatorInterface $translator)
     {
         if (!$payment) {
-            /**
-             * new Shipping
-             */
+            // new Shipping
             $form = $this->createForm(PaymentFormType::class);
         } else {
-            /**
-             * edit existing Shipping
-             */
+            // edit existing Shipping
             $form = $this->createForm(PaymentFormType::class, $payment);
-            $title = 'Fizetési mód módosítása';
         }
 
         $form->handleRequest($request);
@@ -57,10 +53,8 @@ class SettingsPaymentController extends AbstractController
             $em->persist($payment);
             $em->flush();
 
-            $this->addFlash('success', 'Fizetési mód sikeresen elmentve!');
-
-            return $this->redirectToRoute('payment-list');
-
+            $this->addFlash('success', $translator->trans('settings.payment.payment-saved-successfully'));
+            return $this->redirectToRoute('payment-edit', ['id' => $payment->getId()]);
         }
 
         return $this->render('admin/settings/payment-edit.html.twig', [

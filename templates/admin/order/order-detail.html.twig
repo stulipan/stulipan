@@ -552,7 +552,10 @@
                                     <div class="">
                                         <div class="timeline-item timeline-input">
                                             <div class="timeline-icon">
-                                                <img class="img-thumbnail rounded-circle" src="{{ asset('/uploads/images/termekek/' ~ app.user.image) }}" />
+                                                <div class="avatar text-white">
+                                                    {{ app.user.avatar }}
+{#                                                    <img class="img-thumbnail rounded-circle" src="{{ asset('/uploads/images/termekek/' ~ app.user.image) }}" />    #}
+                                                </div>
                                             </div>
                                             <div class="timeline-item-info d-flex justify-content-between JS--commentWrapper">
                                                 <div class="w-100 JS--commentContentBlock">
@@ -576,9 +579,10 @@
                                                 <div class="timeline-item {% if log.isComment is defined and log.isComment == true %}timeline-comment{% endif %}">
                                                     <div class="timeline-icon">
                                                         {% if log.channel is defined and log.channel.shortcode == constant('App\\Entity\\OrderLog::CHANNEL_ADMIN') %}
-                                                            <img class="img-thumbnail rounded-circle" src="{{ asset('/uploads/images/termekek/' ~ app.user.image) }}" />
-                                                        {% else %}
-                                                            <div class="">{{ order.initials }}</div>
+                                                            <div class="avatar text-white">
+                                                                {{ app.user.avatar }}
+        {#                                                       <img class="img-thumbnail rounded-circle" src="{{ asset('/uploads/images/termekek/' ~ app.user.image) }}" />    #}
+                                                            </div>
                                                         {% endif %}
                                                     </div>
                                                     <div class="timeline-item-info d-flex flex-column flex-sm-row justify-content-start justify-content-sm-between">

@@ -20,6 +20,11 @@
 } %}
 {% set cancelUrl = path('payment-list') %}
 
+{% block stylesheets %}
+	{{ parent() }}
+	{% include 'admin/widgets/_tinymce-description-field.html.twig' %}
+{% endblock %}
+
 {%- block title -%}
 	{{ pageTitle }}
 {%- endblock -%}

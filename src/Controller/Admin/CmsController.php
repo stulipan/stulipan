@@ -30,7 +30,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CmsController extends AbstractController
 {
-
     /**
      * @var TranslatorInterface
      */

@@ -37,21 +37,23 @@ class PaymentBuilder
 
 //    private const BARION_POS_KEY = '6566bea7445a407bb6bdcd7b2e46d593';  // Balla fiok: Tulipanfutar.hu
 //    private const BARION_PAYEE_EMAIL = 'kalmucus@gmail.com';
+//    private const BARION_ENVIRONMENT_PROD = true;
 
-    private const BARION_POS_KEY = '797efeec59e54b0c8a0f7b991cf84d9a';  // Balla TEST fiok: Tulipanfutar.hu
+//    private const BARION_POS_KEY = '797efeec59e54b0c8a0f7b991cf84d9a';  // Balla TEST fiok: Tulipanfutar.hu
+//    private const BARION_PAYEE_EMAIL = 'kalmucus@gmail.com';
+//    private const BARION_ENVIRONMENT_PROD = false;
+
+    private const BARION_POS_KEY = '584c6072ec374c029b2ca8e184a21a44';  // Balla fiok: Rafina.hu
     private const BARION_PAYEE_EMAIL = 'kalmucus@gmail.com';
+    private const BARION_ENVIRONMENT_PROD = true;
 
-//    private const BARION_POS_KEY = '6d53dfe8c2b04b60b33ecbedd857f6ff'; // PikkPakk fiok
-//    private const BARION_PAYEE_EMAIL = 'payment@hivjesnyerj.hu';  // PikkPakk fiok
-
-//    private const BARION_POS_KEY = '89fd1360a0484b279a891ef0613cdb6f'; // Sajat teszt fiok: liv...oran@gmail.com
-//    private const BARION_PAYEE_EMAIL = 'liviu.chioran@gmail.com';  // Sajat fiokom
+    private const BARION_COMMENT = 'Online termék vásárlás kártyával';
+    private const BARION_UNIT = 'db';
 
     private const RETURN_URL_UPON_SUCCESS = 'site-payment-success';
     private const RETURN_URL_CALLBACK = 'site-payment-callback-barion';
     private const RETURN_URL_UPON_PAYMENT_ERROR = 'site-checkout-step3-pickPayment';
 
-    private $processor;
     private $urlGenerator;
     private $em;
     private $appKernel;
@@ -60,43 +62,38 @@ class PaymentBuilder
     private $barion;
     private $cib;
 
-    /**
-     * @param string $env The environment to connect to
-     */
+    private $shippingFeeName;
+    private $shippingFeeSku;
+
     function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $entityManager,
                          KernelInterface $appKernel, TranslatorInterface $translator)
     {
-        $env = CashinEnvironment::PROD;
         $this->urlGenerator = $urlGenerator;
         $this->em = $entityManager;
         $this->appKernel = $appKernel;
         $this->translator = $translator;
 
-        switch ($env) {
-
-            case CashinEnvironment::TEST:
-                // do something
-                break;
-            case CashinEnvironment::PROD:
-                // do something
-                break;
-            default:
-                // do something else
-                break;
-        }
-
-
         $this->barion = $this->createBarionClient();
         $this->cib = $this->createCibClient();
+
+        $this->shippingFeeName = $this->translator->trans('cart.shipping-fee');
+        $this->shippingFeeSku = 'shipping-fee';
     }
 
     public function createBarionClient()
     {
+        $env = BarionEnvironment::Test;
+        if (defined('self::BARION_ENVIRONMENT_PROD')) {
+            if (self::BARION_ENVIRONMENT_PROD) {
+                $env = BarionEnvironment::Prod;
+            }
+        }
+
         /** @var BarionClient $barionClient */
         $barionClient = new BarionClient(
             self::BARION_POS_KEY,
             2,
-            BarionEnvironment::Test
+            $env
         );
         return $barionClient;
     }
@@ -225,20 +222,33 @@ class PaymentBuilder
         $trans->Payee = self::BARION_PAYEE_EMAIL;
         $trans->Total = $order->getSummary()->getTotalAmountToPay();
         $trans->Currency = Currency::HUF;
-        $trans->Comment = "Test transaction containing the product";
+        $trans->Comment = self::BARION_COMMENT;
 
+        // Add order items
         foreach ($order->getItems() as $i) {
             $item = new ItemModel();
             $item->Name = $i->getProduct()->getName();
             $item->Description = $i->getProduct()->getName();
             $item->Quantity = $i->getQuantity();
-            $item->Unit = "piece";
+            $item->Unit = self::BARION_UNIT;
             $item->UnitPrice = $i->getUnitPrice();
             $item->ItemTotal = $i->getPriceTotal();
             $item->SKU = $i->getProduct()->getSku();
 
             $trans->AddItem($item);
         }
+
+        // Add shipping fee
+        $item = new ItemModel();
+        $item->Name = $this->shippingFeeName;
+        $item->Description = $this->shippingFeeName;
+        $item->Quantity = 1;
+        $item->Unit = self::BARION_UNIT;
+        $item->UnitPrice = $order->getShippingPriceToPay();
+        $item->ItemTotal = $order->getShippingPriceToPay();
+        $item->SKU = $this->shippingFeeSku;
+
+        $trans->AddItem($item);
 
         $urlRedirect = $this->urlGenerator->generate(self::RETURN_URL_UPON_SUCCESS, [], UrlGeneratorInterface::ABSOLUTE_URL);
         $urlCallback = $this->urlGenerator->generate(self::RETURN_URL_CALLBACK, [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -257,24 +267,6 @@ class PaymentBuilder
         $paymentRequest->AddTransaction($trans);
 
         $paymentIntent = $this->barion->PreparePayment($paymentRequest);
-//        dd($paymentIntent);
-
-//        if ($paymentIntent->RequestSuccessful) {
-//            $transaction = new PaymentTransaction();
-//            $transaction->setKind(PaymentTransaction::KIND_SALE);
-//            $transaction->setAuthorization($paymentIntent->PaymentId);
-//            $transaction->setGateway(PaymentBuilder::GATEWAY_BARION);
-//            $transaction->setSourceName(PaymentTransaction::SOURCE_WEB);
-//            $transaction->setOrder($order);
-//            $transaction->setAmount($order->getSummary()->getTotalAmountToPay());
-//            $transaction->setCurrency('HUF');
-//            $transaction->setStatus(PaymentTransaction::STATUS_PENDING);
-
-//            $order->addTransaction($transaction);
-//            $this->em->persist($order);
-//            $this->em->flush();
-//            return $paymentIntent;
-//        }
         return $paymentIntent;
     }
 

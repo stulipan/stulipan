@@ -42,4 +42,19 @@ class SlugBuilder
         }
         return null;
     }
+
+    /**
+     * Returns the camelCase-version of the slug.
+     * Example: 'this-is-a-product' --> 'this_is_a_product'
+     *
+     * @param string|null $slug
+     * @return string|null
+     */
+    public function convertSlugToUnderscoreCase(?string $slug): ?string
+    {
+        if ($slug) {
+            return str_replace('-', '_', $slug);
+        }
+        return null;
+    }
 }

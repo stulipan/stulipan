@@ -11,34 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ShopController extends AbstractController
 {
-
-
-//    public function generateProductList($categoryId = NULL)
-//    {
-//        //$entityManager = $this->getDoctrine()->getManager();
-//        //$products= $entityManager->getRepository(Product::class)->findAll();
-//
-//        if (!$categoryId) {
-//            $products = $this->getDoctrine()->getManager()
-//                ->getRepository(Product::class)
-//                ->findAll();
-//
-//            $category = 'Virágküldés';
-//        }
-//        else {
-//            $products = $this->getDoctrine()->getManager()
-//                ->getRepository(Product::class)
-//                ->findByCategory($categoryId);
-//
-//            $category = $this->getDoctrine()->getManager()
-//                ->getRepository(ProductCategory::class)
-//                ->find($categoryId);
-//        }
-//
-//        return $products;
-//
-//    }
-    
     /**
      * @ Route("/", name="index")
      */

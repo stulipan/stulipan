@@ -6,7 +6,9 @@ use App\Entity\Product\Product;
 use App\Entity\Product\ProductCategory;
 use App\Entity\Product\ProductStatus;
 use App\Form\AddToCart\CartAddItemType;
+use App\Model\PreviewContent;
 use App\Services\StoreSettings;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,31 +41,38 @@ class ProductController extends AbstractController
      *     "en": "/collection/{slug}",
      *      }, name="site-product-list")
      */
-    public function showProductsByCategory($slug)
+    public function showProductsByCategory($slug, Request $request)
     {
-        // slug-ból visszafejtem a kategóriát
+        $previewMode = $request->query->get(PreviewContent::PREVIEW_TOKEN);
         $category = $this->getDoctrine()
             ->getRepository(ProductCategory::class)
-            ->findOneBy(['slug' => $slug, 'enabled' => true]);
+            ->findOneBy(['slug' => $slug]);
 
         if (!$category) {
             throw $this->createNotFoundException('HIBA: Missing collection.');
-        } else {
-            $products = $category->getProducts();
-        }
-        if (!$products) {
-            $this->addFlash('error', 'Nem talált egy terméket sem! ');
         }
 
-        return $this->render('webshop/site/product-list.html.twig', [
-            'products' => $products,
-            'category' => $category,
-        ]);
+        $canBeRendered = true;
+
+        if (!$previewMode && !$category->isEnabled()) {
+            $canBeRendered = false;
+        }
+
+        if ($canBeRendered === true) {
+//            $products = $category->getProducts();
+            $products = $this->getDoctrine()->getRepository(Product::class)->retrieveByCategory($category);
+            if (count($products) == 0) {
+                $this->addFlash('error', 'Nem talált egy terméket sem! ');
+            }
+
+            return $this->render('webshop/site/product-list.html.twig', [
+                'products' => $products,
+                'category' => $category,
+            ]);
+        }
+        throw $this->createNotFoundException('HIBA: Missing collection.');
     }
 
-//    /**
-//     * @Route("/termek/{slug}", name="site-product-show")
-//     */
     /**
      * @Route({
      *     "hu": "/termekek/{slug}",

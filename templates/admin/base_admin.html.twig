@@ -41,7 +41,7 @@
                     </button>
                 </div>
                 <div class="sidebar-body bg-body p-0">
-                    {% include 'admin/navbar-sidenav-widget.html.twig' %}
+{#                    {% include 'admin/navbar-sidenav-widget.html.twig' %}#}
                 </div>
             </div>
         </div>
@@ -49,6 +49,7 @@
 
 <!-- Begin page -->
 <div class="wrapper">
+{#     page-wrapper" style="overflow: hidden;">#}
     <div class="topnav navbar-sticky sticky-top">
         <div class="container-fluid px-0">
             <nav class="navbar navbar-dark navbar-expand-lg topnav-menu">
@@ -63,9 +64,16 @@
                     <div class="navbar-custom order-1">
                         <ul class="navbar-nav flex-row">
                             <li class="nav-item">
-                                <button class="navbar-toggler" type="button" data-toggle="sidebar" data-target="#burgerMenuContent">
+{#                                <a id="toggle-sidebar" class="btn btn-secondary rounded-0" href="#">#}
+{#                                    <span>Toggle Sidebar</span>#}
+{#                                </a>#}
+
+                                <button id="JS--toggleSmenu-button" class="navbar-toggler" type="button" data-toggleX="sidebar" data-targetX="#burgerMenuContent">
                                     <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
                                 </button>
+{#                                <button class="navbar-toggler" type="button" data-toggle="sidebar" data-target="#burgerMenuContent">#}
+{#                                    <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>#}
+{#                                </button>#}
                             </li>
                         </ul>
                     </div>
@@ -190,13 +198,221 @@
         </div>
     </div>
 
+    <nav id="sMenu" class="sMenu" tabindex="-1">
+        <div class="sMenu-dialog">
+            <div class="sMenu-content">
+                <div class="sMenu--nav">
+                    <ul>
+                        <li class="{% if activeMenu is defined and activeMenu == 'dashboard' %}active-item{% endif %}">
+                            <a href="{{ path('dashboard') }}">
+                                <div class="s-icon">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                </div>
+                                <div class="s-text">{{ 'dashboard.dashboard'|trans }}</div>
+                            </a>
+                        </li>
 
+                        <li class="sMenu--dropdown {% if activeMenu is defined and activeMenu == 'products' %}active-item{% endif %}">
+                            <a href="#" role="button">
+                                <div class="s-icon"><i class="fas fa-boxes"></i></div>
+                                <div class="s-text">{{ 'product.products'|trans }}</div>
+                            </a>
+                            <div class="sMenu--submenu">
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('product-list') }}" class="{% if app.request.get('_route') == 'product-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-boxes"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'product.products'|trans }}</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('collection-list') }}" class="{% if app.request.get('_route') == 'collection-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-list-ul"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'collection.collections'|trans }}</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('smart-label-list') }}" class="{% if app.request.get('_route') == 'smart-label-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-tags"></i>
+                                            </div>
+                                            <div class="s-text">Matricák</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
+                        <li class="sMenu--dropdown {% if activeMenu is defined and activeMenu == 'orders' %}active-item{% endif %}">
+                            <a href="#" role="button">
+                                <div class="s-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="s-text">{{ 'order.orders'|trans }}</div>
+                            </a>
+                            <div class="sMenu--submenu">
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('order-list-table') }}" class="{% if app.request.get('_route') == 'order-list-table' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'order.orders'|trans }}</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('order-list-abandoned') }}" class="{% if app.request.get('_route') == 'order-list-abandoned' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'order.abandoned-orders'|trans }}</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('customer-list') }}" class="{% if app.request.get('_route') == 'customer-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-user-friends"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'customer.customers'|trans }}</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('user-list') }}" class="{% if app.request.get('_route') == 'user-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-user-friends"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'user.users'|trans }}</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="sMenu--dropdown {% if activeMenu is defined and activeMenu == 'boltzaras' %}active-item{% endif %}">
+                            <a href="#" role="button">
+                                <div class="s-icon">
+                                    <i class="fas fa-store"></i>
+                                </div>
+                                <div class="s-text">Bolt</div>
+                            </a>
+                            <div class="sMenu--submenu">
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('boltzaras_list') }}" class="{% if app.request.get('_route') == 'boltzaras_list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-file-invoice-dollar"></i>
+                                            </div>
+                                            <div class="s-text">Boltzárások</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('invoice-list') }}" class="{% if app.request.get('_route') == 'invoice-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-user-friends"></i>
+                                            </div>
+                                            <div class="s-text">Számlák</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('inventory-supply-list') }}" class="{% if app.request.get('_route') == 'inventory-supply-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-dolly"></i>
+                                            </div>
+                                            <div class="s-text">Szállítmányok</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('inventory-waste-list') }}" class="{% if app.request.get('_route') == 'inventory-waste-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="far fa-trash-alt"></i>
+                                            </div>
+                                            <div class="s-text">Selejt</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('inventory-product-list-all') }}" class="{% if app.request.get('_route') == 'inventory-product-list-all' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="far fa-list-alt"></i>
+                                            </div>
+                                            <div class="s-text">Terméklista</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="sMenu--dropdown {% if activeMenu is defined and activeMenu == 'cms' %}active-item{% endif %}">
+                            <a href="#">
+                                <div class="s-icon">
+                                    <i class="fas fa-columns"></i>
+                                </div>
+                                <div class="s-text">{{ 'page.pages'|trans }}</div>
+                                <sup class="badge badge-warning">NEW</sup>
+                            </a>
+                            <div class="sMenu--submenu">
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('cms-page-list') }}" class="{% if app.request.get('_route') == 'cms-page-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'page.pages'|trans }}</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('cms-section-list') }}" class="{% if app.request.get('_route') == 'cms-page-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="far fa-file-code"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'cms.section.sections'|trans }}</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('cms-navigation-list') }}" class="{% if app.request.get('_route') == 'cms-navigation-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'cms.navigation.navigations'|trans }}</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('image-list') }}" class="{% if app.request.get('_route') == 'image-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="far fa-images"></i>
+                                            </div>
+                                            <div class="s-text">Képek</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sMenu--nav">
+                    <ul>
+                        <li class="{% if activeMenu is defined and activeMenu == 'settings' %}active-item{% endif %}">
+                            <a href="{{ path('settings-home') }}">
+                                <div class="s-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="s-text">Beállítások</div>
+                                <sup class="badge badge-light">VIEW</sup>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
 
 
 
     <nav class="sidenav-sticky">
-        {% include 'admin/navbar-sidenav-widget.html.twig' %}
+{#        {% include 'admin/navbar-sidenav-widget.html.twig' %}#}
     </nav>
 
     <div class="content-page p-0" style="overflow: hidden; min-height: 0; ">
@@ -222,27 +438,28 @@
 
 {% block javascripts %}
 	{{ parent() }}
+    {% include 'admin/widgets/sidenav1-js.html.twig' %}
 	<script>
         $(function() {
-            // Catch all the `[data-toggle-sidebar]` elements on the document.
-            document.querySelectorAll("[data-toggle='slider']").forEach(el => {
-                // Add an event listener on those elements "click" event
-                el.addEventListener('click', e => {
-                    // get the sidebar ID from the current element data attribute
-                    const sliderId = el.dataset.target;
-
-                    console.log(sliderId);
-                    // check if there is an element on the doc with the id
-                    const sidebarElement = sliderId ? document.getElementById(sliderId.replace('#','')) : undefined;
-                    console.log(sidebarElement);
-                    // if there is a sidebar with the passed id (data-toggle-sidebar)
-                    if (sidebarElement) {
-                        // toggle the aria-hidden state of the given sidebar
-                        let sidebarState = sidebarElement.getAttribute('aria-hidden');
-                        sidebarElement.setAttribute('aria-hidden', sidebarState == 'true' ? false : true);
-                    }
-                });
-            });
+            // // Catch all the `[data-toggle-sidebar]` elements on the document.
+            // document.querySelectorAll("[data-toggle='slider']").forEach(el => {
+            //     // Add an event listener on those elements "click" event
+            //     el.addEventListener('click', e => {
+            //         // get the sidebar ID from the current element data attribute
+            //         const sliderId = el.dataset.target;
+            //
+            //         console.log(sliderId);
+            //         // check if there is an element on the doc with the id
+            //         const sidebarElement = sliderId ? document.getElementById(sliderId.replace('#','')) : undefined;
+            //         console.log(sidebarElement);
+            //         // if there is a sidebar with the passed id (data-toggle-sidebar)
+            //         if (sidebarElement) {
+            //             // toggle the aria-hidden state of the given sidebar
+            //             let sidebarState = sidebarElement.getAttribute('aria-hidden');
+            //             sidebarElement.setAttribute('aria-hidden', sidebarState == 'true' ? false : true);
+            //         }
+            //     });
+            // });
 
 
 

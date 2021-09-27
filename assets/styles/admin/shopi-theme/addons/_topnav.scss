@@ -5,7 +5,8 @@
 // .topnav
 // .navbar-custom - it is related to Navbar's navbar-toggler-font-size !!
 
-$topnav-height:           50px !default;
+$topnav-height:               50px !default;
+$topnav-nav-link-height:      40px !default;
 
 // ==================================================================
 // Added by Stulipan
@@ -33,8 +34,9 @@ $navbar-custom-link-padding-x:        $navbar-toggler-padding-x;
   padding: 0;
 
   & .nav-link {
+    --nav-link-height: #{$topnav-nav-link-height};
     padding: $navbar-custom-link-padding-y $navbar-custom-link-padding-x;
-    height: 40px;
+    height: var(--nav-link-height);
     overflow-y: hidden;
   }
 
@@ -54,18 +56,22 @@ $navbar-custom-link-padding-x:        $navbar-toggler-padding-x;
 
     .account-user-avatar {
       display: inline-block;
-      font-size: $navbar-toggler-font-size;
 
       @include media-breakpoint-up(sm) {
         padding-right: .25rem;
       }
     }
 
-    .account-user-avatar img {
-      height: 30px;
-      width: 30px;
-      border: 3px solid transparent;
+    .avatar {
+      --avatar-w: 30px;
+      --avatar-h: 30px;
+
+      @include media-breakpoint-down(xs) {
+        --avatar-w: #{$navbar-toggler-font-size};
+        --avatar-h: #{$navbar-toggler-font-size};
+      }
     }
+
     .account-user-detail {
       display: none;
     }

@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CmsPageRepository")
  * @ORM\Table(name="cms_page")
- * @UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
+ * @UniqueEntity("slug", message="Ilyen 'slug' már létezik!")
  */
 class CmsPage
 {
@@ -38,13 +38,13 @@ class CmsPage
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      * @Groups({
      *     "view", "list"
      * })
      *
      * @ORM\Column(name="slug", type="string", length=100, nullable=false, unique=true)
-     * @Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
+     * @ Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
      */
     private $slug;
 
@@ -163,7 +163,7 @@ class CmsPage
     }
     
     /**
-     * @return string
+     * @return string|null
      */
     public function getSlug(): ?string
     {
@@ -171,9 +171,9 @@ class CmsPage
     }
     
     /**
-     * @param string $slug
+     * @param string|null $slug
      */
-    public function setSlug(string $slug)
+    public function setSlug(?string $slug)
     {
         $this->slug = $slug;
     }

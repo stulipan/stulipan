@@ -36,7 +36,13 @@
         </div>
     </div>
 
-    {{ homepage.banner_trio.content|raw }}
+    {% if homepage is defined and homepage %}
+
+        {% if homepage.banner_trio is defined and homepage.banner_trio %}
+            {{ homepage.banner_trio.content|raw }}
+        {% endif %}
+
+    {% endif %}
 
 {#    <div class="container">#}
 {#        <div class="row mt-6">#}

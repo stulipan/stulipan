@@ -137,9 +137,9 @@ class ProductRepository extends ServiceEntityRepository
     /**
      * @return\Doctrine\ORM\Query
      */
-    public function findAllOrdered(?int $limit)
+    public function findAllOrdered(int $limit = null)
     {
-        $limit+=1;
+        if ($limit) $limit+=1;
         $qb = $this->createQueryBuilder('p')
 //            ->andWhere('p.enabled = :enabled')
 //            ->setParameter('enabled', 1)

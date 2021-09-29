@@ -185,7 +185,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         $parentPages[CmsSection::COLLECTION_PAGE] = CmsSection::COLLECTION_PAGE;
 
         $sections = $this->em->getRepository(CmsSection::class)->findBy([
-            'enabled' => true,
+//            'enabled' => true,
             'belongsTo' => CmsSection::HOMEPAGE,
             ]);
 

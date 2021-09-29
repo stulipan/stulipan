@@ -58,10 +58,13 @@ class CmsSection
     
     /**
      * @var bool
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false, options={"default"=false})
      */
-    private $enabled;
+    private $enabled = false;
 
     /**
      * @var string|null
@@ -106,38 +109,38 @@ class CmsSection
     }
     
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
     /**
-     * @param string $name
+     * @param string|null $name
      * @return CmsPage
      */
-    public function setName($name)
+    public function setName(?string $name)
     {
         $this->name = $name;
     }
 
-    public function __toString(): string
+    public function __toString(): ?string
     {
         return $this->getName();
     }
-    
+
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
-    
+
     /**
-     * @param string $slug
+     * @param string|null $slug
      */
-    public function setSlug(string $slug)
+    public function setSlug(?string $slug): void
     {
         $this->slug = $slug;
     }

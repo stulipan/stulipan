@@ -36,19 +36,24 @@
 {#        </div>#}
 {#    </div>#}
 
+    {% set canBeRendered = false %}
+    {% if previewMode is defined and previewMode is same as(true) %}
+        {% set canBeRendered = true %}
+    {% endif %}
+
     {% if homepage is defined and homepage %}
-        {% if homepage.banner_hero is defined and homepage.banner_hero %}
+        {% if homepage.banner_hero is defined and (homepage.banner_hero.enabled is same as(true) or canBeRendered is same as(true)) %}
             {{ homepage.banner_hero.content|raw }}
         {% endif %}
 
-        {% if homepage.story_1 is defined and homepage.story_1 %}
+        {% if homepage.story_1 is defined and (homepage.story_1.enabled is same as(true) or canBeRendered is same as(true)) %}
             {{ homepage.story_1.content|raw }}
         {% endif %}
-        {% if homepage.story_2 is defined and homepage.story_2 %}
+        {% if homepage.story_2 is defined and (homepage.story_2.enabled is same as(true) or canBeRendered is same as(true)) %}
             {{ homepage.story_2.content|raw }}
         {% endif %}
 
-        {% if homepage.banner_trio is defined and homepage.banner_trio %}
+        {% if homepage.banner_trio is defined and (homepage.banner_trio.enabled is same as(true) or canBeRendered is same as(true)) %}
             {{ homepage.banner_trio.content|raw }}
         {% endif %}
 
@@ -159,7 +164,7 @@
     </div>
 
     {% if homepage is defined and homepage %}
-        {% if homepage.drummer is defined and homepage.drummer %}
+        {% if homepage.drummer is defined and (homepage.drummer.enabled is same as(true) or canBeRendered is same as(true)) %}
             {{ homepage.drummer.content|raw }}
         {% endif %}
     {% endif %}

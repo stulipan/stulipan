@@ -48,12 +48,9 @@
 				</div>
 			</div>
 
-{#			{{ dump(images) }}#}
 			{% if images is defined %}
 				{% for image in images %}
 					<div class="card">
-{#						{{ dump(image.fileResource.getSize600) }}#}
-{#						{{ dump(image) }}#}
 						<img class="card-img-top max-width-and-height" src="{{ uploaded_asset(image.path)|imagine_filter('unscaled_600') }}" />
 						<div class="card-body">
 							<div class="card-text"><small class="text-muted">ID: {{ image.id }}</small></div>

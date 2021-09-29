@@ -4,37 +4,8 @@
 @import "_sidebar";
 @import "_svg-icon";
 @import "_input-float";
+@import "_vertical-row";
 
-.vertical-row,
-.vertical-form-row {
-  display: flex;
-  flex-wrap: wrap;
-
-  & .vertical-col {
-    position: relative;
-  }
-}
-
-.vertical-row {
-  margin-top: -.25rem;
-  margin-bottom: -.25rem;
-
-  & .vertical-col {
-    padding-top: .25rem;
-    padding-bottom: .25rem;
-  }
-}
-
-//0.1875rem = 3px at 1rem = 16px
-.vertical-form-row {
-  margin-top: -.1875rem;
-  margin-bottom: -.1875rem;
-
-  & .vertical-col {
-    padding-top: 0.1875rem;
-    padding-bottom: 0.1875rem;
-  }
-}
 
 .navbar--toolbar {
   position: relative;
@@ -79,16 +50,16 @@
   }
 }
 
-.navbar-brand {
-  .store-logo {
-    height: 40px;
-
-    @include media-breakpoint-down(md) {
-      height: 30px;
-      margin-left: 1rem;
-    }
-  }
-}
+//.navbar-brand {
+//  .store-logo {
+//    height: 40px;
+//
+//    @include media-breakpoint-down(md) {
+//      height: 30px;
+//      margin-left: 1rem;
+//    }
+//  }
+//}
 
 .tile-link {
   position: absolute;
@@ -100,19 +71,29 @@
   z-index: 30
 }
 
-//.bg-custom-gray {
-//  background-color: #e4e8ea;
-//}
 
-//.bg-custom-yellow {
-//  background-color: #F3EED9;
-//}
 
 .jumbotron--cover {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  min-height: 350px;
+  min-height: 410px; // 350px;
+
+  &.h450 {
+    min-height: 550px;
+  }
+  &.h500 {
+    min-height: 550px;
+  }
+  &.h550 {
+    min-height: 550px;
+  }
+  &.h600 {
+    min-height: 550px;
+  }
+  &.h650 {
+    min-height: 550px;
+  }
 
   &.mobile {
     display: none;
@@ -121,11 +102,6 @@
     display: block;
   }
 
-  //@include media-breakpoint-up(xs) {
-  //  &.mobile {
-  //    display: none;
-  //  }
-  //}
   @include media-breakpoint-down(xs) {
     &.mobile {
       display: block;
@@ -137,5 +113,21 @@
 
   &.jumbotron--cover-collection {
     min-height: 300px;
+  }
+}
+
+.jumbotron {
+  .btn-primary {
+    @include button-variant($white, $white);
+
+    //color: color-yiq($white);
+    //background-color: $white;
+    //border-color: $white;
+    //
+    //&:focus,
+    //&:hover {
+    //  background-color: $white;
+    //  border-color: $white;
+    //}
   }
 }

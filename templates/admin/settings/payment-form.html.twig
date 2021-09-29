@@ -47,7 +47,7 @@
                     <label for="{{ form.description.vars.full_name }}" class="">{{ 'settings.payment.payment-instructions'|trans }}</label>
                 </div>
                 <div class="col-sm-8 col-lg-9">
-                    {{ form_widget(form.description, {'attr': {'class': 'JS--descriptionField', rows: 6}}) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'JS--tinymceShort', rows: 6}}) }}
                     {{ form_errors(form.description) }}
                     <div class="form-text">{{ 'settings.payment.payment-instructions-help'|trans }}</div>
                 </div>

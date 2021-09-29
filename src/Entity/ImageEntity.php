@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
-//use ApiPlatform\Core\Annotation\ApiResource;
+use App\Model\ImageFileResource;
 use App\Services\FileUploader;
 use Doctrine\ORM\Mapping as ORM;
-use Imagine\Gd\Image;
 use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -75,6 +74,19 @@ class ImageEntity implements JsonSerializable
      * })
      */
     private $url;
+
+    /**
+     * @var ImageFileResource|null
+     * @Groups({
+     *     "main",
+     *     "productView", "productList"
+     * })
+     */
+    private $fileResource;
+
+    public function __construct()
+    {
+    }
     
     /**
      * {@inheritdoc}
@@ -192,5 +204,21 @@ class ImageEntity implements JsonSerializable
     public function getUrl(): ?string
     {
         return $this->url;
+    }
+
+    /**
+     * @return ImageFileResource|null
+     */
+    public function getFileResource(): ?ImageFileResource
+    {
+        return $this->fileResource;
+    }
+
+    /**
+     * @param ImageFileResource|null $fileResource
+     */
+    public function setFileResource(?ImageFileResource $fileResource): void
+    {
+        $this->fileResource = $fileResource;
     }
 }

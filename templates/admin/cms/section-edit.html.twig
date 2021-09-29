@@ -23,45 +23,29 @@
 
 {% block stylesheets %}
 	{{ parent() }}
-	<script src="{{ asset('webshop/tinymce.min.js') }}"></script>
-	<script src="{{ asset('webshop/plugin.min.js') }}"></script>
-	<script>
-		tinymce.init({
-			selector:'.JS--cmsSectionContent',
-			// language: 'hu',
-			block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3; Header 4=h4; Header 5=h5; Header 6=h6; Blockquote=blockquote; Code=code',
-			plugins: 'code image imagetools media link wordcount lists table fullscreen autoresize',
-			// tabfocus_elements: ':prev,:next',
-			// contextmenu: 'link image table',
-			entity_encoding : 'raw',
-			min_height: 400,
-			max_height: 600,
-			menubar:false,
-			// statusbar: false,
-			branding: false,
-			relative_urls : false,
-			// insert_button_items: 'image link inserttable',
-			toolbar1: 'insert formatselect | bold italic underline strikethrough | removeformat | numlist bullist | outdent indent | align | link unlink | table | image media | fullscreen | code |',
-			menu: {
-				file: { title: 'File', items: 'newdocument restoredraft | preview | print ' },
-				edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
-				view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
-				insert: { title: 'Insert', items: 'image link media template codesample | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },
-				// format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat' },
-				format: { title: 'Format', items: '' },
-				tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
-				table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },
-			},
-			skin_url: '/webshop',
-			image_class_list: [
-				{title: 'Choose...', value: ''},
-				{title: 'img-fluid', value: 'img-fluid'},
-			],
-		});
-	</script>
+	{% include 'admin/widgets/tinymce-content-field.html.twig' %}
 {% endblock %}
 
 {% block headerActionsWrapper %}
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right">
+		<ul class="nav nav-tabs adaptive-primary">
+			<li class="nav-item adaptive-item">
+				<a class="nav-link" href="{{ path('cms-navigation-new') }}" target="_blank"><i class="fas fa-plus mr-2"></i>{{ 'cms.section.new-section'|trans }}</a>
+			</li>
+{#			<li class="nav-item adaptive-item">#}
+{#				<a class="nav-link" href="{{ path('cms-page-duplicate', {'id': form.vars.data.id}) }}"><i class="far fa-clone mr-2"></i>{{ 'page.duplicate-page'|trans }}</a>#}
+{#			</li>#}
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
 {% endblock %}
 
 {% block mainContent %}
@@ -71,8 +55,3 @@
 		</div>
 	</div>
 {% endblock %}
-
-{#{% block javascripts %}#}
-{#    {{ parent() }}#}
-{#	{{ encore_entry_script_tags('StoreImageUpload') }}#}
-{#{% endblock %}#}

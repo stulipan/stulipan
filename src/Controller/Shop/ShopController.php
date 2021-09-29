@@ -23,7 +23,7 @@ class ShopController extends AbstractController
      */
     public function showHomepage(StoreSettings $settings)
     {
-        $products= $this->getDoctrine()->getRepository(Product::class)->findAllOrdered();
+        $products= $this->getDoctrine()->getRepository(Product::class)->findAllOrdered(8);
         return $this->render('webshop/site/homepage.html.twig', ['products' => $products]);
     }
 

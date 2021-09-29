@@ -6,6 +6,8 @@ use App\Entity\ImageEntity;
 use App\Model\ImageUsage;
 use Doctrine\ORM\EntityManagerInterface;
 use ErrorException;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Asset\Context\RequestStackContext;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -17,19 +19,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileUploader
 {
     const UPLOADS_IMAGES_FOLDER = '/uploads/images';
-//    const IMAGES_FOLDER = '/uploads/images'; // deprecated
     const WEBSITE_FOLDER_NAME = 'store';
     const PRODUCTS_FOLDER_NAME = 'products';
 
     private $targetDirectory;
     private $requestStackContext;
     private $em;
-    
+
     /**
      * @param $targetDirectory
      * FYI:   $targetDirectory is defined in services.yaml under 'services > _defaults > bind'
      */
-    public function __construct(string $targetDirectory, RequestStackContext $requestStackContext, EntityManagerInterface $em)
+    public function __construct(string $targetDirectory, RequestStackContext $requestStackContext,
+                                EntityManagerInterface $em)
     {
         $this->targetDirectory = $targetDirectory;
         $this->requestStackContext = $requestStackContext;
@@ -86,5 +88,10 @@ class FileUploader
     public function getPublicPath(string $path): string
     {
         return $this->requestStackContext->getBasePath() . self::UPLOADS_IMAGES_FOLDER . '/' . $path;
+    }
+
+    public function getImageFile()
+    {
+
     }
 }

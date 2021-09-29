@@ -25,7 +25,7 @@
 				<div class="card-body">
 					<div class="h5 mb-0">Képfeltöltés</div>
 					{{ form_start(form, { 'attr': {'class': ' ' }}) }}
-					<div class="form-group row mt-3">
+					<div class="form-group row mb-1 mt-3">
 						<div class="col-sm-12">
 							{{ form_widget(form.imageId, { 'attr': {'class': 'V--imageId' }}) }}
 							{{ form_errors(form.imageId) }}
@@ -34,7 +34,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row mb-0">
+					<div class="form-group row mb-1 mb-0">
 						<div class="col-sm-12">
 							<input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-lgg btn-primary mr-1" formnovalidate>
 							{#						<a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>#}
@@ -48,17 +48,66 @@
 				</div>
 			</div>
 
+{#			{{ dump(images) }}#}
 			{% if images is defined %}
 				{% for image in images %}
 					<div class="card">
+{#						{{ dump(image.fileResource.getSize600) }}#}
 {#						{{ dump(image) }}#}
-						<img class="card-img-top" src="{{ uploaded_asset(image.path)|imagine_filter('unscaled_w200') }}" />
+						<img class="card-img-top max-width-and-height" src="{{ uploaded_asset(image.path)|imagine_filter('unscaled_600') }}" />
 						<div class="card-body">
 							<div class="card-text"><small class="text-muted">ID: {{ image.id }}</small></div>
-							<div class="d-flex mt-2">
-								<p class="card-text mr-2"><small class="text-muted">URL:</small></p>
-								<input type="text" id="image_{{ loop.index }}" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.url }}">
-							</div>
+							<div class="row mt-2">
+									<div class="col-12 mb-2">
+										<p class="card-text mr-2"><small class="text-muted">URL:</small></p>
+									</div>
+									<div class="col-12">
+										<div class="form-group row mb-1">
+											<div class="col-3">
+												<label class="text-sm text-muted">100%</label>
+											</div>
+											<div class="col-7">
+												<input type="text" id="image_{{ loop.index }}" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.url }}">
+											</div>
+											<div class="col-2">
+												<a href="{{ image.url }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+											</div>
+										</div>
+										<div class="form-group row mb-1">
+											<div class="col-3">
+												<label class="text-sm text-muted">1920px</label>
+											</div>
+											<div class="col-7">
+												<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.fileResource.getUnscaled1920 }}">
+											</div>
+											<div class="col-2">
+												<a href="{{ image.fileResource.getUnscaled1920 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+											</div>
+										</div>
+										<div class="form-group row mb-1">
+											<div class="col-3">
+												<label class="text-sm text-muted">600px</label>
+											</div>
+											<div class="col-7">
+												<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.fileResource.getUnscaled600 }}">
+											</div>
+											<div class="col-2">
+												<a href="{{ image.fileResource.getUnscaled600 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+											</div>
+										</div>
+										<div class="form-group row mb-1">
+											<div class="col-3">
+												<label class="text-sm text-muted">200px</label>
+											</div>
+											<div class="col-7">
+												<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.fileResource.getUnscaled200 }}">
+											</div>
+											<div class="col-2">
+												<a href="{{ image.fileResource.getUnscaled200 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+											</div>
+										</div>
+									</div>
+								</div>
 						</div>
 					</div>
 				{% endfor %}

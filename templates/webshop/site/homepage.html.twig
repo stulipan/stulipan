@@ -18,25 +18,35 @@
 
 {% block page_content %}
 
-    <div class="container-fluid p-0">
-        <div class="jumbotron jumbotron-fluid">
-            <div class="position-relative text-dark">
+{#    <div class="container-fluid p-0">#}
+{#        <div class="jumbotron jumbotron-fluid">#}
+{#            <div class="position-relative text-dark">#}
 {#                <div class="jumbotron--cover light-overlay" style="background-image: url(https://rafina.hu/media/cache/unscaled/uploads/images/store/szappan-rozsa-box-6657-608385608ad84.jpg);">#}
-                {% set jumboImg = find_image_by_id(2) %}
-                <div class="jumbotron--cover desktop light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_1200') }}{% else %}''{% endif %});"></div>
-                <div class="jumbotron--cover mobile light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_600') }}{% else %}''{% endif %});"></div>
-                <div class="container card-img-overlay d-flex align-items-md-end align-items-center pb-0 pb-md-6">
-                    <div class="text-center w-100">
-                        <h1 class="display-4 font-weight-bold">Rafina otthon dekor</h1>
-                        <p class="lead font-weight-bold">Ajtódíszek, kopogtatók, rózsaboxok szappanrózsából.</p>
-                        <a href="{{ path('site-product-listall') }}" class="btn btn-primary mt-3">Vásárlás<i class="fa-arrow-right fa ml-2"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+{#                {% set jumboImg = find_image_by_id(2) %}#}
+{#                <div class="jumbotron--cover desktop light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_1200') }}{% else %}''{% endif %});"></div>#}
+{#                <div class="jumbotron--cover mobile light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_600') }}{% else %}''{% endif %});"></div>#}
+{#                <div class="container card-img-overlay d-flex align-items-md-end align-items-center pb-0 pb-md-6">#}
+{#                    <div class="text-center w-100">#}
+{#                        <h1 class="display-4 font-weight-bold">Rafina otthon dekor</h1>#}
+{#                        <p class="lead font-weight-bold">Ajtódíszek, kopogtatók, rózsaboxok szappanrózsából.</p>#}
+{#                        <a href="{{ path('site-product-listall') }}" class="btn btn-primary mt-3">Vásárlás<i class="fa-arrow-right fa ml-2"></i></a>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
     {% if homepage is defined and homepage %}
+        {% if homepage.banner_hero is defined and homepage.banner_hero %}
+            {{ homepage.banner_hero.content|raw }}
+        {% endif %}
+
+        {% if homepage.story_1 is defined and homepage.story_1 %}
+            {{ homepage.story_1.content|raw }}
+        {% endif %}
+        {% if homepage.story_2 is defined and homepage.story_2 %}
+            {{ homepage.story_2.content|raw }}
+        {% endif %}
 
         {% if homepage.banner_trio is defined and homepage.banner_trio %}
             {{ homepage.banner_trio.content|raw }}
@@ -147,6 +157,12 @@
             </div>
         </div>
     </div>
+
+    {% if homepage is defined and homepage %}
+        {% if homepage.drummer is defined and homepage.drummer %}
+            {{ homepage.drummer.content|raw }}
+        {% endif %}
+    {% endif %}
 
 {#    <div class="container pb-5">#}
 {#        <div class="row">#}

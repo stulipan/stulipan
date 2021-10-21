@@ -183,6 +183,8 @@ settings:
     dashboard:
         general-settings-title: General
         general-settings-description: View and update your store details
+        notifications-title: Notifications
+        notifications-description: Manage notifications sent to you and your customers
         store-policy-title: Legal
         store-policy-description: Manage your store's legal pages
         translation-title: Store languages
@@ -193,7 +195,7 @@ settings:
         translation-title: Translation
         translation-is-missing: '{{ count }} translation is missing.'
         translations-are-missing: '{{ count }} translations are missing.'
-        interface: Interface:
+        interface: 'Interface:'
         store-texts: Online store
         admin-texts: Admin
     general-settings:
@@ -228,6 +230,17 @@ settings:
         payment-instructions: Payment instructions
         payment-instructions-help: Displays to customers after they place an order with this payment method.
         payment-saved-successfully: Payment method successfully saved.
+    notification:
+        notifications: Notifications
+        notifications-description: These notifications are automatically sent out to the customer. Click on the notification template to edit the content.
+        email-template-not-found: No email template was found!
+        customize-template: Customize template
+        new-email-template: New email template
+        email-template-saved-successfully: Email template successfully saved.
+        name: Template name
+        subject: Email subject
+        body: Email body (HTML)
+        slug: Slug
     policy:
         policy: Legal pages
         legal-pages: Legal pages and policies
@@ -279,6 +292,7 @@ cms:
         slug: Slug
         slug-help: 'Eg.: ''beauty-and-cosmetics''.'
         enabled: Enabled
+        previewable: Show in preview
         parent-page: Parent page
         name-is-missing: Enter the section name.
         slug-is-missing: 'The slug can''t be empty. Slug example: ''beauty-and-cosmetics'''
@@ -291,7 +305,7 @@ cms:
 
     navigation:
         navigation: Navigation
-        navigations: Navigation list
+        navigations: Navigation / Menu
         new-navigation: New navigation
         navigations-not-found: No navigation was found!
         navigations-not-found-suggestion: Try modifying the filters.
@@ -371,4 +385,6 @@ generic:
     updated-at: Updated at
     enabled: Enabled
     disabled: Disabled
+    sort: Sort
+    classname: Class
 

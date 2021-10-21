@@ -134,18 +134,41 @@ class ProductRepository extends ServiceEntityRepository
         return $qb->execute();
 	}
 
+//    /**
+//     * @return\Doctrine\ORM\Query
+//     */
+//    public function findAllOrdered(int $limit = null)
+//    {
+//        if ($limit) $limit+=1;
+//        $qb = $this->createQueryBuilder('p')
+////            ->andWhere('p.enabled = :enabled')
+////            ->setParameter('enabled', 1)
+//             ->orderBy('p.rank', 'ASC')
+//            ->setMaxResults($limit)
+//        ;
+//        return $qb->getQuery()->execute();
+//    }
+
     /**
      * @return\Doctrine\ORM\Query
      */
-    public function findAllOrdered(int $limit = null)
+    public function fetchVisibleProducts(int $limit = null)
     {
-        if ($limit) $limit+=1;
+        $rep = $this->getEntityManager()->getRepository(ProductStatus::class);
+        $enabled = $rep->findOneBy(['shortcode' => ProductStatus::STATUS_ENABLED]);
+        $unavailable = $rep->findOneBy(['shortcode' => ProductStatus::STATUS_UNAVAILABLE]);
+
         $qb = $this->createQueryBuilder('p')
-//            ->andWhere('p.enabled = :enabled')
-//            ->setParameter('enabled', 1)
-             ->orderBy('p.rank', 'ASC')
-            ->setMaxResults($limit)
+            ->where('p.status = :status1')
+            ->orWhere('p.status = :status2')
+            ->setParameter('status1', $enabled)
+            ->setParameter('status2', $unavailable)
+            ->orderBy('p.rank', 'ASC')
         ;
+        if ($limit) {
+            $qb->setMaxResults($limit);
+        }
+
         return $qb->getQuery()->execute();
     }
 

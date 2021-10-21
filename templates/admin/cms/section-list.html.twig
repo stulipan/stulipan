@@ -31,10 +31,11 @@
 
 {% block tableHeader %}
 	<tr>
-		<th scope="col">Név</th>
-		<th scope="col">Slug</th>
-		<th scope="col">Aktív</th>
-		<th scope="col">Szülő</th>
+		<th scope="col"><span title="{{ 'cms.section.slug'|trans }}"><i class="fas fa-toggle-on"></i></span></th>
+		<th scope="col">{{ 'cms.section.name'|trans }}</th>
+		<th scope="col">{{ 'cms.section.slug'|trans }}</th>
+		<th scope="col">{{ 'cms.section.parent-page'|trans }}</th>
+		<th scope="col">{{ 'cms.section.previewable'|trans }}</th>
 		<th scope="col"><i class="fas fa-ellipsis-h"></i></th>
 	</tr>
 {% endblock %}
@@ -44,6 +45,13 @@
 		{% for section in sections %}
 			<tr>
 				<td class="align-middle">
+					{% if section.enabled is defined and section.enabled == true %}
+						<span class="badge badge-success badge-sm">&nbsp;</span>
+					{% else %}
+						<span class="badge badge-light badge-sm">&nbsp;</span>
+					{% endif %}
+				</td>
+				<td class="align-middle">
 					<a href="{{ path('cms-section-edit', {'id': section.id}) }}" class="">
 						{{ section.name }}
 					</a>
@@ -52,29 +60,27 @@
 					{{ section.slug }}
 				</td>
 				<td class="align-middle">
-					{% if section.enabled is defined and section.enabled == true %}
-						<span class="badge badge-success">&nbsp;</span>
-					{% else %}
-						<span class="badge badge-secondary">&nbsp;</span>
-					{% endif %}
-				</td>
-				<td class="align-middle">
 					{% if section.belongsTo is defined and section.belongsTo is not null %}
 						{{ section.belongsTo }}
 					{% endif %}
 				</td>
 				<td class="align-middle">
-					<div class="w-100">
-						{#                            <a href="{{ path('product-edit', {'id': product.id}) }}" class="btn btn-sm btn-secondary" title="Módosít">#}
-						<i class="far fa-edit"></i>
-						{#							</a>#}
-						{#                            <a href="{{ path('site-product-show', {'id': product.id}) }}" class="btn btn-sm btn-secondary" target="_blank" title="Megtekinti a weboldalon">#}
-						{#                                <i class="fas fa-external-link-alt"></i>#}
-						{#							</a>#}
-						{#                            <a href="{{ path('product-delete', {'id': product.id}) }}" onclick="alert('Biztosan törölni akarod?')" class="btn btn-sm btn-secondary" title="Töröl">#}
-						{#                                <i class="far fa-trash-alt"></i>#}
-						{#							</a>#}
-					</div>
+					{% if section.previewable is defined and section.previewable == true %}
+						<span class="badge badge-success badge-sm">&nbsp;</span>
+					{% else %}
+						<span class="badge badge-light badge-sm">&nbsp;</span>
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					{% if section.belongsTo is defined and section.belongsTo is not null %}
+						{% if section.belongsTo == constant('\App\\Entity\\CmsSection::HOMEPAGE') %}
+							<a class="" href="{{ path('homepage', {'preview_token': ''}) }}" target="_blank"><i class="fas fa-external-link-alt mr-2"></i>{{ 'generic.preview'|trans }}</a>
+						{% elseif section.belongsTo == constant('\App\\Entity\\CmsSection::PRODUCT_PAGE') %}
+							<a class="" href="{{ path('site-product-show', {'preview_token': ''}) }}" target="_blank"><i class="fas fa-external-link-alt mr-2"></i>{{ 'generic.preview'|trans }}</a>
+						{% elseif section.belongsTo == constant('\App\\Entity\\CmsSection::COLLECTION_PAGE') %}
+							<a class="" href="{{ path('site-product-listall', {'preview_token': ''}) }}" target="_blank"><i class="fas fa-external-link-alt mr-2"></i>{{ 'generic.preview'|trans }}</a>
+						{% endif %}
+					{% endif %}
 				</td>
 			</tr>
 		{% endfor %}

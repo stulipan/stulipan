@@ -77,6 +77,10 @@ services:
         tags:
             - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\CmsNavigation' }
             - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\CmsNavigation' }
+    App\Event\SetSlugEmailTemplate:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\StoreEmailTemplate' }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\StoreEmailTemplate' }
     App\Event\TimestampableModel:
         tags:
             - { name: doctrine.event_listener, event: prePersist }

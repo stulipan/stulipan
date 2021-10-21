@@ -8,6 +8,7 @@ use App\Entity\CmsNavigationItem;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,25 +28,20 @@ class CmsNavigationItemFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name',TextType::class, [
-                'label' => 'Megnevezés',
-                'attr' => [
-                    'placeholder' => 'Megnevezés, pl: 16-20',
-                    'autocomplete' => 'off'
-                ],
+                'attr' => ['autocomplete' => 'off'],
             ])
             ->add('url', TextType::class,[
-                'label' => 'Url',
-                'attr' => ['placeholder' => '', 'autocomplete' => 'off',],
+                'attr' => ['autocomplete' => 'off',],
                 'required' => true,
                 'constraints' => [new NotBlank()],
             ])
             ->add('enabled', CheckboxType::class, [
-                'label' => 'Engedélyezve',
             ])
-//            ->add('ordering', NumberType::class,[
-//                'label' => 'Sorrend',
-//                'attr' => ['placeholder' => 'Sorrend']
-//            ])
+            ->add('ordering', NumberType::class,[
+            ])
+            ->add('classname', TextType::class,[
+            ])
+
             ->getForm();
     }
 

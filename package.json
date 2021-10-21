@@ -33,6 +33,7 @@
         "bootstrap-icons": "^1.5.0",
         "compression-webpack-plugin": "^7.1.2",
         "eslint": "^6.8.0",
+        "mozjpeg": "^7.1.1",
         "notyf": "^3.9.0",
         "owl.carousel": "^2.3.4",
         "portal-vue": "^2.1.4",

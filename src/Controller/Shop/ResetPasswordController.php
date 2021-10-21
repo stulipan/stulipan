@@ -2,6 +2,7 @@
 
 namespace App\Controller\Shop;
 
+use App\Entity\StoreEmailTemplate;
 use App\Entity\User;
 use App\Form\UserRegistration\ChangePasswordFormType;
 use App\Form\UserRegistration\ResetPasswordRequestFormType;
@@ -14,11 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 /**
  * @Route({
@@ -173,18 +177,28 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('site-reset-password-checkEmail');
         }
 
+        $template = $this->getDoctrine()->getRepository(StoreEmailTemplate::class)->findOneBy(['slug' => 'forgotten-password']);
+
+        $loader = new ArrayLoader([
+            'forgotten-password' => $template->getBody(),
+        ]);
+        $twig = new Environment($loader);
+
+        $html = $twig->render('forgotten-password', [
+            'subject' => $template->getSubject(),
+            'urlResetPassword' => $this->generateUrl('site-reset-password-resetPassword', ['token' => $resetToken->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
+        ]);
+
         $email = (new TemplatedEmail())
             ->from(new Address(
                 $this->storeSettings->get('notifications.sender-email'),
                 $this->storeSettings->get('notifications.sender-name')
             ))
             ->to($user->getEmail())
-            ->subject('Elfelejtett jelszó')
-            ->htmlTemplate('webshop/emails/forgotten-password.html.twig')
-            ->context([
-                'subject' => 'Elfelejtett jelszó',
-                'resetToken' => $resetToken,
-            ])
+//            ->subject('Elfelejtett jelszó')
+//            ->htmlTemplate('webshop/emails/forgotten-password.html.twig')
+            ->subject($template->getSubject())
+            ->html($html)
         ;
 
         $mailer->send($email);

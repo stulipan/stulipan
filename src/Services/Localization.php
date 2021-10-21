@@ -30,7 +30,9 @@ final class Localization
 
     private $session;
 
-    public function __construct(StoreSettings $settings, SessionInterface $session)
+    private $defaultLocale;
+
+    public function __construct(StoreSettings $settings, SessionInterface $session, $defaultLocale)
     {
         $this->session = $session;
 
@@ -53,6 +55,8 @@ final class Localization
             $settings->getDateFormat() ?: self::DATE_FORMAT_DEFAULT['en'],
             $settings->getTimeFormat() ?: self::TIME_FORMAT_DEFAULT['en'],
         ));
+
+        $this->defaultLocale = $defaultLocale;
     }
 
     /**
@@ -88,6 +92,9 @@ final class Localization
     public function getCurrentLocale(): ?Locale
     {
         $code = $this->session->get('_locale');
+        if (!$code) {
+            $code = $this->defaultLocale;
+        }
         $criteria = new Criteria();
         $criteria->where($criteria->expr()->eq('code',$code));
 

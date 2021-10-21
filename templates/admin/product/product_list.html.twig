@@ -15,6 +15,25 @@
 {% endblock %}
 
 {% block headerActionsWrapper %}
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">
+		<ul class="nav nav-tabs adaptive-primary">
+			<li class="nav-item adaptive-item">
+				<a href="{{ path('product-download-csv') }}" class="nav-link"><i class="fas fa-file-csv mr-2"></i> Facebook CSV</a>
+			</li>
+			{#			<li class="nav-item adaptive-item">#}
+			{#				<a href="{{ path('cms-navigation-new') }}" class="nav-link">Új bla bla</a>#}
+			{#			</li>#}
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
 	<a href="{{ path('product-new') }}" class="btn btn-primary">{{ 'product.new-product'|trans }}</a>
 	<a href="{{ path('collection-list') }}" class="btn btn-secondary ml-2">{{ 'collection.collections'|trans }}</a>
 {% endblock %}

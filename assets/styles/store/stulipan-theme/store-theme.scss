@@ -5,6 +5,24 @@
 @import "_font-size-mobile-reboot";
 
 
+
+.advent {
+  background-color: $red;
+
+  & a,
+  & .nav-link {
+    color: $white !important;
+  }
+
+  & .nav-link:hover {
+    background-color: darken($red, 10%) !important;
+  }
+}
+
+.mobileMenu .navbar-nav .nav-item.advent .nav-link {
+  color: $white !important;
+}
+
 .custom-control.text-sm .custom-control-label {
   //padding-top: calc(.1875rem + .06rem);
   //padding-top: calc((#{$font-size-base} * (1 - #{$text-sm-font-size}))/2 + (#{$line-height-base} * 1rem - #{$text-sm-line-height})/2);

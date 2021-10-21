@@ -2,7 +2,7 @@
 {% if nav is defined and nav %}
 {% for item in nav.navigationItems %}
     {% if item.enabled is same as true %}
-    <li class="nav-item"><a href="{{ item.url }}" class="nav-link">{{ item.name }}</a>
+    <li class="nav-item{% if item.classname is defined and item.classname %} {{ item.classname }}{% endif %}"><a href="{{ item.url }}" class="nav-link">{{ item.name }}</a>
     </li>
     {% endif %}
 {% endfor %}

@@ -67,6 +67,16 @@ class CmsSection
     private $enabled = false;
 
     /**
+     * @var bool
+     * @Groups({
+     *     "view", "list"
+     * })
+     *
+     * @ORM\Column(name="previewable", type="boolean", nullable=false, options={"default"=false})
+     */
+    private $previewable = false;
+
+    /**
      * @var string|null
      * @Groups({
      *     "view", "list"
@@ -187,6 +197,24 @@ class CmsSection
 //        $this->enabled = true === $enabled ? 1 : 0;
         $this->enabled = $enabled;
     }
+
+    /**
+     * @return bool
+     */
+    public function isPreviewable(): bool
+    {
+        return null === $this->previewable ? false : $this->previewable;
+    }
+
+    /**
+     * @param bool $previewable
+     */
+    public function setPreviewable(bool $previewable): void
+    {
+        $this->previewable = $previewable;
+    }
+
+
 
     /**
      * @return string|null

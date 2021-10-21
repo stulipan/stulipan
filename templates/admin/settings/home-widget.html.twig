@@ -113,6 +113,25 @@
                 </a>
             </li>
             {% endif %}
+            {% if is_granted('ROLE_MANAGE_STORE_NOTIFICATIONS') %}
+                <li class="settings-item">
+                    <a href="{{ path('notification-list') }}" class="w-100 h-100">
+                        <div class="settings-item-body">
+                            <div class="settings-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="settings-option">
+                                <div>
+                                    <span class="text-primary">{{ 'settings.dashboard.notifications-title'|trans }}</span>
+                                </div>
+                                <div>
+                                    {{ 'settings.dashboard.notifications-description'|trans }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            {% endif %}
             {% if is_granted('ROLE_MANAGE_STORE_POLICY') %}
                 <li class="settings-item">
                     <a href="{{ path('policy-edit') }}" class="w-100 h-100">

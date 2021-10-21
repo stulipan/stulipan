@@ -1,0 +1,82 @@
+{{ form_start(form, { 'attr': {'class': ' ' }}) }}
+    <div class="row">
+        <div class="col-md-8 correction-no-padding">
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            {{ form_label(form.name, form.name, { 'label_attr': {'class': '' }, 'label': 'settings.notification.name'|trans}) }}
+                            {{ form_widget(form.name) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            {{ form_label(form.subject, form.subject, { 'label_attr': {'class': '' }, 'label': 'settings.notification.subject'|trans}) }}
+                            {{ form_widget(form.subject) }}
+                            {{ form_errors(form.subject) }}
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-sm-12">
+                            {{ form_label(form.body, form.body, { 'label_attr': {'class': '' }, 'label': 'settings.notification.body'|trans}) }}
+                            {{ form_widget(form.body, {'attr': {'class': 'JS--tinymceContent', rows: 30}}) }}
+                            {{ form_errors(form.body) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row mb-0">
+                        <div class="col-sm-12">
+                            {{ form_label(form.slug, form.slug, { 'label_attr': {'class': '' }, 'label': 'settings.notification.slug'|trans}) }}
+                            {{ form_widget(form.slug) }}
+                            {{ form_errors(form.slug) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4 correction-no-padding">
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    tralala
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-sm-12">
+                            traalala
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-sm-12">
+            {# Render CSRF token etc .#}
+            <div style="display:none">
+                {{ form_rest(form) }}
+            </div>
+
+            <div class="form-group row mb-0">
+                <div class="col-sm-12">
+                    <input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-lgg btn-primary mr-1" formnovalidate>
+                    <a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{{ form_end(form) }}

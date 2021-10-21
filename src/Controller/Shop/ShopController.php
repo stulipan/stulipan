@@ -24,7 +24,7 @@ class ShopController extends AbstractController
     public function showHomepage(Request $request, StoreSettings $settings)
     {
         $previewMode = $request->query->get(PreviewContent::PREVIEW_TOKEN);
-        $products= $this->getDoctrine()->getRepository(Product::class)->findAllOrdered(8);
+        $products= $this->getDoctrine()->getRepository(Product::class)->fetchVisibleProducts(12);
         return $this->render('webshop/site/homepage.html.twig', [
             'products' => $products,
             'previewMode' => isset($previewMode) ? true : false,

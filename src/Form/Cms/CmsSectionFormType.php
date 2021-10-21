@@ -55,6 +55,9 @@ class CmsSectionFormType extends AbstractType
             ->add('enabled', CheckboxType::class, [
                 'mapped' => true,
             ])
+            ->add('previewable', CheckboxType::class, [
+                'mapped' => true,
+            ])
             ->add('slug', TextType::class,[
                 'mapped' => true,
             ])

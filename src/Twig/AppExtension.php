@@ -21,6 +21,7 @@ use Psr\Container\ContainerInterface;
 use stdClass;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -617,20 +618,5 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'pattern'    => $pattern
         );
     }
-    
-//    // This is for converting object to array   >>> NOT IN USE
-//    public function getFilters()
-//    {
-//        return array(
-//            new \Twig_SimpleFilter('cast_to_array', array($this, 'objectToArrayFilter')),
-//        );
-//    }
-//
-//    public function objectToArrayFilter($stdClassObject) {
-//        // Just typecast it to an array
-//        $response = (array)$stdClassObject;
-//
-//        return $response;
-//    }
-    
+
 }

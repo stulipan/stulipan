@@ -38,7 +38,8 @@
 
 {% block tableHeader %}
 	<tr>
-		<th scope="col">{{ 'cms.navigation.enabled'|trans }}</th>
+		<th scope="col"><span title="{{ 'cms.navigation.enabled'|trans }}"><i class="fas fa-toggle-on"></i></span></th>
+{#		<th scope="col">{{ 'cms.navigation.enabled'|trans }}</th>#}
 		<th scope="col">{{ 'cms.navigation.name'|trans }}</th>
 		<th scope="col"><i class="fas fa-ellipsis-h"></i></th>
 	</tr>
@@ -50,9 +51,9 @@
 			<tr>
 				<td class="align-middle">
 					{% if navigation.enabled is defined and navigation.enabled == true %}
-						<span class="badge badge-success">&nbsp;</span>
+						<span class="badge badge-success badge-sm">&nbsp;</span>
 					{% else %}
-						<span class="badge badge-secondary">&nbsp;</span>
+						<span class="badge badge-secondary badge-sm">&nbsp;</span>
 					{% endif %}
 				</td>
 				<td class="align-middle">

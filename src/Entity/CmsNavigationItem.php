@@ -66,6 +66,27 @@ class CmsNavigationItem
     private $navigation;
 
     /**
+     * @var int
+     * @Groups({
+     *     "view", "list"
+     * })
+     *
+     * @Assert\NotBlank()
+     * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})
+     */
+    private $ordering;
+
+    /**
+     * @var string|null
+     * @Groups({
+     *     "view", "list"
+     * })
+     *
+     * @ORM\Column(name="classname", type="string", length=255, nullable=true)
+     */
+    private $classname;
+
+    /**
      * @return int
      */
     public function getId(): ?int
@@ -165,6 +186,36 @@ class CmsNavigationItem
     {
         $this->navigation = $navigation;
     }
-    
 
+    /**
+     * @return int|null
+     */
+    public function getOrdering(): ?int
+    {
+        return $this->ordering;
+    }
+
+    /**
+     * @param int|null $ordering
+     */
+    public function setOrdering(?int $ordering): void
+    {
+        $this->ordering = $ordering;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClassname(): ?string
+    {
+        return $this->classname;
+    }
+
+    /**
+     * @param string|null $classname
+     */
+    public function setClassname(?string $classname): void
+    {
+        $this->classname = $classname;
+    }
 }

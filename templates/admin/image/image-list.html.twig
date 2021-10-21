@@ -83,6 +83,17 @@
 										</div>
 										<div class="form-group row mb-1">
 											<div class="col-3">
+												<label class="text-sm text-muted">1024px</label>
+											</div>
+											<div class="col-7">
+												<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.fileResource.getUnscaled1024 }}">
+											</div>
+											<div class="col-2">
+												<a href="{{ image.fileResource.getUnscaled1024 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+											</div>
+										</div>
+										<div class="form-group row mb-1">
+											<div class="col-3">
 												<label class="text-sm text-muted">600px</label>
 											</div>
 											<div class="col-7">

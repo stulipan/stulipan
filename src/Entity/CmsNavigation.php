@@ -66,6 +66,7 @@ class CmsNavigation
      *
      * @ORM\OneToMany(targetEntity="CmsNavigationItem", mappedBy="navigation", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="id", referencedColumnName="item_id", nullable=false)
+     * @ORM\OrderBy({"ordering" = "DESC"})
      * @ Assert\NotBlank(message="Egy HTML modulnak legalább egy CMS oldalhoz tartozik.")
      */
     private $navigationItems;
@@ -184,4 +185,5 @@ class CmsNavigation
         $item->setPage(null);
         $this->navigationItems->removeElement($item);
     }
+
 }

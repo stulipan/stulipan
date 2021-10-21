@@ -152,10 +152,12 @@ settings:
     dashboard:
         general-settings-title: 'Webáruház'
         general-settings-description: 'Webáruház adatainak megtekintése és frissítése'
+        notifications-title: 'Értesítések'
+        notifications-description: 'A neked és ügyfeleidnek küldött értesítések kezelése'
         store-policy-title: 'Jogi oldalak'
         store-policy-description: 'Kezeld webáruházad jogi oldalait'
         translation-title: 'Webshop nyelvek'
-        translation-description: 'Kezelje azokat a nyelveket, amelyeket ügyfelei megnézhetnek az üzletében'
+        translation-description: 'Kezelje a webáruház nyelveit'
         admin-general-settings-title: 'Admin oldal'
         admin-general-settings-description: 'Admin oldal működése és beállítások szerkesztése'
     translation:
@@ -197,6 +199,17 @@ settings:
         payment-instructions: Fizetési útmutató
         payment-instructions-help: Ez jelenik meg az ügyfeleknek, miután leadta rendelését ezzel a fizetési móddal.
         payment-saved-successfully: 'Fizetési mód sikeresen elmentve.'
+    notification:
+        notifications: Értesítések
+        notifications-description: Ezeket az értesítéseket automatikusan elküldi az ügyfélnek. A tartalom szerkesztéséhez kattints az értesítés sablonjára.
+        email-template-not-found: Nem talált email sablont!
+        customize-template: Sablon testreszabása
+        new-email-template: Új email sablon
+        email-template-saved-successfully: Email sablon sikeresen elmentve.
+        name: Sablon neve
+        subject: Email tárgya
+        body: Email törzse (HTML)
+        slug: Slug
     policy:
         policy: Jogi oldalak
         legal-pages: Jogi szabályzat oldalak
@@ -249,6 +262,7 @@ cms:
         slug: 'Slug'
         slug-help: 'Ne használj ékezeteket, pl: ''szepseg-es-kozmetika'''
         enabled: Engedélyezve
+        previewable: Látható előnézetben
         parent-page: 'Szülő oldal'
         name-is-missing: 'Nevezd el a modult.'
         slug-is-missing: 'A slug nem lehet üres. Pl: ''szuletesnapi-kellekek'''
@@ -260,7 +274,7 @@ cms:
         collection-page: Kategória oldal
     navigation:
         navigation: Navigation
-        navigations: Navigation list
+        navigations: Navigáció / Menü
         new-navigation: New navigation
         navigations-not-found: No navigation was found!
         navigations-not-found-suggestion: Try modifying the filters.
@@ -336,3 +350,5 @@ generic:
     updated-at: Frissítve
     enabled: Engedélyezve
     disabled: Letiltva
+    sort: Sorrend
+    classname: Class

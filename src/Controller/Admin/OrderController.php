@@ -16,6 +16,8 @@ use App\Entity\Order;
 use App\Entity\OrderLog;
 use App\Entity\OrderLogChannel;
 use App\Entity\OrderStatus;
+use App\Entity\StoreEmailTemplate;
+use App\Entity\User;
 use App\Event\OrderEvent;
 use App\Entity\PaymentStatus;
 use App\Form\DeliveryDate\CartHiddenDeliveryDateFormType;
@@ -29,12 +31,18 @@ use App\Form\OrderShippingAddressType;
 use App\Form\OrderStatusType;
 use App\Form\PaymentStatusType;
 use App\Services\AdminSettings;
+use App\Services\StoreSettings;
+use App\Twig\AppExtension;
 use BarionClient;
 use BarionEnvironment;
 use DateTime;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,8 +52,11 @@ use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Pagination\PaginatedCollection;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 /**
  * @IsGranted("ROLE_MANAGE_ORDERS")
@@ -56,12 +67,15 @@ class OrderController extends AbstractController
     private $translator;
     private $twig;
     private $dispatcher;
+    private $storeSettings;
 
-    public function __construct(TranslatorInterface $translator, Environment $twig, EventDispatcherInterface $dispatcher)
+    public function __construct(TranslatorInterface $translator, Environment $twig, EventDispatcherInterface $dispatcher,
+                                StoreSettings $storeSettings)
     {
         $this->translator = $translator;
         $this->twig = $twig;
         $this->dispatcher = $dispatcher;
+        $this->storeSettings = $storeSettings;
     }
 
 
@@ -386,18 +400,6 @@ class OrderController extends AbstractController
      */
     public function showOrderDetail(Request $request, ?Order $order, $id = null, \App\Services\Localization $localization)
     {
-        $myPosKey = '44bbe1be18864434b28f2d09df89351c';
-        $apiVersion = 2;
-        $environment = BarionEnvironment::Test;
-
-        $barionClient = new BarionClient($myPosKey, $apiVersion, $environment);
-
-//        $money = $this->twig->getFilter('money')->getCallable();
-//        dd($money(4876));
-
-//        setlocale(LC_TIME, "hu_HU");
-//        dd(strftime(" in Finnish is %A,"));
-
         if (!$order) {
             throw $this->createNotFoundException('STUPID: Nincs ilyen rendelés!' );
         }
@@ -477,6 +479,56 @@ class OrderController extends AbstractController
             'commentForm' => $commentForm->createView(),
             
         ]);
+    }
+
+    /**
+     * @Route("/orders/send-confirmation/{id}", name="order-send-confirmation-email")
+     */
+    public function sendOrderConfirmation(Request $request, ?Order $order, $id = null,
+                                          MailerInterface $mailer, AppExtension $appExtension): RedirectResponse
+    {
+        $this->translator->trans('generic.apply');
+        if (!$order) {
+            return $this->redirectToRoute('order-detail', ['id' => $order->getId()]);
+        }
+
+        $template = $this->getDoctrine()->getRepository(StoreEmailTemplate::class)->findOneBy(['slug' => 'order-confirmation']);
+
+        $loader = new ArrayLoader([
+            'order-confirmation' => $template->getBody(),
+        ]);
+        $twig = new Environment($loader);
+        $twig->addExtension($appExtension);
+
+        $subject = str_replace('{{orderNumber}}', '#'.$order->getNumber(), $template->getSubject());
+        $html = $twig->render('order-confirmation', [
+            'subject' => $subject,
+            'order' => $order,
+        ]);
+
+        $email = (new TemplatedEmail())
+            ->from(new Address(
+                $this->storeSettings->get('notifications.sender-email'),
+                $this->storeSettings->get('notifications.sender-name')
+            ))
+            ->to($order->getEmail())
+            ->subject($subject)
+            ->html($html)
+        ;
+        $mailer->send($email);
+
+        $this->addFlash('success', 'Email sikeresen elküldve!');
+
+        return $this->redirectToRoute('order-detail', ['id' => $order->getId()]);
+    }
+
+    private function stringBetweenTwoStrings($str, $starting_word = '{{', $ending_word = '}}'){
+        $arr = explode($starting_word, $str);
+        if (isset($arr[1])){
+            $arr = explode($ending_word, $arr[1]);
+            return trim($arr[0], ' ');
+        }
+        return '';
     }
 
     /**

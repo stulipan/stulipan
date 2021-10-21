@@ -41,23 +41,42 @@
         {% set canBeRendered = true %}
     {% endif %}
 
-    {% if homepage is defined and homepage %}
-        {% if homepage.banner_hero is defined and (homepage.banner_hero.enabled is same as(true) or canBeRendered is same as(true)) %}
+    {% if canBeRendered is same as(true) %}
+        {% if homepage.banner_hero is defined and homepage.banner_hero.previewable is same as(true) %}
             {{ homepage.banner_hero.content|raw }}
         {% endif %}
-
-        {% if homepage.story_1 is defined and (homepage.story_1.enabled is same as(true) or canBeRendered is same as(true)) %}
+        {% if homepage.story_1 is defined and homepage.story_1.previewable is same as(true) %}
             {{ homepage.story_1.content|raw }}
         {% endif %}
-        {% if homepage.story_2 is defined and (homepage.story_2.enabled is same as(true) or canBeRendered is same as(true)) %}
+        {% if homepage.story_2 is defined and homepage.story_2.previewable is same as(true) %}
             {{ homepage.story_2.content|raw }}
         {% endif %}
-
-        {% if homepage.banner_trio is defined and (homepage.banner_trio.enabled is same as(true) or canBeRendered is same as(true)) %}
-            {{ homepage.banner_trio.content|raw }}
+        {% if homepage.story_3 is defined and homepage.story_3.previewable is same as(true) %}
+            {{ homepage.story_3.content|raw }}
         {% endif %}
 
+        {% if homepage.banner_trio is defined and homepage.banner_trio.previewable is same as(true) %}
+            {{ homepage.banner_trio.content|raw }}
+        {% endif %}
+    {% else %}
+        {% if homepage.banner_hero is defined and homepage.banner_hero.enabled is same as(true) %}
+            {{ homepage.banner_hero.content|raw }}
+        {% endif %}
+        {% if homepage.story_1 is defined and homepage.story_1.enabled is same as(true) %}
+            {{ homepage.story_1.content|raw }}
+        {% endif %}
+        {% if homepage.story_2 is defined and homepage.story_2.enabled is same as(true) %}
+            {{ homepage.story_2.content|raw }}
+        {% endif %}
+        {% if homepage.story_3 is defined and homepage.story_3.enabled is same as(true) %}
+            {{ homepage.story_3.content|raw }}
+        {% endif %}
+
+        {% if homepage.banner_trio is defined and homepage.banner_trio.enabled is same as(true) %}
+            {{ homepage.banner_trio.content|raw }}
+        {% endif %}
     {% endif %}
+
 
 {#    <div class="container">#}
 {#        <div class="row mt-6">#}
@@ -150,22 +169,33 @@
 	<!-- /Banner area -->
 
     <!-- Product list -->
-    <div class="container pb-5 mt-6">
-        <div class="row">
-            <div class="products-grid col-12 sidebar-none">
-                <div class="hero-content text-center">
-                    <h2 class="hero-2">Újdonságok</h2>
-                </div>
+{#    <div class="container pb-5X mt-6">#}
+{#        <div class="row">#}
+{#            <div class="products-grid sidebar-none col-sm-12 col-md-11 col-xl-10 mx-auto">#}
+{#                <div class="hero-content text-center">#}
+{#                    <h2 class="hero-2">Újdonságok</h2>#}
+{#                </div>#}
 
-                {% include 'webshop/site/product-list-widget.html.twig' %}
+{#                {% include 'webshop/site/product-list-widget.html.twig' %}#}
 
-            </div>
-        </div>
-    </div>
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
-    {% if homepage is defined and homepage %}
-        {% if homepage.drummer is defined and (homepage.drummer.enabled is same as(true) or canBeRendered is same as(true)) %}
+
+    {% if canBeRendered is same as(true) %}
+        {% if homepage.drummer is defined and homepage.drummer.previewable is same as(true) %}
             {{ homepage.drummer.content|raw }}
+        {% endif %}
+        {% if homepage.spacer_bottom is defined and homepage.spacer_bottom.previewable is same as(true) %}
+            {{ homepage.spacer_bottom.content|raw }}
+        {% endif %}
+    {% else %}
+        {% if homepage.drummer is defined and homepage.drummer.enabled is same as(true) %}
+            {{ homepage.drummer.content|raw }}
+        {% endif %}
+        {% if homepage.spacer_bottom is defined and homepage.spacer_bottom.enabled is same as(true) %}
+            {{ homepage.spacer_bottom.content|raw }}
         {% endif %}
     {% endif %}
 

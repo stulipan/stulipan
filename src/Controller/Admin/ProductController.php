@@ -14,18 +14,26 @@ use App\Form\ProductFilterType;
 use App\Form\ProductFormType;
 use App\Form\ProductQuantityFormType;
 use App\Services\FileUploader;
+use App\Services\Localization;
 use App\Services\StoreSettings;
+use App\Twig\AppExtension;
+use DateTime;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -33,6 +41,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Twig\TwigFilter;
 
 /**
  * @Route("/admin")
@@ -333,6 +342,64 @@ class ProductController extends AbstractController
             'badgesJson' => $this->createJsonNormalized($badges),
             'kindsJson' => $this->createJson($kinds, ['groups' => 'productView']),
         ]);
+    }
+
+    /**
+     * @Route("/products/download", name="product-download-csv")
+     *
+     * Ez nem up-to-date !!!
+     * Lasd a Shop>>ProductController-ben a frissebb verziot!
+     *
+     */
+    public function downloadProductCSV(StoreSettings $storeSettings, Localization $localization): Response
+    {
+        $locale = $localization->getCurrentLocale();
+        $filters = [];
+        $filters['status'] = ProductStatus::STATUS_ENABLED;
+        $productQuery = $this->getDoctrine()->getRepository(Product::class)->findAllQuery($filters);
+
+        $data = [];
+        foreach ($productQuery->getResult() as $p) {
+            $data[] = [
+                'id' => $p->getSku(),
+                'title' => $p->getName(),
+                'description' => $p->getDescription() ? str_replace("\n", '', strip_tags($p->getDescription())) : $p->getName(),
+                'availability' => ($p->getStock() > 0 ? 'in stock' : 'out of stock'),
+                'condition' => 'new',
+                'price' => $p->getPrice()->getNumericValue().' '.$locale->getCurrencyCode(),
+                'link' => $this->generateUrl('site-product-show', ['slug' => $p->getSlug()], UrlGenerator::ABSOLUTE_URL),
+                'image_link' => $p->getImages()[0]->getImageUrl(),
+                'brand' => $storeSettings->get('store.brand'),
+                'google_product_category' => 'Home & Garden > Decor > Seasonal & Holiday Decorations',
+            ];
+        }
+        $context = ['csv_headers' => [
+            'id',
+            'title',
+            'description',
+            'availability',
+            'condition',
+            'price',
+            'link',
+            'image_link',
+            'brand',
+            'google_product_category'
+        ]];
+
+        $encoders = [new CsvEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $csvContent = $serializer->serialize($data, 'csv', $context);
+//        dd($csvContent);
+
+        $response = new Response($csvContent);
+        $response->headers->set('Content-Encoding', 'UTF-8');
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            sprintf('products-%s.csv', (new DateTime('now'))->format($locale->getDateFormat())));
+        $response->headers->set('Content-Disposition', $disposition);
+        return $response;
     }
 
     private function createJson($data, array $context = [])

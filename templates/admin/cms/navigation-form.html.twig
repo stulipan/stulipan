@@ -1,20 +1,33 @@
 {% import _self as myOwnMacro %}
 {% macro printIntervalRow(item) %}
-    <div class="form-group form-row mb-2">
-        <div class="col-md-5 col-6 mb-1">
-{#            {{ form_label(item.name, item.name, {'label_attr': {'class': ''}, 'label': 'cms.navigation.navigation-item-name'|trans}) }}#}
-            {{ form_widget(item.name, {'attr': {'placeholder': 'cms.navigation.navigation-item-name'|trans }} ) }}
-            {{ form_errors(item.name) }}
-        </div>
-        <div class="col-md-5 col-5 mb-1">
-{#            {{ form_label(item.url, item.url, {'label_attr': {'class': ''}, 'label': 'cms.navigation.navigation-item-url'|trans}) }}#}
-            {{ form_widget(item.url, {'attr': {'placeholder': 'cms.navigation.navigation-item-url'|trans }} ) }}
-            {{ form_errors(item.url) }}
-        </div>
-        <div class="col-md-2 col-1 mb-1">
-            {{ form_widget(item.enabled, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
-            {{ form_errors(item.enabled) }}
-            {% do item.enabled.setRendered() %}
+    <div class="form-groupX">
+        <div class="form-row vertical-form-row">
+            <div class="col-md-5 col-6 vertical-col">
+                {#            {{ form_label(item.name, item.name, {'label_attr': {'class': ''}, 'label': 'cms.navigation.navigation-item-name'|trans}) }}#}
+                {{ form_widget(item.name, {'attr': {'placeholder': 'cms.navigation.navigation-item-name'|trans }} ) }}
+                {{ form_errors(item.name) }}
+            </div>
+            <div class="col-md-5 col-6 vertical-col">
+                {#            {{ form_label(item.url, item.url, {'label_attr': {'class': ''}, 'label': 'cms.navigation.navigation-item-url'|trans}) }}#}
+                {{ form_widget(item.url, {'attr': {'placeholder': 'cms.navigation.navigation-item-url'|trans }} ) }}
+                {{ form_errors(item.url) }}
+            </div>
+            <div class="col-md-3 col-4 vertical-col">
+                {{ form_widget(item.classname, {'attr': {'placeholder': 'generic.classname'|trans }} ) }}
+                {{ form_errors(item.classname) }}
+                {% do item.classname.setRendered() %}
+            </div>
+            <div class="col-md-2 col-3 vertical-col">
+                {{ form_widget(item.ordering, {'attr': {'placeholder': 'generic.sort'|trans }} ) }}
+                {{ form_errors(item.ordering) }}
+                {% do item.ordering.setRendered() %}
+            </div>
+            <div class="col-md-2 col-2 vertical-col">
+                {{ form_widget(item.enabled, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
+                {{ form_errors(item.enabled) }}
+                {% do item.enabled.setRendered() %}
+            </div>
+
         </div>
     </div>
 {% endmacro %}
@@ -47,16 +60,22 @@
                             <div class="col-md-12">
                                 <label for="{{ form.navigationItems.vars.full_name }}" class="">{{ 'cms.navigation.navigation-items'|trans }}</label>
                                 <div class="JS--Wrapper-collection">
-                                    <div class="JS--Wrapper-collectionList" data-prototype="{{ myOwnMacro.printIntervalRow(form.navigationItems.vars.prototype)|e('html_attr') }}" data-index="{{ form.navigationItems|length }}">
+                                    <div class="JS--Wrapper-collectionList mx-n3" data-prototype="{{ myOwnMacro.printIntervalRow(form.navigationItems.vars.prototype)|e('html_attr') }}" data-index="{{ form.navigationItems|length }}">
                                         {% if form.navigationItems is not empty %}
                                             {% for item in form.navigationItems %}
-                                                {{ myOwnMacro.printIntervalRow(item) }}
+                                                <div class="px-3 py-3 form-groupX{% if (loop.index is odd) %} bg-light{% else %}{% endif %}">
+                                                    {{ myOwnMacro.printIntervalRow(item) }}
+                                                </div>
                                             {% endfor %}
                                             {% do form.navigationItems.setRendered() %}
                                         {{ form_errors(form.navigationItems) }}
                                         {% endif %}
                                     </div>
-                                    <a href="javascript:void(0)" class="JS--Button-addNewInterval btn btn-secondary mb-2"><i class="fas fa-plus mr-2"></i> {{ 'cms.navigation.new-navigation-item'|trans }}</a>
+                                    <div class="mx-n3">
+                                        <div class="px-3 pt-3">
+                                            <a href="javascript:void(0)" class="JS--Button-addNewInterval btn btn-secondary"><i class="fas fa-plus mr-2"></i> {{ 'cms.navigation.new-navigation-item'|trans }}</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

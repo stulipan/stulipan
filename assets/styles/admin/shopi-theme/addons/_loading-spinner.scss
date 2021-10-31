@@ -1,0 +1,84 @@
+// Button loader
+// To be used as loading animation
+
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+
+//@-webkit-keyframes rotate {
+//  0% {
+//    transform: rotate(0deg)
+//  }
+//  100% {
+//    transform: rotate(360deg)
+//  }
+//}
+//
+//@keyframes rotate {
+//  0% {
+//    transform: rotate(0deg)
+//  }
+//  100% {
+//    transform: rotate(360deg)
+//  }
+//}
+
+.loading-spinner-show {
+  position: relative;
+  pointer-events: none;
+  outline: none !important;
+  box-shadow: none !important;
+
+  & .loading-spinner-invisible {
+    opacity: 0;
+  }
+
+  & .loading-spinner-faded {
+    opacity: .3;
+  }
+
+  &.loading-spinner-bg {
+    background-color: $gray-200;
+    border-radius: $border-radius;
+    color: $muted;
+  }
+
+  & .loading-spinner {
+    display: inline-block;
+    width: #{$line-height-base}rem;  //1.5rem
+    height: #{$line-height-base}rem;
+    vertical-align: text-bottom;
+    border: .25rem solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border .75s linear infinite;
+    position: absolute;
+    top: calc(50% - #{$line-height-base}rem/2);
+    left: calc(50% - #{$line-height-base}rem/2);
+  }
+
+  &.loading-spinner-has-bg .loading-spinner {
+    border-color: lighten($gray-700, 10%);
+    border-right-color: transparent;
+  }
+}
+
+// Corrections
+
+.loading-spinner-show {
+  position: relative;
+  pointer-events: none;
+  outline: none !important;
+  box-shadow: none !important;
+
+  &.btn-secondary,
+  &.btn-secondary:focus,
+  &.btn-link-secondary,
+  &.btn-link-secondary:focus {
+    color: $gray-600;
+  }
+
+  &.btn:disabled {
+    opacity: 1 !important;
+  }
+}

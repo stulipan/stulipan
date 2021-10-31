@@ -25,30 +25,28 @@
 
 {% block bodyClass %} order orderDetail{% endblock %}
 
+    {% block dataSection %}class="JS--Wrapper-orderDetail" data-section-id="orderDetail" data-section-type="orderDetail-page"{% endblock %}
 
     {% block modal %}
         <div class="modal fade" id="modal--Recipient" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-                <div class="modal-content JS--recipientWrapper">
+                <div class="modal-content JS--Wrapper-recipient">
                     <div class="modal-header">
                         <h3 class="modal-title" id="modalLabel">{{ 'order.edit-recipient'|trans }}</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body JS--recipientContentBlock">
-                        <div class="modal-body-content">
+                    <div class="modal-body">
+                        <div class="modal-body-content JS--Wrapper-recipientBody">
                             {% include('admin/order/shippingInfo-form.html.twig') %}
                         </div>
                         <div class="modal-footer">
-                            <div class="loadingWrapper loadingWrapper-secondary">
-                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                            </div>
-                            <div class="loadingWrapper">
-                                <button type="submit" class="JS--btn-submitRecipient btn btn-primary">{{ 'generic.save-changes'|trans }}</button>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+                            <button type="submit" class="JS--Button-submitRecipient btn btn-primary">
+                                <span class="loading-spinner-invisible">{{ 'generic.save-changes'|trans }}</span>
+                                <span class="loading-spinner" role="status"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -57,26 +55,23 @@
 
         <div class="modal fade" id="modal--Sender" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-                <div class="modal-content JS--senderWrapper">
+                <div class="modal-content JS--Wrapper-sender">
                     <div class="modal-header">
                         <h3 class="modal-title" id="modalLabel">{{ 'order.edit-sender'|trans }}</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body JS--senderContentBlock">
-                        <div class="modal-body-content">
+                    <div class="modal-body">
+                        <div class="modal-body-content JS--Wrapper-senderBody">
                             {% include('admin/order/billingInfo-form.html.twig') %}
                         </div>
                         <div class="modal-footer">
-                            <div class="loadingWrapper loadingWrapper-secondary">
-                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                            </div>
-                            <div class="loadingWrapper">
-                                <button type="submit" class="JS--btn-submitSender btn btn-primary">{{ 'generic.save-changes'|trans }}</button>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+                            <button type="submit" class="JS--Button-submitSender btn btn-primary">
+                                <span class="loading-spinner-invisible">{{ 'generic.save-changes'|trans }}</span>
+                                <span class="loading-spinner" role="status"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -231,28 +226,39 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modal--Status" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal fade" id="modal--orderStatus" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-                <div class="modal-content JS--statusWrapper">
+                <div class="modal-content JS--Wrapper-orderStatus">
                     <div class="modal-header">
                         <h3 class="modal-title" id="modalLabel">{{ 'order.order-status'|trans }}</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body JS--statusContentBlock">
-                        <div class="modal-body-content">
-                            {% include('admin/order/status-form.html.twig') %}
+                    <div class="modal-body">
+                        <div class="modal-body-content JS--Wrapper-orderStatusBody">
+                            <div class="">{{ 'order.fulfill-order'|trans }}</div>
+                            <div>
+                                <div class="form-group row mt-3">
+                                    <div class="col-12">
+                                        <div class="d-inline-block custom-control custom-switch">
+                                            <input type="checkbox" id="sendShippingConfirmation" name="sendShippingConfirmation" class="custom-control-input" value="1" checked="checked">
+                                            <label class="switch-custom custom-control-label" for="sendShippingConfirmation"><span class="invalid-feedback"></span>
+                                            </label>
+                                        </div>
+                                        <label class="">{{ 'order.send-shipping-confirmation-email'|trans }}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+{#                            {% include('admin/order/status-form.html.twig') %}#}
                         </div>
                         <div class="modal-footer">
-                            <div class="loadingWrapper loadingWrapper-secondary">
-                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                            </div>
-                            <div class="loadingWrapper">
-                                <button type="submit" class="JS--btn-submitStatus btn btn-primary">{{ 'generic.save'|trans }}</button>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+                            <button type="submit" class="JS--Button-markAsFulfilled btn btn-primary" data-url="{{ path('order-markAsFulfilled', {'id': order.id}) }}">
+                                <span class="loading-spinner-invisible">{{ 'order.mark-as-fulfilled'|trans }}</span>
+                                <span class="loading-spinner" role="status"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -261,26 +267,26 @@
 
         <div class="modal fade" id="modal--paymentStatus" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-                <div class="modal-content JS--paymentStatusWrapper">
+                <div class="modal-content JS--Wrapper-paymentStatus">
                     <div class="modal-header">
                         <h3 class="modal-title" id="modalLabel">{{ 'order.payment-status'|trans }}</h3>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body JS--paymentStatusContentBlock">
-                        <div class="modal-body-content">
-                            {% include('admin/order/paymentStatus-form.html.twig') %}
+                    <div class="modal-body">
+                        <div class="modal-body-content JS--Wrapper-paymentStatusBody">
+                            <div class="">{{ 'order.payment-processed-by'|trans }} <strong>{{ order.paymentGateway }}</strong></div>
+                            <div class="mt-3">{{ 'order.payment-processed-manually'|trans }}</div>
+
+{#                            {% include('admin/order/paymentStatus-form.html.twig') %}#}
                         </div>
                         <div class="modal-footer">
-                            <div class="loadingWrapper loadingWrapper-secondary">
-                                <a href="" class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</a>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                            </div>
-                            <div class="loadingWrapper">
-                                <button type="submit" class="JS--btn-submitPaymentStatus btn btn-primary">{{ 'generic.save'|trans }}</button>
-                                <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                            </div>
+                            <button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+                            <button type="submit" class="JS--Button-markAsPaid btn btn-primary" data-url="{{ path('order-markAsPaid', {'id': order.id}) }}">
+                                <span class="loading-spinner-invisible">{{ 'order.mark-as-paid'|trans }}</span>
+                                <span class="loading-spinner" role="status"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -308,6 +314,56 @@
                     </div>
                 </div>
             </div>
+
+        <div class="modal fade" id="modal--orderConfirmation" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content JS--Wrapper-orderConfirmation">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalLabel">{{ 'order.resend-order-confirmation'|trans }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-body-content JS--Wrapper-orderConfirmationBody">
+                            <div class="">{{ 'order.order-confirmation-will-be-sent-to'|trans({ '{{ email }}': order.email }) }}</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+                            <button type="submit" class="JS--Button-sendOrderConfirmation btn btn-primary" data-url="{{ path('order-sendEmail-orderConfirmation', {'id': order.id}) }}">
+                                <span class="loading-spinner-invisible">{{ 'generic.send'|trans }}</span>
+                                <span class="loading-spinner" role="status"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal--shippingConfirmation" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content JS--Wrapper-shippingConfirmation">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalLabel">{{ 'order.resend-shipping-confirmation'|trans }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-body-content JS--Wrapper-shippingConfirmationBody">
+                            <div class="">{{ 'order.shipping-confirmation-will-be-sent-to'|trans({ '{{ email }}': order.email }) }}</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+                            <button type="submit" class="JS--Button-sendShippingConfirmation btn btn-primary" data-url="{{ path('order-sendEmail-shippingConfirmation', {'id': order.id}) }}">
+                                <span class="loading-spinner-invisible">{{ 'generic.send'|trans }}</span>
+                                <span class="loading-spinner" role="status"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endblock %}
 
     {% block headerTitle %}
@@ -330,13 +386,7 @@
                     <a class="nav-link" href="#" onclick="window.print()"><i class="fas fa-print mr-2"></i>{{ 'order.print'|trans }}</a>
                 </li>
                 <li class="nav-item adaptive-item">
-                    <a class="nav-link" href="{{ path('order-send-confirmation-email', {'id': order.id}) }}"><i class="far fa-paper-plane mr-2"></i>Email küldés</a>
-                </li>
-                <li class="nav-item adaptive-item">
                     <a class="nav-link" href="#"><i class="far fa-file-alt mr-2"></i>{{ 'order.shipping-letter'|trans }}</a>
-                </li>
-                <li class="nav-item adaptive-item">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#modal--Status" data-backdrop="static"><i class="far fa-edit mr-2"></i>{{ 'order.order-status'|trans }}</a>
                 </li>
                 {% if isEditEnabled is defined and isEditEnabled == true %}
                     <li class="nav-item adaptive-item">
@@ -351,12 +401,14 @@
                             {{ 'order.edit-recipient'|trans }}
                         </a>
                     </li>
+                    {% if flowerShopMode %}
                     <li class="nav-item adaptive-item">
                         <a class="nav-link" href="" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static">
                             <i class="far fa-clock mr-2"></i>
                             {{ 'order.new-delivery-date'|trans }}
                         </a>
                     </li>
+                    {% endif %}
                     <li class="nav-item adaptive-item">
                         <a class="nav-link" href="" data-toggle="modal" data-target="#modal--ArchiveOrder" data-backdrop="static">
                             <i class="fas fa-archive mr-2"></i>
@@ -391,10 +443,15 @@
                 {% include 'admin/order/_order-items-widget.html.twig' %}
                 {% include 'admin/order/_order-summary-widget.html.twig' %}
             </div>
-            {% if isEditEnabled is defined and isEditEnabled == true %}
+            {% if order.isUnfulfilled == true %}
             <div class="edit-block d-print-none">
                 <div class="card-footer text-right">
-                    <a href="" class="btn btn-smX btn-secondary" data-dismiss="modal"><i class="far fa-edit mr-2"></i>{{ 'generic.edit'|trans }}</a>
+                    <button class="btn btn-secondary" role="button" data-toggle="modal" data-target="#modal--orderConfirmation" data-backdrop="static">
+                        <i class="far fa-paper-plane mr-2"></i>{{ 'order.send-order-confirmation-button'|trans }}
+                    </button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#modal--orderStatus" data-backdrop="static">
+                        {{ 'order.mark-as-fulfilled'|trans }}
+                    </button>
                 </div>
             </div>
             {% endif %}
@@ -406,7 +463,7 @@
             {% if isEditEnabled is defined and isEditEnabled == true %}
             <div class="edit-block d-print-none">
                 <div class="card-footer text-right">
-                        <span class="nav-item dropdown">
+                        <div class="nav-item dropdown">
                             <a class="btn btn-secondary dropdown-toggle" href="javascript: void(0);" id="navSzerkesztes" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
             {#                    <i class="far fa-edit mr-2"></i>#}
                                 {{ 'generic.modify'|trans }}
@@ -421,7 +478,7 @@
                                     {{ 'order.edit-recipient'|trans }}
                                 </a>
                             </div>
-                        </span>
+                        </div>
                 </div>
             </div>
             {% endif %}
@@ -430,39 +487,37 @@
             <div class="card-body">
                 {% include 'admin/order/_order-payment-widget.html.twig' %}
             </div>
-            {% if isEditEnabled is defined and isEditEnabled == true and order.isBankTransfer is defined and order.isBankTransfer == true %}
-            <div class="edit-block d-print-none">
-                <div class="card-footer text-right">
-                    {% if order.paymentStatus is defined and order.paymentStatus.shortcode == constant('App\\Entity\\PaymentStatus::STATUS_PENDING') %}
-                        <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal--paymentStatus" data-backdrop="static">{{ 'order.mark-as-paid'|trans }}</a>
-                    {% else %}
-                        <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#modal--paymentStatus" data-backdrop="static">{{ 'order.payment-status'|trans }}</a>
-                    {% endif %}
-                </div>
-            </div>
+            {% if order.hasManualPayment == true %}
+                {% if order.isUnpaid is defined and order.isUnpaid == true %}
+                    <div class="edit-block d-print-none">
+                        <div class="card-footer text-right">
+                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal--paymentStatus" data-backdrop="static">{{ 'order.mark-as-paid'|trans }}</a>
+                        </div>
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
     {% endblock %}
 
     {% block sidebar %}
         <div class="mt-20px mt-md-0">
-            <div class="card mb-20px">
-                {% include 'admin/order/_order-delivery-overdue-widget.html.twig' %}
-                <div class="card-body">
-                    <div class="">
-                        {% include 'admin/order/_order-delivery-widget.html.twig' %}
-                    </div>
-                </div>
-                {% if flowerShopMode %}
-                    {% if isEditEnabled is defined and isEditEnabled == true %}
-                    <div class="edit-block d-print-none">
-                        <div class="card-footer text-right">
-                            <a href="" class="btn btn-secondary" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit mr-2"></i>{{ 'generic.modify'|trans }}</a>
+            {% if flowerShopMode %}
+                <div class="card mb-20px">
+                    {% include 'admin/order/_order-delivery-overdue-widget.html.twig' %}
+                    <div class="card-body">
+                        <div class="">
+                            {% include 'admin/order/_order-delivery-widget.html.twig' %}
                         </div>
                     </div>
-                    {% endif %}
-                {% endif %}
-            </div>
+                        {% if isEditEnabled is defined and isEditEnabled == true %}
+                        <div class="edit-block d-print-none">
+                            <div class="card-footer text-right">
+                                <a href="" class="btn btn-secondary" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit mr-2"></i>{{ 'generic.modify'|trans }}</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                </div>
+            {% endif %}
             <div class="card">
             <div class="card-body">
                 {% include 'admin/customer-card.html.twig' with {'customer': order.customer, 'orderCount': order.customer.ordersPlaced.count} %}
@@ -599,7 +654,7 @@
                                                                 <a class="btn-link-timeline" data-toggle="collapse" href="#collapseLog_{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapseLog_{{ loop.index }}">
                                                                     {{ log.message }} <i class="fas fa-angle-down ml-1"></i>
                                                                 </a>
-                                                                {% if log.channel is defined and log.channel.shortcode is not null %}
+                                                                {% if log.channel is defined and log.channel.shortcode is not null and log.channel.isCheckout == false %}
                                                                     <div class="d-inline-block ml-2">
                                                                     (<small class="text-muted">{{ log.channel|capitalize }}</small>)
                                                                     </div>
@@ -611,6 +666,11 @@
                                                                 </div>
                                                             {% else %}
                                                                 {{ log.message }}
+                                                                {% if log.channel is defined and log.channel.shortcode is not null and log.channel.isCheckout == false %}
+                                                                    <div class="d-inline-block">
+                                                                        (<small class="text-muted">{{ log.channel|capitalize }}</small>)
+                                                                    </div>
+                                                                {% endif %}
                                                             {% endif %}
                                                         </div>
                                                         <div class="d-flex flex-row flex-sm-column text-nowrap ml-0 ml-sm-3 mt-1 mt-sm-0 align-items-end">
@@ -642,25 +702,122 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        $(document).ready(function () {
-            let $recipientWrapper = $('.JS--recipientWrapper');
-            let recipientEdit = new OrderDetail($recipientWrapper);
-
-            let $senderWrapper = $('.JS--senderWrapper');
-            let senderEdit = new OrderDetail($senderWrapper);
-
-            let $ddWrapper = $('.JS--deliveryDateContainer');
-            let ddEdit = new OrderDetail($ddWrapper);
-
-            let $statusWrapper = $('.JS--statusWrapper');
-            let st = new OrderDetail($statusWrapper);
-
-            let $paymentStatusWrapper = $('.JS--paymentStatusWrapper');
-            let pay = new OrderDetail($paymentStatusWrapper);
-
-            let $commentWrapper = $('.JS--commentWrapper');
-            let comment = new OrderDetail($commentWrapper);
-        });
+        var recipientConstraints = {
+            '{{ recipientForm.shippingLastname.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'checkout.recipient.missing-lastname'|trans}}'
+                },
+            },
+            '{{ recipientForm.shippingFirstname.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'checkout.recipient.missing-firstname'|trans}}'
+                },
+            },
+            '{{ recipientForm.shippingAddress.street.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'checkout.recipient.missing-address'|trans}}'
+                }
+            },
+            '{{ recipientForm.shippingAddress.city.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'checkout.recipient.missing-city'|trans}}'
+                }
+            },
+            '{{ recipientForm.shippingAddress.province.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'checkout.recipient.missing-province'|trans}}'
+                }
+            },
+            '{{ recipientForm.shippingAddress.zip.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'checkout.recipient.missing-zip'|trans}}'
+                },
+                numericality: {
+                    greaterThanOrEqualTo: 1000,
+                    lessThanOrEqualTo: 9999,
+                    message: '{{ 'checkout.recipient.invalid-zip'|trans}}'
+                }
+            },
+            '{{ recipientForm.shippingPhone.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'checkout.recipient.missing-phone'|trans}}'
+                },
+                format: {
+                    pattern: '^[+]?' // first character must be '+' and is optional (because of '?')
+                        +'([0-9 ]{10,})$', // allowed: '0-9' and ' ' (space), min. length 10 characters (without the '+')
+                    message: '{{ 'checkout.recipient.invalid-phone'|trans}}'
+                }
+            },
+        };
+        var senderConstraints = {
+            '{{ senderForm.billingLastname.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: 'Add meg a vezetéknevet.'
+                },
+            },
+            '{{ senderForm.billingFirstname.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: 'Add meg a keresztnevet.'
+                },
+            },
+            '{{ senderForm.billingAddress.street.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: 'Add meg a címet.'
+                }
+            },
+            '{{ senderForm.billingAddress.city.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: 'Add meg a települést.'
+                }
+            },
+            '{{ senderForm.billingAddress.province.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: 'Add meg a megyét.'
+                }
+            },
+            '{{ senderForm.billingAddress.zip.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: 'Add meg az irányítószámot.'
+                },
+                numericality: {
+                    greaterThanOrEqualTo: 1000,
+                    lessThanOrEqualTo: 9999,
+                    message: 'Hibás irányítószám.'
+                }
+            },
+        };
+        // $(document).ready(function () {
+        //     let $recipientWrapper = $('.JS--recipientWrapper');
+        //     let recipientEdit = new OrderDetail($recipientWrapper);
+        //
+        //     let $senderWrapper = $('.JS--senderWrapper');
+        //     let senderEdit = new OrderDetail($senderWrapper);
+        //
+        //     let $ddWrapper = $('.JS--deliveryDateContainer');
+        //     let ddEdit = new OrderDetail($ddWrapper);
+        //
+        //     let $statusWrapper = $('.JS--statusWrapper');
+        //     let st = new OrderDetail($statusWrapper);
+        //
+        //     let $paymentStatusWrapper = $('.JS--paymentStatusWrapper');
+        //     let pay = new OrderDetail($paymentStatusWrapper);
+        //
+        //     let $commentWrapper = $('.JS--commentWrapper');
+        //     let comment = new OrderDetail($commentWrapper);
+        // });
         $(function() {
             const drpConfig = Object.assign({}, drpBaseConfig, {
                 parentEl: ".JS--dateWrapper",

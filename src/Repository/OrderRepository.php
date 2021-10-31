@@ -84,13 +84,13 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
      *                'paymentStatus' => 'pending'
      *                'orderStatus' => 'created'
      *             ]
-     * @return array|null
+     * @return float
      * @throws Exception
      */
-    public function countAllLast($period = null, $filter = [])
+    public function countLast($period = null, $filter = [])
     {
         if ($period && $period != '24 hours' && $period != '7 days' && $period != '30 days' && $period !== 'lifetime') {
-            return null;
+            return 0;
         }
 
         $qb = $this
@@ -136,8 +136,62 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
                 ;
             }
         }
-        $query = $qb->getQuery()->getOneOrNullResult();
-        return $query;  // returns this array: $query = ['orderCount' => 2]
+        $query = $qb->getQuery()->getSingleScalarResult();
+        return $query == null ? 0 : $query;
+    }
+
+    public function sumLast($period = null, $filter = [])
+    {
+        if ($period && $period != '24 hours' && $period != '7 days' && $period != '30 days' && $period !== 'lifetime') {
+            return 0;
+        }
+
+        $qb = $this
+            ->createQueryBuilder('o')
+            ->andWhere('o.status IS NOT NULL')
+            ->leftJoin('o.items', 'i')
+//            ->select('SUM(i.priceTotal) as totalRevenue')
+            ->select('(SUM(i.priceTotal) + SUM(o.shippingPrice)) as totalRevenue')
+        ;
+
+        if ($period === null || $period === 'lifetime') {
+
+        } else {
+            $date = new DateTime();
+            if ($period == '24 hours') {
+                $date->modify('-24 hours');
+            }
+            if ($period == '7 days') {
+                $date->modify('-7 days');
+            }
+            if ($period == '30 days') {
+                $date->modify('-30 days');
+            }
+            $qb->andWhere('o.createdAt > :date')
+                ->setParameter('date', $date)
+            ;
+        }
+
+        if (is_array($filter)) {
+            if (array_key_exists('paymentStatus', $filter)) {
+                $paymentStatus = $filter['paymentStatus'];
+                $paymentStatus = $this->getEntityManager()->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus]);
+
+                $qb->andWhere('o.paymentStatus = :status')
+                    ->setParameter('status', $paymentStatus)
+                ;
+            }
+            if (array_key_exists('orderStatus', $filter)) {
+                $orderStatus = $filter['orderStatus'];
+                $orderStatus = $this->getEntityManager()->getRepository(OrderStatus::class)->findOneBy(['shortcode' => $orderStatus]);
+
+                $qb->andWhere('o.status = :status')
+                    ->setParameter('status', $orderStatus)
+                ;
+            }
+        }
+        $query = $qb->getQuery()->getSingleScalarResult();
+        return $query == null ? 0 : (float) $query;
     }
 
     /**

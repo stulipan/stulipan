@@ -2,30 +2,26 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\BaseController;
 use App\Entity\Product\Product;
 use App\Entity\Price;
 use App\Entity\Product\ProductBadge;
 use App\Entity\Product\ProductCategory;
 use App\Entity\Product\ProductKind;
 use App\Entity\Product\ProductStatus;
+use App\Entity\SalesChannel;
 use App\Entity\VatRate;
 use App\Form\ProductFilterType;
 use App\Form\ProductFormType;
-use App\Form\ProductQuantityFormType;
 use App\Services\FileUploader;
 use App\Services\Localization;
 use App\Services\StoreSettings;
-use App\Twig\AppExtension;
 use DateTime;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
@@ -41,7 +37,6 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Twig\TwigFilter;
 
 /**
  * @Route("/admin")
@@ -260,7 +255,7 @@ class ProductController extends AbstractController
 //                $product->getPrice()->setType(Price::PRICE_FOR_PRODUCT);
 //            }
 
-            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            /** @var UploadedFile $file */
             $file = $form['imageFile']->getData();
 
             if (!is_null($file)) {
@@ -281,6 +276,7 @@ class ProductController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $categories = $em->getRepository(ProductCategory::class)->findAll();
         $badges = $em->getRepository(ProductBadge::class)->findAll();
+        $salesChannels = $em->getRepository(SalesChannel::class)->findBy(['enabled' => true]);
         $statuses = $em->getRepository(ProductStatus::class)->findAll();
         $kinds = $em->getRepository(ProductKind::class)->findAll();
 
@@ -291,6 +287,7 @@ class ProductController extends AbstractController
             'statusesJson' => $this->createJsonNormalized($statuses),
             'categoriesJson' => $this->createJsonNormalized($categories),
             'badgesJson' => $this->createJsonNormalized($badges),
+            'salesChannelsJson' => $this->createJsonNormalized($salesChannels),
             'kindsJson' => $this->createJson($kinds, ['groups' => 'productView']),
         ]);
     }
@@ -306,7 +303,7 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $product = $form->getData();
-            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            /** @var UploadedFile $file */
             $file = $form['imageFile']->getData();
 
             if (!is_null($file)) {
@@ -330,6 +327,7 @@ class ProductController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $categories = $em->getRepository(ProductCategory::class)->findAll();
         $badges = $em->getRepository(ProductBadge::class)->findAll();
+        $salesChannels = $em->getRepository(SalesChannel::class)->findBy(['enabled' => true]);
         $statuses = $em->getRepository(ProductStatus::class)->findAll();
         $kinds = $em->getRepository(ProductKind::class)->findAll();
 
@@ -340,6 +338,7 @@ class ProductController extends AbstractController
             'statusesJson' => $this->createJsonNormalized($statuses),
             'categoriesJson' => $this->createJsonNormalized($categories),
             'badgesJson' => $this->createJsonNormalized($badges),
+            'salesChannelsJson' => $this->createJsonNormalized($salesChannels),
             'kindsJson' => $this->createJson($kinds, ['groups' => 'productView']),
         ]);
     }

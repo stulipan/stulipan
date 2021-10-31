@@ -84,8 +84,19 @@ order:
     payment-method: Fizetési mód
     paid-by-customer: Vásárló ennyit fizetett
     instructions-for-bank-transfer: 'Banki utaláshoz szükséges adatok'
+    mark-as-paid: 'Megjelölöm fizetettként'
     payment-status: 'Fizetés állapota'
-    mark-as-paid: 'Jelöld meg fizetettként'
+    payment-processed-by: 'Fizetés megtörtént itt:'
+    payment-processed-manually: 'Amennyiben a fizetés a webáruházon kívül történt (pl: utánvét, banki utalás), jelöld meg kifizetettként ezt a megrendelést.'
+    mark-as-fulfilled: 'Rendelés teljesítése'
+    fulfill-order: 'A rendelés ezennel teljesítve lesz.'
+    send-shipping-confirmation-button: 'Szállítási igazolás küldése'
+    resend-shipping-confirmation: 'Szállítási igazolás újraküldése'
+    shipping-confirmation-will-be-sent-to: 'A szállítást megerősítő emailt a következő címre küldjük: {{ email }}'
+    send-shipping-confirmation-email: 'Szállítást megerősítő email küldése a vásárlónak'
+    send-order-confirmation-button: 'Visszaigazoló email küldése'
+    resend-order-confirmation: 'Megrendelés visszaigazolásának újraküldése'
+    order-confirmation-will-be-sent-to: 'A rendelést visszaigazoló emailt a következő címre küldjük: {{ email }}'
     history:
         history-timeline: Előzmények
         leave-a-comment-here: Ide írd az megjegyzésed...
@@ -352,3 +363,4 @@ generic:
     disabled: Letiltva
     sort: Sorrend
     classname: Class
+    send: Elküld

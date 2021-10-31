@@ -34,6 +34,7 @@ Encore
     .addEntry('v-shop', './assets/vue/shop/v-shop.js')
 
     .addEntry('store', './assets/js/store.js')
+    .addEntry('admin', './assets/js/admin.js')
 
     // .addEntry('admin/init', './assets/js/admin/init.js')
 

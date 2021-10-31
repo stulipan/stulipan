@@ -234,6 +234,26 @@
                             </div>
                             <div class="card-footer">
                                 <div class="form-group" :class="{ 'group-validation': showError('categories') }">
+                                    <label class="required" for="badge">Értékesítési csatorna</label>
+                                    <multiselect-bellow
+                                            v-model="product.salesChannels"
+                                            :options="salesChannels"
+                                            :multiple="true"
+                                            :close-on-select="false"
+                                            :custom-label="showSalesChannelName"
+                                            placeholder="Válassz..."
+                                            track-by="id"
+                                            :showLabels="false"
+                                            myClass="detached"
+                                            open-direction="bottom"
+                                            no-result-label="Nincs ilyen opció..."
+                                            :max-height="150"
+                                    >
+                                    </multiselect-bellow>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group" :class="{ 'group-validation': showError('categories') }">
                                     <label class="">Kategóriák</label>
                                     <multiselect-bellow
                                             v-model="product.categories"
@@ -345,6 +365,7 @@
             'categories',
             'statuses',
             'badges',
+            'salesChannels',
             'productKinds',
             'errors',
             'resetForm',
@@ -408,6 +429,9 @@
                 return `${catObj.name}`
             },
             showBadgeName(obj) {
+                return `${obj.name}`
+            },
+            showSalesChannelName(obj) {
                 return `${obj.name}`
             },
             showProductKindName(obj) {

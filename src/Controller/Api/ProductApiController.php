@@ -20,6 +20,7 @@ use App\Serializer\ProductOptionValueDenormalizer;
 use App\Serializer\ProductSelectedOptionDenormalizer;
 use App\Serializer\ProductStatusDenormalizer;
 use App\Serializer\ProductVariantDenormalizer;
+use App\Serializer\SalesChannelDenormalizer;
 use App\Services\FileUploader;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Routing\Annotation\Route;
@@ -134,6 +135,7 @@ class ProductApiController extends BaseController
             new ProductKindDenormalizer($em),
             new ProductStatusDenormalizer($em),
             new ProductBadgeDenormalizer($em),
+            new SalesChannelDenormalizer($em),
             new ProductImageDenormalizer($em),
             new ImageEntityDenormalizer($em),
             new PriceDenormalizer($em),
@@ -191,6 +193,7 @@ class ProductApiController extends BaseController
             new ProductKindDenormalizer($em),
             new ProductStatusDenormalizer($em),
             new ProductBadgeDenormalizer($em),
+            new SalesChannelDenormalizer($em),
             new PriceDenormalizer($em),
             new ProductImageDenormalizer($em),
             new ImageEntityDenormalizer($em),

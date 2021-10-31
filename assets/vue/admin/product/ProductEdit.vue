@@ -17,6 +17,7 @@
                    :categories="categories"
                    :statuses="statuses"
                    :badges="badges"
+                   :salesChannels="salesChannels"
                    :product-kinds="productKinds"
                    :formIsPosting="formIsPosting"
                    :errors="formErrors"
@@ -72,6 +73,7 @@
             'statuses',
             'categories',
             'badges',
+            'salesChannels',
             'productKinds',
         ],
         data: initialData,

@@ -2,7 +2,6 @@
 
 namespace App\Serializer;
 
-use App\Entity\ImageEntity;
 use App\Entity\Price;
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductBadge;
@@ -12,23 +11,12 @@ use App\Entity\Product\ProductKind;
 use App\Entity\Product\ProductOption;
 use App\Entity\Product\ProductStatus;
 use App\Entity\Product\ProductVariant;
-use Cocur\Slugify\Slugify;
-use Doctrine\Common\Annotations\AnnotationReader;
+use App\Entity\SalesChannel;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use libphonenumber\Leniency\Possible;
-use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * Product denormalizer
@@ -130,6 +118,15 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
                 if (!(new ArrayCollection($variants))->contains($variant)) {
                     $object->removeVariant($variant);
                 }
+            }
+        }
+        if (isset($data['salesChannels'])) {
+            foreach ($object->getSalesChannels() as $item) {
+                $object->removeSalesChannel($item);
+            }
+            $salesChannels = $this->denormalizer->denormalize($data['salesChannels'],SalesChannel::class.'[]', $format, $context);
+            foreach ($salesChannels as $item) {
+                $object->addSalesChannel($item);
             }
         }
         return $object;

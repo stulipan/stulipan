@@ -8,6 +8,7 @@ namespace App\Entity\Product;
 
 use App\Entity\Product\ProductCategory;
 use App\Entity\Price;
+use App\Entity\SalesChannel;
 use App\Entity\TimestampableTrait;
 use App\Services\FileUploader;
 use Doctrine\Common\Collections\Collection;
@@ -279,6 +280,19 @@ class Product //implements \JsonSerializable
      * Assert\NotBlank(message="Az altermék egy attribútum kell legyen.")
      */
     private $attribute;
+
+    /**
+     * @var SalesChannel[]|ArrayCollection|null
+     * @Groups({"productView"})
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\SalesChannel", inversedBy="products")
+     * @ORM\JoinTable(name="product_selected_sales_channels",
+     *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="sales_channel_id", referencedColumnName="id")}
+     *      )
+     * @ORM\OrderBy({"ordering": "ASC"})
+     */
+    private $salesChannels;
     
     //////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -299,6 +313,7 @@ class Product //implements \JsonSerializable
         $this->badges = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->hasVariants =  $this->hasVariants();
+        $this->salesChannels = new ArrayCollection();
     }
     
     /**
@@ -853,6 +868,43 @@ class Product //implements \JsonSerializable
     {
         return $this->getAttribute() ? $this->getAttribute()->getName() : '';
     }
+
+    /**
+     * @return bool
+     */
+    public function hasSalesChannel(): bool
+    {
+        return $this->salesChannels->isEmpty() ? false : true;
+    }
+
+    /**
+     * @return SalesChannel[]|Collection
+     */
+    public function getSalesChannels()
+    {
+        return $this->salesChannels ? $this->salesChannels->getValues(): $this->salesChannels;
+    }
+
+    public function addSalesChannel(SalesChannel $item): void
+    {
+        if (!$this->salesChannels->contains($item)) {
+            $this->salesChannels->add($item);
+        }
+    }
+
+    public function removeSalesChannel(SalesChannel $item): void
+    {
+        $this->salesChannels->removeElement($item);
+    }
+
+    /**
+     * @param SalesChannel[]|ArrayCollection|null $salesChannels
+     */
+    public function setSalesChannels($salesChannels): void
+    {
+        $this->salesChannels = $salesChannels;
+    }
+
 
     
     /**

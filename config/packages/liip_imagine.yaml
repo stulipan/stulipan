@@ -33,13 +33,11 @@ liip_imagine:
                 relative_resize:
                     widen: 600
         unscaled_1024:
-#            jpeg_quality: 85
-#            png_compression_level: 8
+            jpeg_quality: 85
+            png_compression_level: 8
             filters:
                 relative_resize:
                     widen: 1024
-            post_processors:
-                mozjpeg: { quality: 70 }
         unscaled_1920:
             jpeg_quality: 85
             png_compression_level: 8

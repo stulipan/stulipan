@@ -127,9 +127,14 @@
         };
     </script>
 
-    <script src="{{ asset('webshop/admin/js/order.detail.js') }}"></script>
+{#    <script src="{{ asset('webshop/admin/js/order.detail.js') }}"></script>#}
 
-{#    {{ encore_entry_script_tags('v-admin') }}#}
+    <script src="{{ asset('webshop/lodash.core.min.js') }}"></script>
+    <script src="{{ asset('webshop/validate.min.js') }}"></script>
+
+{#    {% include('webshop/widgets/_store-localization.html.twig') %}#}
+    {{ encore_entry_script_tags('admin') }}
+
 {% endblock %}
 </body>
 </html>

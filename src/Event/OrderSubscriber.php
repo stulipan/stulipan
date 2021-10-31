@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace App\Event;
 
-use App\Controller\Utils\GeneralUtils;
 use App\Entity\Order;
 use App\Entity\OrderLogChannel;
 use App\Entity\OrderStatus;
 use App\Entity\PaymentStatus;
-use App\Event\OrderEvent;
 use App\Entity\OrderLog;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -53,6 +50,8 @@ class OrderSubscriber implements EventSubscriberInterface
             OrderEvent::PAYMENT_UPDATED => 'onPaymentStatusUpdate',
             OrderEvent::DELIVERY_DATE_UPDATED => 'onDeliveryDateUpdate',
             OrderEvent::SET_ORDER_AS_TRACKED => 'onSetOrderAsTracked',
+            OrderEvent::EMAIL_SENT_ORDER_CONFIRMATION => 'onEmailSentOrderConfirmation',
+            OrderEvent::EMAIL_SENT_SHIPPING_CONFIRMATION => 'onEmailSentShippingConfirmation',
 
         ];
     }
@@ -67,7 +66,6 @@ class OrderSubscriber implements EventSubscriberInterface
 
         $this->setOrderLog($order, $message, null, $this->em->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => $event->getArgument('channel')]));
     }
-
 
     public function onOrderCreate(OrderEvent $event): void
     {
@@ -87,7 +85,8 @@ class OrderSubscriber implements EventSubscriberInterface
 
         $messages = [
             'created' => '{{fullname}} placed this order.',
-            'fulfilled' => 'The order was successfully fulfilled and closed.',
+            'fulfilled' => 'A rendelés teljesítve.',
+//                'The order was successfully fulfilled and closed.',
             'rejected' => 'The order was rejected.',
             'deleted' => 'The order was deleted.',
         ];
@@ -209,6 +208,54 @@ class OrderSubscriber implements EventSubscriberInterface
         }
 
         $this->setOrderLog($order, $message, $description, $this->em->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => $event->getArgument('channel')]));
+    }
+
+    public function onEmailSentOrderConfirmation(OrderEvent $event): void
+    {
+        /** @var Order $order */
+        $order = $event->getSubject();
+
+        if (!$event->getArgument('channel')) {
+            throw new Exception('STUPID: OrderSubscriber >> onDeliveryDateUpdate() függvényben >> nincs \'channel\' definiálva!');
+        }
+
+//        $t = 'Order confirmation email was sent to Liviu jr. Chioran (liviu.chioran@gmail.com).';
+        $message = 'A rendelést visszaigazoló email kiküldve: {{ recipientName }} ({{ recipientEmail }})';
+        $message = $this->translator->trans($message, [
+            '{{ recipientName }}' => $order->getFullname(),
+            '{{ recipientEmail }}' => $order->getEmail(),
+        ]);
+
+        $this->setOrderLog(
+            $order,
+            $message,
+            null,
+            $this->em->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => $event->getArgument('channel')])
+        );
+    }
+
+    public function onEmailSentShippingConfirmation(OrderEvent $event): void
+    {
+        /** @var Order $order */
+        $order = $event->getSubject();
+
+        if (!$event->getArgument('channel')) {
+            throw new Exception('STUPID: OrderSubscriber >> onDeliveryDateUpdate() függvényben >> nincs \'channel\' definiálva!');
+        }
+
+//        $t = 'Order confirmation email was sent to Liviu jr. Chioran (liviu.chioran@gmail.com).';
+        $message = 'A szállításról szóló email kiküldve: {{ recipientName }} ({{ recipientEmail }})';
+        $message = $this->translator->trans($message, [
+            '{{ recipientName }}' => $order->getFullname(),
+            '{{ recipientEmail }}' => $order->getEmail(),
+        ]);
+
+        $this->setOrderLog(
+            $order,
+            $message,
+            null,
+            $this->em->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => $event->getArgument('channel')])
+        );
     }
 
     // Helper

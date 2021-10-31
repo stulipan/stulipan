@@ -119,7 +119,7 @@ class Order
      * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="customer_phone", type="string", length=15, nullable=false)
-     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     * @ Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $phone;
 
@@ -241,7 +241,7 @@ class Order
      * @var float|null
      * @Groups({"orderView", "orderList"})
      *
-     * @Assert\NotBlank()
+     * @ Assert\NotBlank()
      * @ORM\Column(name="scheduling_price", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $schedulingPrice;
@@ -250,7 +250,7 @@ class Order
      * @var float|null
      * @Groups({"orderView", "orderList"})
      *
-     * @Assert\NotBlank()
+     * @ Assert\NotBlank()
      * @ORM\Column(name="shipping_price_discount", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $shippingPriceDiscount;
@@ -327,7 +327,7 @@ class Order
      * @Groups({"orderView", "orderList"})
      *
      * @ORM\Column(name="billing_phone", type="string", length=15, nullable=false)
-     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     * @ Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $billingPhone;
 
@@ -1333,6 +1333,17 @@ class Order
     /**
      * @return bool
      */
+    public function isUnfulfilled(): bool
+    {
+        if ($this->isFulfilled()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
     public function isUnpaid(): bool
     {
         if ($this->getPaymentStatus() && (
@@ -1347,10 +1358,21 @@ class Order
 
     public function isPaid(): bool
     {
-        if ($this->getPaymentStatus()->getShortcode() === PaymentStatus::STATUS_PAID) {
+        if ($this->getPaymentStatus() && (
+            $this->getPaymentStatus()->getShortcode() === PaymentStatus::STATUS_PAID)
+        ) {
             return true;
         }
         return false;
+    }
+
+    public function hasManualPayment(): bool
+    {
+        if ($this->getPaymentMethod() && $this->getPaymentMethod()->isManualPayment()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function isBankTransfer(): bool
@@ -1418,6 +1440,14 @@ class Order
             return null;
         }
         return $transaction;
+    }
+
+    /**
+     * @return PaymentMethod|null
+     */
+    public function getPaymentGateway()
+    {
+        return $this->getPaymentMethod();
     }
 
 

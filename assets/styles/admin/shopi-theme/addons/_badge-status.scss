@@ -1,0 +1,15 @@
+@each $color, $value in $theme-colors-light {
+  .badge-status-#{$color} {
+    border: 4px solid map-get($theme-colors-light,$color);
+    border-radius: 50px;
+    color: map-get($theme-colors-dark,$color);
+
+    .badge-status-inner {
+      width: $font-size-lg;
+      height: $font-size-lg;
+      border: 2px solid darken(map-get($theme-colors-light,$color), 25%);
+      border-radius: 50px;
+    }
+  }
+
+}

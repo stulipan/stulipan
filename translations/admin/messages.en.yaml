@@ -93,9 +93,9 @@ order:
     archive-order: Archive order
     cart-products: Products
     message: Message
-    sender: Sender:
-    phone-number: Phone:
-    delivery-date: Delivery date:
+    sender: 'Sender:'
+    phone-number: 'Phone:'
+    delivery-date: 'Delivery date:'
     time-of-delivery: Time of delivery
     pick-delivery-date: Válaszd ki mikor szállítsuk ki!
     pick-delivery-interval: A kézbesítés az általad kért időpontban történik
@@ -109,16 +109,26 @@ order:
     payment-method: Payment method
     paid-by-customer: Paid by customer
     instructions-for-bank-transfer: Instructions for bank transfer
-    payment-status: Fizetés állapota
-    mark-as-paid: Jelöld meg fizetettként
-
+    mark-as-paid: Mark as paid
+    payment-status: Payment status
+    payment-processed-by: 'Process by:'
+    payment-processed-manually: If you received payment manually, mark this order as paid.
+    mark-as-fulfilled: Mark as fulfilled
+    fulfill-order: The order is going to be fulfilled.
+    send-shipping-confirmation-button: Send shipping confirmation
+    resend-shipping-confirmation: Resend shipping confirmation
+    shipping-confirmation-will-be-sent-to: 'The shipping confirmation email will be sent to {{ email }}'
+    send-shipping-confirmation-email: Send shipping confirmation email to your customer
+    send-order-confirmation-button: Send confirmation email
+    resend-order-confirmation: Resend order confirmation
+    order-confirmation-will-be-sent-to: 'The order confirmation email will be sent to {{ email }}'
     history:
         history-timeline: Timeline
         leave-a-comment-here: Leave a comment...
         only-you-can-see-comments: Only you and the admins can see the comments.
         order-id: Order ID
-        amount: Amount:
-        payment-method: Payment:
+        amount: 'Amount:'
+        payment-method: 'Payment:'
         authorization-key: Authorization key
         payment-gateway: Gateway
         transaction-status: Status
@@ -129,7 +139,7 @@ order:
     user-agent:
         user-agent-details: Rendelés helye
         see-more: See details
-        ip-address: IP address:
+        ip-address: 'IP address:'
         browser: Browser
         platform: Platform (OS)
         user-agent: User agent
@@ -387,4 +397,5 @@ generic:
     disabled: Disabled
     sort: Sort
     classname: Class
+    send: Send
 

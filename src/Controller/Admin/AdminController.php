@@ -39,56 +39,59 @@ class AdminController extends AbstractController
     public function showDashboard(HelperFunction $function)
     {
         $rep = $this->getDoctrine()->getRepository(Order::class);
-//        $orders = $this->getDoctrine()->getRepository(Order::class)->findAllLast('24 hours');
-        $orderCount = $rep->countAllLast('24 hours');
-        $unpaidCount = $rep->countAllLast('24 hours', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast('24 hours', ['orderStatus' => OrderStatus::ORDER_CREATED]);
+        $orderCount = $rep->countLast('24 hours');
+        $unpaidCount = $rep->countLast('24 hours', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
+        $unfulfilledCount = $rep->countLast('24 hours', ['orderStatus' => OrderStatus::ORDER_CREATED]);
+        $totalRevenue = $rep->sumLast('24 hours');
 
         $lastDay = new OrdersSummary();
-        $lastDay->setOrderCount($orderCount['count']);
-//        $lastDay->setTotalRevenue($revenue);
-        $lastDay->setUnpaidCount($unpaidCount['count']);
-        $lastDay->setUnfulfilledCount($unfulfilledCount['count']);
+        $lastDay->setOrderCount($orderCount);
+        $lastDay->setUnpaidCount($unpaidCount);
+        $lastDay->setUnfulfilledCount($unfulfilledCount);
+        $lastDay->setTotalRevenue($totalRevenue);
         $lastDay->setDateRange($function->createDateRange('24 hours'));
 
-        $orderCount = $rep->countAllLast('7 days');
-        $unpaidCount = $rep->countAllLast('7 days', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast('7 days', ['orderStatus' => OrderStatus::ORDER_CREATED]);
+
+        $orderCount = $rep->countLast('7 days');
+        $unpaidCount = $rep->countLast('7 days', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
+        $unfulfilledCount = $rep->countLast('7 days', ['orderStatus' => OrderStatus::ORDER_CREATED]);
+        $totalRevenue = $rep->sumLast('7 days');
 
         $lastWeek = new OrdersSummary();
-        $lastWeek->setOrderCount($orderCount['count']);
-//        $lastWeek->setTotalRevenue($revenue);
-        $lastWeek->setUnpaidCount($unpaidCount['count']);
-        $lastWeek->setUnfulfilledCount($unfulfilledCount['count']);
+        $lastWeek->setOrderCount($orderCount);
+        $lastWeek->setUnpaidCount($unpaidCount);
+        $lastWeek->setUnfulfilledCount($unfulfilledCount);
+        $lastWeek->setTotalRevenue($totalRevenue);
         $lastWeek->setDateRange($function->createDateRange('7 days'));
 
-        $orderCount = $rep->countAllLast('30 days');
-//        dd($orderCount);
-        $unpaidCount = $rep->countAllLast('30 days', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast('30 days', ['orderStatus' => OrderStatus::ORDER_CREATED]);
+        $orderCount = $rep->countLast('30 days');
+        $unpaidCount = $rep->countLast('30 days', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
+        $unfulfilledCount = $rep->countLast('30 days', ['orderStatus' => OrderStatus::ORDER_CREATED]);
+        $totalRevenue = $rep->sumLast('30 days');
 
         $lastMonth = new OrdersSummary();
-        $lastMonth->setOrderCount($orderCount['count']);
-//        $lastMonth->setTotalRevenue($revenue);
-        $lastMonth->setUnpaidCount($unpaidCount['count']);
-        $lastMonth->setUnfulfilledCount($unfulfilledCount['count']);
+        $lastMonth->setOrderCount($orderCount);
+        $lastMonth->setUnpaidCount($unpaidCount);
+        $lastMonth->setUnfulfilledCount($unfulfilledCount);
+        $lastMonth->setTotalRevenue($totalRevenue);
         $lastMonth->setDateRange($function->createDateRange('30 days'));
 
-        $orderCount = $rep->countAllLast('lifetime');
-        $unpaidCount = $rep->countAllLast('lifetime', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
-        $unfulfilledCount = $rep->countAllLast(null, ['orderStatus' => OrderStatus::ORDER_CREATED]);
+        $orderCount = $rep->countLast('lifetime');
+        $unpaidCount = $rep->countLast('lifetime', ['paymentStatus' => PaymentStatus::STATUS_PENDING]);
+        $unfulfilledCount = $rep->countLast(null, ['orderStatus' => OrderStatus::ORDER_CREATED]);
+        $totalRevenue = $rep->sumLast('lifetime');
 
         $lifetime = new OrdersSummary();
-        $lifetime->setOrderCount($orderCount['count']);
-        $lifetime->setUnpaidCount($unpaidCount['count']);
-        $lifetime->setUnfulfilledCount($unfulfilledCount['count']);
+        $lifetime->setOrderCount($orderCount);
+        $lifetime->setUnpaidCount($unpaidCount);
+        $lifetime->setUnfulfilledCount($unfulfilledCount);
+        $lifetime->setTotalRevenue($totalRevenue);
 
         return $this->render('admin/dashboard.html.twig', [
             'lastDay' => $lastDay,
             'lastWeek' => $lastWeek,
             'lastMonth' => $lastMonth,
             'lifetime' => $lifetime,
-
         ]);
     }
 }

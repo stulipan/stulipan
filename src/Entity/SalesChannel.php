@@ -4,32 +4,32 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\TimestampableTrait;
-use App\Services\PaymentBuilder;
+use App\Entity\Product\Product;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  *
- * @ORM\Table(name="payment_method")
- * @ORM\Entity(repositoryClass="App\Repository\PaymentMethodRepository")
+ * @ORM\Table(name="sales_channel")
+ * @ORM\Entity
+ *
  * @UniqueEntity("shortcode", message="Ez a shortcode már használatban van!")
  */
 
-class PaymentMethod
+class SalesChannel implements JsonSerializable
 {
-    public const CREDIT_CARD = 'cib';
-    public const PAYPAL = 'paypal';
-    public const BANK_TRANSFER ='bank';
-    public const BARION = 'barion';
-
-    use TimestampableTrait;
+    public const STORE = 'store';
+    public const FACEBOOK = 'facebook';
+    public const GOOGLE ='google';
 
     /**
      * @var int
-     * @Groups({"orderView", "orderList"})
+     * @Groups({"productView", "productList"})
      *
      * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
@@ -39,28 +39,27 @@ class PaymentMethod
 
     /**
      * @var string
-     * @Groups({"orderView", "orderList"})
+     * @Groups({"productView", "productList"})
      *
-     * @Assert\NotBlank(message="A fizetési mód megnevezése hiányzik!")
-     * @ORM\Column(name="payment_name", type="string", length=100, nullable=false)
+     * @Assert\NotBlank(message="A sales channel megnevezése hiányzik!")
+     * @ORM\Column(name="channel_name", type="string", length=100, nullable=false)
      */
     private $name;
     
     /**
      * @var string
-     * @Groups({"orderView", "orderList"})
+     * @Groups({"productView", "productList"})
      *
      * @Assert\NotBlank(message="A rövid kód hiányzik!")
-     * @ORM\Column(name="shortcode", type="string", length=10, nullable=false)
+     * @ORM\Column(name="shortcode", type="string", length=255, nullable=false)
      */
     private $shortcode;
 
     /**
      * @var string
-     * @Groups({"orderView"})
      *
      * @ORM\Column(name="short", type="string", length=255, nullable=false)
-     * @ Assert\NotBlank(message="A fizetési mód rövid rövid leírása hiányzik!")
+     * @ Assert\NotBlank(message="A sales channel rövid rövid leírása hiányzik!")
      */
     private $short;
 
@@ -68,32 +67,13 @@ class PaymentMethod
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
-     * @ Assert\NotBlank(message="A fizetési mód részletes leírása hiányzik!")
+     * @ Assert\NotBlank(message="A sales channel részletes leírása hiányzik!")
      */
     private $description;
 
     /**
-     * @var string|null
-     * @Groups({"orderView", "orderList"})
-     *
-     * @ORM\Column(name="image", type="string", length=1000, nullable=true)
-     * @Assert\File(mimeTypes={ "image/png", "image/jpeg" }, groups = {"create"})
-     */
-    private $image = '';
-
-    /**
-     * @var float
-     * @Groups({"orderView", "orderList"})
-     *
-     * @Assert\NotBlank(message="Adj meg egy összeget.")
-     * @Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
-     * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
-     */
-    private $price = 0;
-
-    /**
      * @var int
-     * @Groups({"orderView"})
+     * @Groups({"productView"})
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})
@@ -102,10 +82,39 @@ class PaymentMethod
 
     /**
      * @var bool
+     * @Groups({"productView"})
      *
      * @ORM\Column(name="enabled", type="smallint", nullable=false, options={"default"="1"})
      */
     private $enabled = '1';
+
+    /**
+     * @var Product[]|ArrayCollection | null
+     *
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product\Product", mappedBy="salesChannels")
+     */
+    private $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function jsonSerialize()
+    {
+        return [
+            'id'            => $this->getId(),
+            'name'          => $this->getName(),
+            'shortcode'     => $this->getShortcode(),
+            'short'         => $this->getShort(),
+            'description'   => $this->getDescription(),
+            'enabled'       => $this->isEnabled(),
+        ];
+    }
 
 
     /**
@@ -186,38 +195,6 @@ class PaymentMethod
     }
 
     /**
-     * @return null|string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param null|string $image
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getPrice(): float
-    {
-        return (float) $this->price;
-    }
-
-    /**
-     * @param float|null $price
-     */
-    public function setPrice(?float $price): void
-    {
-        $this->price = $price;
-    }
-
-    /**
      * @return int|null
      */
     public function getOrdering(): ?int
@@ -259,18 +236,30 @@ class PaymentMethod
     }
 
     /**
-     * @return bool
+     * @return Product[]|Collection|null
      */
-    public function isBankTransfer(): bool
+    public function getProducts(): ?Collection
     {
-        return PaymentBuilder::MANUAL_BANK === $this->getShortcode() ? true : false;
+        return $this->products->isEmpty() ? null : $this->products;
     }
 
-    /**
-     * @return bool
-     */
-    public function isManualPayment(): bool
-    {
-        return (PaymentBuilder::MANUAL_BANK === $this->getShortcode() || PaymentBuilder::MANUAL_COD === $this->getShortcode()) ? true : false;
-    }
+//    /**
+//     * @param Product $item
+//     */
+//    public function addProduct(Product $item)
+//    {
+//        if (!$this->products->contains($item)) {
+//            $item->addBadge($this);
+//            $this->products->add($item);
+//        }
+//    }
+//
+//    /**
+//     * @param Product $item
+//     */
+//    public function removeProduct(Product $item)
+//    {
+//        $item->removeBadge($this);
+//        $this->products->removeElement($item);
+//    }
 }

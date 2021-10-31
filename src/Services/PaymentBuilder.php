@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Entity\Order;
 use App\Entity\PaymentMethod;
+use App\Entity\PaymentStatus;
 use App\Entity\PaymentTransaction;
 use App\Stulipan\Cashin\Model\Enumerations\CashinEnvironment;
 use App\Stulipan\Cashin\Model\CashinErrorModel;
@@ -302,5 +303,92 @@ class PaymentBuilder
             return $paymentIntent;
         }
         return null;
+    }
+
+    /**
+     * Returns the Payment status based on a transaction details (Kind and Status)
+     *
+     * @param PaymentTransaction $transaction
+     * @return PaymentStatus|null
+     */
+    public function computePaymentStatus(?PaymentTransaction $transaction)
+    {
+        if ($transaction === null) {
+//            throw new \Error('STUPID: computePaymentStatus() >> No transaction found!');
+            return null;
+        }
+        $kind = $transaction->getKind();
+        $status = $transaction->getStatus();
+//        dd($kind . ', ' . $status);
+
+        // Sale
+        // Applies for CC and Manual payments too.
+        if ($kind === PaymentTransaction::KIND_SALE && $status === PaymentTransaction::STATUS_SUCCESS) {
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PAID]);
+            return $status;
+//            return PaymentStatus::STATUS_PAID;
+        }
+        if ($kind === PaymentTransaction::KIND_SALE && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE || $status === PaymentTransaction::STATUS_CANCELED)) {
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
+            return $status;
+//            return PaymentStatus::STATUS_PENDING;
+        }
+
+        // Authorization
+        if ($kind === PaymentTransaction::KIND_AUTHORIZATION && $status === PaymentTransaction::STATUS_SUCCESS) {
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_AUTHORIZED]);
+            return $status;
+//            return PaymentStatus::STATUS_AUTHORIZED;
+        }
+        if ($kind === PaymentTransaction::KIND_AUTHORIZATION && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
+            return $status;
+//            return PaymentStatus::STATUS_PENDING;
+        }
+
+        // Capture
+        if ($kind === PaymentTransaction::KIND_CAPTURE && $status === PaymentTransaction::STATUS_SUCCESS) {
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PAID]);
+            return $status;
+//            return PaymentStatus::STATUS_PAID;
+        }
+        if ($kind === PaymentTransaction::KIND_CAPTURE && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
+            // If current transaction is a Capture, then the parent must be an Authorization Success
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_AUTHORIZED]);
+            return $status;
+//            return PaymentStatus::STATUS_AUTHORIZED;
+        }
+
+        // Refund
+        if ($kind === PaymentTransaction::KIND_REFUND && $status === PaymentTransaction::STATUS_SUCCESS) {
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_REFUNDED]);
+            return $status;
+//            return PaymentStatus::STATUS_REFUNDED;
+        }
+        if ($kind === PaymentTransaction::KIND_REFUND && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
+            // If current transaction is a Refund, then the parent must be a Capture Success
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PAID]);
+            return $status;
+//            return PaymentStatus::STATUS_PAID;
+        }
+
+        // Void
+        if ($kind === PaymentTransaction::KIND_VOID && $status === PaymentTransaction::STATUS_SUCCESS) {
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_VOID]);
+            return $status;
+//            return PaymentStatus::STATUS_VOIDED;
+        }
+        if ($kind === PaymentTransaction::KIND_VOID && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
+            // A Void is a cancellation of a pending authorization or capture. So we don't know
+            // what was before, so we compute paymentStatus for the parent transaction:
+            return $this->computePaymentStatus($transaction->getParent());
+        }
+
+        // None of the above
+        if ($kind === null || ($status === null || $status === PaymentTransaction::STATUS_PENDING || $status === PaymentTransaction::STATUS_FAILURE || $status === PaymentTransaction::STATUS_ERROR)) {
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
+            return $status;
+//            return PaymentStatus::STATUS_PENDING;
+        }
     }
 }

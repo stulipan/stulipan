@@ -16,6 +16,7 @@ use App\Entity\Order;
 use App\Entity\OrderLog;
 use App\Entity\OrderLogChannel;
 use App\Entity\OrderStatus;
+use App\Entity\PaymentTransaction;
 use App\Entity\StoreEmailTemplate;
 use App\Entity\User;
 use App\Event\OrderEvent;
@@ -31,14 +32,19 @@ use App\Form\OrderShippingAddressType;
 use App\Form\OrderStatusType;
 use App\Form\PaymentStatusType;
 use App\Services\AdminSettings;
+use App\Services\EmailSender;
+use App\Services\PaymentBuilder;
 use App\Services\StoreSettings;
 use App\Twig\AppExtension;
 use BarionClient;
 use BarionEnvironment;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Error;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -64,18 +70,25 @@ use Twig\Loader\ArrayLoader;
  */
 class OrderController extends AbstractController
 {
+    private $em;
     private $translator;
     private $twig;
     private $dispatcher;
     private $storeSettings;
+    private $paymentBuilder;
+    private $emailSender;
 
     public function __construct(TranslatorInterface $translator, Environment $twig, EventDispatcherInterface $dispatcher,
-                                StoreSettings $storeSettings)
+                                StoreSettings $storeSettings, PaymentBuilder $paymentBuilder, EmailSender $emailSender,
+                                EntityManagerInterface $entityManager)
     {
+        $this->em = $entityManager;
         $this->translator = $translator;
         $this->twig = $twig;
         $this->dispatcher = $dispatcher;
         $this->storeSettings = $storeSettings;
+        $this->paymentBuilder = $paymentBuilder;
+        $this->emailSender = $emailSender;
     }
 
 
@@ -459,17 +472,16 @@ class OrderController extends AbstractController
         $paymentStatusForm = $this->createForm(PaymentStatusType::class, $order);
 
         $log = new OrderLog();
-
         $log->setChannel($this->getDoctrine()->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => OrderLog::CHANNEL_ADMIN]));
         $log->setOrder($order);
         $log->setComment(true);
 //        $orderLog->setMessage('');
         $commentForm = $this->createForm(OrderCommentType::class, $log);
-        
+
         return $this->render('admin/order/order-detail.html.twig', [
             'order' => $order,
-            'shippingForm' => $shippingForm->createView(),
-            'billingForm' => $billingForm->createView(),
+            'recipientForm' => $shippingForm->createView(),
+            'senderForm' => $billingForm->createView(),
             'generatedDates' => $generatedDates,
             'hiddenDateForm' => $hiddenDateForm->createView(),
             'selectedDate' => $selectedDate,
@@ -482,44 +494,63 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/orders/send-confirmation/{id}", name="order-send-confirmation-email")
+     * @Route("/orders/{id}/sendEmail-orderConfirmation", name="order-sendEmail-orderConfirmation")
      */
-    public function sendOrderConfirmation(Request $request, ?Order $order, $id = null,
-                                          MailerInterface $mailer, AppExtension $appExtension): RedirectResponse
+    public function sendOrderConfirmation(Request $request, ?Order $order, $id = null)
     {
-        $this->translator->trans('generic.apply');
-        if (!$order) {
-            return $this->redirectToRoute('order-detail', ['id' => $order->getId()]);
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /orders/send-confirmation/{id}');
         }
 
-        $template = $this->getDoctrine()->getRepository(StoreEmailTemplate::class)->findOneBy(['slug' => 'order-confirmation']);
+        if (!$order) {
+            $json = json_encode(['error' => 'Nincs ilyen rendelés!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
 
-        $loader = new ArrayLoader([
-            'order-confirmation' => $template->getBody(),
+        try {
+            $this->emailSender->sendEmail($order, StoreEmailTemplate::ORDER_CONFIRMATION);
+        } catch (Error $e) {
+            $json = json_encode(['error' => $e->getMessage()], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+
+        $event = new OrderEvent($order, [
+            'channel' => OrderLog::CHANNEL_ADMIN,
         ]);
-        $twig = new Environment($loader);
-        $twig->addExtension($appExtension);
-
-        $subject = str_replace('{{orderNumber}}', '#'.$order->getNumber(), $template->getSubject());
-        $html = $twig->render('order-confirmation', [
-            'subject' => $subject,
-            'order' => $order,
-        ]);
-
-        $email = (new TemplatedEmail())
-            ->from(new Address(
-                $this->storeSettings->get('notifications.sender-email'),
-                $this->storeSettings->get('notifications.sender-name')
-            ))
-            ->to($order->getEmail())
-            ->subject($subject)
-            ->html($html)
-        ;
-        $mailer->send($email);
-
+        $this->dispatcher->dispatch($event, OrderEvent::EMAIL_SENT_ORDER_CONFIRMATION);
         $this->addFlash('success', 'Email sikeresen elküldve!');
 
-        return $this->redirectToRoute('order-detail', ['id' => $order->getId()]);
+        return new Response('', 200);
+    }
+
+    /**
+     * @Route("/orders/{id}/sendEmail-shippingConfirmation", name="order-sendEmail-shippingConfirmation")
+     */
+    public function sendShippingConfirmation(Request $request, ?Order $order, $id = null)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /orders/send-confirmation/{id}');
+        }
+
+        if (!$order) {
+            $json = json_encode(['error' => 'Nincs ilyen rendelés!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+
+        try {
+            $this->emailSender->sendEmail($order, StoreEmailTemplate::SHIPPING_CONFIRMATION);
+        } catch (Error $e) {
+            $json = json_encode(['error' => $e->getMessage()], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+
+        $event = new OrderEvent($order, [
+            'channel' => OrderLog::CHANNEL_ADMIN,
+        ]);
+        $this->dispatcher->dispatch($event, OrderEvent::EMAIL_SENT_SHIPPING_CONFIRMATION);
+        $this->addFlash('success', 'Email sikeresen elküldve!');
+
+        return new Response('', 200);
     }
 
     private function stringBetweenTwoStrings($str, $starting_word = '{{', $ending_word = '}}'){
@@ -608,8 +639,7 @@ class OrderController extends AbstractController
     }
     
     /**
-     * Edit the shipping address information in an Order.
-     * Used in AJAX.
+     * Edit the shipping address information in an Order. Used in AJAX.
      *
      * @Route("/orders/{id}/editShippingInfo", name="order-editShippingInfo", methods={"POST"})
      */
@@ -667,8 +697,7 @@ class OrderController extends AbstractController
     }
     
     /**
-     * Edit the shipping address information in an Order.
-     * Used in AJAX.
+     * Edit the shipping address information in an Order. Used in AJAX.
      *
      * @Route("/orders/{id}/editBillingInfo", name="order-editBillingInfo", methods={"POST"})
      */
@@ -727,8 +756,7 @@ class OrderController extends AbstractController
     }
     
     /**
-     * Edit the delivery date information in an Order.
-     * Used in AJAX.
+     * Edit the delivery date information in an Order. Used in AJAX.
      *
      * @Route("/orders/{id}/editDeliveryDate", name="order-editDeliveryDate", methods={"POST"})
      */
@@ -785,10 +813,113 @@ class OrderController extends AbstractController
         ]);
         return new Response($html, 200);//        return $this->redirectToRoute('order-detail', ['id' => $order->getId(),]);
     }
-    
+
     /**
-     * Edit the delivery date information in an Order.
-     * Used in AJAX.
+     * @Route("/orders/{id}/markAsFulfilled/", name="order-markAsFulfilled", methods={"POST"})
+     */
+    public function markAsFulfilled(Request $request, ?Order $order, $id = null)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /orders/{id}/markAsFulfilled');
+        }
+
+        if (!$order) {
+            $json = json_encode(['error' => 'Nincs ilyen rendelés!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+
+        if ($order->isFulfilled()) {
+            $json = json_encode(['error' => 'Ez a rendelés már teljesítve lett!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+
+        $isSendShippingConfirmation = true;
+        if ($request->query->get('noShippingConfirmation')) {
+            $isSendShippingConfirmation = false;
+        }
+
+        $status = $this->em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => OrderStatus::STATUS_FULFILLED]);
+        $order->setStatus($status);
+        $this->em->persist($order);
+        $this->em->flush();
+
+        $event = new OrderEvent($order, [
+            'channel' => OrderLog::CHANNEL_ADMIN,
+            'status' => $status->getShortcode(),
+        ]);
+        $this->dispatcher->dispatch($event, OrderEvent::ORDER_UPDATED);
+
+        if ($isSendShippingConfirmation) {
+            try {
+                $this->emailSender->sendEmail($order, StoreEmailTemplate::SHIPPING_CONFIRMATION);
+            } catch (Error $e) {
+                $json = json_encode(['error' => $e->getMessage()], JSON_UNESCAPED_UNICODE);
+                return new JsonResponse($json,400, [], true);
+            }
+        }
+
+        $event = new OrderEvent($order, [
+            'channel' => OrderLog::CHANNEL_ADMIN,
+        ]);
+        $this->dispatcher->dispatch($event, OrderEvent::EMAIL_SENT_SHIPPING_CONFIRMATION);
+
+
+        $this->addFlash('success', 'Rendelés sikeresen teljesítve!');
+//        $html = $this->render('admin/item.html.twig', ['item' => 'Rendelés sikeresen teljesítve!']);
+        return new Response('', 200);
+    }
+
+    /**
+     * @Route("/orders/{id}/markAsPaid", name="order-markAsPaid", methods={"POST"})
+     */
+    public function markAsPaid(Request $request, ?Order $order, $id = null)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /orders/{id}/markAsPaid');
+        }
+
+        if (!$order) {
+            $json = json_encode(['error' => 'Nincs ilyen rendelés!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+
+        if ($order->isPaid()) {
+            $json = json_encode(['error' => 'Ez a rendelés már ki van fizetve!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+
+        $transaction = $order->getTransaction();
+        if (!$transaction) {
+            $json = json_encode(['error' => 'A rendeléshez nem tartozik tranzakció!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json, 400, [], true);
+        }
+
+        if ($transaction->getGateway() === PaymentBuilder::MANUAL_COD || $transaction->getGateway() === PaymentBuilder::MANUAL_BANK) {
+            $transaction->setStatus(PaymentTransaction::STATUS_SUCCESS);
+            $transaction->setProcessedAt(new DateTime('now'));
+            $paymentStatus = $this->paymentBuilder->computePaymentStatus($transaction);
+//                $order->setPaymentStatus($paymentStatus);
+//                $this->em->persist($order);
+            $this->em->persist($transaction);
+            $this->em->flush();
+
+            $event = new OrderEvent($order, [
+                'channel' => OrderLog::CHANNEL_ADMIN,
+                'status' => $paymentStatus->getShortcode(),
+            ]);
+            $this->dispatcher->dispatch($event, OrderEvent::PAYMENT_UPDATED);
+
+            $this->addFlash('success', 'Fizetés állapota sikeresen módosítva!');
+            return new Response('', 200);
+        }
+
+        $json = json_encode(['error' => 'Ismeretlen hiba történt!'], JSON_UNESCAPED_UNICODE);
+        return new JsonResponse($json,400, [], true);
+    }
+
+    /**
+     * NINCS HASZNALATBAN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * Edit the delivery date information in an Order. Used in AJAX.
      *
      * @Route("/orders/{id}/editStatus", name="order-editStatus", methods={"POST"})
      */
@@ -840,8 +971,8 @@ class OrderController extends AbstractController
     }
 
     /**
-     * Edit the Payment Status in an Order.
-     * Used in AJAX.
+     * NINCS HASZNALATBAN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * Edit the Payment Status in an Order. Used in AJAX.
      *
      * @Route("/orders/{id}/editPaymentStatus", name="order-editPaymentStatus", methods={"POST"})
      */
@@ -857,23 +988,42 @@ class OrderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Order $data */
             $data = $form->getData();
-            $order->setPaymentStatus($data->getPaymentStatus());
 
-            $event = new OrderEvent($order, [
-                'channel' => OrderLog::CHANNEL_ADMIN,
-                'paymentStatus' => $data->getPaymentStatus()->getShortcode(),
-            ]);
-            $this->dispatcher->dispatch($event, OrderEvent::PAYMENT_UPDATED);
+//            $status = $data->getPaymentStatus()->getShortcode();
+            $transaction = $order->getTransaction();
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($order);
-            $entityManager->flush();
+            if ($transaction->getGateway() === PaymentBuilder::MANUAL_COD || $transaction->getGateway() === PaymentBuilder::MANUAL_BANK) {
+                $transaction->setStatus(PaymentTransaction::STATUS_SUCCESS);
+                $transaction->setProcessedAt(new DateTime('now'));
+                $paymentStatus = $this->paymentBuilder->computePaymentStatus($transaction);
+//                $order->setPaymentStatus($paymentStatus);
+
+//                $this->em->persist($order);
+                $this->em->persist($transaction);
+                $this->em->flush();
+
+                $event = new OrderEvent($order, [
+                    'channel' => OrderLog::CHANNEL_ADMIN,
+                    'status' => $paymentStatus->getShortcode(),
+                ]);
+                $this->dispatcher->dispatch($event, OrderEvent::PAYMENT_UPDATED);
+            }
+
+//            $event = new OrderEvent($order, [
+//                'channel' => OrderLog::CHANNEL_ADMIN,
+//                'paymentStatus' => $data->getPaymentStatus()->getShortcode(),
+//            ]);
+//            $this->dispatcher->dispatch($event, OrderEvent::PAYMENT_UPDATED);
+//
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->persist($order);
+//            $entityManager->flush();
 
             /**
              * If AJAX request, and because at this point the form data is processed, it returns Success (code 200)
              */
             if ($request->isXmlHttpRequest()) {
-                $this->addFlash('success', 'Fizetés állapota sikeresen módosítva! <br>Új állapot: <strong>'.$order->getPaymentStatus().'</strong>');
+                $this->addFlash('success', 'Fizetés állapota sikeresen módosítva!');
                 $html = $this->render('admin/item.html.twig', [
                     'item' => 'Fizetés állapota sikeresen módosítva!',
                 ]);

@@ -39,6 +39,10 @@
                 :badges="{{ badgesJson }}"
             {%- endif -%}
 
+            {%- if salesChannelsJson is defined -%}
+                :sales-channels="{{ salesChannelsJson }}"
+            {%- endif -%}
+
             {%- if kindsJson is defined -%}
                 :product-kinds="{{ kindsJson }}"
             {%- endif -%}

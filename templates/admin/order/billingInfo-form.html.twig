@@ -1,75 +1,57 @@
-{{ form_start(billingForm, { 'attr': {'class': 'JS--form JS--editForm-recipient' }}) }}
+{{ form_start(senderForm, { 'attr': {'class': 'JS--Wrapper-senderForm' }}) }}
 <div class="row">
     <div class="col-lg-12">
         <div class="form-row">
             <div class="form-group col-sm-6 pr-lg-2">
-                <label for="{{ billingForm.billingFirstname.vars.full_name }}" class="form-label">Keresztnév</label>
-                {{ form_widget(billingForm.billingFirstname, {'attr': {'class': ''}}) }}
-                {{ form_errors(billingForm.billingFirstname) }}
+                <label for="{{ senderForm.billingFirstname.vars.full_name }}" class="form-label">Keresztnév</label>
+                {{ form_widget(senderForm.billingFirstname, {'attr': {'class': ''}}) }}
+                {{ form_errors(senderForm.billingFirstname) }}
             </div>
             <div class="form-group col-sm-6 pr-lg-2">
-                <label for="{{ billingForm.billingLastname.vars.full_name }}" class="form-label">Vezetéknév</label>
-                {{ form_widget(billingForm.billingLastname, {'attr': {'class': ''}}) }}
-                {{ form_errors(billingForm.billingLastname) }}
+                <label for="{{ senderForm.billingLastname.vars.full_name }}" class="form-label">Vezetéknév</label>
+                {{ form_widget(senderForm.billingLastname, {'attr': {'class': ''}}) }}
+                {{ form_errors(senderForm.billingLastname) }}
             </div>
             <div class="form-group col-sm-8">
-                <label for="{{ billingForm.billingCompany.vars.full_name }}" class="form-label">Cégnév</label>
-                {{ form_widget(billingForm.billingCompany, {'attr': {'class': 'form-controlX', 'placeholder': 'Válalkozás Kft.' }}) }}
-                {{ form_errors(billingForm.billingCompany) }}
+                <label for="{{ senderForm.billingCompany.vars.full_name }}" class="form-label">Cégnév</label>
+                {{ form_widget(senderForm.billingCompany, {'attr': {'class': 'form-controlX', 'placeholder': 'Válalkozás Kft.' }}) }}
+                {{ form_errors(senderForm.billingCompany) }}
             </div>
             <div class="form-group col-sm-4">
-                <label for="{{ billingForm.billingVatNumber.vars.full_name }}" class="form-label">ÁFA szám</label>
-                {{ form_widget(billingForm.billingVatNumber, {'attr': {'class': 'form-controlX', 'placeholder': 'ÁFA szám' }}) }}
-                {{ form_errors(billingForm.billingVatNumber) }}
+                <label for="{{ senderForm.billingVatNumber.vars.full_name }}" class="form-label">ÁFA szám</label>
+                {{ form_widget(senderForm.billingVatNumber, {'attr': {'class': 'form-controlX', 'placeholder': 'ÁFA szám' }}) }}
+                {{ form_errors(senderForm.billingVatNumber) }}
             </div>
             <div class="form-group col-md-12 pl-lg-2">
-                <label for="{{ billingForm.billingAddress.street.vars.full_name }}" class="form-label">Címe</label>
-                {{ form_widget(billingForm.billingAddress.street, {'attr': {'class': 'form-controlX'}}) }}
-                {{ form_errors(billingForm.billingAddress.street) }}
+                <label for="{{ senderForm.billingAddress.street.vars.full_name }}" class="form-label">Címe</label>
+                {{ form_widget(senderForm.billingAddress.street, {'attr': {'class': 'form-controlX'}}) }}
+                {{ form_errors(senderForm.billingAddress.street) }}
             </div>
             <div class="form-group col-md-12 pr-lg-2">
-                <label for="{{ billingForm.billingAddress.city.vars.full_name }}" class="form-label">Város</label>
-                {{ form_widget(billingForm.billingAddress.city, {'attr': {'class': 'JS--form-city'}}) }}
-                {{ form_errors(billingForm.billingAddress.city) }}
+                <label for="{{ senderForm.billingAddress.city.vars.full_name }}" class="form-label">Város</label>
+                {{ form_widget(senderForm.billingAddress.city, {'attr': {'class': 'JS--form-city'}}) }}
+                {{ form_errors(senderForm.billingAddress.city) }}
             </div>
             <div class="form-group col-sm-5 col-12 pl-lg-2">
-                <label for="{{ billingForm.billingAddress.country.vars.full_name }}" class="form-label">Ország</label>
-                {{ form_widget(billingForm.billingAddress.country, {'attr': {'class': 'form-control'}}) }}
+                <label for="{{ senderForm.billingAddress.country.vars.full_name }}" class="form-label">Ország</label>
+                {{ form_widget(senderForm.billingAddress.country, {'attr': {'class': 'form-control'}}) }}
                 {#<i class="fas fa-chevron-down form-control-dropdown"></i>#}
-                {{ form_errors(billingForm.billingAddress.country) }}
+                {{ form_errors(senderForm.billingAddress.country) }}
             </div>
             <div class="form-group col-sm-4 col-6 pr-lg-2">
-                <label for="{{ billingForm.billingAddress.province.vars.full_name }}" class="form-label">Megye</label>
-                {{ form_widget(billingForm.billingAddress.province, {'attr': {'class': 'JS--form-province'}}) }}
-                {{ form_errors(billingForm.billingAddress.province) }}
+                <label for="{{ senderForm.billingAddress.province.vars.full_name }}" class="form-label">Megye</label>
+                {{ form_widget(senderForm.billingAddress.province, {'attr': {'class': 'JS--form-province'}}) }}
+                {{ form_errors(senderForm.billingAddress.province) }}
             </div>
             <div class="form-group col-sm-3 col-6 pl-lg-2">
-                <label for="{{ billingForm.billingAddress.zip.vars.full_name }}" class="form-label">Irányítószám</label>
-                {{ form_widget(billingForm.billingAddress.zip, {'attr': {'class': 'JS--form-zip', 'data-url' : path('cart-getPlaceByZip') }}) }}
-                {{ form_errors(billingForm.billingAddress.zip) }}
+                <label for="{{ senderForm.billingAddress.zip.vars.full_name }}" class="form-label">Irányítószám</label>
+                {{ form_widget(senderForm.billingAddress.zip, {'attr': {'class': 'JS--form-zip', 'data-url' : path('cart-getPlaceByZip') }}) }}
+                {{ form_errors(senderForm.billingAddress.zip) }}
             </div>
-
-{#            <div class="form-group col-lg-6 pr-lg-2">#}
-{#                <label for="{{ billingForm.billingPhone.vars.full_name }}" class="form-label">Telefonszám</label>#}
-{#                {{ form_widget(billingForm.billingPhone, {'attr': {'class': '' }}) }}#}
-{#                {{ form_errors(billingForm.billingPhone|raw) }}#}
-{#            </div>#}
-
-            {#<div class="form-group col-lg-12">#}
-                {#<div class="loadingWrapper">#}
-                    {#<button type="submit" class="JS--Button-submit btn btn-primary mr-1">Mentés</button>#}
-                    {#<div class="JS--loadingOverlay d-flex align-items-stretch"></div>#}
-                {#</div>#}
-                {#<div class="loadingWrapper loadingWrapper-secondary">#}
-                    {#<a href="" class="JS--Button-getRecipients btn btn-secondary" data-url="{{ path('cart-getRecipients') }}">Mégse</a>#}
-                    {#<div class="JS--loadingOverlay d-flex align-items-stretch"></div>#}
-                {#</div>#}
-            {#</div>#}
-
         </div>
     </div>
 </div>
 
 
-{{ form_end(billingForm) }}
-{#{% do billingForm.setRendered() %}#}
+{{ form_end(senderForm) }}
+{#{% do senderForm.setRendered() %}#}

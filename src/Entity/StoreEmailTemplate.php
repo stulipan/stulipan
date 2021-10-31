@@ -14,8 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class StoreEmailTemplate
 {
-//    public const SLUG_TERMS_AND_CONDITIONS     = 'terms-and-conditions';
-//    public const SLUG_PRIVACY_POLICY           = 'privacy-policy';
+    public const ORDER_CONFIRMATION             = 'order-confirmation';
+    public const SHIPPING_CONFIRMATION          = 'shipping-confirmation';
+    public const ADMIN_NEW_ORDER_NOTIFICATION   = 'admin-new-order-notification';
+
+    public const FORGOTTEN_PASSWORD             = 'forgotten-password';
 //    public const SLUG_SHIPPING_INFORMATION     = 'shipping-information';
 //    public const SLUG_RETURN_POLICY            = 'return-policy';
 //    public const SLUG_CONTACT_INFORMATION      = 'contact-information';

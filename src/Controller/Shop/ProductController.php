@@ -101,11 +101,16 @@ class ProductController extends AbstractController
         $form = $this->createForm(CartAddItemType::class, $product, ['options' => $product->getOptions()]);
 
         $productStatus = $this->getDoctrine()->getRepository(ProductStatus::class)->findBy(['shortcode' => ProductStatus::STATUS_ENABLED]);
-        $recommendedProducts = $this->getDoctrine()->getRepository(Product::class)->findBy(
-            ['status' => $productStatus],
-            [],
-            12
-        );
+        $recommendedProducts = $this->getDoctrine()->getRepository(Product::class)->retrieveByCategory($product->getCategories()[0]);
+        $recommendedCount = count($recommendedProducts);
+        if ($recommendedCount <=12 ) {
+            $recommendedProducts2 = $this->getDoctrine()->getRepository(Product::class)->findBy(
+                ['status' => $productStatus],
+                [],
+                (12 - $recommendedCount)
+            );
+            $recommendedProducts = array_merge($recommendedProducts, $recommendedProducts2);
+        }
         return $this->render('webshop/site/product-show.html.twig', [
             'product' => $product,
             'recommendedProducts' => $recommendedProducts,

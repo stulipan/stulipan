@@ -13,10 +13,16 @@
     }
 } %}
 
-{% if order.isClosed is defined and order.isClosed == false %}
-    {% set isEditEnabled = true %}
-{% else %}
+{#{% if order.isClosed is defined and order.isClosed == false %}#}
+{#    {% set isEditEnabled = true %}#}
+{#{% else %}#}
+{#    {% set isEditEnabled = false %}#}
+{#{% endif %}#}
+
+{% if order.isClosed == true or order.isCanceled == true %}
     {% set isEditEnabled = false %}
+{% else %}
+    {% set isEditEnabled = true %}
 {% endif %}
 
 {%- block title -%}
@@ -78,7 +84,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modal--DeliveryDate" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal fade" id="modal--deliveryDate" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
                 <div class="modal-content JS--deliveryDateContainer">
                     <div class="modal-header">
@@ -293,6 +299,49 @@
             </div>
         </div>
 
+        <div class="modal fade" id="modal--cancelOrder" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                <div class="modal-content JS--Wrapper-cancelOrder">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="modalLabel">{{ 'order.cancel.cancel-order'|trans }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-body-content JS--Wrapper-cancelOrderBody">
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <div class="h6 mb-3 text-uppercase">{{ 'order.cancel.inventory'|trans }}</div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" id="restockItems" name="restockItems" class="custom-control-input" value="1" checked="checked">
+                                        <label class="checkbox-custom custom-control-label" for="restockItems">{{ 'order.cancel.restock-items'|trans }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-3">
+                                <div class="col-12">
+                                    <div class="h6 mb-3 text-uppercase">{{ 'order.cancel.notification'|trans }}</div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" id="sendNotification" name="sendNotification" class="custom-control-input" value="1" checked="checked">
+                                        <label class="checkbox-custom custom-control-label" for="sendNotification">{{ 'order.cancel.send-notification-to-the-customer'|trans }}<span class="invalid-feedback"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal">{{ 'order.cancel.keep-order'|trans }}</button>
+                            <button type="submit" class="JS--Button-cancelOrder btn btn-danger" data-url="{{ path('order-cancelOrder', {'id': order.id}) }}">
+                                <span class="loading-spinner-invisible">{{ 'order.cancel.cancel-order-button'|trans }}</span>
+                                <span class="loading-spinner" role="status"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="modal--ArchiveOrder" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
                 <div class="modal-content JS--archiveOrderWrapper">
@@ -371,6 +420,9 @@
     {% endblock %}
 
     {% block headerStatusWrapper %}
+        {% if order.isCanceled == true %}
+            <span class="mr-1 badge badge-danger">{{ 'order.status.canceled'|trans }}</span>
+        {% endif %}
         {% if order.paymentStatus is defined and order.paymentStatus is not null %}
             <span class="mr-1 badge badge-{{ order.paymentStatus.css }}">{{ order.paymentStatus }}</span>
         {% endif %}
@@ -388,31 +440,45 @@
                 <li class="nav-item adaptive-item">
                     <a class="nav-link" href="#"><i class="far fa-file-alt mr-2"></i>{{ 'order.shipping-letter'|trans }}</a>
                 </li>
-                {% if isEditEnabled is defined and isEditEnabled == true %}
-                    <li class="nav-item adaptive-item">
-                        <a class="nav-link" href="" data-toggle="modal" data-target="#modal--Sender" data-backdrop="static" data-url="{{ path('order-editBillingInfo', {id: order.id}) }}">
-                            <i class="fas fa-sign-out-alt mr-2"></i>
-                            {{ 'order.edit-sender'|trans }}
-                        </a>
-                    </li>
-                    <li class="nav-item adaptive-item">
-                        <a class="nav-link" href="" data-toggle="modal" data-target="#modal--Recipient" data-backdrop="static" data-url="{{ path('order-editShippingInfo', {id: order.id}) }}">
-                            <i class="fas fa-sign-in-alt mr-2"></i>
-                            {{ 'order.edit-recipient'|trans }}
-                        </a>
-                    </li>
-                    {% if flowerShopMode %}
-                    <li class="nav-item adaptive-item">
-                        <a class="nav-link" href="" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static">
-                            <i class="far fa-clock mr-2"></i>
-                            {{ 'order.new-delivery-date'|trans }}
-                        </a>
-                    </li>
+                {% if order.isCanceled == false %}
+                    {% if order.isUnfulfilled == true %}
+                        <li class="nav-item adaptive-item">
+                            <a class="nav-link" href="" data-toggle="modal" data-target="#modal--Sender" data-backdrop="static" data-url="{{ path('order-editBillingInfo', {id: order.id}) }}">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                {{ 'order.edit-sender'|trans }}
+                            </a>
+                        </li>
+                        <li class="nav-item adaptive-item">
+                            <a class="nav-link" href="" data-toggle="modal" data-target="#modal--Recipient" data-backdrop="static" data-url="{{ path('order-editShippingInfo', {id: order.id}) }}">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                {{ 'order.edit-recipient'|trans }}
+                            </a>
+                        </li>
+                        {% if flowerShopMode %}
+                        <li class="nav-item adaptive-item">
+                            <a class="nav-link" href="" data-toggle="modal" data-target="#modal--deliveryDate" data-backdrop="static">
+                                <i class="far fa-clock mr-2"></i>
+                                {{ 'order.new-delivery-date'|trans }}
+                            </a>
+                        </li>
+                        {% endif %}
                     {% endif %}
+                    <li class="nav-item adaptive-item">
+                        <a class="nav-link" href="" data-toggle="modal" data-target="#modal--cancelOrder" data-backdrop="static">
+                            <i class="fas fa-times mr-2"></i>
+                            {{ 'order.cancel.cancel-order'|trans }}
+                        </a>
+                    </li>
                     <li class="nav-item adaptive-item">
                         <a class="nav-link" href="" data-toggle="modal" data-target="#modal--ArchiveOrder" data-backdrop="static">
                             <i class="fas fa-archive mr-2"></i>
                             {{ 'order.archive-order'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item adaptive-item">
+                        <a class="nav-link" href="{{ path('site-checkout-step4-thankyou', {'orderNumber': order.number, 'orderToken': order.token}) }}" target="_blank">
+                            <i class="far fa-eye mr-2"></i>
+                            {{ 'order.view-status-page'|trans }}
                         </a>
                     </li>
                 {% endif %}
@@ -443,27 +509,27 @@
                 {% include 'admin/order/_order-items-widget.html.twig' %}
                 {% include 'admin/order/_order-summary-widget.html.twig' %}
             </div>
+            {% if order.isCanceled == false %}
             {% if order.isUnfulfilled == true %}
             <div class="edit-block d-print-none">
                 <div class="card-footer text-right">
-                    <button class="btn btn-secondary" role="button" data-toggle="modal" data-target="#modal--orderConfirmation" data-backdrop="static">
-                        <i class="far fa-paper-plane mr-2"></i>{{ 'order.send-order-confirmation-button'|trans }}
-                    </button>
                     <button class="btn btn-primary" data-toggle="modal" data-target="#modal--orderStatus" data-backdrop="static">
                         {{ 'order.mark-as-fulfilled'|trans }}
                     </button>
                 </div>
             </div>
             {% endif %}
+            {% endif %}
         </div>
         <div class="card mt-20px">
             <div class="card-body">
                 {% include 'admin/order/_order-sender-recipient-widget.html.twig' %}
             </div>
-            {% if isEditEnabled is defined and isEditEnabled == true %}
+            {% if order.isCanceled == false %}
+            {% if order.isUnfulfilled == true %}
             <div class="edit-block d-print-none">
                 <div class="card-footer text-right">
-                        <div class="nav-item dropdown">
+                        <span class="nav-item dropdown">
                             <a class="btn btn-secondary dropdown-toggle" href="javascript: void(0);" id="navSzerkesztes" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
             {#                    <i class="far fa-edit mr-2"></i>#}
                                 {{ 'generic.modify'|trans }}
@@ -478,15 +544,17 @@
                                     {{ 'order.edit-recipient'|trans }}
                                 </a>
                             </div>
-                        </div>
+                        </span>
                 </div>
             </div>
+            {% endif %}
             {% endif %}
         </div>
         <div class="card mt-20px">
             <div class="card-body">
                 {% include 'admin/order/_order-payment-widget.html.twig' %}
             </div>
+            {% if order.isCanceled == false %}
             {% if order.hasManualPayment == true %}
                 {% if order.isUnpaid is defined and order.isUnpaid == true %}
                     <div class="edit-block d-print-none">
@@ -495,6 +563,7 @@
                         </div>
                     </div>
                 {% endif %}
+            {% endif %}
             {% endif %}
         </div>
     {% endblock %}
@@ -509,13 +578,15 @@
                             {% include 'admin/order/_order-delivery-widget.html.twig' %}
                         </div>
                     </div>
-                        {% if isEditEnabled is defined and isEditEnabled == true %}
-                        <div class="edit-block d-print-none">
-                            <div class="card-footer text-right">
-                                <a href="" class="btn btn-secondary" data-toggle="modal" data-target="#modal--DeliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit mr-2"></i>{{ 'generic.modify'|trans }}</a>
-                            </div>
+                    {% if order.isCanceled == false %}
+                    {% if order.isUnfulfilled == true %}
+                    <div class="edit-block d-print-none">
+                        <div class="card-footer text-right">
+                            <a href="" class="btn btn-secondary" data-toggle="modal" data-target="#modal--deliveryDate" data-backdrop="static" data-url="{{ path('order-editDeliveryDate', {id: order.id}) }}"><i class="far fa-edit mr-2"></i>{{ 'generic.modify'|trans }}</a>
                         </div>
-                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% endif %}
                 </div>
             {% endif %}
             <div class="card">
@@ -615,8 +686,8 @@
 {#                                                    <img class="img-thumbnail rounded-circle" src="{{ asset('/uploads/images/termekek/' ~ app.user.image) }}" />    #}
                                                 </div>
                                             </div>
-                                            <div class="timeline-item-info d-flex justify-content-between JS--commentWrapper">
-                                                <div class="w-100 JS--commentContentBlock">
+                                            <div class="timeline-item-info d-flex justify-content-between JS--Wrapper-comment">
+                                                <div class="w-100 JS--Wrapper-commentBody">
                                                     {% include 'admin/order/_form-order-comment.html.twig' %}
                                                 </div>
                                             </div>
@@ -797,6 +868,14 @@
                     lessThanOrEqualTo: 9999,
                     message: 'Hibás irányítószám.'
                 }
+            },
+        };
+        var commentConstraints = {
+            '{{ commentForm.message.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'order.history.comment-is-missing'|trans}}'
+                },
             },
         };
         // $(document).ready(function () {

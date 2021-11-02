@@ -4,25 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Controller\Utils\GeneralUtils;
-use App\Entity\OrderItem;
-use App\Entity\OrderStatus;
 use App\Entity\Product\Product;
-use App\Entity\TimestampableTrait;
-use App\Entity\Recipient;
-use App\Entity\Sender;
-use App\Entity\PaymentMethod;
-use App\Entity\ShippingMethod;
-use App\Entity\Discount;
-
 use App\Model\Summary;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-
-use Egulias\EmailValidator\Warning\AddressLiteral;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -233,9 +220,17 @@ class Order
      * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="shipping_price", type="decimal", precision=10, scale=2, nullable=true)
+     * @ORM\Column(name="shipping_fee", type="decimal", precision=10, scale=2, nullable=true)
      */
-    private $shippingPrice;
+    private $shippingFee;
+
+    /**
+     * @var float|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="payment_fee", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $paymentFee;
 
     /**
      * @var float|null
@@ -251,9 +246,9 @@ class Order
      * @Groups({"orderView", "orderList"})
      *
      * @ Assert\NotBlank()
-     * @ORM\Column(name="shipping_price_discount", type="decimal", precision=10, scale=2, nullable=true)
+     * @ORM\Column(name="shipping_fee_discount", type="decimal", precision=10, scale=2, nullable=true)
      */
-    private $shippingPriceDiscount;
+    private $shippingFeeDiscount;
 
 
     /**
@@ -404,6 +399,22 @@ class Order
      * @ORM\Column(name="token", type="string", length=50, nullable=true)
      */
     private $token;
+
+    /**
+     * @var DateTime|null
+     *
+     * @ORM\Column(name="posted_at", type="datetime", nullable=true)
+     *
+     */
+    private $postedAt;
+
+    /**
+     * @var DateTime|null
+     *
+     * @ORM\Column(name="canceled_at", type="datetime", nullable=true)
+     *
+     */
+    private $canceledAt;
 
     /**
      * @var PaymentTransaction[]|ArrayCollection|null;
@@ -853,26 +864,26 @@ class Order
     /**
      * @return float|null
      */
-    public function getShippingPrice(): ?float
+    public function getShippingFee(): ?float
     {
-        if ($this->shippingPrice === null) { return (float) 0; }
-        return (float) $this->shippingPrice;
+        if ($this->shippingFee === null) { return (float) 0; }
+        return (float) $this->shippingFee;
     }
 
     /**
-     * @param float|null $shippingPrice
+     * @param float|null $shippingFee
      */
-    public function setShippingPrice($shippingPrice): void
+    public function setShippingFee($shippingFee): void
     {
-        $this->shippingPrice = $shippingPrice;
+        $this->shippingFee = $shippingFee;
     }
 
     /**
      * @return bool
      */
-    public function hasShippingPrice(): bool
+    public function hasShippingFee(): bool
     {
-        if ($this->shippingPrice !== null) {
+        if ($this->shippingFee !== null) {
             return true;
         }
         return false;
@@ -881,23 +892,57 @@ class Order
     /**
      * @return float|null
      */
-    public function getShippingPriceDiscount(): ?float
+    public function getShippingFeeDiscount(): ?float
     {
-        if ($this->shippingPriceDiscount === null) { return (float) 0; }
-        return (float) $this->shippingPriceDiscount;
+        if ($this->shippingFeeDiscount === null) { return (float) 0; }
+        return (float) $this->shippingFeeDiscount;
     }
 
-    public function getShippingPriceToPay(): ?float
+    public function getShippingFeeToPay(): ?float
     {
-        return (float) ($this->getShippingPrice() - $this->getShippingPriceDiscount());
+        return (float) ($this->getShippingFee() - $this->getShippingFeeDiscount());
+    }
+
+
+    /**
+     * @param float|null $shippingFeeDiscount
+     */
+    public function setShippingFeeDiscount($shippingFeeDiscount): void
+    {
+        $this->shippingFeeDiscount = $shippingFeeDiscount;
     }
 
     /**
-     * @param float|null $shippingPriceDiscount
+     * @return float|null
      */
-    public function setShippingPriceDiscount($shippingPriceDiscount): void
+    public function getPaymentFee(): ?float
     {
-        $this->shippingPriceDiscount = $shippingPriceDiscount;
+        if ($this->paymentFee === null) { return (float) 0; }
+        return (float) $this->paymentFee;
+    }
+
+    /**
+     * @param float|null $paymentFee
+     */
+    public function setPaymentFee(?float $paymentFee): void
+    {
+        $this->paymentFee = $paymentFee;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPaymentFee(): bool
+    {
+        if ($this->paymentFee !== null) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getPaymentFeeToPay(): ?float
+    {
+        return (float) ($this->getPaymentFee());
     }
 
     /**
@@ -1205,6 +1250,37 @@ class Order
         $this->token = $token;
     }
 
+    /**
+     * @return DateTime|null
+     */
+    public function getPostedAt(): ?DateTime
+    {
+        return $this->postedAt;
+    }
+
+    /**
+     * @param DateTime|null $postedAt
+     */
+    public function setPostedAt(?DateTime $postedAt): void
+    {
+        $this->postedAt = $postedAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getCanceledAt(): ?DateTime
+    {
+        return $this->canceledAt;
+    }
+
+    /**
+     * @param DateTime|null $canceledAt
+     */
+    public function setCanceledAt(?DateTime $canceledAt): void
+    {
+        $this->canceledAt = $canceledAt;
+    }
 
     /**
      * @param OrderLog $log
@@ -1310,12 +1386,24 @@ class Order
         if ($this->getStatus() && (
                 $this->getStatus()->getShortcode() === OrderStatus::PAYMENT_REFUNDED ||
                 $this->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED ||
-                $this->getStatus()->getShortcode() === OrderStatus::ORDER_DELETED
+                $this->isCanceled()
             )) {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanceled(): bool
+    {
+//        if ($this->getCanceledAt() !== null) {
+        if ($this->canceledAt !== null) {
+            return true;
+        }
+        return false;
     }
 
     /**

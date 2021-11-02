@@ -455,7 +455,7 @@ class OrderController extends AbstractController
     
         $selectedDate = null === $order->getDeliveryDate() ? null : $order->getDeliveryDate();
         $selectedInterval = null === $order->getDeliveryInterval() ? null : $order->getDeliveryInterval();
-        $selectedIntervalFee = null === $order->getShippingPrice() ? null : $order->getShippingPrice();
+        $selectedIntervalFee = null === $order->getShippingFee() ? null : $order->getShippingFee();
     
         $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
         $hiddenDateForm = $this->createForm(CartHiddenDeliveryDateFormType::class, $hiddenDates);
@@ -464,7 +464,7 @@ class OrderController extends AbstractController
          *
          */
 //        if ($order->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED || $order->getStatus()->getShortcode() === OrderStatus::ORDER_REJECTED ||
-//            $order->getStatus()->getShortcode() === OrderStatus::STATUS_RETURNED || $order->getStatus()->getShortcode() === OrderStatus::ORDER_DELETED) {
+//            $order->getStatus()->getShortcode() === OrderStatus::STATUS_RETURNED || $order->getStatus()->getShortcode() === OrderStatus::ORDER_CANCELED) {
 //            $isDeliveryOverdue = false;
 //        } else {
         
@@ -608,7 +608,7 @@ class OrderController extends AbstractController
 
         $selectedDate = null === $order->getDeliveryDate() ? null : $order->getDeliveryDate();
         $selectedInterval = null === $order->getDeliveryInterval() ? null : $order->getDeliveryInterval();
-        $selectedIntervalFee = null === $order->getShippingPrice() ? null : $order->getShippingPrice();
+        $selectedIntervalFee = null === $order->getShippingFee() ? null : $order->getShippingFee();
 
         $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
         $hiddenDateForm = $this->createForm(CartHiddenDeliveryDateFormType::class, $hiddenDates);
@@ -774,7 +774,7 @@ class OrderController extends AbstractController
             $data = $form->getData();
             $order->setDeliveryDate(DateTime::createFromFormat('!Y-m-d', $data->getDeliveryDate()));
             $order->setDeliveryInterval($data->getDeliveryInterval());
-            $order->setShippingPrice($data->getDeliveryFee());
+            $order->setShippingFee($data->getDeliveryFee());
 
             $event = new OrderEvent($order, [
                 'channel' => OrderLog::CHANNEL_ADMIN,
@@ -916,6 +916,45 @@ class OrderController extends AbstractController
         $json = json_encode(['error' => 'Ismeretlen hiba történt!'], JSON_UNESCAPED_UNICODE);
         return new JsonResponse($json,400, [], true);
     }
+
+    /**
+     * @Route("/orders/{id}/cancelOrder", name="order-cancelOrder", methods={"POST"})
+     */
+    public function cancelOrder(Request $request, ?Order $order, $id = null)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('HIBA: /orders/{id}/cancelOrder');
+        }
+
+        if (!$order) {
+            $json = json_encode(['error' => 'Nincs ilyen rendelés!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+
+        if ($order->isClosed()) {
+            $json = json_encode(['error' => 'Ez a rendelés már le van zárva!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+        if ($order->isCanceled()) {
+            $json = json_encode(['error' => 'Ez a rendelés már törölve volt!'], JSON_UNESCAPED_UNICODE);
+            return new JsonResponse($json,400, [], true);
+        }
+
+        $order->setCanceledAt(new DateTime('now'));
+        $this->em->persist($order);
+        $this->em->flush();
+
+        $event = new OrderEvent($order, [
+            'channel' => OrderLog::CHANNEL_ADMIN,
+            'status' => OrderStatus::ORDER_CANCELED,
+        ]);
+        $this->dispatcher->dispatch($event, OrderEvent::ORDER_UPDATED);
+
+        $this->addFlash('success', 'Rendelés sikeresen törölve!');
+        return new Response('', 200);
+    }
+
+
 
     /**
      * NINCS HASZNALATBAN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

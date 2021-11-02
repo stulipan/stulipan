@@ -245,8 +245,8 @@ class PaymentBuilder
         $item->Description = $this->shippingFeeName;
         $item->Quantity = 1;
         $item->Unit = self::BARION_UNIT;
-        $item->UnitPrice = $order->getShippingPriceToPay();
-        $item->ItemTotal = $order->getShippingPriceToPay();
+        $item->UnitPrice = $order->getShippingFeeToPay();
+        $item->ItemTotal = $order->getShippingFeeToPay();
         $item->SKU = $this->shippingFeeSku;
 
         $trans->AddItem($item);

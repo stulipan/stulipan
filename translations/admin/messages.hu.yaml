@@ -61,11 +61,13 @@ order:
     shipping: Szállítás
     discount: Kedvezmény
     total-amount-to-pay: Fizetendő
+    items-count: '{{ count }} termék'
     edit-sender: 'Feladó módosítása'
     recipient: Címzett
     edit-recipient: 'Címzett módosítása'
     new-delivery-date: 'Új szállítási idő'
     archive-order: 'Arhíválás'
+    view-status-page: 'Állapot oldal megtekintése'
     cart-products: Termékek
     message: Üzenet
     sender: Feladó
@@ -95,12 +97,25 @@ order:
     shipping-confirmation-will-be-sent-to: 'A szállítást megerősítő emailt a következő címre küldjük: {{ email }}'
     send-shipping-confirmation-email: 'Szállítást megerősítő email küldése a vásárlónak'
     send-order-confirmation-button: 'Visszaigazoló email küldése'
-    resend-order-confirmation: 'Megrendelés visszaigazolásának újraküldése'
+    resend-order-confirmation: 'Rendelés-visszaigazolás újraküldése'
     order-confirmation-will-be-sent-to: 'A rendelést visszaigazoló emailt a következő címre küldjük: {{ email }}'
+    status:
+        canceled: Törölve
+    cancel:
+        cancel-order: Rendelés törlése
+        inventory: Készlet
+        restock-items: Termékek visszakészletezése
+        reason-for-cancelation: Tőrlés oka
+        notification: Értesítés
+        send-notification-to-the-customer: 'Értesítés küldése a vásárlónak'
+        keep-order: Megtart
+        cancel-order-button: Rendelés törlése
+
     history:
         history-timeline: Előzmények
-        leave-a-comment-here: Ide írd az megjegyzésed...
+        leave-a-comment-here: Ide írd a megjegyzésed...
         only-you-can-see-comments: Csak te és az adminok látjátok a kommenteket.
+        comment-is-missing: A komment üres!
         order-id: 'Rendelés ID'
         amount: Összeg
         payment-method: 'Fizetési mód'

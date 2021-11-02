@@ -35,8 +35,8 @@
                         <li class="order-summary-item">
                             <span>{{ 'cart.shipping-fee'|trans }}</span>
                             <span class="w-50 text-right">
-                                {%- if order.hasShippingPrice is defined and order.hasShippingPrice -%}
-                                    {{ order.shippingPriceToPay|money }}
+                                {%- if order.hasShippingFee is defined and order.hasShippingFee -%}
+                                    {{ order.shippingFeeToPay|money }}
                                 {%- else -%}
                                     {{ 'cart.shipping-fee-calculated-at-checkout'|trans }}
                                 {%- endif -%}

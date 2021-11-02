@@ -1,0 +1,18 @@
+            <div class="JS--Wrapper-orderSummary">
+                <div class="d-flex justify-content-between">
+                    <div class="h6">{{ 'cart.cart-content'|trans }}</div>
+                    <a class="text-link-checkout" href="{{ path('site-checkout-step0-pickExtraGift') }}">{{ 'generic.edit'|trans }}</a>
+                </div>
+                <div class="cart mt-3">
+                    <div class="JS--resultWrapper">
+                        {% include 'webshop/cart/cart.html.twig' with {
+                            'showMessage': true,
+                            'showQuantity': false,
+                            'showRemove': false,
+                            'showSummary': false,
+                            'hasProductLink': false,
+                        } %}
+                    </div>
+                </div>
+                {% include 'webshop/cart/checkout-sidebar-summary-widget.html.twig' %}
+            </div>

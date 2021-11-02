@@ -826,8 +826,8 @@ theme.CheckoutSection = (function () {
 
     PAYMENT_WRAPPER: '.JS--Wrapper-payment',
     PAYMENT_FORM: '.JS--Wrapper-paymentForm',
-    PAYMENT_CHOICE: '.JS--Wrapper-choice',
-    PAYMENT_CHOICE_BUTTON: '.JS--Button-pickChoice',
+    PAYMENT_CHOICE: '.JS--Wrapper-paymentChoice',
+    PAYMENT_CHOICE_BUTTON: '.JS--Button-pickPayment',
 
     SENDER_WRAPPER: '.JS--Wrapper-sender',
     SENDER_BODY: '.JS--Wrapper-senderBody',
@@ -844,11 +844,14 @@ theme.CheckoutSection = (function () {
     ACCEPT_TERMS_WRAPPER: '.JS--Wrapper-acceptTerms',
     ACCEPT_TERMS_FORM: '.JS--Wrapper-acceptTermsForm',
 
-    SUMMARY_WRAPPER: '.JS--Wrapper-summary',
-    SUMMARY_SHIPPING_PRICE: '.JS--Wrapper-shippingPrice',
-    SUMMARY_SCHEDULING_PRICE: '.JS--Wrapper-schedulingPrice',
-    SUMMARY_AMOUNT_TO_PAY_WRAPPER: '.JS--Wrapper-amountToPay',
-    SUMMARY_AMOUNT_TO_PAY_BODY: '.JS--Wrapper-amountToPayBody',
+    SUMMARY_WRAPPER: '.JS--Wrapper-orderSummary',
+    SUMMARY_SHIPPING_FEE: '.JS--orderSummary-shippingFee',
+    SUMMARY_PAYMENT_BODY: '.JS--orderSummary-paymentBody',
+    SUMMARY_PAYMENT_NAME: '.JS--orderSummary-paymentName',
+    SUMMARY_PAYMENT_FEE: '.JS--orderSummary-paymentFee',
+    SUMMARY_SCHEDULING_PRICE: '.JS--orderSummary-schedulingPrice',
+    SUMMARY_AMOUNT_TO_PAY_WRAPPER: '.JS--orderSummary-amountToPay',
+    SUMMARY_AMOUNT_TO_PAY_BODY: '.JS--orderSummary-amountToPayBody',
 
   };
   const scrollUp = { block: 'start', behavior: 'smooth'};
@@ -1246,7 +1249,7 @@ theme.CheckoutSection = (function () {
       $(selectors.SHIPPING_FORM).addClass('was-validated');
 
       $(selectors.BODY).trigger('checkout.summary.updated', [{
-        shippingPrice: $choiceWrapper.data('shippingPrice')
+        shippingFee: $choiceWrapper.data('shippingFee')
       }]);
 
       errors.shipping = false;
@@ -1539,6 +1542,11 @@ theme.CheckoutSection = (function () {
       $choiceWrapper.addClass('selected');
       $(selectors.PAYMENT_FORM).addClass('was-validated');
 
+      $(selectors.BODY).trigger('checkout.summary.updated', [{
+        paymentFee: $choiceWrapper.data('paymentFee'),
+        paymentName: $choiceWrapper.data('paymentName')
+      }]);
+
       errors.payment = false;
       // if ($wrapper.find(selectors.ALERT)) {
       //   $wrapper.find(selectors.ALERT).hide();
@@ -1550,50 +1558,45 @@ theme.CheckoutSection = (function () {
 
       // let url = '/hu/cart/getSummary';
       let $wrapper = $(selectors.SUMMARY_WRAPPER);
-      let $shippingPrice = $(selectors.SUMMARY_SHIPPING_PRICE);
+      let $shippingFee = $(selectors.SUMMARY_SHIPPING_FEE);
       let $schedulingPriceBody = $(selectors.SUMMARY_SCHEDULING_PRICE);
+      let $paymentName = $(selectors.SUMMARY_PAYMENT_NAME);
+      let $paymentBody = $(selectors.SUMMARY_PAYMENT_BODY);
+      let $paymentFee = $(selectors.SUMMARY_PAYMENT_FEE);
       let $amountToPayWrapper = $(selectors.SUMMARY_AMOUNT_TO_PAY_WRAPPER);
       let $amountToPayBody = $(selectors.SUMMARY_AMOUNT_TO_PAY_BODY);
 
-      let updatedAmountToPay =  $amountToPayWrapper.data('priceTotal');
-      console.log(updatedAmountToPay);
-      let shippingPrice = $shippingPrice.data('shippingPrice');
+      let updatedAmountToPay =  $amountToPayWrapper.data('itemsPrice');
+      let shippingFee = $shippingFee.data('shippingFee');
+      let paymentFee = $paymentFee.data('paymentFee');
 
       // If flowerShopMode, there's no $schedulingPriceBody. We set the schedulingPrice to 0.
       let schedulingPrice = $schedulingPriceBody.length ? $schedulingPriceBody.data('schedulingPrice') : 0;
 
-      if ("undefined" !== typeof summary.shippingPrice) {
-        $shippingPrice.html(summary.shippingPrice.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
-        $shippingPrice.data('shippingPrice', summary.shippingPrice);
-        updatedAmountToPay += summary.shippingPrice + schedulingPrice;
+      if ("undefined" !== typeof summary.shippingFee) {
+        console.log(summary.shippingFee);
+        $shippingFee.html(summary.shippingFee.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $shippingFee.data('shippingFee', summary.shippingFee);
+        updatedAmountToPay += summary.shippingFee + paymentFee + schedulingPrice;
       }
       if ("undefined" !== typeof summary.schedulingPrice) {
         $schedulingPriceBody.html(summary.schedulingPrice.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
         $schedulingPriceBody.data('schedulingPrice', summary.schedulingPrice);
-        updatedAmountToPay += shippingPrice + summary.schedulingPrice;
+        updatedAmountToPay += shippingFee + paymentFee + summary.schedulingPrice;
+      }
+      if ("undefined" !== typeof summary.paymentFee) {
+        $paymentName.html(summary.paymentName);
+        $paymentFee.html(summary.paymentFee.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $paymentFee.data('paymentFee', summary.paymentFee);
+        if (summary.paymentFee == 0) {
+          $paymentBody.addClass('d-none');
+        } else {
+          $paymentBody.removeClass('d-none');
+        }
+        updatedAmountToPay += shippingFee + summary.paymentFee + schedulingPrice;
       }
 
-      console.log(updatedAmountToPay)
       $amountToPayBody.html(updatedAmountToPay.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
-
-      // $wrapper.addClass('loading-spinner-show');
-
-      // $.ajax({
-      //   url: url,
-      //   method: 'GET',
-      //   context: this,
-      // }).done(function (data) {
-      //   $wrapper.replaceWith(data);
-      //   $wrapper.removeClass('loading-spinner-show');
-      // }).fail(function (jqXHR) {
-      //   console.log(jqXHR);
-      //   // $el.append(jqXHR.responseText);
-      //   // theme.LoadingOverlay.hide($el);
-      //   Notify.error(jqXHR.responseText);
-      //   $wrapper.removeClass('loading-spinner-show');
-      // })
-      // ;
-
     },
 
   });

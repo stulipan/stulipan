@@ -88,7 +88,8 @@ class OrderSubscriber implements EventSubscriberInterface
             'fulfilled' => 'A rendelés teljesítve.',
 //                'The order was successfully fulfilled and closed.',
             'rejected' => 'The order was rejected.',
-            'deleted' => 'The order was deleted.',
+            OrderStatus::ORDER_CANCELED => 'Rendelés törölve.'
+//                'The order was deleted.',
         ];
 
         switch ($shortcode) {
@@ -97,7 +98,7 @@ class OrderSubscriber implements EventSubscriberInterface
                     '{{fullname}}' => $order->getFullname(),
                 ]);
                 break;
-            case OrderStatus::STATUS_FULFILLED || OrderStatus::ORDER_REJECTED || OrderStatus::ORDER_DELETED:
+            case OrderStatus::STATUS_FULFILLED || OrderStatus::ORDER_REJECTED || OrderStatus::ORDER_CANCELED:
                 $message = $this->translator->trans($messages[$shortcode], []);
                 break;
 //            case OrderStatus::ORDER_REJECTED:

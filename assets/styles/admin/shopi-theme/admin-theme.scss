@@ -22,13 +22,14 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-.order-list table td {
-  height: 100px;
-}
-
-.order-list table .vertical-ribbon-sm {
-  top: -20px !important;
-}
+//// -------- Ez csak akkor kell ha flowerShopMode --------
+//.order-list table td {
+//  height: 100px;
+//}
+//
+//.order-list table .vertical-ribbon-sm {
+//  top: -20px !important;
+//}
 
 .bg-body {
   background-color: $body-bg;

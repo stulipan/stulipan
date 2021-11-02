@@ -1,11 +1,21 @@
     <h5 class="checkout-block-title">{{ 'checkout.payment.payment-method'|trans }}</h5>
 
     <div class="mt-2">
-        {% if order.paymentMethod is defined and order.paymentMethod is not empty %}
-            {{ order.paymentMethod.name }}
-        {% else %}
-            {% include 'admin/_missing-data-insert.html.twig' %}
-        {% endif %}
+        <div class="d-flex justify-content-between">
+            <div class="">
+                {% if order.paymentMethod is defined and order.paymentMethod is not empty %}
+                    {{ order.paymentMethod.name }}
+                {% else %}
+                    {% include 'admin/_missing-data-insert.html.twig' %}
+                {% endif %}
+            </div>
+            {% if order.isPaid == true %}
+            <div>
+                <span class="mr-1 badge badge-success">{{ order.paymentStatus }}</span>
+            </div>
+            {% endif %}
+        </div>
+
         <div class="mt-1">
         {% if order.paymentMethod is defined and order.paymentMethod %}
             <div class="text-muted">

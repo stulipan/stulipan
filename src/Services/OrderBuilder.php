@@ -275,10 +275,10 @@ class OrderBuilder
 
     /**
      * Elvileg nincs hasznalva, lasd a setShippingMethod
-     * @param float $shippingPrice
+     * @param float $shippingFee
      */
-    public function setShippingPrice(?float $shippingPrice) {
-        $this->order->setShippingPrice($shippingPrice);
+    public function setShippingFee(?float $shippingFee) {
+        $this->order->setShippingFee($shippingFee);
 
         $this->em->persist($this->order);
         $this->em->flush();
@@ -582,10 +582,6 @@ class OrderBuilder
     {
         if ($this->order) {
             $this->order->setPaymentStatus($paymentStatus);
-
-            // Run events
-            $this->runEvent(OrderEvent::PAYMENT_UPDATED, $paymentStatus->getShortcode());
-
             $this->em->persist($this->order);
             $this->em->flush();
         }
@@ -601,6 +597,7 @@ class OrderBuilder
     {
         if ($this->order) {
             $this->order->setPaymentMethod($payment);
+            $this->order->setPaymentFee($payment->getPrice());
 
             $this->em->persist($this->order);
             $this->em->flush();
@@ -616,7 +613,7 @@ class OrderBuilder
     {
         if ($this->order) {
             $this->order->setShippingMethod($shippingMethod);
-            $this->order->setShippingPrice($shippingMethod->getPrice());
+            $this->order->setShippingFee($shippingMethod->getPrice());
 
             $this->em->persist($this->order);
             $this->em->flush();
@@ -662,6 +659,16 @@ class OrderBuilder
             $this->em->persist($this->order);
             $this->em->flush();
         }
+    }
+
+    /**
+     * @param string|null $token
+     */
+    public function setPostedAt(): void
+    {
+        $this->order->setPostedAt(new DateTime('now'));
+        $this->em->persist($this->order);
+        $this->em->flush();
     }
 
     /**

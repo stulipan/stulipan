@@ -553,7 +553,7 @@ class CartController extends AbstractController
 
         $orderBuilder = $this->orderBuilder;
         if ($session->get('orderId') != null && $orderBuilder->getCurrentOrder()->getId() == $session->get('orderId')) {
-            return $this->render('webshop/cart/sidebar-summary.html.twig', [
+            return $this->render('checkout-sidebar.html.twig', [
                 'order' => $orderBuilder->getCurrentOrder(),
             ]);
         }

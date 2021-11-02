@@ -25,12 +25,15 @@
         <div class="">
             <div class="card-body">
                 <div class="card-tile h3">{{ 'account.order.order'|trans}} #{{ order.number }}</div>
-                {% if order.isUnpaid %}
-{#                    <div class="text-sm text-danger mt-2">Fizetésre vár</div>#}
-                    <div class="badge badge-danger">{{ 'account.order.waiting-for-payment'|trans }}</div>
+                {% if order.isPaid %}
+                    <div class="badge badge-success">{{ 'account.order.paid'|trans }}</div>
+                {% else %}
+                    <div class="badge badge-warning">{{ 'account.order.waiting-for-payment'|trans }}</div>
                 {% endif %}
                 {% if order.isFulfilled %}
                     <div class="badge badge-success">{{ 'account.order.fulfilled'|trans }}</div>
+                {% else %}
+                    <div class="badge badge-warning">{{ 'account.order.being-processed'|trans }}</div>
                 {% endif %}
             </div>
         </div>
@@ -42,7 +45,7 @@
                 <div class="cart">
                     {% include 'webshop/user/_myorder-items-widget.html.twig' %}
                 </div>
-                {% include 'webshop/user/_myorder-summary-widget.html.twig' %}
+                {% include 'webshop/cart/checkout-sidebar-summary-widget.html.twig' %}
             </div>
         </div>
     </div>

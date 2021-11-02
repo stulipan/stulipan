@@ -27,7 +27,7 @@ class OrderStatus implements JsonSerializable
     public const STATUS_RETURNED = 'returned'; // visszaküldve
 
     public const ORDER_REJECTED = 'rejected'; // elutasítva - ezt még nem tudom mikor kell használni
-    public const ORDER_DELETED = 'deleted'; // törölve
+    public const ORDER_CANCELED = 'canceled'; // törölve
 
     public const CONVERSION_TRACKING_LOADED = 'conversion.tracking.loaded';
 

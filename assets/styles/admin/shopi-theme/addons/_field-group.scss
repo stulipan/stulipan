@@ -51,9 +51,10 @@ $addon-content-width-lg:          3.5rem !default;  // 56px
 .field-append {
   position: relative;
   display: flex;
-  flex: 1;
+  //flex: 1;
   justify-content: space-between;
   width: 100%;
+  z-index: 4;
 }
 // We use '+label+input' and '+input' so that it works both when Input is preceded by Label or not!
 .field-append+label+input,
@@ -107,6 +108,7 @@ $addon-content-width-lg:          3.5rem !default;  // 56px
   right: 1px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  z-index: 5;
 }
 
 // Correction for FontAwesome icons' right margin

@@ -14,11 +14,6 @@ final class Summary
      */
     private $order;
 
-//    /**
-//     * @var float
-//     */
-//    private totalAmountToPay = 0;
-
     /**
      * Summary constructor.
      *
@@ -37,25 +32,29 @@ final class Summary
      */
     public function getTotalAmountToPay(): float
     {
-        return $this->getPriceTotal() + $this->order->getShippingPriceToPay();
+        return $this->getPriceTotal() + $this->order->getShippingFeeToPay() + $this->order->getPaymentFeeToPay();
     }
 
     /**
-     * Sums all items in cart. 
-     * Returns the total price in cart. 
-     *
+     * Sums all items in cart.
      * @return float
+     */
+    public function getItemsPrice(): float
+    {
+        $total = 0;
+        foreach ($this->order->getItems() as $item) {
+            $total += $item->getPriceTotal();
+            // The above is equivalent to this: $priceTotal += $item->getPrice() * $item->getQuantity();
+        }
+        return $total;
+    }
+
+    /**
+     * DEPREKALTAM !!!!!!!
      */
     public function getPriceTotal(): float
     {
-        $priceTotal = 0;
-        $totalItems = count($this->order->getItems());
-        foreach ($this->order->getItems() as $item) {
-            $priceTotal += $item->getPriceTotal();
-            // The above is equivalent to this:
-            // $priceTotal += $item->getPrice() * $item->getQuantity();
-        }
-        return $priceTotal;
+        return $this->getItemsPrice();
     }
 
     public function getAmountPaidByCustomer(): float

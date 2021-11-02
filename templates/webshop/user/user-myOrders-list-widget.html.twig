@@ -4,16 +4,19 @@
             <div class="font-weight-bold text-uppercase">{{ 'account.order.order-number'|trans }}</div>
             <div class="">#{{ order.number }}</div>
         </div>
-        {% if order.isUnpaid %}
-            <div>
-                <div class="badge badge-danger">{{ 'account.order.waiting-for-payment'|trans }}</div>
-            </div>
-        {% endif %}
-        {% if order.isFulfilled %}
-            <div>
+        <div>
+            {% if order.isPaid %}
+                <div class="badge badge-success">{{ 'account.order.paid'|trans }}</div>
+            {% else %}
+                <div class="badge badge-warning">{{ 'account.order.waiting-for-payment'|trans }}</div>
+            {% endif %}
+            {% if order.isFulfilled %}
                 <div class="badge badge-success">{{ 'account.order.fulfilled'|trans }}</div>
-            </div>
-        {% endif %}
+            {% else %}
+                <div class="badge badge-warning">{{ 'account.order.being-processed'|trans }}</div>
+            {% endif %}
+        </div>
+
 {#        <div class="">#}
 {#            <div class="font-weight-bold text-uppercase">Kézbesítés napja: </div>#}
 {#            <div class="">2019-09-24</div>#}

@@ -437,11 +437,11 @@ class CheckoutController extends AbstractController
     }
 
     /**
-     * Ez rögzíti a rendelést (státusza -> 'created') és tovább küldi a fizetésre.
+     * Ez küldi tovább a fizetésre.
      *
      * @Route("/order/submit", name="site-checkout-place-order", methods={"POST", "GET"})
      */
-    public function placeOrder()
+    public function submitOrderForPayment()
     {
         $orderBuilder = $this->orderBuilder;
         $validation = $this->validatePreviousStep($orderBuilder, self::STEP_PAYMENT_METHOD);
@@ -452,20 +452,6 @@ class CheckoutController extends AbstractController
         $order = $orderBuilder->getCurrentOrder();
         $orderBuilder->setCustomer($order->getCustomer());
 
-        // If Order isn't yet created
-        if ($order->getStatus() === null) {
-            $status = $this->em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => OrderStatus::ORDER_CREATED]);
-            $orderBuilder->setStatus($status);
-            $orderBuilder->setToken((Uuid::v4())->toRfc4122());
-
-            if ($this->storeSettings->get('general.flower-shop-mode')) {
-                $event = new OrderEvent($orderBuilder->getCurrentOrder(), [
-                    'channel' => OrderLog::CHANNEL_CHECKOUT,
-                ]);
-                $this->eventDispatcher->dispatch($event, OrderEvent::DELIVERY_DATE_UPDATED);
-
-            }
-        }
         $payment = $this->paymentBuilder->createPaymentModel(null, $order);
 
         if ($payment->isCreated()) {
@@ -480,91 +466,6 @@ class CheckoutController extends AbstractController
         return $this->redirectToRoute($payment->getErrorRoute());
     }
 
-//    /**
-//     * Returns the Payment status based on a transaction details (Kind and Status)
-//     *
-//     * @param PaymentTransaction $transaction
-//     * @return string|null
-//     */
-//    private function computePaymentStatus(?PaymentTransaction $transaction)
-//    {
-//        if ($transaction === null) {
-//            throw new Error('STUPID: computePaymentStatus() >> No transaction found!');
-//        }
-//        $kind = $transaction->getKind();
-//        $status = $transaction->getStatus();
-////        dd($kind . ', ' . $status);
-//
-//        // Sale
-//        // Applies for CC and Manual payments too.
-//        if ($kind === PaymentTransaction::KIND_SALE && $status === PaymentTransaction::STATUS_SUCCESS) {
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PAID]);
-//            return $status;
-////            return PaymentStatus::STATUS_PAID;
-//        }
-//        if ($kind === PaymentTransaction::KIND_SALE && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE || $status === PaymentTransaction::STATUS_CANCELED)) {
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
-//            return $status;
-////            return PaymentStatus::STATUS_PENDING;
-//        }
-//
-//        // Authorization
-//        if ($kind === PaymentTransaction::KIND_AUTHORIZATION && $status === PaymentTransaction::STATUS_SUCCESS) {
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_AUTHORIZED]);
-//            return $status;
-////            return PaymentStatus::STATUS_AUTHORIZED;
-//        }
-//        if ($kind === PaymentTransaction::KIND_AUTHORIZATION && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
-//            return $status;
-////            return PaymentStatus::STATUS_PENDING;
-//        }
-//
-//        // Capture
-//        if ($kind === PaymentTransaction::KIND_CAPTURE && $status === PaymentTransaction::STATUS_SUCCESS) {
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PAID]);
-//            return $status;
-////            return PaymentStatus::STATUS_PAID;
-//        }
-//        if ($kind === PaymentTransaction::KIND_CAPTURE && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
-//            // If current transaction is a Capture, then the parent must be an Authorization Success
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_AUTHORIZED]);
-//            return $status;
-////            return PaymentStatus::STATUS_AUTHORIZED;
-//        }
-//
-//        // Refund
-//        if ($kind === PaymentTransaction::KIND_REFUND && $status === PaymentTransaction::STATUS_SUCCESS) {
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_REFUNDED]);
-//            return $status;
-////            return PaymentStatus::STATUS_REFUNDED;
-//        }
-//        if ($kind === PaymentTransaction::KIND_REFUND && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
-//            // If current transaction is a Refund, then the parent must be a Capture Success
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PAID]);
-//            return $status;
-////            return PaymentStatus::STATUS_PAID;
-//        }
-//
-//        // Void
-//        if ($kind === PaymentTransaction::KIND_VOID && $status === PaymentTransaction::STATUS_SUCCESS) {
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_VOID]);
-//            return $status;
-////            return PaymentStatus::STATUS_VOIDED;
-//        }
-//        if ($kind === PaymentTransaction::KIND_VOID && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
-//            // A Void is a cancellation of a pending authorization or capture. So we don't know
-//            // what was before, so we compute paymentStatus for the parent transaction:
-//            return $this->paymentBuilder->computePaymentStatus($transaction->getParent());
-//        }
-//
-//        // None of the above
-//        if ($kind === null || ($status === null || $status === PaymentTransaction::STATUS_PENDING || $status === PaymentTransaction::STATUS_FAILURE || $status === PaymentTransaction::STATUS_ERROR)) {
-//            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
-//            return $status;
-////            return PaymentStatus::STATUS_PENDING;
-//        }
-//    }
 
     /**
      * @Route("/payment/callback/barion", name="site-payment-callback-barion", methods={"POST"}) //, "GET"
@@ -636,7 +537,10 @@ class CheckoutController extends AbstractController
     }
 
     /**
-     * Külsős fizetés oldalak, ide irányítanak vissza. Itt ellenőrizzük, hogy sikeres volt-e a fizetés.
+     * Sikeres fizetés után ide küldi a vásárlót.
+     *      -- Manual payment esetén egyből ide esik be
+     *      -- Külsős fizetés oldalak esetén, ide irányítanak vissza. Itt ellenőrizzük, hogy sikeres volt-e a fizetés.
+     *
      * Töröljuk a rendelést session-ből, majd tovább küldjük a Thank you oldalra.
      *
      * @Route("/payment/success", name="site-payment-success", methods={"POST", "GET"})
@@ -663,6 +567,29 @@ class CheckoutController extends AbstractController
                 $this->addFlash('danger', sprintf($this->translator->trans('checkout.payment.payment-failed').' %s', $transaction->getErrorCode()));
                 return $this->redirectToRoute('site-checkout-step3-pickPayment');
             }
+        }
+
+        // If Order isn't yet created
+        if ($order->getStatus() === null) {
+            /** @var OrderStatus $status */
+            $status = $this->em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => OrderStatus::ORDER_CREATED]);
+            $orderBuilder->setStatus($status);   // dispatches OrderEvent::ORDER_UPDATED with $status
+            $orderBuilder->setPostedAt();
+            $orderBuilder->setToken((Uuid::v4())->toRfc4122());
+
+            if ($this->storeSettings->get('general.flower-shop-mode')) {
+                $event = new OrderEvent($orderBuilder->getCurrentOrder(), [
+                    'channel' => OrderLog::CHANNEL_CHECKOUT,
+                ]);
+                $this->eventDispatcher->dispatch($event, OrderEvent::DELIVERY_DATE_UPDATED);
+            }
+
+            $paymentStatus = $this->paymentBuilder->computePaymentStatus($order->getTransaction());
+            $eventPaymentUpdated = new OrderEvent($order, [
+                'channel' => OrderLog::CHANNEL_CHECKOUT,
+                'status' => $paymentStatus->getShortcode(),
+            ]);
+            $this->eventDispatcher->dispatch($eventPaymentUpdated, OrderEvent::PAYMENT_UPDATED);
         }
 
         $emailSender->sendEmail($order, StoreEmailTemplate::ORDER_CONFIRMATION);
@@ -1035,7 +962,7 @@ class CheckoutController extends AbstractController
         $order = $this->orderBuilder->getCurrentOrder();
         $selectedDate = null === $order->getDeliveryDate() ? null : $order->getDeliveryDate();
         $selectedInterval = null === $order->getDeliveryInterval() ? null : $order->getDeliveryInterval();
-        $selectedIntervalFee = null === $order->getShippingPrice() ? null : $order->getShippingPrice();
+        $selectedIntervalFee = null === $order->getShippingFee() ? null : $order->getShippingFee();
 
         $hiddenDates = new HiddenDeliveryDate($selectedDate, $selectedInterval, $selectedIntervalFee);
         return $this->createForm(CartHiddenDeliveryDateFormType::class,$hiddenDates);

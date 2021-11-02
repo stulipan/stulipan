@@ -86,11 +86,13 @@ order:
     shipping: Shipping
     discount: Discount
     total-amount-to-pay: Total amount to pay
+    items-count: '{{ count }} items'
     edit-sender: Edit sender
     recipient: Recipient
     edit-recipient: Edit recipient
     new-delivery-date: New delivery date
     archive-order: Archive order
+    view-status-page: View order status page
     cart-products: Products
     message: Message
     sender: 'Sender:'
@@ -122,10 +124,22 @@ order:
     send-order-confirmation-button: Send confirmation email
     resend-order-confirmation: Resend order confirmation
     order-confirmation-will-be-sent-to: 'The order confirmation email will be sent to {{ email }}'
+    status:
+        canceled: Canceled
+    cancel:
+        cancel-order: Cancel order
+        inventory: Inventory
+        restock-items: Restock items
+        reason-for-cancelation: Reason for cancelation
+        notification: Notification
+        send-notification-to-the-customer: Send notification to the customer
+        keep-order: Keep order
+        cancel-order-button: Cancel order
     history:
         history-timeline: Timeline
         leave-a-comment-here: Leave a comment...
         only-you-can-see-comments: Only you and the admins can see the comments.
+        comment-is-missing: The comment is missing!
         order-id: Order ID
         amount: 'Amount:'
         payment-method: 'Payment:'

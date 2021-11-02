@@ -467,7 +467,7 @@ class Customer
     {
         $realOrders = new ArrayCollection();
         foreach ($this->orders as $order) {
-            if ($order->getStatus() !== null) {
+            if ($order->getStatus() !== null && $order->isCanceled() === false) {
                 $realOrders->add($order);
             }
         }

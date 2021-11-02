@@ -151,7 +151,7 @@ class OrderRepository extends ServiceEntityRepository  // ServiceEntityRepositor
             ->andWhere('o.status IS NOT NULL')
             ->leftJoin('o.items', 'i')
 //            ->select('SUM(i.priceTotal) as totalRevenue')
-            ->select('(SUM(i.priceTotal) + SUM(o.shippingPrice)) as totalRevenue')
+            ->select('(SUM(i.priceTotal) + SUM(o.shippingFee) + SUM(o.paymentFee)) as totalRevenue')
         ;
 
         if ($period === null || $period === 'lifetime') {

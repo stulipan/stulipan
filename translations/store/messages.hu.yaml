@@ -92,6 +92,8 @@ account:
         order-details: Rendelés részletei
         order-placed-at: Rendelés leadva
         waiting-for-payment: Fizetésre vár
+        paid: Fizetve
+        being-processed: Feldolgozás alatt
         shipped: Kiszállítás alatt
         fulfilled: Rendelés teljesítve
         fulfilled-at: Teljesítés dátuma

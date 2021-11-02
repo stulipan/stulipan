@@ -114,6 +114,8 @@ account:
         order-details: Order details
         order-placed-at: Order date
         waiting-for-payment: Waiting to be paid
+        paid: Paid
+        being-processed: Order being processed
         shipped: Being shipped
         fulfilled: Order fulfilled
         fulfilled-at: Fulfilled at

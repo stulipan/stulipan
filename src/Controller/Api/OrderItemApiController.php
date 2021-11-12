@@ -40,7 +40,7 @@ class OrderItemApiController extends BaseController
         $order = $this->getDoctrine()->getRepository(Order::class)->find($id);
         $data = $this->getDoctrine()->getRepository(OrderItem::class)->findBy(['order' => $order]);
         if ($data) {
-            return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+            return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
         } else {
             $errors['message'] = sprintf('Nem talált ilyen rendelést: orderId=%s', $id);
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -90,7 +90,7 @@ class OrderItemApiController extends BaseController
         
         $data = $order->getItems()->getValues();
         if ($data) {
-            return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+            return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
         } else {
             $errors['message'] = sprintf('Nem talált tételeket, ugyanis nem talált ilyen rendelést: orderId=%s', $id);
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -111,9 +111,9 @@ class OrderItemApiController extends BaseController
             $this->getDoctrine()->getManager()->flush();
         }
         $data = $order->getItems()->getValues();
-        return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+        return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
 //        if ($data) {
-//            return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+//            return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
 //        } else {
 //            $errors['message'] = sprintf('A kosarad üres');
 //            return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -145,7 +145,7 @@ class OrderItemApiController extends BaseController
     
         $data = $orderItem;
         if ($data) {
-            return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+            return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
         }
     }
 }

@@ -24,16 +24,8 @@ $uploader-file-avatar-margin-x:         $uploader-file-margin-y !default;
 $uploader-file-size-color:              $gray-600 !default;
 
 .uploader {
-  /*border-radius: 6px;*/
-  /*border: 2px dashed #adb5bc;*/
-}
-.uploader *:not(i) {
-  box-sizing: border-box;
-  font-weight: normal;
-}
-
-.uploader-action {
-  border-radius: $uploader-border-radius;
+  position: relative;
+  @include border-radius($uploader-border-radius);
   border: $uploader-border-width dashed $uploader-border-color;
   cursor: pointer;
   transition: background 30ms ease;
@@ -46,6 +38,26 @@ $uploader-file-size-color:              $gray-600 !default;
     border-color: $uploader-hover-border-color;
     background-color: $uploader-hover-bg;
   }
+}
+.uploader *:not(i) {
+  box-sizing: border-box;
+  font-weight: normal;
+}
+
+.uploader-action {
+  //@include border-radius($uploader-border-radius);
+  //border: $uploader-border-width dashed $uploader-border-color;
+  //cursor: pointer;
+  //transition: background 30ms ease;
+  //
+  //&:focus,
+  //&:hover,
+  //&:active,
+  //&.dragging {
+  //  outline: none;
+  //  border-color: $uploader-hover-border-color;
+  //  background-color: $uploader-hover-bg;
+  //}
 
   & .dz-message {
     display: flex;
@@ -60,7 +72,17 @@ $uploader-file-size-color:              $gray-600 !default;
 
 .uploader-files {
   flex: 1;
-  padding: $uploader-files-padding-y 0 0 0;
+  //padding: $uploader-files-padding-y 0 0 0;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 2*2px);
+  height: calc(100% - 2*2px);
+  overflow-y: scroll;
+  background-color: $gray-100;
+  font-size: 12px;
+  margin: 2px;
 
   & .uploader-file {
     display: flex;

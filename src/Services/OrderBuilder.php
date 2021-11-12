@@ -157,18 +157,30 @@ class OrderBuilder
             $orderItem = new OrderItem();
             $orderItem->setOrder($this->order);
             $orderItem->setProduct($product);
-            $orderItem->setQuantity($quantity);
             $orderItem->setUnitPrice($product->getPrice()->getNumericValue());
 
-            $orderItem->setPriceTotal($orderItem->getUnitPrice() * $orderItem->getQuantity());
+            if ($product->hasEnoughStock($quantity)) {
+                $orderItem->setQuantity($quantity);
+                $orderItem->setPriceTotal($orderItem->getUnitPrice() * $quantity);
+            } else {
+                throw new Exception($this->translator->trans('cart.product.not-enough-stock'));
+            }
             $this->order->addItem($orderItem);
+
         } else {
             $key = $this->indexOfProduct($product);
-            $item = $this->order->getItems()->get($key);
-            $quantity = $this->order->getItems()->get($key)->getQuantity() + 1;
+            $orderItem = $this->order->getItems()->get($key);
+            $quantity += $orderItem->getQuantity();
             $price = $product->getPrice()->getNumericValue();
-            $this->setItemPrice($item, $price);
-            $this->setItemQuantity($item, $quantity);
+
+            $orderItem->setUnitPrice($price);
+
+            if ($product->hasEnoughStock($quantity)) {
+                $orderItem->setQuantity($quantity);
+                $orderItem->setPriceTotal($orderItem->getUnitPrice() * $quantity);
+            } else {
+                throw new Exception($this->translator->trans('cart.product.not-enough-stock'));
+            }
         }
 
         $this->em->persist($this->order);
@@ -177,8 +189,6 @@ class OrderBuilder
         // Run events
         if ($orderBeforeId === null) {
             $this->runEvent(OrderEvent::PRODUCT_ADDED_TO_CART, OrderStatus::CART_CREATED);
-        } else {
-//            $this->runEvent(OrderEvent::PRODUCT_ADDED_TO_CART, OrderStatus::CART_UPDATED);
         }
     }
 
@@ -194,6 +204,7 @@ class OrderBuilder
         if ($this->order && $this->order->getItems()->contains($item)) {
             if ($item->getProduct()->hasEnoughStock($quantity)) {
                 $key = $this->order->getItems()->indexOf($item);
+
                 $item->setQuantity($quantity);
                 $item->setPriceTotal($item->getQuantity() * $item->getUnitPrice());
                 $this->order->getItems()->set($key, $item);
@@ -446,7 +457,7 @@ class OrderBuilder
     public function indexOfProduct(Product $product): ?int
     {
         foreach ($this->order->getItems() AS $key => $item) {
-            if ($item->getProduct() === $product) {
+            if ($item->getProduct()->getId() === $product->getId()) {
                 return $key;
             }
         }

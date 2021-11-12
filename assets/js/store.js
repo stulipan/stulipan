@@ -465,12 +465,11 @@ theme.AddToCart = (function () {
       let $el = $(e.currentTarget);
       if (theme.proceed) { theme.proceed = false; return; }
       theme.LoadingOverlay.show($el, 'click');
-      // $el.addClass('loading-spinner-show');
-      // theme.proceed = true;
 
       let $form = this.$container.find('form');
       let $sidebar = $(selectors.BODY).find(selectors.CART_SIDEBAR);
       let c0 = parseInt($form.find(selectors.PRODUCT_QUANTITY).val());
+      let p = $el.data('productJson');
 
       $.ajax({
         url: $form.attr('action'),
@@ -481,6 +480,21 @@ theme.AddToCart = (function () {
         $form.replaceWith(data);
         $(selectors.BODY).trigger('cart.updated', [c0]);
 
+        // Send 'add_to_cart' event to GA4
+        gtag('event', 'add_to_cart', {
+          currency: 'HUF',
+          value: p.price.numericValue * c0,
+          items: [{
+              item_id: p.sku,
+              item_name: p.name,
+              affiliation: store.name,
+              currency: 'HUF',
+              item_brand: store.brand,
+              item_category: p.categories[0].name,
+              price: p.price.numericValue,
+              quantity: c0
+            }]
+        });
         setTimeout(function() {
           Notify.success(AlertMessages.PRODUCT_ADDED);
           theme.LoadingOverlay.hide($el);
@@ -516,7 +530,9 @@ theme.CartSection = (function () {
     GREETING_CARD_BODY        : '.JS--Wrapper-greetingCardBody',
     GREETING_CARD_FORM        : '.JS--Wrapper-greetingCardForm',
 
+    GOTO_WRAPPER              : '.JS--Wrapper-goTo',
     GOTO_STEP1_BUTTON         : '.JS--Button-gotoStep1',
+    // CONTINUE_SHOPPING_WRAPPER : '.JS--Wrapper-continueShopping',
 
   };
   var ajaxLoading = false;
@@ -532,6 +548,9 @@ theme.CartSection = (function () {
 
         .on('click change', selectors.CART_WRAPPER, this.preventInteraction.bind(this))
     ;
+    $(selectors.BODY).on(
+        'cart.updated', this.toggleGotoButton.bind(this)
+    );
 
     $(document).ajaxStart(function() {
       ajaxLoading = true;
@@ -555,6 +574,18 @@ theme.CartSection = (function () {
       }
     },
 
+    toggleGotoButton(e) {
+      e.preventDefault();
+      let $goto = $(selectors.GOTO_WRAPPER);
+      let $cartBody = $(selectors.CART_BODY);
+      let count = $cartBody.find(selectors.CART_ITEM).length;
+      if (count > 0) {
+        $goto.removeClass('d-none');
+      } else {
+        $goto.addClass('d-none');
+      }
+    },
+
     addGiftToCart: function(e) {
       e.preventDefault();
       if (ajaxLoading) return;
@@ -567,6 +598,7 @@ theme.CartSection = (function () {
 
       let $cartBody = $(selectors.CART_WRAPPER).find(selectors.CART_BODY);
       let url = $el.data('url');
+      let p = $el.data('productJson');
 
       $.ajax({
         url: url,
@@ -576,6 +608,20 @@ theme.CartSection = (function () {
         $cartBody.html(data);
         $(selectors.BODY).trigger('cart.updated', [1]);
 
+        gtag('event', 'add_to_cart', {
+          currency: 'HUF',
+          value: p.price.numericValue * 1,
+          items: [{
+            item_id: p.sku,
+            item_name: p.name,
+            affiliation: store.name,
+            currency: 'HUF',
+            item_brand: store.brand,
+            item_category: p.categories[0].name,
+            price: p.price.numericValue,
+            quantity: 1
+          }]
+        });
         setTimeout(function() {
           // notyf.success(AlertMessages.PRODUCT_ADDED);
           Notify.success(AlertMessages.PRODUCT_ADDED);
@@ -609,6 +655,24 @@ theme.CartSection = (function () {
       }).done(function(data) {
         $(selectors.CART_BODY).html(data);
         $(selectors.BODY).trigger('cart.updated', [count]);
+
+        // // Send 'add_to_cart' event to GA4
+        // // See more https://developers.google.com/tag-manager/ecommerce-ga4#measure_additions_or_removals_from_a_shopping_cart
+        // dataLayer.push({ ecommerce: null });
+        // dataLayer.push({
+        //   event: "remove_from_cart",
+        //   ecommerce: {
+        //     items: [{
+        //       item_name: productJson.name,
+        //       item_id: productJson.sku,
+        //       price: productJson.price.numericValue,
+        //       item_brand: store.brand,
+        //       item_category: productJson.categories[0].name,
+        //       index: 1,
+        //       quantity: -1*count
+        //     }]
+        //   }
+        // });
       }).fail(function(data) {
         Notify.error(AlertMessages.ERROR_AJAX_FAILED);
       }).always(function() {
@@ -710,23 +774,6 @@ theme.CartBadgeSection = (function () {
       $el.html(newCount);                 // update html content
       $el.data('itemsCount', newCount);   // update data-items-count content
       newCount ? $el.addClass(classNames.show) : $el.removeClass(classNames.show);
-
-      // let url = '/hu/cart/getItemsCount';
-      //
-      // $.ajax({
-      //   url: url,
-      //   method: 'GET',
-      //   context: this,
-      // }).done(function (count) {
-      //   $el.html(count);
-      //   count ? $el.addClass(classNames.show) : $el.removeClass(classNames.show);
-      // }).fail(function (jqXHR) {
-      //   // console.log(jqXHR);
-      //   // $el.append(jqXHR.responseText);
-      //   // theme.LoadingOverlay.hide($el);
-      //   // Notify.error(jqXHR.responseText);
-      // })
-      // ;
     },
 
   });
@@ -1135,7 +1182,7 @@ theme.CheckoutSection = (function () {
           $(selectors.REFRESH_RECIPIENT_LIST_BUTTON).trigger('click');
 
           $recipientBody.html(data);
-          $(selectors.RECIPIENT_MODAL).modal('hide');
+          // $(selectors.RECIPIENT_MODAL).modal('hide');
           theme.LoadingOverlay.hide($el);
         }).fail(function() {
           theme.LoadingOverlay.hide($el);
@@ -1251,11 +1298,7 @@ theme.CheckoutSection = (function () {
       $(selectors.BODY).trigger('checkout.summary.updated', [{
         shippingFee: $choiceWrapper.data('shippingFee')
       }]);
-
       errors.shipping = false;
-      // if ($wrapper.find(selectors.ALERT)) {
-      //   $wrapper.find(selectors.ALERT).hide();
-      // }
     },
 
     // Show an empty Sender form, triggered by 'Új számlázási cím hozáadása' button
@@ -1373,7 +1416,7 @@ theme.CheckoutSection = (function () {
         }).done(function(data) {
           $(selectors.REFRESH_SENDER_LIST_BUTTON).trigger('click');
           $senderForm.replaceWith(data);
-          $(selectors.SENDER_MODAL).modal('hide');
+          // $(selectors.SENDER_MODAL).modal('hide');
           theme.LoadingOverlay.hide($el);
         }).fail(function() {
           theme.LoadingOverlay.hide($el);

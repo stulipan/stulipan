@@ -62,7 +62,7 @@ class ProductApiController extends BaseController
     {
         $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
         if ($products) {
-            return $this->jsonObjNormalized(['products' => $products],200, ['groups' => 'productList']);
+            return $this->createJsonResponse(['products' => $products],200, ['groups' => 'productList']);
         } else {
             $errors['message'] = sprintf('Nem talált termékeket.');
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -96,7 +96,7 @@ class ProductApiController extends BaseController
 //            return new JsonResponse($json, 200, [], true);
 
             $data->setBackToList($this->generateUrl('product-list'));
-            return $this->jsonObjNormalized(['products' => [$data]], 200, ['groups' => 'productView']);
+            return $this->createJsonResponse(['products' => [$data]], 200, ['groups' => 'productView']);
             
         } else {
             $errors['message'] = sprintf('Nem talált ilyen terméket: id=%s', $id);
@@ -167,7 +167,7 @@ class ProductApiController extends BaseController
         }
     
         //CELSZERUBB csak a termeket visszaadni, es nem reloadolni a teljes oldalt
-        return $this->jsonObjNormalized(['products' => [$product]], 200, ['groups' => 'productView']);
+        return $this->createJsonResponse(['products' => [$product]], 200, ['groups' => 'productView']);
         
 //        // LEHET IGY, hogy visszaadja a termeket es legeneralja (reloadolja) a teljes oldalt:
 //        $response = $this->jsonNormalized(['products' => [$product]]);
@@ -227,7 +227,7 @@ class ProductApiController extends BaseController
                 $this->cacheManager->getBrowserPath($publicPath, 'product_medium')
             );
         }
-        return $this->jsonObjNormalized(['products' => [$product]],200, ['groups' => 'productView']);
+        return $this->createJsonResponse(['products' => [$product]],200, ['groups' => 'productView']);
     }
     
     /**

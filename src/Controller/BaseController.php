@@ -70,26 +70,13 @@ class BaseController extends AbstractController
      * @param int $statusCode
      * @return JsonResponse
      */
-    protected function jsonObjNormalized($data, $statusCode = 200, array $context = [])
+    protected function createJsonResponse($data, $statusCode = 200, array $context = [])
     {
-//        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-//        $objNormalizer = new ObjectNormalizer($classMetadataFactory,null,null, new PhpDocExtractor(),
-//            null,null,
-//            [
-//                ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
-//                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $content) {
-//                    return $object->getName();
-////                    if ($object instanceof ProductCategory) { return ['id' => $object->getId(), 'name' => $object->getName()]; }
-////                    return $object->getId();
-//                }
-//            ]);
-//        $serializer = new Serializer([$objNormalizer], [new JsonEncoder()]);
-//        $json = $serializer->serialize($data, 'json', $context);
-        $json = $this->createJsonObj($data, $statusCode, $context);
+        $json = $this->createJson($data, $context);
         return new JsonResponse($json, $statusCode, [], true);
     }
 
-    protected function createJsonObj($data, $statusCode = 200, array $context = [])
+    public function createJson($data, array $context = [])
     {
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $objNormalizer = new ObjectNormalizer($classMetadataFactory,null,null, new PhpDocExtractor(),
@@ -98,8 +85,6 @@ class BaseController extends AbstractController
                 ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
                 AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $content) {
                     return $object->getName();
-//                    if ($object instanceof ProductCategory) { return ['id' => $object->getId(), 'name' => $object->getName()]; }
-//                    return $object->getId();
                 }
             ]);
         $serializer = new Serializer([$objNormalizer], [new JsonEncoder()]);

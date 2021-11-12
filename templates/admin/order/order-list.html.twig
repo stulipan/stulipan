@@ -34,7 +34,7 @@
                                         <i class="fas fa-search"></i>
                                     </div>
                                 </div>
-                                {{ form_widget(filterFormSidebar.searchTerm, {'attr': {'class': 'form-control pl-addon-sm' }}) }}
+                                {{ form_widget(filterFormSidebar.searchTerm, {'attr': {'class': 'pl-addon-sm' }}) }}
                             </div>
                             <div class="form-group">
                                 <label>{{ 'order.filter.filter-by-date'|trans }}</label>
@@ -53,19 +53,26 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>{{ 'order.filter.filter-by-order-status'|trans }}</label>
-                                <div class="form-control--Wrapper form-control--Wrapper-bg flex-grow-1">
-                                    {{ form_widget(filterFormSidebar.orderStatus, {'attr': {'class': 'form-control' }}) }}
+                                <label>{{ 'order.filter.filter-by-payment-status'|trans }}</label>
+                                <div class="">
+                                    {{ form_widget(filterFormSidebar.paymentStatus, {'attr': {'class': '' }}) }}
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>{{ 'order.filter.filter-by-payment-status'|trans }}</label>
-                                <div class="form-control--Wrapper form-control--Wrapper-bg flex-grow-1">
-                                    {{ form_widget(filterFormSidebar.paymentStatus, {'attr': {'class': 'form-control' }}) }}
+                                <label>{{ 'order.filter.filter-by-order-status'|trans }}</label>
+                                <div class="">
+                                    {{ form_widget(filterFormSidebar.orderStatus, {'attr': {'class': '' }}) }}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label>Törölt rendelések</label>
+                                <div class="">
+                                    {{ form_widget(filterFormSidebar.isCanceled, {'attr': {'class': ''}, 'placeholder': 'Válassz...' }) }}
+                                </div>
+{#                                {{ form_widget(filterFormSidebar.isCanceled, {'label_attr': {'class': 'checkbox-custom'}, 'label': 'Törölt rendeléseket is beleértve'}) }}#}
+                            </div>
 {#                            <div class="form-group">#}
-{#                                <div class="form-control--WrapperX input-group-appendX flex-lg-grow-0X">#}
+{#                                <div class="">#}
 {#                                    <input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary px-4" formnovalidate>#}
 {#                                </div>#}
 {#                            </div>#}
@@ -119,8 +126,8 @@
     </div>
     <div class="card-body pb-0">
         {{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
-        <div class="w-100 d-flex flex-columnX flex-md-row justify-content-between">
-            <div class="field-group align-middle flex-columnX flex-md-row mr-2">
+        <div class="w-100 d-flex flex-md-row justify-content-between">
+            <div class="field-group align-middle flex-md-row mr-2">
                 <div class="field-item flex-grow-3">
                     <div class="field-prepend">
                         <div class="field-addon-prepend w-addon-sm">
@@ -143,18 +150,18 @@
                     </div>
                 </div>
 
-                <div class="field-item form-control--WrapperX form-control--Wrapper-bgX d-none d-md-flex flex-grow-1">
-                    {{ form_widget(filterForm.orderStatus, {'attr': {'class': 'form-control' }}) }}
-                </div>
-                <div class="field-item form-control--WrapperX form-control--Wrapper-bgX d-none d-md-flex flex-grow-1">
+                <div class="field-item d-none d-md-flex flex-grow-1">
                     {{ form_widget(filterForm.paymentStatus, {'attr': {'class': 'form-control' }}) }}
                 </div>
-                <div class="field-item form-control--WrapperX form-control--Wrapper-bgX flex-grow-1">
+                <div class="field-item d-none d-md-flex flex-grow-1">
+                    {{ form_widget(filterForm.orderStatus, {'attr': {'class': 'form-control' }}) }}
+                </div>
+                <div class="field-item flex-grow-1">
                     <a class="btn btn-secondary w-100 text-nowrap" href="#" data-toggle="sidebar" data-target="#sidebar--Filters">Több szűrő</a>
                 </div>
             </div>
-            <div class="form-control--WrapperX input-group-appendX flex-lg-grow-0X position-relative">
-                <input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary w-100" formnovalidate data-toggle="loading-overlay" aria-hidden="true">
+            <div class="position-relative">
+                <input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary w-100">
                 {#                    <button onclick="return false" role="button" class="btn btn-secondary px-3" data-toggle="loading-overlay" aria-hidden="true">{{ 'generic.ok'|trans }}</button>#}
             </div>
         </div>

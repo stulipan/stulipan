@@ -190,7 +190,7 @@
 
                                     <div class="product-part">
                                         <div class="">
-                                            <button type="submit" class="JS--Button-addToCart btn btn-lg btn-success btn-block" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
+                                            <button type="submit" class="JS--Button-addToCart btn btn-lg btn-success btn-block" {% if product.isPubliclyAvailable == false %}disabled{% endif %} data-product-json="{{ product.json }}">
                                             <span class="loading-spinner-invisible">
                                                 <svg class="icon addtocart">
                                                     <use xlink:href="#bag"> </use>
@@ -629,5 +629,10 @@
                 $recommendedProducts.trigger('prev.owl.carousel');
             });
         });
+    </script>
+    <script>
+        {% if productJson is defined %}
+        var productJson = {{ productJson|raw }};
+        {% endif %}
     </script>
 {% endblock %}

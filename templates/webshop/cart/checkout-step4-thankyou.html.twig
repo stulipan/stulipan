@@ -8,7 +8,7 @@
 
 {% block trackingCodes %}
     {% if isConversionTracked == false %}
-        {% include 'webshop/widgets/tracking-codes.html.twig' with { 'isPurchase': true } %}
+        {% include 'webshop/widgets/tracking-codes.html.twig' with { 'eventPurchase': true } %}
     {% endif %}
 {% endblock %}
 

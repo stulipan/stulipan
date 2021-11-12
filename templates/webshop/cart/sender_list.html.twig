@@ -4,8 +4,8 @@
     {% if senders is defined and senders is not empty %}
         {% for sender in senders %}
             <div class="checkout-sender-item mt-4">
-                <div class="JS--item h-100">
-                    <div class="d-flex flex-column flex-sm-row justify-content-between h-100">
+                <div class="JS--item h-100X">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between h-100X">
                         <div class="">
                             <span class="address-title mb-1">{{ sender.fullname }}</span> {% if selectedSender is defined and selectedSender == sender.id %}<span class="badge badge-warning font-italic text-uppercase">{{ 'checkout.sender.last-used'|trans }}</span>{% endif %}<br>
                             {% if sender.company is defined and sender.company %}

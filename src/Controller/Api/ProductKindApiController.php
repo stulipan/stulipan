@@ -26,7 +26,7 @@ class ProductKindApiController extends BaseController
     {
         $data = $this->getDoctrine()->getRepository(ProductKind::class)->findAll();
         if ($data) {
-            return $this->jsonObjNormalized(['kinds' => $this->toArray($data)], 200, ['groups' => 'productView']);
+            return $this->createJsonResponse(['kinds' => $this->toArray($data)], 200, ['groups' => 'productView']);
         } else {
             $errors['message'] = sprintf('Nem talált terméktípust.');
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -41,7 +41,7 @@ class ProductKindApiController extends BaseController
         $data = $this->getDoctrine()->getRepository(ProductAttribute::class)->findBy(['kind' => $kind], ['ordering' => 'ASC']);
         if ($data) {
 //            dd($data);
-            return $this->jsonObjNormalized(['attributes' => $this->toArray($data)], 200, ['groups' => 'productView']);
+            return $this->createJsonResponse(['attributes' => $this->toArray($data)], 200, ['groups' => 'productView']);
         } else {
             $errors['message'] = sprintf('Nem talált termékváltozatot.');
             return $this->jsonNormalized(['errors' => [$errors]], 422);

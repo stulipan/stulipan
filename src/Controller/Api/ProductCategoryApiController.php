@@ -89,7 +89,7 @@ class ProductCategoryApiController extends BaseController
         $category = $this->getDoctrine()->getRepository(ProductCategory::class)->find($id);
         $data = $category->getProducts()->getValues();
         if ($data) {
-            return $this->jsonObjNormalized(['products' => $this->toArray($data)], 200, ['groups' => 'productList']);
+            return $this->createJsonResponse(['products' => $this->toArray($data)], 200, ['groups' => 'productList']);
         } else {
             $errors['message'] = sprintf('Nem talált ilyen kategóriát: id=%s', $id);
             return $this->jsonNormalized(['errors' => [$errors]], 422);

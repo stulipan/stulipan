@@ -20,6 +20,8 @@ class ImageEntity implements JsonSerializable
     const PRODUCT_IMAGE = 'product';
     const STORE_IMAGE = 'store';
 
+    use TimestampableTrait;
+
     /**
      * @var int
      * @Groups({

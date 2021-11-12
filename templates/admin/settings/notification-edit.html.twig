@@ -27,6 +27,33 @@
 {#	{% include 'admin/widgets/tinymce-content-field.html.twig' %}#}
 {% endblock %}
 
+{% block modal %}
+<div class="modal fade" id="modal--previewEmail" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="modalLabel">{{ 'generic.preview'|trans }}</h3>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="modal-body-content">
+					{{ emailHtml|raw }}
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+					<button type="submit" class="JS--Button-sendShippingConfirmation btn btn-primary">
+						<span class="loading-spinner-invisible">{{ 'generic.send'|trans }}</span>
+						<span class="loading-spinner" role="status"></span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
 {% block headerActionsWrapper %}
 	{% if form.vars.data.id is defined and form.vars.data.id is not null %}
 	<nav class="w-100 adaptive-tabs adaptive-tabs-right">
@@ -44,9 +71,11 @@
 {#				{% endif %}#}
 {#				<a class="nav-link" href="{{ path('site-page-show', query) }}" target="_blank"><i class="fas fa-external-link-alt mr-2"></i>{% if form.vars.data.enabled is same as true %}{{ 'generic.view'|trans }}{% else %}{{ 'generic.preview'|trans }}{% endif %}</a>#}
 			</li>
-{#			<li class="nav-item adaptive-item">#}
-{#				<a class="nav-link" href="{{ path('cms-page-duplicate', {'id': form.vars.data.id}) }}"><i class="far fa-clone mr-2"></i>{{ 'page.duplicate-page'|trans }}</a>#}
-{#			</li>#}
+			<li class="nav-item adaptive-item">
+				<a class="nav-link" href="#" data-toggle="modal" data-target="#modal--previewEmail" data-backdrop="static">
+					<i class="far fa-clone mr-2"></i>{{ 'generic.preview'|trans }}
+				</a>
+			</li>
 		</ul>
 		<ul class="adaptive-template">
 			<li class="nav-item adaptive-item adaptive-more">

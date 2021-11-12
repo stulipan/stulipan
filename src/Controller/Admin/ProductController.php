@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\BaseController;
 use App\Entity\Product\Product;
 use App\Entity\Price;
 use App\Entity\Product\ProductBadge;
@@ -41,7 +42,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @Route("/admin")
  */
-class ProductController extends AbstractController
+class ProductController extends BaseController //extends AbstractController
 {
     
     //////////////////////////////////////////////////////////////////////////////////////
@@ -284,10 +285,10 @@ class ProductController extends AbstractController
 //            'form' => $form->createView(),
             'product' => $product,
             'productJson' => $this->createJson($product, ['groups' => 'productView']),
-            'statusesJson' => $this->createJsonNormalized($statuses),
-            'categoriesJson' => $this->createJsonNormalized($categories),
-            'badgesJson' => $this->createJsonNormalized($badges),
-            'salesChannelsJson' => $this->createJsonNormalized($salesChannels),
+            'statusesJson' => $this->createJson($statuses, ['groups' => 'productView']),
+            'categoriesJson' => $this->createJson($categories, ['groups' => 'productView']),
+            'badgesJson' => $this->createJson($badges, ['groups' => 'productView']),
+            'salesChannelsJson' => $this->createJson($salesChannels, ['groups' => 'productView']),
             'kindsJson' => $this->createJson($kinds, ['groups' => 'productView']),
         ]);
     }
@@ -311,8 +312,6 @@ class ProductController extends AbstractController
                 $newFilename = $fileUploader->uploadFile($file, null); //2nd param = null, else deletes prev image
                 $product->setImage($newFilename);
             }
-//            dd($product);
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();  // PriceVersioning::onFlush() event is triggered, see service.yaml
@@ -335,10 +334,15 @@ class ProductController extends AbstractController
 //            'form' => $form->createView(),
             'product' => $product,
             'productJson' => $this->createJson($product, ['groups' => 'productView']),
-            'statusesJson' => $this->createJsonNormalized($statuses),
-            'categoriesJson' => $this->createJsonNormalized($categories),
-            'badgesJson' => $this->createJsonNormalized($badges),
-            'salesChannelsJson' => $this->createJsonNormalized($salesChannels),
+//            'statusesJson' => $this->createJsonNormalized($statuses),
+//            'categoriesJson' => $this->createJsonNormalized($categories),
+//            'badgesJson' => $this->createJsonNormalized($badges),
+//            'salesChannelsJson' => $this->createJsonNormalized($salesChannels),
+//            'kindsJson' => $this->createJson($kinds, ['groups' => 'productView']),
+            'statusesJson' => $this->createJson($statuses, ['groups' => 'productView']),
+            'categoriesJson' => $this->createJson($categories, ['groups' => 'productView']),
+            'badgesJson' => $this->createJson($badges, ['groups' => 'productView']),
+            'salesChannelsJson' => $this->createJson($salesChannels, ['groups' => 'productView']),
             'kindsJson' => $this->createJson($kinds, ['groups' => 'productView']),
         ]);
     }
@@ -401,41 +405,23 @@ class ProductController extends AbstractController
         return $response;
     }
 
-    private function createJson($data, array $context = [])
-    {
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $objNormalizer = new ObjectNormalizer($classMetadataFactory,null,null, new PhpDocExtractor(),
-            null,null,
-            [
-                ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
-                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $content) {
-                    return $object->getName();
-//                    if ($object instanceof ProductCategory) { return ['id' => $object->getId(), 'name' => $object->getName()]; }
-//                    return $object->getId();
-                }
-            ]);
-        $serializer = new Serializer([$objNormalizer], [new JsonEncoder()]);
-        $json = $serializer->serialize($data, 'json', $context);
-        return $json;
-    }
-
-    protected function createJsonNormalized($data, array $context = [])
-    {
-        $jsonNormalizer = new JsonSerializableNormalizer(
-            null,
-            null,
-            array(JsonSerializableNormalizer::CIRCULAR_REFERENCE_HANDLER=>function ($object) {
-                if ($object instanceof ProductCategory) {
-                    return ['id' => $object->getId(), 'name' => $object->getName()];
-                }
-                return $object->getId();
-
-            })
-        );
-        $serializer = new Serializer([$jsonNormalizer], [new JsonEncoder()]);
-        $json = $serializer->serialize($data, 'json', $context);
-        return $json;
-    }
+//    protected function createJsonNormalized($data, array $context = [])
+//    {
+//        $jsonNormalizer = new JsonSerializableNormalizer(
+//            null,
+//            null,
+//            array(JsonSerializableNormalizer::CIRCULAR_REFERENCE_HANDLER=>function ($object) {
+//                if ($object instanceof ProductCategory) {
+//                    return ['id' => $object->getId(), 'name' => $object->getName()];
+//                }
+//                return $object->getId();
+//
+//            })
+//        );
+//        $serializer = new Serializer([$jsonNormalizer], [new JsonEncoder()]);
+//        $json = $serializer->serialize($data, 'json', $context);
+//        return $json;
+//    }
     
 //    /**
 //     * @Route("/product/delete/{id}", name="product-delete", methods={"GET"})

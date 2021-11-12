@@ -12,7 +12,6 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -24,16 +23,14 @@ class EmailSender
     private const ADMIN_EMAIL_ADDRESS = 'rafinadekor@gmail.com';
 
     private $em;
-    private $translator;
     private $mailer;
     private $appExtension;
     private $storeSettings;
 
-    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator,
-                                MailerInterface $mailer, AppExtension $appExtension, StoreSettings $storeSettings)
+    public function __construct(EntityManagerInterface $entityManager, MailerInterface $mailer,
+                                AppExtension $appExtension, StoreSettings $storeSettings)
     {
         $this->em = $entityManager;
-        $this->translator = $translator;
         $this->mailer = $mailer;
         $this->appExtension = $appExtension;
         $this->storeSettings = $storeSettings;
@@ -64,17 +61,25 @@ class EmailSender
         }
 
         $loader = new ArrayLoader([
+            'subject' => $template->getSubject(),
             $templateSlug => $template->getBody(),
         ]);
         $twig = new Environment($loader);
         $twig->addExtension($this->appExtension);
 
 //        $subject = str_replace('{{orderNumber}}', '#'.$order->getNumber(), $template->getSubject());
-        $subject = $this->translator->trans($template->getSubject(), [
-            '{{orderNumber}}' => '#'.$order->getNumber(),
-            '{{storeUrl}}' => $this->storeSettings->get('store.url'),
-            '{{totalAmount}}' => $this->appExtension->formatMoney($order->getSummary()->getTotalAmountToPay()),
+//        $subject = $this->translator->trans($template->getSubject(), [
+//            '{{orderNumber}}' => '#'.$order->getNumber(),
+//            '{{storeUrl}}' => $this->storeSettings->get('store.url'),
+//            '{{totalAmount}}' => $this->appExtension->formatMoney($order->getSummary()->getTotalAmountToPay()),
+//        ]);
+        $subject = $twig->render('subject', [
+            'orderNumber' => '#'.$order->getNumber(),
+            'storeUrl' => $this->storeSettings->get('store.url'),
+            'totalAmount' => $this->appExtension->formatMoney($order->getSummary()->getTotalAmountToPay()),
         ]);
+
+
         $html = $twig->render($templateSlug, [
             'subject' => $subject,
             'order' => $order,

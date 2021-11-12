@@ -357,7 +357,6 @@ class CartController extends AbstractController
             $deliveryDate = $form->get('deliveryDate')->get('deliveryDate')->getData();
             $orderBuilder->setDeliveryDate($deliveryDate ? $deliveryDate : null, null);
 
-            $orderBuilder = $this->orderBuilder;
             $clientDetails = new ClientDetails($request->getClientIp(), $request->headers->get('user-agent'), $request->headers->get('accept-language'));
             $orderBuilder->setClientDetails($clientDetails);
         }

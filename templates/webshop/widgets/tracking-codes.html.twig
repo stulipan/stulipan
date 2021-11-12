@@ -6,6 +6,8 @@
         })(window,document,'script','dataLayer','GTM-MXDP984');</script>
     <!-- End Google Tag Manager -->
 
+    {#  This comes from GA4 > Data stream >  #}
+    {#  More info here: https://support.google.com/analytics/answer/9310895?hl=en&utm_id=ad#zippy=%2Cin-this-article  #}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K0TW2891BW"></script>
     <script>
@@ -13,34 +15,12 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-K0TW2891BW');
+        gtag('config', 'AW-10803246153');
 
-        {% if isInitiateCheckout is defined and isInitiateCheckout is not empty %}
-        gtag('event', 'begin_checkout', {
-            affiliation: '{{ storeName }}',
+        {% if eventViewCart is defined and eventViewCart is not empty %}
+        gtag('event', 'view_cart', {
             currency: 'HUF',
-            items: [
-                {%- for item in order.items -%}
-                {
-                    item_id: '{{ item.product.sku }}',
-                    item_name: '{{ item.product.name }}',
-                    item_brand: '{{ storeBrand }}',
-                    item_category: '{{ item.product.categories|first }}',
-                    price: {{ item.unitPrice }},
-                    currency: 'HUF',
-                    quantity: {{ item.quantity }}
-                }
-                {%- if loop.last == false -%}
-                    ,
-                {%- endif -%}
-                {%- endfor -%}
-            ],
-            value: {{ order.summary.totalAmountToPay }}
-        });
-        {% endif %}
-        {% if isPurchase is defined and isPurchase is not empty %}
-        gtag('event', 'purchase', {
-            affiliation: '{{ storeName }}',
-            currency: 'HUF',
+            value: {{ order.summary.totalAmountToPay }},
             items: [
                 {%- for item in order.items -%}
                 {
@@ -57,11 +37,64 @@
                 {%- endif -%}
                 {%- endfor -%}
             ],
-            transaction_id: '{{ order.number }}',
-            shipping: 0,
+        });
+        {% endif %}
+        {% if eventInitiateCheckout is defined and eventInitiateCheckout is not empty %}
+        gtag('event', 'begin_checkout', {
+            affiliation: '{{ storeName }}',
+            currency: 'HUF',
             value: {{ order.summary.totalAmountToPay }},
-            tax: 0
-        })
+            items: [
+                {%- for item in order.items -%}
+                {
+                    item_id: '{{ item.product.sku }}',
+                    item_name: '{{ item.product.name }}',
+                    item_brand: '{{ storeBrand }}',
+                    item_category: '{{ item.product.categories|first }}',
+                    price: {{ item.unitPrice }},
+                    currency: 'HUF',
+                    quantity: {{ item.quantity }}
+                }
+                {%- if loop.last == false -%}
+                    ,
+                {%- endif -%}
+                {%- endfor -%}
+            ],
+        });
+        {% endif %}
+        {% if eventPurchase is defined and eventPurchase is not empty %}
+        {# AW generated code:  #}
+        gtag('event', 'conversion', {
+            'send_to': 'AW-10803246153/-tYtCO-nzoIDEMnosZ8o',
+            'value': {{ order.summary.totalAmountToPay }},
+            'currency': 'HUF',
+            'transaction_id': '{{ order.number }}',
+        });
+
+        gtag('event', 'purchase', {
+            affiliation: '{{ storeName }}',
+            currency: 'HUF',
+            transaction_id: '{{ order.number }}',
+            value: {{ order.summary.totalAmountToPay }},
+            shipping: {{ order.shippingFeeToPay + order.paymentFeeToPay }},
+            tax: 0,
+            items: [
+                {%- for item in order.items -%}
+                {
+                    item_id: '{{ item.product.sku }}',
+                    item_name: '{{ item.product.name }}',
+                    item_brand: '{{ storeBrand }}',
+                    item_category: '{{ item.product.categories|first }}',
+                    price: {{ item.unitPrice }},
+                    currency: 'HUF',
+                    quantity: {{ item.quantity }}
+                }
+                {%- if loop.last == false -%}
+                ,
+                {%- endif -%}
+                {%- endfor -%}
+            ],
+        });
         {% endif %}
 
     </script>
@@ -78,10 +111,10 @@
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '591301158497864');
             fbq('track', 'PageView');
-            {% if isPurchase is defined and isPurchase is not empty %}
+            {% if eventPurchase is defined and eventPurchase is not empty %}
             fbq('track', 'Purchase', {value: {{ order.summary.totalAmountToPay }}, currency: 'HUF'});
             {% endif %}
-            {% if isInitiateCheckout is defined and isInitiateCheckout is not empty %}
+            {% if eventInitiateCheckout is defined and eventInitiateCheckout is not empty %}
             fbq('track', 'InitiateCheckout', { num_items: {{ order.itemsCount }}, value: {{ order.summary.totalAmountToPay }}, currency: 'HUF' });
             {% endif %}
 

@@ -101,6 +101,7 @@
                             response => {
                                 Notify.success('A módosítások sikeresen elmentve.', 'success');
                                 this.productInForm = response.data.products[0];  /// ITT CELSZERU BETOLTENI A VISSZAJOVO objektumot
+                                this.orderImages(this.productInForm.images);
                                 this.formIsPosting = false;
                             },
                             response => {
@@ -143,20 +144,25 @@
                 }
             },
             cancelForm () {
-//                this.productInForm = initialData().productInForm
                 this.resetForm = true
             },
             resetErrosInForm () {
                 this.formErrors = initialData().formErrors;
+            },
+            orderImages(images) {
+                images.sort(function(a, b) {
+                    return a.ordering - b.ordering;
+                });
             },
         },
         created () {
             this.productInForm = this.product;
 
             if (this.productInForm.id !== null) {
-              this.productInForm.images.sort(function (a, b) {
-                return a.ordering - b.ordering
-              });
+                this.orderImages(this.productInForm.images);
+              // this.productInForm.images.sort(function (a, b) {
+              //   return a.ordering - b.ordering
+              // });
               this.productKindId = this.productInForm.kind.id;
             }
 

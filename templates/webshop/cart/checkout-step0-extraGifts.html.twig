@@ -4,9 +4,12 @@
     {{ 'cart.cart'|trans }} | {{ parent() }}
 {%- endblock -%}
 
-
 {% block stylesheets %}
     {{ parent() }}
+{% endblock %}
+
+{% block trackingCodes %}
+    {% include 'webshop/widgets/tracking-codes.html.twig' with { 'eventViewCart': true } %}
 {% endblock %}
 
 {% block underNavbar %}
@@ -38,15 +41,13 @@
                                                     'showRemove': true,
                                                     'showSummary': true,
                                                 } %}
-                                                {% if order.items is defined and order.items is empty %}
-                                                    <div class="mt-4 mb-6 text-center">
-                                                        <a href="{{ path('site-product-listall') }}" class="btn btn-primary">{{ 'cart.continue-shopping'|trans }}</a>
-                                                    </div>
-                                                {% endif %}
+{#                                                <div class="JS--Wrapper-continueShopping mt-4 mb-6 text-center {% if order.items is not empty %}d-none{% endif %}">#}
+{#                                                    <a href="{{ path('site-product-listall') }}" class="btn btn-primary">{{ 'cart.continue-shopping'|trans }}</a>#}
+{#                                                </div>#}
                                             </div>
                                         </div>
-                                        {% if order.items is not empty %}
-                                            <div id="goto_checkout" class="col-md-12X col-lg-10X mx-auto mt-4 mt-md-5 mb-4XXmb-md-5">
+{#                                        {% if order.items is not empty %}#}
+                                            <div id="goto_checkout" class="JS--Wrapper-goTo mt-4 mt-md-5 {% if order.items is empty %}d-none{% endif %}">
                                                 <div class="row">
                                                     <div class="col-lg-12 mb-4">
                                                         <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
@@ -59,7 +60,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        {% endif %}
+{#                                        {% endif %}#}
                                         {% if checkoutSettings.get('cart.gift-upsell') %}
                                         <div class="mt-4 mt-md-5">
                                             <div class="checkout-block-header">
@@ -161,8 +162,8 @@
                             {% endif %}
                         </div>
 
-                        {% if order.items is not empty %}
-                        <div id="goto_checkout" class="col-md-12 col-lg-10 mx-auto mt-5 mb-4 mb-md-5">
+
+                        <div id="goto_checkout" class="JS--Wrapper-goTo col-md-12 col-lg-10 mx-auto mt-5 mb-4 mb-md-5 {% if order.items is empty %}d-none{% endif %}">
                             <div class="row">
                                 <div class="col-lg-12 mb-4">
                                     <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
@@ -175,7 +176,6 @@
                                 </div>
                             </div>
                         </div>
-                        {% endif %}
                 </div>
 			</div>
 	</div>

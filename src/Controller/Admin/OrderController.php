@@ -113,6 +113,7 @@ class OrderController extends AbstractController
         $searchTerm = $request->query->get('searchTerm');
         $paymentStatus = $request->query->get('paymentStatus');
         $orderStatus = $request->query->get('orderStatus');
+        $isCanceled = $request->query->get('isCanceled');
         $page = $request->query->get('page') ? $request->query->get('page') : $page;
 //        dd($request->attributes->get('_route_params'));
 //        dd($request->query->all());
@@ -141,6 +142,12 @@ class OrderController extends AbstractController
             $urlParams['paymentStatus'] = $paymentStatus;
             $data['paymentStatus'] = $em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => $paymentStatus]);
         }
+        if (isset($isCanceled)) {
+            $filterTags['isCanceled'] = $isCanceled == 'yes' ? 'Törölt rendelések': 'Nyitott rendelések';
+            $urlParams['isCanceled'] = $isCanceled;
+            $data['isCanceled'] = $isCanceled;
+        }
+
         $filterForm = $this->createForm(OrderFilterType::class, $data);
         $filterFormSidebar = $this->createForm(OrderFilterType::class, $data);
 
@@ -155,6 +162,7 @@ class OrderController extends AbstractController
                 'searchTerm' => isset($shortlist['searchTerm']) ? $shortlist['searchTerm'] : null,
                 'orderStatus' => isset($shortlist['orderStatus']) ? $shortlist['orderStatus'] : null,
                 'paymentStatus' => isset($shortlist['paymentStatus']) ? $shortlist['paymentStatus'] : null,
+                'isCanceled' => isset($shortlist['isCanceled']) ? $shortlist['isCanceled'] : null,
             ]);
         }
 
@@ -201,6 +209,7 @@ class OrderController extends AbstractController
             'searchTerm' => $searchTerm,
             'orderStatus' => $orderStatus,
             'paymentStatus' => $paymentStatus,
+            'isCanceled' => $isCanceled,
         ]);
 
         $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
@@ -384,6 +393,7 @@ class OrderController extends AbstractController
             $searchTerm = null;
             $orderStatus = null;
             $paymentStatus = null;
+            $isCanceled = null;
 
             if ($filters['dateRange']) {
                 $dateRange = $filters['dateRange'];
@@ -397,12 +407,16 @@ class OrderController extends AbstractController
             if ($filters['paymentStatus']) {
                 $paymentStatus = $this->getDoctrine()->getRepository(PaymentStatus::class)->find($filters['paymentStatus'])->getShortcode();
             }
-//            dd($orderStatus);
+            if (isset($filters['isCanceled'])) {
+                $isCanceled = $filters['isCanceled'];
+            }
+
             return $this->redirectToRoute('order-list-table',[
                 'dateRange' => $dateRange,
                 'searchTerm' => $searchTerm,
                 'orderStatus' => $orderStatus,
                 'paymentStatus' => $paymentStatus,
+                'isCanceled' => $isCanceled,
             ]);
         }
         return $this->redirectToRoute('order-list-table');

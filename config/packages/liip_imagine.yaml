@@ -99,7 +99,8 @@ liip_imagine:
                 thumbnail:
 #                    size:          [300, 400]
 #                    size:          [400, 533]
-                    size:          [510, 680]
+#                    size:          [510, 680]
+                    size:          [576, 768]
                     mode:          outbound
                     allow_upscale: true
 

@@ -53,7 +53,7 @@ class Product //implements \JsonSerializable
     
     /**
      * @var string|null
-     * @Groups({"productView", "productList",
+     * @Groups({"productView", "productList", "eventAddToCart",
      *     "orderView"})
      *
      * @Assert\NotBlank(message="product.name-is-missing")
@@ -63,7 +63,7 @@ class Product //implements \JsonSerializable
 
     /**
      * @var string
-     * @Groups({"productView", "productList",
+     * @Groups({"productView", "productList", "eventAddToCart",
      *     "orderView"})
      *
      * @ORM\Column(name="slug", type="string", length=255, nullable=false, unique=true)
@@ -84,7 +84,7 @@ class Product //implements \JsonSerializable
     
     /**
      * @var string|null
-     * @Groups({"productView", "productList",
+     * @Groups({"productView", "productList", "eventAddToCart",
      *     "orderView"})
      *
      * @Assert\NotBlank(message="product.sku-is-missing")
@@ -102,7 +102,7 @@ class Product //implements \JsonSerializable
 
     /**
      * @var Price
-     * @Groups({"productView", "productList"})
+     * @Groups({"productView", "productList", "eventAddToCart"})
      *
      * @ORM\OneToOne(targetEntity="App\Entity\Price", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="price_id", referencedColumnName="id", nullable=false)
@@ -198,7 +198,7 @@ class Product //implements \JsonSerializable
      * ()
      *
      * @var ProductCategory[]|ArrayCollection|null
-     * @Groups({"productView"})
+     * @Groups({"productView", "eventAddToCart"})
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Product\ProductCategory", inversedBy="products")
      * @ORM\JoinTable(name="product_selected_categories",
@@ -305,6 +305,15 @@ class Product //implements \JsonSerializable
      * @Groups({"productView"})
      */
     private $backToList;
+
+    /**
+     * @var string|null
+     * @Groups({
+     *     "productView",
+     *     "productList",
+     * })
+     */
+    private $json;
 
     public function __construct()
     {
@@ -921,5 +930,21 @@ class Product //implements \JsonSerializable
     public function getBackToList()
     {
         return $this->backToList;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJson(): ?string
+    {
+        return $this->json;
+    }
+
+    /**
+     * @param string|null $json
+     */
+    public function setJson(?string $json): void
+    {
+        $this->json = $json;
     }
 }

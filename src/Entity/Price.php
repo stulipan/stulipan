@@ -47,8 +47,13 @@ class Price //implements \JsonSerializable
 
     /**
      * @var float
-     * @Groups({"productView", "productList",
-     *     "geoPriceView", "geoPriceList"})
+     * @Groups({
+     *     "productView",
+     *     "productList",
+     *     "eventAddToCart",
+     *     "geoPriceView",
+     *     "geoPriceList",
+     * })
      *
      * @ORM\Column(name="value", type="decimal", precision=10, scale=2, nullable=false)
      * @Assert\NotBlank()

@@ -59,6 +59,54 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!--    KEPEK     -->
+                        <div class="card mb-20px">
+                            <div class="card-body">
+                                <div class="h5 mb-0">Képek</div>
+                                <div v-if="product && product.images" class="mt-3">
+                                    <div class="form-row__vertical-row">
+                                        <draggable v-model="product.images" group="people" @sort="onImageSort" @start="drag=true" @end="drag=false" class="form-row vertical-row">
+                                            <div v-for="item in product.images" :key="item.id" class="col-md-3 col-6">
+                                                <div class="vertical-col">
+                                                    <div class="product-image">
+                                                        <img v-if="item.image" :src="item.image.file" class="img-fluid" width="400" height="533" />
+                                                        <img v-else :src="item.thumbnailUrl" class="img-fluid" width="400" height="533" />
+                                                        
+                                                        <div v-if="item.ordering === '0' || item.ordering === 0" class="card-img-overlay d-flex align-items-end p-0">
+                                                            <div class="text-center w-100 overlay--productCover">
+                                                                <i class="fas fa-camera"></i> Borítókép
+                                                            </div>
+                                                        </div>
+                                                        <div class="overlay--removeImage">
+                                                            <a @click.prevent="onRemoveImage(item)" href="#" class="btn btn-sm btn-secondary" title="Töröl">
+                                                                <i class="far fa-trash-alt mr-1"></i> Töröl
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div slot="footer" class="col-md-3 col-6">
+                                                <div class="vertical-col h-100">
+                                                    <product-image-upload class="h-100 d-flex align-items-center"
+                                                                          @success="onImageUploadSuccess"
+                                                                          @error="onImageUploadError"
+                                                    >
+                                                    </product-image-upload>
+                                                </div>
+                                            </div>
+                                        </draggable>
+
+                                    </div>
+                                </div>
+                                <!--                                :images=productImages-->
+                                <!--                                <product-image-upload class="w-100 mt-3"-->
+                                <!--                                                      @success="onImageUploadSuccess"-->
+                                <!--                                                      @error="onImageUploadError"-->
+                                <!--                                >-->
+                                <!--                                </product-image-upload>-->
+                            </div>
+                        </div>
                         
                         <!--    VARIANTS___BLOCK     -->
                         <div class="card mb-20px">
@@ -148,43 +196,6 @@
                                         </template>
                                     </template>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!--    KEPEK     -->
-                        <div class="card mb-20px">
-                            <div class="card-body">
-                                <div class="h5 mb-0">Képek</div>
-                                <div v-if="product && product.images" class="mt-3">
-                                    <div class="row vertical-row">
-                                        <div v-for="item in product.images" :key="item.id" class="col-md-4 col-6">
-                                            <div class="vertical-col pb-3">
-                                                <div class="product-image">
-                                                    <div v-if="item.image" :style="{ backgroundImage: 'url(' + item.image.file + ')' }" style="background: center center no-repeat;background-size: cover; height: 200px;" class="w-100"></div>
-                                                    <div v-else :style="{ backgroundImage: 'url(' + item.thumbnailUrl + ')' }" style="background: center center no-repeat;background-size: cover; height: 200px;" class="w-100"></div>
-                                                    <div v-if="item.ordering === '0' || item.ordering === 0" class="card-img-overlay d-flex align-items-end p-0">
-                                                        <div class="text-center w-100 overlay--productCover">
-                                                            <i class="fas fa-camera"></i> Borítókép
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="pt-2 text-center">
-                                                    <p class="productList--name mb-1">
-                                                        <a @click.prevent="onRemoveImage(item)" href="#" class="btn btn-sm btn-secondary" title="Töröl">
-                                                            <i class="far fa-trash-alt mr-1"></i> Töröl
-                                                        </a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-<!--                                :images=productImages-->
-                                <product-image-upload class="w-100 mt-3"
-                                                      @success="onImageUploadSuccess"
-                                                      @error="onImageUploadError"
-                                >
-                                </product-image-upload>
                             </div>
                         </div>
                         
@@ -343,6 +354,7 @@
     import ProductImageUpload from "./../_components/ProductImageUpload";
     import VariantList from "./VariantList";
     import Notify from "../../../js/alerts/notify";
+    import draggable from 'vuedraggable';
 
     const initialData = () => {
         return {
@@ -358,6 +370,7 @@
             MultiselectBellow,
             Multiselect,
             ProductImageUpload,
+            draggable,
         },
         props: [
             'formIsPosting',
@@ -462,13 +475,11 @@
                 this.$emit('click')
             },
             onRemoveImage(image) {
-                const index = this.product.images.findIndex((img) => img.id === image.id);
+                const index = this.product.images.findIndex((img) => img.ordering === image.ordering);
                 // if exists the image
                 if (index !== -1) {
                     this.product.images.splice(index, 1);
-                    for (let i in this.product.images) {
-                        this.product.images[i].ordering = i;
-                    }
+                    this.updateOrdering(this.product.images);
                 }
             },
             onImageUploadSuccess(imageEntity) {
@@ -503,6 +514,18 @@
                 this.localErrors = [];
                 let el = this.$refs.form;
                 el.scrollIntoView();
+            },
+            updateOrdering(images) {
+                images.forEach(function(el, index, theArray) {
+                    theArray[index].ordering = index;
+                }, images);
+                images.sort(function(a, b) {
+                    return a.ordering - b.ordering;
+                });
+            },
+            onImageSort(e) {
+                this.updateOrdering(this.product.images);
+                // e.item.ordering = e.newIndex;
             },
         },
         created () {

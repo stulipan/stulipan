@@ -4,8 +4,8 @@
 {% if recipients is defined and recipients is not empty %}
     {% for recipient in recipients %}
         <div class="checkout-recipient-item mt-4">
-            <div class="JS--item h-100">
-                <div class="d-flex flex-column flex-sm-row justify-content-between h-100">
+            <div class="JS--item h-100X">
+                <div class="d-flex flex-column flex-sm-row justify-content-between h-100X">
                     <div class="">
                         <span class="address-title">{{ recipient.fullname }}</span> {% if selectedRecipient is defined and selectedRecipient == recipient.id %}<span class="badge badge-warning text-uppercase font-italic">{{ 'checkout.recipient.last-used'|trans }}</span>{% endif %}<br>
                         <span class="address-details">{{ recipient.address.street }}</span> <br>

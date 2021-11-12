@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="v--product" class="mb-6">
+    <div id="v--product" class="mb-5">
         <product :product-id="{{ product is defined and product.id is not empty ? product.id : 0}}"
             {%- if productJson is defined -%}
                 :product="{{ productJson }}"

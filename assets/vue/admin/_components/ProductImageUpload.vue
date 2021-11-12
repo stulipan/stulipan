@@ -12,7 +12,7 @@
             tabindex="0"
     >
         <template v-slot:clip-uploader-action="props">
-            <div class="uploader-action" v-bind:class="{dragging: props.dragging}" tabindex="0">
+            <div class="uploader-action" v-bind:class="{dragging: props.dragging}" tabindexZ="0">
                 <div class="dz-message">
                     <div class="d-flex">
                         <i class="fas fa-arrow-circle-up fa-2x"></i>
@@ -27,8 +27,8 @@
 
         <template v-slot:clip-uploader-body="props">
             <div class="uploader-files" v-if="uploadedFiles.length">
-                <div v-for="file in uploadedFiles" class="uploader-file d-flex justify-content-start align-items-center mb-2X">
-                    <div class="file-avatar mr-3">
+                <div v-for="file in uploadedFiles" class="uploader-file d-flex justify-content-start align-items-center">
+                    <div class="file-avatar mr-2">
                         <img v-bind:src="file.dataUrl" class="img-thumbnail" />
                     </div>
                     <div class="file-details">

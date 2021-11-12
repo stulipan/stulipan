@@ -319,7 +319,6 @@ class PaymentBuilder
         }
         $kind = $transaction->getKind();
         $status = $transaction->getStatus();
-//        dd($kind . ', ' . $status);
 
         // Sale
         // Applies for CC and Manual payments too.
@@ -390,5 +389,7 @@ class PaymentBuilder
             return $status;
 //            return PaymentStatus::STATUS_PENDING;
         }
+
+        return $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
     }
 }

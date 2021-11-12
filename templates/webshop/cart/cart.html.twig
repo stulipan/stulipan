@@ -1,6 +1,6 @@
-<div class="loading-spinner-faded">
+{#<div class="loading-spinner-faded">#}
     {% if order.items is empty %}
-        <div class="cart-item text-center">
+        <div class="text-center pb-4">
             <div>
                 <h6 class="text-uppercase">{{ 'cart.your-cart-is-empty'|trans }}</h6>
                 <p class="mb-0">{{ 'cart.but-not-for-long'|trans({ '{{ link }}': path('site-product-listall') })|raw }}</p>
@@ -53,5 +53,5 @@
             </div>
         {% endif %}
     {% endif %}
-</div>
-<div class="loading-spinner" role="status"></div>
+{#</div>#}
+{#<div class="loading-spinner" role="status"></div>#}

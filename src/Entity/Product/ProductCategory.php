@@ -41,6 +41,7 @@ class ProductCategory implements JsonSerializable
      * @Groups({
      *     "main",
      *     "productView",
+     *     "eventAddToCart",
      * })
      *
      * @ORM\Column(name="category_name", type="string", length=100, nullable=false)

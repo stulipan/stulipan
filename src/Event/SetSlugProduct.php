@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Event;
 
+use App\Controller\BaseController;
 use App\Entity\Product\Product;
 use App\Services\Localization;
 use App\Services\SlugBuilder;
@@ -25,11 +26,13 @@ class SetSlugProduct
      * @var SlugBuilder
      */
     private $slugBuilder;
+    private $baseController;
 
-    public function __construct(EntityManagerInterface $em, SlugBuilder $slugBuilder)
+    public function __construct(EntityManagerInterface $em, SlugBuilder $slugBuilder, BaseController $baseController)
     {
         $this->em = $em;
         $this->slugBuilder = $slugBuilder;
+        $this->baseController = $baseController;
     }
     
     /**
@@ -58,5 +61,13 @@ class SetSlugProduct
         $em = $args->getObjectManager();
         $em->persist($product);
         $em->flush();
+    }
+
+    /**
+     * @param LifeCycleEventArgs $args
+     */
+    public function postLoad(Product $product, LifeCycleEventArgs $args)
+    {
+        $product->setJson($this->baseController->createJson($product, ['groups' => 'eventAddToCart']));
     }
 }

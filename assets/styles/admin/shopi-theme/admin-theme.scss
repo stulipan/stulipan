@@ -51,11 +51,6 @@ input[type=number] {
 }
 
 
-
-.edit-block {
-
-}
-
 @media print {
   body {
     background-color: $white;
@@ -171,13 +166,19 @@ input[type=number] {
 }
 
 .overlay--productCover {
-  background: #008CDE;
+  background: $gray-800;
   color: #fff;
-  padding: .2rem;
+  opacity: .8;
+  padding: .3rem;
   text-transform: uppercase;
   font-size: .7rem;
   font-weight: bold;
-  letter-spacing: 0;
+  letter-spacing: 0.05rem;;
+}
+.overlay--removeImage {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 .variant-item {

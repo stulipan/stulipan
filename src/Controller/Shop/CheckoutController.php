@@ -203,7 +203,6 @@ class CheckoutController extends AbstractController
 
         $recipient = null;
         if ($user && $user->getCustomer()) {
-
             /** If Customer exists (is logged in), get all its Recipients and Senders */
             $recipients = $user->getCustomer()->getRecipients();
 
@@ -249,8 +248,6 @@ class CheckoutController extends AbstractController
             $address->setCountry($this->em->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
             $recipient->setAddress($address);
         }
-
-//        dd($orderBuilder->getCustomer());
 
         return $this->render('webshop/cart/checkout-step1-pickDeliveryAddress.html.twig', [
             'order' => $orderBuilder->getCurrentOrder(),

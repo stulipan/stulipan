@@ -16,7 +16,7 @@
                                     </div>
                                 </div>
                                 <div class="product-button">
-                                    <button type="button" class="JS--Button-addGiftToCart btn btn-sm btn-primary" data-url="{{ path('cart-addGift', {'id': product.id}) }}">
+                                    <button type="button" class="JS--Button-addGiftToCart btn btn-sm btn-primary" data-url="{{ path('cart-addGift', {'id': product.id}) }}" data-product-json="{{ product.json }}">
                                         <span class="loading-spinner-invisible">{{ 'product.add-to-cart-short-button'|trans }}</span>
                                         <div class="loading-spinner" role="status"></div>
                                     </button>

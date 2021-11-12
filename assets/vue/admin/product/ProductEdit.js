@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 
 import VueClip from 'vue-clip'
+import Sortable from 'sortablejs';
 
 Vue.use(VueResource);
 Vue.use(VueClip);   // Simple and hackable file uploader

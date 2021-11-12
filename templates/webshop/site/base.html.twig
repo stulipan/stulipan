@@ -103,7 +103,9 @@
     <script src="{{ asset('webshop/lodash.core.min.js') }}"></script>
     <script src="{{ asset('webshop/validate.min.js') }}"></script>
 
-    {% include('webshop/widgets/_store-localization.html.twig') %}
+    {% include 'webshop/widgets/store-localization-js.html.twig' %}
+    {% include 'webshop/widgets/store-settings-js.html.twig' %}
+
 
     <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
     <script src="{{ asset('webshop/site/js/daterangepicker.min.js') }}"></script>

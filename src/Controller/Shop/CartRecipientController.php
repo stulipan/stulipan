@@ -178,6 +178,7 @@ class CartRecipientController extends AbstractController
         $orderBuilder = $this->orderBuilder;
         /** If the Order has a Customer, returns the list of the customer's Recipients */
         if ($orderBuilder->getCurrentOrder()->getCustomer()) {
+
             $recipients = $orderBuilder->getCurrentOrder()->getCustomer()->getRecipients();
         } /** Else simply returns the Recipient from within the Order (Checkout whithout user registration) */
         else {

@@ -62,7 +62,13 @@ class SetOrderNumber
                 .(GeneralUtils::ORDER_NUMBER_RANGE + $entity->getId())
                 .$today->format('d');
             $entity->setNumber($orderNumber);
-            $this->em->persist($entity);
+
+            $args->getEntityManager()->persist($customer);
+            $args->getEntityManager()->persist($entity);
+
+            // $this->em->persist($entity);
+
+
             // $this->em->persist($customer);
             // nem kell, a 'cascade={"persist"}' miatt a lentiekben
             ///**
@@ -77,7 +83,9 @@ class SetOrderNumber
             //     * @ Assert\NotBlank(message="Egy felhasználónak több rendelése lehet.")
             //     */
             //    private $orders = [];
-            $this->em->flush();
+
+            $args->getEntityManager()->flush();
+//            $this->em->flush();
         }
     }
 }

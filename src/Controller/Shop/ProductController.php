@@ -2,6 +2,7 @@
 
 namespace App\Controller\Shop;
 
+use App\Controller\BaseController;
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductCategory;
 use App\Entity\Product\ProductStatus;
@@ -22,7 +23,7 @@ use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-class ProductController extends AbstractController
+class ProductController extends BaseController //extends AbstractController
 {
     /**
      * @Route({
@@ -115,6 +116,7 @@ class ProductController extends AbstractController
             'product' => $product,
             'recommendedProducts' => $recommendedProducts,
             'form' => $form->createView(),
+//            'productJson' => $this->createJson($product, ['groups' => 'productView']),
         ]);
     }
 

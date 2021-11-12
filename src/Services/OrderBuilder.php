@@ -166,7 +166,6 @@ class OrderBuilder
                 throw new Exception($this->translator->trans('cart.product.not-enough-stock'));
             }
             $this->order->addItem($orderItem);
-
         } else {
             $key = $this->indexOfProduct($product);
             $orderItem = $this->order->getItems()->get($key);

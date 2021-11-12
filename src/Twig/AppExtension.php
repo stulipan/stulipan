@@ -312,7 +312,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     {
         switch ($this->locale->getCode()) {
             case 'hu':
-                return number_format($amount, 0, ',','.').' '.$this->locale->getCurrencySymbol();
+                return number_format($amount, 0, ',',' ').' '.$this->locale->getCurrencySymbol();
                 break;
             case 'en':
                 return number_format($amount, 0, '.',',').' '.$this->locale->getCurrencySymbol();
@@ -582,6 +582,19 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             $bname = 'Netscape';
             $ub = "Netscape";
         }
+        else {
+            $bname = 'Unknown';
+            $ub = 'Unknown';
+        }
+
+        if ($ub == 'Unknown') {
+            return array(
+                'userAgent' => $u_agent,
+                'name'      => $bname,
+                'version'   => 'unknown',
+                'platform'  => $platform,
+            );
+        }
 
         // finally get the correct version number
         $known = array('Version', $ub, 'other');
@@ -615,7 +628,6 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'name'      => $bname,
             'version'   => $version,
             'platform'  => $platform,
-            'pattern'    => $pattern
         );
     }
 

@@ -115,8 +115,6 @@ class OrderController extends AbstractController
         $orderStatus = $request->query->get('orderStatus');
         $isCanceled = $request->query->get('isCanceled');
         $page = $request->query->get('page') ? $request->query->get('page') : $page;
-//        dd($request->attributes->get('_route_params'));
-//        dd($request->query->all());
 
         $filterTags = [];
         $urlParams = [];

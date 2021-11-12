@@ -1,4 +1,7 @@
 {{ form_start(form) }}
+    <div class="d-none">
+        {{ form_widget(form.productId) }}
+    </div>
     <div class="product-part">
         <span class="product-variant-selector-label">{{ 'product.product-id'|trans }}:</span>
         {{ product.sku }}

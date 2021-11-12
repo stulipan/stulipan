@@ -55,6 +55,7 @@ class SetOrderNumber
             if ($customer) {
                 $customer->addOrder($entity);
                 $entity->setCustomer($customer);
+                $args->getEntityManager()->persist($customer);
             }
 
             $today = new DateTime('now');
@@ -63,7 +64,7 @@ class SetOrderNumber
                 .$today->format('d');
             $entity->setNumber($orderNumber);
 
-            $args->getEntityManager()->persist($customer);
+
             $args->getEntityManager()->persist($entity);
 
             // $this->em->persist($entity);

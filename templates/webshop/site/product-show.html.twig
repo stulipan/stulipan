@@ -631,8 +631,26 @@
         });
     </script>
     <script>
-        {% if productJson is defined %}
-        var productJson = {{ productJson|raw }};
-        {% endif %}
+        function clickAndGo(e) {
+            e.preventDefault();
+            let url = e.currentTarget.href;
+            let $sidebar = $('#JS--Sidebar-Cart');
+
+            var callback = function () {
+                if (typeof(url) != 'undefined') {
+                    window.location = url;
+                }
+            };
+
+            callback();
+            $sidebar.sidebar('hide');
+            // $sidebar.on('hide.bs.sidebar', function (e) {
+            //     callback()
+            // });
+            return false;
+        }
+{#        {% if productJson is defined %}#}
+{#        var productJson = {{ productJson|raw }};#}
+{#        {% endif %}#}
     </script>
 {% endblock %}

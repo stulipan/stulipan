@@ -14,6 +14,7 @@ use App\Entity\Model\CustomerBasic;
 use App\Entity\Model\HiddenDeliveryDate;
 use App\Form\Checkout\AcceptTermsType;
 use App\Form\Customer\CustomerType;
+use App\Model\AddToCartModel;
 use App\Model\CartGreetingCard;
 use App\Model\CheckoutPaymentMethod;
 use App\Model\CheckoutRecipientAndCustomer;
@@ -334,31 +335,44 @@ class CartController extends AbstractController
      *      - subproduct
      *      - deliveryDate (without deliveryInterval)
      *
-     * @Route("/cart/addItem/{id}", name="cart-addItem", methods={"POST"})
+     * @Route("/cart/addItem", name="cart-addItem", methods={"POST"})
      */
-    public function addItem(Request $request, Product $product): Response
+    public function addItem(Request $request, AddToCartModel $addToCartModel): Response
     {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createNotFoundException('HIBA: /cart/addItem/{id}');
         }
 
         $orderBuilder = $this->orderBuilder;
-        $form = $this->createForm(CartAddItemType::class, $product);
+        $id = $request->request->get('cart_add_item')['productId'];
+        $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
+        $data = [
+//            'id' => $request->request->get('id'),
+//            'deliveryDate' => $request->request->get('deliveryDate'),
+//            'quantity' => $request->request->get('quantity'),
+        ];
+        $form = $this->createForm(CartAddItemType::class, $addToCartModel, ['product'=>$product]);
+
+//        $form = $this->createForm(CartAddItemType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var AddToCartModel $data */
+            $data = $form->getData();
             try {
-                $orderBuilder->addItem($product, $form->get('quantity')->getData());
+                $orderBuilder->addItem($product, $data->getQuantity());
             } catch (\Exception $e) {
                 $form->get('quantity')->addError(new FormError($e->getMessage()));
                 $form->addError(new FormError($e->getMessage()));
             }
 
-            $deliveryDate = $form->get('deliveryDate')->get('deliveryDate')->getData();
-            $orderBuilder->setDeliveryDate($deliveryDate ? $deliveryDate : null, null);
+//            dd($orderBuilder->getCurrentOrder());
 
-            $clientDetails = new ClientDetails($request->getClientIp(), $request->headers->get('user-agent'), $request->headers->get('accept-language'));
-            $orderBuilder->setClientDetails($clientDetails);
+//            $deliveryDate = $form->get('deliveryDate')->get('deliveryDate')->getData();
+//            $orderBuilder->setDeliveryDate($deliveryDate ? $deliveryDate : null, null);
+
+//            $clientDetails = new ClientDetails($request->getClientIp(), $request->headers->get('user-agent'), $request->headers->get('accept-language'));
+//            $orderBuilder->setClientDetails($clientDetails);
         }
 
         // Renders form with errors
@@ -536,6 +550,8 @@ class CartController extends AbstractController
                 'showTotal'=> true,
             ]);
         }
+        $json = json_encode(['error' => 'Valami hiba történt.'], JSON_UNESCAPED_UNICODE);
+        return new JsonResponse($json,400, [], true);
     }
 
     /**

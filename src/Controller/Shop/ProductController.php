@@ -7,6 +7,7 @@ use App\Entity\Product\Product;
 use App\Entity\Product\ProductCategory;
 use App\Entity\Product\ProductStatus;
 use App\Form\AddToCart\CartAddItemType;
+use App\Model\AddToCartModel;
 use App\Model\PreviewContent;
 use App\Services\Localization;
 use App\Services\StoreSettings;
@@ -98,8 +99,16 @@ class ProductController extends BaseController //extends AbstractController
         if (!$product) {
             throw $this->createNotFoundException('Nem talált egy terméket sem, ezzel az ID-vel');
         }
-//        $form = $this->createForm(CartAddItemType::class, $product, ['subproducts' => $product->getSubproducts()]);
-        $form = $this->createForm(CartAddItemType::class, $product, ['options' => $product->getOptions()]);
+//        $form = $this->createForm(CartAddItemType::class, $product, ['options' => $product->getOptions()]);
+
+        $addToCartModel = new AddToCartModel($product->getId(), 1, null);
+//        $data = [
+//            'id' => $product->getId(),
+////            'options' => $product,
+//            'deliveryDate' => null,
+//            'quantity' => 1,
+//        ];
+        $form = $this->createForm(CartAddItemType::class, $addToCartModel, ['product' => $product]);
 
         $productStatus = $this->getDoctrine()->getRepository(ProductStatus::class)->findBy(['shortcode' => ProductStatus::STATUS_ENABLED]);
         $recommendedProducts = $this->getDoctrine()->getRepository(Product::class)->retrieveByCategory($product->getCategories()[0]);

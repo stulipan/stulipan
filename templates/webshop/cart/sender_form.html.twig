@@ -35,8 +35,8 @@
                 {{ form_errors(senderForm.company) }}
             </div>
             <div class="form-group input-float col-sm-4 {% if senderForm.companyVatNumber.vars.value is defined and senderForm.companyVatNumber.vars.value %}active{% endif %}">
-                <label for="{{ senderForm.companyVatNumber.vars.full_name }}" class="form-label">ÁFA szám</label>
-                {{ form_widget(senderForm.companyVatNumber, {'attr': {'class': '', 'placeholder': 'ÁFA szám' }}) }}
+                <label for="{{ senderForm.companyVatNumber.vars.full_name }}" class="form-label">Adószám</label>
+                {{ form_widget(senderForm.companyVatNumber, {'attr': {'class': '', 'placeholder': 'Adószám' }}) }}
                 {{ form_errors(senderForm.companyVatNumber) }}
             </div>
         </div>

@@ -1467,9 +1467,11 @@ class Order
     {
         if ($this->getPaymentMethod() && $this->getPaymentMethod()->isBankTransfer()) {
             return true;
-        } else {
-            return false;
         }
+//        else {
+//            return false;
+//        }
+        return false;
     }
 
     public function hasComment(): bool

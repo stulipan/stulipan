@@ -7,17 +7,17 @@
   border-color: $border;
 
   a,
-  .announcement-link {
+  .abar-link {
     color: darken($color, 0%);
     text-decoration: underline;
   }
 }
 
 
-.announcement-bar {
+.abar {
   display: flex;
   align-items: center;
-  min-height: 30px;
+  min-height: 40px;
   padding: .5rem 1rem;
 
   @include font-size($font-size-base-secondary);
@@ -28,19 +28,19 @@
 
   @include media-breakpoint-down(md) {
     min-height: 30px;
+    font-size: 90%;
   }
 }
 
-
 @each $color, $value in $theme-colors {
-  .announcement-bar-#{$color}-lighten {
-    //@include alert-variant(theme-color-level($color, $alert-bg-level), theme-color-level($color, $alert-border-level), theme-color-level($color, $alert-color-level));
-    @include announcement-variant(map-get($theme-colors-light,$color), $value, color-yiq(map-get($theme-colors-light,$color)));
-  }
-}
-@each $color, $value in $theme-colors {
-  .announcement-bar-#{$color} {
+  .abar-#{$color} {
     //@include alert-variant(theme-color-level($color, $alert-bg-level), theme-color-level($color, $alert-border-level), theme-color-level($color, $alert-color-level));
     @include announcement-variant(map-get($theme-colors,$color), $value, color-yiq(map-get($theme-colors,$color)));
   }
 }
+
+//@each $color, $value in $theme-colors {
+//  .abar-#{$color}-lighten {
+//    @include announcement-variant(map-get($theme-colors-light,$color), $value, color-yiq(map-get($theme-colors-light,$color)));
+//  }
+//}

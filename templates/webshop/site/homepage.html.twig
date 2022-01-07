@@ -8,12 +8,19 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    {% set contentDescription = storeSettings.get('meta.description')|raw|striptags %}
+    {% set contentDescription = contentDescription|length > 200 ? contentDescription|slice(0, 200) ~ '...' : contentDescription %}
+
     <meta property="og:title" content="{{ storeSettings.get('meta.title') }}">
-    <meta property="og:description" content="{{ storeSettings.get('meta.description') }}">
+    <meta property="og:description" content="{{ contentDescription }}">
     <meta property="og:image" content="https://rafina.hu/media/cache/unscaled/uploads/images/store/szappan-rozsa-box-6657-608385608ad84.jpg">
     <meta property="og:image:width" content="1000" />
     <meta property="og:image:height" content="300" />
     <meta property="og:url" content="{{ url(app.request.attributes.get('_route')) }}" />
+
+    <meta name="description" content="{{ contentDescription }}">
+    <link rel="canonical" href="{{ app.request.schemeAndHttpHost }}" />
+
 {% endblock %}
 
 {% block page_content %}

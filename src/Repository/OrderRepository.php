@@ -93,7 +93,15 @@ class OrderRepository extends ServiceEntityRepository
         if (array_key_exists('period', $filter)) {
             $period = $filter['period'];
         }
-        if ($period && $period != '24 hours' && $period != '7 days' && $period != '30 days' && $period !== 'lifetime') {
+        if (array_key_exists('dateRange', $filter)) {
+            $dateRange = $filter['dateRange'];
+        }
+
+        if ($period && $period != '24 hours' && $period != '7 days' && $period != '30 days' && $period !== 'lifetime' && $period !== 'dateRange') {
+            return 0;
+        }
+
+        if ($period === 'dateRange' && !$dateRange) {
             return 0;
         }
 
@@ -103,6 +111,7 @@ class OrderRepository extends ServiceEntityRepository
             ->select('COUNT(o.id) as count')   // COUNT
             ->andWhere('o.postedAt IS NOT NULL')  // azaz letrejott
             ->andWhere('o.status IN (:statusList)')
+            ->andWhere('o.canceledAt IS NULL')
 //            ->andWhere( $qb->expr()->in('o.status', ':statusList')) // equivalent a fentivel
         ;
 
@@ -110,18 +119,52 @@ class OrderRepository extends ServiceEntityRepository
 
         } else {
             $date = new DateTime();
+            $dateRange = new DateRange();
+
             if ($period == '24 hours') {
-                $date->modify('-24 hours')->setTime(0,0);
+//                $date->modify('-24 hours')->setTime(0,0);
+                $dateRange->setStart($date->modify('-24 hours'));
+                $dateRange->setEnd($dateRange->getStart());
             }
             if ($period == '7 days') {
-                $date->modify('-6 days')->setTime(0,0);
+//                $date->modify('-6 days')->setTime(0,0);
+                $dateRange->setStart($date->modify('-6 days'));
+                $dateRange->setEnd($dateRange->getStart());
             }
             if ($period == '30 days') {
-                $date->modify('-29 days')->setTime(0,0);
+//                $date->modify('-29 days')->setTime(0,0);
+                $dateRange->setStart($date->modify('-29 days'));
+                $dateRange->setEnd($dateRange->getStart());
             }
-            $qb->andWhere('o.postedAt >= :date')
-                ->setParameter('date', $date)
+
+            if ($period == 'dateRange') {
+                $splitPieces = explode(" - ", $filter['dateRange']);
+                $start = $splitPieces[0];
+                $end = $splitPieces[1];
+                $format = $this->localization->getCurrentLocale()->getDateFormat();
+
+                if (!isset($start) or $start === null or $start == "") {
+                } else {
+                    $dateRange->setStart(DateTime::createFromFormat($format, $start));
+//                    $start = $dateRange->getStart();
+                }
+                if (!isset($end) or $end === null or $end == "") {
+                } else {
+                    $dateRange->setEnd(DateTime::createFromFormat($format, $end));
+//                    $end = $dateRange->getEnd();
+                }
+            }
+
+            $qb->andWhere('o.postedAt >= :start')
+                ->setParameter('start', $dateRange->getStart())
             ;
+
+            if ($dateRange->getStart() <= $dateRange->getEnd()) {
+                $qb->andWhere('o.postedAt <= :end')
+                    ->setParameter('end', $dateRange->getEnd())
+                ;
+            }
+
         }
 
         $statusList = [
@@ -156,7 +199,6 @@ class OrderRepository extends ServiceEntityRepository
             ;
         }
 
-
         $query = $qb->getQuery()->getSingleScalarResult();
         return $query == null ? 0 : $query;
     }
@@ -177,8 +219,58 @@ class OrderRepository extends ServiceEntityRepository
         if (array_key_exists('period', $filter)) {
             $period = $filter['period'];
         }
-        if ($period && $period != '24 hours' && $period != '7 days' && $period != '30 days' && $period !== 'lifetime') {
+        if (array_key_exists('dateRange', $filter)) {
+            $dateRange = $filter['dateRange'];
+        }
+        if ($period && $period != '24 hours' && $period != '7 days' && $period != '30 days' && $period !== 'lifetime' && $period !== 'dateRange') {
             return 0;
+        }
+        if ($period === 'dateRange' && !$dateRange) {
+            return 0;
+        }
+        $params = [];
+
+        if ($period === null || $period === 'lifetime') {
+            $params['startDate'] = (new DateTime('-100 years'))->format('Y-m-j');
+        } else {
+            $date = new DateTime();
+            $dateRange = new DateRange();
+
+            if ($period == '24 hours') {
+                $dateRange->setStart($date->modify('-24 hours'));
+                $dateRange->setEnd($dateRange->getStart());
+            }
+            if ($period == '7 days') {
+                $dateRange->setStart($date->modify('-6 days'));
+                $dateRange->setEnd($dateRange->getStart());
+            }
+            if ($period == '30 days') {
+                $dateRange->setStart($date->modify('-29 days'));
+                $dateRange->setEnd($dateRange->getStart());
+            }
+            if ($period == 'dateRange') {
+                $splitPieces = explode(" - ", $filter['dateRange']);
+                $start = $splitPieces[0];
+                $end = $splitPieces[1];
+                $format = $this->localization->getCurrentLocale()->getDateFormat();
+
+                if (!isset($start) or $start === null or $start == "") {
+                } else {
+                    $dateRange->setStart(DateTime::createFromFormat($format, $start));
+                }
+                if (!isset($end) or $end === null or $end == "") {
+                } else {
+                    $dateRange->setEnd(DateTime::createFromFormat($format, $end));
+                }
+            }
+            $params['startDate'] = $dateRange->getStart()->format('Y-m-j H:i:s');
+
+            if ($dateRange->getStart() <= $dateRange->getEnd()) {
+                $sqlEndDate = "
+                    AND o.posted_at <= :endDate
+                ";
+                $params['endDate'] = $dateRange->getEnd()->format('Y-m-j H:i:s');
+            }
         }
 
 //        SELECT sum(s.summa)
@@ -227,9 +319,13 @@ class OrderRepository extends ServiceEntityRepository
                 RIGHT JOIN cart_order_item i ON o.id=i.order_id
                 WHERE 
                       o.posted_at IS NOT NULL 
-                  AND o.posted_at >= :postedAt
-                  
+                  AND o.posted_at >= :startDate
+                  AND o.canceled_at IS NULL 
         ";
+
+        if (isset($sqlEndDate)) {
+            $sql .= $sqlEndDate;
+        }
 
         if (isset($sqlStatusList)) {
             $sql .= $sqlStatusList;
@@ -244,98 +340,14 @@ class OrderRepository extends ServiceEntityRepository
         ";
         $conn = $this->getEntityManager()->getConnection();
         $statement = $conn->prepare($sql);
-        $params = [];
-
-        if ($period === null || $period === 'lifetime') {
-            $params['postedAt'] = (new DateTime('-100 years'))->format('Y-m-j');
-        } else {
-            $date = new DateTime();
-            if ($period == '24 hours') {
-                $date->modify('-24 hours')->setTime(0,0);
-            }
-            if ($period == '7 days') {
-                $date->modify('-6 days')->setTime(0,0);
-            }
-            if ($period == '30 days') {
-                $date->modify('-29 days')->setTime(0,0);
-            }
-            $params['postedAt'] = $date->format('Y-m-j');
-        }
 
         $statement->execute($params);
         $query = $statement->fetchOne();
         return $query == null ? 0 : (float) $query;
-
-
-//        $rsm = new Query\ResultSetMapping();
-//        $rsm->addEntityResult('App:Order', 'o')
-////            ->addEntityResult('App:OrderItem', 'i')
-//            ->addFieldResult('o', 'id', 'id')
-//            ->addFieldResult('o', 'shipping_fee', 'shipping_fee')
-//            ->addFieldResult('o', 'payment_fee', 'payment_fee')
-//            ->addFieldResult('o', 'status_id', 'status_id')
-//            ->addFieldResult('o', 'created_at', 'created_at')
-//            ->addJoinedEntityResult('App:OrderItem' , 'i', 'o', 'items')
-//            ->addFieldResult('i', 'id', 'id')
-//            ->addFieldResult('i', 'order_id', 'order_id')
-//            ->addFieldResult('i', 'price_total', 'price_total')
-//        ;
-
-
-
-
-////        dd($query->getSQL());
-//        $entities = $query->getScalarResult();
-//        dd($entities);
-//        $query = $query->getSingleScalarResult();
-//        dd($query);
-//        return $query == null ? 0 : (float) $query;
-////        dd($entities);
-
-
-
-
-////        $subQuery = $this->getEntityManager()->getRepository(Order::class)->createQueryBuilder('o')
-//        $subQuery = $this->getEntityManager()->createQueryBuilder()
-////        $subQuery = $this->createQueryBuilder('o')
-//            ->addSelect('sum(i.priceTotal), o.shippingFee, o.paymentFee, sum(i.priceTotal) + o.shippingFee + o.paymentFee as summa')
-//            ->from('App:Order', 'o')
-//            ->join('o.items', 'i')
-//            ->addGroupBy('i.order')
-//        ;
-//
-//        $qb = $this->getEntityManager()->createQueryBuilder()
-//            ->addSelect('sum(s.summa) as summat')
-//            ->from('('.$subQuery.')', 's')
-//        ;
-
-//        dd($subQuery->getDQL());
-//        dd($qb->getDQL());
-//        dd($qb->getQuery()->getResult());
-//        dd($subQuery->getQuery()->getResult());
-//        dd($subQuery->getDQL());
-// etc
-// ...
-//// main query
-//$query = $entityManager->createQueryBuilder()
-//    ->select('...')
-//    ->from('...', $subQuery1)
-//    ->leftJoin('...', $subQuery1->getDQL()),
-//    ->where()
-//    ;
-
-//        $qb = $this
-//            ->createQueryBuilder('o')
-//            ->andWhere('o.status IS NOT NULL')
-//            ->leftJoin('o.items', 'i')
-////            ->select('SUM(i.priceTotal) as totalRevenue')
-//            ->select('(SUM(i.priceTotal) + SUM(o.shippingFee) + SUM(o.paymentFee)) as totalRevenue')
-//        ;
-
     }
 
     /**
-     * Used with PagerFanta in OrderController.
+     * Used with PagerFanta in Admin\OrderController.
      *
      * Fetches orders
      *  - using some filtering criteria

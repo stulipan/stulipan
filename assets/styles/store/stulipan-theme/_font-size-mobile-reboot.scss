@@ -23,7 +23,8 @@ $mobile-input-height-sm:                            calc(#{$input-line-height-sm
   .list-group-item,
   .dropdown-menu,
   h5, .h5,
-  h6, .h6
+  h6, .h6,
+  .lead
   {
     @include font-size($mobile-font-size-base);
     line-height: $mobile-line-height-base;

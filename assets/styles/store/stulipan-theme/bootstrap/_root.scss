@@ -8,6 +8,11 @@
     --#{$color}: #{$value};
   }
 
+  // Added by Stulipan
+  @each $color, $value in $grays {
+    --gray-#{$color}: #{$value};
+  }
+
   @each $bp, $value in $grid-breakpoints {
     --breakpoint-#{$bp}: #{$value};
   }

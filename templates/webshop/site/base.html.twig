@@ -19,26 +19,166 @@
         <link rel="apple-touch-icon" href="{{ storeSettings.get('store.apple-touch-icon') }}">
         <link rel="manifest" href="{{ asset('webshop/site/favicon/manifest.webmanifest')}}">
 
-{#    <link rel="preload" as="font" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}" crossorigin>#}
-{#    <link rel="stylesheet" href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}">#}
+        <style>
+            {% include 'webshop/_css/fonts.html.twig' %}
 
-{#    <link rel="dns-prefetch" href="//fonts.googleapis.com">#}
-{#    <link rel="preconnect" href="https://fonts.googleapis.com">#}
-{#    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap" rel="stylesheet">#}
+            :root {
+                --blue: #9cdbf1;
+                --blue-lighten: #ebf6fd;
+                --blue-dark: #0070be;
+                --indigo: #6610f2;
+                --purple: #876ebd;
+                --purple-lighten: #d1bff8;
+                --pink: #e83e8c;
+                --red: #dc3545;
+                --red-lighten: #ffc8c9;
+                --orange: #fd7e14;
+                --yellow: #fff0ca;
+                --yellow-lighten: #f4eddd;
+                --green: #41aa9e;
+                --green-lighten: #bbe5b3;
+                --teal: #20c997;
+                --cyan: #469ab9;
+                --white: #fff;
+                --peach: #ffedee;
+                --purple-gray: #5b6377;
+                --purple-gray-dark: #404756;
+                --gray-eee: #eee;
+                --gray: #6d7175;
+                --gray-dark: #343a40;
+                --body-color: #121519;
+                --primary: #3c3c3c;
+                --secondary: #eee;
+                --success: #41aa9e;
+                --info: #876ebd;
+                --warning: #fff0ca;
+                --danger: #dc3545;
+                --light: #e1e5e9;
+                --dark: #343a40;
+                --breakpoint-xs: 0;
+                --breakpoint-sm: 576px;
+                --breakpoint-md: 768px;
+                --breakpoint-lg: 992px;
+                --breakpoint-xl: 1200px;
+                --breakpoint-xxl: 1360px;
+                --font-family-sans-serif: "HK Grotesk", Roboto, Arial, sans-serif;
+                --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            }
+            *,
+            :after,
+            :before {
+                box-sizing: border-box;
+            }
+            html {
+                font-family: sans-serif;
+                line-height: 1.15;
+                -webkit-text-size-adjust: 100%;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            }
+            article,
+            aside,
+            figcaption,
+            figure,
+            footer,
+            header,
+            hgroup,
+            main,
+            nav,
+            section {
+                display: block;
+            }
+            body {
+                margin: 0;
+                font-family: HK Grotesk, Roboto, Arial, sans-serif;
+                font-display: auto;
+                font-size: 0.9375rem;
+                font-weight: 400;
+                line-height: 1.35;
+                color: #121519;
+                text-align: left;
+                background-color: #fff;
+            }
+        </style>
+        <style>
+            @media (max-width: 767.98px) {
+                .col-form-label,
+                .dropdown-menu,
+                .h5,
+                .h6,
+                .list-group-item,
+                body,
+                h5,
+                h6 {
+                    font-size: 1rem;
+                    line-height: 1.4;
+                }
+                .collapse-arrow-show:after,
+                .svg-icon:not(.svg-icon-md):not(.svg-icon-lg) {
+                    --font-size: 1rem;
+                    --line-height: 1.4rem;
+                }
+                .btn,
+                .form-control,
+                .input-float .form-control {
+                    font-size: 1rem;
+                    line-height: 1.4;
+                }
+                .form-control {
+                    height: calc(1.4em + 1rem + 2px);
+                }
+                .btn {
+                    padding-left: 0.75rem !important;
+                    padding-right: 0.75rem !important;
+                }
+                .btn-sm,
+                .checkout-summary,
+                .progress--bar,
+                .text-sm,
+                small {
+                    font-size: 0.875rem;
+                    line-height: 1.25;
+                }
+                .form-control-sm {
+                    height: calc(1.2em + 0.75rem + 2px);
+                }
+            }
+            @media (max-width: 767.98px) {
+                .container {
+                    padding-right: 1rem;
+                    padding-left: 1rem;
+                }
+                .row {
+                    margin-right: -1rem;
+                    margin-left: -1rem;
+                }
+                .row > .col,
+                .row > [class*="col-"] {
+                    padding-right: 1rem;
+                    padding-left: 1rem;
+                }
+                .row-narrow {
+                    margin-right: -0.5rem;
+                    margin-left: -0.5rem;
+                }
+                .row-narrow > .col,
+                .row-narrow > [class*="col-"] {
+                    padding-right: 0.5rem;
+                    padding-left: 0.5rem;
+                }
+            }
+        </style>
 
+        {{ encore_entry_link_tags('store-theme') }}
 
-{#        <script src="https://kit.fontawesome.com/469d83575c.js" crossorigin="anonymous"></script>#}
-{#    <link rel="preload" as="font" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">#}
-{#    <link rel="stylesheet" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">#}
-
-    {{ encore_entry_link_tags('store-theme') }}
-    <link rel="preload" href="{{ asset('build/store-plugins.css') }}" as="style" onload="this.rel='stylesheet'">
-
-{#        <link rel="preload" as="style" href="{{ asset('build/store-plugins.css') }}">#}
-{#    {{ encore_entry_link_tags('store-plugins') }}#}
+{#      <!-- Media type (print) doesn't match the current environment, so browser decides it's not that important#}
+{#      and loads the stylesheet asynchronously (without delaying page rendering). On load, we change media type#}
+{#      so that the stylesheet gets applied to screens. -->#}
+        <link rel="stylesheet" href="{{ asset('build/store-plugins.css') }}" media="print" onload="this.media='all'">
+{#    <!-- Fallback that only gets inserted when JavaScript is disabled, in which case we can't load CSS asynchronously. -->#}
+        <noscript><link rel="stylesheet" href="{{ asset('build/store-plugins.css') }}" media="all" type="text/css"></noscript>
 
 {#        JS scripts with defer                 #}
-    {{ encore_entry_script_tags('store-app') }}
+        {{ encore_entry_script_tags('store-app') }}
     {% endblock %}
 
     {% block trackingCodes %}
@@ -48,7 +188,7 @@
     <style>
 {#        {% include 'webshop/_css/css.html.twig' %}#}
 
-        {% include 'webshop/_css/fonts.html.twig' %}
+
     </style>
 </head>
 

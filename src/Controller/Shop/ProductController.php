@@ -99,15 +99,8 @@ class ProductController extends BaseController //extends AbstractController
         if (!$product) {
             throw $this->createNotFoundException('Nem talált egy terméket sem, ezzel az ID-vel');
         }
-//        $form = $this->createForm(CartAddItemType::class, $product, ['options' => $product->getOptions()]);
 
         $addToCartModel = new AddToCartModel($product->getId(), 1, null);
-//        $data = [
-//            'id' => $product->getId(),
-////            'options' => $product,
-//            'deliveryDate' => null,
-//            'quantity' => 1,
-//        ];
         $form = $this->createForm(CartAddItemType::class, $addToCartModel, ['product' => $product]);
 
         $productStatus = $this->getDoctrine()->getRepository(ProductStatus::class)->findBy(['shortcode' => ProductStatus::STATUS_ENABLED]);
@@ -125,7 +118,6 @@ class ProductController extends BaseController //extends AbstractController
             'product' => $product,
             'recommendedProducts' => $recommendedProducts,
             'form' => $form->createView(),
-//            'productJson' => $this->createJson($product, ['groups' => 'productView']),
         ]);
     }
 

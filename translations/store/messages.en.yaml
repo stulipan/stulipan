@@ -28,6 +28,7 @@ product:
     add-to-cart-short-button: Add to cart
     product-id: 'Product ID'
     quantity: Quantity
+    currently-available-in-stock: This product is available
     no-longer-available: 'The product is no longer available.'
 
 collection:

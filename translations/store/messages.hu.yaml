@@ -5,6 +5,7 @@ product:
     add-to-cart-short-button: Kosárba
     product-id: 'Termékkód'
     quantity: Mennyiség
+    currently-available-in-stock: A termék készleten van
     no-longer-available: 'A termék már nem áll forgalmazásban.'
 
 collection:
@@ -302,7 +303,7 @@ datetime:
     fri: Pé
     sat: Szo
     sun: Va
-    lifetime: 'Teljes élettartam'
+    lifetime: 'Élettartam'
     today: Ma
     yesterday: Tegnap
     last-7-days: 'Utolsó 7 nap'

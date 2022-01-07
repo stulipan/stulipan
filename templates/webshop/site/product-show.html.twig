@@ -20,18 +20,23 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    {% set contentDescription = product.description|raw|striptags %}
+    {% set contentDescription = contentDescription|length > 200 ? contentDescription|slice(0, 200) ~ '...' : contentDescription %}
 
     {{ encore_entry_link_tags('owlcarousel') }}
 {#    <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >#}
 
     <meta property="og:title" content="{{ product.name }} - {{ storeSettings.get('meta.title')}}">
-    <meta property="og:description" content="{{ product.name }}. {{ storeSettings.get('meta.description')}}">
+    <meta property="og:description" content="{{ contentDescription }}">
     {% if product.coverImage %}
         <meta property="og:image" content="{{ uploaded_asset(product.coverImage)|imagine_filter('size_facebook') }}">
         <meta property="og:image:width" content="1000" />
         <meta property="og:image:height" content="1000" />
     {% endif %}
     <meta property="og:url" content="{{ url('site-product-show', {'slug': product.slug}) }}" />
+
+    <meta name="description" content="{{ contentDescription }}">
+    <link rel="canonical" href="{{ url('site-product-show', {'slug': product.slug}) }}" />
 {% endblock %}
 
 {% block bodyClass %} product-details{% endblock %}
@@ -90,23 +95,18 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             {% endif %}
-                                            <div class="position-relative w-100">
-    {#                                            <div>#}
-    {#                                                <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="w-100 img-fluid" width="534" height="712">#}
-    {#                                            </div>#}
-                                                <div class="position-absoluteX w-100" style="top: 0;">
-                                                    <div class="position-relative">
-                                                        <div data-slider-id="1" class="JS--Wrapper-productDetail owl-product-detail owl-carousel owl-theme product-details-imageWrapper">
-                                                            {% if product.images is defined %}
-                                                                {% for image in product.images %}
-                                                                    <div class="item">
-    {#                                                                    <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">#}
-                                                                            <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="img-fluid" width="534" height="712">
-    {#                                                                    </a>#}
-                                                                    </div>
-                                                                {% endfor %}
-                                                            {% endif %}
-                                                        </div>
+                                            <div class="product-media-main">
+                                                <div class="product-media-main-inside">
+                                                    <div data-slider-id="1" class="JS--Wrapper-productDetail owl-product-detail owl-carousel owl-theme product-details-imageWrapper">
+                                                        {% if product.images is defined %}
+                                                            {% for image in product.images %}
+                                                                <div class="item">
+{#                                                                    <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">#}
+                                                                        <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="img-fluid" width="534" height="712">
+{#                                                                    </a>#}
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -162,15 +162,19 @@
 {#                                                        </li>#}
 {#                                                        <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>#}
                                                     <li class="list-inline-item price">{{ product.price.numericValue|money }}</li>
-
                                                 </ul>
                                             </div>
                                         </div>
                                     {% endif %}
+                                    {% if product.stock > 0 %}
                                     <div class="product-part">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            {{ product.description|raw }}
+                                        <div class="available">
+                                            {{ 'product.currently-available-in-stock'|trans }}
                                         </div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="product-part">
+                                        {{ product.description|raw }}
                                     </div>
                                 {% endif %}
 
@@ -323,7 +327,7 @@
                                                     <div class="mt-2 text-left">
                                                         <div class="row">
                                                             <div class="col-9 col-md-12">
-                                                                <img src="/uploads/images/icons/barion-card.svg" alt="..." class="w-100 h-25pxX" style="filter: grayscale(100%);">
+                                                                <img src="/uploads/images/icons/barion-card.svg" alt="..." class="w-100" style="filter: grayscale(100%);">
                                                             </div>
                                                         </div>
                                                     </div>

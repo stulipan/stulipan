@@ -349,6 +349,24 @@ login:
     password: Jelszó
     remember-me: Emlékezz rám
     login-button: Bejelentkezek
+analytics:
+    analytics: Analitika
+    reports: Jelentések
+    group-by: Bontás...
+    breakdown: 'Bontás: {{ value }}'
+    day: Napi
+    week: Heti
+    month: Havi
+    year: Éves
+    none: Nincs
+    filter-by-date: Idő szerint
+    date-range: 'Idő sáv: {{ value }}'
+    sales-over-time:
+        sales-over-time-title: Eladások az adott időszakban
+        date: Dátum
+        orders: Rendelések
+        total-sales: Eladások
+        summary: Összesen
 generic:
     id: '#'
     not-available: nincs
@@ -357,6 +375,7 @@ generic:
     edit: Szerkesztés
     modify: Módosít
     preview: Előnézet
+    export: Exportálás
     view: Megtekint
     open: Megnyit
     save: Mentés
@@ -379,3 +398,4 @@ generic:
     sort: Sorrend
     classname: Class
     send: Elküld
+    entries-being-shown: 'Találatok száma:'

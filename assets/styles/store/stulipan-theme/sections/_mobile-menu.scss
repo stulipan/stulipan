@@ -93,13 +93,18 @@
       height: 50px;
       /*mikor lenyilik a dropdown, akkor a link magassaga a .nav-item erteke lesz, azaz 50px + 1px az also border miatt */
       align-items: center;
+      text-decoration: none;
     }
+
+    $mobile-menu-nav-link-hover-bg:                rgba($gray-400, .5) !default;
 
     & .nav-item .nav-link:hover,
     & .nav-item .nav-link:focus {
-      /*background-color: rgba(#008cde, .5);*/
-      /*background-color: rgba(0, 140, 222, .5);*/
+      --mobile-menu-nav-link-hover-bg: #{$mobile-menu-nav-link-hover-bg};
       color: #fff;
+      outline: none;
+      border-radius: 0;
+      background-color: var(--mobile-menu-nav-link-hover-bg);
     }
 
     & .nav-item.show {

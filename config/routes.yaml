@@ -1,6 +1,6 @@
 index:
     path: /
-    controller: App\Controller\Shop\ShopController::index
+    controller: App\Controller\Shop\ShopController::showHomepage
 
 admin:
     path: /{all}/admin   # {all} so that both /admin and /hu/admin work

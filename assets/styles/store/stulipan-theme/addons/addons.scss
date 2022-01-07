@@ -91,9 +91,11 @@
 .navbar-brand {
   .store-logo {
     height: 40px;
+    width: auto;
 
     @include media-breakpoint-down(md) {
       height: 30px;
+      width: auto;
       margin-left: 1rem;
     }
   }

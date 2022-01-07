@@ -6,100 +6,88 @@
 
 {% block body %}
     {{ parent() }}
-    <header class="header">
+    <header>
         {{ include('webshop/widgets/_navbar-impersonate-user.html.twig') }}
 
         {% block underNavbar %}
-            {% if true is same as(false) %}
-            <div class="announcement-bar announcement-bar-dark">
+            {% if true is same as(true) %}
+            <div class="abar abar-primary">
                 <div class="container">
-                    <div class="">Ingyenes szállítás Budapesten! <a class="..." href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}">Bővebben itt</a></div>
+                    <div class="">Országos szállítás 3-5 munkanap. Vásárlás utánvéttel, bankkártyával vagy banki utalással. Személyes átvétel Budapesten.</div>
                 </div>
             </div>
             {% endif %}
         {% endblock %}
 
         {% block navbar %}
-		<nav class="navbar px-0 navbar-expand-lg navbar-sticky navbar-lightX navbar-stulipan flex-column">
-			<div class="container h-100">
-                <div class="d-flex justify-content-between align-items-center w-100 h-100 px-2 px-lg-0 py-0 py-lg-3">
+		<nav class="navbar">
+			<div class="navbar-body">
+                <div class="container">
                         <!-- Navbar Ted -->
-                        <div class="navbar--ted d-none d-lg-flex justify-content-md-start mr-md-3 order-md-1 order-2 w-md-25">
-{#                            <ul class="list-inline mb-0">#}
+                        <div class="navbar-social">
                                 {% if storeSettings.get('social.facebook') and storeSettings.get('social.facebook') is not null %}
-                                    <a href="{{ storeSettings.get('social.facebook') }}" target="_blank" title="facebook" class="login-cart-link"><svg class="icon mr-0"><use xlink:href="#facebook"></use></svg></a>
+                                    <a href="{{ storeSettings.get('social.facebook') }}" target="_blank" title="facebook" class="navbar-link"><svg class="icon"><use xlink:href="#facebook"></use></svg></a>
                                 {% endif %}
                                 {% if storeSettings.get('social.instagram') and storeSettings.get('social.instagram') is not null %}
-                                    <a href="{{ storeSettings.get('social.instagram') }}" target="_blank" title="instagram" class="login-cart-link"><svg class="icon mr-0"><use xlink:href="#instagram"></use></svg></a>
+                                    <a href="{{ storeSettings.get('social.instagram') }}" target="_blank" title="instagram" class="navbar-link"><svg class="icon"><use xlink:href="#instagram"></use></svg></a>
                                 {% endif %}
                                 {% if storeSettings.get('social.pinterest') and storeSettings.get('social.pinterest') is not null %}
-                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.pinterest') }}" target="_blank" title="pinterest" class="login-cart-link"><i class="fab fa-pinterest"></i></a></li>
+                                    <a href="{{ storeSettings.get('social.pinterest') }}" target="_blank" title="pinterest" class="navbar-link"><i class="fab fa-pinterest"></i></a>
                                 {% endif %}
                                 {% if storeSettings.get('social.twitter') and storeSettings.get('social.twitter') is not null %}
-                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.twitter') }}" target="_blank" title="vimeo" class="login-cart-link"><i class="fab fa-twitter"></i></a></li>
+                                    <a href="{{ storeSettings.get('social.twitter') }}" target="_blank" title="vimeo" class="navbar-link"><i class="fab fa-twitter"></i></a>
                                 {% endif %}
                                 {% if storeSettings.get('social.youtube') and storeSettings.get('social.youtube') is not null %}
-                                    <li class="list-inline-item"><a href="{{ storeSettings.get('social.youtube') }}" target="_blank" title="vimeo" class="login-cart-link"><i class="fab fa-youtube"></i></a></li>
+                                    <a href="{{ storeSettings.get('social.youtube') }}" target="_blank" title="vimeo" class="navbar-link"><i class="fab fa-youtube"></i></a>
                                 {% endif %}
-{#                            </ul>#}
                             {% if storeSettings.get('store.phone') is defined and storeSettings.get('store.phone') is not empty %}
-                            <div class="nav-item login-cart-link">
+                            <div class="nav-item navbar-link">
                                 <svg class="icon">
                                     <use xlink:href="#telephone"> </use>
                                 </svg>
-                                <span class="login-cart-text d-lg-inline ml-1">{{ storeSettings.get('store.phone')}}</span>
+                                <span class="navbar-text d-lg-inline ml-1">{{ storeSettings.get('store.phone')}}</span>
                             </div>
                             {% endif %}
                         </div>
 
-                        <a href="#" role="button" data-toggle="sidebar" data-target="#sidebar--mobileMenu" class="navbar-toggler login-cart-link d-lg-none text-left order-lg-10 order-1 mr-2">
+                        <a class="navbar-toggler" href="#" role="button" data-toggle="sidebar" data-target="#sidebar--mobileMenu">
                             <svg class="icon">
                                 <use xlink:href="#list"> </use>
                             </svg>
                         </a>
 
                         <!-- Navbar Logo -->
-                        <div class="navbar--logo d-flex justify-content-md-start flex-grow-1 flex-lg-grow-0 order-md-2 order-3 ml-md-0">
+                        <div class="navbar-logo">
                             {% include 'webshop/widgets/logo.html.twig' %}
                         </div>
 
                         <!-- Navbar Login Cart -->
-                        <div class="navbar-custom justify-content-end pl-0 order-md-4 order-4 w-md-25">
-                            <ul class="navbar-nav mb-0 flex-row">
-
-{#                                <li class="nav-item dropdown h-100 pr-3 border-right d-none d-md-flex">#}
-{#                                    <a id="langsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle login-cart-link">#}
-{#                                        <img src="{{ asset('/webshop/site/flags/4x3/' ~ myLocale ~'.svg') }}" alt="magyar" class="topbar-flag topbar-flag-selected">#}
-{#                                    </a>#}
-{#                                    <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown--flownX mt-0">#}
-{#                                        {% include 'webshop/site/navbar-language-dropdown.html.twig' %}#}
+                        <div class="navbar-custom">
+                            <ul class="custom-nav">
+{#                                <li class="nav-item">#}
+{#                                    <div class="navbar-link">#}
+{#                                        <svg class="icon">#}
+{#                                            <use xlink:href="#search"></use>#}
+{#                                        </svg>#}
 {#                                    </div>#}
 {#                                </li>#}
-
-                                <li class="nav-item pl-0 pl-md-2">
-                                    <div class="login-cart-link">
-                                        <svg class="icon">
-                                            <use xlink:href="#search"></use>
-                                        </svg>
-                                    </div>
-                                </li>
                                 <li class="nav-item dropdown">
                                     {% if not is_granted('ROLE_USER') %}
-                                        <a href="{{ path('site-login') }}" class="dropdown-toggle login-cart-link">
+                                        <a href="{{ path('site-login') }}" class="dropdown-toggle arrow-none navbar-link">
                                             <svg class="icon">
                                                 <use xlink:href="#person"> </use>
                                             </svg>
-                                            <span class="login-cart-text d-none d-lg-inline ml-1 ml-lg-2 ">{{ 'navbar.login'|trans }}</span>
+                                            <span class="navbar-text">{{ 'navbar.login'|trans }}</span>
                                         </a>
                                     {% endif %}
                                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                        <a href="#" id="myaccountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle login-cart-link">
+                                        <a href="#" id="myaccountDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle arrow-none navbar-link">
                                             <svg class="icon">
                                                 <use xlink:href="#person"> </use>
                                             </svg>
-                                            <span class="login-cart-text d-none d-lg-inline ml-1 ml-lg-2">{{ 'navbar.my-account'|trans }}</span>
+                                            <span class="navbar-text">{{ 'navbar.my-account'|trans }}</span>
                                         </a>
-                                        <div aria-labelledby="myaccountDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown--flownX mt-0">
+                                        <div aria-labelledby="myaccountDropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left mt-0">
                                             <span class="dropdown-item text-dark disabled font-weight-bold border-bottom">{{ 'account.welcome'|trans({'{{ user }}': app.user.firstname}) }}</span>
                                             <a href="{{ path('site-user-myAccount') }}" class="dropdown-item">
                                                 <svg class="icon">
@@ -123,19 +111,15 @@
                                     {{ render(controller('App\\Controller\\Shop\\CartUtilsController::cartDetailsDropdown')) }}
                                 </li>
                             </ul>
-
                         </div>
 
                 </div>
 			</div>
-
-            <div id="navbarCollapse" class="collapse navbar-collapse w-100 menu-stulipan navbar-light order-lg-2 order-1">
+            <div class="navbar-menu">
                 <div class="container">
-                    <div class="">
-                        <ul class="navbar-nav mx-auto px-3 px-lg-0 justify-content-center">
-                            {% include 'webshop/site/navbar-menu-items.html.twig' %}
-                        </ul>
-                    </div>
+                    <ul class="navbar-nav">
+                        {% include 'webshop/site/navbar-menu-items.html.twig' %}
+                    </ul>
                 </div>
             </div>
 		</nav>
@@ -186,71 +170,6 @@
             </div>
         </div>
     {% endblock %}
-
-{#    {% block footerHighlights %}#}
-{#        <div class="bg-secondary py-5">#}
-{#            <div class="container">#}
-{#                <div class="row miert-dobozok">#}
-{#                    <div class="col-sm-11 col-xl-12 mx-auto">#}
-{#                        <div class="row">#}
-{#                            <div class="col-lg-3 col-sm-6 text-center px-lg-5 mb-5 mb-lg-0">#}
-{#                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">#}
-{#                                    <div class="service-icon">#}
-{#                                        <img src="{{  asset('uploads/images/icons/legnepszerubb-2.png') }}">#}
-{#                                    </div>#}
-{#                                    <div class="service-text">#}
-{#                                        <h6 class="">A legnépszerűbb virágfutár</h6>#}
-{#                                        <p class="font-weight-light text-sm">Budapesten és környékén. A Difiori kevesebb csupán 4 év alatt a legnépszerűbb virágfutárrá nőtte ki magát. Válassz te is minket!#}
-{#                                        </p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-
-{#                            <div class="col-lg-3 col-sm-6 text-center px-lg-5 mb-5 mb-lg-0">#}
-{#                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">#}
-{#                                    <div class="service-icon">#}
-{#                                        <img src="{{  asset('uploads/images/icons/futar-kezbesites-1.png') }}">#}
-{#                                    </div>#}
-{#                                    <div class="service-text">#}
-{#                                        <h6 class="">Házhozszállítás akár aznap</h6>#}
-{#                                        <p class="font-weight-light text-sm">A gyors kézbesítést saját futárokkal biztosítjuk, választható időpontban. A szállítási módokról és díjakról <a class="text-underlineX" href="{{ path ('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.#}
-{#                                        </p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-
-{#                            <div class="col-lg-3 col-sm-6 text-center px-lg-5 mb-5 mb-lg-0">#}
-{#                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">#}
-{#                                    <div class="service-icon">#}
-{#                                        <img src="{{  asset('uploads/images/icons/kockazat-nelkul-1.png') }}">#}
-{#                                    </div>#}
-{#                                    <div class="service-text">#}
-{#                                        <h6 class="">Virágküldés kockázat nélkül!</h6>#}
-{#                                        <p class="font-weight-light text-sm">Fizess online kényelmesen és biztonságosan bankkártyáddal. A bankkártyás fizetést a CIB Bank biztosítja.#}
-{#                                        </p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-
-{#                            <div class="col-lg-3 col-sm-6 text-center px-lg-5">#}
-{#                                <div class="d-flex flex-row flex-sm-column align-items-start align-items-sm-center">#}
-{#                                    <div class="service-icon">#}
-{#                                        <img src="{{  asset('uploads/images/icons/vasarloi-elegedetseg-1.png') }}">#}
-{#                                    </div>#}
-{#                                    <div class="service-text">#}
-{#                                        <h6 class="">Magas vásárlói elégedettség</h6>#}
-{#                                        <p class="font-weight-light text-sm">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.#}
-{#                                        </p>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    {% endblock %}#}
-
 
     <footer class="main-footer">
         {% block page_footer %}
@@ -346,12 +265,6 @@
                 <div class="sidebar-body p-0">
                     <ul class="navbar-nav mx-auto px-3 px-lg-0 justify-content-center border-top">
                         {% include 'webshop/site/navbar-menu-items.html.twig' %}
-                        {#                        <li class="nav-item dropdown">#}
-                        {#                            <a href="#" id="langsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Nyelvek</a>#}
-                        {#                            <div aria-labelledby="langsDropdown" class="dropdown-menu dropdown-menu-right">#}
-                        {#                                {% include 'webshop/site/navbar-language-dropdown.html.twig' %}#}
-                        {#                            </div>#}
-                        {#                        </li>#}
                     </ul>
                 </div>
             </div>

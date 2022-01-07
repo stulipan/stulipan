@@ -380,6 +380,24 @@ login:
     remember-me: Stay logged in
     login-button: Login
 
+analytics:
+    analytics: Analytics
+    reports: Reports
+    group-by: Group by...
+    breakdown: 'Breakdown: {{ value }}'
+    day: Day
+    week: Week
+    month: Month
+    year: Year
+    none: None
+    filter-by-date: Date range
+    date-range: 'Date range: {{ value }}'
+    sales-over-time:
+        sales-over-time-title: Sales over time
+        date: Date
+        orders: Orders
+        total-sales: Total sales
+        summary: Summary
 
 
 generic:
@@ -390,6 +408,7 @@ generic:
     edit: Edit
     modify: Modify
     preview: Preview
+    export: Export
     view: Page
     open: Open
     save: Save
@@ -412,4 +431,5 @@ generic:
     sort: Sort
     classname: Class
     send: Send
+    entries-being-shown: 'Showing results:'
 

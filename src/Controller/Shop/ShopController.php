@@ -12,13 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ShopController extends AbstractController
 {
     /**
-     * @ Route("/", name="index")
-     */
-    public function index()
-    {
-        return $this->redirectToRoute('homepage');
-    }
-    /**
      * @Route("/", name="homepage")
      */
     public function showHomepage(Request $request, StoreSettings $settings)

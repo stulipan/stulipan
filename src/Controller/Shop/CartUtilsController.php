@@ -103,10 +103,9 @@ class CartUtilsController extends AbstractController
     public function cartDetailsDropdown()
     {
         $orderBuilder = $this->orderBuilder;
-//        dd($orderBuilder->getCurrentOrder());
         return $this->render('webshop/site/navbar-cart-dropdown.html.twig', [
             'order' => $orderBuilder->getCurrentOrder(),
-            'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
+//            'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
         ]);
     }
 

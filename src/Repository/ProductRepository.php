@@ -129,6 +129,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('status2', $unavailable)
             ->setParameter('categoryId',$category->getId())
             ->orderBy('p.rank', 'ASC')
+            ->orderBy('p.createdAt', 'DESC')
             ->getQuery();
 
         return $qb->execute();

@@ -46,7 +46,7 @@ $red-lighten:     #FFC8C9 !default;
 $orange:          #fd7e14 !default;
 $yellow:          #FFF0CA !default; //#f9d95f !default;
 $yellow-lighten:  #F4EDDD !default; //#FAF1CB !default;
-$green:           #41AA9E !default; //#00aa5b !default;
+$green:           #00924A !default; //#41AA9E !default; //#00aa5b !default;
 $green-lighten:   #bbe5b3 !default;
 $teal:            #20c997 !default;
 $cyan:            #469ab9 !default;
@@ -81,6 +81,7 @@ $colors: map-merge(
     "teal":           $teal,
     "cyan":           $cyan,
     "white":          $white,
+    "black":          $black,
     "peach":          $peach,
     "purple-gray":    $purple-gray,
     "purple-gray-dark": $purple-gray-dark,
@@ -207,10 +208,10 @@ $spacers: map-merge(
     4: ($spacer * 2), //($spacer * 1.5),
     5: ($spacer * 3),
     6: ($spacer * 5),
-    5px: ($spacer-px * 5),
-    10px: ($spacer-px * 10),
-    20px: ($spacer-px * 20),
-    30px: ($spacer-px * 30),
+    //5px: ($spacer-px * 5),
+    //10px: ($spacer-px * 10),
+    //20px: ($spacer-px * 20),
+    //30px: ($spacer-px * 30),
   ),
   $spacers
 );

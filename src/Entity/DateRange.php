@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use DateTime;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,6 +24,20 @@ class DateRange
      */
     private $end;
 
+    /**
+     * DateRange constructor.
+     * @param DateTime $start
+     * @param DateTime|null $end
+     */
+    public function __construct(DateTime $start = null, ?DateTime $end = null)
+    {
+        $this->start = $start;
+        $this->end = $end;
+    }
+
+    /**
+     * @return DateTime|null
+     */
     public function getStart()
     {
         return $this->start;
@@ -38,6 +48,9 @@ class DateRange
         $this->start = $date->setTime(0,0);
     }
 
+    /**
+     * @return DateTime|null
+     */
     public function getEnd()
     {
         return $this->end;

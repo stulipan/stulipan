@@ -78,16 +78,25 @@
                                 {% endblock %}
                                 {% block pagination %}
                                     {% if paginator is defined and paginator is not empty %}
+                                        {% if paginator.nbResults > paginator.maxPerPage %}
                                         <div class="card-body">
                                             <div class="pagerfanta">
                                                 {{ pagerfanta(paginator, 'twitter_bootstrap4', { 'prev_message': '← ' ~ 'generic.prev'|trans, 'next_message': 'generic.next'|trans ~ ' →'}) }}
                                             </div>
                                         </div>
+                                        {% endif %}
                                     {% else %}
                                         <div class="pt-3"></div>
                                     {% endif %}
                                 {% endblock %}
                             {% endblock %}
+                        </div>
+                        <div class="mb-20px text-muted">
+                            {% block afterTable %}
+                            {% endblock %}
+                        </div>
+                        <div class="mb-20px">
+                            &nbsp;
                         </div>
                     </div>
                 </div>

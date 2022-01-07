@@ -346,14 +346,8 @@ class CartController extends AbstractController
         $orderBuilder = $this->orderBuilder;
         $id = $request->request->get('cart_add_item')['productId'];
         $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
-        $data = [
-//            'id' => $request->request->get('id'),
-//            'deliveryDate' => $request->request->get('deliveryDate'),
-//            'quantity' => $request->request->get('quantity'),
-        ];
-        $form = $this->createForm(CartAddItemType::class, $addToCartModel, ['product'=>$product]);
 
-//        $form = $this->createForm(CartAddItemType::class, $product);
+        $form = $this->createForm(CartAddItemType::class, $addToCartModel, ['product'=>$product]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -365,14 +359,6 @@ class CartController extends AbstractController
                 $form->get('quantity')->addError(new FormError($e->getMessage()));
                 $form->addError(new FormError($e->getMessage()));
             }
-
-//            dd($orderBuilder->getCurrentOrder());
-
-//            $deliveryDate = $form->get('deliveryDate')->get('deliveryDate')->getData();
-//            $orderBuilder->setDeliveryDate($deliveryDate ? $deliveryDate : null, null);
-
-//            $clientDetails = new ClientDetails($request->getClientIp(), $request->headers->get('user-agent'), $request->headers->get('accept-language'));
-//            $orderBuilder->setClientDetails($clientDetails);
         }
 
         // Renders form with errors

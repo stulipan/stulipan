@@ -361,6 +361,8 @@ analytics:
     none: Nincs
     filter-by-date: Idő szerint
     date-range: 'Idő sáv: {{ value }}'
+    export-your-report: A jelentés exportálása
+    report-will-be-exported-as-csv: A jelentés CSV táblázatként kerül exportálásra.
     sales-over-time:
         sales-over-time-title: Eladások az adott időszakban
         date: Dátum
@@ -376,6 +378,7 @@ generic:
     modify: Módosít
     preview: Előnézet
     export: Exportálás
+    export-button: Letöltés
     view: Megtekint
     open: Megnyit
     save: Mentés

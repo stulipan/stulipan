@@ -775,10 +775,74 @@ theme.Order = (function () {
   return Order;
 
 })();
+theme.Analytics = (function () {
+  var selectors = {
+    BODY: 'body',
+    ALERT: '.JS--Wrapper-alert',
+    ANALYTICS_WRAPPER: '.JS--Wrapper-analytics',
+
+    EXPORT_REPORT_DOWNLOAD_BUTTON: '.JS--Button-downloadExportReport',
+    EXPORT_REPORT_BODY: '.JS--Wrapper-exportReportBody',
+  };
+  const scrollUp = { block: 'start', behavior: 'smooth'};
+  var ajaxLoading = false;
+
+  function Analytics(container) {
+    this.$container = $(container);
+
+    this.$container
+        .on('click', selectors.EXPORT_REPORT_DOWNLOAD_BUTTON, this.downloadReport.bind(this))
+
+        .on('click change', selectors.ANALYTICS_WRAPPER, this.preventInteraction.bind(this))
+    ;
+
+    $(document).ajaxStart(function() {
+      ajaxLoading = true;
+      document.dispatchEvent(new Event('disposeTooltip'));
+    });
+    $(document).ajaxStop(function() {
+      ajaxLoading = false;
+      // document.dispatchEvent(new Event('initFloatingInput'));
+      // document.dispatchEvent(new Event('initFormValidation'));
+      document.dispatchEvent(new Event('initTooltip'));
+    });
+  }
+
+  // Analytics.prototype = _.assignIn({}, Analytics.prototype, {
+  $.extend(Analytics.prototype, {
+
+    _disableFormElements: function () {
+      $(selectors.BODY).find("input, select, form").prop('readOnly', true);
+    },
+
+    preventInteraction(e) {
+      if (ajaxLoading) {
+        e.preventDefault();
+      }
+    },
+
+    downloadReport: function (e) {
+      e.preventDefault();
+      if (ajaxLoading) return;
+
+      let $el = $(e.currentTarget);
+      let url = $el.data('url');
+      let $exportReportBody = $(selectors.EXPORT_REPORT_BODY);
+
+      window.location.href = url;
+      $exportReportBody.closest('.modal').modal('hide');
+    },
+
+  });
+
+  return Analytics;
+
+})();
 
 $(document).ready(function() {
   var sections = new theme.Sections();
   sections.register('orderDetail-page', theme.Order);
+  sections.register('sales-over-time', theme.Analytics);
 });
 
 theme.init = function() {

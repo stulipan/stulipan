@@ -15,15 +15,46 @@
 
 {% block bodyClass %} order order-list{% endblock %}
 
+{% block dataSection %}class="JS--Wrapper-analytics" data-section-id="analytics" data-section-type="sales-over-time"{% endblock %}
+
+{% block modal %}
+    <div class="modal fade" id="modal--exportReport" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content JS--Wrapper-exportReport">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalLabel">{{ 'analytics.export-your-report'|trans }}</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body-content JS--Wrapper-exportReportBody">
+                        <div class="">{{ 'analytics.report-will-be-exported-as-csv'|trans }}</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+                        <button type="submit" class="JS--Button-downloadExportReport btn btn-primary" data-url="{{ path('analytics-sales-over-time-download', {'dateRange': filterForm.dateRange.vars.value, 'groupBy': filterForm.groupBy.vars.value}) }}">
+                            <span class="loading-spinner-invisible">{{ 'generic.export-button'|trans }}</span>
+                            <span class="loading-spinner" role="status"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block headerActionsWrapper %}
     <nav class="w-100 adaptive-tabs adaptive-tabs-right">
         <ul class="nav nav-tabs adaptive-primary navbar--toolbarX">
             <li class="nav-item adaptive-item">
-                <a class="nav-link" href="#"><i class="fas fa-print mr-2"></i>{{ 'generic.export'|trans }}</a>
+                <a class="nav-link" href="" data-toggle="modal" data-target="#modal--exportReport" data-backdrop="static">
+                    <i class="fas fa-download mr-2"></i> {{ 'generic.export'|trans }}
+                </a>
             </li>
-            <li class="nav-item adaptive-item">
-                <a class="nav-link" href="#"><i class="far fa-file-alt mr-2"></i>{{ 'generic.cancel'|trans }}</a>
-            </li>
+{#            <li class="nav-item adaptive-item">#}
+{#                <a class="nav-link" href="#"><i class="far fa-file-alt mr-2"></i>{{ 'generic.cancel'|trans }}</a>#}
+{#            </li>#}
         </ul>
         <ul class="adaptive-template">
             <li class="nav-item adaptive-item adaptive-more">
@@ -38,53 +69,6 @@
 {% endblock %}
 
 {% block beforeContent %}
-    <div class="mt-3 card-bodyX pb-0X">
-        {{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
-        <div class="w-100 d-flex flex-md-row justify-content-between">
-            <div class="field-group align-middle flex-md-row mr-2">
-                <div class="field-item flex-grow-1" id="JS--idosav">
-                    <div class="field-prepend field-append">
-                        <div class="field-addon-prepend w-addon-sm">
-                            <i class="far fa-calendar-alt mr-0"></i>
-                        </div>
-                    </div>
-                    {{ form_widget(filterForm.dateRange, { 'attr': {
-                        'class' : 'pl-addon-sm pr-addon-sm bg-transparent custom-date JS--inputDate'
-                    }}) }}
-                    <div class="field-addon-append w-addon-sm">
-                        <a href="" class="btn btn-link-secondary JS--clearDate"><i class="far fa-times-circle"></i></a>
-                    </div>
-                </div>
-
-                <div class="field-item flex-grow-1">
-                    {{ form_widget(filterForm.groupBy, {'attr': {'class': 'form-control' }}) }}
-                </div>
-            </div>
-            <div class="position-relative">
-                <input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary w-100">
-            </div>
-        </div>
-        <div style="display:none">
-            {{ form_rest(filterForm) }}
-        </div>
-        {{ form_end(filterForm) }}
-    </div>
-    <div class="mt-1 card-bodyX py-0X">
-        {% if filterTags is defined and filterTags|length %}
-            <div class="vertical-form-row mt-2">
-                {% for filterKey,value in filterTags %}
-                    {% if value is defined and value is not null %}
-                        <div class="vertical-col">
-                            <div class="filter-tag">
-                                <div class="filter-tag-content">{{ value }}</div>
-                                <a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
     <div class="mt-3 row">
         <div class="col-md-12 overflow-x-scroll overflow-x-md-hidden">
             <div class="position-relative">
@@ -123,6 +107,57 @@
     </div>
 {% endblock %}
 
+{% block contentFilter %}
+    <div class="card-body pb-0">
+        {{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
+        <div class="w-100 d-flex flex-md-row justify-content-between">
+            <div class="field-group align-middle flex-md-row mr-2">
+                <div class="field-item flex-grow-1" id="JS--idosav">
+                    <div class="field-prepend field-append">
+                        <div class="field-addon-prepend w-addon-sm">
+                            <i class="far fa-calendar-alt mr-0"></i>
+                        </div>
+                    </div>
+                    {{ form_widget(filterForm.dateRange, { 'attr': {
+                        'class' : 'pl-addon-sm pr-addon-sm bg-transparent custom-date JS--inputDate'
+                    }}) }}
+                    <div class="field-addon-append w-addon-sm">
+                        <a href="" class="btn btn-link-secondary JS--clearDate"><i class="far fa-times-circle"></i></a>
+                    </div>
+                </div>
+
+                <div class="field-item flex-grow-1">
+                    {{ form_widget(filterForm.groupBy, {'attr': {'class': 'form-control' }}) }}
+                </div>
+            </div>
+            <div class="position-relative">
+                <input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary w-100">
+            </div>
+        </div>
+        <div style="display:none">
+            {{ form_rest(filterForm) }}
+        </div>
+        {{ form_end(filterForm) }}
+    </div>
+    <div class="card-body py-0">
+        {% if filterTags is defined and filterTags|length %}
+            <div class="vertical-form-row mt-2">
+                {% for filterKey,value in filterTags %}
+                    {% if value is defined and value is not null %}
+                        <div class="vertical-col">
+                            <div class="filter-tag">
+                                <div class="filter-tag-content">{{ value }}</div>
+                                <a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
 {% block tableHeader %}
     {% if sales is defined and sales is not empty %}
         <tr>
@@ -155,7 +190,7 @@
                     {{ item.orderCount }}
                 </td>
                 <td class="">
-                    {{ item.totalRevenue|money }}
+                    {{ item.totalSales|money }}
                 </td>
             </tr>
         {% endfor %}

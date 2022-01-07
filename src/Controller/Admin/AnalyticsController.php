@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\DateRange;
 use App\Entity\Order;
+use App\Entity\Product\Product;
+use App\Entity\Product\ProductStatus;
 use App\Form\AnalyticsFilterType;
 use App\Model\OrdersSummary;
 use App\Services\AnalyticsBreakdown;
@@ -17,8 +19,14 @@ use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -45,7 +53,7 @@ class AnalyticsController extends AbstractController
 
 
     /**
-     * @Route("/analytics/sales-over-time", name="analytics-sales-over-time")
+     * @Route("/analytics/sales-over-time/{page}", name="analytics-sales-over-time")
      */
     public function showSalesOverTime(Request $request, $page = 1, StoreSettings $settings)
     {
@@ -114,7 +122,75 @@ class AnalyticsController extends AbstractController
         $filterForm = $this->createForm(AnalyticsFilterType::class, $data);
 
         // DATA IN THE LIST
+        $sales = $this->getSalesOverTime($range, $groupBy);
+
+        $pagerfanta = new Pagerfanta(new ArrayAdapter($sales));
+//        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
+        $pagerfanta->setMaxPerPage(50);
+
+        try {
+            $pagerfanta->setCurrentPage($page);
+        } catch(NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
         $sales = [];
+        foreach ($pagerfanta->getCurrentPageResults() as $result) {
+            $sales[] = $result;
+        }
+
+        return $this->render('admin/analytics/sales-over-time.html.twig', [
+            'currentPeriod' => $currentPeriod,
+            'filterForm' => $filterForm->createView(),
+            'filterTags' => $filterTags,
+            'filterUrls' => $filterUrls,
+            'sales' => $sales,
+            'paginator' => $pagerfanta,
+            'total' => $pagerfanta->getNbResults(),
+        ]);
+    }
+
+    /**
+     * @Route("/analytics/filter", name="analytics-filter")
+     */
+    public function handleFilterForm(Request $request)
+    {
+        $dataFromRequest = $request->request->all();
+        $formName = array_keys($dataFromRequest)[0];
+
+        // Since there are two Filter forms on the page with randomly created unique names (blockPrefixes -> see OrderFilterType)
+        // the form name must be extracted from the Request data and used to recreate the very same form.
+        $form = $this->get('form.factory')->createNamed($formName, AnalyticsFilterType::class);
+//        $form = $this->createForm(OrderFilterType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $filters = $form->getData();
+            $dateRange = null;
+            $groupBy = null;
+
+            if ($filters['dateRange']) {
+                $dateRange = $filters['dateRange'];
+            }
+            if ($filters['groupBy']) {
+                $groupBy = $filters['groupBy'];
+            } else {
+                $groupBy = $this->ab->getDefault();
+            }
+
+            return $this->redirectToRoute('analytics-sales-over-time',[
+                'dateRange' => $dateRange,
+                'groupBy' => $groupBy,
+            ]);
+        }
+        return $this->redirectToRoute('analytics-sales-over-time');
+    }
+
+    private function getSalesOverTime(DateRange $range = null, string $groupBy = null)
+    {
+        $rep = $this->getDoctrine()->getRepository(Order::class);
+        $sales = [];
+
         $startR = clone $range->getStart();
         $endR = clone $range->getEnd();
         $numberOfBreakdowns = $this->getNumberOfBreakdowns($groupBy, $range);
@@ -230,75 +306,32 @@ class AnalyticsController extends AbstractController
                         'period'=> 'dateRange',
                         'dateRange' => $this->dateRangeHelper->toDateRangeString($currentRange)
                     ]),
-                    'totalRevenue' => $rep->sumLast([
+                    'totalSales' => $rep->sumLast([
                         'period'=> 'dateRange',
                         'dateRange' => $this->dateRangeHelper->toDateRangeString($currentRange)
                     ]),
                 ];
             }
         }
-
-        $pagerfanta = new Pagerfanta(new ArrayAdapter($sales));
-//        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
-        $pagerfanta->setMaxPerPage(50);
-
-        try {
-            $pagerfanta->setCurrentPage($page);
-        } catch(NotValidCurrentPageException $e) {
-            throw new NotFoundHttpException();
-        }
-
-        $sales = [];
-        foreach ($pagerfanta->getCurrentPageResults() as $result) {
-            $sales[] = $result;
-        }
-
-        return $this->render('admin/analytics/sales-over-time.html.twig', [
-            'currentPeriod' => $currentPeriod,
-            'filterForm' => $filterForm->createView(),
-            'filterTags' => $filterTags,
-            'filterUrls' => $filterUrls,
-            'sales' => $sales,
-            'paginator' => $pagerfanta,
-            'total' => $pagerfanta->getNbResults(),
-        ]);
+        return $sales;
     }
 
-    /**
-     * @Route("/analytics/filter", name="analytics-filter")
-     */
-    public function handleFilterForm(Request $request)
+    private function getSchema(string $reportName)
     {
-        $dataFromRequest = $request->request->all();
-        $formName = array_keys($dataFromRequest)[0];
-
-        // Since there are two Filter forms on the page with randomly created unique names (blockPrefixes -> see OrderFilterType)
-        // the form name must be extracted from the Request data and used to recreate the very same form.
-        $form = $this->get('form.factory')->createNamed($formName, AnalyticsFilterType::class);
-//        $form = $this->createForm(OrderFilterType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $filters = $form->getData();
-            $dateRange = null;
-            $groupBy = null;
-
-            if ($filters['dateRange']) {
-                $dateRange = $filters['dateRange'];
-            }
-            if ($filters['groupBy']) {
-                $groupBy = $filters['groupBy'];
-            }
-
-            return $this->redirectToRoute('analytics-sales-over-time',[
-                'dateRange' => $dateRange,
-                'groupBy' => $groupBy,
-            ]);
+        $schema = null;
+        switch ($reportName) {
+            CASE AnalyticsBreakdown::R_SALES_OVER_TIME:
+                $schema = [
+                    'date' => $this->translator->trans('analytics.sales-over-time.date'),
+                    'orderCount' => $this->translator->trans('analytics.sales-over-time.orders'),
+                    'totalSales' => $this->translator->trans('analytics.sales-over-time.total-sales'),
+                ];
+                break;
         }
-        return $this->redirectToRoute('analytics-sales-over-time');
+        return $schema;
     }
 
-    public function getGroupByString(string $groupBy)
+    private function getGroupByString(string $groupBy)
     {
         $groupByString = null;
         switch ($groupBy) {
@@ -321,7 +354,7 @@ class AnalyticsController extends AbstractController
         return $groupByString;
     }
 
-    public function getNumberOfBreakdowns(string $groupBy = null, DateRange $range = null)
+    private function getNumberOfBreakdowns(string $groupBy = null, DateRange $range = null)
     {
         $numberOfBreakdowns = 0;
         if ($range) {
@@ -384,5 +417,64 @@ class AnalyticsController extends AbstractController
             }
         }
         return $numberOfBreakdowns;
+    }
+
+
+
+    /**
+     * @Route("/analytics/sales-over-time-download", name="analytics-sales-over-time-download")
+     */
+    public function downloadCSV(Request $request, StoreSettings $storeSettings, Localization $localization): Response
+    {
+        $dateRange = $request->query->get('dateRange');
+        $groupBy = $request->query->get('groupBy');
+
+        $rep = $this->getDoctrine()->getRepository(Order::class);
+        if ($dateRange == null) {
+            // Start date is when first order was placed
+            // Then build range
+            $ordersPlaced = $rep->findBy(['status' => !null], ['postedAt' => 'ASC']);
+            if (count($ordersPlaced) > 0) {
+                $start = $ordersPlaced[0]->getPostedAt();
+            }
+            if (!isset($start)) {
+                $start = new DateTime();
+            }
+            $end = new DateTime();
+            $range = new DateRange($start, $end);
+        } else {
+            $range = $this->dateRangeHelper->split($dateRange);
+        }
+        $sales = $this->getSalesOverTime($range, $groupBy);
+
+        $locale = $localization->getCurrentLocale();
+
+        $data = [];
+        $schema = $this->getSchema(AnalyticsBreakdown::R_SALES_OVER_TIME);
+
+        foreach ($sales as $item) {
+            foreach ($item as $key => $value) {
+                $newkey = isset($schema[$key]) ? $schema[$key] : $key;
+                $item[$newkey] = $value;
+                unset($item[$key]);
+            }
+            $data[] = $item;
+        }
+
+        $encoders = [new CsvEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $csvContent = $serializer->serialize($data, 'csv');
+
+        $response = new Response($csvContent);
+        $response->headers->set('Content-Encoding', 'UTF-8');
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $filename = AnalyticsBreakdown::R_SALES_OVER_TIME;
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            sprintf($filename.'-%s-%s.csv', $range->getStart()->format($locale->getDateFormat()), $range->getEnd()->format($locale->getDateFormat()))
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        return $response;
     }
 }

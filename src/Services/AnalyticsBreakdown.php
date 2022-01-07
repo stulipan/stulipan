@@ -14,6 +14,8 @@ class AnalyticsBreakdown
     public const YEAR = 'year';
     public const NONE = 'none';
 
+    public const R_SALES_OVER_TIME = 'sales-over-time';
+
     private $translator;
 
     public function __construct(TranslatorInterface $translator)

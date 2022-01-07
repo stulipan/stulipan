@@ -392,6 +392,8 @@ analytics:
     none: None
     filter-by-date: Date range
     date-range: 'Date range: {{ value }}'
+    export-your-report: Export your report
+    report-will-be-exported-as-csv: Report will be exported as a CSV (comma separated values) table.
     sales-over-time:
         sales-over-time-title: Sales over time
         date: Date
@@ -409,6 +411,7 @@ generic:
     modify: Modify
     preview: Preview
     export: Export
+    export-button: Export
     view: Page
     open: Open
     save: Save

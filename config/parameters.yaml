@@ -1,8 +1,0 @@
-parameters:
-    database_host: localhost
-    database_port: 3306
-    database_name: tulipdb
-    database_user: liviu
-    database_password: Sssl9000
-
-    jwt_key_pass_phrase: ssl9000

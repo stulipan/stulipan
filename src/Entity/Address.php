@@ -41,7 +41,7 @@ class Address
      * @ORM\Column(name="street", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="checkout.recipient.missing-address")
      */
-    private $street='';
+    private $street;
 
     /**
      * @var string
@@ -66,7 +66,7 @@ class Address
      * @ORM\Column(name="province", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="checkout.recipient.missing-province")
      */
-    private $province='';
+    private $province;
 
     /**
      * @var GeoCountry

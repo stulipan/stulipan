@@ -35,12 +35,10 @@
                         <label for="{{ form.price.vars.full_name }}" class="">Szállítási díj</label>
                     </div>
                     <div class="col-sm-8 col-lg-6 ">
-                        <div class="field-group">
-                            <div class="field-item field-prepend">
-                                <div class="field-addon-prepend w-addon-smX">HUF</div>
-                            </div>
-                            {{ form_widget(form.price) }}
+                        <div class="field-prepend">
+                            <div class="field-addon-prepend w-addon-sm">HUF</div>
                         </div>
+                        {{ form_widget(form.price) }}
                         {{ form_errors(form.price) }}
                     </div>
                 </div>

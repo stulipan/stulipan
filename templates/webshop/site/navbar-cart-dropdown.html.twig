@@ -3,9 +3,9 @@
             <svg class="icon">
                 <use xlink:href="#bag"> </use>
             </svg>
-            <div class="JS--Badge-itemsCount navbar-badge {% if order.itemsCount is defined and order.itemsCount > 0 %}show{% endif %}" data-section-id="cartBadge-template" data-section-type="cartBadge-template" data-items-count="{% if order.itemsCount is defined %}{{ order.itemsCount }}{% endif %}">
-                {% if order.itemsCount is defined %}
-                    {{  order.itemsCount }}
+            <div class="JS--Badge-itemsCount navbar-badge {% if cart.hasItems %}show{% endif %}" data-section-id="cartBadge-template" data-section-type="cartBadge-template" data-items-count="{% if cart.hasItems %}{{ cart.itemCount }}{% endif %}">
+                {% if cart.hasItems %}
+                    {{ cart.itemCount }}
                 {% else %}
                     0
                 {% endif %}

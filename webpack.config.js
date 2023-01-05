@@ -22,7 +22,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
 
-    .addEntry('store-app', './assets/store-app.js')
+    // .addEntry('store-app', './assets/store-app.js')
 
     .addEntry('admin-app', './assets/admin-app.js')
     .addEntry('v-admin', './assets/vue/admin/v-admin.js')

@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
+// !!! NOT IN USE !!!!
 class CartRecipientController extends AbstractController
 {
     /**
@@ -54,64 +54,64 @@ class CartRecipientController extends AbstractController
 
     }
 
-    /**
-     * Handles the Sender form. Only available for logged in users.
-     * Create and submit the form from AJAX.
-     *
-     * @Route("/cart/editRecipient/{id}", name="cart-editRecipient", methods={"POST"})
-     */
-    public function editRecipientForm(Request $request, ?Recipient $recipient, $id = null, ValidatorInterface $validator)
-    {
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException('HIBA: /cart/editRecipient/{id}');
-        }
-
-        // If User from session is equal to User in Recipient
-        $orderBuilder = $this->orderBuilder;
-        $customer = $orderBuilder->getCurrentOrder()->getCustomer();
-        if (!$recipient) {
-            $orderBuilder->removeRecipient($orderBuilder->getCurrentOrder()->getRecipient());  // torli a mar elmentett Recipientet
-
-            $recipient = new Recipient();
-            $recipient->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
-            // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
-            $address = new Address();
-            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
-            $recipient->setAddress($address);
-            $form = $this->createForm(RecipientType::class, $recipient);
-        } else {
-            $form = $this->createForm(RecipientType::class, $recipient);
-        }
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            //elobb elmentem a recipient formadatokat a Recipient tablaba
-            $recipient = $form->getData();
-
-            $phone = $form->get('phone')->getData();
-
-            if ($customer) {
-                $recipient->setCustomer($customer); // a cimzettet egy Customerhez kotjuk
-            }
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($recipient);
-            $entityManager->flush();
-
-            $orderBuilder->setRecipient($recipient);
-        }
-        // Renders form with errors
-        if ($form->isSubmitted() && !$form->isValid()) {
-            $html = $this->renderView('webshop/cart/recipient_form.html.twig', [
-                'recipientForm' => $form->createView(),
-            ]);
-            return new Response($html, 400);
-        }
-
-        return $this->render('webshop/cart/recipient_form.html.twig', [
-            'recipientForm' => $form->createView(),
-        ]);
-    }
+//    /**
+//     * Handles the Sender form. Only available for logged in users.
+//     * Create and submit the form from AJAX.
+//     *
+//     * @Route("/cart/editRecipient/{id}", name="cart-editRecipient", methods={"POST"})
+//     */
+//    public function editRecipientForm(Request $request, ?Recipient $recipient, $id = null, ValidatorInterface $validator)
+//    {
+//        if (!$request->isXmlHttpRequest()) {
+//            throw $this->createNotFoundException('HIBA: /cart/editRecipient/{id}');
+//        }
+//
+//        // If User from session is equal to User in Recipient
+//        $orderBuilder = $this->orderBuilder;
+//        $customer = $orderBuilder->getCurrentOrder()->getCustomer();
+//        if (!$recipient) {
+//            $orderBuilder->removeRecipient($orderBuilder->getCurrentOrder()->getRecipient());  // torli a mar elmentett Recipientet
+//
+//            $recipient = new Recipient();
+//            $recipient->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
+//            // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
+//            $address = new Address();
+//            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
+//            $recipient->setAddress($address);
+//            $form = $this->createForm(RecipientType::class, $recipient);
+//        } else {
+//            $form = $this->createForm(RecipientType::class, $recipient);
+//        }
+//
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            //elobb elmentem a recipient formadatokat a Recipient tablaba
+//            $recipient = $form->getData();
+//
+//            $phone = $form->get('phone')->getData();
+//
+//            if ($customer) {
+//                $recipient->setCustomer($customer); // a cimzettet egy Customerhez kotjuk
+//            }
+//            $entityManager = $this->getDoctrine()->getManager();
+//            $entityManager->persist($recipient);
+//            $entityManager->flush();
+//
+//            $orderBuilder->setRecipient($recipient);
+//        }
+//        // Renders form with errors
+//        if ($form->isSubmitted() && !$form->isValid()) {
+//            $html = $this->renderView('webshop/cart/recipient_form.html.twig', [
+//                'recipientForm' => $form->createView(),
+//            ]);
+//            return new Response($html, 400);
+//        }
+//
+//        return $this->render('webshop/cart/recipient_form.html.twig', [
+//            'recipientForm' => $form->createView(),
+//        ]);
+//    }
 
 
 
@@ -156,134 +156,5 @@ class CartRecipientController extends AbstractController
         }
     }
 
-    /**
-     * Gets the list of Recipients. Handles 2 situations:
-     *
-     * 1. A Customer is assigned to the current order (User is logged in)
-     * Returns all the customer's recipients.
-     *
-     * 2. No customer was found in the current order (User isn't logged in, eg: Guest checkout)
-     * In this case returns only one Recipient.
-     *
-     * @Route("/cart/getRecipients", name="cart-getRecipients", methods={"GET"})
-     */
-    public function getRecipients(Request $request)
-    {
-        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
 
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException('HIBA: /cart/getRecipients');
-        }
-
-        $orderBuilder = $this->orderBuilder;
-        /** If the Order has a Customer, returns the list of the customer's Recipients */
-        if ($orderBuilder->getCurrentOrder()->getCustomer()) {
-
-            $recipients = $orderBuilder->getCurrentOrder()->getCustomer()->getRecipients();
-        } /** Else simply returns the Recipient from within the Order (Checkout whithout user registration) */
-        else {
-            $recipients = new ArrayCollection();
-            /** Verifies if a Recipient exists. If not return the Recipient form. */
-            if ($orderBuilder->hasRecipient()) {
-                $recipients->add($orderBuilder->getCurrentOrder()->getRecipient());
-            }
-        }
-//        if (!$recipients || $recipients->isEmpty()) {
-//            $recipient = new Recipient();
-//            // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
-//            $address = new Address();
-//            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
-//            $recipient->setAddress($address);
-//            $form = $this->createForm(RecipientType::class, $recipient);
-//
-//            return $this->render('webshop/cart/recipient_form.html.twig', [
-//                'order' => $orderBuilder->getCurrentOrder(),
-//                'recipientForm' => $form->createView(),
-//            ]);
-//        }
-        return $this->render('webshop/cart/recipient_list.html.twig', [
-            'recipients' => $recipients,
-            'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
-        ]);
-    }
-
-    /**
-     * @Route("/cart/getRecipient", name="cart-getRecipient", methods={"GET"})
-     */
-    public function getRecipient(Request $request)
-    {
-        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
-
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException('HIBA: /cart/getRecipient');
-        }
-
-        $orderBuilder = $this->orderBuilder;
-        if ($orderBuilder->hasRecipient()) {
-            $recipient = $orderBuilder->getCurrentOrder()->getRecipient();
-        } else {
-            $recipient = new Recipient();
-            // Ezzel mondom meg neki, mi legyen a default country ertek (azaz Magyarorszag)
-            $address = new Address();
-            $address->setCountry($this->getDoctrine()->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
-            $recipient->setAddress($address);
-        }
-
-        $form = $this->createForm(RecipientType::class, $recipient);
-
-        return $this->render('webshop/cart/recipient_form.html.twig', [
-            'recipientForm' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * Picks a Recipient from the recipient list and assigns it to the current Order.
-     * It is used in AJAX.
-     *
-     * @Route("/cart/pickRecipient/{id}", name="cart-pickRecipient", methods={"POST"})
-     */
-    public function pickRecipient(Request $request, Recipient $recipient)
-    {
-        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
-
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException('HIBA: /cart/pickRecipient/{id}');
-        }
-
-        // If User from session is equal to User in Recipient
-        if ($this->orderBuilder->getCustomer() === $recipient->getCustomer()) {
-            $orderBuilder = $this->orderBuilder;
-            $orderBuilder->setRecipient($recipient);
-
-            return $this->render('webshop/cart/recipient_form.html.twig', [
-                'recipientForm' => $this->createForm(RecipientType::class, $recipient)->createView(),
-                'selectedRecipient' => $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
-            ]);
-        }
-    }
-    
-    /**
-     * Deletes a Recipient. Used in AJAX.
-     *
-     * @Route("/cart/deleteRecipient/{id}", name="cart-deleteRecipient", methods={"DELETE", "GET"})
-     */
-    public function deleteRecipient(Request $request, ?Recipient $recipient, $id = null)
-    {
-        $this->denyAccessUnlessGranted("IS_AUTHENTICATED_FULLY");
-
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException('HIBA: /cart/deleteRecipient/{id}');
-        }
-
-        // If User from session is equal to User in Recipient
-        if ($this->orderBuilder->getCustomer() === $recipient->getCustomer()) {
-            $this->orderBuilder->getCustomer()->removeRecipient($recipient);
-            if ($this->orderBuilder->getCurrentOrder()->getRecipient() == $recipient) {
-                $this->orderBuilder->removeRecipient();
-            }
-            $this->getDoctrine()->getManager()->remove($recipient);
-            $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('cart-getRecipient');
-        }
-    }
 }

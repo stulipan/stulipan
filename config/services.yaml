@@ -12,6 +12,7 @@ parameters:
     images_directory: '%kernel.project_dir%/public/uploads/images'
     product_images_directory: '%kernel.project_dir%/public/uploads/images/termekek'
     category_images_directory: '%kernel.project_dir%/public/uploads/images/categories'
+    export_directory: '%kernel.project_dir%/export'
 
     default_vat_rate: 1  # id=1 a VatRate db tablaban   #nincs hasznalva!!
 
@@ -23,6 +24,7 @@ services:
 
         bind:
             $targetDirectory: '%images_directory%'    # used in Services\FileUploader.php
+            $exportDirectory: '%export_directory%'
             $imagePath: '%images_directory%'          # used in Form\ImageType.php
 #            $default_vat_rate: 1
             $locales: '%app_locales%'

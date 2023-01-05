@@ -81,32 +81,36 @@
 
 {%  block cartCollapse %}
     <div class="cart">
-        {% include 'webshop/cart/cart.html.twig' with {
-            'showMessage': true,
-            'showQuantity': false,
-            'showRemove': false,
-            'showSummary': false,
-            'hasProductLink': false,
-        } %}
+        <div class="cart-body">
+            {% include 'webshop/cart/cart.html.twig' with {
+                'showMessage': true,
+                'showQuantity': false,
+                'showRemove': false,
+                'showSummary': false,
+                'hasProductLink': false,
+            } %}
+        </div>
     </div>
     {% include 'webshop/cart/checkout-sidebar-summary-widget.html.twig' %}
 {% endblock %}
 
 {%  block rightColumn %}
     <div class="cart">
-        {% include 'webshop/cart/cart.html.twig' with {
-            'showMessage': true,
-            'showQuantity': false,
-            'showRemove': false,
-            'showSummary': false,
-            'hasProductLink': false,
-        } %}
+        <div class="cart-body">
+            {% include 'webshop/cart/cart.html.twig' with {
+                'showMessage': true,
+                'showQuantity': false,
+                'showRemove': false,
+                'showSummary': false,
+                'hasProductLink': false,
+            } %}
+        </div>
     </div>
     {% include 'webshop/cart/checkout-sidebar-summary-widget.html.twig' %}
 {% endblock %}
 
 {% block gotoNext %}
-    <div class="mt-20px mb-5 mb-5 d-flex flex-column flex-md-row justify-content-center">
+    <div class="mt-20px mb-5 d-flex flex-column flex-md-row justify-content-center">
         <a href="{{ path('homepage') }}" class="btn btn-primary btn-lg btn-block">{{ 'checkout.continue-to-store-button'|trans }}</a>
     </div>
 {% endblock %}

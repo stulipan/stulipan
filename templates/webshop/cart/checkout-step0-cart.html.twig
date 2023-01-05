@@ -12,6 +12,8 @@
     {% include 'webshop/widgets/tracking-codes.html.twig' with { 'eventViewCart': true } %}
 {% endblock %}
 
+{% block bodyClass %}cart-page{% endblock %}
+
 {% block underNavbar %}
 {% endblock %}
 
@@ -35,8 +37,9 @@
                                             </div>
 
                                             {% include 'webshop/cart/alert-cartItems-insert.html.twig' %}
-                                            <div class="JS--Wrapper-cartBody cart mt-4">
+                                            <div class="JS--Wrapper-cartBody cart-body cart-body-on-page mt-4">
                                                 {% include 'webshop/cart/cart.html.twig' with {
+                                                    'order': cart,
                                                     'showQuantity': true,
                                                     'showRemove': true,
                                                     'showSummary': true,
@@ -47,11 +50,11 @@
                                             </div>
                                         </div>
 {#                                        {% if order.items is not empty %}#}
-                                            <div id="goto_checkout" class="JS--Wrapper-goTo mt-4 mt-md-5 {% if order.items is empty %}d-none{% endif %}">
+                                            <div id="goto_checkout" class="JS--Wrapper-goTo mt-4 mt-md-5 {% if cart.items is empty %}d-none{% endif %}">
                                                 <div class="row">
                                                     <div class="col-lg-12 mb-4">
                                                         <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
-                                                            <button class="JS--Button-gotoStep1 btn btn-success btn-lg w-md-50 btn-goto order-1 order-lg-2 py-3" data-url="{{ path('site-checkout-step1-pickDeliveryAddress') }}">
+                                                            <button class="JS--Button-gotoStep1 btn btn-success btn-lg w-md-50 btn-goto order-1 order-lg-2 py-3" data-url="{{ path('site-checkout-initializeCheckout') }}">
                                                                 <span class="loading-spinner-invisible">{{ flowerShopMode ? 'checkout.flower-shop.continue-to-recipient-button'|trans : 'checkout.continue-to-shipping-address-button'|trans }}</span>
                                                                 <span class="loading-spinner" role="status"></span>
                                                             </button>
@@ -89,7 +92,7 @@
                                     <div class="col-lg-12 correction-no-padding">
                                         <div class="JS--Wrapper-greetingCard card write-message">
                                             <div class="card-body">
-                                                <svg class="svg-icon"><use xlink:href="#mail-1"></use></svg>
+                                                <svg class="svg-icon"><use xlink:href="#envelope"></use></svg>
                                                 <div class="checkout-block-header">
                                                     <h4 class="checkout-block-title">{{ 'cart.greeting-card.send-message-title'|trans }}</h4>
                                                 </div>
@@ -163,11 +166,11 @@
                         </div>
 
 
-                        <div id="goto_checkout" class="JS--Wrapper-goTo col-md-12 col-lg-10 mx-auto mt-5 mb-4 mb-md-5 {% if order.items is empty %}d-none{% endif %}">
+                        <div id="goto_checkout" class="JS--Wrapper-goTo col-md-12 col-lg-10 mx-auto mt-5 mb-4 mb-md-5 {% if cart.items is empty %}d-none{% endif %}">
                             <div class="row">
                                 <div class="col-lg-12 mb-4">
                                     <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
-                                        <button class="JS--Button-gotoStep1 btn btn-success btn-lg w-md-50 btn-goto order-1 order-lg-2 py-3" data-url="{{ path('site-checkout-step1-pickDeliveryAddress') }}">
+                                        <button class="JS--Button-gotoStep1 btn btn-success btn-lg w-md-50 btn-goto order-1 order-lg-2 py-3" data-url="{{ path('site-checkout-initializeCheckout') }}">
                                             <span class="loading-spinner-invisible">{{ flowerShopMode ? 'checkout.flower-shop.continue-to-recipient-button'|trans : 'checkout.continue-to-shipping-address-button'|trans }}</span>
                                             <span class="loading-spinner" role="status"></span>
                                         </button>

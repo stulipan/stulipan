@@ -369,7 +369,7 @@ class ProductController extends BaseController //extends AbstractController
                 'description' => $p->getDescription() ? str_replace("\n", '', strip_tags($p->getDescription())) : $p->getName(),
                 'availability' => ($p->getStock() > 0 ? 'in stock' : 'out of stock'),
                 'condition' => 'new',
-                'price' => $p->getPrice()->getNumericValue().' '.$locale->getCurrencyCode(),
+                'price' => $p->getSellingPrice().' '.$locale->getCurrencyCode(),
                 'link' => $this->generateUrl('site-product-show', ['slug' => $p->getSlug()], UrlGenerator::ABSOLUTE_URL),
                 'image_link' => $p->getImages()[0]->getImageUrl(),
                 'brand' => $storeSettings->get('store.brand'),

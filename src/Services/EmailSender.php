@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use App\Entity\Order;
 use App\Entity\StoreEmailTemplate;
 use App\Twig\AppExtension;
@@ -76,7 +75,7 @@ class EmailSender
         $subject = $twig->render('subject', [
             'orderNumber' => '#'.$order->getNumber(),
             'storeUrl' => $this->storeSettings->get('store.url'),
-            'totalAmount' => $this->appExtension->formatMoney($order->getSummary()->getTotalAmountToPay()),
+            'totalAmount' => $this->appExtension->formatMoney($order->getTotalAmountToPay()),
         ]);
 
 
@@ -123,7 +122,7 @@ class EmailSender
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
-            throw new ErrorException('Az emailt nem sikerült elküldeni!');
+            throw new ErrorException('Az emailt nem sikerült elküldeni! '.$e->getMessage());
         }
     }
 }

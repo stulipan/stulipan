@@ -60,6 +60,9 @@ class PaymentBuilder
     private $appKernel;
     private $translator;
 
+    /**
+     * @var BarionClient $barion
+     */
     private $barion;
     private $cib;
 
@@ -126,7 +129,12 @@ class PaymentBuilder
         return $this->cib;
     }
 
-    public function createPaymentModel(string $gateway = null, Order $order)
+    /**
+     * @param string|null $gateway
+     * @param Order $order
+     * @return CashinPaymentModel
+     */
+    public function createPaymentModel(string $gateway = null, Order $order, bool $isTestMode = false)
     {
         $payment = new CashinPaymentModel();
         $paymentMethodShortcode = $order->getPaymentMethod()->getShortcode();
@@ -137,11 +145,25 @@ class PaymentBuilder
             $transaction = new PaymentTransaction();
             $transaction->setSourceName(PaymentTransaction::SOURCE_WEB);
             $transaction->setOrder($order);
-            $transaction->setAmount($order->getSummary()->getTotalAmountToPay());
+            $transaction->setAmount($order->getTotalAmountToPay());
             $transaction->setCurrency('HUF');
             $transaction->setStatus(PaymentTransaction::STATUS_PENDING);
 
             $order->addTransaction($transaction);
+        }
+
+        if ($isTestMode) {
+            $transaction->setAmount($order->getTotalAmountToPay());
+            $transaction->setCurrency('HUF');
+            $transaction->setStatus(PaymentTransaction::STATUS_PENDING);
+            $transaction->setProcessedAt(null);
+
+            $transaction->setErrorCode(null);
+            $transaction->setMessage(null);
+
+            $transaction->setGatewayErrorCode(null);
+            $transaction->setGatewayErrorTitle(null);
+            $transaction->setGatewayErrorMessage(null);
         }
 
         if ($paymentMethodShortcode === self::MANUAL_COD || $paymentMethodShortcode === self::MANUAL_BANK) {
@@ -221,7 +243,8 @@ class PaymentBuilder
         $trans = new PaymentTransactionModel();
         $trans->POSTransactionId = $order->getNumber(); //$transaction->getId(); //"TRANS-01";
         $trans->Payee = self::BARION_PAYEE_EMAIL;
-        $trans->Total = $order->getSummary()->getTotalAmountToPay();
+//        dd($order->getTotalAmountToPay());
+        $trans->Total = $order->getTotalAmountToPay();
         $trans->Currency = Currency::HUF;
         $trans->Comment = self::BARION_COMMENT;
 
@@ -279,7 +302,7 @@ class PaymentBuilder
 
         $paymentRequest = new PaymentRequest();
         $paymentRequest->uid = 'CIB12345678';
-        $paymentRequest->amount = $order->getSummary()->getTotalAmountToPay();
+        $paymentRequest->amount = $order->getTotalAmountToPay();
         $paymentRequest->urlReturn = $urlRedirect;
 
 
@@ -292,7 +315,7 @@ class PaymentBuilder
             $transaction->setGateway(PaymentBuilder::GATEWAY_CIB);
             $transaction->setSourceName(PaymentTransaction::SOURCE_WEB);
             $transaction->setOrder($order);
-            $transaction->setAmount($order->getSummary()->getTotalAmountToPay());
+            $transaction->setAmount($order->getTotalAmountToPay());
             $transaction->setCurrency('HUF');
 
             $transaction->setStatus(PaymentTransaction::STATUS_PENDING);
@@ -308,10 +331,10 @@ class PaymentBuilder
     /**
      * Returns the Payment status based on a transaction details (Kind and Status)
      *
-     * @param PaymentTransaction $transaction
+     * @param PaymentTransaction|null $transaction
      * @return PaymentStatus|null
      */
-    public function computePaymentStatus(?PaymentTransaction $transaction)
+    public function computePaymentStatus(?PaymentTransaction $transaction): ?PaymentStatus
     {
         if ($transaction === null) {
 //            throw new \Error('STUPID: computePaymentStatus() >> No transaction found!');
@@ -320,62 +343,52 @@ class PaymentBuilder
         $kind = $transaction->getKind();
         $status = $transaction->getStatus();
 
-        // Sale
-        // Applies for CC and Manual payments too.
+        // Sale (applies for CC and Manual payments too)
         if ($kind === PaymentTransaction::KIND_SALE && $status === PaymentTransaction::STATUS_SUCCESS) {
             $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PAID]);
             return $status;
-//            return PaymentStatus::STATUS_PAID;
         }
         if ($kind === PaymentTransaction::KIND_SALE && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE || $status === PaymentTransaction::STATUS_CANCELED)) {
             $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
             return $status;
-//            return PaymentStatus::STATUS_PENDING;
         }
 
         // Authorization
         if ($kind === PaymentTransaction::KIND_AUTHORIZATION && $status === PaymentTransaction::STATUS_SUCCESS) {
             $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_AUTHORIZED]);
             return $status;
-//            return PaymentStatus::STATUS_AUTHORIZED;
         }
         if ($kind === PaymentTransaction::KIND_AUTHORIZATION && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
             $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
             return $status;
-//            return PaymentStatus::STATUS_PENDING;
         }
 
         // Capture
         if ($kind === PaymentTransaction::KIND_CAPTURE && $status === PaymentTransaction::STATUS_SUCCESS) {
             $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PAID]);
             return $status;
-//            return PaymentStatus::STATUS_PAID;
         }
         if ($kind === PaymentTransaction::KIND_CAPTURE && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
             // If current transaction is a Capture, then the parent must be an Authorization Success
             $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_AUTHORIZED]);
             return $status;
-//            return PaymentStatus::STATUS_AUTHORIZED;
         }
 
         // Refund
         if ($kind === PaymentTransaction::KIND_REFUND && $status === PaymentTransaction::STATUS_SUCCESS) {
             $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_REFUNDED]);
             return $status;
-//            return PaymentStatus::STATUS_REFUNDED;
         }
         if ($kind === PaymentTransaction::KIND_REFUND && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
             // If current transaction is a Refund, then the parent must be a Capture Success
             $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PAID]);
             return $status;
-//            return PaymentStatus::STATUS_PAID;
         }
 
         // Void
         if ($kind === PaymentTransaction::KIND_VOID && $status === PaymentTransaction::STATUS_SUCCESS) {
-            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_VOID]);
+            $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_VOIDED]);
             return $status;
-//            return PaymentStatus::STATUS_VOIDED;
         }
         if ($kind === PaymentTransaction::KIND_VOID && ($status === PaymentTransaction::STATUS_ERROR || $status === PaymentTransaction::STATUS_FAILURE)) {
             // A Void is a cancellation of a pending authorization or capture. So we don't know
@@ -387,7 +400,6 @@ class PaymentBuilder
         if ($kind === null || ($status === null || $status === PaymentTransaction::STATUS_PENDING || $status === PaymentTransaction::STATUS_FAILURE || $status === PaymentTransaction::STATUS_ERROR)) {
             $status = $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);
             return $status;
-//            return PaymentStatus::STATUS_PENDING;
         }
 
         return $this->em->getRepository(PaymentStatus::class)->findOneBy(['shortcode' => PaymentStatus::STATUS_PENDING]);

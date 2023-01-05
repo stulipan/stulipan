@@ -16,22 +16,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\Constraints as CustomAssert;
 
 /**
- * @ ApiResource(
- * )
- *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * ORM\EntityListeners({"App\Event\SetSlugProduct"})
  * @UniqueEntity("sku", message="product.sku-already-in-use")
  * @UniqueEntity("slug", message="product.slug-already-in-use")
  */
-class Product //implements \JsonSerializable
+class Product
 {
     // Ezeket mar nem hasznalom
     const STATUS_ENABLED = 1;
@@ -101,7 +99,7 @@ class Product //implements \JsonSerializable
 //    private $grossPrice = 0;
 
     /**
-     * @var Price
+     * @var Price|null
      * @Groups({"productView", "productList", "eventAddToCart"})
      *
      * @ORM\OneToOne(targetEntity="App\Entity\Price", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -310,10 +308,14 @@ class Product //implements \JsonSerializable
      * @var string|null
      * @Groups({
      *     "productView",
-     *     "productList",
+     *     "productList"
      * })
      */
     private $json;
+
+//    private $sellingPrice;
+//    private $compareAtPrice;
+
 
     public function __construct()
     {
@@ -325,27 +327,28 @@ class Product //implements \JsonSerializable
         $this->salesChannels = new ArrayCollection();
     }
     
-    /**
-     * {@inheritdoc}
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id'            => $this->getId(),
-            'name'          => $this->getName(),
-            'slug'          => $this->getSlug(),
-            'kind'          => $this->getKind(),
-            'sku'           => $this->getSku(),
-            'description'   => $this->getDescription(),
-            'status'        => $this->getStatus(),
-            'price'         => $this->getPrice(),
-            'stock'         => $this->getStock(),
-            'categories'    => $this->getCategories(),
-//            'image'         => $this->getImage(),
-            'attribute'     => $this->getAttributeName(),
-        ];
-    }
-    
+//    /**
+//     * {@inheritdoc}
+//     */
+//    function jsonSerialize()
+//    {
+//        return [
+//            'id'            => $this->getId(),
+//            'name'          => $this->getName(),
+//            'slug'          => $this->getSlug(),
+//            'kind'          => $this->getKind(),
+//            'sku'           => $this->getSku(),
+//            'description'   => $this->getDescription(),
+//            'status'        => $this->getStatus(),
+//            'price'         => $this->getPrice(),
+//            'sellingPrice'  => $this->getSellingPrice(),
+//            'compareAtPrice' => $this->getCompareAtPrice(),
+//            'stock'         => $this->getStock(),
+//            'categories'    => $this->getCategories(),
+////            'image'         => $this->getImage(),
+//            'attribute'     => $this->getAttributeName(),
+//        ];
+//    }
     
     /**
      * Get id
@@ -450,13 +453,71 @@ class Product //implements \JsonSerializable
     }
 
     /**
-     * @param Price $price
+     * @param Price|null $price
      */
     public function setPrice(?Price $price)
     {
         $this->price = $price;
     }
-    
+
+    /**
+     * @Groups({
+     *     "productView",
+     *     "productList"
+     * })
+     *
+     * @return float|null
+     */
+    public function getSellingPrice()
+    {
+        return $this->getPrice()->getNumericValue();
+    }
+
+    /**
+     * @Groups({
+     *     "productView",
+     *     "productList",
+     * })
+     *
+     * @return float|null
+     */
+    public function getCompareAtPrice()
+    {
+        return $this->getPrice()->getCompareAtValue();
+    }
+
+    public function getDiscountPercentage()
+    {
+        if ($this->getCompareAtPrice() != null) {
+            $discount = (int) floor( (1 - $this->getSellingPrice()/$this->getCompareAtPrice() ) * 100 );
+            return sprintf('-%s%%', $discount);
+        }
+        return 0;
+    }
+
+    public function getDiscountAmount()
+    {
+        if ($this->isOnSale()) {
+            return $this->getCompareAtPrice()-$this->getSellingPrice();
+        }
+        return 0;
+    }
+
+    public function isOnSale()
+    {
+        return null === $this->getCompareAtPrice() ? false : true;
+    }
+
+    /**
+     * @Groups({"productView", "productList",
+     *     "orderView"})
+     */
+    public function getCoverImage()
+    {
+//        return $this->getImages()->first();
+        return $this->getImages()[0];
+    }
+
     /**
      * @ return ProductImage[]|Collection
      */
@@ -485,7 +546,7 @@ class Product //implements \JsonSerializable
      *
      * @return null|string
      */
-    public function getCoverImage()
+    public function getCoverImageAsset()
     {
         if (!$this->images->isEmpty()) {
             foreach ($this->images as $image) {

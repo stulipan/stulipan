@@ -12,6 +12,9 @@
                                         <div class="product-media-main">
                                             <div class="product-media-main-inside">
                                                 {% set bestseller = false %}
+                                                {% if product.isOnSale %}
+                                                    <div class="ribbon ribbon-danger">{{ product.discountPercentage }}</div>
+                                                {% endif %}
                                                 {% if product.isUnavailable() %}
                                                     <div class="ribbon ribbon-dark">{{ 'product.sold-out'|trans }}</div>
                                                 {% elseif product.hasBadges %}
@@ -23,7 +26,7 @@
                                                         {% endif %}
                                                     {% endfor %}
                                                 {% endif %}
-                                                <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="400" height="533">
+                                                <img src="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="400" height="533">
                                                 {% if bestseller %}
                                                     <div class="ribbon ribbon-bottom">
                                                         <svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}
@@ -33,10 +36,9 @@
                                         </div>
                                         <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link"></a>
                                         <div class="product-title">
-                                                <p class="productList--name">{{ product.name }}</p>
-{#                                                <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.name }}</a>#}
-                                                <div class="productList--price-gross mt-1">{{ product.price.grossPrice|money }}</div>
-                                            </div>
+                                            <p class="productList--name">{{ product.name }}</p>
+                                            {% include 'webshop/site/product-list-price-snippet.html.twig' %}
+                                        </div>
                                     </div>
                                 </div>
                                 {% endif %}

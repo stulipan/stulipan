@@ -1,5 +1,5 @@
     <div class="">
-        <span class="">Válassz az elmentett számlázási címeid közűl</span>
+        <span class="">{{ 'checkout.sender.previously-saved-senders-modal-description'|trans }}</span>
     </div>
     {% if senders is defined and senders is not empty %}
         {% for sender in senders %}
@@ -21,12 +21,12 @@
                             <div class="d-flex flex-row flex-sm-column h-100">
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                     <a href="{{ path('cart-pickSender', {id: sender.id}) }}" class="JS--Button-pickSender btn btn-primary btn-sm mb-0 mb-sm-2">
-                                        <span class="loading-spinner-invisible">Kiválaszt</span>
+                                        <span class="loading-spinner-invisible">{{ 'checkout.sender.select-sender'|trans }}</span>
                                         <div class="loading-spinner" role="status"></div>
                                     </a>
                                 {% endif %}
                                 <button class="JS--Button-deleteSender btn btn-sm btn-secondary ml-2 ml-sm-0" data-url="{{ path('cart-deleteSender', {id: sender.id}) }}">
-                                    <span class="loading-spinner-invisible">Töröl</span>
+                                    <span class="loading-spinner-invisible">{{ 'generic.delete'|trans }}</span>
                                     <span class="loading-spinner" role="status"></span>
                                 </button>
                             </div>

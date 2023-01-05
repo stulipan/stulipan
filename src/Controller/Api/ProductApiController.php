@@ -246,7 +246,7 @@ class ProductApiController extends BaseController
         $model->productName = $product->getProductName();
         $model->sku = $product->getSku();
 
-        $model->setPrice($product->getPrice()->getGrossPrice());
+        $model->setPrice($product->getSellingPrice());
         $model->setStatus($product->getStatus()->getName());
         $model->setImage('/uploads/images/termekek/'.$product->getImage());
         $model->setStock($product->getStock());

@@ -51,7 +51,6 @@ class CustomerType extends AbstractType
                 'required' => true,
                 'attr' => $emailAttr,
             ]);
-//        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
 
         $builder->add('lastname', TextType::class,[
 //            'mapped' => false,
@@ -93,27 +92,4 @@ class CustomerType extends AbstractType
             'urlName' => 'cart-setCustomer',
         ]);
     }
-
-//    public function onPreSetData(FormEvent $event)
-//    {
-//        $form = $event->getForm();
-//
-//        /** @var Customer $data */
-//        $data = $event->getData();
-//
-//        // disable field if it has been populated with a client already
-//        if (isset($data) && $data->getEmail()) {
-//            $emailAttr = [
-//                'placeholder' => '',
-//                'autocomplete' => 'email',
-//                'disabled' => false,
-//                'readonly' => 'readonly'
-//            ];
-//
-//            $form->add('email', TextType::class, [
-//                'required' => true,
-//                'attr' => $emailAttr,
-//            ]);
-//        }
-//    }
 }

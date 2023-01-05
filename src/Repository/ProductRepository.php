@@ -128,8 +128,8 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('status1', $enabled)
             ->setParameter('status2', $unavailable)
             ->setParameter('categoryId',$category->getId())
-            ->orderBy('p.rank', 'ASC')
             ->orderBy('p.createdAt', 'DESC')
+            ->orderBy('p.rank', 'DESC')
             ->getQuery();
 
         return $qb->execute();
@@ -164,7 +164,7 @@ class ProductRepository extends ServiceEntityRepository
             ->orWhere('p.status = :status2')
             ->setParameter('status1', $enabled)
             ->setParameter('status2', $unavailable)
-            ->orderBy('p.rank', 'ASC')
+            ->orderBy('p.rank', 'DESC')
         ;
         if ($limit) {
             $qb->setMaxResults($limit);

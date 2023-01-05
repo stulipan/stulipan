@@ -4,10 +4,12 @@ namespace App\Controller\Shop;
 
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\Address;
+use App\Entity\CartItem;
 use App\Entity\GreetingCardMessageCategory;
 use App\Entity\DeliveryDateType;
 use App\Entity\DeliverySpecialDate;
 use App\Entity\Geo\GeoCountry;
+use App\Entity\Model\CustomerBasic;
 use App\Entity\Model\GeneratedDates;
 use App\Entity\Model\DeliveryDateWithIntervals;
 use App\Entity\Model\HiddenDeliveryDate;
@@ -16,14 +18,18 @@ use App\Entity\PaymentTransaction;
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductStatus;
 use App\Entity\StoreEmailTemplate;
+use App\Event\StoreEvent;
 use App\Form\Checkout\AcceptTermsType;
 use App\Form\Checkout\SameAsRecipientType;
 use App\Form\Customer\CustomerType;
+use App\Form\CustomerBasic\CustomerBasicType;
 use App\Model\CartGreetingCard;
 
 use App\Model\CheckoutPaymentMethod;
 use App\Model\CheckoutShippingMethod;
 use App\Entity\Order;
+use App\Services\CartBuilder;
+use App\Services\CheckoutBuilder;
 use App\Services\EmailSender;
 use App\Services\OrderBuilder;
 use App\Entity\OrderLog;
@@ -48,6 +54,7 @@ use App\Form\Checkout\ShippingMethodType;
 use App\Form\UserRegistration\UserRegistrationFormType;
 use App\Services\CheckoutSettings;
 use App\Services\PaymentBuilder;
+use App\Services\StoreSessionStorage;
 use App\Services\StoreSettings;
 use App\Stulipan\Cashin\CashinBundle;
 use App\Stulipan\Cashin\Model\Enumerations\CashinEnvironment;
@@ -62,6 +69,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Error;
 use Exception;
+use phpDocumentor\Reflection\Types\This;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -69,6 +77,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Uuid;
@@ -82,27 +91,29 @@ class CheckoutController extends AbstractController
     private const STEP_SHIPPING_METHOD = 'shipping-method';
     private const STEP_PAYMENT_METHOD = 'payment-method';
 
-    /**
-     * @var OrderBuilder
-     */
     private $orderBuilder;
+    private $cartBuilder;
+    private $checkoutBuilder;
     private $translator;
     private $em;
     private $urlGenerator;
     private $eventDispatcher;
-    private $barionClient;
     private $cibClient;
     private $des;
     private $paymentBuilder;
 
     private $storeSettings;
     private $checkoutSettings;
+    private $token;
 
-    public function __construct(OrderBuilder $orderBuilder, TranslatorInterface $translator, EntityManagerInterface $entityManager,
+    public function __construct(OrderBuilder $orderBuilder, CartBuilder $cartBuilder, CheckoutBuilder $checkoutBuilder,
+                                TranslatorInterface $translator, EntityManagerInterface $entityManager,
                                 StoreSettings $storeSettings, CheckoutSettings $checkoutSettings,
                                 UrlGeneratorInterface $urlGenerator, EventDispatcherInterface $eventDispatcher, PaymentBuilder $paymentBuilder)
     {
         $this->orderBuilder = $orderBuilder;
+        $this->cartBuilder = $cartBuilder;
+        $this->checkoutBuilder = $checkoutBuilder;
         $this->translator = $translator;
         $this->em = $entityManager;
         $this->urlGenerator = $urlGenerator;
@@ -111,151 +122,77 @@ class CheckoutController extends AbstractController
         $this->checkoutSettings = $checkoutSettings;
         $this->paymentBuilder = $paymentBuilder;
 
-//        // Barion init
-//        $myPosKey = '6d53dfe8c2b04b60b33ecbedd857f6ff'; // Pikk Pakk fiok
-//        $apiVersion = 2;
-//        $environment = \BarionEnvironment::Test;
-//
-//        /** @var \BarionClient $barionClient */
-//        $this->barionClient = new \BarionClient($myPosKey, $apiVersion, $environment);
-        $this->barionClient = $paymentBuilder->createBarionClient();
-
-//        // Cib init
-//        $myPid = 'YSC0001'; // Maysa Car fiok
-//        $environment = CibEnvironment::TEST;
-//
-////        $projectDir = $this->getParameter('kernel.project_dir');
-////        $des = $projectDir . '/config/cib/' . 'YSC.des';
-//        $des = __DIR__ . '/../../../config/cib/' . 'YSC.des';
-//
-//        $this->cibClient = new GatewayCibBundle($myPid, $des, $environment);
-//        $this->des = $des;
         $this->cibClient = $paymentBuilder->createCibClient();
-
     }
 
     /**
-     * @Route("/cart", name="site-checkout-step0-pickExtraGift")
+     * When pressing the 'Go to Checkout' on the Cart page this URL is being launched.
+     *
+     *
+     * @Route("/order/initializeCheckout", name="site-checkout-initializeCheckout", methods={"POST", "GET"})
      */
-    public function checkoutStep0PickExtraGift(StoreSettings $settings)
+    public function initializeCheckout()
     {
-        $orderBuilder = $this->orderBuilder;
-        $user = $this->getUser();
-
-        $setDiscountForm = $this->createForm(SetDiscountType::class, $orderBuilder->getCurrentOrder());
-
-        $giftCategory = $this->em->getRepository(ProductCategory::class)->find($settings->get('general.giftCategory'));
-        $gifts = $giftCategory->getProducts();
-        $products= $this->em->getRepository(Product::class)->findBy(
-            ['status' => $this->em->getRepository(ProductStatus::class)->findOneBy(['shortcode' => ProductStatus::STATUS_ENABLED])],
-            ['rank' => 'ASC'],
-            8
-        );
-
-        $greetingCard = new CartGreetingCard($orderBuilder->getCurrentOrder()->getMessage(), $orderBuilder->getCurrentOrder()->getMessageAuthor());
-        $greetingCardForm = $this->createForm(GreetingCardFormType::class, $greetingCard);
-        $cardCategories = $this->em->getRepository(GreetingCardMessageCategory::class)
-            ->findAll();
-
-        return $this->render('webshop/cart/checkout-step0-extraGifts.html.twig', [
-            'title' => 'Kosár',
-            'order' => $orderBuilder->getCurrentOrder(),
-            'orderId' => $orderBuilder->getCurrentOrder()->getId(),
-            'setDiscountForm' => $setDiscountForm->createView(),
-            'progressBar' => 'pickExtraGift',
-            'gifts' => $gifts,
-            'giftCategory' => $giftCategory,
-            'upsellProducts' => $products,
-            'greetingCardForm' => $greetingCardForm->createView(),
-            'cardCategories' => $cardCategories,
-        ]);
-    }
-
-    /**
-     * @Route("/order/delivery-address", name="site-checkout-step1-pickDeliveryAddress")
-     */
-    public function step1PickDeliveryAddress()
-    {
-        /**
-         * Ezt be kell szúrni a services.yaml-ba
-         * App\Entity\OrderBuilder:
-         *    public: true
-         */
-        $orderBuilder = $this->orderBuilder;
-        $user = $this->getUser();
-
-        $validation = $this->validatePreviousStep($orderBuilder, self::STEP_CART);
+        $validation = $this->validateCart();
         if (!$validation['isValid']) {
             return $this->redirectToRoute($validation['route']);
         }
 
-        $customer = $orderBuilder->getCustomer();
+        $checkoutBuilder = $this->checkoutBuilder;
+        $checkoutBuilder->initializeCheckout();
+        return $this->redirectToRoute('site-checkout-step1-pickDeliveryAddress', [
+            'checkoutToken' => $checkoutBuilder->getCurrent()->getToken(),
+        ]);
+    }
 
-        if ($user) {
-            /** If before login a Recipient was added to the Order, assign the current Customer to this Recipient */
-            $recipientInOrder = $orderBuilder->getCurrentOrder()->getRecipient();
-            if ($recipientInOrder) {
-                $recipientInOrder->setCustomer($customer);   //// ????
-                $this->em->persist($recipientInOrder);
-                $this->em->flush();
-            }
+    /**
+     * @Route("/order/delivery-address/{checkoutToken}", name="site-checkout-step1-pickDeliveryAddress")
+     */
+    public function step1PickDeliveryAddress(SessionInterface $session, string $checkoutToken = null)
+    {
+        $validation = $this->validateCart();
+        if (!$validation['isValid']) {
+            return $this->redirectToRoute($validation['route']);
         }
 
-        $recipient = null;
-        if ($user && $user->getCustomer()) {
-            /** If Customer exists (is logged in), get all its Recipients and Senders */
-            $recipients = $user->getCustomer()->getRecipients();
+//        dd((Uuid::v4())->toRfc4122());
 
-            if ($orderBuilder->hasRecipient()) {
-                $recipient = $orderBuilder->getCurrentOrder()->getRecipient();
-            }
-//            else {
-//                if ($customer->hasRecipients()) {
-//                    if ($customer->getLastOrder()) {
-//                        $recipient = $customer->getLastOrder()->getRecipient();
-//                    } else {
-//                        $recipient = $customer->getRecipients()->last();
-//                    }
-//                }
-//            }
-        }
-        else {
-            /** Else, simply return the Recipient/Sender saved already in the Order (This is the Guest Checkout scenario) */
-            $recipients = new ArrayCollection();
-            if ($orderBuilder->getCurrentOrder()->getRecipient()) {
-                $recipients->add($orderBuilder->getCurrentOrder()->getRecipient());
-            }
-            if ($orderBuilder->hasRecipient()) {
-                $recipient = $orderBuilder->getCurrentOrder()->getRecipient();
-                $orderBuilder->setRecipient($recipient);
-            }
-        }
-//        if (!$customer) {
-//            $customer = new Customer();
-//        }
-//        $customerBasic = new CustomerBasic(
-//            $customer && $customer->getEmail() ? $customer->getEmail() : $orderBuilder->getCurrentSession()->fetch('email'),
-//            $customer && $customer->getFirstname() ? $customer->getFirstname() : $orderBuilder->getCurrentSession()->fetch('firstname'),
-//            $customer && $customer->getLastname() ? $customer->getLastname() : $orderBuilder->getCurrentSession()->fetch('lastname'),
-//            $customer && $customer->getPhone() ? $customer->getPhone() : $orderBuilder->getCurrentOrder()->getBillingPhone()
-//        );
+        $checkoutBuilder = $this->checkoutBuilder;
 
-//        if ($recipients->isEmpty()) {
+        $user = $this->getUser();
+
+        $customer = $checkoutBuilder->getCustomer();
+        $customerBasic = new CustomerBasic();
+        if ($customer) {
+            $customerBasic->setEmail($customer->getEmail());
+            $customerBasic->setAcceptsMarketing($customer->isAcceptsMarketing());
+        }
+
+        $recipient = $checkoutBuilder->getCurrent()->getRecipient();
         if (!$recipient) {
             $recipient = new Recipient();
-            $recipient->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
+            if ($user) {
+                $recipient->setUser($user);
+            }
             $address = new Address();
             $address->setCountry($this->em->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
             $recipient->setAddress($address);
         }
 
+        if ($user) {
+            $recipients = $user->getRecipients();
+        } else {
+            $recipients = new ArrayCollection();
+        }
+
         return $this->render('webshop/cart/checkout-step1-pickDeliveryAddress.html.twig', [
-            'order' => $orderBuilder->getCurrentOrder(),
-            'recipients' => $recipients,
+            'customerForm' => $this->createForm(CustomerBasicType::class, $customerBasic)->createView(),
             'recipientForm' => $this->createForm(RecipientType::class, $recipient)->createView(),
-            'selectedRecipient' => null !== $orderBuilder->getCurrentOrder()->getRecipient() ? $orderBuilder->getCurrentOrder()->getRecipient()->getId() : null,
+            'selectedRecipient' => null !== $checkoutBuilder->getCurrent()->getRecipient() ? $checkoutBuilder->getCurrent()->getRecipient()->getId() : null,
+            'recipients' => $recipients,
+            'checkout' => $this->checkoutBuilder->getCurrent()->getId() !== null ? $this->checkoutBuilder->getCurrent() : $this->cartBuilder->getCurrent(),
             'progressBar' => 'pickDeliveryAddress',
-            'customerForm' => $this->createForm(CustomerType::class, $customer)->createView(),
+            'user' => $user,
         ]);
     }
 
@@ -264,42 +201,25 @@ class CheckoutController extends AbstractController
      */
     public function step2PickShipping()
     {
-        $orderBuilder = $this->orderBuilder;
-//        dd($orderBuilder->getCurrentOrder());
-        $validation = $this->validatePreviousStep($orderBuilder, self::STEP_DELIVERY_ADDRESS);
+        $validation = $this->validatePreviousStep(self::STEP_DELIVERY_ADDRESS);
         if (!$validation['isValid']) {
             return $this->redirectToRoute($validation['route']);
         }
+
+        $checkoutBuilder = $this->checkoutBuilder;
         $shippingMethods = $this->em->getRepository(ShippingMethod::class)->findBy(['enabled' => true], ['ordering' => 'ASC']);
+        $selectedDate = null === $checkoutBuilder->getCurrent()->getDeliveryDate() ? null : $checkoutBuilder->getCurrent()->getDeliveryDate();
+        $selectedInterval = null === $checkoutBuilder->getCurrent()->getDeliveryInterval() ? null : $checkoutBuilder->getCurrent()->getDeliveryInterval();
 
-//        $customer = $this->getUser();
-        $customer = $orderBuilder->getCustomer();
-
-        /** After login, add current user as Customer (to the current Order and to the current Recipient also) */
-        if ($customer) {
-//            $orderBuilder->setCustomer($customer);
-            /** If before login a Recipient was added to the Order, assign the current Customer to this Recipient */
-            $recipientInOrder = $orderBuilder->getCurrentOrder()->getRecipient();
-            if ($recipientInOrder) {
-                $recipientInOrder->setCustomer($customer);
-                $this->em->persist($recipientInOrder);
-                $this->em->flush();
-            }
-        }
-
-        $selectedDate = null === $orderBuilder->getCurrentOrder()->getDeliveryDate() ? null : $orderBuilder->getCurrentOrder()->getDeliveryDate();
-        $selectedInterval = null === $orderBuilder->getCurrentOrder()->getDeliveryInterval() ? null : $orderBuilder->getCurrentOrder()->getDeliveryInterval();
-
+//        dd($checkoutBuilder->getCurrent()->getCustomer());
         return $this->render('webshop/cart/checkout-step2-pickShipping.html.twig', [
-            'order' => $orderBuilder->getCurrentOrder(),
+            'checkout' => $checkoutBuilder->getCurrent(),
             'generatedDates' => $this->generateDates(),
             'hiddenDateForm' => $this->createHiddenDateForm()->createView(),
             'selectedDate' => $selectedDate,
             'selectedInterval' => $selectedInterval,
-
             'shippingMethods' => $shippingMethods,
-            'shippingMethodForm' => $this->createForm(ShippingMethodType::class, (new CheckoutShippingMethod($orderBuilder->getCurrentOrder()->getShippingMethod())))->createView(),
-//            'hasShipping' => $orderBuilder->getCurrentOrder()->getShippingMethod() ? 'true' : 'false',
+            'shippingMethodForm' => $this->createForm(ShippingMethodType::class, (new CheckoutShippingMethod($checkoutBuilder->getCurrent()->getShippingMethod())))->createView(),
             'progressBar' => 'pickShipping',
         ]);
     }
@@ -309,124 +229,62 @@ class CheckoutController extends AbstractController
      */
     public function step3PickPayment()
     {
-
-        $orderBuilder = $this->orderBuilder;
-        $validation = $this->validatePreviousStep($orderBuilder, self::STEP_SHIPPING_METHOD);
+        $validation = $this->validatePreviousStep(self::STEP_SHIPPING_METHOD);
         if (!$validation['isValid']) {
             return $this->redirectToRoute($validation['route']);
         }
 
-        $user = new User();
-//        $user->setEmail($orderBuilder->getCurrentSession()->fetch('email'));
-//        $user->setFirstname($orderBuilder->getCurrentSession()->fetch('firstname'));
-//        $user->setLastname($orderBuilder->getCurrentSession()->fetch('lastname'));
-        $user->setEmail($orderBuilder->getCustomer()->getEmail());
-        $user->setFirstname($orderBuilder->getCustomer()->getFirstname());
-        $user->setLastname($orderBuilder->getCustomer()->getLastname());
-        $registrationForm = $this->createForm(UserRegistrationFormType::class, $user);
+        $user = $this->getUser();
+        $checkoutBuilder = $this->checkoutBuilder;
+
+        $newUser = new User();
+        $newUser->setEmail($checkoutBuilder->getCustomer()->getEmail());
+//        $newUser->setFirstname($checkoutBuilder->getCustomer()->getFirstname());
+//        $newUser->setLastname($checkoutBuilder->getCustomer()->getLastname());
+//        $newUser->setPhone($checkoutBuilder->getCustomer()->getPhone());
+        $registrationForm = $this->createForm(UserRegistrationFormType::class, $newUser);
 
         $paymentMethods = $this->em->getRepository(PaymentMethod::class)->findAllOrdered();
-        $acceptTermsForm = $this->createForm(AcceptTermsType::class, ['isAcceptedTerms' => $orderBuilder->getCurrentOrder()->isAcceptedTerms()]);
-        $sameAsRecipient = $this->createForm(SameAsRecipientType::class);
+        $acceptTermsForm = $this->createForm(AcceptTermsType::class, ['isAcceptedTerms' => $checkoutBuilder->getCurrent()->isAcceptedTerms()]);
+        $sameAsRecipient = $checkoutBuilder->getCurrent()->isSameAsShipping();
+        $sameAsRecipientForm = $this->createForm(SameAsRecipientType::class, ['sameAsRecipient' => $sameAsRecipient]);
+        $isNewSender = ($sameAsRecipient === null || $sameAsRecipient === true) ? false : true;
 
-//        $customer = $this->getUser();
-        $customer = $orderBuilder->getCustomer();
+//////////////////// Ehhez kapcsolodik a CheckoutBuilder::setSender()-ben levo kikomentelt resz !! //////////////
+//        $sender = null;
+//        // Any Sender in db is relevant ONLY when the same_as_recipient = false
+//        if ($sameAsRecipient === false) {
+//            $sender = $checkoutBuilder->getCurrent()->getSender();
+//        }
+//////////////////// Ehhez kapcsolodik a CheckoutBuilder::setSender()-ben levo kikomentelt resz !! //////////////
 
-        /** After login, add current user as Customer (to the current Order and to the current Recipient also) */
-        if ($customer) {
-//            $orderBuilder->setCustomer($customer);
-            /** If before login a Sender was added to the Order, asign the current Customer to this Sender */
-            $senderInOrder = $orderBuilder->getCurrentOrder()->getSender();
-            if ($senderInOrder) {
-                $senderInOrder->setCustomer($customer);
-                $this->em->persist($senderInOrder);
-                $this->em->flush();
-            }
-            $recipientInOrder = $orderBuilder->getCurrentOrder()->getRecipient();
-            if ($recipientInOrder) {
-                $recipientInOrder->setCustomer($customer);
-                $this->em->persist($recipientInOrder);
-                $this->em->flush();
-            }
-        }
-
-        /**
-         * If Customer exists (is logged in), get all its Senders
-         */
-        $sender = null;
-        if ($customer) {
-            $senders = $customer->getSenders();
-
-            if ($orderBuilder->hasSender()) {
-                $sender = $orderBuilder->getCurrentOrder()->getSender();
-            }
-//            else {
-//                if ($customer->hasSenders()) {
-//                    if ($customer->getLastOrder()) {
-//                        $sender = $customer->getLastOrder()->getSender();
-//                    } else {
-//                        $sender = $customer->getSenders()->last();
-//                    }
-//                }
-//            }
-        }
-        /**
-         *  Else, simply return the Sender saved already in the Order (This is the Guest Checkout scenario)
-         */
-        else {
-            $senders = new ArrayCollection();
-            if ($orderBuilder->getCurrentOrder()->getSender()) {
-                $senders->add($orderBuilder->getCurrentOrder()->getSender());
-            }
-            if ($orderBuilder->hasSender()) {
-                $sender = $orderBuilder->getCurrentOrder()->getSender();
-                $orderBuilder->setSender($sender);
-            }
-        }
-
-//        if ($senders->isEmpty()) {
+        $sender = $checkoutBuilder->getCurrent()->getSender();
         if (!$sender) {
             $sender = new Sender();
-            if ($customer) {
-                $sender->setFirstname($customer->getFirstname());
-                $sender->setLastname($customer->getLastname());
-//                $sender->setPhone($customer->getPhone());
+            if ($user) {
+                $sender->setUser($user);
             }
-            
-            $sender->setCustomer($orderBuilder->getCurrentOrder()->getCustomer());
             $address = new Address();
             $address->setCountry($this->em->getRepository(GeoCountry::class)->findOneBy(['alpha2' => 'hu']));
             $sender->setAddress($address);
-            $senderForm = $this->createForm(SenderType::class, $sender);
+        }
+        $senderForm = $this->createForm(SenderType::class, $sender);
 
-            return $this->render('webshop/cart/checkout-step3-pickPayment.html.twig', [
-                'order' => $orderBuilder->getCurrentOrder(),
-//                'shippingMethods' => $shippingMethods,
-                'paymentMethods' => $paymentMethods,
-                'hasShipping' => $orderBuilder->getCurrentOrder()->getShippingMethod() ? 'true' : 'false',
-                'hasPayment' => $orderBuilder->getCurrentOrder()->getPaymentMethod() ? 'true' : 'false',
-                'paymentMethodForm' => $this->createForm(PaymentMethodType::class, (new CheckoutPaymentMethod($orderBuilder->getCurrentOrder()->getPaymentMethod())))->createView(),
-                'senders' => $senders,
-                'senderForm' => $senderForm->createView(),
-                'sameAsRecipientForm' => $sameAsRecipient->createView(),
-                'progressBar' => 'pickPayment',
-                'acceptTermsForm' => $acceptTermsForm->createView(),
-                'registrationForm' => $registrationForm->createView(),
-            ]);
+        if ($user) {
+            $senders = $user->getSenders();
+        } else {
+            $senders = new ArrayCollection();
         }
 
         return $this->render('webshop/cart/checkout-step3-pickPayment.html.twig', [
-            'order' => $orderBuilder->getCurrentOrder(),
-//            'shippingMethods' => $shippingMethods,
+            'checkout' => $checkoutBuilder->getCurrent(),
             'paymentMethods' => $paymentMethods,
-            'hasShipping' => $orderBuilder->getCurrentOrder()->getShippingMethod() ? 'true' : 'false',
-            'hasPayment' => $orderBuilder->getCurrentOrder()->getPaymentMethod() ? 'true' : 'false',
-            'paymentMethodForm' => $this->createForm(PaymentMethodType::class, (new CheckoutPaymentMethod($orderBuilder->getCurrentOrder()->getPaymentMethod())))->createView(),
+            'paymentMethodForm' => $this->createForm(PaymentMethodType::class, (new CheckoutPaymentMethod($checkoutBuilder->getCurrent()->getPaymentMethod())))->createView(),
             'senders' => $senders,
-            'sender' => $sender,
-            'senderForm' => $this->createForm(SenderType::class, $sender)->createView(),
-            'sameAsRecipientForm' => $sameAsRecipient->createView(),
-            'selectedSender' => null !== $orderBuilder->getCurrentOrder()->getSender() ? $orderBuilder->getCurrentOrder()->getSender()->getId() : null,
+            'senderForm' => $senderForm->createView(),
+            'sameAsRecipientForm' => $sameAsRecipientForm->createView(),
+            'isNewSender' => $isNewSender,
+            'selectedSender' => null !== $checkoutBuilder->getCurrent()->getSender() ? $checkoutBuilder->getCurrent()->getSender()->getId() : null,
             'progressBar' => 'pickPayment',
             'acceptTermsForm' => $acceptTermsForm->createView(),
             'registrationForm' => $registrationForm->createView(),
@@ -434,27 +292,32 @@ class CheckoutController extends AbstractController
     }
 
     /**
-     * Ez küldi tovább a fizetésre.
+     * Ez küldi tovább a fizetésre. Két dolog történik itt:
+     *          1. We create the Order at this point, and
+     *          2. we submit the Order to payment (we also redirect the user to the 3rd party payment gateway).
+     *
      *
      * @Route("/order/submit", name="site-checkout-place-order", methods={"POST", "GET"})
      */
-    public function submitOrderForPayment()
+    public function submitOrderForPayment(CheckoutSettings $checkoutSettings)
     {
-        $orderBuilder = $this->orderBuilder;
-        $validation = $this->validatePreviousStep($orderBuilder, self::STEP_PAYMENT_METHOD);
+        $validation = $this->validatePreviousStep(self::STEP_PAYMENT_METHOD);
         if (!$validation['isValid']) {
             return $this->redirectToRoute($validation['route']);
         }
 
+        $isTestMode = $checkoutSettings->get('testing.test-mode');
+
+        $orderBuilder = $this->orderBuilder;
+        $orderBuilder->initializeOrder();   // it also dispatches StoreEvent::ORDER_CREATE
+        // TODO: the event should be dispatched here
         $order = $orderBuilder->getCurrentOrder();
-        $orderBuilder->setCustomer($order->getCustomer());
 
-        $payment = $this->paymentBuilder->createPaymentModel(null, $order);
-
+        $payment = $this->paymentBuilder->createPaymentModel(null, $order, $isTestMode);
         if ($payment->isCreated()) {
             $paymentStatus = $this->paymentBuilder->computePaymentStatus($order->getTransaction());
             $orderBuilder->setPaymentStatus($paymentStatus);
-            return $this->redirect($payment->getPaymentPageUrl(), 302);
+            return $this->redirect($payment->getPaymentPageUrl(), 302);    // redirect the user to the 3rd party Payment Gateway.
         }
 
         $this->addFlash('danger', $payment->getError()->getMessage());
@@ -469,7 +332,7 @@ class CheckoutController extends AbstractController
      */
     public function callbackBarion(Request $request): Response
     {
-        $paymentId = $request->get('PaymentId');
+        $paymentId = $request->get('paymentId');
         $paymentResponse = $this->paymentBuilder->getBarion()->GetPaymentState($paymentId);
         $transaction = $this->em->getRepository(PaymentTransaction::class)->findOneBy(['authorization' => $paymentId]);
 
@@ -488,20 +351,6 @@ class CheckoutController extends AbstractController
                     $transaction->setStatus(PaymentTransaction::STATUS_FAILURE);
                     $transaction->setErrorCode(PaymentTransaction::ERROR_PROCESSING_ERROR);
                 }
-//                switch ($paymentResponse->Status) {
-//                    // See Barion statuses here: https://docs.barion.com/PaymentStatus
-//                    case \PaymentStatus::Succeeded:
-//                        $transaction->setStatus(PaymentTransaction::STATUS_SUCCESS);
-//                        $transaction->setProcessedAt(new DateTime('now'));
-//                        break;
-//                    case (\PaymentStatus::Failed || \PaymentStatus::Canceled || \PaymentStatus::Expired):
-//                        dd('failed');
-//                        $transaction->setStatus(PaymentTransaction::STATUS_FAILURE);
-//                        $transaction->setErrorCode(PaymentTransaction::ERROR_PROCESSING_ERROR);
-//                        break;
-//                    default:
-//                        break;
-//                }
 
                 if ($paymentResponse->FundingInformation) {
                     $fundingDetail = new PaymentFundingDetail();
@@ -522,14 +371,13 @@ class CheckoutController extends AbstractController
                 $this->em->persist($transaction);
                 $this->em->flush();
 
-                $event = new OrderEvent($order, [
+                $event = new StoreEvent($order, [
                     'channel' => OrderLog::CHANNEL_CHECKOUT,
-                    'status' => $paymentStatus->getShortcode(),
+                    'newPaymentStatus' => $paymentStatus->getShortcode(),
                 ]);
-                $this->eventDispatcher->dispatch($event, OrderEvent::PAYMENT_UPDATED);
+                $this->eventDispatcher->dispatch($event, StoreEvent::ORDER_UPDATE);
             }
         }
-//        dd($paymentResponse);
         return new Response('ok', 200);
     }
 
@@ -555,12 +403,14 @@ class CheckoutController extends AbstractController
             return $this->redirectToRoute('site-checkout-step3-pickPayment');
         }
 
-        if ($order->getPaymentMethod()->getShortcode() !== PaymentBuilder::MANUAL_BANK &&
-            $order->getPaymentMethod()->getShortcode() !== PaymentBuilder::MANUAL_COD) {
+        // TODO: itt érdemes lenne lecsekkolni (mint a callback-ben), hogy sikeres volt-e a fizetés, és milyen választ add itt ebben a pillanatban a Barion gateway
+        /** @var PaymentTransaction $transaction */
+        $transaction = $order->getTransactions()->last();
+        $gateway = $transaction->getGateway();
+        $transactionStatus = $transaction->getStatus();
 
-            /** @var PaymentTransaction $transaction */
-            $transaction = $order->getTransactions()->last();
-            if ($transaction->getStatus() !== PaymentTransaction::STATUS_SUCCESS) {
+        if ($gateway !== PaymentBuilder::MANUAL_BANK && $gateway !== PaymentBuilder::MANUAL_COD) {
+            if ($transactionStatus !== PaymentTransaction::STATUS_SUCCESS) {
                 $this->addFlash('danger', sprintf($this->translator->trans('checkout.payment.payment-failed').' %s', $transaction->getErrorCode()));
                 return $this->redirectToRoute('site-checkout-step3-pickPayment');
             }
@@ -570,35 +420,38 @@ class CheckoutController extends AbstractController
         if ($order->getStatus() === null) {
             /** @var OrderStatus $status */
             $status = $this->em->getRepository(OrderStatus::class)->findOneBy(['shortcode' => OrderStatus::ORDER_CREATED]);
-            $orderBuilder->setStatus($status);   // dispatches OrderEvent::ORDER_UPDATED with $status
+
+            // This should be deprecated
+            $orderBuilder->setStatus($status);   // no longer dispatches OrderEvent::ORDER_UPDATED with $status
+
             $orderBuilder->setPostedAt();
             $orderBuilder->setToken((Uuid::v4())->toRfc4122());
 
-            if ($this->storeSettings->get('general.flower-shop-mode')) {
-                $event = new OrderEvent($orderBuilder->getCurrentOrder(), [
-                    'channel' => OrderLog::CHANNEL_CHECKOUT,
-                ]);
-                $this->eventDispatcher->dispatch($event, OrderEvent::DELIVERY_DATE_UPDATED);
-            }
+            // Nem kuldok event-et, mivel ez nem Payment, se nem Fulfillment
+//            if ($this->storeSettings->get('general.flower-shop-mode')) {
+//                $event = new OrderEvent($orderBuilder->getCurrentOrder(), [
+//                    'channel' => OrderLog::CHANNEL_CHECKOUT,
+//                ]);
+//                $this->eventDispatcher->dispatch($event, OrderEvent::DELIVERY_DATE_UPDATED);
+//            }
 
             $paymentStatus = $this->paymentBuilder->computePaymentStatus($order->getTransaction());
-            $eventPaymentUpdated = new OrderEvent($order, [
+            $event = new StoreEvent($order, [
                 'channel' => OrderLog::CHANNEL_CHECKOUT,
-                'status' => $paymentStatus->getShortcode(),
+                'newPaymentStatus' => $paymentStatus->getShortcode(),
             ]);
-            $this->eventDispatcher->dispatch($eventPaymentUpdated, OrderEvent::PAYMENT_UPDATED);
+            $this->eventDispatcher->dispatch($event, StoreEvent::ORDER_UPDATE);
         }
 
         $emailSender->sendEmail($order, StoreEmailTemplate::ORDER_CONFIRMATION);
-        $eventEmail = new OrderEvent($order, [
-            'channel' => OrderLog::CHANNEL_CHECKOUT,
-        ]);
-        $this->eventDispatcher->dispatch($eventEmail, OrderEvent::EMAIL_SENT_ORDER_CONFIRMATION);
-
         $emailSender->sendEmail($order, StoreEmailTemplate::ADMIN_NEW_ORDER_NOTIFICATION, true);
 
-        /** When at this step, the Order has been
-         * successfully placed, so it can be removed from session */
+        $eventEmail = new StoreEvent($order, [
+            'channel' => OrderLog::CHANNEL_CHECKOUT,
+        ]);
+        $this->eventDispatcher->dispatch($eventEmail, StoreEvent::EMAIL_SEND_ORDER_CONFIRMATION);
+
+        // When at this step, the Order has been successfully placed, so it can be removed from session
         if (!$testMode) {
             $orderBuilder->getCurrentSession()->removeOrderFromSession();
         }
@@ -627,10 +480,8 @@ class CheckoutController extends AbstractController
             if ($order->getIsConversionTracked()) {
                 $isConversionTracked = true;
             }
-            $eventConversion = new OrderEvent($order, [
-                'conversionTrackingStatus' => OrderStatus::CONVERSION_TRACKING_LOADED,
-            ]);
-            $this->eventDispatcher->dispatch($eventConversion, OrderEvent::SET_ORDER_AS_TRACKED);
+            $eventConversion = new StoreEvent($order);
+            $this->eventDispatcher->dispatch($eventConversion, StoreEvent::ORDER_TRACK_CONVERSION);
 
             $isBankTransfer = $order->getPaymentMethod()->isBankTransfer() ? true : false;
             return $this->render('webshop/cart/checkout-step4-thankyou.html.twig', [
@@ -641,99 +492,6 @@ class CheckoutController extends AbstractController
         }
         throw $this->createNotFoundException('The order does not exist');
     }
-
-//    private function createBarionPayment(Order $order): ?\PreparePaymentResponseModel
-//    {
-//        $trans = new \PaymentTransactionModel();
-//        $trans->POSTransactionId = $order->getNumber(); //$transaction->getId(); //"TRANS-01";
-//        $trans->Payee = 'payment@hivjesnyerj.hu';  /////// WEBSHOP BARION FIOK EMAIL CIM
-//        $trans->Total = $order->getSummary()->getTotalAmountToPay();
-//        $trans->Currency = \Currency::HUF;
-//        $trans->Comment = "Test transaction containing the product";
-//
-//        foreach ($order->getItems() as $i) {
-//            $item = new \ItemModel();
-//            $item->Name = $i->getProduct()->getName();
-//            $item->Description = $i->getProduct()->getName();
-//            $item->Quantity = $i->getQuantity();
-//            $item->Unit = "piece";
-//            $item->UnitPrice = $i->getUnitPrice();
-//            $item->ItemTotal = $i->getPriceTotal();
-//            $item->SKU = $i->getProduct()->getSku();
-//
-//            $trans->AddItem($item);
-//        }
-//
-//        $urlRedirect = $this->urlGenerator->generate('site-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
-//        $urlCallback = $this->urlGenerator->generate('site-payment-callback-barion', [], UrlGeneratorInterface::ABSOLUTE_URL);
-//
-//        $paymentRequest = new \PreparePaymentRequestModel();
-//        $paymentRequest->GuestCheckout = true;
-//        $paymentRequest->PaymentType = \PaymentType::Immediate;
-//        $paymentRequest->FundingSources = array(\FundingSourceType::All);
-//        $paymentRequest->PaymentRequestId = 'PAYMENT-'.$order->getNumber(); //"PAYMENT-01";
-//        $paymentRequest->PayerHint = $order->getCustomer()->getEmail();
-//        $paymentRequest->Locale = \UILocale::HU;
-//        $paymentRequest->OrderNumber = $order->getNumber();
-//        $paymentRequest->Currency = \Currency::HUF;
-//        $paymentRequest->RedirectUrl = $urlRedirect; // "http://webshop.example.com/afterpayment";
-//        $paymentRequest->CallbackUrl = $urlCallback; // "http://webshop.example.com/processpayment";
-//        $paymentRequest->AddTransaction($trans);
-//
-//        $paymentIntent = $this->barionClient->PreparePayment($paymentRequest);
-//        if ($paymentIntent->RequestSuccessful) {
-//            $transaction = new Transaction();
-//            $transaction->setKind(Transaction::KIND_SALE);
-//            $transaction->setAuthorization($paymentIntent->PaymentId);
-//            $transaction->setGateway(PaymentMethod::BARION);
-//            $transaction->setSourceName(Transaction::SOURCE_WEB);
-//            $transaction->setOrder($order);
-//            $transaction->setAmount($order->getSummary()->getTotalAmountToPay());
-//            $transaction->setCurrency('HUF');
-//
-//            $transaction->setStatus(Transaction::STATUS_PENDING);
-//
-//            $order->addTransaction($transaction);
-//            $this->em->persist($order);
-//            $this->em->flush();
-//            return $paymentIntent;
-//        }
-//        return null;
-//    }
-
-//    private function createCibPayment(Order $order): ?PaymentResponse
-//    {
-////        $urlRedirect = $this->urlGenerator->generate('site-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
-//        $urlRedirect = $this->urlGenerator->generate('site-checkout-payment-cib', [], UrlGeneratorInterface::ABSOLUTE_URL);
-//        $urlCallback = $this->urlGenerator->generate('site-payment-callback-barion', [], UrlGeneratorInterface::ABSOLUTE_URL);
-//
-//        $paymentRequest = new PaymentRequest();
-//        $paymentRequest->uid = 'CIB12345678';
-//        $paymentRequest->amount = $order->getSummary()->getTotalAmountToPay();
-//        $paymentRequest->urlReturn = $urlRedirect;
-//
-//
-//        $paymentIntent = $this->cibClient->preparePayment($paymentRequest);
-////        dd($paymentIntent);
-//        if ($paymentIntent->requestSuccessful && $paymentIntent->responseCode === PaymentResponse::SUCCESSFUL_INITIALIZATION) {
-//            $transaction = new Transaction();
-//            $transaction->setKind(Transaction::KIND_SALE);
-//            $transaction->setAuthorization($paymentIntent->transactionId);
-//            $transaction->setGateway(PaymentMethod::CREDIT_CARD);
-//            $transaction->setSourceName(Transaction::SOURCE_WEB);
-//            $transaction->setOrder($order);
-//            $transaction->setAmount($order->getSummary()->getTotalAmountToPay());
-//            $transaction->setCurrency('HUF');
-//
-//            $transaction->setStatus(Transaction::STATUS_PENDING);
-//
-//            $order->addTransaction($transaction);
-//            $this->em->persist($order);
-//            $this->em->flush();
-//            return $paymentIntent;
-//        }
-//        return null;
-//    }
 
     /**
      * @Route("/cib", name="site-checkout-payment-cib", methods={"POST", "GET"})
@@ -757,7 +515,7 @@ class CheckoutController extends AbstractController
                     '33',
                     $paymentResponse->pid,
                     $paymentResponse->transactionId,
-                    $orderBuilder->getCurrentOrder()->getSummary()->getTotalAmountToPay()
+                    $orderBuilder->getCurrentOrder()->getTotalAmountToPay()
                 );
                 $statusResponse = $this->cibClient->preparePaymentStatus($statusRequest);
 //                dd($statusResponse);
@@ -769,6 +527,34 @@ class CheckoutController extends AbstractController
                     return $this->redirectToRoute('site-checkout-step3-pickPayment');
                 }
             }
+        }
+    }
+
+    public function validateCart(): array
+    {
+        $isValid = true;
+        $cartBuilder = $this->cartBuilder;
+        if (!$cartBuilder->getCurrent()->hasItems()) {
+            $isValid = false;
+        } else {
+            // Remove unavailable products from cart!
+            foreach ($cartBuilder->getCurrent()->getItems() as $item) {
+                if (!$item->getProduct()->isPubliclyAvailable()) {
+                    $cartBuilder->removeItem($item);
+                }
+            }
+        }
+
+        if ($isValid) {
+            return [
+                'isValid' => true,
+                'route' => null
+            ];
+        } else {
+            return [
+                'isValid' => false,
+                'route' => 'site-checkout-step0-pickExtraGift'
+            ];
         }
     }
 
@@ -785,60 +571,31 @@ class CheckoutController extends AbstractController
      *          STEP_SHIPPING_METHOD    = 'shipping-method';
      *          STEP_PAYMENT_METHOD     = 'payment-method';
      */
-    public function validatePreviousStep(OrderBuilder $orderBuilder, string $step): array
+    public function validatePreviousStep(string $step): array
     {
-        $validOrder = true;
-        if ($step === self::STEP_CART) {
-//            return true;
-            if (!$orderBuilder->hasItems()) {
-                $validOrder = false;
-//                $this->addFlash('items-missing', 'A kosarad üres.');
-            } else {
-                // Remove unavailable products from cart
-                foreach ($orderBuilder->getItems() as $item) {
-                    if (!$item->getProduct()->isPubliclyAvailable()) {
-                        $orderBuilder->removeItem($item);
-                    }
-                }
-            }
-//            if (!$orderBuilder->hasMessage()) {
-//                $validOrder = false;
-//                $this->addFlash('message-warning', 'Ha szeretnél üzenni a virággal, itt tudod kifejezni pár szóban, mit írjunk az üdvözlőlapra. (Nem kötelező)');
-//            }
-            if ($validOrder) {
-                return [
-                    'isValid' => true,
-                    'route' => null
-                ];
-            } else {
-                return [
-                    'isValid' => false,
-                    'route' => 'site-checkout-step0-pickExtraGift'
-                ];
-            }
-        }
+        $isValid = true;
 
         if ($step === self::STEP_DELIVERY_ADDRESS) {
+            $checkoutBuilder = $this->checkoutBuilder;
             // If step1 is invalid, then no need to check step2. Return route to step1
-            $validation = $this->validatePreviousStep($orderBuilder, self::STEP_CART);
+            $validation = $this->validateCart();
             if ($validation['isValid'] == false) {
                 return [
                     'isValid' => false,
                     'route' => $validation['route']
                 ];
-//                return ['isValid' => false, 'route' => 'site-checkout-step0-pickExtraGift'];
             }
             // Continue normally and check step2
-            if (!$orderBuilder->hasRecipient()) {
-                $validOrder = false;
+            if (!$checkoutBuilder->hasRecipient()) {
+                $isValid = false;
                 $this->addFlash('recipient-missing', $this->translator->trans('checkout.recipient.missing-recipient'));
             }
-            if (!$orderBuilder->hasCustomer()) {
-                $validOrder = false;
+            if (!$checkoutBuilder->hasCustomer()) {
+                $isValid = false;
                 $this->addFlash('customer-missing', $this->translator->trans('checkout.customer.missing-customer'));
             }
 
-            if ($validOrder) {
+            if ($isValid) {
                 return [
                     'isValid' => true,
                     'route' => null
@@ -852,32 +609,32 @@ class CheckoutController extends AbstractController
         }
 
         if ($step === self::STEP_SHIPPING_METHOD) {
+            $checkoutBuilder = $this->checkoutBuilder;
             // If previous step is invalid, then no need to check this step. Simply return route to previous step
-            $validation = $this->validatePreviousStep($orderBuilder, self::STEP_DELIVERY_ADDRESS);
+            $validation = $this->validatePreviousStep(self::STEP_DELIVERY_ADDRESS);
             if (!$validation['isValid']) {
                 return [
                     'isValid' => false,
                     'route' => $validation['route']
                 ];
-//                return ['isValid' => false, 'route' => 'site-checkout-step0-pickExtraGift'];
             }
             // Continue normally and check this step
-            if (!$orderBuilder->hasShippingMethod()) {
-                $validOrder = false;
+            if (!$checkoutBuilder->hasShippingMethod()) {
+                $isValid = false;
                 $this->addFlash('shipping-missing', $this->translator->trans('checkout.shipping.shipping-method-missing'));
             }
 
             if ($this->storeSettings->get('general.flower-shop-mode')) {
-                if (!$orderBuilder->hasDeliveryDate()) {
-                    $validOrder = false;
+                if (!$checkoutBuilder->hasDeliveryDate()) {
+                    $isValid = false;
                     $this->addFlash('date-missing', $this->translator->trans('checkout.delivery-date.delivery-date-missing'));
                 }
             }
 //            if ($orderBuilder->isDeliveryDateInPast()) {
-//                $validOrder = false;
+//                $isValid = false;
 //                $this->addFlash('date-missing', 'Nem adtál meg szállítási napot! Bizonyosodj meg róla, hogy választottál szállítási idősávot is!');
 //            }
-            if ($validOrder) {
+            if ($isValid) {
                 return ['isValid' => true, 'route' => null];
             } else {
                 return ['isValid' => false, 'route' => 'site-checkout-step2-pickShipping'];
@@ -886,23 +643,26 @@ class CheckoutController extends AbstractController
         }
 
         if ($step === self::STEP_PAYMENT_METHOD) {
+            $checkoutBuilder = $this->checkoutBuilder;
             // If previous step is invalid, then no need to check this step. Simply return route to previous step
-            $validation = $this->validatePreviousStep($orderBuilder, self::STEP_SHIPPING_METHOD);
+            $validation = $this->validatePreviousStep(self::STEP_SHIPPING_METHOD);
             if (!$validation['isValid']) {
-//                return ['isValid' => false, 'route' => 'site-checkout-step1-pickDeliveryAddress'];
-                return ['isValid' => false, 'route' => $validation['route']];
+                return [
+                    'isValid' => false,
+                    'route' => $validation['route']
+                ];
             }
             // Continue normally and check step3
-            if (!$orderBuilder->hasSender()) {
-                $validOrder = false;
+            if (!$checkoutBuilder->hasBillingAddress()) {
+                $isValid = false;
                 $this->addFlash('sender-missing', 'Adj meg egy számlázási címet.');
             }
-            if (!$orderBuilder->hasPaymentMethod()) {
-                $validOrder = false;
+            if (!$checkoutBuilder->hasPaymentMethod()) {
+                $isValid = false;
                 $this->addFlash('payment-missing', 'Válassz fizetési módot.');
             }
 
-            if ($validOrder) {
+            if ($isValid) {
                 return ['isValid' => true, 'route' => null];
             } else {
                 return ['isValid' => false, 'route' => 'site-checkout-step3-pickPayment'];

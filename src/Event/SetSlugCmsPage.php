@@ -20,14 +20,11 @@ class SetSlugCmsPage
      * @var SlugBuilder
      */
     private $slugBuilder;
-
-    private $em;
     private $validator;
 
-    public function __construct(SlugBuilder $slugBuilder, EntityManagerInterface $em, ValidatorInterface $validator)
+    public function __construct(SlugBuilder $slugBuilder, ValidatorInterface $validator)
     {
         $this->slugBuilder = $slugBuilder;
-        $this->em = $em;
         $this->validator = $validator;
     }
     
@@ -55,13 +52,15 @@ class SetSlugCmsPage
         $cmsPage->setSlug($this->buildValidSlug($cmsPage, $slug));
     }
 
-    private function buildValidSlug($cmsPage, $slug)
+    private function buildValidSlug(CmsPage $cmsPage, string $slug)
     {
         $cmsPage->setSlug($slug);
         $errors = $this->validator->validate($cmsPage);
 
         if (count($errors) > 0) {
-            return $this->buildValidSlug($cmsPage, $slug.'-1');
+            $slugOriginal = $this->slugBuilder->slugify($cmsPage->getName());
+            $postfix = $this->slugBuilder->numberedPostfix($slugOriginal, $slug);
+            return $this->buildValidSlug($cmsPage, $slugOriginal.'-'.$postfix);
         }
         return $slug;
     }

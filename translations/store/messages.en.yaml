@@ -141,6 +141,7 @@ cart:
     shipping-fee-calculated-in-next-step: Calculated at next step
     scheduling-fee: Scheduled delivery
     discount: Discount
+    saving: Your saving
     total: Total
     subtotal: Subtotal
     total-amount-to-pay: Total amount to pay
@@ -211,11 +212,44 @@ checkout:
 
     sender:
         sender: Billing address
+        sender-title: Billing address
+        sender-description: Select the billing address.
+        new-sender: Add new billing address
+        previously-saved-senders: Previously saved addresses
+        previously-saved-senders-modal-title: Previously saved addresses
+        previously-saved-senders-modal-description: Pick one form previously saved addresses
+        no-previously-saved-senders: No billing address yet.
+        select-sender: Bill to this address
+        firstname: First name
+        lastname: Last name
+        address: Address
+        address-placeholder: 'Address: Street, number, door...'
+        city: City
+        city-placeholder: City
+        province: County
+        zip: Postal code
+        country: Country
+        phone: Phone number
+        phone-placeholder: 'Phone number, eg.: +36... or 06...'
+        company: Company name
+        tax-number: VAT number
+        missing-firstname: Please enter the first name!
+        missing-lastname: Please enter the last name!
+        missing-address: Please enter the address.
+        missing-city: Please enter the city.
+        missing-province: Please enter the county.
+        missing-zip: Please enter the postal code.
+        invalid-zip: Invalid postal code!
+        missing-country: Please select a country.
+        missing-phone: Please enter billing phone number.
+        invalid-phone: 'A valid phone number is required. Valid format: +36... or 06...'
+        missing-company: 'Please enter company name.'
+        missing-tax-number: 'Please enter company''s tax number (eg: VAT number)'
+        missing-recipient: "Don't forget to enter the shipping information."
         last-used: 'Last used'
         same-as-shipping-address: Same as shipping address
-        use-different-shipping-address: Use different billing address
-
-        no-previously-saved-senders: No billing address yet.
+        use-different-shipping-address: Use a different billing address
+        missing-billing-address: Please select a billing address.
     flower-shop:
         recipient: Recipient
         recipient-title: Recipient's details
@@ -266,9 +300,19 @@ checkout:
     overview:
         recipient: Ship to
         recipient-to: Ship to
-        customer: Customer
+        customer-contact: Contact
         customer-from: Customer
         shipping-method: Shipping
+    account:
+        create-account-title: Create account
+        create-account-description: It's optional to create an account. If you choose to register, enter a password and you're all set!
+        email-address: Email address
+        password: Password
+        confirm-password: Confirm password
+        firstname: Firstname
+        lastname: Lastname
+        email-is-invalid: 'Invalid email address!'
+        email-is-in-use: 'This email address is already in use!'
     terms:
         accept-terms-label: 'By placing this order you accept and agree to our <a {{ terms }}>Terms and conditions</a> and <a {{ privacy }}>Privacy policy</a> and you acknowledge that we will use the information you provided to fulfill the order.'
         accept-terms-error: 'Please accept the Terms and conditions before placing your order.'
@@ -277,7 +321,8 @@ checkout:
     continue-to-payment-method-button: 'Continue to payment method'
     back-to-cart-button: Back to cart
     back-to-shipping-address-button: Back to shipping address
-    back-to-shipping-method-button: Back to shipping method
+    back-to-shipping-method-button: Back to shipping
+    place-order: Order now
     continue-to-store-button: Go to the store
 
     phone-number-tooltip: 'Enter phone number in either of this formats: +36... or 06... and do not use blank spaces or any other characters.'
@@ -388,3 +433,5 @@ generic:
     page-not-found: The page you were looking for could not be found
     page-not-found-description: You’ve got to a page that doesn’t really exist. Whether it’s our fault or yours, we don’t know, but it’s definitely not here what you were looking for.
     back-to-homepage: Back to homepage
+error:
+    ajax-no-data-was-returned: No data was returned

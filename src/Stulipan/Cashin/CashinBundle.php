@@ -24,6 +24,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use UILocale;
 
+/**
+ * NINCS HASNALATBAN!!!!
+ */
 class CashinBundle extends Bundle
 {
     public const GATEWAY_BARION = 'barion';
@@ -112,7 +115,7 @@ class CashinBundle extends Bundle
         $trans = new PaymentTransactionModel();
         $trans->POSTransactionId = $order->getNumber(); //$transaction->getId(); //"TRANS-01";
         $trans->Payee = 'payment@hivjesnyerj.hu';  /////// WEBSHOP BARION FIOK EMAIL CIM
-        $trans->Total = $order->getSummary()->getTotalAmountToPay();
+        $trans->Total = $order->getTotalAmountToPay();
         $trans->Currency = Currency::HUF;
         $trans->Comment = "Test transaction containing the product";
 
@@ -153,7 +156,7 @@ class CashinBundle extends Bundle
             $transaction->setGateway(PaymentMethod::BARION);
             $transaction->setSourceName(Transaction::SOURCE_WEB);
             $transaction->setOrder($order);
-            $transaction->setAmount($order->getSummary()->getTotalAmountToPay());
+            $transaction->setAmount($order->getTotalAmountToPay());
             $transaction->setCurrency('HUF');
 
             $transaction->setStatus(Transaction::STATUS_PENDING);
@@ -174,7 +177,7 @@ class CashinBundle extends Bundle
 
         $paymentRequest = new PaymentRequest();
         $paymentRequest->uid = 'CIB12345678';
-        $paymentRequest->amount = $order->getSummary()->getTotalAmountToPay();
+        $paymentRequest->amount = $order->getTotalAmountToPay();
         $paymentRequest->urlReturn = $urlRedirect;
 
 
@@ -187,7 +190,7 @@ class CashinBundle extends Bundle
             $transaction->setGateway(PaymentMethod::CREDIT_CARD);
             $transaction->setSourceName(Transaction::SOURCE_WEB);
             $transaction->setOrder($order);
-            $transaction->setAmount($order->getSummary()->getTotalAmountToPay());
+            $transaction->setAmount($order->getTotalAmountToPay());
             $transaction->setCurrency('HUF');
 
             $transaction->setStatus(Transaction::STATUS_PENDING);

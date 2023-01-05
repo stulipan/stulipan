@@ -30,12 +30,12 @@ class InventoryProduct
      */
     private $productName = '';
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="category_id", type="integer")
-     */
-    private $categoryId;
+//    /**
+//     * @var int
+//     *
+//     * @ORM\Column(name="category_id", type="integer")
+//     */
+//    private $categoryId;
 
     /**
      *
@@ -59,17 +59,17 @@ class InventoryProduct
      */
     public function getCategoryId(): int
     {
-        return $this->categoryId;
+        return $this->category->getId();
     }
-
-    /**
-     * @var int $categoryId
-     *
-     */
-    public function setCategoryId(int $categoryId): void
-    {
-        $this->categoryId = $categoryId;
-    }
+//
+//    /**
+//     * @var int $categoryId
+//     *
+//     */
+//    public function setCategoryId(int $categoryId): void
+//    {
+//        $this->categoryId = $categoryId;
+//    }
 
     /**
      * @return InventoryCategory
@@ -80,7 +80,7 @@ class InventoryProduct
     }
 
     /**
-     * @var InventoryCategory $category
+     * @var InventoryCategory|null $category
      *
      */
     public function setCategory(?InventoryCategory $category): void
@@ -96,7 +96,7 @@ class InventoryProduct
     /**
      * Set product name
      *
-     * @var string $productName
+     * @var string|null $productName
      */
     public function setProductName(?string $productName)
     {

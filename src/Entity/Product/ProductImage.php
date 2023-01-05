@@ -44,7 +44,6 @@ class ProductImage //implements \JsonSerializable
     
     /**
      * @var ImageEntity
-     * @Groups({""})
      *
      * ==== One ProductImage is one ImageEntity => Egy termékkép mindig egy sima kép lesz ====
      *

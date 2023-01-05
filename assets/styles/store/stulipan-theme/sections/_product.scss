@@ -55,7 +55,6 @@ $product-media-main-bg:                                          $gray-100 !defa
 }
 
 .product-details {
-
   & .product-name h1 {
     font-size: 1.35rem;
     font-weight: $font-weight-bold;
@@ -75,21 +74,21 @@ $product-media-main-bg:                                          $gray-100 !defa
 
   .available {
     color: $success;
-  }
-  .available:before {
-    display: inline-block;
-    -webkit-animation: zoomin 1s 200;
-    width: $font-size-base;
-    height: $font-size-base;
-    margin-right: .5rem;
-    border: 1px solid $white;
-    box-shadow: 0 0 5px rgba(black, .5);
-    content: ' ';
-    border-radius: 50%;
-    background: $success;
-    vertical-align: middle;
-  }
 
+    &:before {
+      display: inline-block;
+      -webkit-animation: zoomin 1s 200;
+      width: $font-size-base;
+      height: $font-size-base;
+      margin-right: .5rem;
+      border: 1px solid $white;
+      box-shadow: 0 0 5px rgba(black, .5);
+      content: ' ';
+      border-radius: 50%;
+      background: $success;
+      vertical-align: middle;
+    }
+  }
 
   & .product-credit-card {
     margin-top: map_get($spacers, 4);
@@ -293,29 +292,6 @@ $product-media-main-bg:                                          $gray-100 !defa
   border-color: #fff #fff #343a40 !important
 }
 
-$price-font-size-default:        1.14rem;
-$price-font-weight:              $font-weight-base !default;
-$price-font-size-mobile:         calc(#{$price-font-size-default} * 0.80);
-$price-font-size-sm:             $font-size-base; //$font-size-base-secondary;
-
-.price {
-  color: inherit;
-  @include font-size($price-font-size-default);
-  font-weight: $price-font-weight;
-  //@include media-breakpoint-up(sm) {
-  //  font-size: $price-font-size-default;
-  //}
-  &.price-sale {
-    color: $danger;
-  }
-
-}
-
-.price-sm {
-  font-size: $price-font-size-sm !important;
-}
-
-
 .general-info-section {
   margin-top: map_get($spacers, 4);
 
@@ -327,7 +303,6 @@ $price-font-size-sm:             $font-size-base; //$font-size-base-secondary;
       max-width: 100%;
     }
   }
-
 }
 
 .general-info-title {

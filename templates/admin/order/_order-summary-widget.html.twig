@@ -3,7 +3,7 @@
             <ul class="order-summary mb-0 list-unstyled">
                 <li class="order-summary-item">
                     <span>{{ 'order.subtotal'|trans }}</span>
-                    <span>{{ order.summary.totalBeforeDiscount|money }}</span>
+                    <span>{{ order.totalAfterSale|money }}</span>
                 </li>
                 <li class="order-summary-item">
                     <span>{{ 'order.shipping'|trans }}</span>
@@ -15,7 +15,7 @@
 {#                </li>#}
                 <li class="order-summary-item">
                     <span>{{ 'order.total-amount-to-pay'|trans }}</span>
-                    <span class="order-summary-total">{{ order.summary.totalAmountToPay|money }}</span>
+                    <span class="order-summary-total">{{ order.totalAmountToPay|money }}</span>
                 </li>
             </ul>
         </div>

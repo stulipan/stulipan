@@ -6,7 +6,22 @@
  * --------------------------------------------------------------------------
  */
 ;
-import Notify from './alerts/notify'
+import Notify from './alerts/notify';
+import Sidebar from './sidebar';
+import FloatingInput from './floating-input';
+
+if (AlertMessages.SUCCESS) {
+  Notify.success(AlertMessages.SUCCESS);
+}
+if (AlertMessages.ERROR) {
+  Notify.error(AlertMessages.ERROR);
+}
+if (AlertMessages.WARNING) {
+  Notify.warning(AlertMessages.WARNING);
+}
+if (AlertMessages.INFO) {
+  Notify.info(AlertMessages.INFO);
+}
 
 window.theme = window.theme || {};
 
@@ -207,7 +222,7 @@ class FormValidation {
     input.classList.remove("is-invalid");
     input.classList.remove("is-valid");
     // and remove any old messages
-    this.closestParent(input, 'form-group').querySelectorAll(".invalid-feedback").forEach(function(el) {
+    this.closestParent(input, 'form-group').querySelectorAll('.invalid-feedback').forEach(function(el) {
       el.innerHTML = '';
     });
   }
@@ -439,6 +454,8 @@ theme.DatePicker = (function () {
 /**
  *
  */
+window.theme = window.theme || {};
+
 theme.AddToCart = (function () {
   var selectors = {
     BODY                      : 'body',
@@ -461,7 +478,6 @@ theme.AddToCart = (function () {
 
     addToCart: function(e) {
       e.preventDefault();
-
       let $el = $(e.currentTarget);
       if (theme.proceed) { theme.proceed = false; return; }
       theme.LoadingOverlay.show($el, 'click');
@@ -481,25 +497,25 @@ theme.AddToCart = (function () {
         $(selectors.BODY).trigger('cart.updated', [c0]);
 
         // Send 'add_to_cart' event to GA4
-        gtag('event', 'add_to_cart', {
-          currency: 'HUF',
-          value: p.price.numericValue * c0,
-          items: [{
-              item_id: p.sku,
-              item_name: p.name,
-              affiliation: store.name,
-              currency: 'HUF',
-              item_brand: store.brand,
-              item_category: p.categories[0].name,
-              price: p.price.numericValue,
-              quantity: c0
-            }]
-        });
-        setTimeout(function() {
+        // gtag('event', 'add_to_cart', {
+        //   currency: 'HUF',
+        //   value: p.price.numericValue * c0,
+        //   items: [{
+        //       item_id: p.sku,
+        //       item_name: p.name,
+        //       affiliation: store.name,
+        //       currency: 'HUF',
+        //       item_brand: store.brand,
+        //       item_category: p.categories[0].name,
+        //       price: p.price.numericValue,
+        //       quantity: c0
+        //     }]
+        // });
+        // setTimeout(function() {
           Notify.success(AlertMessages.PRODUCT_ADDED);
           theme.LoadingOverlay.hide($el);
           $sidebar.sidebar('show');
-        }, 500);
+        // }, 500);
 
       }).fail(function (jqXHR) {
         $form.replaceWith(jqXHR.responseText);
@@ -769,7 +785,6 @@ theme.CartBadgeSection = (function () {
     refreshItemsCount: function (e, count) {
       e.preventDefault();
       let $el = $(selectors.ITEMS_COUNT_BUBBLE);
-
       let newCount = $el.data('itemsCount') + count;
       $el.html(newCount);                 // update html content
       $el.data('itemsCount', newCount);   // update data-items-count content
@@ -886,7 +901,11 @@ theme.CheckoutSection = (function () {
     PICK_SENDER_BUTTON: '.JS--Button-pickSender',
     DELETE_SENDER: '.JS--Button-deleteSender',
 
-    SAME_AS_RECIPIENT: '.JS--Wrapper-sameAsRecipientForm',
+    SAME_AS_RECIPIENT_FORM: '.JS--Wrapper-sameAsRecipientForm',
+    SAME_AS_RECIPIENT_CHOICE: '.JS--Wrapper-sameAsChoice',
+    SAME_AS_RECIPIENT_CHOICE_BUTTON: '.JS--Button-pickSameAsChoice',
+
+    REGISTRATION_FORM: '.JS--Wrapper-registrationForm',
 
     ACCEPT_TERMS_WRAPPER: '.JS--Wrapper-acceptTerms',
     ACCEPT_TERMS_FORM: '.JS--Wrapper-acceptTermsForm',
@@ -909,13 +928,14 @@ theme.CheckoutSection = (function () {
     deliveryDate: false,
     payment: false,
     sender: false,
+    sameAsRecipient: false,
     acceptTerms: false,
+    registration: false,
   };
   var ajaxLoading = false;
 
   function Checkout(container) {
     this.$container = $(container);
-
     this.$container
         .on('click', selectors.GOTO_STEP2_BUTTON, this.submitRecipientAndCustomer.bind(this))
         .on('click', selectors.GOTO_STEP3_BUTTON, this.submitShippingMethod.bind(this))
@@ -930,12 +950,14 @@ theme.CheckoutSection = (function () {
         .on('click', selectors.REFRESH_SENDER_LIST_BUTTON, this.refreshSenderList.bind(this))
         .on('click', selectors.PICK_SENDER_BUTTON, this.pickSender.bind(this))
         .on('click', selectors.DELETE_SENDER, this.deleteSender.bind(this))
-        .on('change', selectors.SAME_AS_RECIPIENT, this.handleSenderForm.bind(this))
 
         .on('change', selectors.SHIPPING_CHOICE_BUTTON, this.markShippingAsSelected.bind(this))
         .on('change', selectors.PAYMENT_CHOICE_BUTTON, this.markPaymentAsSelected.bind(this))
+        .on('change', selectors.SAME_AS_RECIPIENT_CHOICE_BUTTON, this.handleSameAsRecipient.bind(this))
 
         .on('click change', selectors.CHECKOUT_WRAPPER, this.preventInteraction.bind(this))
+
+        .on('checkout.sameAsRecipient.activateSenderForm', this.activateSenderForm.bind(this))
 
     ;
     $(selectors.BODY).on(
@@ -971,6 +993,9 @@ theme.CheckoutSection = (function () {
     if ($(selectors.PAYMENT_FORM).length) {
       this.paymentValidator = new FormValidation(selectors.PAYMENT_FORM, paymentConstraints);
     }
+    if ($(selectors.SAME_AS_RECIPIENT_FORM).length) {
+      this.sameAsRecipientValidator = new FormValidation(selectors.SAME_AS_RECIPIENT_FORM, sameAsRecipientConstraints);
+    }
     if ($(selectors.ACCEPT_TERMS_FORM).length) {
       this.acceptTermsValidator = new FormValidation(selectors.ACCEPT_TERMS_FORM, acceptTermsConstraints);
     }
@@ -994,16 +1019,14 @@ theme.CheckoutSection = (function () {
       e.preventDefault();
       if (ajaxLoading) return;
 
-      if (typeof this.recipientValidator !== 'undefined') {
-        this.recipientValidator.validateForm();
-        errors.recipient = this.recipientValidator.hasError();
-      }
-
       if (typeof this.customerValidator !== 'undefined') {
         this.customerValidator.validateForm();
         errors.customer = this.customerValidator.hasError();
       }
-
+      if (typeof this.recipientValidator !== 'undefined') {
+        this.recipientValidator.validateForm();
+        errors.recipient = this.recipientValidator.hasError();
+      }
       if (errors.recipient || errors.customer) {
         $(selectors.CHECKOUT_WRAPPER).find('.invalid-feedback:not(:empty)').closest('form')[0].scrollIntoView(scrollUp);
         return;
@@ -1017,58 +1040,55 @@ theme.CheckoutSection = (function () {
         theme.LoadingOverlay.show($el, 'click');
 
         let url = $el.data('url');
-        let $wrapper = $(selectors.CHECKOUT_WRAPPER);
         let $recipientForm = $(selectors.RECIPIENT_FORM);
-        let $recipientBody = $(selectors.RECIPIENT_BODY);
-        let $customerBody = $(selectors.CUSTOMER_BODY);
         let $customerForm = $(selectors.CUSTOMER_FORM);
-
+        console.log($customerForm);
 
         let recipientForm = null;
         let customerForm = null;
 
         let a1 = $.ajax({
-          url: $recipientForm.attr('action'),
-          method: 'POST',
-          data: $recipientForm.serialize(),
-          context: this
-        });
-        let a2 = $.ajax({
           url: $customerForm.attr('action'),
           method: 'POST',
           data: $customerForm.serialize(),
           context: this,
         });
+        let a2 = $.ajax({
+          url: $recipientForm.attr('action'),
+          method: 'POST',
+          data: $recipientForm.serialize(),
+          context: this
+        });
 
-        a1.done(function(data) {
-          $recipientForm.replaceWith(data);
+        a1.done(function(data){
+          $customerForm.replaceWith(data);
         })
-            .fail(function (jqXHR) {
-              recipientForm = jqXHR.responseText;
-              errors.recipient = true;
+            .fail(function(jqXHR){
+              customerForm = jqXHR.responseText;
+              errors.customer = true;
             })
             .always(function() {
               a2.done(function(data){
-                $customerForm.replaceWith(data);
+                $recipientForm.replaceWith(data);
               })
                   .fail(function(jqXHR){
-                    customerForm = jqXHR.responseText;
-                    errors.customer = true;
+                    recipientForm = jqXHR.responseText;
+                    errors.recipient = true;
                   })
                   .always(function() {
-                    $recipientForm.replaceWith(recipientForm);
                     $customerForm.replaceWith(customerForm);
+                    $recipientForm.replaceWith(recipientForm);
                     document.dispatchEvent(new Event('initFloatingInput'));
                     document.dispatchEvent(new Event('initFormValidation'));
                     document.dispatchEvent(new Event('initTooltip'));
                   }.bind(this))
             }.bind(this));
 
-        $.when(a1, a2).fail(function () {
+        $.when(a1, a2).fail(function () { 
           theme.LoadingOverlay.hide($el);
 
           setTimeout(function (){
-            if (errors.recipient || errors.customer) {
+            if (errors.customer || errors.recipient) {
               $(selectors.CHECKOUT_WRAPPER).find('.invalid-feedback:not(:empty)').closest('form')[0].scrollIntoView(scrollUp);
             }
           }, 500);
@@ -1328,16 +1348,23 @@ theme.CheckoutSection = (function () {
       });
     },
 
-    handleSenderForm(e) {
+    handleSameAsRecipient(e) {
       e.preventDefault();
       if (ajaxLoading) return;
 
-      let $el = $(e.currentTarget);
-      let $formWrapper = $(selectors.SAME_AS_RECIPIENT);
+      $(selectors.SAME_AS_RECIPIENT_FORM).addClass('was-validated');
+      this.$container.trigger('checkout.sameAsRecipient.activateSenderForm');
+    },
+
+    activateSenderForm(e) {
+      e.preventDefault();
+      if (ajaxLoading) return;
+
+      let $formWrapper = $(selectors.SAME_AS_RECIPIENT_FORM);
       let $senderBody = $(selectors.SENDER_BODY);
 
-      let input = $formWrapper.find('input')[0];
-      if (input.checked) {
+      let inputSameAs = $formWrapper.find('input')[0];
+      if (inputSameAs.checked) {
         $senderBody.removeClass('--active');
         errors.sender = false;
       } else {
@@ -1433,32 +1460,37 @@ theme.CheckoutSection = (function () {
       e.preventDefault();
       if (ajaxLoading) return;
 
-      let $sameAsRecipient = $(selectors.SAME_AS_RECIPIENT);
-      let sameAsRecipientInput = $sameAsRecipient.find('input')[0];
+      let $sameAsRecipientForm = $(selectors.SAME_AS_RECIPIENT_FORM);
+      let sameAsRecipientInput = $sameAsRecipientForm.find('input')[0];
 
-      if (!sameAsRecipientInput.checked) {
+      let isSameAsRecipient = $sameAsRecipientForm.find('input')[0].checked;
+      let isNewSender = $sameAsRecipientForm.find('input')[1].checked;
+
+      if (isNewSender) {
         if (typeof this.senderValidator !== 'undefined') {
           this.senderValidator.validateForm();
           errors.sender = this.senderValidator.hasError();
         }
       }
-
+      if (typeof this.sameAsRecipientValidator !== 'undefined') {
+        this.sameAsRecipientValidator.validateForm();
+        errors.sameAsRecipient = this.sameAsRecipientValidator.hasError();
+      }
       if (typeof this.acceptTermsValidator !== 'undefined') {
         this.acceptTermsValidator.validateForm();
         errors.acceptTerms = this.acceptTermsValidator.hasError();
       }
-
       if (typeof this.paymentValidator !== 'undefined') {
         this.paymentValidator.validateForm();
         errors.payment = this.paymentValidator.hasError();
       }
 
-      if (errors.payment || errors.sender || errors.acceptTerms) {
+      if (errors.payment || errors.sender || errors.sameAsRecipient || errors.acceptTerms) {
         $(selectors.CHECKOUT_WRAPPER).find('.invalid-feedback:not(:empty)').closest('form')[0].scrollIntoView(scrollUp);
         return;
       }
 
-      if (!errors.payment && !errors.sender && !errors.acceptTerms) {
+      if (!errors.payment && !errors.sender && !errors.sameAsRecipient && !errors.acceptTerms && !errors.registration) {
         this._disableFormElements();
 
         let $el = $(e.currentTarget);
@@ -1468,10 +1500,12 @@ theme.CheckoutSection = (function () {
         let url = $el.data('url');
         let $paymentForm = $(selectors.PAYMENT_FORM);
         let $senderForm = $(selectors.SENDER_FORM);
+        // let $registrationForm = $(selectors.REGISTRATION_FORM);
         let $acceptTermsForm = $(selectors.ACCEPT_TERMS_FORM);
 
         let paymentForm = null;
         let senderForm = null;
+        // let registrationForm = null;
         let acceptTermsForm = null;
 
         let a1 = $.ajax({
@@ -1482,8 +1516,7 @@ theme.CheckoutSection = (function () {
         });
 
         let a2 = null;
-        if (!sameAsRecipientInput.checked) {
-          console.log('senderForm');
+        if (isNewSender) {
           a2 = $.ajax({
             url: $senderForm.attr('action'),
             method: 'POST',
@@ -1491,16 +1524,14 @@ theme.CheckoutSection = (function () {
             context: this
           });
         }
-        if (sameAsRecipientInput.checked) {
-          console.log('sameAsRecipient');
+        if (isSameAsRecipient) {
           a2 = $.ajax({
-            url: $sameAsRecipient.attr('action'),
+            url: $sameAsRecipientForm.attr('action'),
             method: 'POST',
-            // data: $senderForm.serialize(),
+            data: $sameAsRecipientForm.serialize(),
             context: this
           });
         }
-
 
         let a3 = $.ajax({
           url: $acceptTermsForm.attr('action'),
@@ -1509,27 +1540,40 @@ theme.CheckoutSection = (function () {
           context: this
         });
 
+        // let isSubmitRegistration = false;
+        // if ($registrationForm.find('#registration_email')[0].value.length > 0 && $registrationForm.find('#registration_password')[0].value.length > 0) {
+        //   isSubmitRegistration = true;
+        // }
+        //
+        // if (isSubmitRegistration) {
+        //   let a4 = $.ajax({
+        //     url: $registrationForm.attr('action'),
+        //     method: 'POST',
+        //     data: $registrationForm.serialize(),
+        //     context: this
+        //   });
+        // }
 
         a1.done(function(data) {
           $paymentForm.replaceWith(data);
         })
-          .fail(function (jqXHR) {
+          .fail(function(jqXHR) {
             paymentForm = jqXHR.responseText;
             errors.payment = true;
           })
           .always(function() {
 
             a2.done(function(data){
-              if (!sameAsRecipientInput.checked) {
+              if (isNewSender) {
                 $senderForm.replaceWith(data);
               }
             })
               .fail(function(jqXHR){
-                if (!sameAsRecipientInput.checked) {
+                if (isNewSender) {
                   senderForm = jqXHR.responseText;
                   errors.sender = true;
                 } else {
-                  console.log(jqXHR.responseText)
+                  // console.log(jqXHR.responseText)
                 }
               })
               .always(function() {
@@ -1542,8 +1586,22 @@ theme.CheckoutSection = (function () {
                     errors.acceptTerms = true;
                   })
                   .always(function() {
+
+                    // if (isSubmitRegistration) {
+                    //   a4.done(function (data) {
+                    //     $registrationForm.replaceWith(data);
+                    //   })
+                    //       .fail(function (jqXHR){
+                    //         registrationForm = jqXHR.responseText;
+                    //         errors.registration = true;
+                    //       })
+                    //       .always(function (){
+                    //         $registrationForm.replaceWith(registrationForm);
+                    //       }.bind(this))
+                    // }
+
                     $paymentForm.replaceWith(paymentForm);
-                    if (!sameAsRecipientInput.checked) {
+                    if (isNewSender) {
                       $senderForm.replaceWith(senderForm);
                     }
                     $acceptTermsForm.replaceWith(acceptTermsForm);
@@ -1567,6 +1625,7 @@ theme.CheckoutSection = (function () {
         }.bind(this));
 
         $.when(a1, a2, a3).done(function () {
+          console.log('url');
           window.location.href = url;
         }.bind(this));
       }
@@ -1580,9 +1639,9 @@ theme.CheckoutSection = (function () {
       let $el = $(e.currentTarget);
       let $wrapper = $(selectors.PAYMENT_WRAPPER);
       let $choiceWrapper = $el.closest(selectors.PAYMENT_CHOICE);
-      $choiceWrapper.find('input').prop('checked',true);  // Beleteszi a pipát
-      $wrapper.find('.selected').removeClass('selected');
-      $choiceWrapper.addClass('selected');
+      // $choiceWrapper.find('input').prop('checked',true);  // Beleteszi a pipát
+      // $wrapper.find('.selected').removeClass('selected');
+      // $choiceWrapper.addClass('selected');
       $(selectors.PAYMENT_FORM).addClass('was-validated');
 
       $(selectors.BODY).trigger('checkout.summary.updated', [{
@@ -1616,20 +1675,21 @@ theme.CheckoutSection = (function () {
       // If flowerShopMode, there's no $schedulingPriceBody. We set the schedulingPrice to 0.
       let schedulingPrice = $schedulingPriceBody.length ? $schedulingPriceBody.data('schedulingPrice') : 0;
 
+      // .toLocaleString 'options' definitions here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat
+
       if ("undefined" !== typeof summary.shippingFee) {
-        console.log(summary.shippingFee);
-        $shippingFee.html(summary.shippingFee.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $shippingFee.html(summary.shippingFee.toLocaleString("hu-HU", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
         $shippingFee.data('shippingFee', summary.shippingFee);
         updatedAmountToPay += summary.shippingFee + paymentFee + schedulingPrice;
       }
       if ("undefined" !== typeof summary.schedulingPrice) {
-        $schedulingPriceBody.html(summary.schedulingPrice.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $schedulingPriceBody.html(summary.schedulingPrice.toLocaleString("hu-HU", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
         $schedulingPriceBody.data('schedulingPrice', summary.schedulingPrice);
         updatedAmountToPay += shippingFee + paymentFee + summary.schedulingPrice;
       }
       if ("undefined" !== typeof summary.paymentFee) {
         $paymentName.html(summary.paymentName);
-        $paymentFee.html(summary.paymentFee.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $paymentFee.html(summary.paymentFee.toLocaleString("hu-HU", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
         $paymentFee.data('paymentFee', summary.paymentFee);
         if (summary.paymentFee == 0) {
           $paymentBody.addClass('d-none');
@@ -1639,7 +1699,7 @@ theme.CheckoutSection = (function () {
         updatedAmountToPay += shippingFee + summary.paymentFee + schedulingPrice;
       }
 
-      $amountToPayBody.html(updatedAmountToPay.toLocaleString("de-DE", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+      $amountToPayBody.html(updatedAmountToPay.toLocaleString("hu-HU", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
     },
 
   });
@@ -1735,11 +1795,10 @@ $(document).ready(function() {
 });
 
 theme.init = function() {
-  // console.log('init');
-  // new theme.AddToCart;
   document.addEventListener('initTooltip', function() { $('[data-toggle="tooltip"]').tooltip(); }, false);
   document.addEventListener('disposeTooltip', function() { $('[data-toggle="tooltip"]').tooltip('dispose'); }, false);
   document.dispatchEvent(new Event('initTooltip'));
 };
 
+// equiv to $(document).ready(theme.init);
 $(theme.init);

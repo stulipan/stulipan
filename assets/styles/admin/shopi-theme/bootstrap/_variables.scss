@@ -466,7 +466,7 @@ $input-btn-line-height:       $line-height-base !default;
 
 $input-btn-focus-width:       1px !default; //.125rem !default;
 $input-btn-focus-color:       rgba($component-active-bg, 1) !default; //lighten($component-active-bg, 25) !default; // rgba($component-active-bg, .25) !default;
-$input-btn-focus-box-shadow:  0 0 0 1px $white, 0 0 0 3px lighten($primary, 15%) !default; //0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
+$input-btn-focus-box-shadow:  0 0 0 3px rgba($primary, .35) !default; // 0 0 0 1px $white, 0 0 0 3px lighten($primary, 15%) !default; //0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
 
 $input-btn-padding-y-sm:      .25rem !default;
 $input-btn-padding-x-sm:      .3125rem !default; //.45rem !default;
@@ -522,8 +522,7 @@ $btn-border-radius:           $border-radius !default;
 $btn-border-radius-lg:        $border-radius-lg !default;
 $btn-border-radius-sm:        $border-radius-sm !default;
 
-$btn-transition:              color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
-
+$btn-transition:              border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
 
 // Forms
 

@@ -6,7 +6,7 @@
                 <div class="">
                     <div class="d-flex align-items-start mr-2">
                         <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="{% if hasProductLink is defined and not hasProductLink %}pointer-events-none{% endif %}">
-                            <img src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_small') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
+                            <img src="{{ uploaded_asset(item.product.coverImageAsset)|imagine_filter('product_small') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
                         </a>
                         <div class="d-flex w-100 justify-content-between">
                             <div class="pl-3">
@@ -21,7 +21,16 @@
                                     </div>
                                 {% else %}
                                     <span class="d-block cart-item-quantity">{{ 'cart.quantity'|trans }}: {{ item.quantity }} </span>
-                                    <span class="d-block cart-item-price">{{ (item.unitPrice * item.quantity) |money }}</span>
+                                    {% if item.product.isOnSale %}
+                                        <div class="price">
+                                            <span class="price-sale">{{ (item.product.sellingPrice * item.quantity)|money }}</span>
+                                            <span class="price-compare">{{ (item.product.compareAtPrice * item.quantity)|money }}</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="price">
+                                            <span class="price-regular">{{ (item.product.sellingPrice * item.quantity)|money }}</span>
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
                                 {% if not item.product.isPubliclyAvailable %}
                                     <em class="d-block cart-item-missing">{{ 'cart.product-no-longer-available'|trans }}</em>
@@ -32,20 +41,19 @@
                 </div>
             </div>
 
-            <div class="d-flex flex-column flex-sm-row justify-content-end justify-content-sm-between align-items-end align-items-sm-center">
+            <div class="d-flex flex-column flex-sm-row justify-content-end justify-content-sm-between align-items-end align-items-sm-start">
                 {% if showQuantity is defined and showQuantity %}
-                    <span class="d-block cart-item-price">{{ (item.unitPrice * item.quantity) |money }}</span>
+                    {% if item.product.isOnSale %}
+                        <div class="price">
+                            <span class="price-sale">{{ (item.product.sellingPrice * item.quantity)|money }}</span>
+                            <span class="price-compare">{{ (item.product.compareAtPrice * item.quantity)|money }}</span>
+                        </div>
+                    {% else %}
+                        <div class="price">
+                            <span class="price-regular">{{ (item.product.sellingPrice * item.quantity)|money }}</span>
+                        </div>
+                    {% endif %}
                 {% endif %}
-{#                {% if showQuantity is defined and showQuantity %}#}
-{#                    <div class="ml-2 mr-1 mr-md-6">#}
-{#                        <div class="d-flex align-items-center">#}
-{#                            <div class="d-flex align-items-center JS--formWrapper text-center loading-spinner-bg" data-wrapper-item-quantity>#}
-{#                                {{ render(controller('App\\Controller\\Shop\\CartController::setItemQuantityForm', {'id' : item.id})) }}#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                {% endif %}#}
-
                 {% if showRemove is defined and showRemove %}
                     <div class="pl-1 pl-sm-4 d-flex justify-content-end mt-2 mt-sm-0">
                         <button class="JS--Button-removeItem btn btn-link-secondary"

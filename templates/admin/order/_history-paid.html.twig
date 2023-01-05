@@ -5,8 +5,8 @@
         <dd>{{ order.transaction.authorization }}</dd>
         <dt>{{ 'order.history.amount'|trans }}</dt>
         <dd>
-                {%- if order.summary.totalAmountToPay is defined and order.summary.totalAmountToPay is not null -%}
-                        {{  order.summary.totalAmountToPay|money }}
+                {%- if order.totalAmountToPay is defined and order.totalAmountToPay is not null -%}
+                        {{  order.totalAmountToPay|money }}
                 {%- else -%}
                         -
                 {%- endif -%}

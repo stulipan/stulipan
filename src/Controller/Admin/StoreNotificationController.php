@@ -88,7 +88,7 @@ class StoreNotificationController extends AbstractController
             $orderItem->setOrder($order);
             $orderItem->setProduct($product);
             $orderItem->setQuantity(2);
-            $orderItem->setUnitPrice($product->getPrice()->getNumericValue());
+            $orderItem->setUnitPrice($product->getSellingPrice());
             $orderItem->setPriceTotal($orderItem->getUnitPrice() * $orderItem->getQuantity());
         $order->addItem($orderItem);
 
@@ -97,7 +97,7 @@ class StoreNotificationController extends AbstractController
             $orderItem->setOrder($order);
             $orderItem->setProduct($product);
             $orderItem->setQuantity(1);
-            $orderItem->setUnitPrice($product->getPrice()->getNumericValue());
+            $orderItem->setUnitPrice($product->getSellingPrice());
             $orderItem->setPriceTotal($orderItem->getUnitPrice() * $orderItem->getQuantity());
         $order->addItem($orderItem);
         $order->setShippingMethod($shippingMethod);
@@ -129,7 +129,7 @@ class StoreNotificationController extends AbstractController
         $subject = $twig->render('subject', [
             'orderNumber' => '#'.$order->getNumber(),
             'storeUrl' => $storeSettings->get('store.url'),
-            'totalAmount' => $appExtension->formatMoney($order->getSummary()->getTotalAmountToPay()),
+            'totalAmount' => $appExtension->formatMoney($order->getTotalAmountToPay()),
         ]);
 
         $html = $subject.PHP_EOL.PHP_EOL.PHP_EOL;

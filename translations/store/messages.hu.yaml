@@ -114,10 +114,11 @@ cart:
     remove-item: Eltávolítás
     product-no-longer-available: '*A termék már nem áll forgalmazásban'
     shipping-fee: 'Szállítási díj'
-    shipping-fee-calculated-at-checkout: 'A szállítási díj a pénztárban lesz kiszámolva.'
+    shipping-fee-calculated-at-checkout: 'A pénztárban lesz kiszámolva.'
     shipping-fee-calculated-in-next-step: 'A következő lépésben lesz kiszámolva'
     scheduling-fee: 'Szállítás időpontra'
     discount: Kedvezmény
+    saving: Megtakarításod
     total: Összesen
     subtotal: Részösszeg
     total-amount-to-pay: Fizentendő
@@ -183,13 +184,45 @@ checkout:
         missing-recipient: 'Nem adtál még meg szállítási címet.'
         last-used: 'Legutóbb használt'
     sender:
-        sender: Számlázási cím
+        sender: 'Számlázási cím'
+        sender-title: 'Számlázási adataid'
+        sender-description: 'Add meg számlázási adataidat.'
+        new-sender: 'Új számlázási cím hozáadása'
+        previously-saved-senders: 'Előzőleg megadott címek'
+        previously-saved-senders-modal-title: 'Előzőleg megadott számlázási címek'
+        previously-saved-senders-modal-description: 'Előzőleg megadott számlázási címek'
+        no-previously-saved-senders: 'Még nincs számlázási címed.'
+        select-sender: 'Számlázás erre a címre'
+        firstname: Keresztnév
+        lastname: Vezetéknév
+        address: Címe
+        address-placeholder: 'Cím: Utca, házszám, emelet, ajtó...'
+        city: Város
+        city-placeholder: 'Város, település'
+        province: Megye
+        zip: Irányítószám
+        country: Ország
+        phone: Telefonszám
+        phone-placeholder: 'Telefonszám, pl: +36... vagy 06...'
+        company: Cég neve
+        tax-number: Adószám
+        missing-firstname: 'Add meg a keresztnevet!'
+        missing-lastname: 'Add meg a vezetéknevet!'
+        missing-address: 'Add meg a címet.'
+        missing-city: 'Add meg a települést.'
+        missing-province: 'Add meg a megyét.'
+        missing-zip: 'Add meg az irányítószámot.'
+        invalid-zip: 'Hibás irányítószám.'
+        missing-country: 'Válasszd ki az országot.'
+        missing-phone: 'Add meg a telefonszámot.'
+        invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
+        missing-company: 'Add meg a cégnevet.'
+        missing-tax-number: 'Add meg az adószámot.'
+        missing-sender: 'Nem adtál még meg szállítási címet.'
         last-used: 'Legutóbb használt'
         same-as-shipping-address: 'A számlázási cím megegyezik a szállítási címmel'
         use-different-shipping-address: 'Másik számlázási címet adok meg'
-
-        no-previously-saved-senders: 'Még nincs számlázási címed.'
-
+        missing-billing-address: 'Válassz számlázási címet.'
     flower-shop:
         recipient: Címzett
         recipient-page-title: 'A címzett adatai'
@@ -241,9 +274,19 @@ checkout:
     overview:
         recipient: Szállítási cím
         recipient-to: Neki küldöd
-        customer: Vásárló
+        customer-contact: Vásárló adatai
         customer-from: Aki küldi
         shipping-method: Szállítás mód
+    account:
+        create-account-title: 'Fiók létrehozása'
+        create-account-description: 'Nem kötelező regisztrálni, de megteheted gyorsan csupán egy jelszó megadásával.'
+        email-address: 'Email címed'
+        password: Jelszó
+        confirm-password: 'Jelszó újra'
+        firstname: Keresztnév
+        lastname: Vezetéknév
+        email-is-invalid: 'Ellenőrizd, hogy helyesen írtad be az email címet.'
+        email-is-in-use: 'Az email címet elgépelted, vagy már regisztráltál vele!'
     terms:
         accept-terms-label: 'A rendelés leadásával kijelented, hogy elolvastad és elfogadod az <a {{ terms }}>ÁSZF</a> illetve az <a {{ privacy }}>Adatvédelemben</a> foglaltakat és hozzájárulsz, hogy az itt megadott adatokat felhasználjuk a rendelés teljesítéséhez.'
         accept-terms-error: 'A rendelés leadásához kérjük fogadd el az ÁSZF-et.'
@@ -253,7 +296,9 @@ checkout:
     back-to-cart-button: 'Vissza a kosárhoz'
     back-to-shipping-address-button: 'Vissza a szállítási címhez'
     back-to-shipping-method-button: 'Vissza a szállítási módhoz'
+    place-order: 'A rendelést leadom'
     continue-to-store-button: 'Tovább a webáruházba'
+
     phone-number-tooltip: 'A telefonszámot így írd be: +36... vagy 06... és ne használj szóközt illetve egyéb karaktereket.'
     missing-recipient-information: 'Töltsd ki a hiányzó mezőket.'
     missing-sender-information: 'Töltsd ki a hiányzó mezőket.'
@@ -334,7 +379,7 @@ currency:
     short: Ft
     code: HUF
 generic:
-    not-available: nincs
+    not-available: nincs megadva
     prev: Előző
     next: Kővetkező
     save: Mentés
@@ -350,3 +395,5 @@ generic:
     page-not-found: A keresett oldal nem található
     page-not-found-description: Olyan oldalra tévedtél, ami valójában nincs. Hogy ez a mi hibánk, vagy a tiéd, azt nem tudjuk, mindenesetre biztosan nem itt van, amit keresel.
     back-to-homepage: Vissza a főoldalra
+error:
+    ajax-no-data-was-returned: No data was returned

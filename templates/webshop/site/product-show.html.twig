@@ -28,8 +28,8 @@
 
     <meta property="og:title" content="{{ product.name }} - {{ storeSettings.get('meta.title')}}">
     <meta property="og:description" content="{{ contentDescription }}">
-    {% if product.coverImage %}
-        <meta property="og:image" content="{{ uploaded_asset(product.coverImage)|imagine_filter('size_facebook') }}">
+    {% if product.coverImageAsset %}
+        <meta property="og:image" content="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('size_facebook') }}">
         <meta property="og:image:width" content="1000" />
         <meta property="og:image:height" content="1000" />
     {% endif %}
@@ -154,15 +154,19 @@
                                 {% if product.isPubliclyAvailable %}
                                     {% if product.isFlower %}
                                     {% else %}
-                                        <div class="product-part mt-1">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <ul class="list-inline mb-0">
-{#                                                        <li class="list-inline-item price">#}
-{#                                                            <del>{{ (product.price.numericValue*4)|money }}</del>#}
-{#                                                        </li>#}
-{#                                                        <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>#}
-                                                    <li class="list-inline-item price">{{ product.price.numericValue|money }}</li>
-                                                </ul>
+                                        <div class="product-part">
+                                            <div class="product-price-block">
+                                                {% if product.isOnSale %}
+                                                    <div class="price">
+                                                        <span class="price-sale">{{ product.sellingPrice|money }}</span>
+                                                        <span class="price-compare">{{ product.compareAtPrice|money }}</span>
+                                                    </div>
+                                                    <div class="price-percentage">{{ product.discountPercentage }}</div>
+                                                {% else %}
+                                                    <div class="price">
+                                                        <span class="price-regular">{{ product.sellingPrice|money }}</span>
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     {% endif %}
@@ -173,23 +177,27 @@
                                         </div>
                                     </div>
                                     {% endif %}
-                                    <div class="product-part">
-                                        {{ product.description|raw }}
+                                {% else %}
+                                    <div class="alert alert-warning mt-3">
+                                        <svg class="icon">
+                                            <use xlink:href="#info-circle"> </use>
+                                        </svg>
+                                        {{ 'product.no-longer-available'|trans }}
                                     </div>
                                 {% endif %}
+                                <div class="product-part">
+                                    {{ product.description|raw }}
+                                </div>
+                                <div class="product-part">
+                                    <span class="product-variant-selector-label">{{ 'product.product-id'|trans }}:</span>
+                                    {{ product.sku }}
+                                </div>
 
                                 <!-- Add to cart form -->
-                                <div data-section-id="addToCart-template" data-section-type="addToCart-template">
+                                <div data-section-id="addToCart-template-id" data-section-type="addToCart-template">
 
                                     {% if product.isPubliclyAvailable %}
                                         {% include 'webshop/site/product-show-addToCartForm-widget.html.twig' %}
-                                    {% else %}
-                                        <div class="alert alert-warning mt-3">
-                                            <svg class="icon">
-                                                <use xlink:href="#info-circle"> </use>
-                                            </svg>
-                                            {{ 'product.no-longer-available'|trans }}
-                                        </div>
                                     {% endif %}
 
                                     <div class="product-part">
@@ -378,7 +386,7 @@
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}
-                                        <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="300" height="400">
+                                        <img src="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="300" height="400">
                                         {% if bestseller %}
                                             <div class="ribbon ribbon-bottom">
                                                 <svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}
@@ -389,7 +397,7 @@
                                 </div>
                                 <div class="product-title-wrapper">
                                     <p class="productList--name"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.name }}</a></p>
-                                    <div class="productList--price-gross mt-1">{{ product.price.grossPrice|money }}</div>
+                                    {% include 'webshop/site/product-list-price-snippet.html.twig' %}
                                 </div>
                             </div>
                         {% endif %}
@@ -633,28 +641,29 @@
                 $recommendedProducts.trigger('prev.owl.carousel');
             });
         });
+        // debugger;
     </script>
-    <script>
-        function clickAndGo(e) {
-            e.preventDefault();
-            let url = e.currentTarget.href;
-            let $sidebar = $('#JS--Sidebar-Cart');
-
-            var callback = function () {
-                if (typeof(url) != 'undefined') {
-                    window.location = url;
-                }
-            };
-
-            callback();
-            $sidebar.sidebar('hide');
-            // $sidebar.on('hide.bs.sidebar', function (e) {
-            //     callback()
-            // });
-            return false;
-        }
+{#    <script>#}
+{#        // function clickAndGo(e) {#}
+{#        //     e.preventDefault();#}
+{#        //     let url = e.currentTarget.href;#}
+{#        //     let $sidebar = $('#JS--Sidebar-Cart');#}
+{#        //#}
+{#        //     var callback = function () {#}
+{#        //         if (typeof(url) != 'undefined') {#}
+{#        //             window.location = url;#}
+{#        //         }#}
+{#        //     };#}
+{#        //#}
+{#        //     callback();#}
+{#        //     $sidebar.sidebar('hide');#}
+{#        //     // $sidebar.on('hide.bs.sidebar', function (e) {#}
+{#        //     //     callback()#}
+{#        //     // });#}
+{#        //     return false;#}
+{#        // }#}
 {#        {% if productJson is defined %}#}
 {#        var productJson = {{ productJson|raw }};#}
 {#        {% endif %}#}
-    </script>
+{#    </script>#}
 {% endblock %}

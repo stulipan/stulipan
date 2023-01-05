@@ -3,6 +3,7 @@
 namespace App\Controller\Shop;
 
 use App\Entity\Geo\GeoPlace;
+use App\Services\CartBuilder;
 use App\Services\OrderBuilder;
 use App\Entity\Product\ProductCategory;
 use App\Repository\GeoPlaceRepository;
@@ -15,14 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CartUtilsController extends AbstractController
 {
-    /**
-     * @var OrderBuilder
-     */
-    private $orderBuilder;
+    private $cartBuilder;
 
-    public function __construct(OrderBuilder $orderBuilder)
+    public function __construct(CartBuilder $cartBuilder)
     {
-        $this->orderBuilder = $orderBuilder;
+        $this->cartBuilder = $cartBuilder;
     }
 
     /**
@@ -102,10 +100,8 @@ class CartUtilsController extends AbstractController
      */
     public function cartDetailsDropdown()
     {
-        $orderBuilder = $this->orderBuilder;
         return $this->render('webshop/site/navbar-cart-dropdown.html.twig', [
-            'order' => $orderBuilder->getCurrentOrder(),
-//            'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
+            'cart' => $this->cartBuilder->getCurrent(),
         ]);
     }
 
@@ -114,10 +110,10 @@ class CartUtilsController extends AbstractController
      */
     public function showSidebarCart()
     {
-        $orderBuilder = $this->orderBuilder;
+        $cartBuilder = $this->cartBuilder;
         return $this->render('webshop/site/navbar-cart-sidebar.html.twig', [
-            'order' => $orderBuilder->getCurrentOrder(),
-            'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
+            'cart' => $cartBuilder->getCurrent(),
+            'totalAmountToPay' => $cartBuilder->getCurrent()->getTotalAfterSale(),
         ]);
     }
 

@@ -57,4 +57,29 @@ class SlugBuilder
         }
         return null;
     }
+
+    /**
+     * Generates a numbered postfix and appends it to a string.
+     *      Example: 'terebes-5' --> 'terebes-6'
+     *      Example: 'terebes'   --> 'terebes-1'
+     *
+     * @param string $searchFor
+     * @param string $searchIn
+     * @return string
+     */
+    public function numberedPostfix(string $searchFor, string $searchIn)
+    {
+        // search for 'terebes' in 'terebes-1' ==> results: '-1'
+        $stringDiff = str_replace($searchFor, '', $searchIn);
+        // remove '-' ==> results: '1'
+        $stringDiff = ltrim($stringDiff, '-');
+        if ('' !== $stringDiff) {
+            $number = (int) $stringDiff;
+            $number += 1;
+            $postfix = (string) $number;
+        } else {
+            $postfix = '1';
+        }
+        return $postfix;
+    }
 }

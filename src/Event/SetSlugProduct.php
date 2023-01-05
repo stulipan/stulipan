@@ -64,6 +64,7 @@ class SetSlugProduct
     }
 
     /**
+     * @param Product $product
      * @param LifeCycleEventArgs $args
      */
     public function postLoad(Product $product, LifeCycleEventArgs $args)

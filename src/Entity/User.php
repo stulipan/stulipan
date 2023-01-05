@@ -120,11 +120,37 @@ class User implements UserInterface, Serializable
      */
     private $roles = [];
 
+    /**
+     * @var Recipient[]|ArrayCollection|null
+     *
+     * ==== One User/Customer has Recipients ====
+     * ==== mappedBy="customer" => az Recipients entitásban definiált 'customer' attribútumról van szó ====
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Recipient", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=true)
+     * @Assert\NotBlank(message="Egy felhasználónak több címzetje lehet.")
+     */
+    private $recipients;
+
+    /**
+     * @var Sender[]|ArrayCollection|null
+     *
+     * ==== One User/Customer has Senders ====
+     * ==== mappedBy="customer" => a Senders entitásban definiált 'customer' attribútumról van szó ====
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Sender", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=true)
+     * @Assert\NotBlank(message="Egy felhasználónak több számlázási címe lehet.")
+     */
+    private $senders;
+
     public function __construct()
     {
         $this->isActive = true;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
+        $this->recipients = new ArrayCollection();
+        $this->senders = new ArrayCollection();
     }
 
 //    public function __toString(): string
@@ -273,7 +299,7 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFirstname(): ?string
     {
@@ -281,7 +307,7 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      */
     public function setFirstname(?string $name)
     {
@@ -289,7 +315,7 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      */
     public function setLastname(?string $name)
     {
@@ -297,7 +323,7 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLastname(): ?string
     {
@@ -306,7 +332,7 @@ class User implements UserInterface, Serializable
 
     /**
      * @Groups({"orderView", "orderList"})
-     * @return string
+     * @return string|null
      */
     public function getFullname(): ?string
     {
@@ -428,5 +454,81 @@ class User implements UserInterface, Serializable
     private function ucWords (?string $string)
     {
         return $string ? ucwords($string) : $string;
+    }
+
+    /**
+     * @param Recipient $recipient
+     */
+    public function addRecipient(Recipient $recipient): void
+    {
+        $this->recipients->add($recipient);
+    }
+
+    /**
+     * @param Recipient $recipient
+     */
+    public function removeRecipient(Recipient $recipient): void
+    {
+        $this->recipients->removeElement($recipient);
+    }
+
+    /**
+     * @return Recipient[]|Collection
+     */
+    public function getRecipients(): Collection
+    {
+        return $this->recipients;
+    }
+
+    /**
+     * Checking if the Customer has Recipients.
+     *
+     * @return bool
+     */
+    public function hasRecipients(): bool
+    {
+        if ($this->recipients and !$this->recipients->isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param Sender $sender
+     */
+    public function addSender(Sender $sender): void
+    {
+        $this->senders->add($sender);
+    }
+
+    /**
+     * @param Sender $sender
+     */
+    public function removeSender(Sender $sender): void
+    {
+        $this->senders->removeElement($sender);
+    }
+
+    /**
+     * @return Sender[]|Collection
+     */
+    public function getSenders(): Collection
+    {
+        return $this->senders;
+    }
+
+    /**
+     * Checking if the Customer has Senders.
+     *
+     * @return bool
+     */
+    public function hasSenders(): bool
+    {
+        if ($this->senders and !$this->senders->isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

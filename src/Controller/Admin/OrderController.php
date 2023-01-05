@@ -21,6 +21,7 @@ use App\Entity\StoreEmailTemplate;
 use App\Entity\User;
 use App\Event\OrderEvent;
 use App\Entity\PaymentStatus;
+use App\Event\StoreEvent;
 use App\Form\DeliveryDate\CartHiddenDeliveryDateFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
@@ -54,7 +55,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
-use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Pagination\PaginatedCollection;
@@ -526,10 +526,10 @@ class OrderController extends AbstractController
             return new JsonResponse($json,400, [], true);
         }
 
-        $event = new OrderEvent($order, [
+        $event = new StoreEvent($order, [
             'channel' => OrderLog::CHANNEL_ADMIN,
         ]);
-        $this->dispatcher->dispatch($event, OrderEvent::EMAIL_SENT_ORDER_CONFIRMATION);
+        $this->dispatcher->dispatch($event, StoreEvent::EMAIL_SEND_ORDER_CONFIRMATION);
         $this->addFlash('success', 'Email sikeresen elküldve!');
 
         return new Response('', 200);
@@ -556,10 +556,10 @@ class OrderController extends AbstractController
             return new JsonResponse($json,400, [], true);
         }
 
-        $event = new OrderEvent($order, [
+        $event = new StoreEvent($order, [
             'channel' => OrderLog::CHANNEL_ADMIN,
         ]);
-        $this->dispatcher->dispatch($event, OrderEvent::EMAIL_SENT_SHIPPING_CONFIRMATION);
+        $this->dispatcher->dispatch($event, StoreEvent::EMAIL_SEND_SHIPPING_CONFIRMATION);
         $this->addFlash('success', 'Email sikeresen elküldve!');
 
         return new Response('', 200);

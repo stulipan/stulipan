@@ -146,7 +146,6 @@ class CmsController extends AbstractController
         $newPage->setContent($page->getContent());
         $newPage->setEnabled($page->getEnabled());
         $newPage->setParent($page->getParent());
-        $newPage->setSlug($page->getSlug().'-1');
         $newPage->setImage($page->getImage());
 
         $violations = $validator->validate($newPage);

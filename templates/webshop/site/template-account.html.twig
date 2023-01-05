@@ -95,11 +95,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="back-to-my-account mb-3 mb-md-0">
-                                    <a href="{{ path('site-user-myAccount') }}" class="text-dark">
-                                        <i class="fas fa-long-arrow-alt-left mr-2"></i>
-                                        {#            <svg class="svg-icon svg-icon-heavy">#}
-                                        {#                <use xlink:href="#male-user-1"> </use>#}
-                                        {#            </svg>#}
+                                    <a href="{{ path('site-user-myAccount') }}" class="text-decoration-none">
+                                        <svg class="icon">
+                                            <use xlink:href="#arrow-left"></use>
+                                        </svg>
                                         {{ 'account.my-account'|trans }}
                                     </a>
                                 </div>

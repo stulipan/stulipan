@@ -4,18 +4,13 @@ namespace App\Security;
 
 use App\Entity\Customer;
 use App\Entity\User;
-use App\Services\OrderBuilder;
-use App\Services\OrderSessionStorage;
-use App\Repository\UserRepository;
+use App\Services\CheckoutBuilder;
+use App\Services\StoreSessionStorage;
 use App\Services\AbandonedOrderRetriever;
 use App\Services\CustomerBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -52,38 +47,28 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     private $customer;
     /**
-     * @var OrderBuilder
+     * @param AbandonedOrderRetriever $abandonedRetriever
      */
-    private $orderBuilder;
-    /**
-     * @param CustomerBuilder $customerBuilder
-     */
-    private $customerBuilder;
-    /**
-     * @param AbandonedOrderRetriever $abandonedOrderRetriever
-     */
-    private $abandonedOrderRetriever;
+    private $abandonedRetriever;
     /**
      * @var EntityManagerInterface
      */
     private $em;
 
-    private $orderSession;
+    private $storage;
     private $translator;
 
-    public function __construct(EntityManagerInterface $em, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager,
-                                UserPasswordEncoderInterface $passwordEncoder, OrderBuilder $orderBuilder,
-                                CustomerBuilder $customerBuilder, OrderSessionStorage $orderSession,
-                                AbandonedOrderRetriever $abandonedOrderRetriever, TranslatorInterface $translator)
+    public function __construct(EntityManagerInterface       $em, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager,
+                                UserPasswordEncoderInterface $passwordEncoder, CheckoutBuilder $checkoutBuilder,
+                                CustomerBuilder              $customerBuilder, StoreSessionStorage $storage,
+                                AbandonedOrderRetriever      $abandonedRetriever, TranslatorInterface $translator)
     {
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
         $this->em = $em;
-        $this->orderBuilder = $orderBuilder;
-        $this->customerBuilder = $customerBuilder;
-        $this->orderSession = $orderSession;
-        $this->abandonedOrderRetriever = $abandonedOrderRetriever;
+        $this->storage = $storage;
+        $this->abandonedRetriever = $abandonedRetriever;
         $this->translator = $translator;
     }
 
@@ -133,7 +118,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
-//        return $this->userRepository->findOneBy(['email' => $credentials['email']]);
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
         if (!$user) {
             // fail authentication with a custom error
@@ -151,13 +135,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function checkCredentials($credentials, UserInterface $user)
     {
         $isPasswordValid = $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
-
         if (!$isPasswordValid) {
             throw new CustomUserMessageAuthenticationException('Password is incorrect.');
         }
-
         return $isPasswordValid;
-//        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     /**
@@ -170,100 +151,179 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        $this->orderSession->add('success', $this->translator->trans('registration.login-success'));
-//        $session->getFlashBag()->add('success', $translator->trans('registration.login-success'));
+        $this->storage->add('success', $this->translator->trans('registration.login-success'));   /// ???
 
-        $orderInSession = $this->orderSession->getOrderById();  // extract Order from session, if any
-        $customer = $this->customerBuilder->retrieveCustomer($orderInSession);  // build Customer object
-        $abandonedOrder = $this->abandonedOrderRetriever->getOrder();
+        /** @var User $user */
+        $user = $token->getUser();
+        $checkoutInSession = $this->storage->getCheckoutById();  // extract Checkout from session, if any
 
-        if ($customer->getId() === null) {
-            $this->em->persist($customer);
-            $this->em->flush();
-        }
+        if ($checkoutInSession) {
+            $customerInSession = $checkoutInSession->getCustomer();
+            $customerInUser = $user->getCustomer();
 
-        /**
-         * Gets the items from abandoned Order and adds them to the Order in session.
-         * Returns the Order in session (with id!).
-         */
-        if ($orderInSession && $abandonedOrder) {
-            if ($abandonedOrder->hasItems()) {
-                foreach ($abandonedOrder->getItems() as $item) {
-                    if (!$orderInSession->containsTheProduct($item->getProduct())) {
-                        $abandonedOrder->removeItem($item);
-                        $item->setOrder($orderInSession);
-                        $orderInSession->addItem($item);
-                    }
-                }
-            }
-            // nem akarjuk az elozo Order teljes tartalmat atmasolni
-            // $abandonedOrder->copyPropertyValuesInto($orderInSession);
+            if ($customerInSession && $customerInUser) {
+               if ($customerInSession === $customerInUser) {
+                   // do nothing
+               }
+               else {
+                   $checkoutInSession->setCustomer(null);
+                   if ($customerInSession->getCheckouts()->isEmpty()) {
+                       $this->em->remove($customerInSession);  // remove unused Customer
+                   }
+                   $checkoutInSession->setCustomer($customerInUser);  // update Customer in current Checkout
+                   $checkoutInSession->setEmail($customerInUser->getEmail());
+//                   $checkoutInSession->setPhone($customerInUser->getPhone());
+                   $this->em->persist($checkoutInSession);
+                   $this->em->flush();
 
-            $orderInSession->setCustomer($customer);
-            $orderInSession->setFirstname($customer->getFirstname());
-            $orderInSession->setLastname($customer->getLastname());
-            $orderInSession->setEmail($customer->getEmail());
-            $orderInSession->setPhone($customer->getPhone());
-
-            if ($orderInSession->getRecipient()) {
-                $orderInSession->getRecipient()->setCustomer($customer);
-                $this->em->persist($orderInSession->getRecipient());
-            }
-            if ($orderInSession->getSender()) {
-                $orderInSession->getSender()->setCustomer($customer);
-                $this->em->persist($orderInSession->getSender());
+                   $customerInSession = $customerInUser;
+               }
             }
 
-            $abandonedOrder->setCustomer(null);
-            $abandonedOrder->setRecipient(null);
-            $abandonedOrder->setSender(null);
-            $this->em->remove($abandonedOrder);  // remove abandonedOrder from db
+            if ($customerInSession && !$customerInUser) {
+                $customerInSession->setUser($user);
+                $checkoutInSession->setEmail($customerInSession->getEmail());
+//                $checkoutInSession->setPhone($customerInSession->getPhone());
+                $this->em->persist($customerInSession);
+                $this->em->persist($checkoutInSession);
+                $this->em->flush();
+            }
 
-            $this->em->persist($orderInSession);
-            $this->em->flush();
-        }
+            if (!$customerInSession && $customerInUser) {
+                $checkoutInSession->setCustomer($customerInUser);
+                $checkoutInSession->setEmail($customerInUser->getEmail());
+                $this->em->persist($checkoutInSession);
+                $this->em->flush();
+            }
 
-        /** If no Order in session, adds the abandonedOrder to the session */
-        if (!$orderInSession && $abandonedOrder) {
-            $this->orderBuilder->setCurrentOrder($abandonedOrder);
-        }
+            if (!$customerInSession && !$customerInUser) {
+                $customer = new Customer();
+                $customer->setEmail($user->getEmail());
+                $customer->setFirstname($user->getFirstname());
+                $customer->setLastname($user->getLastname());
+                $customer->setPhone($user->getPhone());
+                $customer->setUser($user);
+                $checkoutInSession->setCustomer($customer);
+                $checkoutInSession->setEmail($customer->getEmail());
+//                $checkoutInSession->setPhone($customer->getPhone());
+                $this->em->persist($customer);
+                $this->em->persist($checkoutInSession);
+                $this->em->flush();
+            }
 
-        if ($orderInSession) {
-            if ($customer) {
-                $orderInSession->setCustomer($customer);
-                $orderInSession->setFirstname($customer->getFirstname());
-                $orderInSession->setLastname($customer->getLastname());
-                $orderInSession->setEmail($customer->getEmail());
-                $orderInSession->setPhone($customer->getPhone());
+//            if ($user->getCustomer()) {
+//                if ($customerInSession) {
+//                    $checkoutInSession->setCustomer(null);
+//
+//                    $this->em->remove($customerInSession);  // remove unused Customer
+//                }
+//
+//                $checkoutInSession->setCustomer($user->getCustomer());  // update Customer in current Checkout
+//                $checkoutInSession->setEmail($user->getCustomer()->getEmail());
+//                $checkoutInSession->setPhone($user->getCustomer()->getPhone());
+//
+//                $this->em->persist($checkoutInSession);
+//                $this->em->flush();
+//
+//                $customer = $user->getCustomer();
+//            }
+//            else {
+//                if ($customer) {
+//                    $customer->setUser($user);
+//                    $checkoutInSession->setEmail($customer->getEmail());
+//                    $checkoutInSession->setPhone($customer->getPhone());
+//                    $this->em->persist($customer);
+//                    $this->em->persist($checkoutInSession);
+//                    $this->em->flush();
+//                } else {
+//                    $customer = new Customer();
+//                    $customer->setEmail($user->getEmail());
+//                    $customer->setFirstname($user->getFirstname());
+//                    $customer->setLastname($user->getLastname());
+//                    $customer->setPhone($user->getPhone());
+//                    $customer->setUser($user);
+//                    $checkoutInSession->setCustomer($customer);
+//                    $checkoutInSession->setEmail($customer->getEmail());
+//                    $checkoutInSession->setPhone($customer->getPhone());
+//                    $this->em->persist($customer);
+//                    $this->em->persist($checkoutInSession);
+//                    $this->em->flush();
+//                }
+//            }
 
-                if ($orderInSession->getRecipient()) {
-                    $orderInSession->getRecipient()->setCustomer($customer);
-                    $this->em->persist($orderInSession->getRecipient());
-                }
-                if ($orderInSession->getSender()) {
-                    $orderInSession->getSender()->setCustomer($customer);
-                    $this->em->persist($orderInSession->getSender());
-                }
-                $this->em->persist($orderInSession);
+            if ($checkoutInSession->getRecipient()) {
+                $checkoutInSession->getRecipient()->setUser($user);
+                $user->getRecipients()->add($checkoutInSession->getRecipient());
+                $this->em->persist($checkoutInSession->getRecipient());
+                $this->em->persist($user);
+                $this->em->flush();
+            }
+            if ($checkoutInSession->getSender()) {
+                $checkoutInSession->getSender()->setUser($user);
+                $user->getSenders()->add($checkoutInSession->getSender());
+                $this->em->persist($checkoutInSession->getSender());
+                $this->em->persist($user);
                 $this->em->flush();
             }
         }
 
+        $abandonedCheckout = $this->abandonedRetriever->getCheckout($user, $checkoutInSession);
+//        dd($abandonedCheckout);
+
+        // Gets the items from abandoned Order and adds them to the Order in session.
+        // Returns the Order in session (with id!).
+        if ($checkoutInSession && $abandonedCheckout) {
+            if ($abandonedCheckout->hasItems()) {
+                foreach ($abandonedCheckout->getItems() as $item) {
+                    if (!$checkoutInSession->containsTheProduct($item->getProduct())) {
+                        $abandonedCheckout->removeItem($item);
+                        $item->setCheckout($checkoutInSession);
+                        $checkoutInSession->addItem($item);
+                    }
+                }
+                foreach ($abandonedCheckout->getCart()->getItems() as $item) {
+                    if (!$checkoutInSession->getCart()->containsTheProduct($item->getProduct())) {
+                        $abandonedCheckout->getCart()->removeItem($item);
+                        $item->setCart($checkoutInSession->getCart());
+                        $checkoutInSession->getCart()->addItem($item);
+                    }
+                }
+            }
+
+            $abandonedCheckout->setCustomer(null); // remove Customer
+            $prevRecipient = $abandonedCheckout->getRecipient();
+            $abandonedCheckout->setRecipient(null);  // remove Recipient
+            if ($prevRecipient && $prevRecipient->getUser() === null) {
+                $this->em->remove($prevRecipient);
+            }
+            $prevSender = $abandonedCheckout->getSender();  // remove Sender
+            $abandonedCheckout->setSender(null);
+            if ($prevSender && $prevSender->getUser() === null) {
+                $this->em->remove($prevSender);
+            }
+            $this->em->remove($abandonedCheckout);  // remove abandonedOrder from db
+
+            $this->em->persist($checkoutInSession->getCart());
+            $this->em->persist($checkoutInSession);
+            $this->em->flush();
+        }
+
+        // If no Checkout in session, adds the abandonedCheckout to the session
+        if (!$checkoutInSession && $abandonedCheckout) {
+            $this->storage->set(StoreSessionStorage::CART_ID, $abandonedCheckout->getCart()->getId());
+            $this->storage->set(StoreSessionStorage::CHECKOUT_ID, $abandonedCheckout->getId());
+        }
+
         $request->getSession()->set('_locale', $request->getLocale());
 
-        /**
-         * Scenario 1: If there was a target path which triggered login, redirects to target path
-         *
-         * Scenario 2: In the LoginController\siteLogin() we always set up targetPath = referer URL, so that the user will always go back to the page where he clicked on the login link.
-         * For example, if the user is at step2 of checkout and clicks login, he will be redirected back to step2 after successful login.
-         */
+        // Scenario 1: If there was a target path which triggered login, redirects to target path
+        // Scenario 2: In the LoginController\siteLogin() we always set up targetPath = referer URL, so that the user will always go back to the page where he clicked on the login link.
+        // For example, if the user is at step2 of checkout and clicks login, he will be redirected back to step2 after successful login.
         $targetPath = $this->getTargetPath($request->getSession(), $providerKey);
         if ($targetPath) {
             return new RedirectResponse($targetPath);
         }
-        /**
-         * If login was initiated by going to the Login page, redirects to Homepage
-         */
+        // If login was initiated by going to the Login page, redirects to Homepage
         if ($request->getPathInfo() === $this->router->generate('site-login')) {
             return new RedirectResponse($this->router->generate('homepage'));
         }

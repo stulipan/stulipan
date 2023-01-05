@@ -19,49 +19,53 @@
             <div class="col-lg-12 correction-no-padding">
                 <div class="card">
                     <div class="card-body">
-                            <div class="checkout-overview">
-                                    <div class="">
-                                        <div class="w-100 checkout-overview-item">
-                                            <div class="checkout-overview-item-grid">
-                                                <div class="checkout-overview-item-label">
-                                                    <div class="checkout-overview-item-title">
-                                                        {{ flowerShopMode ? 'checkout.overview.recipient-to'|trans : 'checkout.overview.recipient'|trans }}
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-overview-item-data">
-                                                    <div class="checkout-overview-item-description">
-                                                        {{ order.recipient.fullname }},
-                                                        {{ order.recipient.address.street }},
-                                                        {{ order.recipient.address.zip }} {{ order.recipient.address.city }},
-                                                        {{ order.recipient.address.province }}, {{ order.recipient.address.country }},
-                                                        {{ order.recipient.phone }}
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-overview-item-action">
-                                                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
-                                                </div>
+                        <div class="checkout-overview">
+                            <div class="">
+                                <div class="w-100 checkout-overview-item">
+                                    <div class="checkout-overview-item-grid">
+                                        <div class="checkout-overview-item-label">
+                                            <div class="checkout-overview-item-title">
+                                                {{ flowerShopMode ? 'checkout.overview.customer-from'|trans : 'checkout.overview.customer-contact'|trans }}
                                             </div>
                                         </div>
-                                        <div class="w-100 checkout-overview-item">
-                                            <div class="checkout-overview-item-grid">
-                                                <div class="checkout-overview-item-label">
-                                                    <div class="checkout-overview-item-title">
-                                                        {{ flowerShopMode ? 'checkout.overview.customer-from'|trans : 'checkout.overview.customer'|trans }}
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-overview-item-data">
-                                                    <div class="checkout-overview-item-description">
-                                                        {{ order.customer.fullname }}, {{ order.customer.email }}, {{ order.customer.phone }}
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-overview-item-action">
-                                                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
-                                                </div>
+                                        <div class="checkout-overview-item-data">
+                                            <div class="checkout-overview-item-description">
+                                                {% if flowerShopMode %}
+                                                    {{ checkout.customer.fullname }}, {{ checkout.customer.email }}, {{ checkout.customer.phone }}
+                                                {% else %}
+                                                    {{ checkout.customer.email }}
+                                                {% endif %}
                                             </div>
+                                        </div>
+                                        <div class="checkout-overview-item-action">
+                                            <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="w-100 checkout-overview-item">
+                                    <div class="checkout-overview-item-grid">
+                                        <div class="checkout-overview-item-label">
+                                            <div class="checkout-overview-item-title">
+                                                {{ flowerShopMode ? 'checkout.overview.recipient-to'|trans : 'checkout.overview.recipient'|trans }}
+                                            </div>
+                                        </div>
+                                        <div class="checkout-overview-item-data">
+                                            <div class="checkout-overview-item-description">
+                                                {{ checkout.recipient.fullname }},
+                                                {{ checkout.recipient.address.street }},
+                                                {{ checkout.recipient.address.zip }} {{ checkout.recipient.address.city }},
+                                                {{ checkout.recipient.address.province }}, {{ checkout.recipient.address.country }},
+                                                {{ checkout.recipient.phone }}
+                                            </div>
+                                        </div>
+                                        <div class="checkout-overview-item-action">
+                                            <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>

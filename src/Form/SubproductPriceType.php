@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\nincs;
 use App\Entity\Price;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

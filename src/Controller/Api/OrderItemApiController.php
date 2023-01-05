@@ -60,7 +60,7 @@ class OrderItemApiController extends BaseController
             $orderItem->setOrder($order);
             $orderItem->setProduct($product);
             $orderItem->setQuantity(1);
-            $orderItem->setUnitPrice($product->getPrice()->getNumericValue());
+            $orderItem->setUnitPrice($product->getSellingPrice());
         
             $orderItem->setPriceTotal($orderItem->getUnitPrice() * $orderItem->getQuantity());
             $order->addItem($orderItem);
@@ -73,7 +73,7 @@ class OrderItemApiController extends BaseController
             // If current quantity + 1 is less than or equal to current stock it will add it to the cart
             if ($item->getQuantity()+1 <= $product->getStock()) {
                 $item->setQuantity($item->getQuantity()+1);
-                $price = $product->getPrice()->getNumericValue();
+                $price = $product->getSellingPrice();
                 $item->setUnitPrice($price);
                 $item->setPriceTotal($item->getUnitPrice() * $item->getQuantity());
             } else {
@@ -130,7 +130,7 @@ class OrderItemApiController extends BaseController
         $quantity = $data['quantity'];
         if ($quantity <= $orderItem->getProduct()->getStock()) {
             $orderItem->setQuantity($quantity);
-            $price = $orderItem->getProduct()->getPrice()->getNumericValue();
+            $price = $orderItem->getProduct()->getSellingPrice();
             $orderItem->setPriceTotal($price * $quantity);
         } else {
             $errors['message'] = sprintf('A termékből csupán %s db van készleten.', $orderItem->getProduct()->getStock());

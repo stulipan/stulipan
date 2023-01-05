@@ -3,6 +3,8 @@
 namespace App\Controller\Shop;
 
 use App\Controller\BaseController;
+use App\Entity\Customer;
+use App\Entity\Order;
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductCategory;
 use App\Entity\Product\ProductStatus;
@@ -12,13 +14,10 @@ use App\Model\PreviewContent;
 use App\Services\Localization;
 use App\Services\StoreSettings;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -138,7 +137,7 @@ class ProductController extends BaseController //extends AbstractController
      *
      * Template from Facebook here: https://www.facebook.com/business/help/120325381656392?id=725943027795860
      */
-    public function downloadProductCSV(StoreSettings $storeSettings, Localization $localization): Response
+    public function facebookProductCSV(StoreSettings $storeSettings, Localization $localization): Response
     {
         $locale = $localization->getCurrentLocale();
         $filters = [];
@@ -169,6 +168,7 @@ class ProductController extends BaseController //extends AbstractController
                 'availability' => ($p->getStock() > 0 ? 'in stock' : 'out of stock'),
                 'condition' => 'new',
                 'price' => $p->getPrice()->getNumericValue().' '.$locale->getCurrencyCode(),
+//                'price' => $p->getSellingPrice().' '.$locale->getCurrencyCode(),
                 'link' => $this->generateUrl('site-product-show', ['slug' => $p->getSlug()], UrlGenerator::ABSOLUTE_URL),
                 'image_link' => $coverImageUrl,
                 'additional_image_link' => $additionalImages,
@@ -201,7 +201,220 @@ class ProductController extends BaseController //extends AbstractController
         $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            sprintf('products-%s.csv', (new DateTime('now'))->format($locale->getDateFormat())));
+            sprintf('facebook-product-feed-%s.csv', (new DateTime('now'))->format($locale->getDateFormat())));
+        $response->headers->set('Content-Disposition', $disposition);
+        return $response;
+    }
+
+    /**
+     * @Route("/google-product-feed.csv", name="site-product-google-product-feed-csv")
+     *
+     * Template from Facebook here: https://www.facebook.com/business/help/120325381656392?id=725943027795860
+     */
+    public function googleProductCSV(StoreSettings $storeSettings, Localization $localization): Response
+    {
+        $locale = $localization->getCurrentLocale();
+        $filters = [];
+        $filters['status'] = ProductStatus::STATUS_ENABLED;
+        $productQuery = $this->getDoctrine()->getRepository(Product::class)->findAllQuery($filters);
+
+        $data = [];
+        /** @var Product $p */
+        foreach ($productQuery->getResult() as $p) {
+            $coverImageUrl = null;
+            $additionalImages = '';
+//            dd($p->getImages());
+            $description = $p->getDescription() ? str_replace("\n", '', strip_tags($p->getDescription())) : $p->getName();
+            $description = rtrim($description, '.') . '.';
+            $description .= ' '.'A Rafina termékei (kopogtatók, asztaldíszek, rózsaboxok, stb.) egytől egyig mind kézzel készült, nem sorozatgyártottak. Előfordulhat, hogy egy-egy termék limitált számban kapható, ezért érdemes a kiszemelt darabot minél hamarabb megrendelni. Az elkészítésük során, minden termékre nagy figyelmet fordítunk és gondosan ügyelünk, hogy a végeredmény minőségi darab legyen. Az ajtódíszek és kopogtatók esetén, tudd, hogy rendelkeznek egy akasztóval, úgy ahogy egy képkeretnél az megszokott. Továbbá, minden kopogtatót, egy dekoratív akasztó szalaggal is ellátunk, hogy kézhezvétel után a kopogtatót azonnal fel tudd helyezni az ajtóra.';
+
+            foreach ($p->getImages() as $index => $image) {
+                if ($index == 0) {
+                    $coverImageUrl = $p->getImages()[$index]->getImageUrl();
+                } else {
+                    if ($additionalImages) {
+                        if (strlen($additionalImages.','.$image->getImageUrl()) <= 2000) {
+                            $additionalImages = $additionalImages.','.$image->getImageUrl();
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    else {
+                        $additionalImages = $image->getImageUrl();
+                    }
+                }
+            }
+
+            $data[] = [
+                'id' => $p->getSku(),
+                'title' => substr($p->getName(), 0, 150),
+                'description' => substr($description, 0, 5000),
+                'availability' => ($p->getStock() > 0 ? 'in stock' : 'out of stock'),
+                'condition' => 'new',
+                'price' => $p->getPrice()->getNumericValue().' '.$locale->getCurrencyCode(),
+//                'price' => $p->getSellingPrice().' '.$locale->getCurrencyCode(),
+                'link' => $this->generateUrl('site-product-show', ['slug' => $p->getSlug()], UrlGenerator::ABSOLUTE_URL),
+                'image_link' => $coverImageUrl,
+                'additional_image_link' => $additionalImages,
+                'brand' => substr($storeSettings->get('store.brand'), 0, 70),
+                'google_product_category' => 'Home & Garden > Decor > Seasonal & Holiday Decorations',
+            ];
+        }
+        $context = [
+            'csv_headers' => [
+                'id',
+                'title',
+                'description',
+                'availability',
+                'condition',
+                'price',
+                'link',
+                'image_link',
+                'additional_image_link',
+                'brand',
+                'google_product_category'
+            ],
+            'csv_delimiter' => "\t",
+        ];
+
+        $encoders = [new CsvEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $csvContent = $serializer->serialize($data, 'csv', $context);
+//        dd($csvContent);
+
+        $response = new Response($csvContent);
+        $response->headers->set('Content-Encoding', 'UTF-8');
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            sprintf('google-product-feed-%s.csv', (new DateTime('now'))->format($locale->getDateFormat())));
+        $response->headers->set('Content-Disposition', $disposition);
+        return $response;
+    }
+
+    /**
+     * @Route("/sendgrid-contacts-igen.csv", name="site-sendgrid-contacts-igen-csv")
+     *
+     * Template from Facebook here: https://www.facebook.com/business/help/120325381656392?id=725943027795860
+     */
+    public function sendgridContactsCSVigen(StoreSettings $storeSettings, Localization $localization): Response
+    {
+        $locale = $localization->getCurrentLocale();
+        $filters = [];
+        $filters['status'] = ProductStatus::STATUS_ENABLED;
+//        $dataQuery = $this->getDoctrine()->getRepository(Customer::class)->findAll();
+        $dataQuery = $this->getDoctrine()->getRepository(Customer::class)->findBy(['acceptsMarketing' => true]);
+
+        $data = [];
+//        foreach ($dataQuery->getResult() as $p) {
+        foreach ($dataQuery as $p) {
+
+            /** @var Order $lastOrder */
+            $address = null;
+            $lastOrder = $p->getLastOrder();
+            if ($lastOrder) {
+                $address = $lastOrder->getBillingAddress();
+            }
+
+            $data[] = [
+                'email' => $p->getEmail(),
+                'first_name' => $p->getFirstname(),
+                'last_name' => $p->getLastname(),
+                'address_line_1' => $address ? $address->getStreet() : '',
+                'address_line_2' => '',
+                'city' => $address ? $address->getCity() : '',
+                'state_province_region' => $address ? $address->getProvince() : '',
+                'postal_code' => $address ? $address->getZip() : '',
+                'country' => $address ? $address->getCountry()->getName() : '',
+            ];
+        }
+        $context = ['csv_headers' => [
+            'email',
+            'first_name',
+            'last_name',
+            'address_line_1',
+            'address_line_2',
+            'city',
+            'state_province_region',
+            'postal_code',
+            'country',
+        ]];
+
+        $encoders = [new CsvEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $csvContent = $serializer->serialize($data, 'csv', $context);
+
+        $response = new Response($csvContent);
+        $response->headers->set('Content-Encoding', 'UTF-8');
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            sprintf('sendgrid-contacts-igen-%s.csv', (new DateTime('now'))->format($locale->getDateFormat())));
+        $response->headers->set('Content-Disposition', $disposition);
+        return $response;
+    }
+
+    /**
+     * @Route("/sendgrid-contacts-nem.csv", name="site-sendgrid-contacts-nem-csv")
+     *
+     * Template from Facebook here: https://www.facebook.com/business/help/120325381656392?id=725943027795860
+     */
+    public function sendgridContactsCSVnem(StoreSettings $storeSettings, Localization $localization): Response
+    {
+        $locale = $localization->getCurrentLocale();
+        $filters = [];
+        $filters['status'] = ProductStatus::STATUS_ENABLED;
+        $dataQuery = $this->getDoctrine()->getRepository(Customer::class)->findBy(['acceptsMarketing' => false]);
+
+        $data = [];
+//        foreach ($dataQuery->getResult() as $p) {
+        foreach ($dataQuery as $p) {
+
+            /** @var Order $lastOrder */
+            $address = null;
+            $lastOrder = $p->getLastOrder();
+            if ($lastOrder) {
+                $address = $lastOrder->getBillingAddress();
+            }
+
+            $data[] = [
+                'email' => $p->getEmail(),
+                'first_name' => $p->getFirstname(),
+                'last_name' => $p->getLastname(),
+                'address_line_1' => $address ? $address->getStreet() : '',
+                'address_line_2' => '',
+                'city' => $address ? $address->getCity() : '',
+                'state_province_region' => $address ? $address->getProvince() : '',
+                'postal_code' => $address ? $address->getZip() : '',
+                'country' => $address ? $address->getCountry()->getName() : '',
+            ];
+        }
+        $context = ['csv_headers' => [
+            'email',
+            'first_name',
+            'last_name',
+            'address_line_1',
+            'address_line_2',
+            'city',
+            'state_province_region',
+            'postal_code',
+            'country',
+        ]];
+
+        $encoders = [new CsvEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $csvContent = $serializer->serialize($data, 'csv', $context);
+
+        $response = new Response($csvContent);
+        $response->headers->set('Content-Encoding', 'UTF-8');
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            sprintf('sendgrid-contacts-nem-%s.csv', (new DateTime('now'))->format($locale->getDateFormat())));
         $response->headers->set('Content-Disposition', $disposition);
         return $response;
     }

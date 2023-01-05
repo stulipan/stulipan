@@ -283,7 +283,7 @@
                 </td>
                 {% endif %}
                 <td class="text-nowrap">
-                    <span class="">{{ order.summary.totalAmountToPay|money }}</span>
+                    <span class="">{{ order.totalAmountToPay|money }}</span>
                     <br>
                     <small class="text-muted">{{ 'order.items-count'|trans({'{{ count }}': order.itemsCount}) }}</small>
                 </td>

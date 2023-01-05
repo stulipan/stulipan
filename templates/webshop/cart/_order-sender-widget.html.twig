@@ -13,6 +13,12 @@
                 {% else %}
                     {% include 'admin/_missing-data-insert.html.twig' %}
                 {% endif %}
+                <br>
+                {% if order.billingPhone is defined and order.billingPhone %}
+                    {{ order.billingPhone }}
+                {% else %}
+                    {% include 'admin/_missing-data-insert.html.twig' %}
+                {% endif %}
                 <span class="">
                 {% if order.billingAddress is defined and order.billingAddress %} <br>
                     {{ order.billingAddress.zip }} {{ order.billingAddress.city }}, {{ order.billingAddress.street }}, {{ order.billingAddress.province }}, {{ order.billingAddress.country }}

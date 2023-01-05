@@ -105,10 +105,8 @@ class LoginController extends AbstractController
             );
         }
     
-        /**
-         * Renders the form with errors
-         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
-         */
+        // Renders the form with errors
+        // If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
         if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
             $html = $this->renderView('webshop/cart/registration-form-duringCheckout.html.twig', [
                 'registrationForm' => $form->createView(),

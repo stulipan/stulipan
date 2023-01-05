@@ -11,7 +11,7 @@
 <div class="form-group radio-validation mb-0">
     <div class="checkout-method-selection content-body-thick-border">
         {% for choice in paymentMethodForm.paymentMethod %}
-            <div class="checkout-payment-item JS--Wrapper-paymentChoice {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}" data-payment-fee="{{ paymentMethods[loop.index0].price }}" data-payment-name="{{ paymentMethods[loop.index0].name }}">
+            <div class="checkout-payment-item JS--Wrapper-paymentChoice{% if choice.vars.checked is defined and choice.vars.checked %} selected{% endif %}" data-payment-fee="{{ paymentMethods[loop.index0].price }}" data-payment-name="{{ paymentMethods[loop.index0].name }}">
                 <div class="JS--Button-pickPayment loading-spinner-has-bg">
                     <div class="loading-spinner-invisible">
                         <div class="custom-control custom-radio">

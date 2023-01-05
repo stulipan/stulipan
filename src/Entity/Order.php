@@ -10,6 +10,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -201,19 +202,19 @@ class Order
      */
     private $discount;
 
-    /**
-     * @var float|null
-     * @Assert\NotBlank()
-     * @ORM\Column(name="price_total_", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
-     */
-    private $priceTotal = 0;
-
-    /**
-     * @var float|null
-     * @Assert\NotBlank()
-     * @ORM\Column(name="price_total_after_discount_", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
-     */
-    private $priceTotalAfterDiscount = 0;
+//    /**
+//     * @var float|null
+//     * @Assert\NotBlank()
+//     * @ORM\Column(name="price_total_", type="decimal", precision=10, scale=2, nullable=true)
+//     */
+//    private $priceTotal;
+//
+//    /**
+//     * @var float|null
+//     * @Assert\NotBlank()
+//     * @ORM\Column(name="price_total_after_discount_", type="decimal", precision=10, scale=2, nullable=true)
+//     */
+//    private $priceTotalAfterDiscount;
     
     /**
      * @var float|null
@@ -385,6 +386,15 @@ class Order
     private $isAcceptedTerms;
 
     /**
+     * @var Checkout|null
+     * ==== One Order belongs to a Checkout ====
+     * ==== This is the Inversed side ===
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\Checkout", mappedBy="order")
+     */
+    private $checkout;
+
+    /**
      * @var bool|null
      * @Groups({"orderView"})
      *
@@ -541,6 +551,83 @@ class Order
     public function hasItems(): bool
     {
         return !$this->items->isEmpty();
+    }
+
+    /**
+     * Imports the products (items) AND also the Message & MessageAuthor from the Checkout
+     *
+     * @param Checkout $checkout
+     * @param string $messageNotEnoughStock
+     * @return $this|false
+     * @throws Exception
+     */
+    public function importItemsFromCheckout(Checkout $checkout, string $messageNotEnoughStock)
+    {
+        $newItems = new ArrayCollection();
+        foreach ($checkout->getItems() as $checkoutItem) {
+            $product = $checkoutItem->getProduct();
+
+            $wasFound = false;
+            foreach ($this->getItems() as $orderItem) {
+                // If product in Checkout already exists in Order, update the quantity and price
+                if ($orderItem->getProduct()->getId() === $product->getId()) {
+
+                    if ($product->hasEnoughStock($checkoutItem->getQuantity())) {
+                        $orderItem->setQuantity($checkoutItem->getQuantity());
+                        $orderItem->setUnitPrice($product->getSellingPrice());
+                    } else {
+                        throw new Exception($messageNotEnoughStock);
+                    }
+
+                    $wasFound = true;
+                    break;  // if product was found, break the foreach loop
+                }
+            }
+            // Product wasn't found in Order, then add it to newItems
+            if (!$wasFound) {
+                $orderItem = new OrderItem();
+                $orderItem->setProduct($product);
+
+                if ($product->hasEnoughStock($checkoutItem->getQuantity())) {
+                    $orderItem->setQuantity($checkoutItem->getQuantity());
+                    $orderItem->setUnitPrice($product->getSellingPrice());
+                } else {
+                    throw new Exception($messageNotEnoughStock);
+                }
+
+                $orderItem->setOrder($this);
+                $newItems->add($orderItem);
+            }
+        }
+
+        // Add each of the newItems to Order
+        foreach ($newItems as $newItem) {
+            $this->addItem($newItem);
+        }
+
+        // If Checkout and Order have different amount of items (there are more products in Order than in Checkout)
+        if ($checkout->getItems()->count() != $this->getItems()->count()) {
+            foreach ($this->getItems() as $orderItem) {
+                $product = $orderItem->getProduct();
+
+                $wasFound = false;
+                foreach ($checkout->getItems() as $checkoutItem) {
+                    // If a product from Order isn't in Checkout, then remove it
+                    if ($product->getId() === $checkoutItem->getProduct()->getId()) {
+                        $wasFound = true;
+                    }
+                }
+                if (!$wasFound) {
+                    $this->removeItem($orderItem);
+//                    $this->em->remove($orderItem);
+                }
+            }
+        }
+
+        $this->setMessage($checkout->getMessage());
+        $this->setMessageAuthor($checkout->getMessageAuthor());
+
+        return $this;
     }
     
     /**
@@ -819,47 +906,37 @@ class Order
         $this->discount = $discount;
     }
 
-    /**
-     * @return float
-     */
-    public function getPriceTotal(): float
-    {
-        return (float) $this->priceTotal;
-    }
+//    /**
+//     * @return float
+//     */
+//    public function getPriceTotal(): float
+//    {
+//        return (float) $this->priceTotal;
+//    }
+//
+//    /**
+//     * @param float $priceTotal
+//     */
+//    public function setPriceTotal(float $priceTotal): void
+//    {
+//        $this->priceTotal = $priceTotal;
+//    }
 
-    /**
-     * @param float $priceTotal
-     */
-    public function setPriceTotal(float $priceTotal): void
-    {
-        $this->priceTotal = $priceTotal;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getPriceTotalAfterDiscount(): ?float
-    {
-        return (float) $this->priceTotalAfterDiscount;
-    }
-
-    /**
-     * @param float $priceTotal
-     */
-    public function setPriceTotalAfterDiscount(float $priceTotal): void
-    {
-        $this->priceTotalAfterDiscount = $priceTotal;
-    }
-    
-    /**
-     * Get information needed to summarize the basket.
-     *
-     * @return Summary
-     */
-    public function getSummary(): Summary
-    {
-        return new Summary($this);
-    }
+//    /**
+//     * @return float|null
+//     */
+//    public function getPriceTotalAfterDiscount(): ?float
+//    {
+//        return (float) $this->priceTotalAfterDiscount;
+//    }
+//
+//    /**
+//     * @param float $priceTotal
+//     */
+//    public function setPriceTotalAfterDiscount(float $priceTotal): void
+//    {
+//        $this->priceTotalAfterDiscount = $priceTotal;
+//    }
 
     /**
      * @return float|null
@@ -900,7 +977,8 @@ class Order
 
     public function getShippingFeeToPay(): ?float
     {
-        return (float) ($this->getShippingFee() - $this->getShippingFeeDiscount());
+//        return (float) ($this->getShippingFee() - $this->getShippingFeeDiscount());
+        return (float) ($this->getShippingFee());
     }
 
 
@@ -961,6 +1039,27 @@ class Order
     {
         $this->schedulingPrice = $schedulingPrice;
     }
+
+    // temporary solution: retrieve all orderItems, then get the associated products and check if they are onSale
+    public function getDiscountAmount()
+    {
+        $discountAmount = 0;
+        foreach ($this->items as $item) {
+            if ($item->getProduct()->isOnSale()) {
+                $discountAmount += $item->getProduct()->getDiscountAmount();
+            }
+        }
+        return $discountAmount;
+    }
+
+    public function hasDiscount(): bool
+    {
+        if ($this->getDiscountAmount() > 0 ) {
+            return true;
+        }
+        return false;
+    }
+
 
 
     /**
@@ -1538,6 +1637,66 @@ class Order
     public function getPaymentGateway()
     {
         return $this->getPaymentMethod();
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getTotalBeforeSale()
+    {
+        $total = 0;
+        foreach ($this->items as $item) {
+            if ($item->getProduct()->isOnSale()) {
+                $total += $item->getQuantity() * $item->getProduct()->getCompareAtPrice();
+            } else {
+                $total += $item->getQuantity() * $item->getProduct()->getSellingPrice();
+            }
+        }
+        return $total;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getTotalAfterSale()
+    {
+        $total = 0;
+        foreach ($this->items as $item) {
+            $total += $item->getQuantity() * $item->getProduct()->getSellingPrice();
+        }
+        return $total;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getTotalSaving()
+    {
+        return $this->getTotalBeforeSale() - $this->getTotalAfterSale();
+    }
+
+    public function hasProductOnSale()
+    {
+        // upon finding first onSale product, it returns 'true'
+        foreach ($this->items as $item) {
+            if ($item->getProduct()->isOnSale()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getTotalAmountToPay()
+    {
+        return $this->getTotalAfterSale() + $this->getShippingFeeToPay() + $this->getPaymentFeeToPay() + $this->getSchedulingPrice();
+    }
+
+    public function getAmountPaidByCustomer(): float
+    {
+        if ($this->isPaid()) {
+            return $this->getTotalAmountToPay();
+        }
+        return 0;
     }
 
 

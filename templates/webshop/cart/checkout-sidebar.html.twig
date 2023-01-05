@@ -4,8 +4,9 @@
                     <a class="text-link-checkout" href="{{ path('site-checkout-step0-pickExtraGift') }}">{{ 'generic.edit'|trans }}</a>
                 </div>
                 <div class="cart mt-3">
-                    <div class="JS--resultWrapper">
+                    <div class="JS--resultWrapper cart-body">
                         {% include 'webshop/cart/cart.html.twig' with {
+                            'order': checkout,
                             'showMessage': true,
                             'showQuantity': false,
                             'showRemove': false,

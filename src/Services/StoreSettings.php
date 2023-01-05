@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Error;
 use Exception;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -107,6 +108,23 @@ final class StoreSettings
         } catch (Exception $e) {
             // Defaults to 'Y-m-d' if 'general.date-format' doesn't exist in the settings yaml file
             return Localization::TIME_FORMAT_DEFAULT[$this->session->get('_locale')];
+        }
+    }
+    /**
+     * @return boolean
+     */
+    public function isFlowerShop(): bool
+    {
+        $name = 'general.flower-shop-mode';
+        $strings = explode('.', $name);
+        try {
+            if ($this->parameters[$strings[0]][$strings[1]]['content'] !== null && $this->parameters[$strings[0]][$strings[1]]['content'] !== '' && $this->parameters[$strings[0]][$strings[1]]['content'] !== ' ') {
+                return $this->parameters[$strings[0]][$strings[1]]['content'];
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            return false;
         }
     }
 }

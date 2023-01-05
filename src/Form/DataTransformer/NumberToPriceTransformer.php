@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
+//      NINCS HASZNALATBAN !!!
 class NumberToPriceTransformer implements DataTransformerInterface
 {
     private $em;

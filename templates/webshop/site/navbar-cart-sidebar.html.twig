@@ -9,8 +9,9 @@
             </div>
             <div class="sidebar-body">
                 <div class="d-flex flex-column justify-content-between h-100">
-                    <div class="JS--Sidebar-cartBody cart" data-section-id="sidebarCart-template" data-section-type="sidebarCart-template">
+                    <div class="JS--Sidebar-cartBody cart-body" data-section-id="sidebarCart-template" data-section-type="sidebarCart-template">
                         {% include 'webshop/cart/cart.html.twig' with {
+                            'order': cart,
                             'showQuantity': false,
                             'showRemove': false,
                             'showTotal': true,

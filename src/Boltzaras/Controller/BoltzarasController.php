@@ -12,9 +12,10 @@ use App\Entity\DateRange;
 use App\Services\StoreSettings;
 use DateTime;
 use Pagerfanta\Exception\NotValidCurrentPageException;
-use Swift_Mailer;
-use Swift_Message;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,7 +81,7 @@ class BoltzarasController extends AbstractController
 	/**
      * @Route("/boltzaras/edit/{id}", name="boltzaras-edit")
      */
-    public function editAction(Request $request, ?Boltzaras $boltzaras, $id = null, Swift_Mailer $mailer)
+    public function editAction(Request $request, ?Boltzaras $boltzaras, $id = null, MailerInterface $mailer, StoreSettings $storeSettings)
     {
         if (!$boltzaras) {
             // new Boltzaras
@@ -99,33 +100,37 @@ class BoltzarasController extends AbstractController
             $boltzaras = $form->getData();
             $boltzaras->setModositasIdopontja();
          	
-			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($boltzaras);
-			$entityManager->flush();
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($boltzaras);
+			$em->flush();
 
             $subject = 'Napi boltzárás';
-            $email = (new Swift_Message())
-                ->setSubject($subject)
-                ->setFrom(['rafinadekor@gmail.com' => 'Napi boltzárás'])
-                ->setTo('rafinadekor@gmail.com')
-                ->setBody(
-                    $this->renderView('admin/emails/boltzaras-napi-riport.html.twig', [
-                            'kassza' => $boltzaras->getKassza(),
-                            'keszpenz' => $boltzaras->getKeszpenz(),
-                            'bankkartya' => $boltzaras->getBankkartya(),
-                            'munkatars' => $boltzaras->getMunkatars(),
-                            'subject' => $subject,
-                            'idopont' => $boltzaras->getIdopont(),
-                        ]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($email);
+            $from = new Address(
+                $storeSettings->get('notifications.sender-email'),
+                $storeSettings->get('notifications.sender-name')
+            );
+            $replyTo = $storeSettings->get('notifications.reply-to-email');
+            $to = $storeSettings->get('notifications.admin-notification-email');
 
+            $email = (new Email())
+                ->from($from)
+                ->replyTo($replyTo)
+                ->to($to)
+                ->subject($subject)
+//                ->text('Sending emails is fun again!')
+                ->html($this->renderView('admin/emails/boltzaras-napi-riport.html.twig', [
+                        'kassza' => $boltzaras->getKassza(),
+                        'keszpenz' => $boltzaras->getKeszpenz(),
+                        'bankkartya' => $boltzaras->getBankkartya(),
+                        'munkatars' => $boltzaras->getMunkatars(),
+                        'subject' => $subject,
+                        'idopont' => $boltzaras->getIdopont(),
+                    ]
+                ));
+            $mailer->send($email);
             $this->addFlash('success', 'Boltzárás sikeresen elmentve!');
 
 			return $this->redirectToRoute('boltzaras_list');
-			
         }
         
         return $this->render('admin/boltzaras/boltzaras_edit.html.twig', [
@@ -154,9 +159,9 @@ class BoltzarasController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $boltzarasWeb = $form->getData();
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($boltzarasWeb);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($boltzarasWeb);
+            $em->flush();
 
             $this->addFlash('success', 'Webes boltzárás sikeresen elmentve!');
 
@@ -318,14 +323,14 @@ class BoltzarasController extends AbstractController
 //         	$zarasAdatok->setModositasIdopontja();
 //
 //			// you can fetch the EntityManager via $this->getDoctrine()
-//			// or you can add an argument to your action: index(EntityManagerInterface $entityManager)
-//			$entityManager = $this->getDoctrine()->getManager();
+//			// or you can add an argument to your action: index(EntityManagerInterface $em)
+//			$em = $this->getDoctrine()->getManager();
 //
 //			// tell Doctrine you want to (eventually) save the Product (no queries yet)
-//			$entityManager->persist($zarasAdatok);
+//			$em->persist($zarasAdatok);
 //
 //			// actually executes the queries (i.e. the INSERT query)
-//			$entityManager->flush();
+//			$em->flush();
 //
 //			$this->addFlash('success', 'Sikeresen leadtad a boltzárásjelentést! Jó pihenést!');
 //

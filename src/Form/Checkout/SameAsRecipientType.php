@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace App\Form\Checkout;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SameAsRecipientType extends AbstractType
@@ -31,19 +28,15 @@ class SameAsRecipientType extends AbstractType
         $builder
             ->add('sameAsRecipient', ChoiceType::class, [
                 'required' => true,
-//                'false_values' => [false, null],
-                'mapped' => false,
-//                'constraints' => [
-//                    new IsTrue(['message' => $this->translator->trans('checkout.terms.accept-terms-error')]),
-//                ],
-
+                'mapped' => true,
                 'choices' => [
                     $this->translator->trans('checkout.sender.same-as-shipping-address') => true,
                     $this->translator->trans('checkout.sender.use-different-shipping-address') => false,
                 ],
                 'multiple' => false,
                 'expanded' => true,
-                'data' => true,
+//                'placeholder' => false,
+//                'data' => true,
             ])
             ->getForm();
     }

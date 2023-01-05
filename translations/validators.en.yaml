@@ -5,3 +5,10 @@
 order:
   history:
     comment-is-missing: The comment is missing!
+
+
+registration:
+  email-is-missing: 'Enter your email address!'
+  email-is-invalid: 'Invalid email address!'
+  email-is-in-use: 'This email address is already in use!'
+  password-is-missing: 'Enter a password!'

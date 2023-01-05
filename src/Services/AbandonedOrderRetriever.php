@@ -2,12 +2,10 @@
 
 namespace App\Services;
 
-
+use App\Entity\Checkout;
 use App\Entity\Customer;
-use App\Entity\Order;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
 
 class AbandonedOrderRetriever
 {
@@ -16,45 +14,40 @@ class AbandonedOrderRetriever
      */
     private $em;
 
-    /**
-     * @var Security $security
-     */
-    private $security;
-
-    public function __construct(EntityManagerInterface $em, Security $security)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->security = $security;
     }
 
     /**
      * Used in:
      *      - App\Security\LoginFormAuthenticator
      *
-     * Retrieves the previous unfinished Order, if any.
-     * In other words, it creates an abandoned Order.
+     * Retrieves the previous unfinished Checkout, if any. In other words, it creates an Abandoned Order.
      *
-     * @return Order|null
+     * @return Checkout|null
      */
-    public function getOrder(): ?Order
+    public function getCheckout(?User $user, ?Checkout $exceptedCheckout): ?Checkout
     {
-        /** @var User $user */
-        $user = $this->security->getUser();
-        $abandonedOrder = null;
+        $abandoned = null;
 
-        if ($user) {
-            if ($user->hasCustomer()) {
-                $customer = $user->getCustomer();
-            } else {
-                $customers = $this->em->getRepository(Customer::class)->findBy(['email' => $user->getEmail()]);
-                $customer = $customers ?? $customers->last();
-            }
+        if (!$user) {
+            return null;
+        }
+
+        if ($user->hasCustomer()) {
+            $customer = $user->getCustomer();
+        } else {
+            $customers = $this->em->getRepository(Customer::class)->findBy(['email' => $user->getEmail()]);
+            $customer = $customers ?? $customers->last();
         }
 
         if (isset($customer) && $customer) {
-            $abandonedOrder = $this->em->getRepository(Order::class)->findLastPartialOrder(['customer' => $customer]);
+            $abandoned = $this->em->getRepository(Checkout::class)->findLast([
+                'customer' => $customer,
+                'except' => $exceptedCheckout
+            ]);
         }
-
-        return $abandonedOrder;
+        return $abandoned;
     }
 }

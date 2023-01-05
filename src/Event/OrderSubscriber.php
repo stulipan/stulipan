@@ -174,7 +174,7 @@ class OrderSubscriber implements EventSubscriberInterface
         switch ($shortcode) {
             case PaymentStatus::STATUS_PENDING:
                 $message = $this->translator->trans($messages[$shortcode], [
-                    '{{amount}}' => $money($order->getSummary()->getTotalAmountToPay()),
+                    '{{amount}}' => $money($order->getTotalAmountToPay()),
                     '{{payment}}' => $order->getPaymentMethod(),
                 ]);
                 $description = $this->twig->render('admin/order/_history-pending.html.twig', [
@@ -184,7 +184,7 @@ class OrderSubscriber implements EventSubscriberInterface
                 break;
             case PaymentStatus::STATUS_PAID:
                 $message = $this->translator->trans($messages[$shortcode], [
-                    '{{amount}}' => $money($order->getSummary()->getTotalAmountToPay()),
+                    '{{amount}}' => $money($order->getTotalAmountToPay()),
                     '{{payment}}' => $order->getPaymentMethod(),
                 ]);
                 $description = $this->twig->render('admin/order/_history-paid.html.twig', [
@@ -193,17 +193,17 @@ class OrderSubscriber implements EventSubscriberInterface
                 break;
 //            case PaymentStatus::STATUS_PARTIALLY_PAID:
 //                $message = $this->translator->trans($messages[$shortcode], [
-//                    '{{amount}}' => $order->getSummary()->getTotalAmountToPay()
+//                    '{{amount}}' => $order->getTotalAmountToPay()
 //                ]);
 //                break;
 //            case PaymentStatus::STATUS_PARTIALLY_REFUNDED:
 //                $message = $this->translator->trans($messages[$shortcode], [
-//                    '{{amount}}' => $order->getSummary()->getTotalAmountToPay()
+//                    '{{amount}}' => $order->getTotalAmountToPay()
 //                ]);
 //                break;
             case PaymentStatus::STATUS_REFUNDED:
                 $message = $this->translator->trans($messages[$shortcode], [
-                    '{{amount}}' => $money($order->getSummary()->getTotalAmountToPay())
+                    '{{amount}}' => $money($order->getTotalAmountToPay())
                 ]);
                 break;
         }

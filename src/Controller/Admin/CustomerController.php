@@ -196,7 +196,7 @@ class CustomerController extends AbstractController
         if ($orders) {
             $orderCount = $orders->count();
             foreach ($orders as $o => $order) {
-                $totalRevenue += $order->getSummary()->getTotalAmountToPay();
+                $totalRevenue += $order->getTotalAmountToPay();
             }
         }
 

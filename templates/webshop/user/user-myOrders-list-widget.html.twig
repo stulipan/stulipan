@@ -37,12 +37,12 @@
                     {% for item in order.items %}
                         <div class="position-relative mb-2 mr-2">
                             <div class="">
-                                <img class="img-fluid" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_small') }}" width="80px;" />
+                                <img class="img-fluid" src="{{ uploaded_asset(item.product.coverImageAsset)|imagine_filter('product_small') }}" width="80px;" />
                             </div>
                             <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="tile-link"></a>
                         </div>
 {#                        <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}">#}
-{#                            <img class="img-thumbnailX mb-1 pr-2" src="{{ uploaded_asset(item.product.coverImage)|imagine_filter('product_small') }}" width="80px;" />#}
+{#                            <img class="img-thumbnailX mb-1 pr-2" src="{{ uploaded_asset(item.product.coverImageAsset)|imagine_filter('product_small') }}" width="80px;" />#}
 {#                        </a>#}
                     {% endfor %}
                 </div>

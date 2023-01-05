@@ -140,9 +140,9 @@
 		{% for product in products %}
 			<tr {% if product.isRemoved == true %}class="disabled"{% endif %}>
 				<td class="align-middle">
-					{% if product.coverImage is defined and product.coverImage %}
+					{% if product.coverImageAsset is defined and product.coverImageAsset %}
 						<a href="{{ path('product-edit', {'id': product.id}) }}" class="">
-							<img class="img-thumbnail" src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_small') }}" style="width: 50px; width: 50px;" />
+							<img class="img-thumbnail" src="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('product_small') }}" style="width: 50px; width: 50px;" />
 						</a>
 					{% endif %}
 				</td>

@@ -4,59 +4,60 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Entity\Order;
+use App\Entity\Cart;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class OrderSessionStorage
+/// !!! NINCS HASZNALATBAN !!!!
+class CartSessionStorage
 {
-    private const ORDER_KEY_NAME = 'orderId';
+    public const SESSION_ID = 'cartId';
 
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private $em;
 
     /**
      * @var SessionInterface
      */
     private $session;
 
-    public function __construct(EntityManagerInterface $entityManager, SessionInterface $session)
+    public function __construct(EntityManagerInterface $em, SessionInterface $session)
     {
-        $this->entityManager = $entityManager;
+        $this->em = $em;
         $this->session = $session;
     }
 
-    public function set(int $orderId): void
+    public function set(int $cartId): void
     {
-        $this->session->set(self::ORDER_KEY_NAME, $orderId);
+        $this->session->set(self::SESSION_ID, $cartId);
     }
 
-    public function removeOrderFromSession(): void
+    public function removeCartFromSession(): void
     {
-        $this->session->remove(self::ORDER_KEY_NAME);
-        $this->session->remove('email');
-        $this->session->remove('firstname');
-        $this->session->remove('lastname');
+        $this->session->remove(self::SESSION_ID);
+//        $this->session->remove('email');
+//        $this->session->remove('firstname');
+//        $this->session->remove('lastname');
     }
 
-    public function getOrderById(): ?Order
+    public function getCartById(): ?Cart
     {
         if ($this->has()) {
-            return $this->entityManager->getRepository(Order::class)->find($this->get());
+            return $this->em->getRepository(Cart::class)->find($this->get());
         }
         return null;
     }
 
     public function has(): bool
     {
-        return $this->session->has(self::ORDER_KEY_NAME);
+        return $this->session->has(self::SESSION_ID);
     }
 
     public function get(): int
     {
-        return $this->session->get(self::ORDER_KEY_NAME);
+        return $this->session->get(self::SESSION_ID);
     }
 
     /**

@@ -1,24 +1,21 @@
 {{ form_start(sameAsRecipientForm, { 'attr': {'class': 'JS--Wrapper-sameAsRecipientForm' }}) }}
-<div class="form-row">
-    <div class="form-group col-lg-12 mb-0">
-        {% for choice in sameAsRecipientForm.sameAsRecipient %}
-            <div class="checkout-payment-item {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}">
-                <div class="custom-control custom-radio">
-                    <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {% if choice.vars.checked is defined and choice.vars.checked %}checked{% endif %}/>
-                    <label class="custom-control-label w-100" for="{{ choice.vars.id }}">
-{#                        <div class="d-flex justify-content-start justify-content-sm-between">#}
-                            <div class="checkout-sameas-item-titleX pr-2 pr-sm-0">{{ choice.vars.label }}</div>
-{#                        </div>#}
-                    </label>
+    <div class="form-group radio-validation mb-0">
+        <div class="checkout-method-selection content-body-thick-border">
+            {% for choice in sameAsRecipientForm.sameAsRecipient %}
+                <div class="checkout-payment-item JS--Wrapper-sameAsChoice{% if choice.vars.checked is defined and choice.vars.checked %} selected{% endif %}">
+                    <div class="JS--Button-pickSameAsChoice custom-control custom-radio">
+                        <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {% if choice.vars.checked is defined and choice.vars.checked %}checked{% endif %}/>
+                        <label class="custom-control-label w-100" for="{{ choice.vars.id }}">
+                            <span class="pr-2 pr-sm-0">{{ choice.vars.label }}</span>
+                        </label>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+        {{ form_errors(sameAsRecipientForm.sameAsRecipient) }}
+        {% do sameAsRecipientForm.sameAsRecipient.setRendered() %}
     </div>
-    {{ form_errors(sameAsRecipientForm.sameAsRecipient) }}
-    {% do sameAsRecipientForm.sameAsRecipient.setRendered() %}
-</div>
-{# Render CSRF token etc .#}
-<div style="display:none">
-    {{ form_rest(sameAsRecipientForm) }}
-</div>
+    <div style="display:none">
+        {{ form_rest(sameAsRecipientForm) }}
+    </div>
 {{ form_end(sameAsRecipientForm) }}

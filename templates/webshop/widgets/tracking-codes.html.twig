@@ -20,15 +20,15 @@
         {% if eventViewCart is defined and eventViewCart is not empty %}
         gtag('event', 'view_cart', {
             currency: 'HUF',
-            value: {{ order.summary.totalAmountToPay }},
+            value: {{ cart.totalAmountToPay }},
             items: [
-                {%- for item in order.items -%}
+                {%- for item in cart.items -%}
                 {
                     item_id: '{{ item.product.sku }}',
                     item_name: '{{ item.product.name }}',
                     item_brand: '{{ storeBrand }}',
                     item_category: '{{ item.product.categories|first }}',
-                    price: {{ item.unitPrice }},
+                    price: {{ item.product.sellingPrice }},
                     currency: 'HUF',
                     quantity: {{ item.quantity }}
                 }
@@ -43,15 +43,15 @@
         gtag('event', 'begin_checkout', {
             affiliation: '{{ storeName }}',
             currency: 'HUF',
-            value: {{ order.summary.totalAmountToPay }},
+            value: {{ checkout.totalAmountToPay }},
             items: [
-                {%- for item in order.items -%}
+                {%- for item in checkout.items -%}
                 {
                     item_id: '{{ item.product.sku }}',
                     item_name: '{{ item.product.name }}',
                     item_brand: '{{ storeBrand }}',
                     item_category: '{{ item.product.categories|first }}',
-                    price: {{ item.unitPrice }},
+                    price: {{ item.product.sellingPrice }},
                     currency: 'HUF',
                     quantity: {{ item.quantity }}
                 }
@@ -66,7 +66,7 @@
         {# AW generated code:  #}
         gtag('event', 'conversion', {
             'send_to': 'AW-10803246153/-tYtCO-nzoIDEMnosZ8o',
-            'value': {{ order.summary.totalAmountToPay }},
+            'value': {{ order.totalAmountToPay }},
             'currency': 'HUF',
             'transaction_id': '{{ order.number }}',
         });
@@ -75,7 +75,7 @@
             affiliation: '{{ storeName }}',
             currency: 'HUF',
             transaction_id: '{{ order.number }}',
-            value: {{ order.summary.totalAmountToPay }},
+            value: {{ order.totalAmountToPay }},
             shipping: {{ order.shippingFeeToPay + order.paymentFeeToPay }},
             tax: 0,
             items: [
@@ -112,10 +112,10 @@
             fbq('init', '591301158497864');
             fbq('track', 'PageView');
             {% if eventPurchase is defined and eventPurchase is not empty %}
-            fbq('track', 'Purchase', {value: {{ order.summary.totalAmountToPay }}, currency: 'HUF'});
+            fbq('track', 'Purchase', {value: {{ order.totalAmountToPay }}, currency: 'HUF'});
             {% endif %}
             {% if eventInitiateCheckout is defined and eventInitiateCheckout is not empty %}
-            fbq('track', 'InitiateCheckout', { num_items: {{ order.itemsCount }}, value: {{ order.summary.totalAmountToPay }}, currency: 'HUF' });
+            fbq('track', 'InitiateCheckout', { num_items: {{ checkout.itemCount }}, value: {{ checkout.totalAmountToPay }}, currency: 'HUF' });
             {% endif %}
 
     </script>

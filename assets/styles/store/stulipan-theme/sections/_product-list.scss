@@ -3,9 +3,6 @@
 .products-grid {
   & .product {
     margin-bottom: 30px;
-
-    & .productList--price-gross {
-    }
   }
 
   & .text-link-product {
@@ -38,8 +35,7 @@
     margin-top: 1rem;
   }
 
-  .productList--name,
-  .productList--price-gross {
+  .productList--name {
     @include font-size($font-size-base);
   }
   .productList--name {

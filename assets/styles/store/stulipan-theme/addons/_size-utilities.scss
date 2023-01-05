@@ -32,6 +32,13 @@ $text-sm-line-height: $line-height-sm !default; //1.125rem !default;
 
 // Spacing addons
 
+.mt-20px {
+  margin-top: 20px !important;
+}
+.mb-20px {
+  margin-bottom: 20px !important;
+}
+
 @include media-breakpoint-down(md) {
   .mx-n5px {
     margin-left: -5px !important;

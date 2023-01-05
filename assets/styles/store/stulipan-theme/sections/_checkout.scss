@@ -234,7 +234,7 @@ $checkout-border-width:                 3px !default;
   }
 
   & .checkout-overview-item-title {
-    text-transform: uppercase;
+    //text-transform: uppercase;
     letter-spacing: $letter-spacing;
   }
   & .checkout-overview-item-description {
@@ -336,12 +336,14 @@ $checkout-border-width:                 3px !default;
 .checkout-sender-form {
   max-height: 0;
   overflow: hidden;
+  visibility: hidden;
 
   &.--active {
     padding: .75rem .75rem;
-    margin-top: .25rem;
+    //margin-top: .25rem;
     max-height: 800px;
-    transition: max-height 0.125s; // cubic-bezier(0.65, 0.05, 0.36, 1);
+    visibility: visible;
+    transition: max-height 0.25s ease-out; // cubic-bezier(0.65, 0.05, 0.36, 1);
 
     @include media-breakpoint-up(lg) {
       padding: 1rem 1rem;

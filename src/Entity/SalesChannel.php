@@ -58,16 +58,14 @@ class SalesChannel implements JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="short", type="string", length=255, nullable=false)
-     * @ Assert\NotBlank(message="A sales channel rövid rövid leírása hiányzik!")
+     * @ORM\Column(name="short", type="string", length=255, nullable=true)
      */
     private $short;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", nullable=false)
-     * @ Assert\NotBlank(message="A sales channel részletes leírása hiányzik!")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
@@ -76,7 +74,7 @@ class SalesChannel implements JsonSerializable
      * @Groups({"productView"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})
+     * @ORM\Column(name="ordering", type="smallint", nullable=false, options={"default"=100, "unsigned"=true})
      */
     private $ordering;
 
@@ -84,9 +82,9 @@ class SalesChannel implements JsonSerializable
      * @var bool
      * @Groups({"productView"})
      *
-     * @ORM\Column(name="enabled", type="smallint", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="enabled", type="boolean", nullable=false, options={"default"=false})
      */
-    private $enabled = '1';
+    private $enabled = 0;
 
     /**
      * @var Product[]|ArrayCollection | null

@@ -56,7 +56,7 @@ class User implements UserInterface, Serializable
     /**
      * @var int|null
      *
-     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
+     * @ORM\Column(name="phone", type="string", length=15, nullable=true)
      * @ Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $phone;
@@ -64,14 +64,14 @@ class User implements UserInterface, Serializable
     /**
      * @var bool
      *
-     * @ORM\Column(name="verified_email", type="smallint", length=1, nullable=false, options={"default"="0"})
+     * @ORM\Column(name="verified_email", type="boolean", nullable=false, options={"default"=false})
      */
     private $verifiedEmail = 0;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="accepts_marketing", type="smallint", length=1, nullable=false, options={"default"="0"})
+     * @ORM\Column(name="accepts_marketing", type="boolean", nullable=false, options={"default"=false})
      */
     private $acceptsMarketing = 0;
 
@@ -271,7 +271,8 @@ class User implements UserInterface, Serializable
      */
     public function isVerifiedEmail(): bool
     {
-        return 1 !== $this->verifiedEmail ? false : true;
+//        return 1 !== $this->verifiedEmail ? false : true;
+        return null === $this->verifiedEmail ? false : $this->enabled;
     }
 
     /**

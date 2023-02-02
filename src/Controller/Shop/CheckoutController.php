@@ -4,6 +4,7 @@ namespace App\Controller\Shop;
 
 use App\Controller\Utils\GeneralUtils;
 use App\Entity\Address;
+use App\Entity\Cart;
 use App\Entity\CartItem;
 use App\Entity\GreetingCardMessageCategory;
 use App\Entity\DeliveryDateType;
@@ -16,6 +17,7 @@ use App\Entity\Model\HiddenDeliveryDate;
 use App\Entity\PaymentFundingDetail;
 use App\Entity\PaymentTransaction;
 use App\Entity\Product\Product;
+use App\Entity\Product\ProductBadge;
 use App\Entity\Product\ProductStatus;
 use App\Entity\StoreEmailTemplate;
 use App\Event\StoreEvent;
@@ -56,8 +58,6 @@ use App\Services\CheckoutSettings;
 use App\Services\PaymentBuilder;
 use App\Services\StoreSessionStorage;
 use App\Services\StoreSettings;
-use App\Stulipan\Cashin\CashinBundle;
-use App\Stulipan\Cashin\Model\Enumerations\CashinEnvironment;
 use App\Stulipan\GatewayCib\GatewayCibBundle;
 use App\Stulipan\GatewayCib\Model\Enumerations\CibEnvironment;
 use App\Stulipan\GatewayCib\Model\PaymentRequest;
@@ -72,6 +72,7 @@ use Exception;
 use phpDocumentor\Reflection\Types\This;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Stulipan\Traducible\StulipanTraducibleBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -105,11 +106,13 @@ class CheckoutController extends AbstractController
     private $storeSettings;
     private $checkoutSettings;
     private $token;
+    private $traducible;
 
     public function __construct(OrderBuilder $orderBuilder, CartBuilder $cartBuilder, CheckoutBuilder $checkoutBuilder,
                                 TranslatorInterface $translator, EntityManagerInterface $entityManager,
                                 StoreSettings $storeSettings, CheckoutSettings $checkoutSettings,
-                                UrlGeneratorInterface $urlGenerator, EventDispatcherInterface $eventDispatcher, PaymentBuilder $paymentBuilder)
+                                UrlGeneratorInterface $urlGenerator, EventDispatcherInterface $eventDispatcher, PaymentBuilder $paymentBuilder,
+                                StulipanTraducibleBundle $traducible)
     {
         $this->orderBuilder = $orderBuilder;
         $this->cartBuilder = $cartBuilder;
@@ -123,6 +126,8 @@ class CheckoutController extends AbstractController
         $this->paymentBuilder = $paymentBuilder;
 
         $this->cibClient = $paymentBuilder->createCibClient();
+
+        $this->traducible = $traducible;
     }
 
     /**
@@ -150,6 +155,48 @@ class CheckoutController extends AbstractController
      */
     public function step1PickDeliveryAddress(SessionInterface $session, string $checkoutToken = null)
     {
+//        $cmf = $this->em->getMetadataFactory();
+//        $class = $cmf->getMetadataFor(Cart::class);
+////        dd($class->fieldMappings);
+//        foreach ($class->fieldMappings as $fieldMapping) {
+//            dump($fieldMapping);
+//        }
+//        dd('sop');
+
+
+//        $badges = $this->em->getRepository(ProductBadge::class)->findAll();
+//        /** @var ProductBadge $badge */
+//        $badge = $badges[0];
+//        $badge->translate('en')->setName('Bestseller');
+//        $badge->translate('hu')->setName('Hónap sztárja');
+//
+//        $badges[1]->translate('en')->setName('Sale');
+//        $badges[1]->translate('hu')->setName('Akció');
+//        $this->em->persist($badges[1]);
+//
+//        $badges[2]->translate('en')->setName('Trending');
+//        $badges[2]->translate('hu')->setName('Felkapott');
+//        $this->em->persist($badges[2]);
+//
+//        $badges[3]->translate('en')->setName('Top product');
+//        $badges[3]->translate('hu')->setName('Hónap sztárja');
+//        $this->em->persist($badges[3]);
+//
+////        dd($badge);
+////        dd($badge->getNewTranslations()->getValues());
+////        dd($badge->getName());
+////        dd($badge->translate()->getName());
+//
+////        $this->em->persist($badge);
+////
+//        // In order to persist new translations, call mergeNewTranslations method, before flush
+//        $badge->mergeNewTranslations();
+//        $badges[1]->mergeNewTranslations();
+//        $badges[2]->mergeNewTranslations();
+//        $badges[3]->mergeNewTranslations();
+//        $this->em->flush();
+//
+
         $validation = $this->validateCart();
         if (!$validation['isValid']) {
             return $this->redirectToRoute($validation['route']);

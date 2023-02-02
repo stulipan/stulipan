@@ -67,7 +67,7 @@ class Recipient
      * ==== inversed By="recipients" => a User entitásban definiált 'recipients' attibútumról van szó; A Címzettet így kötjük vissza a Customerhez
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="recipients")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $user;
 

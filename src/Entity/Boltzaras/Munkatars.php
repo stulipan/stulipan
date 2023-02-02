@@ -15,8 +15,8 @@ class Munkatars
 
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      */
     private $id;
 
@@ -31,7 +31,7 @@ class Munkatars
      * @ORM\Column(name="image", type="string", length=1000, nullable=true)
      * @Assert\File(mimeTypes={ "image/png", "image/jpeg" }, groups = {"create"})
      */
-    private $avatar = '';
+    private $avatar;
 
 
     // getter methods

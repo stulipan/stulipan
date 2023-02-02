@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity\Product;
 
-//use ApiPlatform\Core\Annotation\ApiResource;
-
-use App\Entity\Product\ProductCategory;
 use App\Entity\Price;
 use App\Entity\SalesChannel;
 use App\Entity\TimestampableTrait;
@@ -16,7 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -43,7 +39,7 @@ class Product
      * @Groups({"productView", "productList",
      *     "orderView"})
      *
-     * @ORM\Column(name="id", type="smallint", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -119,8 +115,6 @@ class Product
 //    private $image;
     
     /**
-     * ()
-     *
      * @var ProductImage[]|ArrayCollection|null
      * @Groups({"productView", "productList",
      *     "orderView"})
@@ -476,7 +470,7 @@ class Product
     /**
      * @Groups({
      *     "productView",
-     *     "productList",
+     *     "productList"
      * })
      *
      * @return float|null

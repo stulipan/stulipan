@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-//use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,7 +25,7 @@ class VatRate implements JsonSerializable
      * @var int
      * @Groups({"productView"})
      *
-     * @ORM\Column(type="smallint", name="id", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

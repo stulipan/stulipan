@@ -27,7 +27,7 @@ class CheckoutItem
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -49,9 +49,9 @@ class CheckoutItem
      * @var Product
      * @Groups({"orderView", "orderList"})
      *
-     * ==== One OrderItem is one Product => Egy tétel mindig egy termék ====
+     * ==== Many CheckoutItems can exist out of one Product ====
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\Product\Product")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product\Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false)
      * @Assert\NotBlank(message="A tétel egy termék kell legyen.")
      */

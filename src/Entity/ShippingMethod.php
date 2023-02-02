@@ -50,7 +50,7 @@ class ShippingMethod
      * @Groups({"orderView", "orderList"})
      *
      * @Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
-     * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
+     * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"=0.00})
      */
     private $price;
 
@@ -59,7 +59,7 @@ class ShippingMethod
      * @Groups({"orderView"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})
+     * @ORM\Column(name="ordering", type="smallint", nullable=false, options={"default"=100, "unsigned"=true})
      * @ORM\OrderBy({"ordering" = "ASC"})
      */
     private $ordering;
@@ -67,9 +67,9 @@ class ShippingMethod
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled", type="smallint", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="enabled", type="smallint", nullable=false, options={"default"=0})
      */
-    private $enabled;
+    private $enabled = false;
 
     /**
      * @return int|null

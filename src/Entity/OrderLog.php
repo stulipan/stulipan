@@ -26,7 +26,7 @@ class OrderLog
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="id", type="integer", length=255, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -54,7 +54,7 @@ class OrderLog
     /**
      * @var OrderLogChannel
      *
-     * @ORM\OneToOne(targetEntity="OrderLogChannel")
+     * @ORM\ManyToOne(targetEntity="OrderLogChannel")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", nullable=false)
      */
     private $channel;
@@ -74,7 +74,7 @@ class OrderLog
     /**
      * @var bool
      *
-     * @ORM\Column(name="comment", type="smallint", length=1, nullable=false, options={"default"="0"})
+     * @ORM\Column(name="comment", type="smallint", length=1, nullable=false, options={"default"=0})
      */
     private $comment = 0;
 

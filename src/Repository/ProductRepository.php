@@ -135,23 +135,9 @@ class ProductRepository extends ServiceEntityRepository
         return $qb->execute();
 	}
 
-//    /**
-//     * @return\Doctrine\ORM\Query
-//     */
-//    public function findAllOrdered(int $limit = null)
-//    {
-//        if ($limit) $limit+=1;
-//        $qb = $this->createQueryBuilder('p')
-////            ->andWhere('p.enabled = :enabled')
-////            ->setParameter('enabled', 1)
-//             ->orderBy('p.rank', 'ASC')
-//            ->setMaxResults($limit)
-//        ;
-//        return $qb->getQuery()->execute();
-//    }
-
     /**
-     * @return\Doctrine\ORM\Query
+     * @param int|null $limit
+     * @return int|mixed|string
      */
     public function fetchVisibleProducts(int $limit = null)
     {

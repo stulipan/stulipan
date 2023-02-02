@@ -25,7 +25,7 @@ class CartItem
      * @var int
      * @Groups({"cartView", "cartList"})
      *
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -47,9 +47,10 @@ class CartItem
      * @var Product
      * @Groups({"cartView", "cartList"})
      *
-     * ==== One CartItem is one Product => Egy tétel mindig egy termék ====
+     * ==== Many CartItems can exist out of one Product ====
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\Product\Product")
+     * @ ORM\OneToOne(targetEntity="App\Entity\Product\Product")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product\Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false)
      * @Assert\NotBlank(message="A tétel egy termék kell legyen.")
      */

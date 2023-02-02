@@ -21,7 +21,7 @@ class InventoryInvoice
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="smallint", name="id", length=11)
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      */
     private $id;
 

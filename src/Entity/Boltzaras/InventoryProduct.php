@@ -19,7 +19,7 @@ class InventoryProduct
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="smallint", name="id", length=11)
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      */
     private $id;
 
@@ -28,7 +28,7 @@ class InventoryProduct
      * @Assert\NotBlank(message="Adj nevet a terméknek.")
      * @ORM\Column(name="product_name", type="string", length=255, nullable=true)
      */
-    private $productName = '';
+    private $productName;
 
 //    /**
 //     * @var int

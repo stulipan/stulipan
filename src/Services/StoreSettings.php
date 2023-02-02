@@ -110,8 +110,9 @@ final class StoreSettings
             return Localization::TIME_FORMAT_DEFAULT[$this->session->get('_locale')];
         }
     }
+
     /**
-     * @return boolean
+     * @return bool
      */
     public function isFlowerShop(): bool
     {

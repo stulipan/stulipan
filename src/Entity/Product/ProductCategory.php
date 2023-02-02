@@ -30,7 +30,7 @@ class ProductCategory implements JsonSerializable
      *     "productView"
      * })
      *
-     * @ORM\Column(type="smallint", name="id", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -41,7 +41,7 @@ class ProductCategory implements JsonSerializable
      * @Groups({
      *     "main",
      *     "productView",
-     *     "eventAddToCart",
+     *     "eventAddToCart"
      * })
      *
      * @ORM\Column(name="category_name", type="string", length=100, nullable=false)
@@ -63,7 +63,7 @@ class ProductCategory implements JsonSerializable
      * @var string|null
      * @Groups({"main"})
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 

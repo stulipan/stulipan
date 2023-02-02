@@ -22,7 +22,7 @@ class ProductStatus implements JsonSerializable
      * @var int
      * @Groups({"productView", "productList"})
      *
-     * @ORM\Column(name="id", length=5, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -56,7 +56,7 @@ class ProductStatus implements JsonSerializable
      * @var string
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="css", type="string", length=20, nullable=false)
+     * @ORM\Column(name="css", type="string", length=20, nullable=true)
      */
     private $css;
     

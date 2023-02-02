@@ -16,7 +16,7 @@ class CmsNavigationItem
     /**
      * @var int
      *
-     * @ORM\Column(type="smallint", name="id", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -39,7 +39,7 @@ class CmsNavigationItem
      *     "view", "list"
      * })
      *
-     * @ORM\Column(name="url", type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(name="url", type="string", length=255, nullable=false)
      * @ Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
      */
     private $url;
@@ -72,7 +72,7 @@ class CmsNavigationItem
      * })
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})
+     * @ORM\Column(name="ordering", type="smallint", nullable=false, options={"default"=100, "unsigned"=true})
      */
     private $ordering;
 

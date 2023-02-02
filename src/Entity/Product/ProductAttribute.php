@@ -28,7 +28,7 @@ class ProductAttribute //implements \JsonSerializable
      * @var int
      * @Groups({"productView"})
      *
-     * @ORM\Column(name="id", length=5, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -57,7 +57,7 @@ class ProductAttribute //implements \JsonSerializable
      * @Groups({"productView"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="ordering", nullable=false, options={"default"="100"})
+     * @ORM\Column(name="ordering", type="smallint", nullable=false, options={"default"=100, "unsigned"=true})
      */
     private $ordering;
     

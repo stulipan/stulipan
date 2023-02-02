@@ -23,7 +23,7 @@ class GreetingCardMessage
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="smallint", length=5, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

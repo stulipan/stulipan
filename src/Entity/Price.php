@@ -22,7 +22,7 @@ class Price //implements \JsonSerializable
      * @Groups({"productView", "productList",
      *     "geoPriceView", "geoPriceList"})
      *
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -59,10 +59,9 @@ class Price //implements \JsonSerializable
 
     /**
      * @var VatRate
-     * @ Groups({""})
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\VatRate")
-     * @ORM\JoinColumn(name="vat_rate_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\VatRate")
+     * @ORM\JoinColumn(name="vat_rate_id", referencedColumnName="id", nullable=false)
      * @ Assert\NotBlank(message="Válassz egy ÁFA típust ehhez az árhoz.")
      */
     private $vatRate;

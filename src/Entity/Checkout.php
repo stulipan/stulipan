@@ -81,9 +81,8 @@ class Checkout
      *
      * ==== One Order has one Recipient ====
      *
-     * @ORM\OneToOne(targetEntity="Recipient")
-     * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id", nullable=false)
-     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen címzett.")
+     * @ORM\ManyToOne(targetEntity="Recipient")
+     * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id", nullable=true)
      */
     private $recipient;
 
@@ -93,9 +92,8 @@ class Checkout
      *
      * ==== One Order has one Sender ====
      *
-     * @ORM\OneToOne(targetEntity="Sender")
+     * @ORM\ManyToOne(targetEntity="Sender")
      * @ORM\JoinColumn(name="sender_id", referencedColumnName="id", nullable=true)
-     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen feladó.")
      */
     private $sender;
 
@@ -111,7 +109,6 @@ class Checkout
      * @Groups({"orderView"})
      *
      * @ORM\Column(name="message", type="string", length=255, nullable=true)
-     * @ Assert\NotBlank(message="Nincs uzenet!")
      */
     private $message;
 
@@ -120,7 +117,6 @@ class Checkout
      * @Groups({"orderView"})
      *
      * @ORM\Column(name="message_author", type="string", length=255, nullable=true)
-     * @ Assert\NotBlank(message="Nincs uzenet alairas!")
      */
     private $messageAuthor;
 
@@ -214,17 +210,17 @@ class Checkout
      */
     private $deliveryInterval;
 
-    /**
-     * @var ClientDetails
-     *
-     * ==== One Order has one ClientDetails ====
-     *
-     * @ORM\OneToOne(targetEntity="ClientDetails", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="client_details_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Egy rendelésnek kell legyen egy ClientDetails.")
-     * @Assert\Valid()
-     */
-    private $clientDetails;
+//    /**
+//     * @var ClientDetails
+//     *
+//     * ==== One Order has one ClientDetails ====
+//     *
+//     * @ORM\OneToOne(targetEntity="ClientDetails", cascade={"persist", "remove"})
+//     * @ORM\JoinColumn(name="client_details_id", referencedColumnName="id", nullable=true)  // csak ideiglenesen: nullable=true
+//     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen egy ClientDetails.")  // csak ideiglenesen: nullable=true
+//     * @Assert\Valid()
+//     */
+//    private $clientDetails;
 
     /**
      * @var bool|null
@@ -810,21 +806,21 @@ class Checkout
         $this->deliveryInterval = $deliveryInterval;
     }
 
-    /**
-     * @return ClientDetails
-     */
-    public function getClientDetails(): ?ClientDetails
-    {
-        return $this->clientDetails;
-    }
-
-    /**
-     * @param ClientDetails $clientDetails
-     */
-    public function setClientDetails(ClientDetails $clientDetails): void
-    {
-        $this->clientDetails = $clientDetails;
-    }
+//    /**
+//     * @return ClientDetails
+//     */
+//    public function getClientDetails(): ?ClientDetails
+//    {
+//        return $this->clientDetails;
+//    }
+//
+//    /**
+//     * @param ClientDetails $clientDetails
+//     */
+//    public function setClientDetails(ClientDetails $clientDetails): void
+//    {
+//        $this->clientDetails = $clientDetails;
+//    }
 
     /**
      * @return bool|null

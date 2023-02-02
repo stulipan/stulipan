@@ -25,7 +25,7 @@ class ProductImage //implements \JsonSerializable
      * @Groups({"productView", "productList",
      *     "orderView"})
      *
-     * @ORM\Column(name="id", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -79,7 +79,7 @@ class ProductImage //implements \JsonSerializable
      * @Groups({"productView"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="ordering", nullable=false, options={"default"="100"})
+     * @ORM\Column(name="ordering", type="smallint", nullable=false, options={"default"=100, "unsigned"=true})
      */
     private $ordering;
     

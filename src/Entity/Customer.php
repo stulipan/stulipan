@@ -27,7 +27,7 @@ class Customer
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -46,7 +46,7 @@ class Customer
     /**
      * @var int|null
      *
-     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
+     * @ORM\Column(name="phone", type="string", length=15, nullable=true)
      * @Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $phone;
@@ -54,7 +54,7 @@ class Customer
     /**
      * @var bool
      *
-     * @ORM\Column(name="verified_email", type="smallint", length=1, nullable=false, options={"default"="0"})
+     * @ORM\Column(name="verified_email", type="smallint", length=1, nullable=false, options={"default"=0})
      */
     private $verifiedEmail = 0;
 
@@ -92,7 +92,7 @@ class Customer
      * @var string
      * @Groups({"orderView"})
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a keresztneved.")
      */
     private $firstname;
@@ -101,7 +101,7 @@ class Customer
      * @var string
      * @Groups({"orderView"})
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a neved.")
      */
     private $lastname;

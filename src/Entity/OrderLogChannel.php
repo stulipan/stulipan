@@ -21,7 +21,7 @@ class OrderLogChannel implements JsonSerializable
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="id", length=5, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

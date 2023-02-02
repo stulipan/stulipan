@@ -43,7 +43,7 @@ class Sender
      * ==== inversed By="senders" => a User entitásban definiált 'senders' attibútumról van szó; A Sendert így kötjük vissza a Customerhez
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="senders")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $user;
 

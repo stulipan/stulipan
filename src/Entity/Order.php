@@ -48,7 +48,7 @@ class Order
     /**
      * @var OrderStatus|null
      *
-     * @ORM\OneToOne(targetEntity="OrderStatus")
+     * @ORM\ManyToOne(targetEntity="OrderStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=true)
      */
     private $status;
@@ -56,7 +56,7 @@ class Order
     /**
      * @var PaymentStatus|null
      *
-     * @ORM\OneToOne(targetEntity="PaymentStatus")
+     * @ORM\ManyToOne(targetEntity="PaymentStatus")
      * @ORM\JoinColumn(name="payment_status_id", referencedColumnName="id", nullable=true)
      */
     private $paymentStatus;
@@ -106,34 +106,34 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="customer_phone", type="string", length=15, nullable=false)
+     * @ORM\Column(name="customer_phone", type="string", length=15, nullable=true)
      * @ Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $phone;
 
-    /**
-     * @var Recipient|null
-     * @Groups({"orderView", "orderList"})
-     *
-     * ==== One Order has one Recipient ====
-     *
-     * @ORM\OneToOne(targetEntity="Recipient")
-     * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id", nullable=false)
-     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen címzett.")
-     */
-    private $recipient;
+//    /**
+//     * @var Recipient|null
+//     * @Groups({"orderView", "orderList"})
+//     *
+//     * ==== One Order has one Recipient ====
+//     *
+//     * @ORM\ManyToOne(targetEntity="Recipient")
+//     * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id", nullable=false)
+//     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen címzett.")
+//     */
+//    private $recipient;
 
-    /**
-     * @var Sender|null
-     * @Groups({"orderView", "orderList"})
-     *
-     * ==== One Order has one Sender ====
-     *
-     * @ORM\OneToOne(targetEntity="Sender")
-     * @ORM\JoinColumn(name="sender_id", referencedColumnName="id", nullable=true)
-     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen feladó.")
-     */
-    private $sender;
+//    /**
+//     * @var Sender|null
+//     * @Groups({"orderView", "orderList"})
+//     *
+//     * ==== One Order has one Sender ====
+//     *
+//     * @ORM\OneToOne(targetEntity="Sender")
+//     * @ORM\JoinColumn(name="sender_id", referencedColumnName="id", nullable=true)
+//     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen feladó.")
+//     */
+//    private $sender;
 
     /**
      * @var string|null
@@ -256,7 +256,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="shipping_firstname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="shipping_firstname", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a keresztnevet.")
      */
     private $shippingFirstname;
@@ -265,7 +265,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="shipping_lastname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="shipping_lastname", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a vezetéknevet.")
      */
     private $shippingLastname;
@@ -274,7 +274,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="shipping_phone", type="string", length=15, nullable=false)
+     * @ORM\Column(name="shipping_phone", type="string", length=15, nullable=true)
      * @Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $shippingPhone;
@@ -286,7 +286,7 @@ class Order
      * ==== One Order has one Shipping Address ====
      *
      * @ORM\OneToOne(targetEntity="OrderAddress", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", nullable=true)
      * @Assert\NotBlank(message="Egy rendelésnek kell legyen egy szállítási címe.")
      * @Assert\Valid()
      */
@@ -296,7 +296,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="billing_firstname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="billing_firstname", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a keresztnevet.")
      */
     private $billingFirstname;
@@ -305,7 +305,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="billing_lastname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="billing_lastname", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a vezetéknevet.")
      */
     private $billingLastname;
@@ -322,7 +322,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="billing_phone", type="string", length=15, nullable=false)
+     * @ORM\Column(name="billing_phone", type="string", length=15, nullable=true)
      * @ Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $billingPhone;
@@ -341,7 +341,7 @@ class Order
      * ==== One Order has one Billing Address ====
      *
      * @ORM\OneToOne(targetEntity="OrderAddress", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", nullable=true)
      * @Assert\NotBlank(message="Egy rendelésnek kell legyen egy számlázási címe.")
      * @Assert\Valid()
      */
@@ -365,17 +365,17 @@ class Order
      */
     private $deliveryInterval;
 
-    /**
-     * @var ClientDetails
-     *
-     * ==== One Order has one ClientDetails ====
-     *
-     * @ORM\OneToOne(targetEntity="ClientDetails", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="client_details_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Egy rendelésnek kell legyen egy ClientDetails.")
-     * @Assert\Valid()
-     */
-    private $clientDetails;
+//    /**
+//     * @var ClientDetails
+//     *
+//     * ==== One Order has one ClientDetails ====
+//     *
+//     * @ORM\OneToOne(targetEntity="ClientDetails", cascade={"persist", "remove"})
+//     * @ORM\JoinColumn(name="client_details_id", referencedColumnName="id", nullable=true)   // csak ideiglenesen: nullable=true
+//     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen egy ClientDetails.")  // csak ideiglenesen: nullable=true
+//     * @Assert\Valid()
+//     */
+//    private $clientDetails;
 
     /**
      * @var bool|null
@@ -778,29 +778,29 @@ class Order
         $this->phone = $phone;
     }
 
-    /**
-     * @return Recipient|null
-     */
-    public function getRecipient(): ?Recipient
-    {
-        return $this->recipient;
-    }
-
-    /**
-     * @param Recipient $recipient
-     */
-    public function setRecipient(?Recipient $recipient): void
-    {
-        $this->recipient = $recipient;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasRecipient(): bool
-    {
-        return null === $this->getRecipient() ? false : true;
-    }
+//    /**
+//     * @return Recipient|null
+//     */
+//    public function getRecipient(): ?Recipient
+//    {
+//        return $this->recipient;
+//    }
+//
+//    /**
+//     * @param Recipient $recipient
+//     */
+//    public function setRecipient(?Recipient $recipient): void
+//    {
+//        $this->recipient = $recipient;
+//    }
+//
+//    /**
+//     * @return bool
+//     */
+//    public function hasRecipient(): bool
+//    {
+//        return null === $this->getRecipient() ? false : true;
+//    }
 
     /**
      * @return string|null
@@ -834,29 +834,29 @@ class Order
         $this->messageAuthor = $author;
     }
 
-    /**
-     * @return Sender|null
-     */
-    public function getSender(): ?Sender
-    {
-        return $this->sender;
-    }
-
-    /**
-     * @param Sender $sender
-     */
-    public function setSender(?Sender $sender): void
-    {
-        $this->sender = $sender;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSender(): bool
-    {
-        return null === $this->getSender() ? false : true;
-    }
+//    /**
+//     * @return Sender|null
+//     */
+//    public function getSender(): ?Sender
+//    {
+//        return $this->sender;
+//    }
+//
+//    /**
+//     * @param Sender $sender
+//     */
+//    public function setSender(?Sender $sender): void
+//    {
+//        $this->sender = $sender;
+//    }
+//
+//    /**
+//     * @return bool
+//     */
+//    public function hasSender(): bool
+//    {
+//        return null === $this->getSender() ? false : true;
+//    }
 
     /**
      * @return PaymentMethod|null
@@ -883,7 +883,7 @@ class Order
     }
 
     /**
-     * @param ShippingMethod $shippingMethod
+     * @param ShippingMethod|null $shippingMethod
      */
     public function setShippingMethod(?ShippingMethod $shippingMethod): void
     {
@@ -1285,21 +1285,21 @@ class Order
         $this->deliveryInterval = $deliveryInterval;
     }
 
-    /**
-     * @return ClientDetails
-     */
-    public function getClientDetails(): ?ClientDetails
-    {
-        return $this->clientDetails;
-    }
-
-    /**
-     * @param ClientDetails $clientDetails
-     */
-    public function setClientDetails(ClientDetails $clientDetails): void
-    {
-        $this->clientDetails = $clientDetails;
-    }
+//    /**
+//     * @return ClientDetails
+//     */
+//    public function getClientDetails(): ?ClientDetails
+//    {
+//        return $this->clientDetails;
+//    }
+//
+//    /**
+//     * @param ClientDetails $clientDetails
+//     */
+//    public function setClientDetails(ClientDetails $clientDetails): void
+//    {
+//        $this->clientDetails = $clientDetails;
+//    }
 
     /**
      * @return bool|null

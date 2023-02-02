@@ -18,7 +18,7 @@ class CmsNavigation
     /**
      * @var int
      *
-     * @ORM\Column(type="smallint", name="id", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

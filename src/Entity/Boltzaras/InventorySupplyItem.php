@@ -25,7 +25,7 @@ class InventorySupplyItem
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -48,7 +48,7 @@ class InventorySupplyItem
      *
      * ==== One SupplyItem is one InventoryProduct => Egy tétel mindig egy termék ====
      *
-     * @ORM\OneToOne(targetEntity="InventoryProduct")
+     * @ORM\ManyToOne(targetEntity="InventoryProduct")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false)
      * @Assert\NotBlank(message="A tétel egy termék kell legyen.")
      */

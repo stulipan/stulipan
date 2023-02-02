@@ -87,7 +87,7 @@ class PaymentMethod
      *
      * @Assert\NotBlank(message="Adj meg egy összeget.")
      * @Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
-     * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
+     * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"=0.00})
      */
     private $price = 0;
 
@@ -96,16 +96,16 @@ class PaymentMethod
      * @Groups({"orderView"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})
+     * @ORM\Column(name="ordering", type="smallint", nullable=false, options={"default"=100, "unsigned"=true})
      */
     private $ordering;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled", type="smallint", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="enabled", type="smallint", nullable=false, options={"default"=0})
      */
-    private $enabled = '1';
+    private $enabled = false;
 
 
     /**

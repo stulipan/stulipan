@@ -89,7 +89,7 @@
                                             {% elseif product.hasBadges %}
                                                 {% for badge in product.badges %}
                                                     {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                        <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                                        <div class="ribbon ribbon-{{ badge.css }}">{{ badge.name }}</div>
                                                     {% else %}
                                                         {% set bestseller = true %}
                                                     {% endif %}
@@ -380,7 +380,7 @@
                                         {% elseif product.hasBadges %}
                                             {% for badge in product.badges %}
                                                 {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge.name }}</div>
                                                 {% else %}
                                                     {% set bestseller = true %}
                                                 {% endif %}

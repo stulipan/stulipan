@@ -28,7 +28,7 @@
         "@pnotify/bootstrap4": "^5.2.0",
         "@pnotify/core": "^5.2.0",
         "@sweetalert2/theme-bootstrap-4": "^4.0.3",
-        "axios": "^0.19.0",
+        "axios": "^0.21.2",
         "bootstrap": "^4.3.1",
         "bootstrap-icons": "^1.5.0",
         "compression-webpack-plugin": "^7.1.2",

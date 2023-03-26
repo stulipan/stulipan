@@ -26,15 +26,15 @@ class ImageSetFullPath implements ServiceSubscriberInterface
 {
     /** @var ContainerInterface */
     private $container;
-    
+
     /** @var FileUploader */
     private $fileUploader;
-    
+
     /** @var CacheManager */
     private $cacheManager;
 
     private $filterManager;
-    
+
     public function __construct(ContainerInterface $container, FileUploader $fileUploader,
                                 CacheManager $cacheManager, FilterManager $filterManager)
     {
@@ -43,14 +43,14 @@ class ImageSetFullPath implements ServiceSubscriberInterface
         $this->cacheManager = $cacheManager;
         $this->filterManager = $filterManager;
     }
-    
+
     /**
      * @param LifeCycleEventArgs $args
      */
     public function postLoad(LifeCycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        
+
         if ($entity instanceof ProductImage) {
             if ($entity->getImage()) {
                 $publicPath = $this->fileUploader->getPublicPath($entity->getImagePath());
@@ -70,6 +70,8 @@ class ImageSetFullPath implements ServiceSubscriberInterface
                 );
             }
         }
+
+        // Images used throughout the whole website
         if ($entity instanceof ImageEntity) {
 //            if ($entity->getType() == ImageEntity::STORE_IMAGE) {
                 $publicPath = $this->fileUploader->getPublicPath($entity->getPath());
@@ -77,7 +79,7 @@ class ImageSetFullPath implements ServiceSubscriberInterface
                     $this->cacheManager->getBrowserPath($publicPath, 'unscaled')
                 );
 
-                $allFilters = $this->filterManager->getFilterConfiguration()->all();
+                $allFilters = $this->filterManager->getFilterConfiguration()->all();  // retrieve all filters that are set up in liip_imagine.yaml
                 $allowedStrings  = ['unscaled', 'size_'];
 
                 $filters = array_filter(
@@ -90,6 +92,15 @@ class ImageSetFullPath implements ServiceSubscriberInterface
                     ARRAY_FILTER_USE_KEY
                 );
 
+
+                // filters ==> [
+                //      'unscaled' => [ ],
+                //      'unscaled_200' => [ ],
+                //      'size_1200' => [ ],
+                //      'size_600' => [ ],
+                //      'size_200 => [ ]'
+                // ]
+                //
                 // keys ==> ['unscaled', 'unscaled_200', 'size_1200', 'size_600', 'size_200']
                 $keys = array_keys($filters);
 
@@ -147,7 +158,7 @@ class ImageSetFullPath implements ServiceSubscriberInterface
 //            );
 //        }
     }
-    
+
     public static function getSubscribedServices()
     {
         return [

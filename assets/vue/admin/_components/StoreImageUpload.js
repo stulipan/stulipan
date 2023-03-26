@@ -9,7 +9,7 @@ Vue.use(VueClip);   // Simple and hackable file uploader
 
 Vue.http.options.root = 'http://stulipan.dfr';
 const uploadUrls = {
-    productImage: '/hu/admin/api/upload/storeImage/',
+    productImage: '/admin/api/upload/storeImage/',
 };
 
 new Vue({

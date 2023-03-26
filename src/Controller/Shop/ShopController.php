@@ -18,10 +18,10 @@ class ShopController extends AbstractController
     {
         $previewMode = $request->query->get(PreviewContent::PREVIEW_TOKEN);
         $em = $this->getDoctrine()->getManager();
-        if(FALSE == $em->getConnection()->ping()){
-            $em->getConnection()->close();
-            $em->getConnection()->connect();
-        }
+//        if(FALSE == $em->getConnection()->ping()){
+//            $em->getConnection()->close();
+//            $em->getConnection()->connect();
+//        }
         $products = $em->getRepository(Product::class)->fetchVisibleProducts(12);
 //        $products= $this->getDoctrine()->getManager()->getRepository(Product::class)->fetchVisibleProducts(12);
         return $this->render('webshop/site/homepage.html.twig', [

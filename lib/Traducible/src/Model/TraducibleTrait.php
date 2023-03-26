@@ -8,14 +8,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Stulipan\Traducible\Entity\TranslationInterface;
 use Stulipan\Traducible\Exception\TranslatableException;
+use Symfony\Component\Validator\Constraints as Assert;
 
 trait TraducibleTrait
 {
-//    use TraduciblePropertiesTrait;
-//    use TraducibleMethodsTrait;
-
     /**
      * @var Collection<string, TranslationInterface>
+     * @Assert\Valid()  // Line added by Stulipan
      */
     protected $translations;
 
@@ -266,5 +265,10 @@ trait TraducibleTrait
         }
 
         return $this->findTranslationByLocale($this->getDefaultLocale(), false);
+    }
+
+    public static function getClassSuffix(): string  // Added by Stulipan
+    {
+        return 'Translation';
     }
 }

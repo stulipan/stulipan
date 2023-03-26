@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CmsPage
 {
+    use ImageEntityTrait;
+
     /**
      * @var int
      *
@@ -57,19 +59,7 @@ class CmsPage
      * @ORM\Column(name="content", type="text", length=65535, nullable=true)
      */
     private $content;
-    
-    /**
-     * @var ImageEntity|null
-     *
-     * @ORM\OneToOne(targetEntity="App\Entity\ImageEntity", cascade={"persist"}) // No need for cascade={"persist"} as the ImageEntity will previously be saved to db
-     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=true)
-     **/
-    private $image;
-    
-    /**
-     * @var string|null
-     */
-    private $imageUrl;
+
 
     /**
      * @var CmsPage|null
@@ -127,20 +117,7 @@ class CmsPage
     {
         return $this->id;
     }
-    
-//    /**
-//     * The setId is required for the Serializer/Normalizer to be able to create
-//     * the subentities, and it must return the current entity !!
-//     *
-//     * @param int $id
-//     * @return CmsPage
-//     */
-    public function setId(int $id): CmsPage
-    {
-        $this->id = $id;
-        return $this;
-    }
-    
+
     /**
      * @return string
      */
@@ -194,59 +171,6 @@ class CmsPage
         $this->content = $content;
     }
 
-    /**
-     * @return ImageEntity
-     */
-    public function getImage(): ?ImageEntity
-    {
-        return $this->image;
-    }
-    
-    /**
-     * @param ImageEntity $image
-     * @return CmsPage|null
-     */
-    public function setImage(?ImageEntity $image): ?CmsPage
-    {
-        $this->image = $image;
-        return $this;
-    }
-    
-    /**
-     * This is used in ImageSetFullPath service. The service calls setImageUrl to set full URL to the image (eg: https://www....../image_filename.jpeg )
-     * @param null|string $imageUrl
-     */
-    public function setImageUrl($imageUrl)
-    {
-        $this->imageUrl = $imageUrl;
-    }
-    
-    /**
-     * Return full URL: http://stulipan.dfr/media/cache/resolve/product_small/uploads/images/products/ethan-haddox-484912-unsplash-5ceea70235e84.jpeg
-     * This is to be used API
-     *
-     *      This is generated in the ImageSetFullPath.php event (!!)
-     *
-     * @return null|string
-     */
-    public function getImageUrl(): ?string
-    {
-        return $this->imageUrl;
-    }
-    
-    /**
-     * Returns "products/image_filename.jpeg"
-     * This is to be used in Twig templates with uploaded_asset()
-     *
-     * @return string
-     */
-    public function getImagePath(): ?string
-    {
-        if ($this->getImage()) {
-            return FileUploader::WEBSITE_FOLDER_NAME .'/'. $this->getImage()->getFile();
-        }
-        return null;
-    }
     /**
      * @return bool
      */

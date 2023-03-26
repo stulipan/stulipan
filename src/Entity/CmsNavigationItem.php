@@ -93,7 +93,7 @@ class CmsNavigationItem
     {
         return $this->id;
     }
-    
+
 //    /**
 //     * The setId is required for the Serializer/Normalizer to be able to create
 //     * the subentities, and it must return the current entity !!
@@ -106,7 +106,7 @@ class CmsNavigationItem
 //        $this->id = $id;
 //        return $this;
 //    }
-    
+
     /**
      * @return string
      */
@@ -122,11 +122,11 @@ class CmsNavigationItem
         $this->name = $name;
     }
 
-    public function __toString(): ?string
+    public function __toString(): string
     {
         return $this->getName();
     }
-    
+
     /**
      * @return string|null
      */
@@ -134,7 +134,7 @@ class CmsNavigationItem
     {
         return $this->url;
     }
-    
+
     /**
      * @param string|null $url
      */

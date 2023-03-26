@@ -1,0 +1,145 @@
+{% import _self as myOwnMacro %}
+{% macro printIntervalRow(item) %}
+    <div class="form-row vertical-form-row">
+        <div class="col-md-12 col-12 vertical-col">
+            {% for child in item.children %}
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        {{ form_label(child) }}
+                        {{ form_widget(child) }}
+                        {{ form_errors(child) }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}
+
+
+{{ form_start(form, { 'attr': {'class': ' ' }}) }}
+    <div class="row">
+        <div class="col-md-8 correction-no-padding">
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <nav class="adaptive-tabs">
+                        {% if form.translations|length > 1 %}
+                        <ul class="nav nav-tabs adaptive-primary mb-3" id="myTab" role="tablist">
+                            {% for item in form.translations %}
+                                <li class="nav-item adaptive-item">
+                                    <a class="nav-link {% if loop.first %}active{% endif %}" id="lang-{{ loop.index }}-tab" href="#lang-{{ loop.index }}" data-toggle="tab" role="tab" aria-controls="home" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">{{ item.vars.name|upper }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        <ul class="adaptive-template">
+                            <li class="nav-item adaptive-item adaptive-more">
+                                <button type="button" class="adaptive-button nav-link btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                                    {{ 'generic.more'|trans }}
+                                </button>
+                                <ul class="adaptive-secondary">
+                                </ul>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            {% for item in form.translations %}
+                                <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="lang-{{ loop.index }}" role="tabpanel" aria-labelledby="lang-{{ loop.index }}-tab">
+{#                                    1. Első megoldás a macro#}
+                                    {{ myOwnMacro.printIntervalRow(item) }}
+{#                                    2. Másokdik megoldás a direkt beszúrás#}
+{#                                    {{ form_label(item.name) }}#}
+{#                                    {{ form_widget(item.name) }}#}
+{#                                    {{ form_errors(item.name) }}#}
+{#<br>#}
+{#                                    {{ form_label(item.description) }}#}
+{#                                    {{ form_widget(item.description) }}#}
+{#                                    {{ form_errors(item.description) }}#}
+                                </div>
+                                {% do form.translations.setRendered() %}
+                                {{ form_errors(form.translations) }}
+                            {% endfor %}
+                        </div>
+                    </nav>
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+{#                            {{ dump(form.nume) }}#}
+{#                            {{ form_widget(form.nume) }}#}
+{#                            {{ form.widget(form.nume.name) }}#}
+                        </div>
+                    </div>
+
+
+
+{#                    <div class="form-group row mb-0">#}
+{#                        <div class="col-sm-12">#}
+{#                            {{ form_label(form.content, form.content, { 'label_attr': {'class': '' }, 'label': 'page.content'|trans}) }}#}
+{#                            {{ form_widget(form.content, {'attr': {'class': 'JS--tinymceContent', rows: 6}}) }}#}
+{#                            {{ form_errors(form.content) }}#}
+{#                        </div>#}
+{#                    </div>#}
+                </div>
+            </div>
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row mb-0">
+                        <div class="col-sm-12">
+                            {{ form_label(form.css, form.css, { 'label_attr': {'class': '' }, 'label': 'badge.css'|trans}) }}
+                            {{ form_widget(form.css) }}
+                            {{ form_errors(form.css) }}
+                            <small class="form-text">{{ 'page.css-help'|trans }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4 correction-no-padding">
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <label class="form-control-label">{{ 'badge.ordering'|trans }}</label>
+                                </div>
+                                <div class="d-flex">
+                                    {{ form_widget(form.ordering) }}
+                                </div>
+                            </div>
+                            {{ form_errors(form.ordering) }}
+                            {% do form.ordering.setRendered() %}
+                        </div>
+                    </div>
+{#                    <div class="form-group row mb-0">#}
+{#                        <div class="col-sm-12">#}
+{#                            {{ form_label(form.parent, form.parent, { 'label_attr': {'class': '' }, 'label': 'page.parent-page'|trans }) }}#}
+{#                            {{ form_widget(form.parent) }}#}
+{#                            {{ form_errors(form.parent) }}#}
+{#                        </div>#}
+{#                    </div>#}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-sm-12">
+            {# Render CSRF token etc .#}
+            <div style="display:none">
+                {{ form_rest(form) }}
+            </div>
+
+            <div class="form-group row mb-0">
+                <div class="col-sm-12">
+                    <input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-lgg btn-primary mr-1" formnovalidate>
+                    <a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{{ form_end(form) }}

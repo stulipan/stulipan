@@ -9,6 +9,7 @@ parameters:
     supported_locales:
       hu_HU: hu
       en_US: en
+      en_GB: en
     images_directory: '%kernel.project_dir%/public/uploads/images'
     product_images_directory: '%kernel.project_dir%/public/uploads/images/termekek'
     category_images_directory: '%kernel.project_dir%/public/uploads/images/categories'
@@ -30,6 +31,7 @@ services:
             $locales: '%app_locales%'
             $supportedLocales: '%supported_locales%'
             $defaultLocale: '%locale%'
+            $defaultContentLocale: '%locale%'
             $storeSettingsDirectory: '%kernel.project_dir%/src/Resources/StoreSettings'
             $generalSettingsFile: 'general.yaml'
             $checkoutSettingsFile: 'checkout.yaml'
@@ -84,6 +86,14 @@ services:
         tags:
             - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\StoreEmailTemplate' }
             - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\StoreEmailTemplate' }
+    App\Event\SetSlugBlog:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\Blog' }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\Blog' }
+    App\Event\SetSlugBlogArticle:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\BlogArticle' }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\BlogArticle' }
     App\Event\TimestampableModel:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
@@ -95,6 +105,9 @@ services:
     App\Event\OrderSetPaymentStatus:
         tags:
             - { name: doctrine.orm.entity_listener, event: postLoad, entity: 'App\Entity\Order' }
+    App\Event\HostSetLocale:
+        tags:
+            - { name: doctrine.event_listener, event: postLoad }
     App\Event\SetDefaultVatRateForNewPrice:
         tags:
             - { name: doctrine.event_listener, event: prePersist }

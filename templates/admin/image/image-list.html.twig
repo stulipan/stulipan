@@ -17,112 +17,126 @@
 {% block headerActionsWrapper %}
 {% endblock %}
 
+{% block beforeContent %}
+<div class="row mt-2 mt-md-3">
+	<div class="col-sm-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="h5 mb-0">Képfeltöltés</div>
+				{{ form_start(form, { 'attr': {'class': ' ' }}) }}
+				<div class="form-group row mb-1 mt-3">
+					<div class="col-sm-12">
+					 {{ form_widget(form.imageId, { 'attr': {'class': 'V--imageId' }}) }}
+					 {{ form_errors(form.imageId) }}
+					 <div id="v--imageUpload" class="d-flex justify-content-center align-items-center" style="border-radius: 6px; background-color: #f4f4f5; height:100px; width: 100%;">
+						 <div class="spinner-border text-light" role="status"></div>
+					 </div>
+					</div>
+				</div>
+				<div class="form-group row mt-2 mb-0">
+					<div class="col-sm-12">
+					 <input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-lgg btn-primary mr-1" formnovalidate>
+					 {#						<a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>#}
+					</div>
+				</div>
+				{# Render CSRF token etc .#}
+				<div style="display:none">
+					{{ form_rest(form) }}
+				</div>
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</div>
+</div>
+ {% endblock %}
 
 {% block contentInner %}
 	<div class="card-body">
 		<div class="card-columns">
-			<div class="card mb-20px">
-				<div class="card-body">
-					<div class="h5 mb-0">Képfeltöltés</div>
-					{{ form_start(form, { 'attr': {'class': ' ' }}) }}
-					<div class="form-group row mb-1 mt-3">
-						<div class="col-sm-12">
-							{{ form_widget(form.imageId, { 'attr': {'class': 'V--imageId' }}) }}
-							{{ form_errors(form.imageId) }}
-							<div id="v--imageUpload" class="d-flex justify-content-center align-items-center" style="border-radius: 6px; background-color: #f4f4f5; height:100px; width: 100%;">
-								<div class="spinner-border text-light" role="status"></div>
+			{% if images is defined %}
+				{% for image in images %}
+					<div class="card overflow-hidden">
+						<img class="card-img-top max-width-and-height" src="{{ uploaded_asset(image.path)|imagine_filter('unscaled_600') }}" />
+						<div class="position-absolute" style="top: 0; left: 0;">
+							<div class="alert-light p-1">
+								<small class="text-muted">ID: {{ image.id }}</small>
+							</div>
+						</div>
+						<div class="card-body">
+{#							<div class="form-inline mb-1">#}
+{#								<div class="form-group mr-1">#}
+{#									<label class="text-sm text-muted">100%</label>#}
+{#								</div>#}
+{#								<div class="form-group flex-grow-1 mr-1">#}
+{#									<input type="text" id="image_{{ loop.index }}" name="image_{{ loop.index }}" class="form-control w-100 form-control-sm" value="{{ image.url }}">#}
+{#								</div>#}
+{#								<div class="form-group">#}
+{#									<a href="{{ image.url }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>#}
+{#								</div>#}
+{#							</div>#}
+
+							<div class="form-inline mb-1">
+								<div class="form-group mr-1">
+									<label class="text-sm text-muted">Unscaled</label>
+								</div>
+								<div class="form-group flex-grow-1 mr-1">
+									<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control w-100 form-control-sm" value="{{ image.fileResource.getUnscaled }}">
+								</div>
+								<div class="form-group">
+									<a href="{{ image.fileResource.getUnscaled }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+								</div>
+							</div>
+
+							<div class="form-inline mb-1">
+								<div class="form-group mr-1">
+									<label class="text-sm text-muted">1920px</label>
+								</div>
+								<div class="form-group flex-grow-1 mr-1">
+									<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control w-100 form-control-sm" value="{{ image.fileResource.getUnscaled1920 }}">
+								</div>
+								<div class="form-group">
+									<a href="{{ image.fileResource.getUnscaled1920 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+								</div>
+							</div>
+
+							<div class="form-inline mb-1">
+								<div class="form-group mr-1">
+									<label class="text-sm text-muted">1024px</label>
+								</div>
+								<div class="form-group flex-grow-1 mr-1">
+									<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control w-100 form-control-sm" value="{{ image.fileResource.getUnscaled1024 }}">
+								</div>
+								<div class="form-group">
+									<a href="{{ image.fileResource.getUnscaled1024 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+								</div>
+							</div>
+
+							<div class="form-inline mb-1">
+								<div class="form-group mr-1">
+									<label class="text-sm text-muted">600px</label>
+								</div>
+								<div class="form-group flex-grow-1 mr-1">
+									<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control w-100 form-control-sm" value="{{ image.fileResource.getUnscaled600 }}">
+								</div>
+								<div class="form-group">
+									<a href="{{ image.fileResource.getUnscaled600 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+								</div>
+							</div>
+
+							<div class="form-inline mb-1">
+								<div class="form-group mr-1">
+									<label class="text-sm text-muted">200px</label>
+								</div>
+								<div class="form-group flex-grow-1 mr-1">
+									<input type="text" id="image_{{ loop.index }}" name="image_{{ loop.index }}" class="form-control w-100 form-control-sm" value="{{ image.fileResource.getUnscaled200 }}">
+								</div>
+								<div class="form-group">
+									<a href="{{ image.fileResource.getUnscaled200 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="form-group row mb-1 mb-0">
-						<div class="col-sm-12">
-							<input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-lgg btn-primary mr-1" formnovalidate>
-							{#						<a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>#}
-						</div>
-					</div>
-					{# Render CSRF token etc .#}
-					<div style="display:none">
-						{{ form_rest(form) }}
-					</div>
-					{{ form_end(form) }}
-				</div>
-			</div>
-
-			{% if images is defined %}
-				{% for image in images %}
-					<div class="card">
-						<img class="card-img-top max-width-and-height" src="{{ uploaded_asset(image.path)|imagine_filter('unscaled_600') }}" />
-						<div class="card-body">
-							<div class="card-text"><small class="text-muted">ID: {{ image.id }}</small></div>
-							<div class="row mt-2">
-									<div class="col-12 mb-2">
-										<p class="card-text mr-2"><small class="text-muted">URL:</small></p>
-									</div>
-									<div class="col-12">
-										<div class="form-group row mb-1">
-											<div class="col-3">
-												<label class="text-sm text-muted">100%</label>
-											</div>
-											<div class="col-7">
-												<input type="text" id="image_{{ loop.index }}" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.url }}">
-											</div>
-											<div class="col-2">
-												<a href="{{ image.url }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
-											</div>
-										</div>
-										<div class="form-group row mb-1">
-											<div class="col-3">
-												<label class="text-sm text-muted">1920px</label>
-											</div>
-											<div class="col-7">
-												<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.fileResource.getUnscaled1920 }}">
-											</div>
-											<div class="col-2">
-												<a href="{{ image.fileResource.getUnscaled1920 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
-											</div>
-										</div>
-										<div class="form-group row mb-1">
-											<div class="col-3">
-												<label class="text-sm text-muted">1024px</label>
-											</div>
-											<div class="col-7">
-												<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.fileResource.getUnscaled1024 }}">
-											</div>
-											<div class="col-2">
-												<a href="{{ image.fileResource.getUnscaled1024 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
-											</div>
-										</div>
-										<div class="form-group row mb-1">
-											<div class="col-3">
-												<label class="text-sm text-muted">600px</label>
-											</div>
-											<div class="col-7">
-												<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.fileResource.getUnscaled600 }}">
-											</div>
-											<div class="col-2">
-												<a href="{{ image.fileResource.getUnscaled600 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
-											</div>
-										</div>
-										<div class="form-group row mb-1">
-											<div class="col-3">
-												<label class="text-sm text-muted">200px</label>
-											</div>
-											<div class="col-7">
-												<input type="text" id="image_{{ loop.index }}_1" name="image_{{ loop.index }}" class="form-control form-control-sm" value="{{ image.fileResource.getUnscaled200 }}">
-											</div>
-											<div class="col-2">
-												<a href="{{ image.fileResource.getUnscaled200 }}" class="btn-link-secondary text-sm" target="_blank"><i class="fas fa-external-link-alt"></i></a>
-											</div>
-										</div>
-									</div>
-								</div>
-						</div>
-					</div>
 				{% endfor %}
-		{#	{% else %}#}
-		{#		<tr>#}
-		{#			<td><li><em>Nem talált CMS oldalakat!</em></li></td>#}
-		{#		</tr>#}
 			{% endif %}
 		</div>
 		{% if paginator is defined and paginator is not empty %}

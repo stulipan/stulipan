@@ -73,7 +73,6 @@ class ProductBadge implements JsonSerializable, TraducibleInterface
     public function __call($name, $arguments)
     {
         return $this->proxyCurrentLocaleTranslation($name, $arguments);
-//        return PropertyAccess::createPropertyAccessor()->getValue($this->translate(), $name);
     }
 
     /**
@@ -89,12 +88,22 @@ class ProductBadge implements JsonSerializable, TraducibleInterface
     }
     
     /**
-     * @return int
+     * @return int|null
      */
     public function getId(): ?int
     {
         return $this->id;
     }
+
+//    /**
+//     * @param int $id
+//     */
+//    public function setId(int $id): void
+//    {
+//        $this->id = $id;
+//    }
+
+
     
 //    /**
 //     * @return string

@@ -7,6 +7,7 @@
   background-color: $breadcrumb-bg;
   @include border-radius($breadcrumb-border-radius);
   font-size: $breadcrumb-font-size;
+  color: $breadcrumb-link-color; // Added by Stulipan
 
   & a {
     color: $breadcrumb-link-color;

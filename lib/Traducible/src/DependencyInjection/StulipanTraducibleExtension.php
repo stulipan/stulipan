@@ -11,9 +11,7 @@ class StulipanTraducibleExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-//        $configDir = __DIR__ . '/../Resources/config';
         $configDir = __DIR__ . '/../../config';
-//        dd($configDir);
         $loader = new YamlFileLoader($container, new FileLocator($configDir));
         $c = $loader->load('services.yml');
 
@@ -21,9 +19,18 @@ class StulipanTraducibleExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $definition = $container->getDefinition('stulipan.traducible');
-        $definition->setArgument(0, $config['unicorns_are_real']);
-        $definition->setArgument(1, $config['min_sunshine']);
-//        dd($container);
+//        $definition->setArgument(0, $config['unicorns_are_real']);
+//        $definition->setArgument(1, $config['min_sunshine']);
+//        $definition->setArgument(2, $config['default_content_locale']);
+
+        $container->setParameter('stulipan.traducible', $config);
+
+//        foreach ($config as $key => $conf) {
+//            $definition->setArgument($key, $conf);
+//        }
+
+//        dd($container->getParameter('stulipan.traducible'));
+//        dd($definition->getArguments());
     }
 
 //    public function getAlias()

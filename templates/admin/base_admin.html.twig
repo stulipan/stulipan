@@ -89,7 +89,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ path('smart-label-list') }}" class="{% if app.request.get('_route') == 'smart-label-list' %}active-subitem{% endif %}">
+                                        <a href="{{ path('badge-list') }}" class="{% if app.request.get('_route') == 'badge-list' %}active-subitem{% endif %}">
                                             <div class="s-icon">
                                                 <i class="fas fa-tags"></i>
                                             </div>
@@ -238,7 +238,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ path('cms-section-list') }}" class="{% if app.request.get('_route') == 'cms-page-list' %}active-subitem{% endif %}">
+                                        <a href="{{ path('cms-section-list') }}" class="{% if app.request.get('_route') == 'cms-section-list' %}active-subitem{% endif %}">
                                             <div class="s-icon">
                                                 <i class="far fa-file-code"></i>
                                             </div>
@@ -259,6 +259,14 @@
                                                 <i class="far fa-images"></i>
                                             </div>
                                             <div class="s-text">Képek</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('blog-article-list') }}" class="{% if app.request.get('_route') == 'blog-article-list' %}active-subitem{% endif %}">
+                                            <div class="s-icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <div class="s-text">{{ 'blog.articles'|trans }}</div>
                                         </a>
                                     </li>
                                 </ul>
@@ -290,7 +298,7 @@
     </nav>
 
     <div class="content-page p-0" style="overflow: hidden; min-height: 0; ">
-        {{ include('webshop/widgets/_navbar-impersonate-user.html.twig') }}
+        {% include 'webshop/widgets/_navbar-impersonate-user.html.twig' %}
     </div>
     <div class="content-page">
         <div class="content">

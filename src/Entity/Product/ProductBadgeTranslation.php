@@ -35,9 +35,17 @@ class ProductBadgeTranslation implements TranslationInterface
      * @Groups({"productView", "productList"})
      *
      * @ORM\Column(name="badge_name", type="string", length=100, nullable=false)
+     * @Assert\NotBlank()
      */
     private $name;
-    
+
+    /**
+     * @var string|null
+     * @Groups({"productView", "productList"})
+     *
+     * @ORM\Column(name="description", type="string", nullable=true)
+     */
+    private $description;
 
     /**
      * @return int|null
@@ -48,9 +56,9 @@ class ProductBadgeTranslation implements TranslationInterface
     }
     
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -68,5 +76,19 @@ class ProductBadgeTranslation implements TranslationInterface
         return $this->getName();
     }
 
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
 
+    /**
+     * @param string|null $description
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
 }

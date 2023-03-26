@@ -1,0 +1,145 @@
+{% extends 'webshop/site/template-general.html.twig' %}
+
+{% set pageTitle = article.title %}
+{% set breadcrumb = {
+    0: {
+        'url': path('homepage'),
+        'text': 'generic.home'|trans,
+    },
+    1: {
+        'url': path('site-page-show', { 'slug': article.slug }),
+        'text': article.title,
+    },
+} %}
+
+{% block bodyClass %}blog article{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% set contentDescription = article.content|raw|striptags %}
+    {% set contentDescription = contentDescription|length > 200 ? contentDescription|slice(0, 200) ~ '...' : contentDescription %}
+
+    <meta property="og:title" content="{{ article.title }} - {{ storeSettings.get('meta.title')}}">
+    <meta property="og:description" content="{{ contentDescription }}">
+{#    {% if product.coverImageAsset %}#}
+{#        <meta property="og:image" content="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('size_facebook') }}">#}
+{#        <meta property="og:image:width" content="1000" />#}
+{#        <meta property="og:image:height" content="1000" />#}
+{#    {% endif %}#}
+    <meta property="og:url" content="{{ url('site-article-show', {'blog': article.blog, 'slug': article.slug}) }}" />
+
+    <meta name="description" content="{{ contentDescription }}">
+    <link rel="canonical" href="{{ url('site-article-show', {'blog': article.blog, 'slug': article.slug}) }}" />
+{% endblock %}
+
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="row mt-5">
+        <div class="col-xl-11 col-md-12 mx-auto">
+            <div class="row">
+                <div class="col-12">
+                    <div class="article-title">
+                        <h1 class="title-border display-4">{{ article.title }}</h1>
+                    </div>
+                    <div class="">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a class="text-decoration-none" href="{{ path('site-article-list') }}" title="Cikkek: {{ article.blog.name }}">{{ article.blog }}</a>
+                                </li>
+                                {% if article.publishedAt is not empty %}
+                                    <li class="breadcrumb-item">
+                                        {{ article.publishedAt|localizedDateNice }}
+                                    </li>
+                                {% endif %}
+                                {% if article.author is not empty %}
+                                    <li class="breadcrumb-item" aria-current="page">
+                                        {{ 'blog.article.written-by'|trans({'{{ author }}' : article.author}) }}
+                                    </li>
+                                {% endif %}
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-8 col-md-7 col-sm-12 mx-auto">
+                    <div class="pr-0 pr-md-5">
+                        {% if article.imagePath is defined and article.imagePath is not empty %}
+                        <div class="article-body mt-4">
+                            <img class="img-fluid" src="{{ uploaded_asset(article.imagePath)|imagine_filter('unscaled') }}" alt="{{ article.title }}">
+                        </div>
+                        {% endif %}
+                        <div class="article-body pb-5 mt-4">
+                            {{ article.content|raw }}
+                        </div>
+
+                        <div class="article-share mb-4">
+                            <div>
+                                <ul class="list-group flex-row align-items-center">
+                                    {% set articleUrl = absolute_url(path('site-article-show', {'blog': article.blog.slug, 'slug': article.slug})) %}
+                                    <li class="list-group-item border-0 p-0 mr-3">
+                                        <h3 class="title-borderX mb-0">{{ 'generic.share'|trans }}</h3>
+                                    </li>
+                                    <li class="list-group-item border-0 p-0">
+                                        <a class="btn facebook" href="https://www.facebook.com/sharer.php?u={{ articleUrl }}" target="_blank" rel="noopener">
+                                            <svg class="icon">
+                                                <use xlink:href="#facebook"></use>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li class="list-group-item border-0 p-0">
+                                        <a class="btn pinterest" href="https://pinterest.com/pin/create/button/?url={{ articleUrl }}"  target="_blank" rel="noopener">
+                                            <svg class="icon">
+                                                <use xlink:href="#pinterest"></use>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li class="list-group-item border-0 p-0">
+                                        <a class="btn email" href="mailto:?body={{ articleUrl }}" target="_blank" rel="noopener">
+                                            <svg class="icon">
+                                                <use xlink:href="#envelope-fill"></use>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li class="list-group-item border-0 p-0">
+                                        <a class="btn linkedin" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ articleUrl }}" target="_blank" rel="noopener">
+                                            <svg class="icon">
+                                                <use xlink:href="#linkedin"></use>
+                                            </svg>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="article-author mb-4">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-5 col-sm-12">
+                    <div class="article-body mt-4">
+                        <h3>Ez itt egy sidebar</h3>
+                    </div>
+
+{#                    <div class="article-body mt-4">#}
+{#                        {{ article.seoDescription|raw }}#}
+{#                    </div>#}
+                    <div class="products-grid">
+                        {% include 'webshop/site/product-list-widget.html.twig' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block footerHighlights %}
+{% endblock %}
+

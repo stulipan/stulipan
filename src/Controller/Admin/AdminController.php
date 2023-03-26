@@ -5,23 +5,30 @@ namespace App\Controller\Admin;
 use App\Entity\Order;
 use App\Entity\OrderStatus;
 use App\Model\OrdersSummary;
-use App\Entity\PaymentMethod;
 use App\Entity\PaymentStatus;
-use App\Entity\ShippingMethod;
-use App\Form\ShippingFormType;
 use App\Services\HelperFunction;
-use DateTime;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Services\Localization;
+use Stulipan\Traducible\Builder\LocaleStorage;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/admin")
  */
 class AdminController extends AbstractController
 {
+    private $session;
+    private $localeStorage;
+    private $localization;
+
+    public function __construct(SessionInterface $session, LocaleStorage $localeStorage, Localization $localization)
+    {
+        $this->session = $session;
+        $this->localeStorage = $localeStorage;
+        $this->localization = $localization;
+    }
+
     /**
      * @Route("/", name="admin")
      */
@@ -93,5 +100,19 @@ class AdminController extends AbstractController
             'lastMonth' => $lastMonth,
             'lifetime' => $lifetime,
         ]);
+    }
+
+    /**
+     * @Route("/setContentLanguage/{language}", name="content-language")
+     */
+    public function setContentLanguage(string $language)
+    {
+        if (!$language) {
+            $this->addFlash('success', 'Nem történt nyelvi beállítás...!');
+        }
+
+//        dd($this->localization->isSupportedLocale($language));
+        $this->localeStorage->setContentLocale($language);
+        return $this->redirectToRoute('dashboard');
     }
 }

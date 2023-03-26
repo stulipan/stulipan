@@ -23,13 +23,14 @@ class StorePolicyController extends AbstractController
     {
         $rep = $this->getDoctrine()->getRepository(StorePolicy::class);
         $storePolicies = new StorePolicies(
-            $rep->findOneBy(['slug' => StorePolicy::SLUG_TERMS_AND_CONDITIONS]),
-            $rep->findOneBy(['slug' => StorePolicy::SLUG_PRIVACY_POLICY]),
-            $rep->findOneBy(['slug' => StorePolicy::SLUG_SHIPPING_INFORMATION]),
-            $rep->findOneBy(['slug' => StorePolicy::SLUG_RETURN_POLICY]),
-            $rep->findOneBy(['slug' => StorePolicy::SLUG_CONTACT_INFORMATION]),
-            $rep->findOneBy(['slug' => StorePolicy::SLUG_LEGAL_NOTICE])
+            $rep->findOneBy(['slug' => StorePolicy::SLUG_TERMS_AND_CONDITIONS] ) ?? new StorePolicy(),
+            $rep->findOneBy(['slug' => StorePolicy::SLUG_PRIVACY_POLICY] ) ?? new StorePolicy(),
+            $rep->findOneBy(['slug' => StorePolicy::SLUG_SHIPPING_INFORMATION] ) ?? new StorePolicy(),
+            $rep->findOneBy(['slug' => StorePolicy::SLUG_RETURN_POLICY] ) ?? new StorePolicy(),
+            $rep->findOneBy(['slug' => StorePolicy::SLUG_CONTACT_INFORMATION] ) ?? new StorePolicy(),
+            $rep->findOneBy(['slug' => StorePolicy::SLUG_LEGAL_NOTICE] ) ?? new StorePolicy()
         );
+
 
         $form = $this->createForm(StorePoliciesFormType::class, $storePolicies);
         $form->handleRequest($request);

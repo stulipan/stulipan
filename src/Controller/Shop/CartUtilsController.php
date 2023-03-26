@@ -97,6 +97,8 @@ class CartUtilsController extends AbstractController
 
     /**
      * Renders the dropdown cart. The items are retrieved from session
+     *
+     * @ Route("/cart/cartDetailsDropdown", name="cart-detailsDropdown", methods={"GET"})
      */
     public function cartDetailsDropdown()
     {
@@ -107,6 +109,7 @@ class CartUtilsController extends AbstractController
 
     /**
      * Renders the slider cart. The items are retrieved from session
+     * @ Route("/cart/showSidebarCart", name="cart-showSidebarCart", methods={"GET"})
      */
     public function showSidebarCart()
     {

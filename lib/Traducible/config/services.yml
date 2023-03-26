@@ -22,5 +22,6 @@ services:
 
    stulipan.traducible:
       class: 'Stulipan\Traducible\StulipanTraducibleBundle'
+      arguments: ['%stulipan.traducible%']
 
    Stulipan\Traducible\StulipanTraducibleBundle: '@stulipan.traducible'  # Why this line is needed? Explanation here: https://symfony.com/doc/current/service_container.html#explicitly-configuring-services-and-arguments

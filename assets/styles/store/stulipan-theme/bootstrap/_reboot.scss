@@ -52,7 +52,8 @@ body {
   line-height: $line-height-base;
   color: $body-color;
   text-align: left; // 3
-  background-color: $body-bg; // 2
+  background-color: $body-bg; //
+  letter-spacing: $letter-spacing; // Added by Stulipan
 }
 
 // Suppress the focus outline on elements that cannot be accessed via keyboard.

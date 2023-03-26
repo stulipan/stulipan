@@ -10,6 +10,7 @@ use App\Entity\GreetingCardMessageCategory;
 use App\Entity\DeliveryDateType;
 use App\Entity\DeliverySpecialDate;
 use App\Entity\Geo\GeoCountry;
+use App\Entity\Host;
 use App\Entity\Model\CustomerBasic;
 use App\Entity\Model\GeneratedDates;
 use App\Entity\Model\DeliveryDateWithIntervals;
@@ -155,6 +156,10 @@ class CheckoutController extends AbstractController
      */
     public function step1PickDeliveryAddress(SessionInterface $session, string $checkoutToken = null)
     {
+
+//        $host = $this->em->getRepository(Host::class)->findOneBy(['name' => 'stulipan.com']);
+//        dd($host);
+
 //        $cmf = $this->em->getMetadataFactory();
 //        $class = $cmf->getMetadataFor(Cart::class);
 ////        dd($class->fieldMappings);

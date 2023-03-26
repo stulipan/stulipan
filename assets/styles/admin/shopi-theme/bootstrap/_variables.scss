@@ -6,8 +6,8 @@
 // Color system
 
 $white:    #fff !default;
-$gray-100: #f0f3f5 !default;
-$gray-200: #e8eaec !default;  //e9ecef e4e5e7
+$gray-100: #f2f3f4 !default;  // #f0f3f5
+$gray-200: #ededed !default; // #e8eaec !default;  //e9ecef e4e5e7
 $gray-300: #dee2e6 !default;
 $gray-400: #c4cdd5 !default;  // border
 $gray-500: #adb5bd !default;
@@ -230,7 +230,7 @@ $sizes: map-merge(
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   #f6f6f7 !default;
+$body-bg:                   #ebebeb !default; //#f6f6f7
 $body-color:                $gray-900 !default;
 
 
@@ -953,7 +953,7 @@ $card-img-overlay-padding:          1.25rem !default;
 $card-group-margin:                 $grid-gutter-width / 2 !default;
 $card-deck-margin:                  $card-group-margin !default;
 
-$card-columns-count:                3 !default;
+$card-columns-count:                2 !default; //3 !default;
 $card-columns-gap:                  1.25rem !default;
 $card-columns-margin:               $card-spacer-y !default;
 

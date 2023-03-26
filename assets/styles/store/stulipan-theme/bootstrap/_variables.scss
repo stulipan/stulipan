@@ -7,7 +7,7 @@
 
 $white:    #fff !default;
 $gray-100: #f0f3f5 !default;
-$gray-200: #e8eaec !default; //#f6f6f9 !default; //e8eaec  //e9ecef  Javaslat: f6f6f9
+$gray-200: #e6e4e1 !default; // #e8eaec !default; //#f6f6f9 !default; //e9ecef  Javaslat: f6f6f9
 $gray-300: #E1E5E9 !default;  // new border !
 $gray-400: #c4cdd5 !default;  // ex-border
 $gray-500: #adb5bd !default;
@@ -239,7 +239,7 @@ $body-bg:                   $white !default;
 $body-bg-secondary:         #f6f6f7 !default;  // Added by Stulipan
 $body-color:                $gray-900 !default;
 
-$letter-spacing:            .05rem !default; //0.055rem !default;
+$letter-spacing:            -0.02rem !default; //0.05rem !default;
 
 // Links
 //
@@ -394,7 +394,7 @@ $headings-font-family:        null !default;
 $headings-font-weight:        600 !default; //600 !default;
 $headings-line-height:        1.3 !default;
 $headings-color:              null !default;
-$headings-letter-spacing:     0 !default; //.02rem !default; // Added by Stulipan
+$headings-letter-spacing:     -0.05rem !default; //.02rem !default; // Added by Stulipan
 
 $display1-size:               6rem !default;
 $display2-size:               5.5rem !default;
@@ -425,7 +425,7 @@ $blockquote-border-style:     solid !default;
 $blockquote-border-color:     $purple-gray !default;
 
 // Added by Stulipan
-$blockquote-font-family:      'Lora', serif !default;
+$blockquote-font-family:      'Georgia', serif !default;
 $blockquote-bg:               $gray-100 !default;
 $blockquote-line-height:      $line-height-base * 1.25 !default;
 
@@ -537,7 +537,7 @@ $btn-line-height-lg:          $input-btn-line-height-lg !default;
 $btn-border-width:            $input-btn-border-width !default;
 
 $btn-font-weight:             $font-weight-base !default; // $font-weight-bold !default;
-$btn-text-transform:          uppercase !default;
+$btn-text-transform:          uppercase !default;  // Added by Stulipan
 $btn-letter-spacing:          .075rem !default; //$letter-spacing !default;
 $btn-box-shadow:              inset 0 1px 0 0 rgba($gray-300, .15) !default; //, 0 1px 1px rgba($black, .075) !default;
 $btn-focus-width:             $input-btn-focus-width !default;
@@ -1196,7 +1196,8 @@ $thumbnail-box-shadow:              none !default;
 // Figures
 
 $figure-caption-font-size:          90% !default;
-$figure-caption-color:              $gray-600 !default;
+$figure-caption-color:              $gray-800 !default;
+$figure-caption-margin-y:           $paragraph-margin-bottom !default;
 
 
 // Breadcrumbs

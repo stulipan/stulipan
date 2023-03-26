@@ -15,6 +15,10 @@ final class Localization
         'hu' => 'Y-m-d',
         'en' => 'm/d/Y',
     ];
+    public const DATE_FORMAT_NICE_DEFAULT = [
+        'hu' => 'Y. F j.',
+        'en' => 'F j, Y',
+    ];
     public const TIME_FORMAT_DEFAULT = [
         'hu' => 'H:i',
         'en' => 'H:i',
@@ -31,10 +35,12 @@ final class Localization
     private $session;
 
     private $defaultLocale;
+    private $supportedLocales;
 
-    public function __construct(StoreSettings $settings, SessionInterface $session, $defaultLocale)
+    public function __construct(StoreSettings $settings, SessionInterface $session, $defaultLocale, $supportedLocales)
     {
         $this->session = $session;
+        $this->supportedLocales = $supportedLocales;
 
         $this->locales = new ArrayCollection();
         $this->locales->add(new Locale(
@@ -44,6 +50,7 @@ final class Localization
             'HUF',
             'Ft',
             $settings->getDateFormat() ?: self::DATE_FORMAT_DEFAULT['hu'],
+            self::DATE_FORMAT_NICE_DEFAULT['hu'],
             $settings->getTimeFormat() ?: self::TIME_FORMAT_DEFAULT['hu'],
         ));
         $this->locales->add(new Locale(
@@ -51,8 +58,9 @@ final class Localization
             'English',
             'Euro',
             'EUR',
-            'HUF',
+            'EUR',
             $settings->getDateFormat() ?: self::DATE_FORMAT_DEFAULT['en'],
+            self::DATE_FORMAT_NICE_DEFAULT['en'],
             $settings->getTimeFormat() ?: self::TIME_FORMAT_DEFAULT['en'],
         ));
 
@@ -102,5 +110,22 @@ final class Localization
             throw new Exception('HIBA: Localization class-ban >> a getCurrentLocale() nem dobott találatot!');
         }
         return $this->locales->matching($criteria)->first();
+    }
+
+    public function getSupportedLocales(): ?array
+    {
+        if (is_array($this->supportedLocales) && !empty($this->supportedLocales)) {
+            return $this->supportedLocales;
+        }
+
+        return null;
+    }
+
+    public function isSupportedLocale(string $locale)
+    {
+        if (in_array($locale, $this->getSupportedLocales(), true)) {
+            return true;
+        }
+        return false;
     }
 }

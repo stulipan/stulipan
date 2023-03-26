@@ -21,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
-use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Pagination\PaginatedCollection;
@@ -95,11 +94,11 @@ class BoltzarasController extends AbstractController
 
         // handleRequest only handles data on POST
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $boltzaras = $form->getData();
             $boltzaras->setModositasIdopontja();
-         	
+
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($boltzaras);
 			$em->flush();
@@ -132,7 +131,7 @@ class BoltzarasController extends AbstractController
 
 			return $this->redirectToRoute('boltzaras_list');
         }
-        
+
         return $this->render('admin/boltzaras/boltzaras_edit.html.twig', [
             'form' => $form->createView(),
             'title' => 'Boltzárás adatainak módosítása',

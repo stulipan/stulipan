@@ -132,6 +132,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFilter('browser', [$this, 'formatBrowserInfo']),
             new TwigFilter('timeAgo', [$this, 'formatTimeAgo']),
             new TwigFilter('localizedDate', [$this, 'formatLocalizedDate']),
+            new TwigFilter('localizedDateNice', [$this, 'formatLocalizedDateNice']),
             new TwigFilter('localizedTime', [$this, 'formatLocalizedTime']),
             new TwigFilter('rawDateTime', [$this, 'formatRawDateTime']),
             new TwigFilter('money', [$this, 'formatMoney']),
@@ -419,9 +420,14 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function formatLocalizedDate($dateTime, string $format=null)
     {
+        if($dateTime === null) {
+            return null;
+        }
+
         if ($format == null || $format == '') {
             $format = $this->locale->getDateFormat();
         }
+
         $shortMonths = [
             'jan' => $this->translator->trans('datetime.jan'),
             'feb' => $this->translator->trans('datetime.feb'),
@@ -492,6 +498,11 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             }
         }
         return $dateTime;
+    }
+
+    public function formatLocalizedDateNice($dateTime, string $format=null)
+    {
+        return $this->formatLocalizedDate($dateTime, $this->locale->getDateFormatNice());
     }
 
     public function formatLocalizedTime($dateTime, string $format=null)

@@ -77,7 +77,7 @@ security:
 
         admin:
             #            pattern: ^/(hu|en)/admin           # ez is mukodik, vagy altalanosabb az also sor
-            pattern: ^/%app_locales%/admin      #app_locales come from services.yaml
+            pattern: (^/%app_locales%/admin|^/admin)      #app_locales come from services.yaml
             provider: admin_user_provider_from_sajat_db
             anonymous: true
             guard:
@@ -192,6 +192,7 @@ security:
             ROLE_MANAGE_VAT,
             ROLE_MANAGE_SETTINGS,
             ROLE_MANAGE_CMS,
+            ROLE_MANAGE_BLOG,
             ROLE_MANAGE_TRANSLATION,
             ROLE_MANAGE_STORE_POLICY,
             ROLE_MANAGE_STORE_NOTIFICATIONS

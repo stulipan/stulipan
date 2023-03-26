@@ -1,10 +1,13 @@
 {
-    "name": "djpiticu/stulipan",
+    "name": "stulipan/stulipan",
     "license": "proprietary",
     "type": "project",
     "description": "Stulipan Shop Application",
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "repositories": [
+            {"type": "path", "url":  "../addons/CookieConsentBundle"}
+        ],
     "require": {
         "php": "^7.1.3",
         "ext-iconv": "*",
@@ -45,14 +48,14 @@
         "symfony/security-http": "^5.2",
         "symfony/sendgrid-mailer": "5.2.*",
         "symfony/serializer": "5.2.*",
-        "symfony/swiftmailer-bundle": "^3.1",
         "symfony/twig-bundle": "^5.2",
         "symfony/uid": "5.2.*",
         "symfony/validator": "^5.2",
         "symfony/web-link": "^5.2",
         "symfony/webpack-encore-bundle": "^1.11",
         "symfony/yaml": "^5.2",
-        "symfonycasts/reset-password-bundle": "^1.7"
+        "symfonycasts/reset-password-bundle": "^1.7",
+        "stulipan/cookie-consent-bundle": "dev-master"
     },
     "require-dev": {
         "symfony/browser-kit": "^5.2",

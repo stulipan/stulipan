@@ -41,9 +41,6 @@ class CmsPageFormType extends AbstractType
         $queryBuilder->orderBy('p.name', 'ASC');
         
         $builder
-            ->add('id',HiddenType::class,[
-            
-            ])
             ->add('name', null,[
                 'label' => 'Oldal neve',
             ])

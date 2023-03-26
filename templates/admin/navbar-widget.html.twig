@@ -38,5 +38,22 @@
                 <span class="navbar-toggler-icon"><i class="fas fa-cog"></i></span>
             </a>
         </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link" id="langDropdown" data-toggle="dropdown" data-display="static" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <div class="nav-user">
+                    <span class="navbar-toggler-icon"><i class="fas fa-globe"></i></span>
+                </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-transition dropdown-menu-topbar mt-2" aria-labelledby="userDropdown">
+                <a href="{{ path('content-language', {'language': 'hu'}) }}" class="dropdown-item">
+                    {#                    <img src="{{ asset('/webshop/site/flags/4x3/hu.svg') }}" alt="magyar" class="topbar-flag">#}
+                    Magyar
+                </a>
+                <a href="{{ path('content-language', {'language': 'en'}) }}" class="dropdown-item">
+                    {#                    <img src="{{ asset('/webshop/site/flags/4x3/gb.svg') }}" alt="english" class="topbar-flag">#}
+                    English
+                </a>
+            </div>
+        </li>
     </ul>
 </div>

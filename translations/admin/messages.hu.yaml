@@ -47,6 +47,36 @@ page:
     slug-is-missing: 'A slug nem lehet üres. Pl: ''szuletesnapi-kellekek'''
     slug-already-in-use: 'Ez már használatban van. Megoldás:  tegyél egy ''-1'' a végére.'
     duplicate-page: Másolat készítése
+blog:
+    blogs: Blogok kezelése
+    blog: Blog
+    new-blog: Új blog
+    name: Blog neve
+    articles: Cikkek
+    new-article: Új cikk
+    articles-not-found: Még nincs egy cikk sem megírva!
+    articles-not-found-suggestion: 'Próbáld módosítani a szűrőket.'
+    article:
+        title: Cím
+        content: Tartalom
+        excerpt: Kivonat
+        excerpt-help: Adj hozzá egy összefoglalót. Ez fog megjelenni a kezdőlapon vagy a blogoldalon.
+        image: Kép
+        slug: 'URL slug'
+        slug-help: 'Ne használj ékezeteket, pl: ''szepseg-es-kozmetika''. Ez az adott kategória URL-jében lesz látható: ''www.example.com/termekek/szepseg-es-kozmetika'''
+        enabled: Engedélyezve
+        author: Szerző
+        published-at: 'Publikálva:'
+        last-edited-at: 'Utoljára szerkesztve:'
+        written-by: 'Szerző: {{ author }}'
+        created-successfully: 'Cikk sikeresen elmentve.'
+        updated-successfully: 'Cikk sikeresen frissítve.'
+        title-is-missing: 'Adj egy címet a cikknek.'
+        slug-is-missing: 'A slug nem lehet üres. Pl: ''ez-itt-egy-cikk'''
+        slug-already-in-use: 'Ez már használatban van. Megoldás:  tegyél egy ''-1'' a végére.'
+        duplicate-article: Másolat készítése
+        duplicated-successfully: 'Cikk sikeresen duplikálva.'
+        duplication-failed: 'Hiba történt a másoláskor: {{ message }}'
 order:
     orders: Rendelések
     abandoned-orders: Elhagyott kosarak
@@ -386,6 +416,7 @@ generic:
     changes-saved: 'Módosítások elmentve'
     cancel: Mégse
     close: Bezár
+    draft: Piszkozat
     more-actions: Műveletek
     more: További
     ok: OK
@@ -401,4 +432,9 @@ generic:
     sort: Sorrend
     classname: Class
     send: Elküld
+    share: Megosztás
     entries-being-shown: 'Találatok száma:'
+    seo-title: SEO-cím
+    seo-description: SEO-leírás
+    seo-title-is-missing: 'SEO-cím hiányzik!'
+

@@ -110,7 +110,7 @@ class CmsNavigation
         $this->name = $name;
     }
 
-    public function __toString(): ?string
+    public function __toString(): string
     {
         return $this->getName();
     }
@@ -130,7 +130,7 @@ class CmsNavigation
     {
         $this->slug = $slug;
     }
-    
+
     /**
      * @return bool
      */
@@ -178,11 +178,11 @@ class CmsNavigation
     }
 
     /**
-     * @param CmsSection $item
+     * @param CmsNavigationItem $item
      */
     public function removeNavigationItem(CmsNavigationItem $item)
     {
-        $item->setPage(null);
+        $item->setNavigation(null);
         $this->navigationItems->removeElement($item);
     }
 

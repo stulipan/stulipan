@@ -36,9 +36,9 @@
                             'placeholder': 'Idősávcsoport neve'
                         }}) }}
                         {{ form_errors(form.name) }}
-                        <span class="form-text text-muted">
+                        <small class="form-text text-muted">
                             A dátumtípus neve. Pl: <em>Március 8, Nőnap</em>
-                        </span>
+                        </small>
                     </div>
                 </div>
 
@@ -64,11 +64,11 @@
                             </div>
                                 {{ form_errors(form.intervals) }}
                                 <a href="" class="JS--Button-addNewInterval btn btn-secondary mb-2"><i class="fas fa-plus mr-2"></i> Új idősáv beszúrása</a>
-                                <span class="form-text text-muted">
+                                <small class="form-text text-muted">
                                     Az idősávokat így nevezd el: <em>08-12, 12-18, 16-20</em> <br>
                                     Az utolsó oszlopba írd be az egyes sávok sorrendjét, így: <em>1, 2, stb.</em>
                                     {#Szabd meg, hány szállítást tudsz válalni ebben az idősávban.#}
-                                </span>
+                                </small>
                             {% endif %}
                         </div>
                     </div>

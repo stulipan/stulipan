@@ -71,7 +71,7 @@ class StorePolicy
     {
         return $this->id;
     }
-    
+
 //    /**
 //     * The setId is required for the Serializer/Normalizer to be able to create
 //     * the subentities, and it must return the current entity !!
@@ -84,7 +84,7 @@ class StorePolicy
         $this->id = $id;
         return $this;
     }
-    
+
     /**
      * @return string|null
      */
@@ -100,11 +100,11 @@ class StorePolicy
         $this->name = $name;
     }
 
-//    public function __toString(): ?string
+//    public function __toString(): string
 //    {
 //        return $this->getName();
 //    }
-    
+
     /**
      * @return string
      */
@@ -112,7 +112,7 @@ class StorePolicy
     {
         return $this->slug;
     }
-    
+
     /**
      * @param string $slug
      */
@@ -120,7 +120,7 @@ class StorePolicy
     {
         $this->slug = $slug;
     }
-    
+
     /**
      * @return string|null
      */

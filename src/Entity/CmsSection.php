@@ -55,7 +55,7 @@ class CmsSection
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
     private $description;
-    
+
     /**
      * @var bool
      * @Groups({
@@ -117,7 +117,7 @@ class CmsSection
         $this->id = $id;
         return $this;
     }
-    
+
     /**
      * @return string|null
      */
@@ -134,7 +134,7 @@ class CmsSection
         $this->name = $name;
     }
 
-    public function __toString(): ?string
+    public function __toString(): string
     {
         return $this->getName();
     }
@@ -154,7 +154,7 @@ class CmsSection
     {
         $this->slug = $slug;
     }
-    
+
     /**
      * @return string|null
      */

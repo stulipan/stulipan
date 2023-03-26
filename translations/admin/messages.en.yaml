@@ -72,6 +72,36 @@ page:
     slug-is-missing: 'The slug can''t be empty. Slug example: ''beauty-and-cosmetics'''
     slug-already-in-use: 'Slug already in use. The slug must be unique. Possible solution: Add a ''-1'' to the end.'
     duplicate-page: Duplicate page
+blog:
+    blogs: Manage blogs
+    new-blog: New blog
+    blog: Blog
+    name: Name
+    articles: Articles
+    new-article: New article
+    articles-not-found: No article written yet!
+    articles-not-found-suggestion: 'Try modifying filters.'
+    article:
+        title: Title
+        content: Content
+        excerpt: Excerpt
+        excerpt-help: Add a summary of the post to appear on your home page or blog.
+        image: Image
+        slug: Slug
+        slug-help: 'Eg.: ''beauty-and-cosmetics''. This will be visible in the collection''s URL like this: www.example.com/collection/szepseg-es-kozmetika'
+        enabled: Enabled
+        author: Author
+        published-at: 'Published at:'
+        last-edited-at: 'Last edited:'
+        written-by: 'Written by {{ author }}'
+        created-successfully: 'Article successfully saved.'
+        updated-successfully: 'Article successfully updated.'
+        title-is-missing: 'Enter the title.'
+        slug-is-missing: 'The slug can''t be empty. Slug example: ''this-is-an-article'''
+        slug-already-in-use: 'Slug already in use. The slug must be unique. Possible solution: Add a ''-1'' to the end.'
+        duplicate-article: Duplicate article
+        duplicated-successfully: 'Article successfully duplicated.'
+        duplication-failed: 'An error occurred: {{ message }}'
 order:
     orders: Orders
     abandoned-orders: Abandoned orders
@@ -412,13 +442,14 @@ generic:
     preview: Preview
     export: Export
     export-button: Export
-    view: Page
+    view: View
     open: Open
     save: Save
     save-changes: Save changes
     changes-saved: Changes saved
     cancel: Cancel
     close: Close
+    draft: Draft
     more-actions: More actions
     more: More
     ok: OK
@@ -434,5 +465,9 @@ generic:
     sort: Sort
     classname: Class
     send: Send
+    share: Share
     entries-being-shown: 'Showing results:'
+    seo-title: SEO title
+    seo-description: SEO description
+    seo-title-is-missing: 'SEO title is missing!'
 

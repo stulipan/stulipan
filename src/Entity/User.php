@@ -272,7 +272,7 @@ class User implements UserInterface, Serializable
     public function isVerifiedEmail(): bool
     {
 //        return 1 !== $this->verifiedEmail ? false : true;
-        return null === $this->verifiedEmail ? false : $this->enabled;
+        return null === $this->verifiedEmail ? false : $this->verifiedEmail;
     }
 
     /**

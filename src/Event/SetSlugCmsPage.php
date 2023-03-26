@@ -6,7 +6,6 @@ namespace App\Event;
 
 use App\Entity\CmsPage;
 use App\Services\SlugBuilder;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

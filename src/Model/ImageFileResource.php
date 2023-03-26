@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Entity\ImageEntity;
 use Error;
 
+/**
+ * This class creates properties like unscaled200, unscaled600, size600, sizeFacebook, productSmall, productMedium, etc.
+ */
 class ImageFileResource
 {
+    /**
+     * @var array
+     */
     private $data;
 
     public function createProperty(string $propertyName, $val){
@@ -35,6 +40,7 @@ class ImageFileResource
         $this->__get($property);
     }
 
+    // Eg: whenever I use a method like 'getUnscaled200()', the __call method bellow is called where $name parameter is 'getUnscaled200'
     public function __call($name, $args)
     {
         $property = lcfirst(substr($name, 3));

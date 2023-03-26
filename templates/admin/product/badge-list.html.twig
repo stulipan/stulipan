@@ -1,0 +1,106 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set activeMenu = 'products' %}
+{% set pageTitle = 'badge.badges'|trans %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+} %}
+
+{% block headerActionsWrapper %}
+{#	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">#}
+{#		<ul class="nav nav-tabs adaptive-primary">#}
+{#			<li class="nav-item adaptive-item">#}
+{#				<a href="{{ path('product-download-csv') }}" class="nav-link"><i class="fas fa-file-csv mr-2"></i> Facebook CSV</a>#}
+{#			</li>#}
+{#		</ul>#}
+{#		<ul class="adaptive-template">#}
+{#			<li class="nav-item adaptive-item adaptive-more">#}
+{#				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">#}
+{#					<span>{{ 'generic.more-actions'|trans }}</span>#}
+{#				</a>#}
+{#				<ul class="adaptive-secondary">#}
+{#				</ul>#}
+{#			</li>#}
+{#		</ul>#}
+{#	</nav>#}
+{#	<a href="{{ path('product-new') }}" class="btn btn-primary">{{ 'product.new-product'|trans }}</a>#}
+{#	<a href="{{ path('collection-list') }}" class="btn btn-secondary ml-2">{{ 'collection.collections'|trans }}</a>#}
+{% endblock %}
+
+{% block contentFilter %}
+{#	<div class="card-body">#}
+{#		<nav class="adaptive-tabs">#}
+{#			{% set len = 0 %}#}
+{#			{% for quickLink in filterQuickLinks %}#}
+{#				{% set len = len +  quickLink['name']|length %}#}
+{#			{% endfor %}#}
+{#			{% set len = len + 10 %}#}
+{#			<ul class="nav nav-tabs adaptive-primary vertical-form-rowX" style="--nav-tabs-width: {{ len }}ch">#}
+{#				{% for quickLink in filterQuickLinks %}#}
+{#					<li class="nav-item adaptive-item">#}
+{#						<div class="vertical-colX">#}
+{#							<div class="">#}
+{#								#}{#												<span class="badge-quantity bg-white">{{ quickLink['itemCount'] }}</span>#}
+{#								<a href="{{ quickLink['url'] }}" class="nav-link {% if quickLink['active'] is defined and quickLink['active'] %}active{% endif %}">#}
+{#									<span class="d-flex justify-content-between align-items-center">#}
+{#										<span class="d-flex">{{ quickLink['name'] }}</span>#}
+{#										<span class="d-flex ml-2 badge badge-light">{{ quickLink['itemCount'] }}</span>#}
+{#									</span>#}
+{#								</a>#}
+{#							</div>#}
+{#						</div>#}
+{#					</li>#}
+{#				{% endfor %}#}
+{#			</ul>#}
+{#			<ul class="adaptive-template">#}
+{#				<li class="nav-item adaptive-item adaptive-more">#}
+{#					<button type="button" class="adaptive-button nav-link btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">#}
+{#						#}{#											<i class="fas fa-ellipsis-h"></i>#}
+{#						{{ 'generic.more'|trans }}#}
+{#					</button>#}
+{#					<ul class="adaptive-secondary">#}
+{#					</ul>#}
+{#				</li>#}
+{#			</ul>#}
+{#		</nav>#}
+{#	</div>#}
+{% endblock %}
+
+{% block tableHeader %}
+	{% if badges is defined and badges is not empty %}
+		<tr>
+			<th scope="col" class="">Név</th>
+			<th scope="col">Ikon/megjelenés</th>
+		</tr>
+	{% endif %}
+{% endblock %}
+
+{% block tableBody %}
+	{% if badges is defined and badges is not empty %}
+		{% for badge in badges %}
+			<tr>
+				<td class="align-middle">
+					<a href="{{ path('badge-edit', {'id': badge.id}) }}">{{ badge.name }}</a>
+				</td>
+				<td class="align-middle text-left">
+					{{ badge.css }}
+				</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+{% endblock %}
+
+{% block tableEmpty %}
+	{% if badges is defined and badges is empty %}
+		<div class="h-100 text-center p-4">
+			<div class="h1 text-muted-extra">
+				<i class="fas fa-boxes"></i>
+			</div>
+			<div class="font-18 mt-3 mb-2">Nem talált matricákat!</div>
+{#			<div class="text-muted-extra">Próbáld módosítani a szűrőket.</div>#}
+		</div>
+	{% endif %}
+{% endblock %}

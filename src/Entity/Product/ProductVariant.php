@@ -24,7 +24,7 @@ class ProductVariant //implements \JsonSerializable
      * @var int
      * @Groups({"productView", "productList"})
      *
-     * @ORM\Column(name="id", type="integer", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -81,13 +81,13 @@ class ProductVariant //implements \JsonSerializable
     private $product;
 
     /**
-     * @var int|null
+     * @var int
      * @Groups({"productView", "productList"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="position", nullable=true, options={"default"="100"})
+     * @ORM\Column(name="position", type="smallint", nullable=false, options={"default"=100, "unsigned"=true})
      */
-    private $position = null;
+    private $position;
 
     /**
      * @var Price|null
@@ -97,7 +97,6 @@ class ProductVariant //implements \JsonSerializable
      * @ORM\JoinColumn(name="price_id", referencedColumnName="id", nullable=false)
      * @Assert\Type(type="App\Entity\Price")
      * @Assert\Valid
-     * @ Assert\NotNull(message="Adj árat a terméknek.")
      */
     private $price;
 
@@ -106,7 +105,7 @@ class ProductVariant //implements \JsonSerializable
      * @Groups({"productView", "productList"})
      *
      * @ORM\OneToOne(targetEntity="App\Entity\Product\ProductImage", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=true)
      * @ Assert\Type(type="App\Entity\Price")
      * @Assert\Valid
      */

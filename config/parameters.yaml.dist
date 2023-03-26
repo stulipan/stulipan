@@ -1,8 +1,6 @@
 parameters:
     database_host: localhost
     database_port: null
-    database_name: LOCALHOST_stulipan_dfr
-    database_user: liviu
-    database_password: Sssl9000
-
-    jwt_key_pass_phrase: ssl9000
+    database_name: null
+    database_user: user
+    database_password: pwd

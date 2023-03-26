@@ -7,31 +7,189 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="robots" content="noindex, nofollow">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
-    <title>{% block title %}{{ storeSettings.get('meta.title') }} | {{ storeSettings.get('meta.name') }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index, follow">
+    <title>{% block title %}{% if pageTitle is defined and pageTitle is not empty %}{{ pageTitle }} | {% endif %} {{ storeSettings.get('meta.name') }}{% endblock %}</title>
 
     {% block stylesheets %}
-        <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" >
-        <link href="{{ asset('webshop/site/fonts/hkgrotesk/stylesheet.css') }}" rel="stylesheet" >
-        <link href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}" rel="stylesheet" >
+{#        <!-- 48×48 -->#}
+        <link rel="shortcut icon" href="{{ storeFavicon }}" type="image/png">
+        {#        <link rel="icon" href="{{ asset('webshop/site/favicon/icon.svg')}}" type="image/svg+xml">#}
+{#        <!-- 180×180 -->#}
+        <link rel="apple-touch-icon" href="{{ storeSettings.get('store.apple-touch-icon') }}">
+        <link rel="manifest" href="{{ asset('webshop/site/favicon/manifest.webmanifest')}}">
+
+        <style>
+            {% include 'webshop/_css/fonts.html.twig' %}
+
+            :root {
+                --blue: #9cdbf1;
+                --blue-lighten: #ebf6fd;
+                --blue-dark: #0070be;
+                --indigo: #6610f2;
+                --purple: #876ebd;
+                --purple-lighten: #d1bff8;
+                --pink: #e83e8c;
+                --red: #dc3545;
+                --red-lighten: #ffc8c9;
+                --orange: #fd7e14;
+                --yellow: #fff0ca;
+                --yellow-lighten: #f4eddd;
+                --green: #41aa9e;
+                --green-lighten: #bbe5b3;
+                --teal: #20c997;
+                --cyan: #469ab9;
+                --white: #fff;
+                --peach: #ffedee;
+                --purple-gray: #5b6377;
+                --purple-gray-dark: #404756;
+                --gray-eee: #eee;
+                --gray: #6d7175;
+                --gray-dark: #343a40;
+                --body-color: #121519;
+                --primary: #3c3c3c;
+                --secondary: #eee;
+                --success: #41aa9e;
+                --info: #876ebd;
+                --warning: #fff0ca;
+                --danger: #dc3545;
+                --light: #e1e5e9;
+                --dark: #343a40;
+                --breakpoint-xs: 0;
+                --breakpoint-sm: 576px;
+                --breakpoint-md: 768px;
+                --breakpoint-lg: 992px;
+                --breakpoint-xl: 1200px;
+                --breakpoint-xxl: 1360px;
+                --font-family-sans-serif: "HK Grotesk", Roboto, Arial, sans-serif;
+                --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            }
+            *,
+            :after,
+            :before {
+                box-sizing: border-box;
+            }
+            html {
+                font-family: sans-serif;
+                line-height: 1.15;
+                -webkit-text-size-adjust: 100%;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            }
+            article,
+            aside,
+            figcaption,
+            figure,
+            footer,
+            header,
+            hgroup,
+            main,
+            nav,
+            section {
+                display: block;
+            }
+            body {
+                margin: 0;
+                font-family: HK Grotesk, Roboto, Arial, sans-serif;
+                font-display: auto;
+                font-size: 0.9375rem;
+                font-weight: 400;
+                line-height: 1.35;
+                color: #121519;
+                text-align: left;
+                background-color: #fff;
+            }
+        </style>
+        <style>
+            @media (max-width: 767.98px) {
+                .col-form-label,
+                .dropdown-menu,
+                .h5,
+                .h6,
+                .list-group-item,
+                body,
+                h5,
+                h6 {
+                    font-size: 1rem;
+                    line-height: 1.4;
+                }
+                .collapse-arrow-show:after,
+                .svg-icon:not(.svg-icon-md):not(.svg-icon-lg) {
+                    --font-size: 1rem;
+                    --line-height: 1.4rem;
+                }
+                .btn,
+                .form-control,
+                .input-float .form-control {
+                    font-size: 1rem;
+                    line-height: 1.4;
+                }
+                .form-control {
+                    height: calc(1.4em + 1rem + 2px);
+                }
+                .btn {
+                    padding-left: 0.75rem !important;
+                    padding-right: 0.75rem !important;
+                }
+                .btn-sm,
+                .checkout-summary,
+                .progress--bar,
+                .text-sm,
+                small {
+                    font-size: 0.875rem;
+                    line-height: 1.25;
+                }
+                .form-control-sm {
+                    height: calc(1.2em + 0.75rem + 2px);
+                }
+            }
+            @media (max-width: 767.98px) {
+                .container {
+                    padding-right: 1rem;
+                    padding-left: 1rem;
+                }
+                .row {
+                    margin-right: -1rem;
+                    margin-left: -1rem;
+                }
+                .row > .col,
+                .row > [class*="col-"] {
+                    padding-right: 1rem;
+                    padding-left: 1rem;
+                }
+                .row-narrow {
+                    margin-right: -0.5rem;
+                    margin-left: -0.5rem;
+                }
+                .row-narrow > .col,
+                .row-narrow > [class*="col-"] {
+                    padding-right: 0.5rem;
+                    padding-left: 0.5rem;
+                }
+            }
+        </style>
 
         {{ encore_entry_link_tags('store-theme') }}
-        {{ encore_entry_link_tags('app') }}
-        {{ encore_entry_link_tags('app-style') }}
 
-        <link href="{{ asset('webshop/site/v-style.css') }}" rel="stylesheet" />
-
-        <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/assets/owl.carousel.css" rel="stylesheet" >
-        <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >
+{#      <!-- Media type (print) doesn't match the current environment, so browser decides it's not that important#}
+{#      and loads the stylesheet asynchronously (without delaying page rendering). On load, we change media type#}
+{#      so that the stylesheet gets applied to screens. -->#}
+        <link rel="stylesheet" href="{{ asset('build/store-plugins.css') }}" media="print" onload="this.media='all'">
+{#    <!-- Fallback that only gets inserted when JavaScript is disabled, in which case we can't load CSS asynchronously. -->#}
+        <noscript><link rel="stylesheet" href="{{ asset('build/store-plugins.css') }}" media="all" type="text/css"></noscript>
 
 {#        JS scripts with defer                 #}
-        {{ encore_entry_script_tags('app') }}
+{#        {{ encore_entry_script_tags('store-app') }}#}
     {% endblock %}
+
+    {% block trackingCodes %}
+    {% include 'webshop/widgets/tracking-codes.html.twig' %}
+    {% endblock %}
+
+    <style>
+{#        {% include 'webshop/_css/css.html.twig' %}#}
+
+
+    </style>
 </head>
 
 <body class="{% block bodyClass %}{% endblock %}">
@@ -48,11 +206,15 @@
 {#</div>#}
 
 {% block body %}
+    {% block trackingCodesBody %}
+        {% include 'webshop/widgets/tracking-codes-body.html.twig' %}
+    {% endblock %}
+
 {% endblock %}
 
 
 {% block javascripts %}
-    <script>
+    <script async>
         // ------------------------------------------------------- //
         //   Inject SVG Sprite -
         //   see more here
@@ -70,101 +232,23 @@
                 document.body.insertBefore(div, document.body.childNodes[0]);
             }
         }
-        injectSvgSprite('{{ asset('webshop/site/orion-svg-sprite.svg') }}');
-
+        injectSvgSprite('{{ asset('webshop/site/icons-sprite.svg') }}');
     </script>
+
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel/owl.carousel.js"></script>
-    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>
-    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/smooth-scroll/smooth-scroll.polyfills.min.js"></script>
-    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>
-
-    {{ encore_entry_script_tags('sidebar') }}
-    {{ encore_entry_script_tags('floating-input') }}
-
     <script src="{{ asset('webshop/lodash.core.min.js') }}"></script>
-
-    <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
-    <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
     <script src="{{ asset('webshop/validate.min.js') }}"></script>
 
-    {% include('webshop/cart/_cart-and-checkout-localization.html.twig') %}
-    <script>
-        // Innen: https://momentjs.com/docs/#/i18n/
-        moment.locale("{{ app.request.locale }}", {
-            monthsShort : [
-                "{{ 'datetime.jan'|trans }}",
-                "{{ 'datetime.feb'|trans }}",
-                "{{ 'datetime.mar'|trans }}",
-                "{{ 'datetime.apr'|trans }}",
-                "{{ 'datetime.may'|trans }}",
-                "{{ 'datetime.jun'|trans }}",
-                "{{ 'datetime.jul'|trans }}",
-                "{{ 'datetime.aug'|trans }}",
-                "{{ 'datetime.sep'|trans }}",
-                "{{ 'datetime.oct'|trans }}",
-                "{{ 'datetime.nov'|trans }}",
-                "{{ 'datetime.dec'|trans }}",
-            ]
-        });
-        moment.locale("{{ app.request.locale }}", {
-            months: [
-                "{{ 'datetime.january'|trans }}",
-                "{{ 'datetime.february'|trans }}",
-                "{{ 'datetime.march'|trans }}",
-                "{{ 'datetime.april'|trans }}",
-                "{{ 'datetime.mayy'|trans }}",
-                "{{ 'datetime.june'|trans }}",
-                "{{ 'datetime.july'|trans }}",
-                "{{ 'datetime.august'|trans }}",
-                "{{ 'datetime.september'|trans }}",
-                "{{ 'datetime.october'|trans }}",
-                "{{ 'datetime.november'|trans }}",
-                "{{ 'datetime.december'|trans }}",
-            ]
-        });
-        {#console.log("{{ storeSettings.getDateFormatInMomentJsFormat }}");#}
-        const drpBaseConfig = {
-            locale: {
-                format: "{{ storeSettings.getDateFormatInMomentJsFormat }}",
-                // format: 'YYYY-MM-DD',
-                separator: ' - ',
-                dropdownRangeLabel: "{{ 'datetime.date-range'|trans }}",
-                customRangeLabel: "{{ 'datetime.custom-range'|trans }}",
-                applyLabel: "{{ 'generic.apply'|trans }}",
-                cancelLabel: "{{ 'generic.delete'|trans }}",
-                daysOfWeek: [
-                    "{{ 'datetime.sun'|trans }}",
-                    "{{ 'datetime.mon'|trans }}",
-                    "{{ 'datetime.tue'|trans }}",
-                    "{{ 'datetime.wed'|trans }}",
-                    "{{ 'datetime.thu'|trans }}",
-                    "{{ 'datetime.fri'|trans }}",
-                    "{{ 'datetime.sat'|trans }}",
-                ],
-                monthNames: [
-                    "{{ 'datetime.january'|trans }}",
-                    "{{ 'datetime.february'|trans }}",
-                    "{{ 'datetime.march'|trans }}",
-                    "{{ 'datetime.april'|trans }}",
-                    "{{ 'datetime.mayy'|trans }}",
-                    "{{ 'datetime.june'|trans }}",
-                    "{{ 'datetime.july'|trans }}",
-                    "{{ 'datetime.august'|trans }}",
-                    "{{ 'datetime.september'|trans }}",
-                    "{{ 'datetime.october'|trans }}",
-                    "{{ 'datetime.november'|trans }}",
-                    "{{ 'datetime.december'|trans }}",
-                ],
-                firstDay: 1,
-            },
-        };
-    </script>
+    {% include 'webshop/widgets/store-localization-js.html.twig' %}
+    {% include 'webshop/widgets/store-settings-js.html.twig' %}
 
+
+    <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
+    <script src="{{ asset('webshop/site/js/daterangepicker.min.js') }}"></script>
     {{ encore_entry_script_tags('store') }}
 {% endblock %}
 </body>

@@ -1,0 +1,28 @@
+        <div class="form-row">
+            {% if upsellProducts is defined %}
+            {% for product in upsellProducts %}
+                {% if product.isPubliclyAvailable %}
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-6">
+                            <div class="product">
+                                <div class="product-wrapper">
+                                    <div class="product-image">
+                                        <img src="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('product_medium') }}" alt="{{ product.productName}}" class="img-fluid">
+                                    </div>
+                                    <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link"></a>
+                                    <div class="product-title text-center">
+                                        <p class="productList--name">{{ product.productName }}</p>
+                                        {% include 'webshop/site/product-list-price-snippet.html.twig' %}
+                                    </div>
+                                </div>
+                                <div class="product-button">
+                                    <button type="button" class="JS--Button-addGiftToCart btn btn-sm btn-primary" data-url="{{ path('cart-addGift', {'id': product.id}) }}" data-product-json="{{ product.json }}">
+                                        <span class="loading-spinner-invisible">{{ 'product.add-to-cart-short-button'|trans }}</span>
+                                        <div class="loading-spinner" role="status"></div>
+                                    </button>
+                                </div>
+                            </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+        </div>

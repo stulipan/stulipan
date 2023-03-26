@@ -1,0 +1,134 @@
+{{ form_start(form, { 'attr': {'class': ' ' }}) }}
+    <div class="row">
+        <div class="col-md-8 correction-no-padding">
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            {{ form_label(form.name, form.name, { 'label_attr': {'class': '' }, 'label': 'cms.section.name'|trans}) }}
+                            {{ form_widget(form.name) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-sm-12">
+                            {{ form_label(form.content, form.content, { 'label_attr': {'class': '' }, 'label': 'cms.section.content'|trans}) }}
+                            {{ form_widget(form.content, {'attr': {'class': 'JS--tinymceContent', rows: 10}}) }}
+                            {{ form_errors(form.content) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{#            <div class="card mb-20px">#}
+{#                <div class="card-body">#}
+{#                    <div class="form-group row mb-0">#}
+{#                        <div class="col-sm-12">#}
+{#                            <div class="mb-1">{{ 'cms.section.image'|trans }}</div>#}
+{#                            {{ form_widget(form.imageId, { 'attr': {'class': 'V--imageId' }}) }}#}
+{#                            {{ form_errors(form.imageId) }}#}
+{#                            <div id="v--imageUpload" class="d-flex justify-content-center align-items-center" style="border-radius: 6px; background-color: #f4f4f5; height:100px; width: 100%;">#}
+{#                                <div class="spinner-border text-light" role="status"></div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row mb-0">
+                        <div class="col-sm-12">
+                            {{ form_label(form.slug, form.slug, { 'label_attr': {'class': '' }, 'label': 'cms.section.slug'|trans}) }}
+                            {{ form_widget(form.slug) }}
+                            {{ form_errors(form.slug) }}
+                            <small class="form-text">{{ 'cms.section.slug-help'|trans }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4 correction-no-padding">
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <label class="form-control-label">{{ 'cms.section.enabled'|trans }}</label>
+                                </div>
+                                <div class="d-flex">
+                                    {{ form_widget(form.enabled, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
+{#                                    <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">#}
+{#                                    <label class="form-check-label required justify-content-end" for="{{ form.enabled.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>#}
+                                </div>
+                            </div>
+                            {{ form_errors(form.enabled) }}
+                            {% do form.enabled.setRendered() %}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <label class="form-control-label">{{ 'cms.section.previewable'|trans }}</label>
+                                </div>
+                                <div class="d-flex">
+                                    {{ form_widget(form.previewable, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
+                                    {#                                    <input type="checkbox" id="{{ form.enabled.vars.id }}" name="{{ form.enabled.vars.full_name }}" required="required" class="form-check-input" value="{{ form.enabled.vars.value }}" {{ form.enabled.vars.checked == 1 ? 'checked=\"checked\"' : ''}} data-switch="primary">#}
+                                    {#                                    <label class="form-check-label required justify-content-end" for="{{ form.enabled.vars.id }}" data-on-label="Igen" data-off-label="Nem"></label>#}
+                                </div>
+                            </div>
+                            {{ form_errors(form.previewable) }}
+                            {% do form.previewable.setRendered() %}
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-sm-12">
+                            {{ form_label(form.belongsTo, form.belongsTo, { 'label_attr': {'class': '' }, 'label': 'cms.section.parent-page'|trans }) }}
+                            {{ form_widget(form.belongsTo) }}
+                            {{ form_errors(form.belongsTo) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{#            <div class="card overflow-hidden mb-20px">#}
+{#                <div class="card-body">#}
+{#                    <div class="h5 admin-card-title mb-3">{{ 'cms.section.image'|trans }}</div>#}
+{#                    <div class="w-100 mt-2">#}
+{#                        {% if form.vars.data.image|default %}#}
+{#                            <div class="d-flexX w-100 img-thumbnail" style="background: url('{{ uploaded_asset(form.vars.data.imagePath)|imagine_filter('unscaled') }}') center center / cover no-repeat; height: 250px;"></div>#}
+{#                        {% else %}#}
+{#                            {% include 'admin/_missing-image-insert.html.twig' with {#}
+
+{#                                className: 'img-unavailable-lg'#}
+{#                            } %}#}
+{#                        {% endif %}#}
+{#                    </div>#}
+
+{#                </div>#}
+{#            </div>#}
+
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-sm-12">
+            {# Render CSRF token etc .#}
+            <div style="display:none">
+                {{ form_rest(form) }}
+            </div>
+
+            <div class="form-group row mb-0">
+                <div class="col-sm-12">
+                    <input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-lgg btn-primary mr-1" formnovalidate>
+                    <a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{{ form_end(form) }}

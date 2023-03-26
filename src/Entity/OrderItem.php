@@ -27,7 +27,7 @@ class OrderItem
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -49,19 +49,19 @@ class OrderItem
      * @var Product
      * @Groups({"orderView", "orderList"})
      *
-     * ==== One OrderItem is one Product => Egy tétel mindig egy termék ====
+     * ==== Many OrderItems can exist out of one Product ====
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\Product\Product")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product\Product")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false)
      * @Assert\NotBlank(message="A tétel egy termék kell legyen.")
      */
     private $product;
 
-    /**
-     * @var string
-     * @ORM\Column(name="subproduct_attribute", type="string", length=100, nullable=false)
-     */
-    private $subproductAttribute;
+//    /**
+//     * @var string
+//     * @ORM\Column(name="subproduct_attribute", type="string", length=100, nullable=false)
+//     */
+//    private $subproductAttribute;
 
     /**
      * @var int|null
@@ -140,21 +140,21 @@ class OrderItem
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSubproductAttribute(): ?string
-    {
-        return $this->subproductAttribute;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setSubproductAttribute(string $name): void
-    {
-        $this->subproductAttribute = $name;
-    }
+//    /**
+//     * @return string
+//     */
+//    public function getSubproductAttribute(): ?string
+//    {
+//        return $this->subproductAttribute;
+//    }
+//
+//    /**
+//     * @param string $name
+//     */
+//    public function setSubproductAttribute(string $name): void
+//    {
+//        $this->subproductAttribute = $name;
+//    }
 
     /**
      * @return int

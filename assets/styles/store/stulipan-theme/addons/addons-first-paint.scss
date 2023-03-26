@@ -1,0 +1,135 @@
+@import "_size-utilities";
+@import "_announcement-bar";
+@import "_header";
+@import "_logo";
+@import "_ribbon";
+@import "_sidebar";
+@import "_svg-icon";
+@import "_input-float";
+@import "_vertical-row";
+
+
+.navbar--toolbar {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: justify;
+  justify-content: flex-start;
+
+  & .nav-item:first-of-type,
+  & button:first-of-type,
+  & a:first-of-type {
+    margin-left: -.75rem;
+  }
+}
+
+.top-bar {
+  color: #495057;
+  background: #f8f9fa;
+  padding: 0.25rem;
+  font-weight: 300
+}
+
+.topbar-flag {
+  margin-right: 10px;
+  height: 20px;
+
+  &.topbar-flag-selected {
+    margin-right: 0;
+    height: 15px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .navbar--logo .h3 {
+    font-size: 1.125rem;
+    letter-spacing: 0.03rem;
+    //color: #ffffff !important;
+  }
+}
+
+//.navbar-brand {
+//  .store-logo {
+//    height: 40px;
+//
+//    @include media-breakpoint-down(md) {
+//      height: 30px;
+//      margin-left: 1rem;
+//    }
+//  }
+//}
+
+.tile-link {
+  position: absolute;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 30
+}
+
+
+
+.jumbotron--cover {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  min-height: 410px; // 350px;
+
+  &.h450 {
+    min-height: 550px;
+  }
+  &.h500 {
+    min-height: 550px;
+  }
+  &.h550 {
+    min-height: 550px;
+  }
+  &.h600 {
+    min-height: 550px;
+  }
+  &.h650 {
+    min-height: 550px;
+  }
+
+  &.mobile {
+    display: none;
+  }
+  &.desktop {
+    display: block;
+  }
+
+  @include media-breakpoint-down(xs) {
+    &.mobile {
+      display: block;
+    }
+    &.desktop {
+      display: none;
+    }
+  }
+
+  &.jumbotron--cover-collection {
+    min-height: 300px;
+  }
+}
+
+.jumbotron {
+  .btn-primary {
+    @include button-variant($white, $white);
+
+    //color: color-yiq($white);
+    //background-color: $white;
+    //border-color: $white;
+    //
+    //&:focus,
+    //&:hover {
+    //  background-color: $white;
+    //  border-color: $white;
+    //}
+  }
+}

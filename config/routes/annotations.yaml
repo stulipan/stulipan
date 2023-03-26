@@ -1,11 +1,19 @@
 controllers:
     resource: ../../src/Controller/
     type: annotation
+
+    # Az alábbi sorokat élesítve, kötelezően lesz '/hu', '/en' az URL-ekben
     prefix: /{_locale}
     requirements:
         _locale: '%app_locales%'
     defaults:
         _locale: '%locale%'
+    # ___________________________________________________
+
+#    host:
+#        hu: 'www.stulipan.dfr'
+#        en: 'www.stulipan.com'
+
 
 kernel:
     resource: ../../src/Kernel.php

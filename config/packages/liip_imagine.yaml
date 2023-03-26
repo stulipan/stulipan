@@ -2,43 +2,120 @@
 liip_imagine:
 #    # valid drivers options include "gd" or "gmagick" or "imagick"
 #    driver: "gd"
+    resolvers:
+        default:
+            web_path: ~
 
 #
 #    # define your filter sets under this option
     filter_sets:
+        cache: ~
 #
 #        # an example thumbnail transformation definition
 #        # https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html#create-thumbnails
-        category_thumbnail:
+        unscaled:
+            jpeg_quality: 85
+            png_compression_level: 8
             filters:
-                thumbnail:
-                    size:          [160, 40]
-                    mode:          outbound
-                    allow_upscale: true
-        category_image:
+                scale:
+                    to: 1
+
+        unscaled_200:
+            jpeg_quality: 85
+            png_compression_level: 8
+            filters:
+                relative_resize:
+                    widen: 200
+        unscaled_600:
+            jpeg_quality: 85
+            png_compression_level: 8
+            filters:
+                relative_resize:
+                    widen: 600
+        unscaled_1024:
+            jpeg_quality: 85
+            png_compression_level: 8
+            filters:
+                relative_resize:
+                    widen: 1024
+        unscaled_1920:
+            jpeg_quality: 85
+            png_compression_level: 8
+            filters:
+                relative_resize:
+                    widen: 1920
+
+        # available, but I'm not using it
+        size_1200:
+            jpeg_quality: 85
+            png_compression_level: 8
+            filters:
+                scale:
+                    dim:          [1200, 1200]
+
+        # available, but I'm not using it
+        size_600:
             jpeg_quality:          85
             png_compression_level: 8
             filters:
                 thumbnail:
-                    size:          [1200, 300]
+                    size:          [600, 600]
                     mode:          outbound
                     allow_upscale: true
 
-        product_thumbnail:
+        size_200:
+            jpeg_quality: 85
+            png_compression_level: 8
             filters:
                 thumbnail:
                     size:          [200, 200]
                     mode:          outbound
                     allow_upscale: true
+#                scale:
+#                    dim: [ 200, 200 ]
 
-        product_image:
-            jpeg_quality:          85
+        size_facebook:
+            jpeg_quality: 85
             png_compression_level: 8
             filters:
                 thumbnail:
-                    size:          [1024, 1024]
+                    size: [ 960, 960 ]
+                    mode: outbound
+                    allow_upscale: true
+
+        product_small:
+            jpeg_quality:          75
+            png_compression_level: 8
+            filters:
+                thumbnail:
+                    size:          [150, 200]
                     mode:          outbound
                     allow_upscale: true
+
+        product_medium:
+            jpeg_quality:          75
+            png_compression_level: 8
+            filters:
+                thumbnail:
+#                    size:          [300, 400]
+#                    size:          [400, 533]
+#                    size:          [510, 680]
+                    size:          [576, 768]
+                    mode:          outbound
+                    allow_upscale: true
+
+        product_large:
+            jpeg_quality:          75
+            png_compression_level: 8
+            filters:
+                thumbnail:
+                    size:          [768, 1024]
+                    mode:          outbound
+                    allow_upscale: true
+                watermark_image:
+                    image: "/public/uploads/images/icons/watermark.png"
+                    size: 0.25
+                    position: bottomleft
 
 #            # set your image quality defaults
 #            jpeg_quality:          85

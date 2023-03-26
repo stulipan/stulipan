@@ -17,8 +17,7 @@ const ClassName = {
   BLOCK_SPACES      : 'input-float-block-spaces',
 };
 
-
-class FloatingInput {
+class FloatingInputClass {
   constructor() {
     document.addEventListener('DOMContentLoaded', this.init.bind(this));
     document.addEventListener('initFloatingInput', this.init.bind(this));
@@ -77,7 +76,5 @@ class FloatingInput {
   // }
 }
 
-// export default new FloatingInput()
-
-const instance = new FloatingInput();
-export { instance as FloatingInput };
+const FloatingInput = new FloatingInputClass();
+export default FloatingInput;

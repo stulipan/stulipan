@@ -9,19 +9,16 @@
 	},
 } %}
 
-{% block title %}
+{%- block title -%}
 	{{ title }}
-{% endblock %}
+{%- endblock -%}
 
 {% block headerActionsWrapper %}
 	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">
 		<ul class="nav nav-tabs adaptive-primary">
-			<li class="nav-item adaptive-item">
-				<a href="{{ path('cms-page-new') }}" class="nav-link">Új bla bla</a>
-			</li>
-			<li class="nav-item adaptive-item">
-				<a href="{{ path('cms-page-new') }}" class="nav-link">Új bla bla</a>
-			</li>
+{#			<li class="nav-item adaptive-item">#}
+{#				<a href="{{ path('cms-navigation-list') }}" class="nav-link">{{ '' }}</a>#}
+{#			</li>#}
 		</ul>
 		<ul class="adaptive-template">
 			<li class="nav-item adaptive-item adaptive-more">
@@ -73,7 +70,7 @@
 				</td>
 				<td class="align-middle">
 					{% if page.image|default %}
-						<div class="img-thumbnail" style="background: url('{{ uploaded_asset(page.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
+						<div class="img-thumbnail" style="background: url('{{ uploaded_asset(page.imagePath)|imagine_filter('size_200') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
 					{% else %}
 						{% include 'admin/_missing-image-insert.html.twig' %}
 					{% endif %}

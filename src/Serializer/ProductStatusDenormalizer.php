@@ -28,9 +28,9 @@ class ProductStatusDenormalizer implements DenormalizerInterface, DenormalizerAw
     {
         if (isset($data['id'])) {
             $object = $this->em->find(ProductStatus::class, $data['id']);
-            
+            return $object;
         }
-        return $object;
+        return null;
     }
     
     /**

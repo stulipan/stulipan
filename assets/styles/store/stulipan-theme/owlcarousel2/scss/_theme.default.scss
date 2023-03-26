@@ -1,0 +1,175 @@
+@import '../../bootstrap/functions';
+@import '../../bootstrap/variables';
+@import '../../bootstrap/mixins';
+/*
+ * 	Default theme - Owl Carousel CSS File
+ */
+
+$color-base:			#869791 !default;
+$color-white:			#FFF !default;
+$color-gray:			#adb5bd !default;
+
+//nav
+
+$nav-color: 			$color-white !default;
+$nav-color-hover:		$color-white !default;
+$nav-font-size: 		14px !default;
+$nav-rounded: 			3px !default;
+$nav-margin: 			5px !default;
+$nav-padding: 			4px 7px !default;
+$nav-background: 		$color-gray !default;
+$nav-background-hover:	$color-base !default;
+$nav-disabled-opacity: 	0.5 !default;
+
+//dots
+
+$dot-width:				14px !default;
+$dot-height:			14px !default;
+$dot-rounded:			30px !default;
+$dot-margin: 			0px 5px !default;
+$dot-background:		$color-white !default; // $color-gray !default;
+$dot-background-active:	$color-white !default; // $color-base !default;
+
+//carousel-btn
+$carousel-btn-bg:             $gray-eee !default;
+$carousel-btn-hover-bg:       darken($gray-eee, 5%) !default;
+$carousel-btn-focus-shadow:   $btn-focus-box-shadow !default;
+
+// Added by Stulipan
+$dot-active-width:		    18px !default;
+$dot-active-height:			18px !default;
+
+@import 'theme';
+
+
+//.product-detail-carousel {
+//  min-height: 600px;
+//}
+
+.owl-product-detail {
+  &.owl-theme .owl-nav.disabled + .owl-dots {
+    display: none;
+
+    @include media-breakpoint-down(xs) {
+      display: block;
+      position: absolute;
+      width: 100%;
+      left: 0;
+      bottom: 40px;
+    }
+  }
+}
+
+
+.products-carousel {
+  --carousel-nav-width: 100px;
+  --carousel-padding-x: 10px;
+  --carousel-btn-width: 40px;
+  --carousel-btn-bg: #{$carousel-btn-bg};
+  --carousel-btn-hover-bg: #{$carousel-btn-hover-bg};
+  --carousel-dot-active-bg: #{$body-color};
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 390px;
+
+  @include media-breakpoint-down(sm) {
+    --carousel-nav-width: 0.001rem;
+    --carousel-btn-width: 0.001rem;
+    --carousel-padding-x: 0;
+  }
+
+  & .carousel-nav {
+    position: absolute;
+    display: flex;
+    width: var(--carousel-nav-width);
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: 0;
+    z-index: 10;
+    cursor: pointer;
+
+    &.prev {
+      left: 0;
+
+      & .icon {
+        margin-left: -2px;
+      }
+    }
+    &.next {
+      right: 0;
+
+      & .icon {
+        margin-right: -2px;
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      display: none;
+    }
+  }
+
+  & .carousel-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--carousel-btn-width);
+    height: var(--carousel-btn-width);
+    background-color: var(--carousel-btn-bg);
+    font-size: 1.2rem;
+    padding: 0;
+    @include border-radius($border-radius);
+
+    &:hover,
+    &:focus {
+      outline: none;
+      background-color: var(--carousel-btn-hover-bg);
+      box-shadow: none;
+    }
+    &:focus {
+      outline: 0;
+      box-shadow: $carousel-btn-focus-shadow;
+    }
+
+    & .icon {
+      margin: 0;
+      width: calc(var(--carousel-btn-width) / 2);
+      height: calc(var(--carousel-btn-width) / 2);
+    }
+  }
+
+  & .owl-carousel {
+    width: calc(100% - 2 * var(--carousel-nav-width));
+    left: var(--carousel-nav-width);
+    padding: 0 var(--carousel-padding-x);
+
+    & button.owl-dot {
+      padding: 10px 0 !important;
+    }
+
+    & .owl-dot,
+    & .owl-dot.active {
+      & span {
+        width: 30px;
+        height: 0;
+        border-width: 2px;
+        border-radius: 0;
+      }
+    }
+
+    & .owl-dot.active {
+      span {
+        border-color: var(--carousel-dot-active-bg);
+      }
+    }
+  }
+}
+
+.owl-theme .owl-nav,
+.owl-theme .owl-dots {
+  & button:focus {
+    outline: none;
+  }
+}

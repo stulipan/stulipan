@@ -41,9 +41,6 @@ class CmsPageFormType extends AbstractType
         $queryBuilder->orderBy('p.name', 'ASC');
         
         $builder
-            ->add('id',HiddenType::class,[
-            
-            ])
             ->add('name', null,[
                 'label' => 'Oldal neve',
             ])
@@ -86,11 +83,6 @@ class CmsPageFormType extends AbstractType
 //                'placeholder' => 'Képfeltöltés...',
 //            ]
 //        ]);
-        $builder->add('image', TextType::class, [
-            'mapped' => false,
-            'required' => false,
-//            'data' => $options['data']->getImagePath(),
-        ]);
         $builder->add('imageId', HiddenType::class, [
             'mapped' => false,
             'required' => false,

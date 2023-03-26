@@ -1,128 +1,263 @@
 {% extends 'webshop/site/base-site.html.twig' %}
 
-{% block title %}
-    {{ parent() }}
-{% endblock %}
+{% set pageTitle = storeSettings.get('meta.title') %}
+
+{%- block title -%}
+    {{ pageTitle }}
+{%- endblock -%}
 
 {% block stylesheets %}
     {{ parent() }}
+    {% set contentDescription = storeSettings.get('meta.description')|raw|striptags %}
+    {% set contentDescription = contentDescription|length > 200 ? contentDescription|slice(0, 200) ~ '...' : contentDescription %}
+
+    <meta property="og:title" content="{{ storeSettings.get('meta.title') }}">
+    <meta property="og:description" content="{{ contentDescription }}">
+    <meta property="og:image" content="https://rafina.hu/media/cache/unscaled/uploads/images/store/szappan-rozsa-box-6657-608385608ad84.jpg">
+    <meta property="og:image:width" content="1000" />
+    <meta property="og:image:height" content="300" />
+    <meta property="og:url" content="{{ url(app.request.attributes.get('_route')) }}" />
+
+    <meta name="description" content="{{ contentDescription }}">
+    <link rel="canonical" href="{{ app.request.schemeAndHttpHost }}" />
+
 {% endblock %}
 
 {% block page_content %}
 
-	<!-- Banner area -->
-    <div class="container py-3 pb-5 mt-2">
-        <div class="row">
-            <div class="col-lg-4 d-flex d-noneX d-md-blockX align-items-lg-stretch order-2 order-lg-1">
-                    <div class="row flex-grow-1">
-                        <div class="col-lg-12 col-sm-6 d-flex align-items-stretch mb-lg-30px">
-                            <div style="background: center center url(https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/cache/w0h0q80np1/Banner/card/otthon-card-8.jpg?v=1547034881) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-5 text-center mb-30px mb-lg-0">
-                                <a href="/termekek/ajandek" class="tile-link"> </a>
-                                <div class="w-100 text-light">
-                                    <h3 class="heroBanner-title text-uppercase mb-0">Otthon dekor</h3>
-                                    <a class="btn heroBanner-btnZ mt-2">Vásárlás<i class="fa-arrow-right fa ml-2"></i></a>
-                                    {#<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>#}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-sm-6 d-flex align-items-stretch">
-                            <div style="background: center center url(https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/data/Banner/card/IMG_0826-2.jpg?v=1547034881) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-4 text-center mb-30px mb-lg-0">
-                                <a href="/termekek/viragdobozok" class="tile-link"> </a>
-                                <div class="w-100">
-                                    <h3 class="text-uppercase heroBanner-title mb-0">Virágdobozok</h3>
-                                    <a class="btn heroBanner-btnZ mt-2">Vásárlás<i class="fa-arrow-right fa ml-2"></i></a>
-                                    {#<p class="lead">Consectetur adipisicing elit sed do eiusmod tempor.</p>#}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            </div>
-            <div class="col-lg-8 order-1 order-lg-2 mb-lg-0 mb-30px align-items-stretch" style="height: 487px;">
-                {#<div class="card light-overlay text-dark border-0">#}
-                <div class="dark-overlay light-overlayX d-flex align-items-center text-white border-0 h-100 py-6 py-lg-5 text-center mb-30px mb-lg-0" style="height: 748px; background: center center url(http://www.stulipan.dfr/uploads/images/termekek/vegyes-pasztell-csokor-3.jpg) no-repeat; background-size: cover;">
-                    <a href="/termekek/viragdobozok" class="tile-link"> </a>
-                </div>
+{#    <div class="container-fluid p-0">#}
+{#        <div class="jumbotron jumbotron-fluid">#}
+{#            <div class="position-relative text-dark">#}
+{#                <div class="jumbotron--cover light-overlay" style="background-image: url(https://rafina.hu/media/cache/unscaled/uploads/images/store/szappan-rozsa-box-6657-608385608ad84.jpg);">#}
+{#                {% set jumboImg = find_image_by_id(2) %}#}
+{#                <div class="jumbotron--cover desktop light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_1200') }}{% else %}''{% endif %});"></div>#}
+{#                <div class="jumbotron--cover mobile light-overlay" style="background-image: url({% if jumboImg is defined and jumboImg is not empty %}{{ uploaded_asset(jumboImg.path)|imagine_filter('size_600') }}{% else %}''{% endif %});"></div>#}
+{#                <div class="container card-img-overlay d-flex align-items-md-end align-items-center pb-0 pb-md-6">#}
+{#                    <div class="text-center w-100">#}
+{#                        <h1 class="display-4 font-weight-bold">Rafina otthon dekor</h1>#}
+{#                        <p class="lead font-weight-bold">Ajtódíszek, kopogtatók, rózsaboxok szappanrózsából.</p>#}
+{#                        <a href="{{ path('site-product-listall') }}" class="btn btn-primary mt-3">Vásárlás<i class="fa-arrow-right fa ml-2"></i></a>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
-                    {#<img src="https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/cache/w0h0q80np1/Landing/menyasszonyi-csokor-ankert-1.jpg?v=null.1510219410" alt="Card image" class="card-img">#}
-                    <a href="{{ path('site-product-listall') }}" class="tile-link"> </a>
-                    <div class="card-img-overlay d-flex align-items-center">
-                        <div class="text-center w-100 overlay-content p-2 text-white">
-                            <h1 class="heroBanner-title text-uppercase mb-0">Virágküldés</h1>
-                            <p class="font-weight-bold mb-2">Budapestre és környékére. Házhozszállítás akár aznap vagy későbbi dátumra.</p>
-                            <a class="btn heroBanner-btn">Vásárlás<i class="fa-arrow-right fa ml-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-        </div>
-    </div>
+    {% set canBeRendered = false %}
+    {% if previewMode is defined and previewMode is same as(true) %}
+        {% set canBeRendered = true %}
+    {% endif %}
+
+    {% if canBeRendered is same as(true) %}
+        {% if homepage.banner_hero is defined and homepage.banner_hero.previewable is same as(true) %}
+            {{ homepage.banner_hero.content|raw }}
+        {% endif %}
+        {% if homepage.story_1 is defined and homepage.story_1.previewable is same as(true) %}
+            {{ homepage.story_1.content|raw }}
+        {% endif %}
+        {% if homepage.story_2 is defined and homepage.story_2.previewable is same as(true) %}
+            {{ homepage.story_2.content|raw }}
+        {% endif %}
+        {% if homepage.story_3 is defined and homepage.story_3.previewable is same as(true) %}
+            {{ homepage.story_3.content|raw }}
+        {% endif %}
+
+        {% if homepage.banner_trio is defined and homepage.banner_trio.previewable is same as(true) %}
+            {{ homepage.banner_trio.content|raw }}
+        {% endif %}
+    {% else %}
+        {% if homepage.banner_hero is defined and homepage.banner_hero.enabled is same as(true) %}
+            {{ homepage.banner_hero.content|raw }}
+        {% endif %}
+        {% if homepage.story_1 is defined and homepage.story_1.enabled is same as(true) %}
+            {{ homepage.story_1.content|raw }}
+        {% endif %}
+        {% if homepage.story_2 is defined and homepage.story_2.enabled is same as(true) %}
+            {{ homepage.story_2.content|raw }}
+        {% endif %}
+        {% if homepage.story_3 is defined and homepage.story_3.enabled is same as(true) %}
+            {{ homepage.story_3.content|raw }}
+        {% endif %}
+
+        {% if homepage.banner_trio is defined and homepage.banner_trio.enabled is same as(true) %}
+            {{ homepage.banner_trio.content|raw }}
+        {% endif %}
+    {% endif %}
+
+
+{#    <div class="container">#}
+{#        <div class="row mt-6">#}
+{#            <div class="col-xl-8 mx-auto text-center">#}
+{#                <h2 class="hero-2 text-uppercase">Nyári kollekció</h2>#}
+{#                <p class="lead text-muted">Alakíts ki egy élhető és kényelmes életteret. Lehet meghitt vagy játékos, színes vagy egy színű, de ami számít, az az, hogy neked vibráljon, érzékeidre hasson, legyen neked való.</p>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row mt-5">#}
+{#            <div class="col-md-6 d-flex align-items-md-stretch mb-20px mb-md-0">#}
+{#                <div class="d-flex position-relative align-items-center text-white dark-overlay w-100 text-center py-6 py-md-0" style="background: center center url(/media/cache/resolve/unscaled/uploads/images/store/IMG_7080-60a582fdb5cca.jpg) no-repeat; background-size: cover;">#}
+{#                    <a href="/hu/kategoria/kopogtatok" class="tile-link"> </a>#}
+{#                    <div class="card-img-overlay w-100 overlay-content">#}
+{#                        <h2 class="display-3 font-weight-bold text-uppercase mb-0">BeachVibe</h2>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="col-md-6">#}
+{#                <div class="card border-0 text-white text-center mb-20px dark-overlay">#}
+{#                    <div class="d-flex align-items-center img-thumbnail img-preview" style="height: 350px;">#}
+{#                        <div class="w-100">#}
+{#                            <img src="/media/cache/resolve/unscaled/uploads/images/store/pink-kopogtato-hero-60a586ddd0047.jpg" alt="Kopogtatók, ajtódíszek" class="card-img">#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <a href="https://rafina.hu/hu/kategoria/kopogtatok" class="tile-link"> </a>#}
+{#                    <div class="card-img-overlay d-flex align-items-center">#}
+{#                        <div class="text-center w-100 overlay-content">#}
+{#                            <h2 class="display-4 font-weight-bold text-uppercase text-center mb-0">PinkUp!</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="card border-0 text-white text-center dark-overlay">#}
+{#                    <div class="d-flex align-items-center img-thumbnail img-preview" style="height: 350px;">#}
+{#                        <div class="w-100">#}
+{#                            <img src="/media/cache/resolve/unscaled/uploads/images/store/candy-kopogtato-hero-60a588440a117.jpg" alt="Rafina" class="card-img">#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <a href="/hu/termekek/fagyis-kopogtato-p8" class="tile-link"> </a>#}
+{#                    <div class="card-img-overlay d-flex align-items-center">#}
+{#                        <div class="text-center w-100 overlay-content">#}
+{#                            <h2 class="display-4 font-weight-bold text-uppercase text-center mb-0">Candy</h2>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+	<!-- Banner area -->
+{#    <div class="container py-3 pb-5 mt-2">#}
+{#        <div class="row">#}
+{#            <div class="col-lg-4 d-flex align-items-lg-stretch order-2 order-lg-1">#}
+{#                    <div class="row flex-grow-1">#}
+{#                        <div class="col-lg-12 col-sm-6 d-flex align-items-stretch mb-lg-30px">#}
+{#                            <div style="background: center center url(https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/cache/w0h0q80np1/Banner/card/otthon-card-8.jpg?v=1547034881) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-5 text-center mb-30px mb-lg-0">#}
+{#                                <a href="/termekek/ajandek" class="tile-link"> </a>#}
+{#                                <div class="w-100 text-light">#}
+{#                                    <h3 class="heroBanner-title text-uppercase mb-0">Otthon dekor</h3>#}
+{#                                    <a class="btn heroBanner-btnZ mt-2">Vásárlás<i class="fa-arrow-right fa ml-2"></i></a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="col-lg-12 col-sm-6 d-flex align-items-stretch">#}
+{#                            <div style="background: center center url(https://difiorivirag.cdn.shoprenter.hu/custom/difiorivirag/image/data/Banner/card/IMG_0826-2.jpg?v=1547034881) no-repeat; background-size: cover;" class="d-flex align-items-center text-white border-0 w-100 py-6 py-lg-4 text-center mb-30px mb-lg-0">#}
+{#                                <a href="/termekek/viragdobozok" class="tile-link"> </a>#}
+{#                                <div class="w-100">#}
+{#                                    <h3 class="text-uppercase heroBanner-title mb-0">Virágdobozok</h3>#}
+{#                                    <a class="btn heroBanner-btnZ mt-2">Vásárlás<i class="fa-arrow-right fa ml-2"></i></a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#            </div>#}
+{#            <div class="col-lg-8 order-1 order-lg-2 mb-lg-0 mb-30px align-items-stretch" style="height: 487px;">#}
+{#                <div class="dark-overlay light-overlayX d-flex align-items-center text-white border-0 h-100 py-6 py-lg-5 text-center mb-30px mb-lg-0" style="height: 748px; background: center center url(http://www.stulipan.dfr/uploads/images/termekek/vegyes-pasztell-csokor-3.jpg) no-repeat; background-size: cover;">#}
+{#                    <a href="/termekek/viragdobozok" class="tile-link"> </a>#}
+{#                </div>#}
+
+{#                    <a href="{{ path('site-product-listall') }}" class="tile-link"> </a>#}
+{#                    <div class="card-img-overlay d-flex align-items-center">#}
+{#                        <div class="text-center w-100 overlay-content p-2 text-white">#}
+{#                            <h1 class="heroBanner-title text-uppercase mb-0">Virágküldés</h1>#}
+{#                            <p class="font-weight-bold mb-2">Budapestre és környékére. Házhozszállítás akár aznap vagy későbbi dátumra.</p>#}
+{#                            <a class="btn heroBanner-btn">Vásárlás<i class="fa-arrow-right fa ml-2"></i></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#        </div>#}
+{#    </div>#}
 	<!-- /Banner area -->
 
     <!-- Product list -->
-    <div class="container pb-5">
-        <div class="row">
-            <div class="products-grid col-12 sidebar-none">
-                <div class="hero-content text-center">
-                    <h2 class="">Virágdobozok</h2>
-                </div>
+{#    <div class="container pb-5X mt-6">#}
+{#        <div class="row">#}
+{#            <div class="products-grid sidebar-none col-sm-12 col-md-11 col-xl-10 mx-auto">#}
+{#                <div class="hero-content text-center">#}
+{#                    <h2 class="hero-2">Újdonságok</h2>#}
+{#                </div>#}
 
-                {{ include('/webshop/site/product-list-widget.html.twig') }}
+{#                {% include 'webshop/site/product-list-widget.html.twig' %}#}
 
-            </div>
-        </div>
-    </div>
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
-    <div class="container pb-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="hero-content text-center">
-                    <h2 class="">Vásárlóink mondták</h2>
-                </div>
 
-                <div class="col-md-12 mt-5">
-                    <div class="row">
+    {% if canBeRendered is same as(true) %}
+        {% if homepage.drummer is defined and homepage.drummer.previewable is same as(true) %}
+            {{ homepage.drummer.content|raw }}
+        {% endif %}
+        {% if homepage.spacer_bottom is defined and homepage.spacer_bottom.previewable is same as(true) %}
+            {{ homepage.spacer_bottom.content|raw }}
+        {% endif %}
+    {% else %}
+        {% if homepage.drummer is defined and homepage.drummer.enabled is same as(true) %}
+            {{ homepage.drummer.content|raw }}
+        {% endif %}
+        {% if homepage.spacer_bottom is defined and homepage.spacer_bottom.enabled is same as(true) %}
+            {{ homepage.spacer_bottom.content|raw }}
+        {% endif %}
+    {% endif %}
 
-                        {% for i in 0..9 %}
-                        <div class="col-md-6">
-                            <div class="reviewbox mb-4">
-                                <div class="details">
-                                    <span class="h6 mr-2">Szabó Béla</span>
-                                    <a href="#" class="text-body text-underline"><span class="mr-2">Budaörs</span></a>
-                                    <time itemprop="dateCreated" class="date text-muted mr-2">11/09/2019</time>
-                                    <div class="d-inline-block">
-                                        <ul class="review-stars-group mr-2 mb-0">
-                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                            <li class="review-stars-item"><i class="fa fa-star"></i></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="testimonial text-muted mt-4">
-                                    {%  if loop.index in [1, 5, 6, 9] %}
-                                    <span>I have bought from you several times in the past and have recommended you to friends. This particular bouquet was sent as a surprise for a 90th birthday.
-                                        <a data-expand="">Read More</a>
-                                    </span>
-                                    {% elseif loop.index is odd %}
-                                    <span>
-                                        Serenata dellivered my order to my mum in law on the chosen day, and my mum was absolutely delighted, she sent photos to all as they were indeed beautiful. Her birthday was 29/8 and today 05/09 they are still as beautiful as they were on the day. Their prices are brilliant and affordable, and I would recommend Serenata to anyone looking for the perfect 'bouquet' for that special person.
-                                    </span>
-                                    {% else %}
-                                    <span>
-                                        Easy to order from web site, delivery very good, flowers were for my daughters birthday who lives in Norfolk, she was very pleased with them. This is the third time I have used Serenata Flowers and would not hesitate to recommend them to others.
-                                    </span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        {%  endfor %}
+{#    <div class="container pb-5">#}
+{#        <div class="row">#}
+{#            <div class="col-md-12">#}
+{#                <div class="hero-content text-center">#}
+{#                    <h2 class="">Vásárlóink mondták</h2>#}
+{#                </div>#}
 
-                    </div>
-                </div>
+{#                <div class="col-md-12 mt-5">#}
+{#                    <div class="row">#}
 
-            </div>
-        </div>
-    </div>
+{#                        {% for i in 0..9 %}#}
+{#                        <div class="col-md-6">#}
+{#                            <div class="reviewbox mb-4">#}
+{#                                <div class="details">#}
+{#                                    <span class="h6 mr-2">Szabó Béla</span>#}
+{#                                    <a href="#" class="text-body text-underline"><span class="mr-2">Budaörs</span></a>#}
+{#                                    <time itemprop="dateCreated" class="date text-muted mr-2">11/09/2019</time>#}
+{#                                    <div class="d-inline-block">#}
+{#                                        <ul class="review-stars-group mr-2 mb-0">#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>#}
+{#                                            <li class="review-stars-item"><i class="fa fa-star"></i></li>#}
+{#                                        </ul>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="testimonial text-muted mt-4">#}
+{#                                    {%  if loop.index in [1, 5, 6, 9] %}#}
+{#                                    <span>I have bought from you several times in the past and have recommended you to friends. This particular bouquet was sent as a surprise for a 90th birthday.#}
+{#                                        <a data-expand="">Read More</a>#}
+{#                                    </span>#}
+{#                                    {% elseif loop.index is odd %}#}
+{#                                    <span>#}
+{#                                        Serenata dellivered my order to my mum in law on the chosen day, and my mum was absolutely delighted, she sent photos to all as they were indeed beautiful. Her birthday was 29/8 and today 05/09 they are still as beautiful as they were on the day. Their prices are brilliant and affordable, and I would recommend Serenata to anyone looking for the perfect 'bouquet' for that special person.#}
+{#                                    </span>#}
+{#                                    {% else %}#}
+{#                                    <span>#}
+{#                                        Easy to order from web site, delivery very good, flowers were for my daughters birthday who lives in Norfolk, she was very pleased with them. This is the third time I have used Serenata Flowers and would not hesitate to recommend them to others.#}
+{#                                    </span>#}
+{#                                    {% endif %}#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        {%  endfor %}#}
+
+{#                    </div>#}
+{#                </div>#}
+
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
 
 

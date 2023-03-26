@@ -1,0 +1,38 @@
+$svg-icon-size-width:           1.125rem !default; //$font-size-base !default;
+$svg-icon-line-height:          $line-height-base * 1rem !default;
+
+.icon {
+  --icon-font-size: #{$svg-icon-size-width};
+  --icon-line-height: #{$svg-icon-line-height};
+  width: var(--icon-font-size);
+  height: var(--icon-font-size);
+  margin-right: .5rem;
+  stroke: currentColor;
+  stroke-width: .025; //3px;
+  --layer1: currentColor;
+  --layer2: currentColor;
+  margin-bottom: calc((var(--icon-line-height) - var(--icon-font-size)) / 2);
+}
+
+.icon-light {
+  stroke-width: .0125; //2;
+}
+
+.svg-icon-heavy {
+  stroke-width: .5; // 5
+}
+
+.icon-sm {
+  --icon-font-size: #{$font-size-sm};
+  --icon-line-height: #{$line-height-sm} * 1rem;
+}
+
+.icon-md {
+  --icon-font-size: 2rem;
+  --icon-line-height: 3rem;
+}
+
+.icon-lg {
+  --icon-font-size: 4rem;
+  --icon-line-height: 8rem;
+}

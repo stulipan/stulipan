@@ -7,19 +7,13 @@ namespace App\Form;
 use App\Entity\Order;
 use App\Entity\OrderLog;
 use App\Entity\OrderLogChannel;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 
 class OrderCommentType extends AbstractType
@@ -38,7 +32,6 @@ class OrderCommentType extends AbstractType
             "mapped" => false,
         ]);
         $builder->add('message',TextareaType::class,[
-            'label' => 'Ide írd az üzenetet...',
             'attr' => ['rows' => '1'],
             'required' => false,
 //            'constraints' => [
@@ -56,10 +49,6 @@ class OrderCommentType extends AbstractType
             'required' => false,
             'mapped' => true,
         ]);
-//        $builder->add('user',TextType::class,[
-//            'label' => 'User',
-//            'required' => false,
-//        ]);
         $builder->getForm();
     }
 

@@ -38,7 +38,7 @@ class Recipient
      * @ORM\Column(name="firstname", type="string", length=255, nullable=false)
      * @Assert\NotNull(message="checkout.recipient.missing-firstname")
      */
-    private $firstname='';
+    private $firstname;
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class Recipient
      * @ORM\Column(name="lastname", type="string", length=255, nullable=false)
      * @Assert\NotNull(message="checkout.recipient.missing-lastname")
      */
-    private $lastname='';
+    private $lastname;
 
     /**
      * @var Address
@@ -61,16 +61,15 @@ class Recipient
     private $address;
 
     /**
-     * @var Customer
+     * @var User|null
      *
      * ==== Many Recipients belong to one Customer ====
      * ==== inversed By="recipients" => a User entitásban definiált 'recipients' attibútumról van szó; A Címzettet így kötjük vissza a Customerhez
      *
-     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="recipients")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @ Assert\NotBlank(message="Egy címzetnek kell legyen felhasználója/Customer.")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="recipients")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    private $customer;
+    private $user;
 
 
     /**
@@ -157,20 +156,38 @@ class Recipient
     }
 
     /**
-     * @return Customer|null
+     * @return User|null
      */
-    public function getCustomer(): ?Customer
+    public function getUser(): ?User
     {
-        return $this->customer;
+        return $this->user;
     }
 
     /**
-     * @var Customer|null $customer
+     * @param User|null $user
      */
-    public function setCustomer(?Customer $customer): void
+    public function setUser(?User $user): void
     {
-        $this->customer = $customer;
+        $this->user = $user;
     }
+
+//    /**
+//     * @return Customer|null
+//     */
+//    public function getCustomer(): ?Customer
+//    {
+//        return $this->customer;
+//    }
+//
+//    /**
+//     * @var Customer|null $customer
+//     */
+//    public function setCustomer(?Customer $customer): void
+//    {
+//        $this->customer = $customer;
+//    }
+
+
 
     /**
      * @return string

@@ -1,29 +1,24 @@
-    <li class="nav-item"><a href="/" class="nav-link">Home</a>
+{% set nav = 0|fetchNavigationBySlug('fomenu') %}
+{% if nav is defined and nav %}
+{% for item in nav.navigationItems %}
+    {% if item.enabled is same as true %}
+    <li class="nav-item{% if item.classname is defined and item.classname %} {{ item.classname }}{% endif %}"><a href="{{ item.url }}" class="nav-link">{{ item.name }}</a>
     </li>
-    <li class="nav-item"><a href="{{ path('site-product-listall') }}" class="nav-link">Virágok</a>
-    </li>
-    <li class="nav-item dropdown position-static"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Template</a>
-        <div class="dropdown-menu megamenuX py-lg-0">
-{#            <div class="row">#}
-{#                <div class="col-lg-9">#}
-{#                    <div class="row p-3 pr-lg-0 pl-lg-5 pt-lg-5">#}
-{#                        <div class="col-lg-3">#}
-{#                            <!-- Megamenu list-->#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-        </div>
-    </li>
-    <div class="nav-item dropdown">
-        <a id="navbarDropdownMenuLink" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle nav-link">Webshop</a>
-        <div aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-left mt-0">
+    {% endif %}
+{% endfor %}
+{% endif %}
 
-                    {{ render(controller('App\\Controller\\Shop\\CartUtilsController::listProductCategoriesInMenu')) }}
+{#    <li class="nav-item"><a href="/" class="nav-link">Nyitóoldal</a>#}
+{#    </li>#}
+{#    <li class="nav-item"><a href="{{ path('site-product-listall') }}" class="nav-link">Összes termék</a>#}
+{#    </li>#}
+{#    <div class="nav-item dropdown">#}
+{#        <a id="navbarDropdownMenuLink" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle nav-link">Termékek</a>#}
+{#        <div aria-labelledby="navbarDropdownMenuLink" class="dropdown-menu dropdown-menu-left mt-0">#}
 
-        </div>
-    </div>
-    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a>
-    </li>
-    <li class="nav-item"><a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="nav-link ">Rólunk</a>
-    </li>
+{#                    {{ render(controller('App\\Controller\\Shop\\CartUtilsController::listProductCategoriesInMenu')) }}#}
+
+{#        </div>#}
+{#    </div>#}
+{#    <li class="nav-item"><a href="{{ path ('site-page-show', { 'slug': 'rolunk'}) }}" class="nav-link ">Rólunk</a>#}
+{#    </li>#}

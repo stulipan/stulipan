@@ -1,10 +1,14 @@
 {{ form_start(form) }}
-    <div class="product-variants">
-        <div class="product-variant-selector-label">Product ID: {{ product.sku }}</div>
+    <div class="d-none">
+        {{ form_widget(form.productId) }}
     </div>
+{#    <div class="product-part">#}
+{#        <span class="product-variant-selector-label">{{ 'product.product-id'|trans }}:</span>#}
+{#        {{ product.sku }}#}
+{#    </div>#}
 
     {% if product.isFlower %}
-        <div class="product-variants">
+        <div class="product-part">
             <div class="product-variant-selector-label">Méret</div>
 
             {% if form.options is defined and form.options is not empty %}
@@ -38,9 +42,9 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
+                                        <h3 class="modal-title" id="modalLabel">{{ policies.shipping_information.name }}</h3>
                                         <div class="mt-4">
-                                            {{ pages.szallitasiDijak.content|raw }}
+                                            {{ policies.shipping_information.content|raw }}
                                         </div>
                                     </div>
                                 </div>
@@ -86,7 +90,8 @@
             {% do form.options.setRendered() %}
         </div>
 
-        <div class="product-delivery">
+        {% if flowerShopMode %}
+        <div class="product-part">
             <div class="product-variant-selector-label">Szállítás</div>
 
             <div class="product-variant-selector-content mb-4 JS--deliveryDateContainer">
@@ -110,9 +115,7 @@
                                     <div class="vp choose-date" tabindex="0">
                                         <div class="vp-figure">
                                             <span class="vp-content">
-                                                <span class="tile tile-lg">
-                                                    <i class="far fa-calendar-alt fa-2x"></i>
-                                                </span>
+                                                <i class="far fa-calendar-alt fa-2x"></i>
                                             </span>
                                         </div>
                                     </div>
@@ -129,16 +132,8 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
-
-{#        {% if not form.vars.valid %}#}
-{#            <div class="JS--alertMessage alert alert-danger mt-3" role="alert" data-alert-message>#}
-{#                <i class="fas fa-exclamation-circle mr-1 text-muted"></i>#}
-{#                {% for error in form.vars.errors %}#}
-{#                    {{ error.message }}#}
-{#                {% endfor %}#}
-{#            </div>#}
-{#        {% endif %}#}
     {% else %}
 
         {% if form.options is defined and form.options is not empty %}
@@ -168,14 +163,12 @@
         {% do form.options.setRendered() %}
         {% do form.deliveryDate.deliveryDate.setRendered() %}
 
-        <div class="row">
-            <div class="col-12 detail-option mb-4">
-                <div class="product-variant-selector-label">
-                    Items <span>(required)</span>
-                </div>
-                {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
-                {{ form_errors(form.quantity) }}
+        <div class="product-part">
+            <div class="product-variant-selector-label">
+                {{ 'product.quantity'|trans }}
             </div>
+            {{ form_widget(form.quantity, {'attr': {'class': 'form-control detail-quantity'}}) }}
+            {{ form_errors(form.quantity) }}
         </div>
 
     {% endif %}

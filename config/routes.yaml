@@ -1,9 +1,9 @@
 index:
     path: /
-    controller: App\Controller\Shop\ShopController::index
+    controller: App\Controller\Shop\ShopController::showHomepage
 
 admin:
-    path: /{all}/admin   # {all} so that both /admin and /hu/admin work
+    path: /{_locale}/admin   # {all} so that both /admin and /hu/admin work
     controller: App\Controller\Admin\AdminController::showAdmin
 
 logout:
@@ -11,8 +11,7 @@ logout:
     methods: GET
 
 admin-logout:
-#    path: /{all}/admin/logout
-    path: '/%app_locales%/admin/logout'
+    path: '/{_locale}/admin/logout'
     methods: GET
 
 _liip_imagine:
@@ -20,5 +19,9 @@ _liip_imagine:
 
 api_login_check:
     path: /admin/api/login
+
+
+ch_cookie_consent:
+    resource: "@CookieConsentBundle/Resources/config/routing.yaml"
 
 # config/routes.yaml

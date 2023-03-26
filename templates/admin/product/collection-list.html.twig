@@ -1,0 +1,88 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set activeMenu = 'products' %}
+{% set pageTitle = 'collection.collections'|trans %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+} %}
+
+{%- block title -%}
+    {{ pageTitle }}
+{%- endblock -%}
+
+{% block bodyClass %} collection collection-list{% endblock %}
+
+{% block modal %}
+{% endblock %}
+
+{% block headerActionsWrapper %}
+    <a href="{{ path('collections-new') }}" class="btn btn-primary">{{ 'collection.new-collection'|trans }}</a>
+{% endblock %}
+
+{% block tableHeader %}
+    {% if collections is defined and collections is not empty %}
+        <tr>
+            <th scope="col">Aktív</th>
+            <th scope="col">Kép</th>
+            <th scope="col">Név</th>
+            <th scope="col">Slug</th>
+{#            <th scope="col">Leírás</th>#}
+            <th scope="col" class="text-center"><i class="fas fa-ellipsis-h"></i></th>
+        </tr>
+    {% endif %}
+{% endblock %}
+
+{% block tableBody %}
+    {% if collections is defined and collections is not empty %}
+        {% for collection in collections %}
+            <tr>
+                <td class="align-middle text-center">
+                    {% if collection.enabled is defined and collection.enabled == true %}
+                        <span class="badge badge-sm badge-success">&nbsp;</span>
+                    {% else %}
+                        <span class="badge badge-sm badge-danger">&nbsp;</span>
+                    {% endif %}
+                </td>
+                <td class="align-middle">
+                    {% if collection.image|default %}
+                        <div class="img-thumbnail" style="background: url('{{ uploaded_asset(collection.imagePath)|imagine_filter('size_200') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
+                    {% else %}
+                        {% include 'admin/_missing-image-insert.html.twig' %}
+                    {% endif %}
+                </td>
+                <td class="align-middle">
+                    <a href="{{ path('collections-edit', {'id': collection.id}) }}" class="">
+                        {{ collection.name }}
+                    </a>
+                    <br>
+                    {{ collection.description|raw }}
+                </td>
+                <td class="align-middle text-muted">
+                    {{ collection.slug }}
+                </td>
+{#                <td class="align-middle">#}
+{#                    {{ collection.description|raw }}#}
+{#                </td>#}
+                <td class="align-middle">
+                    <a href="{{ path('collections-edit', {'id': collection.id}) }}" role="button" class="btn btn-secondary"><i class="far fa-edit"></i></a>
+                </td>
+
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block tableEmpty %}
+    {% if collections is defined and collections is empty %}
+        <div class="h-100 text-center p-4">
+            <div class="h1 text-muted-extra">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="font-18 mt-3 mb-2">{{ 'collection.collections-not-found'|trans }}</div>
+            <div class="text-muted-extra">{{ 'collection.collections-not-found-suggestion'|trans }}</div>
+        </div>
+    {% endif %}
+{% endblock %}

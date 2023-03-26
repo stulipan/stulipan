@@ -31,61 +31,62 @@
                         {% block sidebar %}
                             <div class="account-sidebar card mb-20px">
                                 <div class="list-group list-group-flush">
-{#                                    <li class="list-group-item">#}
-                                        <a href="{{ path('site-user-myAccount') }}" class="list-group-item list-group-item-action">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="d-inline-flex align-items-center">
-                                                    <svg class="svg-icon svg-icon-heavy">
-                                                        <use xlink:href="#male-user-1"> </use>
-                                                    </svg>
-                                                    {{ 'account.my-account'|trans }}
-                                                </div>
-                                                <div class="d-flex text-mutedX text-sm">
-                                                    <i class="fas fa-chevron-right"></i>
-                                                </div>
+                                    <a href="{{ path('site-user-myAccount') }}" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-inline-flex align-items-center">
+                                                <svg class="icon">
+                                                    <use xlink:href="#person"></use>
+                                                </svg>
+                                                {{ 'account.my-account'|trans }}
                                             </div>
-                                        </a>
-{#                                    </li>#}
-{#                                    <li class="list-group-item">#}
-                                        <a href="{{ path('site-user-myOrders') }}" class="text-darkX list-group-item list-group-item-action">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="d-inline-flex align-items-center">
-                                                    <svg class="svg-icon svg-icon-heavy"><use xlink:href="#retail-bag-2"></use></svg>
-                                                    {{ 'account.my-orders'|trans }}
-                                                </div>
-                                                <div class="d-flex text-mutedX text-sm">
-                                                    <i class="fas fa-chevron-right"></i>
-                                                </div>
+                                            <div class="d-flex">
+                                                <svg class="icon mr-0">
+                                                    <use xlink:href="#chevron-right"></use>
+                                                </svg>
                                             </div>
-
-                                        </a>
-{#                                    </li>#}
-{#                                    <li class="list-group-item">#}
-                                        <a href="{{ path('site-user-myDetails') }}" class="text-darkX list-group-item list-group-item-action">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="d-inline-flex align-items-center">
-                                                    <i class="fas fa-clipboard-list"></i>
-                                                    {{ 'account.account-information'|trans }}
-                                                </div>
-                                                <div class="d-flex text-mutedX text-sm">
-                                                    <i class="fas fa-chevron-right"></i>
-                                                </div>
+                                        </div>
+                                    </a>
+                                    <a href="{{ path('site-user-myOrders') }}" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-inline-flex align-items-center">
+                                                <svg class="icon">
+                                                    <use xlink:href="#bag-check"></use>
+                                                </svg>
+                                                {{ 'account.my-orders'|trans }}
                                             </div>
-                                        </a>
-{#                                    </li>#}
-{#                                    <li class="list-group-item">#}
-                                        <a href="{{ path('site-user-myAccount') }}" class="text-darkX list-group-item list-group-item-action">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="d-inline-flex align-items-center">
-                                                    <i class="fa fa-sign-in-alt"></i>
-                                                    {{ 'account.change-password'|trans }}
-                                                </div>
-                                                <div class="d-flex text-mutedX text-sm">
-                                                    <i class="fas fa-chevron-right"></i>
-                                                </div>
+                                            <div class="d-flex">
+                                                <svg class="icon mr-0">
+                                                    <use xlink:href="#chevron-right"></use>
+                                                </svg>
                                             </div>
-                                        </a>
-{#                                    </li>#}
+                                        </div>
+                                    </a>
+                                    <a href="{{ path('site-user-myDetails') }}" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-inline-flex align-items-center">
+                                                <svg class="icon">
+                                                    <use xlink:href="#person-lines-fill"></use>
+                                                </svg>
+                                                {{ 'account.account-information'|trans }}
+                                            </div>
+                                            <div class="d-flex">
+                                                <svg class="icon mr-0">
+                                                    <use xlink:href="#chevron-right"></use>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </a>
+{#                                    <a href="{{ path('site-user-myAccount') }}" class="list-group-item list-group-item-action">#}
+{#                                        <div class="d-flex justify-content-between align-items-center">#}
+{#                                            <div class="d-inline-flex align-items-center">#}
+{#                                                <i class="fa fa-sign-in-alt mr-2"></i>#}
+{#                                                {{ 'account.change-password'|trans }}#}
+{#                                            </div>#}
+{#                                            <div class="d-flex">#}
+{#                                                <i class="fas fa-chevron-right"></i>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </a>#}
                                 </div>
                             </div>
                         {% endblock %}
@@ -94,11 +95,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="back-to-my-account mb-3 mb-md-0">
-                                    <a href="{{ path('site-user-myAccount') }}" class="text-dark">
-                                        <i class="fas fa-long-arrow-alt-left mr-2"></i>
-                                        {#            <svg class="svg-icon svg-icon-heavy">#}
-                                        {#                <use xlink:href="#male-user-1"> </use>#}
-                                        {#            </svg>#}
+                                    <a href="{{ path('site-user-myAccount') }}" class="text-decoration-none">
+                                        <svg class="icon">
+                                            <use xlink:href="#arrow-left"></use>
+                                        </svg>
                                         {{ 'account.my-account'|trans }}
                                     </a>
                                 </div>
@@ -116,5 +116,5 @@
     </div>
 {% endblock %}
 
-{% block footerHighlights %}
-{% endblock %}
+{#{% block footerHighlights %}#}
+{#{% endblock %}#}

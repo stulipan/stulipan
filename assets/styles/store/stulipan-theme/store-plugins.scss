@@ -1,0 +1,67 @@
+@import "bootstrap/functions";
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+
+@import "addons/addons-remaining-paint.scss";
+@import "sections/sections-remaining-paint.scss";
+
+@import "sweetalert2/sweetalert2";
+@import "daterangepicker";
+
+
+
+// Ekko lightbox
+.ekko-lightbox .modal-header {
+  padding: 0
+}
+
+.ekko-lightbox .modal-title {
+  display: none
+}
+
+.ekko-lightbox .ekko-lightbox-nav-overlay span {
+  padding: 0 .5rem
+}
+
+.ekko-lightbox .nav-arrow {
+  -ms-flex-positive: 0;
+  flex-grow: 0
+}
+
+.ekko-lightbox .nav-arrow-right {
+  justify-self: right
+}
+
+.ekko-lightbox .close {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  vertical-align: top;
+  background: #343a40;
+  color: #fff;
+  top: -5px;
+  right: -5px;
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  font-size: 2rem;
+  z-index: 999;
+  cursor: pointer;
+  outline: none
+}
+
+.ekko-lightbox .close span {
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  text-shadow: none;
+  font-weight: normal
+}
+
+.ekko-lightbox .modal-footer {
+  -ms-flex-pack: center;
+  justify-content: center;
+  padding-top: 0
+}

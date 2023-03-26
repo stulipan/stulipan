@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace App\Event;
 
-use App\Controller\Utils\GeneralUtils;
 use App\Entity\Order;
 use App\Entity\OrderLogChannel;
 use App\Entity\OrderStatus;
 use App\Entity\PaymentStatus;
-use App\Event\OrderEvent;
 use App\Entity\OrderLog;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -48,11 +45,13 @@ class OrderSubscriber implements EventSubscriberInterface
         return [
             // az 'onPaymentStatusUpdate' egy method ami lefuttat és amit nekem kell definialni. Lasd lent, ott van definialva
             OrderEvent::PRODUCT_ADDED_TO_CART => 'onCartCreate',
-            OrderEvent::ORDER_CREATED => 'onOrderCreate',
+//            OrderEvent::ORDER_CREATED => 'onOrderCreate',
             OrderEvent::ORDER_UPDATED => 'onOrderCreate',
             OrderEvent::PAYMENT_UPDATED => 'onPaymentStatusUpdate',
             OrderEvent::DELIVERY_DATE_UPDATED => 'onDeliveryDateUpdate',
             OrderEvent::SET_ORDER_AS_TRACKED => 'onSetOrderAsTracked',
+            OrderEvent::EMAIL_SENT_ORDER_CONFIRMATION => 'onEmailSentOrderConfirmation',
+            OrderEvent::EMAIL_SENT_SHIPPING_CONFIRMATION => 'onEmailSentShippingConfirmation',
 
         ];
     }
@@ -67,7 +66,6 @@ class OrderSubscriber implements EventSubscriberInterface
 
         $this->setOrderLog($order, $message, null, $this->em->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => $event->getArgument('channel')]));
     }
-
 
     public function onOrderCreate(OrderEvent $event): void
     {
@@ -87,9 +85,11 @@ class OrderSubscriber implements EventSubscriberInterface
 
         $messages = [
             'created' => '{{fullname}} placed this order.',
-            'fulfilled' => 'The order was successfully fulfilled and closed.',
+            'fulfilled' => 'A rendelés teljesítve.',
+//                'The order was successfully fulfilled and closed.',
             'rejected' => 'The order was rejected.',
-            'deleted' => 'The order was deleted.',
+            OrderStatus::ORDER_CANCELED => 'Rendelés törölve.'
+//                'The order was deleted.',
         ];
 
         switch ($shortcode) {
@@ -98,7 +98,7 @@ class OrderSubscriber implements EventSubscriberInterface
                     '{{fullname}}' => $order->getFullname(),
                 ]);
                 break;
-            case OrderStatus::STATUS_FULFILLED || OrderStatus::ORDER_REJECTED || OrderStatus::ORDER_DELETED:
+            case OrderStatus::STATUS_FULFILLED || OrderStatus::ORDER_REJECTED || OrderStatus::ORDER_CANCELED:
                 $message = $this->translator->trans($messages[$shortcode], []);
                 break;
 //            case OrderStatus::ORDER_REJECTED:
@@ -138,17 +138,30 @@ class OrderSubscriber implements EventSubscriberInterface
         }
 
         $messages = [
+//            'pending' => 'A {{amount}} payment is pending on {{payment}}.',
+//            'success' => '',
+//            'failure' => '',
+//            'error' => '',
+//            'canceled' => '',
+//
+//            'paid' => 'A {{amount}} payment was processed on {{payment}}.',
+//            'partially_paid' => 'A partial payment of {{amount}} has been paid by the customer.',
+//            'partially_refunded' => 'A partial refund of {{amount}} has been issue to the customer.',
+//            'refunded' => 'A {{amount}} has been refunded to the customer.',
+
             'pending' => 'A {{amount}} payment is pending on {{payment}}.',
-            'paid' => 'A payment of {{amount}} has been paid by the customer.',
+            'paid' => 'A {{amount}} payment was processed on {{payment}}.',
             'partially_paid' => 'A partial payment of {{amount}} has been paid by the customer.',
             'partially_refunded' => 'A partial refund of {{amount}} has been issue to the customer.',
             'refunded' => 'A {{amount}} has been refunded to the customer.',
         ];
         $descriptions = [
-            'pending' => $this->twig->render('admin/order/_history-pending.html.twig', [
-                'order' => $order,
-            ]),
-//            'paid' => '',
+//            'pending' => $this->twig->render('admin/order/_history-pending.html.twig', [
+//                'order' => $order,
+//            ]),
+//            'paid' => $this->twig->render('admin/order/_history-paid.html.twig', [
+//                'order' => $order,
+//            ]),
 //            'partially_paid' => '',
 //            'partially_refunded' => '',
 //            'refunded' => '',
@@ -161,34 +174,89 @@ class OrderSubscriber implements EventSubscriberInterface
         switch ($shortcode) {
             case PaymentStatus::STATUS_PENDING:
                 $message = $this->translator->trans($messages[$shortcode], [
-                    '{{amount}}' => $money($order->getSummary()->getTotalAmountToPay()),
+                    '{{amount}}' => $money($order->getTotalAmountToPay()),
                     '{{payment}}' => $order->getPaymentMethod(),
                 ]);
-                $description = $descriptions[$shortcode];
+                $description = $this->twig->render('admin/order/_history-pending.html.twig', [
+                    'order' => $order,
+//                    'paymentGateway' => $order->getPaymentMethod()->getShortcode(),
+                ]);
                 break;
             case PaymentStatus::STATUS_PAID:
                 $message = $this->translator->trans($messages[$shortcode], [
-                    '{{amount}}' => $money($order->getSummary()->getTotalAmountToPay()),
+                    '{{amount}}' => $money($order->getTotalAmountToPay()),
+                    '{{payment}}' => $order->getPaymentMethod(),
+                ]);
+                $description = $this->twig->render('admin/order/_history-paid.html.twig', [
+                    'order' => $order,
                 ]);
                 break;
 //            case PaymentStatus::STATUS_PARTIALLY_PAID:
 //                $message = $this->translator->trans($messages[$shortcode], [
-//                    '{{amount}}' => $order->getSummary()->getTotalAmountToPay()
+//                    '{{amount}}' => $order->getTotalAmountToPay()
 //                ]);
 //                break;
 //            case PaymentStatus::STATUS_PARTIALLY_REFUNDED:
 //                $message = $this->translator->trans($messages[$shortcode], [
-//                    '{{amount}}' => $order->getSummary()->getTotalAmountToPay()
+//                    '{{amount}}' => $order->getTotalAmountToPay()
 //                ]);
 //                break;
             case PaymentStatus::STATUS_REFUNDED:
                 $message = $this->translator->trans($messages[$shortcode], [
-                    '{{amount}}' => $money($order->getSummary()->getTotalAmountToPay())
+                    '{{amount}}' => $money($order->getTotalAmountToPay())
                 ]);
                 break;
         }
 
         $this->setOrderLog($order, $message, $description, $this->em->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => $event->getArgument('channel')]));
+    }
+
+    public function onEmailSentOrderConfirmation(OrderEvent $event): void
+    {
+        /** @var Order $order */
+        $order = $event->getSubject();
+
+        if (!$event->getArgument('channel')) {
+            throw new Exception('STUPID: OrderSubscriber >> onDeliveryDateUpdate() függvényben >> nincs \'channel\' definiálva!');
+        }
+
+//        $t = 'Order confirmation email was sent to Liviu jr. Chioran (liviu.chioran@gmail.com).';
+        $message = 'A rendelést visszaigazoló email kiküldve: {{ recipientName }} ({{ recipientEmail }})';
+        $message = $this->translator->trans($message, [
+            '{{ recipientName }}' => $order->getFullname(),
+            '{{ recipientEmail }}' => $order->getEmail(),
+        ]);
+
+        $this->setOrderLog(
+            $order,
+            $message,
+            null,
+            $this->em->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => $event->getArgument('channel')])
+        );
+    }
+
+    public function onEmailSentShippingConfirmation(OrderEvent $event): void
+    {
+        /** @var Order $order */
+        $order = $event->getSubject();
+
+        if (!$event->getArgument('channel')) {
+            throw new Exception('STUPID: OrderSubscriber >> onDeliveryDateUpdate() függvényben >> nincs \'channel\' definiálva!');
+        }
+
+//        $t = 'Order confirmation email was sent to Liviu jr. Chioran (liviu.chioran@gmail.com).';
+        $message = 'A szállításról szóló email kiküldve: {{ recipientName }} ({{ recipientEmail }})';
+        $message = $this->translator->trans($message, [
+            '{{ recipientName }}' => $order->getFullname(),
+            '{{ recipientEmail }}' => $order->getEmail(),
+        ]);
+
+        $this->setOrderLog(
+            $order,
+            $message,
+            null,
+            $this->em->getRepository(OrderLogChannel::class)->findOneBy(['shortcode' => $event->getArgument('channel')])
+        );
     }
 
     // Helper

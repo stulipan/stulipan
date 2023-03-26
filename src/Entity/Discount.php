@@ -45,14 +45,14 @@ class Discount
     /**
      * @var float
      * @Assert\NotBlank()
-     * @ORM\Column(name="gross_price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
+     * @ORM\Column(name="gross_price", type="decimal", precision=10, scale=2, nullable=false, options={"default"=0.00})
      */
     private $discount;
 
     /**
      * @return int
      */
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }

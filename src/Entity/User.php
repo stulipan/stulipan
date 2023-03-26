@@ -33,12 +33,12 @@ class User implements UserInterface, Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=64, unique=true)
+     * @ORM\Column(name="username", type="string", length=255, unique=true)
      */
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="registration.password-is-missing")
      */
     private $password;
@@ -56,7 +56,7 @@ class User implements UserInterface, Serializable
     /**
      * @var int|null
      *
-     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
+     * @ORM\Column(name="phone", type="string", length=15, nullable=true)
      * @ Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $phone;
@@ -64,14 +64,14 @@ class User implements UserInterface, Serializable
     /**
      * @var bool
      *
-     * @ORM\Column(name="verified_email", type="smallint", length=1, nullable=false, options={"default"="0"})
+     * @ORM\Column(name="verified_email", type="boolean", nullable=false, options={"default"=false})
      */
     private $verifiedEmail = 0;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="accepts_marketing", type="smallint", length=1, nullable=false, options={"default"="0"})
+     * @ORM\Column(name="accepts_marketing", type="boolean", nullable=false, options={"default"=false})
      */
     private $acceptsMarketing = 0;
 
@@ -120,11 +120,37 @@ class User implements UserInterface, Serializable
      */
     private $roles = [];
 
+    /**
+     * @var Recipient[]|ArrayCollection|null
+     *
+     * ==== One User/Customer has Recipients ====
+     * ==== mappedBy="customer" => az Recipients entitásban definiált 'customer' attribútumról van szó ====
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Recipient", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=true)
+     * @Assert\NotBlank(message="Egy felhasználónak több címzetje lehet.")
+     */
+    private $recipients;
+
+    /**
+     * @var Sender[]|ArrayCollection|null
+     *
+     * ==== One User/Customer has Senders ====
+     * ==== mappedBy="customer" => a Senders entitásban definiált 'customer' attribútumról van szó ====
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Sender", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="user_id", nullable=true)
+     * @Assert\NotBlank(message="Egy felhasználónak több számlázási címe lehet.")
+     */
+    private $senders;
+
     public function __construct()
     {
         $this->isActive = true;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
+        $this->recipients = new ArrayCollection();
+        $this->senders = new ArrayCollection();
     }
 
 //    public function __toString(): string
@@ -144,7 +170,12 @@ class User implements UserInterface, Serializable
     public function getRoles(): array
     {
         $roles = $this->roles;
-        $roles[] = 'ROLE_USER';  // guarantees every user at least has ROLE_USER
+
+        // guarantees that a user always has at least one role for security
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+
         return array_unique($roles);
     }
 
@@ -194,11 +225,15 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @see UserInterface
+     * Returns the salt that was originally used to encode the password.
+     *
+     * {@inheritdoc}
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
-        // not needed when using bcrypt or argon
+        // We're using bcrypt in security.yaml to encode the password, so
+        // the salt value is built-in and and you don't have to generate one
+        // See https://en.wikipedia.org/wiki/Bcrypt
         return null;
     }
     
@@ -236,7 +271,8 @@ class User implements UserInterface, Serializable
      */
     public function isVerifiedEmail(): bool
     {
-        return 1 !== $this->verifiedEmail ? false : true;
+//        return 1 !== $this->verifiedEmail ? false : true;
+        return null === $this->verifiedEmail ? false : $this->verifiedEmail;
     }
 
     /**
@@ -252,7 +288,7 @@ class User implements UserInterface, Serializable
      */
     public function isAcceptsMarketing(): bool
     {
-        return 1 !== $this->acceptsMarketing ? false : true;
+        return null === $this->acceptsMarketing ? false : $this->acceptsMarketing;
     }
 
     /**
@@ -264,7 +300,7 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFirstname(): ?string
     {
@@ -272,7 +308,7 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      */
     public function setFirstname(?string $name)
     {
@@ -280,7 +316,7 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      */
     public function setLastname(?string $name)
     {
@@ -288,7 +324,7 @@ class User implements UserInterface, Serializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLastname(): ?string
     {
@@ -297,7 +333,7 @@ class User implements UserInterface, Serializable
 
     /**
      * @Groups({"orderView", "orderList"})
-     * @return string
+     * @return string|null
      */
     public function getFullname(): ?string
     {
@@ -306,6 +342,15 @@ class User implements UserInterface, Serializable
         }
         $fullname = $this->firstname.' '.$this->lastname;
         return $fullname;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getInitials(): ?string
+    {
+        $fullnameInitial = $this->firstname[0].$this->lastname[0];
+        return $this->ucWords($fullnameInitial);
     }
 
     /**
@@ -324,6 +369,14 @@ class User implements UserInterface, Serializable
         $this->image = $image;
     }
 
+    public function getAvatar()
+    {
+        if ($this->getImage() == null) {
+            return $this->getInitials();
+        }
+        return $this->getImage();
+    }
+
     /**
      * @param bool $isActive
      */
@@ -332,28 +385,32 @@ class User implements UserInterface, Serializable
         $this->isActive = $isActive;
     }
 
-    /** @see \Serializable::serialize() */
-    public function serialize()
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
     {
-        return serialize(array(
+        // add $this->salt too if you don't use Bcrypt or Argon2i
+        return serialize([
             $this->id,
             $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt,
-        ));
+            $this->email,
+            $this->password
+        ]);
     }
 
-    /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized): void
     {
-        list (
+        // add $this->salt too if you don't use Bcrypt or Argon2i
+        [
             $this->id,
             $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt
-            ) = unserialize($serialized, array('allowed_classes' => false));
+            $this->email,
+            $this->password
+        ] = unserialize($serialized, ['allowed_classes' => false]);
     }
 
     public function getIsActive(): ?bool
@@ -398,5 +455,81 @@ class User implements UserInterface, Serializable
     private function ucWords (?string $string)
     {
         return $string ? ucwords($string) : $string;
+    }
+
+    /**
+     * @param Recipient $recipient
+     */
+    public function addRecipient(Recipient $recipient): void
+    {
+        $this->recipients->add($recipient);
+    }
+
+    /**
+     * @param Recipient $recipient
+     */
+    public function removeRecipient(Recipient $recipient): void
+    {
+        $this->recipients->removeElement($recipient);
+    }
+
+    /**
+     * @return Recipient[]|Collection
+     */
+    public function getRecipients(): Collection
+    {
+        return $this->recipients;
+    }
+
+    /**
+     * Checking if the Customer has Recipients.
+     *
+     * @return bool
+     */
+    public function hasRecipients(): bool
+    {
+        if ($this->recipients and !$this->recipients->isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param Sender $sender
+     */
+    public function addSender(Sender $sender): void
+    {
+        $this->senders->add($sender);
+    }
+
+    /**
+     * @param Sender $sender
+     */
+    public function removeSender(Sender $sender): void
+    {
+        $this->senders->removeElement($sender);
+    }
+
+    /**
+     * @return Sender[]|Collection
+     */
+    public function getSenders(): Collection
+    {
+        return $this->senders;
+    }
+
+    /**
+     * Checking if the Customer has Senders.
+     *
+     * @return bool
+     */
+    public function hasSenders(): bool
+    {
+        if ($this->senders and !$this->senders->isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

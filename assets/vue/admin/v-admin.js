@@ -1,3 +1,7 @@
+// NINCS HASZNALVA !!!!!
+
+
+
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 
@@ -5,7 +9,7 @@ import VueClip from 'vue-clip'
 import VModal from 'vue-js-modal'
 
 import Category from './../admin/category/Category.vue'
-import CmsImageUpload from './../admin/_components/CmsImageUpload.vue'
+import StoreImageUpload from './../admin/_components/StoreImageUpload.vue'
 
 
 Vue.use(VueResource);
@@ -16,7 +20,7 @@ Vue.use(VModal, { dialog: true });
 
 Vue.http.options.root = 'http://stulipan.dfr';
 const uploadUrls = {
-    productImage: '/hu/admin/api/images/product/',
+    productImage: '/hu/admin/api/upload/productImage/',
 };
 
 
@@ -39,11 +43,3 @@ if (document.getElementById('v--geoPrice')) {
         // components: {GeoPrice},
     });
 }
-
-// if (document.getElementById('v--imageUpload')) {
-//     new Vue({
-//         el: '#v--imageUpload',
-//         template: '<CmsImageUpload/>',
-//         components: {CmsImageUpload},
-//     });
-// }

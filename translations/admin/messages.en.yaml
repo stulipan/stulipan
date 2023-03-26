@@ -21,9 +21,90 @@
 #           order > 'customer'
 #           etc
 
+collection:
+    collections: Collections
+    new-collection: New collection
+    collections-not-found: No collection was found!
+    collections-not-found-suggestion: Try modifying the filters.
+    new-collection-created-successfully: New collection was successfully created!
+    name: Collection name
+    description: Description
+    seo-content: SEO content
+    image: Collection image
+    slug: Slug
+    slug-help: 'Eg.: ''beauty-and-cosmetics''. This will be visible in the collection''s URL like this: www.example.com/collection/szepseg-es-kozmetika'
+    enabled: Enabled
+    parent-collection: Parent collection
+    name-is-missing: Enter the collection name.
+    slug-is-missing: 'The slug can''t be empty. Slug example: ''beauty-and-cosmetics'''
+    slug-already-in-use: 'Slug already in use. The slug must be unique. Possible solution: Add a ''-1'' to the end.'
 
+product:
+    products: Products
+    new-product: New product
+    correct-errors: 'Javítsd a lenti hibákat.'
+    name-is-missing: 'Adj nevet a terméknek.'
+    slug-is-missing: 'A slug nem lehet üres. Pl: ''szuletesnapi-lufi'''
+    slug-already-in-use: 'Ez az SKU kód már használatban!'
+    sku-is-missing: 'Nem adtál meg SKU-t.'
+    sku-already-in-use: 'Ez az SKU kód már használatban!'
+    price-is-missing: 'Árazd be a terméket.'
+    stock-is-missing: 'Nem adtálg meg készletet.'
+    stock-is-negative: 'Nem lehet negatív készlet.'
+    status-is-missing: 'Válassz egy állapotot.'
+    collection-is-missing: 'Válassz kategóriát.'
+    type-is-missing: 'Válassz egy terméktípust.'
+
+page:
+    pages: Pages
+    new-page: New page
+    pages-not-found: No pages were found!
+    pages-not-found-suggestion: Try modifying the filters.
+    new-collection-created-successfully: New page was successfully created!
+    name: Page name
+    content: Content
+    image: Image
+    slug: Slug
+    slug-help: 'Eg.: ''beauty-and-cosmetics''. This will be visible in the collection''s URL like this: www.example.com/collection/szepseg-es-kozmetika'
+    enabled: Enabled
+    parent-page: Parent page
+    name-is-missing: Enter the collection name.
+    slug-is-missing: 'The slug can''t be empty. Slug example: ''beauty-and-cosmetics'''
+    slug-already-in-use: 'Slug already in use. The slug must be unique. Possible solution: Add a ''-1'' to the end.'
+    duplicate-page: Duplicate page
+blog:
+    blogs: Manage blogs
+    new-blog: New blog
+    blog: Blog
+    name: Name
+    articles: Articles
+    new-article: New article
+    articles-not-found: No article written yet!
+    articles-not-found-suggestion: 'Try modifying filters.'
+    article:
+        title: Title
+        content: Content
+        excerpt: Excerpt
+        excerpt-help: Add a summary of the post to appear on your home page or blog.
+        image: Image
+        slug: Slug
+        slug-help: 'Eg.: ''beauty-and-cosmetics''. This will be visible in the collection''s URL like this: www.example.com/collection/szepseg-es-kozmetika'
+        enabled: Enabled
+        author: Author
+        published-at: 'Published at:'
+        last-edited-at: 'Last edited:'
+        written-by: 'Written by {{ author }}'
+        created-successfully: 'Article successfully saved.'
+        updated-successfully: 'Article successfully updated.'
+        title-is-missing: 'Enter the title.'
+        slug-is-missing: 'The slug can''t be empty. Slug example: ''this-is-an-article'''
+        slug-already-in-use: 'Slug already in use. The slug must be unique. Possible solution: Add a ''-1'' to the end.'
+        duplicate-article: Duplicate article
+        duplicated-successfully: 'Article successfully duplicated.'
+        duplication-failed: 'An error occurred: {{ message }}'
 order:
     orders: Orders
+    abandoned-orders: Abandoned orders
     order: Order
     order-id: Order ID
     delivery-date-overdue: Delivery date overdue!
@@ -35,15 +116,18 @@ order:
     shipping: Shipping
     discount: Discount
     total-amount-to-pay: Total amount to pay
+    items-count: '{{ count }} items'
     edit-sender: Edit sender
     recipient: Recipient
     edit-recipient: Edit recipient
     new-delivery-date: New delivery date
+    archive-order: Archive order
+    view-status-page: View order status page
     cart-products: Products
     message: Message
-    sender: Sender:
-    phone-number: Phone:
-    delivery-date: Delivery date:
+    sender: 'Sender:'
+    phone-number: 'Phone:'
+    delivery-date: 'Delivery date:'
     time-of-delivery: Time of delivery
     pick-delivery-date: Válaszd ki mikor szállítsuk ki!
     pick-delivery-interval: A kézbesítés az általad kért időpontban történik
@@ -51,22 +135,55 @@ order:
     free-delivery: Ingyenes szállítás
     choose-the-timeframe-when-the-recipient-will-available-at-delivery-address: Olyan idősávot válassz, amikor a szállítási címen elerhető lesz a címzett.
     save-delivery-time: Save date
-
-    payment: Payment
+    archive-order-title: Archive order
+    archive-order-description: The order will be archived.
+    archive-order-proceed: Proceed
+    payment-method: Payment method
+    paid-by-customer: Paid by customer
     instructions-for-bank-transfer: Instructions for bank transfer
-    payment-status: Fizetés állapota
-    mark-as-paid: Jelöld meg fizetettként
-
+    mark-as-paid: Mark as paid
+    payment-status: Payment status
+    payment-processed-by: 'Process by:'
+    payment-processed-manually: If you received payment manually, mark this order as paid.
+    mark-as-fulfilled: Mark as fulfilled
+    fulfill-order: The order is going to be fulfilled.
+    send-shipping-confirmation-button: Send shipping confirmation
+    resend-shipping-confirmation: Resend shipping confirmation
+    shipping-confirmation-will-be-sent-to: 'The shipping confirmation email will be sent to {{ email }}'
+    send-shipping-confirmation-email: Send shipping confirmation email to your customer
+    send-order-confirmation-button: Send confirmation email
+    resend-order-confirmation: Resend order confirmation
+    order-confirmation-will-be-sent-to: 'The order confirmation email will be sent to {{ email }}'
+    status:
+        canceled: Canceled
+    cancel:
+        cancel-order: Cancel order
+        inventory: Inventory
+        restock-items: Restock items
+        reason-for-cancelation: Reason for cancelation
+        notification: Notification
+        send-notification-to-the-customer: Send notification to the customer
+        keep-order: Keep order
+        cancel-order-button: Cancel order
     history:
         history-timeline: Timeline
+        leave-a-comment-here: Leave a comment...
+        only-you-can-see-comments: Only you and the admins can see the comments.
+        comment-is-missing: The comment is missing!
         order-id: Order ID
-        amount: Amount:
-        payment-method: Payment:
+        amount: 'Amount:'
+        payment-method: 'Payment:'
+        authorization-key: Authorization key
+        payment-gateway: Gateway
+        transaction-status: Status
+        transaction-type: Type
+        transaction-created-at: Created at
+        transaction-processed-at: Processed at
 
     user-agent:
         user-agent-details: Rendelés helye
         see-more: See details
-        ip-address: IP address:
+        ip-address: 'IP address:'
         browser: Browser
         platform: Platform (OS)
         user-agent: User agent
@@ -118,8 +235,12 @@ dashboard:
 settings:
     settings: Settings
     dashboard:
-        general-settings-title: General settings
+        general-settings-title: General
         general-settings-description: View and update your store details
+        notifications-title: Notifications
+        notifications-description: Manage notifications sent to you and your customers
+        store-policy-title: Legal
+        store-policy-description: Manage your store's legal pages
         translation-title: Store languages
         translation-description: Manage the languages your customers can view on your store
         admin-general-settings-title: Admin
@@ -128,7 +249,7 @@ settings:
         translation-title: Translation
         translation-is-missing: '{{ count }} translation is missing.'
         translations-are-missing: '{{ count }} translations are missing.'
-        interface: Interface:
+        interface: 'Interface:'
         store-texts: Online store
         admin-texts: Admin
     general-settings:
@@ -137,44 +258,198 @@ settings:
         customer-support: Customer support
         business-name: Business name
         business-address: Business address
-
+    shipping:
+        shipping: Shipping
+        shipping-description: Shipping methods settings.
+        shipping-method: Shipping method
+        shipping-methods: Shipping methods
+        shipping-method-not-found: No shipping method was found!
+        new-shipping-method: New shipping method
+        edit-shipping-method: Edit shipping method
+        new-shipping-method-description: Feel free to add and set up new shipping methods.
+        shipping-methods-description: Manage your shipping methods, by adding new one or editing existing methods.
+        shipping-saved-successfully: Shipping method successfully saved.
+    payment:
+        payment: Payment
+        payment-description: Payment methods settings.
+        payment-method: Payment method
+        payment-methods: Payment methods
+        payment-method-not-found: No payment method was found!
+        new-payment-method: New payment method
+        edit-payment-method: Edit payment method
+        new-payment-method-description: Feel free to add and set up new payment methods.
+        payment-methods-description: Manage your payment methods, by adding new one or editing existing methods.
+        additional-details: Additional details
+        additional-details-help: Displays to customers in Checkout when they’re choosing a payment method.
+        payment-instructions: Payment instructions
+        payment-instructions-help: Displays to customers after they place an order with this payment method.
+        payment-saved-successfully: Payment method successfully saved.
+    notification:
+        notifications: Notifications
+        notifications-description: These notifications are automatically sent out to the customer. Click on the notification template to edit the content.
+        email-template-not-found: No email template was found!
+        customize-template: Customize template
+        new-email-template: New email template
+        email-template-saved-successfully: Email template successfully saved.
+        name: Template name
+        subject: Email subject
+        body: Email body (HTML)
+        slug: Slug
+    policy:
+        policy: Legal pages
+        legal-pages: Legal pages and policies
+        legal-pages-description: 'You can create your own legal (policy) pages. Your saved policies will be linked in the footer of your checkout. You may need to add your policies to menus in your online store.'
+        terms-and-conditions: Terms and conditions
+        privacy-policy: Privacy policy
+        shipping-information: Shipping information
+        return-policy: Return policy
+        contact-information: Contact information
+        legal-notice: Legal notice
+        name: Title
+        content: Content
 customer:
     customer: Customer
     customers: Customers
     new-customer: Add customer
-    all-customers: All customers
-    search: Search
-    search-button: Search
-    search-placeholder: Search...
-    search-result: 'Search:'
-    choose-status: Status...
     filter:
         all-customers: All customers
-        active-customers: Active
+        accepts-marketing: Email subscribers
         custom-filter: Custom filter
+        search: Search
+        search-button: Search
+        search-placeholder: Search...
+        search-result: 'Search:'
+        filter-by-accepts-marketing-choose: Email subscription status
+        filter-by-accepts-marketing-subscribed: Subscribed
+        filter-by-accepts-marketing-no: No
         not-found: No customers found
         not-found-suggestion: Try changing the filters or search term
     send-account-invite: Send account invite
     previous-orders: Previous orders
+    no-previous-orders: No previous orders.
     view-profile: View profile
     orders: Orders
     spent-total: Spent total
     average-cart-value: Average cart value
     order-count: '{{ count }} order'
     orders-count: '{{ count }} orders'
+    accepts-marketing: Subscribed
+cms:
+    section:
+        sections: Sections
+        new-section: New section
+        sections-not-found: No section was found!
+        sections-not-found-suggestion: Try modifying the filters.
+        new-section-created-successfully: New section was successfully created!
+        name: section name
+        content: Content
+        slug: Slug
+        slug-help: 'Eg.: ''beauty-and-cosmetics''.'
+        enabled: Enabled
+        previewable: Show in preview
+        parent-page: Parent page
+        name-is-missing: Enter the section name.
+        slug-is-missing: 'The slug can''t be empty. Slug example: ''beauty-and-cosmetics'''
+        slug-already-in-use: 'Slug already in use. The slug must be unique. Possible solution: Add a ''-1'' to the end.'
+        page-is-missing: Select a page this section belongs to.
+        section-saved-successfully: Section saved successfully.
+        homepage: Homepage
+        product-page: Product page
+        collection-page: Collection page
+
+    navigation:
+        navigation: Navigation
+        navigations: Navigation / Menu
+        new-navigation: New navigation
+        navigations-not-found: No navigation was found!
+        navigations-not-found-suggestion: Try modifying the filters.
+        name: Name
+        enabled: Enabled
+        navigation-item: Navigation item
+        navigation-items: Navigation items
+        new-navigation-item: New navigation item
+        navigation-item-name: Navigation item name
+        navigation-item-url: Navigation item URL
+
+user:
+    users: Users
+    user: User
+    email-address: Email
+    account-created-at: Registered at
+    avatar-photo: Avatar photo
+    avatar-change-replace: Replace photo
+    avatar-remove-photo: Remove photo
+    send-account-invite: Send account invite
+    view-customer-profile: View customer profile
+    name: Name
+    role: Role
+    permissions: Permisions
+    users-not-found: No user was found!
+    users-not-found-suggestion: Try modifying the filters.
+    filter:
+        filters: Filter orders
+        more-filters: More filtering
+        search: Search
+        search-button: Search
+        search-placeholder: Search...
+        search-result: 'Search:'
+        filter-by-date: Filter by date...
+        filter-by-date-result: Date range
+        filter-by-status: Active user
+        filter-by-status-choose: 'Choose...'
+        all-users: All users
+        active-users: Active
+        custom-filter: Custom filter
+        not-found: No users were found
+        not-found-suggestion: Try changing the filters or search term
+login:
+    login-meta: Login
+    login-title: Login
+    email: Email
+    password: Password
+    remember-me: Stay logged in
+    login-button: Login
+
+analytics:
+    analytics: Analytics
+    reports: Reports
+    group-by: Group by...
+    breakdown: 'Breakdown: {{ value }}'
+    day: Day
+    week: Week
+    month: Month
+    year: Year
+    none: None
+    filter-by-date: Date range
+    date-range: 'Date range: {{ value }}'
+    export-your-report: Export your report
+    report-will-be-exported-as-csv: Report will be exported as a CSV (comma separated values) table.
+    sales-over-time:
+        sales-over-time-title: Sales over time
+        date: Date
+        orders: Orders
+        total-sales: Total sales
+        summary: Summary
+
 
 generic:
+    id: '#'
     not-available: n/a
     prev: Previous
     next: Next
     edit: Edit
     modify: Modify
     preview: Preview
+    export: Export
+    export-button: Export
+    view: View
     open: Open
     save: Save
     save-changes: Save changes
+    changes-saved: Changes saved
     cancel: Cancel
     close: Close
+    draft: Draft
     more-actions: More actions
     more: More
     ok: OK
@@ -183,4 +458,16 @@ generic:
     search-button: Search
     search-title: Search
     search-placeholder: Search...
+    created-at: Created at
+    updated-at: Updated at
+    enabled: Enabled
+    disabled: Disabled
+    sort: Sort
+    classname: Class
+    send: Send
+    share: Share
+    entries-being-shown: 'Showing results:'
+    seo-title: SEO title
+    seo-description: SEO description
+    seo-title-is-missing: 'SEO title is missing!'
 

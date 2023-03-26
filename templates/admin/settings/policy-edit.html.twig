@@ -1,0 +1,77 @@
+{% extends 'admin/template-editing.html.twig' %}
+
+{% set activeMenu = 'settings' %}
+
+{% set pageTitle = 'settings.policy.policy'|trans %}
+
+{% set breadcrumb = {
+	0: {
+		'url': path('settings-home'),
+		'text': 'settings.settings'|trans,
+	},
+} %}
+{% set cancelUrl = path('settings-home') %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<script src="{{ asset('webshop/tinymce.min.js') }}"></script>
+	<script src="{{ asset('webshop/plugin.min.js') }}"></script>
+	<script>
+		tinymce.init({
+			selector:'.JS--tinymceContent',
+			// language: 'hu',
+			block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3; Header 4=h4; Header 5=h5; Header 6=h6; Blockquote=blockquote; Code=code',
+			plugins: 'code image imagetools media link wordcount lists table fullscreen autoresize',
+			// tabfocus_elements: ':prev,:next',
+			// contextmenu: 'link image table',
+			entity_encoding : 'raw',
+			min_height: 400,
+			max_height: 600,
+			menubar:false,
+			// statusbar: false,
+			branding: false,
+			relative_urls : false,
+			// insert_button_items: 'image link inserttable',
+			toolbar1: 'insert formatselect | bold italic underline strikethrough | removeformat | numlist bullist | outdent indent | align | link unlink | table | image media | fullscreen | code |',
+			menu: {
+				file: { title: 'File', items: 'newdocument restoredraft | preview | print ' },
+				edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
+				view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
+				insert: { title: 'Insert', items: 'image link media template codesample | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },
+				// format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat' },
+				format: { title: 'Format', items: '' },
+				tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
+				table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },
+			},
+			skin_url: '/webshop',
+			image_class_list: [
+				{title: 'Choose...', value: ''},
+				{title: 'img-fluid', value: 'img-fluid'},
+			],
+		});
+	</script>
+{% endblock %}
+
+{%- block title -%}
+	{{ pageTitle }}
+{%- endblock -%}
+
+
+{% block content %}
+	<div class="row mt-3 mt-md-20px">
+		<div class="col-md-4">
+			<div class="pr-md-5 pr-lg-6">
+				<div class="h5 font-weight-bold">{{ 'settings.policy.legal-pages'|trans }}</div>
+				<div class="text-muted mt-2 mt-md-2">{{ 'settings.policy.legal-pages-description'|trans }}</div>
+			</div>
+			{% block moduleButtons %}
+				<div class="">
+				</div>
+			{% endblock %}
+		</div>
+
+		<div class="col-md-8 correction-no-padding mt-3 mt-md-0">
+			{% include 'admin/settings/policy-form.html.twig' with {'cancelUrl': cancelUrl} %}
+		</div>
+	</div>
+{% endblock %}

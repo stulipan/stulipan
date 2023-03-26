@@ -6,7 +6,22 @@
  * --------------------------------------------------------------------------
  */
 ;
-import Notify from './alerts/notify'
+import Notify from './alerts/notify';
+import Sidebar from './sidebar';
+import FloatingInput from './floating-input';
+
+if (AlertMessages.SUCCESS) {
+  Notify.success(AlertMessages.SUCCESS);
+}
+if (AlertMessages.ERROR) {
+  Notify.error(AlertMessages.ERROR);
+}
+if (AlertMessages.WARNING) {
+  Notify.warning(AlertMessages.WARNING);
+}
+if (AlertMessages.INFO) {
+  Notify.info(AlertMessages.INFO);
+}
 
 window.theme = window.theme || {};
 
@@ -44,70 +59,70 @@ theme.Sections.prototype = _.assignIn({}, theme.Sections.prototype, {
     this.instances.push(instance);
   },
 
-  _onSectionLoad: function(evt) {
-    var container = $('[data-section-id]', evt.target)[0];
-    if (container) {
-      this._createInstance(container);
-    }
-  },
-
-  _onSectionUnload: function(evt) {
-    this.instances = _.filter(this.instances, function(instance) {
-      var isEventInstance = instance.id === evt.detail.sectionId;
-
-      if (isEventInstance) {
-        if (_.isFunction(instance.onUnload)) {
-          instance.onUnload(evt);
-        }
-      }
-
-      return !isEventInstance;
-    });
-  },
-
-  _onSelect: function(evt) {
-    // eslint-disable-next-line no-shadow
-    var instance = _.find(this.instances, function(instance) {
-      return instance.id === evt.detail.sectionId;
-    });
-
-    if (!_.isUndefined(instance) && _.isFunction(instance.onSelect)) {
-      instance.onSelect(evt);
-    }
-  },
-
-  _onDeselect: function(evt) {
-    // eslint-disable-next-line no-shadow
-    var instance = _.find(this.instances, function(instance) {
-      return instance.id === evt.detail.sectionId;
-    });
-
-    if (!_.isUndefined(instance) && _.isFunction(instance.onDeselect)) {
-      instance.onDeselect(evt);
-    }
-  },
-
-  _onBlockSelect: function(evt) {
-    // eslint-disable-next-line no-shadow
-    var instance = _.find(this.instances, function(instance) {
-      return instance.id === evt.detail.sectionId;
-    });
-
-    if (!_.isUndefined(instance) && _.isFunction(instance.onBlockSelect)) {
-      instance.onBlockSelect(evt);
-    }
-  },
-
-  _onBlockDeselect: function(evt) {
-    // eslint-disable-next-line no-shadow
-    var instance = _.find(this.instances, function(instance) {
-      return instance.id === evt.detail.sectionId;
-    });
-
-    if (!_.isUndefined(instance) && _.isFunction(instance.onBlockDeselect)) {
-      instance.onBlockDeselect(evt);
-    }
-  },
+  // _onSectionLoad: function(evt) {
+  //   var container = $('[data-section-id]', evt.target)[0];
+  //   if (container) {
+  //     this._createInstance(container);
+  //   }
+  // },
+  //
+  // _onSectionUnload: function(evt) {
+  //   this.instances = _.filter(this.instances, function(instance) {
+  //     var isEventInstance = instance.id === evt.detail.sectionId;
+  //
+  //     if (isEventInstance) {
+  //       if (_.isFunction(instance.onUnload)) {
+  //         instance.onUnload(evt);
+  //       }
+  //     }
+  //
+  //     return !isEventInstance;
+  //   });
+  // },
+  //
+  // _onSelect: function(evt) {
+  //   // eslint-disable-next-line no-shadow
+  //   var instance = _.find(this.instances, function(instance) {
+  //     return instance.id === evt.detail.sectionId;
+  //   });
+  //
+  //   if (!_.isUndefined(instance) && _.isFunction(instance.onSelect)) {
+  //     instance.onSelect(evt);
+  //   }
+  // },
+  //
+  // _onDeselect: function(evt) {
+  //   // eslint-disable-next-line no-shadow
+  //   var instance = _.find(this.instances, function(instance) {
+  //     return instance.id === evt.detail.sectionId;
+  //   });
+  //
+  //   if (!_.isUndefined(instance) && _.isFunction(instance.onDeselect)) {
+  //     instance.onDeselect(evt);
+  //   }
+  // },
+  //
+  // _onBlockSelect: function(evt) {
+  //   // eslint-disable-next-line no-shadow
+  //   var instance = _.find(this.instances, function(instance) {
+  //     return instance.id === evt.detail.sectionId;
+  //   });
+  //
+  //   if (!_.isUndefined(instance) && _.isFunction(instance.onBlockSelect)) {
+  //     instance.onBlockSelect(evt);
+  //   }
+  // },
+  //
+  // _onBlockDeselect: function(evt) {
+  //   // eslint-disable-next-line no-shadow
+  //   var instance = _.find(this.instances, function(instance) {
+  //     return instance.id === evt.detail.sectionId;
+  //   });
+  //
+  //   if (!_.isUndefined(instance) && _.isFunction(instance.onBlockDeselect)) {
+  //     instance.onBlockDeselect(evt);
+  //   }
+  // },
 
   register: function(type, constructor) {   // 'constructor' is a function
     this.constructors[type] = constructor;
@@ -127,7 +142,6 @@ theme.LoadingOverlay = (function() {
     el.addClass('loading-spinner-show');
     theme.proceed = true;
     el.trigger(eventText);
-    // notyf.dismissAll();
   }
 
   function hide(el) {
@@ -147,25 +161,6 @@ class FormValidation {
     this.constraints = constraints;
     this.isWithError = false;
     this.formElements = 'input:not([type=hidden]), textarea, select';
-
-    // validate.validators.linkedInputNotEmpty = function (value, options, key) {
-    //   // let form = document.querySelector(this.formWrapper);
-    //   let linkedInput = document.getElementsByName(options.linkedInput);
-    //   // let field = document.querySelectorAll('input[name$="'+linkedInput+'"]');
-    //
-    //   console.log('linkedInput field: '+options.linkedInput);
-    //   console.log('linkedInput value: '+linkedInput.value);
-    //   console.log(validate.isEmpty(linkedInput.value))
-    //
-    //   // console.log('currentInput field: '+key);
-    //   console.log('currentInput value: '+value);
-    //   console.log(validate.isEmpty(value));
-    //   console.log('if: '+!validate.isEmpty(linkedInput.value) && validate.isEmpty(value))
-    //   if (!validate.isEmpty(linkedInput.value) && validate.isEmpty(value)) {
-    //     return options.message;
-    //   }
-    //   return;
-    // };
 
     // Listen for the event.
     document.addEventListener('initFormValidation', function (e) {
@@ -227,7 +222,7 @@ class FormValidation {
     input.classList.remove("is-invalid");
     input.classList.remove("is-valid");
     // and remove any old messages
-    this.closestParent(input, 'form-group').querySelectorAll(".invalid-feedback").forEach(function(el) {
+    this.closestParent(input, 'form-group').querySelectorAll('.invalid-feedback').forEach(function(el) {
       el.innerHTML = '';
     });
   }
@@ -246,7 +241,7 @@ class FormValidation {
   }
 }
 
-const datePicker = (function () {
+theme.DatePicker = (function () {
   const selectors = {
     DELIVERY_DATE_WRAPPER: '.JS--Wrapper-deliveryDate',
     DELIVERY_DATE_FORM: '.JS--Wrapper-deliveryDateForm',
@@ -257,108 +252,166 @@ const datePicker = (function () {
     DELIVERY_DATE_GENERATED_DATE: "[class*='JS--generatedDate-']",
   };
 
-  // Initiliaze DateRangePicker
-  const drpConfig = Object.assign({}, drpBaseConfig, {
-    // parentEl: ".JS--dateWrapper",
-    // displayInline: true,
-    opens: 'left',
-    drops: 'auto',
-    singleDatePicker: true,
-    autoApply: true,
-    autoUpdateInput: false,
-    minDate: moment().add(4, 'hours'),
-    maxDate: moment().add(2, 'months'),
-  });
-  $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
+  function DatePicker(container) {
+    this.$container = $(container);
 
-  let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
-  let $vp = $wrapper.find('.vp-checked');
-  let hiddenForm = {
-    date: {
-      element: $wrapper.find('#hidden_deliveryDate'),
-      value: $wrapper.find('#hidden_deliveryDate').val(),
-      setDateValue: function (value) {
-        this.element.val(value);
-      },
-    },
-    interval: {
-      element: $wrapper.find('#hidden_deliveryInterval'),
-      value: $wrapper.find('#hidden_deliveryInterval').val(),
-      setIntervalValue: function (value) {
-        this.element.val(value);
-      },
-    },
-    fee: {
-      element: $wrapper.find('#hidden_deliveryFee'),
-      value: $wrapper.find('#hidden_deliveryFee').val(),
-      setFeeValue: function (value) {
-        this.element.val(value);
-      },
-    },
+    this.$container
+        .on('ready', this.handleDatePicker.bind(this))
+    ;
+    this.handleDatePicker(selectors);
   }
 
-  // Set initial value in DRP
-  if (hiddenForm.date.value) {
-    $('.JS--Button-clickDate').data('daterangepicker').setStartDate(hiddenForm.date.value);
-    $('.JS--Button-clickDate').data('daterangepicker').setEndDate(hiddenForm.date.value);
-  }
+  $.extend(DatePicker.prototype, {
 
-  let $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);
-  let $selectedInterval = $wrapper.find('.JS--generatedInterval-' + hiddenForm.date.value);
-  let $intervalDropdown = $selectedInterval.find('.JS--intervalDropdown');
+    handleDatePicker: function(selectors) {
+      // Initiliaze DateRangePicker
+      const drpConfig = Object.assign({}, drpBaseConfig, {
+        // parentEl: ".JS--dateWrapper",
+        // displayInline: true,
+        opens: 'left',
+        drops: 'auto',
+        singleDatePicker: true,
+        autoApply: true,
+        autoUpdateInput: false,
+        minDate: moment().add(4, 'hours'),
+        maxDate: moment().add(2, 'months'),
+      });
+      $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
 
-  if ($selectedDate.hasClass('d-none')) {
-    $selectedDate.removeClass('d-none').addClass('d-temporary');
-    $wrapper.find('.JS--showCalendarIcon').hide();
-  }
-  if ($selectedInterval.hasClass('d-none')) {
-    $selectedInterval.removeClass('d-none').addClass('d-temporary');
-  }
+      let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
+      let $vp = $wrapper.find('.vp-checked');
+      let hiddenForm = {
+        date: {
+          element: $wrapper.find('#hidden_deliveryDate'),
+          value: $wrapper.find('#hidden_deliveryDate').val(),
+          setDateValue: function (value) {
+            this.element.val(value);
+          },
+        },
+        interval: {
+          element: $wrapper.find('#hidden_deliveryInterval'),
+          value: $wrapper.find('#hidden_deliveryInterval').val(),
+          setIntervalValue: function (value) {
+            this.element.val(value);
+          },
+        },
+        fee: {
+          element: $wrapper.find('#hidden_deliveryFee'),
+          value: $wrapper.find('#hidden_deliveryFee').val(),
+          setFeeValue: function (value) {
+            this.element.val(value);
+          },
+        },
+      }
 
-  let cart = $('.JS--cartWrapper');
-  let summaryDeliveryFeePos = cart.find('.JS--summaryDeliveryFee');
-  let summaryTotal = cart.find('.JS--summaryTotal');
-  let summaryTotalPos = cart.find('.JS--summaryTotalPos');
+      // Set initial value in DRP
+      if (hiddenForm.date.value) {
+        $('.JS--Button-clickDate').data('daterangepicker').setStartDate(hiddenForm.date.value);
+        $('.JS--Button-clickDate').data('daterangepicker').setEndDate(hiddenForm.date.value);
+      }
 
-  $wrapper
-    .on('keydown click', selectors.DELIVERY_DATE_GENERATED_DATE, pickDeliveryDate.bind(this))
-    .on('apply.daterangepicker', selectors.DELIVERY_DATE_DRP_BUTTON, function(e, picker) {
-      applySelectedDate(e, picker);
-    }.bind(this))
-    .on('cancel.daterangepicker', selectors.DELIVERY_DATE_DRP_BUTTON, function(e, picker) {
-      cancelSelectedDate(e, picker);
-    }.bind(this))
-  ;
+      let $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);
+      let $selectedInterval = $wrapper.find('.JS--generatedInterval-' + hiddenForm.date.value);
+      let $intervalDropdown = $selectedInterval.find('.JS--intervalDropdown');
 
-  // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
-  // Ez akkor triggerelődik, amikor nem kattintunk sem dátumboxra, sem kalendáriumra.
-  onSelectInterval($intervalDropdown);
+      if ($selectedDate.hasClass('d-none')) {
+        $selectedDate.removeClass('d-none').addClass('d-temporary');
+        $wrapper.find('.JS--showCalendarIcon').hide();
+      }
+      if ($selectedInterval.hasClass('d-none')) {
+        $selectedInterval.removeClass('d-none').addClass('d-temporary');
+      }
 
-  // $.extend(Checkout.prototype, {
-    /**
-     * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.
-     * Továbbá mutatja a dátumhoz tartozó idősávot.
-     */
-    function pickDeliveryDate(e) {
-      if (e.keyCode === 13 || e.type === 'click') {
+      let cart = $('.JS--Wrapper-summary');
+      let $schedulingPriceBody = cart.find('.JS--Wrapper-schedulingPrice');
+      let $amountToPayBody = cart.find('.JS--Wrapper-amountToPayBody');
+      let $amountToPayWrapper = cart.find('.JS--Wrapper-amountToPay');
+
+      $wrapper
+          .on('keydown click', selectors.DELIVERY_DATE_GENERATED_DATE, pickDeliveryDate.bind(this))
+          .on('apply.daterangepicker', selectors.DELIVERY_DATE_DRP_BUTTON, function(e, picker) {
+            applySelectedDate(e, picker);
+          }.bind(this))
+          .on('cancel.daterangepicker', selectors.DELIVERY_DATE_DRP_BUTTON, function(e, picker) {
+            cancelSelectedDate(e, picker);
+          }.bind(this))
+      ;
+
+      // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
+      // Ez akkor triggerelődik, amikor nem kattintunk sem dátumboxra, sem kalendáriumra.
+      onSelectInterval($intervalDropdown);
+
+      // $.extend(Checkout.prototype, {
+      /**
+       * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.
+       * Továbbá mutatja a dátumhoz tartozó idősávot.
+       */
+      function pickDeliveryDate(e) {
+        if (e.keyCode === 13 || e.type === 'click') {
+          let $el = $(e.currentTarget);
+          $wrapper = $el.closest('.JS--deliveryDateContainer');
+          let $dateWrapper = $el.closest('.JS--dateWrapper');
+          let $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
+
+          $dateWrapper.find('.vp-checked').removeClass('vp-checked');
+          $el.find('.vp').addClass('vp-checked');
+          let $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $el.data('date-value'));
+
+          hiddenForm.date.setDateValue($el.data('date-value'));
+
+          // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
+          // amugy visszallitja (ujra mutatja) a CalendarIcont
+          if (!($el.hasClass('d-temporary'))) {
+            $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
+            $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
+            $intervalModule.removeClass('d-none').addClass('d-temporary');
+            $dateWrapper.find('.JS--showCalendarIcon').show();
+          }
+
+          //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
+          $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);
+          hiddenForm.interval.setIntervalValue('');
+
+          // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
+          // Ez akkor triggerelődik, amikor kattintunk a dátumboxra (ami nem a kallendárium).
+          onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
+
+          // Set daterangepicker to current value
+          $('.JS--Button-clickDate').data('daterangepicker').setStartDate($el.data('date-value'));
+          $('.JS--Button-clickDate').data('daterangepicker').setEndDate($el.data('date-value'));
+
+        }
+      }
+
+      /**
+       * Kezeli a kalendáriumra kattintást.
+       */
+      function applySelectedDate(e, picker) {
+        e.preventDefault();
+        let $pickerDate = picker.startDate.format('YYYY-MM-DD');
         let $el = $(e.currentTarget);
         $wrapper = $el.closest('.JS--deliveryDateContainer');
         let $dateWrapper = $el.closest('.JS--dateWrapper');
         let $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
 
+        hiddenForm.date.setDateValue($pickerDate);
+
+        $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
         $dateWrapper.find('.vp-checked').removeClass('vp-checked');
-        $el.find('.vp').addClass('vp-checked');
-        let $intervalModule = $intervalsWrapper.find('.JS--generatedInterval-' + $el.data('date-value'));
+        $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
 
-        hiddenForm.date.setDateValue($el.data('date-value'));
+        let $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
+        let $intervalModule = $wrapper.find('.JS--generatedInterval-' + $pickerDate);
 
-        // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
-        // amugy visszallitja (ujra mutatja) a CalendarIcont
-        if (!($el.hasClass('d-temporary'))) {
-          $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-          $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-          $intervalModule.removeClass('d-none').addClass('d-temporary');
-          $dateWrapper.find('.JS--showCalendarIcon').show();
+        if ($dateModule.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon
+          $wrapper.find('.JS--showCalendarIcon').hide();
+          $dateModule.removeClass('d-none').addClass('d-temporary');
+        }
+        $dateModule.find('.vp').addClass('vp-checked');
+        $intervalModule.removeClass('d-none').addClass('d-temporary');
+
+        if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
+          $wrapper.find('.JS--showCalendarIcon').show();
         }
 
         //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
@@ -366,88 +419,43 @@ const datePicker = (function () {
         hiddenForm.interval.setIntervalValue('');
 
         // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
-        // Ez akkor triggerelődik, amikor kattintunk a dátumboxra (ami nem a kallendárium).
+        // Ez akkor triggerelődik, amikor kattintunk a kalendáriumra.
         onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
-
-        // Set daterangepicker to current value
-        $('.JS--Button-clickDate').data('daterangepicker').setStartDate($el.data('date-value'));
-        $('.JS--Button-clickDate').data('daterangepicker').setEndDate($el.data('date-value'));
-
-      }
-    }
-
-    /**
-     * Kezeli a kalendáriumra kattintást.
-     */
-    function applySelectedDate(e, picker) {
-      e.preventDefault();
-      let $pickerDate = picker.startDate.format('YYYY-MM-DD');
-      let $el = $(e.currentTarget);
-      $wrapper = $el.closest('.JS--deliveryDateContainer');
-      let $dateWrapper = $el.closest('.JS--dateWrapper');
-      let $intervalsWrapper = $wrapper.find('.JS--intervalsWrapper');
-
-      hiddenForm.date.setDateValue($pickerDate);
-
-      $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-      $dateWrapper.find('.vp-checked').removeClass('vp-checked');
-      $intervalsWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-
-      let $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
-      let $intervalModule = $wrapper.find('.JS--generatedInterval-' + $pickerDate);
-
-      if ($dateModule.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon
-        $wrapper.find('.JS--showCalendarIcon').hide();
-        $dateModule.removeClass('d-none').addClass('d-temporary');
-      }
-      $dateModule.find('.vp').addClass('vp-checked');
-      $intervalModule.removeClass('d-none').addClass('d-temporary');
-
-      if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
-        $wrapper.find('.JS--showCalendarIcon').show();
+        // $el.find('.vp-checked')[0].focus();
+        $el.closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
       }
 
-      //minden elozoleg becsekkolt input/select mezot uresre allitok, es torlom a hidden input mezobol is!
-      $intervalsWrapper.find('.JS--intervalDropdown').prop('checked', false);
-      hiddenForm.interval.setIntervalValue('');
+      function cancelSelectedDate(e, picker) {
+        let $el = $(e.currentTarget);
+        $el.val('');
+        $el.closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
+      }
 
-      // Az idősáv kiválasztásakor elmenti a hidden mezőbe az értéket.
-      // Ez akkor triggerelődik, amikor kattintunk a kalendáriumra.
-      onSelectInterval($intervalModule.find('.JS--intervalDropdown'));
-      // $el.find('.vp-checked')[0].focus();
-      $el.closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
-    }
+      function onSelectInterval(dropdown) {
+        dropdown.on('change', function () {
+          hiddenForm.interval.setIntervalValue($(this).val());
+          // retrieve delivery fee from 'data-' attribute
+          let dropdownValue = $(this).children('option:selected').data('fee'); //.toString()
+          hiddenForm.fee.setFeeValue(dropdownValue);
 
-    function cancelSelectedDate(e, picker) {
-      let $el = $(e.currentTarget);
-      $el.val('');
-      $el.closest('.JS--dateWrapper').find('*[tabindex=0]').focus();
-    }
+          $('body').trigger('checkout.summary.updated', [{
+            schedulingPrice: dropdownValue
+          }]);
+        });
+      }
 
-    function onSelectInterval(dropdown) {
-      dropdown.on('change', function () {
-        hiddenForm.interval.setIntervalValue($(this).val());
-        // retrieve delivery fee from 'data-' attribute
-        let dropdownValue = $(this).children('option:selected').data('fee'); //.toString()
-        hiddenForm.fee.setFeeValue(dropdownValue);
+    },
+  });
 
-        summaryDeliveryFeePos.html(
-            dropdownValue.toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
-        );
-        summaryTotal.html(
-            (summaryTotalPos.data('summary-total') - hiddenForm.fee.value + dropdownValue).toLocaleString("fr-FR", {style: "decimal", minimumFractionDigits: 0, useGrouping: true})
-        );
-        // $('.JS--deliveryDateContainer').find('.JS--alertMessage').replaceWith('');
-        // alert.deliveryDate.hasError = false;
-      });
-    }
+    return DatePicker;
 
-  // });
 })();
 
 /**
  *
  */
+window.theme = window.theme || {};
+
 theme.AddToCart = (function () {
   var selectors = {
     BODY                      : 'body',
@@ -470,16 +478,14 @@ theme.AddToCart = (function () {
 
     addToCart: function(e) {
       e.preventDefault();
-
       let $el = $(e.currentTarget);
       if (theme.proceed) { theme.proceed = false; return; }
       theme.LoadingOverlay.show($el, 'click');
-      // $el.addClass('loading-spinner-show');
-      // theme.proceed = true;
 
       let $form = this.$container.find('form');
       let $sidebar = $(selectors.BODY).find(selectors.CART_SIDEBAR);
       let c0 = parseInt($form.find(selectors.PRODUCT_QUANTITY).val());
+      let p = $el.data('productJson');
 
       $.ajax({
         url: $form.attr('action'),
@@ -490,11 +496,26 @@ theme.AddToCart = (function () {
         $form.replaceWith(data);
         $(selectors.BODY).trigger('cart.updated', [c0]);
 
-        setTimeout(function() {
+        // Send 'add_to_cart' event to GA4
+        // gtag('event', 'add_to_cart', {
+        //   currency: 'HUF',
+        //   value: p.price.numericValue * c0,
+        //   items: [{
+        //       item_id: p.sku,
+        //       item_name: p.name,
+        //       affiliation: store.name,
+        //       currency: 'HUF',
+        //       item_brand: store.brand,
+        //       item_category: p.categories[0].name,
+        //       price: p.price.numericValue,
+        //       quantity: c0
+        //     }]
+        // });
+        // setTimeout(function() {
           Notify.success(AlertMessages.PRODUCT_ADDED);
           theme.LoadingOverlay.hide($el);
           $sidebar.sidebar('show');
-        }, 500);
+        // }, 500);
 
       }).fail(function (jqXHR) {
         $form.replaceWith(jqXHR.responseText);
@@ -525,7 +546,9 @@ theme.CartSection = (function () {
     GREETING_CARD_BODY        : '.JS--Wrapper-greetingCardBody',
     GREETING_CARD_FORM        : '.JS--Wrapper-greetingCardForm',
 
+    GOTO_WRAPPER              : '.JS--Wrapper-goTo',
     GOTO_STEP1_BUTTON         : '.JS--Button-gotoStep1',
+    // CONTINUE_SHOPPING_WRAPPER : '.JS--Wrapper-continueShopping',
 
   };
   var ajaxLoading = false;
@@ -535,12 +558,15 @@ theme.CartSection = (function () {
 
     this.$container
         .on('click', selectors.ADD_GIFT_TO_CART_BUTTON, this.addGiftToCart.bind(this))
-        // .on('click', selectors.REMOVE_ITEM_BUTTON, this.removeItem.bind(this))
+        .on('click', selectors.REMOVE_ITEM_BUTTON, this.removeItem.bind(this))
         .on('change', selectors.ITEM_QUANTITY_SELECT, this.setItemQuantity.bind(this))
         .on('click', selectors.GOTO_STEP1_BUTTON, this.submitGreetingCardForm.bind(this))
 
         .on('click change', selectors.CART_WRAPPER, this.preventInteraction.bind(this))
     ;
+    $(selectors.BODY).on(
+        'cart.updated', this.toggleGotoButton.bind(this)
+    );
 
     $(document).ajaxStart(function() {
       ajaxLoading = true;
@@ -564,6 +590,18 @@ theme.CartSection = (function () {
       }
     },
 
+    toggleGotoButton(e) {
+      e.preventDefault();
+      let $goto = $(selectors.GOTO_WRAPPER);
+      let $cartBody = $(selectors.CART_BODY);
+      let count = $cartBody.find(selectors.CART_ITEM).length;
+      if (count > 0) {
+        $goto.removeClass('d-none');
+      } else {
+        $goto.addClass('d-none');
+      }
+    },
+
     addGiftToCart: function(e) {
       e.preventDefault();
       if (ajaxLoading) return;
@@ -576,6 +614,7 @@ theme.CartSection = (function () {
 
       let $cartBody = $(selectors.CART_WRAPPER).find(selectors.CART_BODY);
       let url = $el.data('url');
+      let p = $el.data('productJson');
 
       $.ajax({
         url: url,
@@ -585,6 +624,20 @@ theme.CartSection = (function () {
         $cartBody.html(data);
         $(selectors.BODY).trigger('cart.updated', [1]);
 
+        gtag('event', 'add_to_cart', {
+          currency: 'HUF',
+          value: p.price.numericValue * 1,
+          items: [{
+            item_id: p.sku,
+            item_name: p.name,
+            affiliation: store.name,
+            currency: 'HUF',
+            item_brand: store.brand,
+            item_category: p.categories[0].name,
+            price: p.price.numericValue,
+            quantity: 1
+          }]
+        });
         setTimeout(function() {
           // notyf.success(AlertMessages.PRODUCT_ADDED);
           Notify.success(AlertMessages.PRODUCT_ADDED);
@@ -618,6 +671,24 @@ theme.CartSection = (function () {
       }).done(function(data) {
         $(selectors.CART_BODY).html(data);
         $(selectors.BODY).trigger('cart.updated', [count]);
+
+        // // Send 'add_to_cart' event to GA4
+        // // See more https://developers.google.com/tag-manager/ecommerce-ga4#measure_additions_or_removals_from_a_shopping_cart
+        // dataLayer.push({ ecommerce: null });
+        // dataLayer.push({
+        //   event: "remove_from_cart",
+        //   ecommerce: {
+        //     items: [{
+        //       item_name: productJson.name,
+        //       item_id: productJson.sku,
+        //       price: productJson.price.numericValue,
+        //       item_brand: store.brand,
+        //       item_category: productJson.categories[0].name,
+        //       index: 1,
+        //       quantity: -1*count
+        //     }]
+        //   }
+        // });
       }).fail(function(data) {
         Notify.error(AlertMessages.ERROR_AJAX_FAILED);
       }).always(function() {
@@ -714,28 +785,10 @@ theme.CartBadgeSection = (function () {
     refreshItemsCount: function (e, count) {
       e.preventDefault();
       let $el = $(selectors.ITEMS_COUNT_BUBBLE);
-
       let newCount = $el.data('itemsCount') + count;
       $el.html(newCount);                 // update html content
       $el.data('itemsCount', newCount);   // update data-items-count content
       newCount ? $el.addClass(classNames.show) : $el.removeClass(classNames.show);
-
-      // let url = '/hu/cart/getItemsCount';
-      //
-      // $.ajax({
-      //   url: url,
-      //   method: 'GET',
-      //   context: this,
-      // }).done(function (count) {
-      //   $el.html(count);
-      //   count ? $el.addClass(classNames.show) : $el.removeClass(classNames.show);
-      // }).fail(function (jqXHR) {
-      //   // console.log(jqXHR);
-      //   // $el.append(jqXHR.responseText);
-      //   // theme.LoadingOverlay.hide($el);
-      //   // Notify.error(jqXHR.responseText);
-      // })
-      // ;
     },
 
   });
@@ -835,8 +888,8 @@ theme.CheckoutSection = (function () {
 
     PAYMENT_WRAPPER: '.JS--Wrapper-payment',
     PAYMENT_FORM: '.JS--Wrapper-paymentForm',
-    PAYMENT_CHOICE: '.JS--Wrapper-choice',
-    PAYMENT_CHOICE_BUTTON: '.JS--Button-pickChoice',
+    PAYMENT_CHOICE: '.JS--Wrapper-paymentChoice',
+    PAYMENT_CHOICE_BUTTON: '.JS--Button-pickPayment',
 
     SENDER_WRAPPER: '.JS--Wrapper-sender',
     SENDER_BODY: '.JS--Wrapper-senderBody',
@@ -848,8 +901,23 @@ theme.CheckoutSection = (function () {
     PICK_SENDER_BUTTON: '.JS--Button-pickSender',
     DELETE_SENDER: '.JS--Button-deleteSender',
 
+    SAME_AS_RECIPIENT_FORM: '.JS--Wrapper-sameAsRecipientForm',
+    SAME_AS_RECIPIENT_CHOICE: '.JS--Wrapper-sameAsChoice',
+    SAME_AS_RECIPIENT_CHOICE_BUTTON: '.JS--Button-pickSameAsChoice',
+
+    REGISTRATION_FORM: '.JS--Wrapper-registrationForm',
+
     ACCEPT_TERMS_WRAPPER: '.JS--Wrapper-acceptTerms',
     ACCEPT_TERMS_FORM: '.JS--Wrapper-acceptTermsForm',
+
+    SUMMARY_WRAPPER: '.JS--Wrapper-orderSummary',
+    SUMMARY_SHIPPING_FEE: '.JS--orderSummary-shippingFee',
+    SUMMARY_PAYMENT_BODY: '.JS--orderSummary-paymentBody',
+    SUMMARY_PAYMENT_NAME: '.JS--orderSummary-paymentName',
+    SUMMARY_PAYMENT_FEE: '.JS--orderSummary-paymentFee',
+    SUMMARY_SCHEDULING_PRICE: '.JS--orderSummary-schedulingPrice',
+    SUMMARY_AMOUNT_TO_PAY_WRAPPER: '.JS--orderSummary-amountToPay',
+    SUMMARY_AMOUNT_TO_PAY_BODY: '.JS--orderSummary-amountToPayBody',
 
   };
   const scrollUp = { block: 'start', behavior: 'smooth'};
@@ -860,13 +928,14 @@ theme.CheckoutSection = (function () {
     deliveryDate: false,
     payment: false,
     sender: false,
+    sameAsRecipient: false,
     acceptTerms: false,
+    registration: false,
   };
   var ajaxLoading = false;
 
   function Checkout(container) {
     this.$container = $(container);
-
     this.$container
         .on('click', selectors.GOTO_STEP2_BUTTON, this.submitRecipientAndCustomer.bind(this))
         .on('click', selectors.GOTO_STEP3_BUTTON, this.submitShippingMethod.bind(this))
@@ -884,10 +953,17 @@ theme.CheckoutSection = (function () {
 
         .on('change', selectors.SHIPPING_CHOICE_BUTTON, this.markShippingAsSelected.bind(this))
         .on('change', selectors.PAYMENT_CHOICE_BUTTON, this.markPaymentAsSelected.bind(this))
+        .on('change', selectors.SAME_AS_RECIPIENT_CHOICE_BUTTON, this.handleSameAsRecipient.bind(this))
 
         .on('click change', selectors.CHECKOUT_WRAPPER, this.preventInteraction.bind(this))
 
+        .on('checkout.sameAsRecipient.activateSenderForm', this.activateSenderForm.bind(this))
+
     ;
+    $(selectors.BODY).on(
+        'checkout.summary.updated', this.updateSummary.bind(this)
+    );
+
     $(document).ajaxStart(function() {
       ajaxLoading = true;
       document.dispatchEvent(new Event('disposeTooltip'));
@@ -909,49 +985,6 @@ theme.CheckoutSection = (function () {
       this.shippingValidator = new FormValidation(selectors.SHIPPING_FORM, shippingConstraints);
     }
     if ($(selectors.DELIVERY_DATE_FORM).length) {
-      // Initiliaze DateRangePicker
-      const drpConfig = Object.assign({}, drpBaseConfig, {
-        // parentEl: ".JS--dateWrapper",
-        // displayInline: true,
-        opens: 'left',
-        drops: 'auto',
-        singleDatePicker: true,
-        autoApply: true,
-        autoUpdateInput: false,
-        minDate: moment().add(4, 'hours'),
-        maxDate: moment().add(2, 'months'),
-      });
-      $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
-
-      let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
-      let $vp = $wrapper.find('.vp-checked');
-      let hiddenForm = {
-        date: {
-          element: $wrapper.find('#hidden_deliveryDate'),
-          value: $wrapper.find('#hidden_deliveryDate').val(),
-          setDateValue: function (value) {
-            this.element.val(value);
-          },
-        },
-        interval: {
-          element: $wrapper.find('#hidden_deliveryInterval'),
-          value: $wrapper.find('#hidden_deliveryInterval').val(),
-          setIntervalValue: function (value) {
-            this.element.val(value);
-          },
-        },
-        fee: {
-          element: $wrapper.find('#hidden_deliveryFee'),
-          value: $wrapper.find('#hidden_deliveryFee').val(),
-          setFeeValue: function (value) {
-            this.element.val(value);
-          },
-        },
-      }
-
-
-
-
       this.deliveryDateValidator = new FormValidation(selectors.DELIVERY_DATE_FORM, deliveryDateConstraints);
     }
     if ($(selectors.SENDER_FORM).length) {
@@ -959,6 +992,9 @@ theme.CheckoutSection = (function () {
     }
     if ($(selectors.PAYMENT_FORM).length) {
       this.paymentValidator = new FormValidation(selectors.PAYMENT_FORM, paymentConstraints);
+    }
+    if ($(selectors.SAME_AS_RECIPIENT_FORM).length) {
+      this.sameAsRecipientValidator = new FormValidation(selectors.SAME_AS_RECIPIENT_FORM, sameAsRecipientConstraints);
     }
     if ($(selectors.ACCEPT_TERMS_FORM).length) {
       this.acceptTermsValidator = new FormValidation(selectors.ACCEPT_TERMS_FORM, acceptTermsConstraints);
@@ -979,62 +1015,18 @@ theme.CheckoutSection = (function () {
       }
     },
 
-    initDatePicker() {
-      // Initiliaze DateRangePicker
-      const drpConfig = Object.assign({}, drpBaseConfig, {
-        // parentEl: ".JS--dateWrapper",
-        // displayInline: true,
-        opens: 'left',
-        drops: 'auto',
-        singleDatePicker: true,
-        autoApply: true,
-        autoUpdateInput: false,
-        minDate: moment().add(4, 'hours'),
-        maxDate: moment().add(2, 'months'),
-      });
-      $(selectors.DELIVERY_DATE_DRP_BUTTON).daterangepicker(drpConfig);
-
-      let $wrapper = $(selectors.DELIVERY_DATE_WRAPPER);
-      let $vp = $wrapper.find('.vp-checked');
-      let hiddenForm = {
-        date: {
-          element: $wrapper.find('#hidden_deliveryDate'),
-          value: $wrapper.find('#hidden_deliveryDate').val(),
-          setDateValue: function (value) {
-            this.element.val(value);
-          },
-        },
-        interval: {
-          element: $wrapper.find('#hidden_deliveryInterval'),
-          value: $wrapper.find('#hidden_deliveryInterval').val(),
-          setIntervalValue: function (value) {
-            this.element.val(value);
-          },
-        },
-        fee: {
-          element: $wrapper.find('#hidden_deliveryFee'),
-          value: $wrapper.find('#hidden_deliveryFee').val(),
-          setFeeValue: function (value) {
-            this.element.val(value);
-          },
-        },
-      };
-    },
-
     submitRecipientAndCustomer: function (e) {
       e.preventDefault();
       if (ajaxLoading) return;
-
-      if (typeof this.recipientValidator !== 'undefined') {
-        this.recipientValidator.validateForm();
-        errors.recipient = this.recipientValidator.hasError();
-      }
 
       if (typeof this.customerValidator !== 'undefined') {
         this.customerValidator.validateForm();
         errors.customer = this.customerValidator.hasError();
       }
-
+      if (typeof this.recipientValidator !== 'undefined') {
+        this.recipientValidator.validateForm();
+        errors.recipient = this.recipientValidator.hasError();
+      }
       if (errors.recipient || errors.customer) {
         $(selectors.CHECKOUT_WRAPPER).find('.invalid-feedback:not(:empty)').closest('form')[0].scrollIntoView(scrollUp);
         return;
@@ -1048,58 +1040,55 @@ theme.CheckoutSection = (function () {
         theme.LoadingOverlay.show($el, 'click');
 
         let url = $el.data('url');
-        let $wrapper = $(selectors.CHECKOUT_WRAPPER);
         let $recipientForm = $(selectors.RECIPIENT_FORM);
-        let $recipientBody = $(selectors.RECIPIENT_BODY);
-        let $customerBody = $(selectors.CUSTOMER_BODY);
         let $customerForm = $(selectors.CUSTOMER_FORM);
-
+        console.log($customerForm);
 
         let recipientForm = null;
         let customerForm = null;
 
         let a1 = $.ajax({
-          url: $recipientForm.attr('action'),
-          method: 'POST',
-          data: $recipientForm.serialize(),
-          context: this
-        });
-        let a2 = $.ajax({
           url: $customerForm.attr('action'),
           method: 'POST',
           data: $customerForm.serialize(),
           context: this,
         });
+        let a2 = $.ajax({
+          url: $recipientForm.attr('action'),
+          method: 'POST',
+          data: $recipientForm.serialize(),
+          context: this
+        });
 
-        a1.done(function(data) {
-          $recipientForm.replaceWith(data);
+        a1.done(function(data){
+          $customerForm.replaceWith(data);
         })
-            .fail(function (jqXHR) {
-              recipientForm = jqXHR.responseText;
-              errors.recipient = true;
+            .fail(function(jqXHR){
+              customerForm = jqXHR.responseText;
+              errors.customer = true;
             })
             .always(function() {
               a2.done(function(data){
-                $customerForm.replaceWith(data);
+                $recipientForm.replaceWith(data);
               })
                   .fail(function(jqXHR){
-                    customerForm = jqXHR.responseText;
-                    errors.customer = true;
+                    recipientForm = jqXHR.responseText;
+                    errors.recipient = true;
                   })
                   .always(function() {
-                    $recipientForm.replaceWith(recipientForm);
                     $customerForm.replaceWith(customerForm);
+                    $recipientForm.replaceWith(recipientForm);
                     document.dispatchEvent(new Event('initFloatingInput'));
                     document.dispatchEvent(new Event('initFormValidation'));
                     document.dispatchEvent(new Event('initTooltip'));
                   }.bind(this))
             }.bind(this));
 
-        $.when(a1, a2).fail(function () {
+        $.when(a1, a2).fail(function () { 
           theme.LoadingOverlay.hide($el);
 
           setTimeout(function (){
-            if (errors.recipient || errors.customer) {
+            if (errors.customer || errors.recipient) {
               $(selectors.CHECKOUT_WRAPPER).find('.invalid-feedback:not(:empty)').closest('form')[0].scrollIntoView(scrollUp);
             }
           }, 500);
@@ -1183,7 +1172,6 @@ theme.CheckoutSection = (function () {
       }).done(function(data) {
         $recipientListBody.html(data);
         theme.LoadingOverlay.hide($el);
-        // this.recipient.hideAlert();
       }).fail(function() {
         theme.LoadingOverlay.hide($el);
         Notify.error(AlertMessages.ERROR_UNKNOWN);
@@ -1214,7 +1202,7 @@ theme.CheckoutSection = (function () {
           $(selectors.REFRESH_RECIPIENT_LIST_BUTTON).trigger('click');
 
           $recipientBody.html(data);
-          $(selectors.RECIPIENT_MODAL).modal('hide');
+          // $(selectors.RECIPIENT_MODAL).modal('hide');
           theme.LoadingOverlay.hide($el);
         }).fail(function() {
           theme.LoadingOverlay.hide($el);
@@ -1327,10 +1315,10 @@ theme.CheckoutSection = (function () {
       $choiceWrapper.addClass('selected');
       $(selectors.SHIPPING_FORM).addClass('was-validated');
 
+      $(selectors.BODY).trigger('checkout.summary.updated', [{
+        shippingFee: $choiceWrapper.data('shippingFee')
+      }]);
       errors.shipping = false;
-      // if ($wrapper.find(selectors.ALERT)) {
-      //   $wrapper.find(selectors.ALERT).hide();
-      // }
     },
 
     // Show an empty Sender form, triggered by 'Új számlázási cím hozáadása' button
@@ -1343,14 +1331,14 @@ theme.CheckoutSection = (function () {
       theme.LoadingOverlay.show($el, 'click');
 
       let url = $el.data('url');
-      let $senderBody = $(selectors.SENDER_BODY);
+      let $senderForm = $(selectors.SENDER_FORM);
 
       $.ajax({
         url: url,
         method: 'POST',
         context: this
       }).done(function(data) {
-        $senderBody.html(data);
+        $senderForm.replaceWith(data);
         theme.LoadingOverlay.hide($el);
         errors.sender = true;
       }).fail(function() {
@@ -1358,6 +1346,30 @@ theme.CheckoutSection = (function () {
         theme.LoadingOverlay.hide($el);
         // this.sender.showAlertAt($wrapper.find(Wrapper.ALERT), AlertMessages.ERROR_AJAX_FAILED, 'danger');
       });
+    },
+
+    handleSameAsRecipient(e) {
+      e.preventDefault();
+      if (ajaxLoading) return;
+
+      $(selectors.SAME_AS_RECIPIENT_FORM).addClass('was-validated');
+      this.$container.trigger('checkout.sameAsRecipient.activateSenderForm');
+    },
+
+    activateSenderForm(e) {
+      e.preventDefault();
+      if (ajaxLoading) return;
+
+      let $formWrapper = $(selectors.SAME_AS_RECIPIENT_FORM);
+      let $senderBody = $(selectors.SENDER_BODY);
+
+      let inputSameAs = $formWrapper.find('input')[0];
+      if (inputSameAs.checked) {
+        $senderBody.removeClass('--active');
+        errors.sender = false;
+      } else {
+        $senderBody.addClass('--active');
+      }
     },
 
     // Picks a Sender from the recipient list (modal) and updates the Sender form with it.
@@ -1370,7 +1382,7 @@ theme.CheckoutSection = (function () {
       if (theme.proceed) { theme.proceed = false; return; }
       theme.LoadingOverlay.show($el, 'click');
 
-      let $senderBody = $(selectors.SENDER_BODY);
+      let $senderForm = $(selectors.SENDER_FORM);
       let url = $el.attr('href');
 
       $.ajax({
@@ -1379,7 +1391,7 @@ theme.CheckoutSection = (function () {
         context: this
       }).done(function(data) {
         $(selectors.REFRESH_SENDER_LIST_BUTTON).trigger('click');
-        $senderBody.html(data);
+        $senderForm.replaceWith(data);
         errors.sender = false;
       }).fail(function () {
         Notify.error(AlertMessages.ERROR_AJAX_FAILED);
@@ -1404,7 +1416,6 @@ theme.CheckoutSection = (function () {
       }).done(function(data) {
         $senderListBody.html(data);
         theme.LoadingOverlay.hide($el);
-        this.sender.hideAlert();
       }).fail(function() {
         theme.LoadingOverlay.hide($el);
         Notify.error(AlertMessages.ERROR_UNKNOWN);
@@ -1421,7 +1432,7 @@ theme.CheckoutSection = (function () {
       theme.LoadingOverlay.show($el, 'click');
 
       let url = $el.data('url');
-      let $senderBody = $(selectors.SENDER_BODY);
+      let $senderForm = $(selectors.SENDER_FORM);
 
       let confirm = window.confirm('Biztosan szeretnéd törölni?');
       if (confirm) {
@@ -1431,8 +1442,8 @@ theme.CheckoutSection = (function () {
           context: this
         }).done(function(data) {
           $(selectors.REFRESH_SENDER_LIST_BUTTON).trigger('click');
-          $senderBody.html(data);
-          $(selectors.SENDER_MODAL).modal('hide');
+          $senderForm.replaceWith(data);
+          // $(selectors.SENDER_MODAL).modal('hide');
           theme.LoadingOverlay.hide($el);
         }).fail(function() {
           theme.LoadingOverlay.hide($el);
@@ -1449,29 +1460,37 @@ theme.CheckoutSection = (function () {
       e.preventDefault();
       if (ajaxLoading) return;
 
-      // let $wrapper = $(selectors.PAYMENT_WRAPPER);
+      let $sameAsRecipientForm = $(selectors.SAME_AS_RECIPIENT_FORM);
+      let sameAsRecipientInput = $sameAsRecipientForm.find('input')[0];
 
-      if (typeof this.senderValidator !== 'undefined') {
-        this.senderValidator.validateForm();
-        errors.sender = this.senderValidator.hasError();
+      let isSameAsRecipient = $sameAsRecipientForm.find('input')[0].checked;
+      let isNewSender = $sameAsRecipientForm.find('input')[1].checked;
+
+      if (isNewSender) {
+        if (typeof this.senderValidator !== 'undefined') {
+          this.senderValidator.validateForm();
+          errors.sender = this.senderValidator.hasError();
+        }
       }
-
+      if (typeof this.sameAsRecipientValidator !== 'undefined') {
+        this.sameAsRecipientValidator.validateForm();
+        errors.sameAsRecipient = this.sameAsRecipientValidator.hasError();
+      }
       if (typeof this.acceptTermsValidator !== 'undefined') {
         this.acceptTermsValidator.validateForm();
         errors.acceptTerms = this.acceptTermsValidator.hasError();
       }
-
       if (typeof this.paymentValidator !== 'undefined') {
         this.paymentValidator.validateForm();
         errors.payment = this.paymentValidator.hasError();
       }
 
-      if (errors.payment || errors.sender || errors.acceptTerms) {
+      if (errors.payment || errors.sender || errors.sameAsRecipient || errors.acceptTerms) {
         $(selectors.CHECKOUT_WRAPPER).find('.invalid-feedback:not(:empty)').closest('form')[0].scrollIntoView(scrollUp);
         return;
       }
 
-      if (!errors.payment && !errors.sender && !errors.acceptTerms) {
+      if (!errors.payment && !errors.sender && !errors.sameAsRecipient && !errors.acceptTerms && !errors.registration) {
         this._disableFormElements();
 
         let $el = $(e.currentTarget);
@@ -1481,10 +1500,12 @@ theme.CheckoutSection = (function () {
         let url = $el.data('url');
         let $paymentForm = $(selectors.PAYMENT_FORM);
         let $senderForm = $(selectors.SENDER_FORM);
+        // let $registrationForm = $(selectors.REGISTRATION_FORM);
         let $acceptTermsForm = $(selectors.ACCEPT_TERMS_FORM);
 
         let paymentForm = null;
         let senderForm = null;
+        // let registrationForm = null;
         let acceptTermsForm = null;
 
         let a1 = $.ajax({
@@ -1493,12 +1514,24 @@ theme.CheckoutSection = (function () {
           data: $paymentForm.serialize(),
           context: this
         });
-        let a2 = $.ajax({
-          url: $senderForm.attr('action'),
-          method: 'POST',
-          data: $senderForm.serialize(),
-          context: this
-        });
+
+        let a2 = null;
+        if (isNewSender) {
+          a2 = $.ajax({
+            url: $senderForm.attr('action'),
+            method: 'POST',
+            data: $senderForm.serialize(),
+            context: this
+          });
+        }
+        if (isSameAsRecipient) {
+          a2 = $.ajax({
+            url: $sameAsRecipientForm.attr('action'),
+            method: 'POST',
+            data: $sameAsRecipientForm.serialize(),
+            context: this
+          });
+        }
 
         let a3 = $.ajax({
           url: $acceptTermsForm.attr('action'),
@@ -1507,22 +1540,41 @@ theme.CheckoutSection = (function () {
           context: this
         });
 
+        // let isSubmitRegistration = false;
+        // if ($registrationForm.find('#registration_email')[0].value.length > 0 && $registrationForm.find('#registration_password')[0].value.length > 0) {
+        //   isSubmitRegistration = true;
+        // }
+        //
+        // if (isSubmitRegistration) {
+        //   let a4 = $.ajax({
+        //     url: $registrationForm.attr('action'),
+        //     method: 'POST',
+        //     data: $registrationForm.serialize(),
+        //     context: this
+        //   });
+        // }
 
         a1.done(function(data) {
           $paymentForm.replaceWith(data);
         })
-          .fail(function (jqXHR) {
+          .fail(function(jqXHR) {
             paymentForm = jqXHR.responseText;
             errors.payment = true;
           })
           .always(function() {
 
             a2.done(function(data){
-              $senderForm.replaceWith(data);
+              if (isNewSender) {
+                $senderForm.replaceWith(data);
+              }
             })
               .fail(function(jqXHR){
-                senderForm = jqXHR.responseText;
-                errors.sender = true;
+                if (isNewSender) {
+                  senderForm = jqXHR.responseText;
+                  errors.sender = true;
+                } else {
+                  // console.log(jqXHR.responseText)
+                }
               })
               .always(function() {
 
@@ -1534,8 +1586,24 @@ theme.CheckoutSection = (function () {
                     errors.acceptTerms = true;
                   })
                   .always(function() {
+
+                    // if (isSubmitRegistration) {
+                    //   a4.done(function (data) {
+                    //     $registrationForm.replaceWith(data);
+                    //   })
+                    //       .fail(function (jqXHR){
+                    //         registrationForm = jqXHR.responseText;
+                    //         errors.registration = true;
+                    //       })
+                    //       .always(function (){
+                    //         $registrationForm.replaceWith(registrationForm);
+                    //       }.bind(this))
+                    // }
+
                     $paymentForm.replaceWith(paymentForm);
-                    $senderForm.replaceWith(senderForm);
+                    if (isNewSender) {
+                      $senderForm.replaceWith(senderForm);
+                    }
                     $acceptTermsForm.replaceWith(acceptTermsForm);
                     document.dispatchEvent(new Event('initFloatingInput'));
                     document.dispatchEvent(new Event('initFormValidation'));
@@ -1557,6 +1625,7 @@ theme.CheckoutSection = (function () {
         }.bind(this));
 
         $.when(a1, a2, a3).done(function () {
+          console.log('url');
           window.location.href = url;
         }.bind(this));
       }
@@ -1570,15 +1639,67 @@ theme.CheckoutSection = (function () {
       let $el = $(e.currentTarget);
       let $wrapper = $(selectors.PAYMENT_WRAPPER);
       let $choiceWrapper = $el.closest(selectors.PAYMENT_CHOICE);
-      $choiceWrapper.find('input').prop('checked',true);  // Beleteszi a pipát
-      $wrapper.find('.selected').removeClass('selected');
-      $choiceWrapper.addClass('selected');
+      // $choiceWrapper.find('input').prop('checked',true);  // Beleteszi a pipát
+      // $wrapper.find('.selected').removeClass('selected');
+      // $choiceWrapper.addClass('selected');
       $(selectors.PAYMENT_FORM).addClass('was-validated');
+
+      $(selectors.BODY).trigger('checkout.summary.updated', [{
+        paymentFee: $choiceWrapper.data('paymentFee'),
+        paymentName: $choiceWrapper.data('paymentName')
+      }]);
 
       errors.payment = false;
       // if ($wrapper.find(selectors.ALERT)) {
       //   $wrapper.find(selectors.ALERT).hide();
       // }
+    },
+
+    updateSummary: function(e, summary) {
+      e.preventDefault();
+
+      // let url = '/hu/cart/getSummary';
+      let $wrapper = $(selectors.SUMMARY_WRAPPER);
+      let $shippingFee = $(selectors.SUMMARY_SHIPPING_FEE);
+      let $schedulingPriceBody = $(selectors.SUMMARY_SCHEDULING_PRICE);
+      let $paymentName = $(selectors.SUMMARY_PAYMENT_NAME);
+      let $paymentBody = $(selectors.SUMMARY_PAYMENT_BODY);
+      let $paymentFee = $(selectors.SUMMARY_PAYMENT_FEE);
+      let $amountToPayWrapper = $(selectors.SUMMARY_AMOUNT_TO_PAY_WRAPPER);
+      let $amountToPayBody = $(selectors.SUMMARY_AMOUNT_TO_PAY_BODY);
+
+      let updatedAmountToPay =  $amountToPayWrapper.data('itemsPrice');
+      let shippingFee = $shippingFee.data('shippingFee');
+      let paymentFee = $paymentFee.data('paymentFee');
+
+      // If flowerShopMode, there's no $schedulingPriceBody. We set the schedulingPrice to 0.
+      let schedulingPrice = $schedulingPriceBody.length ? $schedulingPriceBody.data('schedulingPrice') : 0;
+
+      // .toLocaleString 'options' definitions here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat
+
+      if ("undefined" !== typeof summary.shippingFee) {
+        $shippingFee.html(summary.shippingFee.toLocaleString("hu-HU", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $shippingFee.data('shippingFee', summary.shippingFee);
+        updatedAmountToPay += summary.shippingFee + paymentFee + schedulingPrice;
+      }
+      if ("undefined" !== typeof summary.schedulingPrice) {
+        $schedulingPriceBody.html(summary.schedulingPrice.toLocaleString("hu-HU", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $schedulingPriceBody.data('schedulingPrice', summary.schedulingPrice);
+        updatedAmountToPay += shippingFee + paymentFee + summary.schedulingPrice;
+      }
+      if ("undefined" !== typeof summary.paymentFee) {
+        $paymentName.html(summary.paymentName);
+        $paymentFee.html(summary.paymentFee.toLocaleString("hu-HU", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
+        $paymentFee.data('paymentFee', summary.paymentFee);
+        if (summary.paymentFee == 0) {
+          $paymentBody.addClass('d-none');
+        } else {
+          $paymentBody.removeClass('d-none');
+        }
+        updatedAmountToPay += shippingFee + summary.paymentFee + schedulingPrice;
+      }
+
+      $amountToPayBody.html(updatedAmountToPay.toLocaleString("hu-HU", {style: "decimal", minimumFractionDigits: 0, useGrouping: true}) + ' Ft');
     },
 
   });
@@ -1667,17 +1788,17 @@ $(document).ready(function() {
 
   // Used on the Checkout pages
   sections.register('checkout-template', theme.CheckoutSection);
+  sections.register('datePicker-block', theme.DatePicker);
 
   // Used on the Registration pages
   sections.register('registration-section', theme.RegistrationSection);
 });
 
 theme.init = function() {
-  // console.log('init');
-  // new theme.AddToCart;
   document.addEventListener('initTooltip', function() { $('[data-toggle="tooltip"]').tooltip(); }, false);
   document.addEventListener('disposeTooltip', function() { $('[data-toggle="tooltip"]').tooltip('dispose'); }, false);
   document.dispatchEvent(new Event('initTooltip'));
 };
 
+// equiv to $(document).ready(theme.init);
 $(theme.init);

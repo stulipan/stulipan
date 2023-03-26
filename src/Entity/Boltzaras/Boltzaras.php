@@ -16,8 +16,8 @@ class Boltzaras
 
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="smallint", name="zaras_id", length=5)
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      */
     private $id;
 
@@ -57,7 +57,7 @@ class Boltzaras
     /**
      * @Assert\NotBlank(message="Válassz munkatársat.")
      * @ORM\ManyToOne(targetEntity="App\Entity\Boltzaras\Munkatars")
-     * @ORM\JoinColumn(name="munkatars_id", referencedColumnName="munkatars_id")
+     * @ORM\JoinColumn(name="munkatars_id", referencedColumnName="id", nullable=false)
      */
     private $munkatars;
 

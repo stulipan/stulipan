@@ -3,17 +3,21 @@
 namespace App\Controller\Shop;
 
 use App\Entity\User;
+use App\Form\UserRegistration\ForgottenPasswordFormType;
 use App\Form\UserRegistration\UserRegistrationFormType;
 use App\Security\LoginFormAuthenticator;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginController extends AbstractController
 {
@@ -51,10 +55,9 @@ class LoginController extends AbstractController
          */
         $this->saveTargetPath($request->getSession(), 'main', $request->headers->get('referer') ? $request->headers->get('referer') : '');
         
-        return $this->render('webshop/site/user-login-register.html.twig', [
+        return $this->render('webshop/user/user-login-register.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
-            'title' => 'Bejelentkezés',
             'registrationForm' => $registrationForm->createView(),
         ]);
     }
@@ -62,7 +65,9 @@ class LoginController extends AbstractController
     /**
      * @Route("/register", name="site-register")
      */
-    public function siteRegister(Request $request, UserPasswordEncoderInterface $encoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator) //AuthenticationUtils $authenticationUtils,
+    public function siteRegister(Request $request, UserPasswordEncoderInterface $encoder,
+                                 GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $formAuthenticator,
+                                 TranslatorInterface $translator)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('homepage');
@@ -70,7 +75,6 @@ class LoginController extends AbstractController
         $form = $this->createForm(UserRegistrationFormType::class);
         $form->handleRequest($request);
 
-//        dd($form->isValid());
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $user = new User();
@@ -87,6 +91,7 @@ class LoginController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->addFlash('success', $translator->trans('registration.registration-success'));
             /**
              * Instead of redirecting to a normal route use return $guardHandler->authenticateUserAndHandleSuccess()
              * This needs a few arguments: the $user that's being logged in, the $request object,
@@ -100,10 +105,8 @@ class LoginController extends AbstractController
             );
         }
     
-        /**
-         * Renders the form with errors
-         * If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
-         */
+        // Renders the form with errors
+        // If AJAX request and the form was submitted, renders the form, fills it with data and validation errors!
         if ($form->isSubmitted() && $request->isXmlHttpRequest()) {
             $html = $this->renderView('webshop/cart/registration-form-duringCheckout.html.twig', [
                 'registrationForm' => $form->createView(),
@@ -111,8 +114,7 @@ class LoginController extends AbstractController
             return new Response($html,400);
         }
 
-        return $this->render('webshop/site/user-register.html.twig', [
-            'title' => 'Fiók létrehozása',
+        return $this->render('webshop/user/user-register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }

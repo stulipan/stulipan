@@ -7,8 +7,9 @@ framework:
 
         paths:
             - '%kernel.project_dir%/translations'
-            - '%kernel.project_dir%/translations/store'
             - '%kernel.project_dir%/translations/admin'
+            - '%kernel.project_dir%/translations/store'
         fallbacks:
-            - '%locale%'
+#            - '%locale%'
             - 'hu'
+            - 'en'

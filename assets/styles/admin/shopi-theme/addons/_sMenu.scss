@@ -1,0 +1,226 @@
+// Sidebar menu / sMenu
+
+// Important!
+// The sMenu's height depends on the '_topnav.scss' component's height
+
+// Inspired by:
+// https://github.com/azouaoui-med
+// Demo: https://azouaoui-med.github.io/pro-sidebar-template/src/
+
+
+$smenu-zindex:                     $zindex-modal !default;
+$smenu-top-offset:                 $topnav-height !default;
+
+$smenu-width:                      240px !default;
+$smenu-width-mobile:               280px !default;
+$smenu-bg:                         $body-bg !default;
+$smenu-font-size:                  $font-size-base !default;
+
+$smenu-icon-width:                 1.25rem !default;
+$smenu-icon-margin-x:              .75rem !default;
+$smenu-icon-color:                 $gray-700 !default;
+
+$smenu-link-padding-x:             .5rem !default;
+$smenu-link-hover-bg:              $gray-200 !default;
+$smenu-link-selected-bg:           $primary-active !default;
+$smenu-link-selected-color:        initial !default;
+
+$smenu-toggle-distance-x:          5px !default;
+$smenu-backdrop-bg:                $modal-backdrop-bg !default;
+$smenu-backdrop-opacity:           .3 !default;
+$smenu-backdrop-zindex:            $zindex-modal-backdrop !default;
+
+.sMenu {
+  position: fixed;
+  left: -$smenu-width;
+  top: 50px;
+  min-height: calc(100% - 50px);
+  height: calc(100% - 50px);
+  width: $smenu-width;
+  background-color: #f6f6f7;
+  display: block;
+  z-index: $smenu-zindex;
+  transition: left .3s ease, width .3s ease;
+
+  @include media-breakpoint-down(md) {
+    left: -$smenu-width-mobile;
+    width: $smenu-width-mobile;
+  }
+
+  .sMenu-dialog {
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid $gray-400;
+    padding: .5rem;
+    overflow-y: scroll;
+  }
+
+  .sMenu-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+}
+
+.sMenu--nav {
+  padding-top: .5rem;
+
+  &:last-of-type {
+    padding-bottom: .5rem;
+  }
+
+  ul {
+    margin: 0;
+    padding-inline-start: 0;
+    @include font-size($smenu-font-size);
+
+    & li {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 2px;
+
+      & a {
+        color: initial;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        border-radius: $border-radius;
+        padding: $smenu-link-padding-x $smenu-link-padding-x;
+        @include transition($btn-transition);
+
+        &:focus,
+        &:hover {
+          outline: none;
+          background-color: $smenu-link-hover-bg !important;
+        }
+
+        &.active-subitem {
+          color: $smenu-link-selected-color;
+          //background-color: $smenu-link-selected-bg;
+          font-weight: bold;
+        }
+
+        .s-text {
+          flex-wrap: nowrap;
+          margin-right: .5rem;
+        }
+        .s-icon {
+          width: $smenu-icon-width;
+          margin-right: $smenu-icon-margin-x;
+          color: $smenu-icon-color;
+          font-size: 1rem;
+          line-height: 1rem;
+        }
+        sup {
+          zoom: 65%;
+        }
+      }
+    }
+  }
+}
+
+.sMenu--nav .sMenu--dropdown {
+  .sMenu--submenu {
+    display: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+
+    & li a {
+      overflow: hidden;
+
+      .s-icon {
+        display: none;
+      }
+      .s-text {
+        padding-left: calc(#{$smenu-icon-width} + #{$smenu-icon-margin-x} + .5rem);
+      }
+    }
+  }
+
+  & >a:after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f105";
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    background: 0 0;
+    position: absolute;
+    right: $smenu-link-padding-x;
+    //top: 14px;
+    transition: transform .3s ease;
+
+  }
+
+  &.active>a:after {
+    transform: rotate(90deg);
+  }
+}
+
+.sMenu--nav .sMenu--dropdown.active-item {
+  & > a {
+    background-color: $smenu-link-selected-bg;
+
+    & .sidemenu-item-content {
+      color: $smenu-link-selected-color;
+    }
+  }
+
+  & .sMenu--submenu {
+    display: block;
+  }
+}
+
+
+.content-page {
+  transition: padding-left .3s ease;
+}
+
+// Makes it visible on desktop
+.sMenu--enabled {
+  .sMenu {
+    @include media-breakpoint-up(lg) {
+      left: 0px;
+    }
+  }
+  .content-page {
+    @include media-breakpoint-up(lg) {
+      padding-left: $smenu-width;
+    }
+  }
+}
+
+// Makes it visible when toggled
+.sMenu--enabled.sMenu--show {
+  .sMenu {
+    left: 0;
+  }
+}
+
+
+
+.sMenu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: $zindex-modal-backdrop;
+  width: 100vw;
+  height: 100vh;
+  background-color: $smenu-backdrop-bg;
+  display: block;
+
+  // Fade for backdrop
+  &.fade { opacity: 0; }
+  &.show { opacity: $smenu-backdrop-opacity; }
+
+  @include media-breakpoint-up(lg) {
+    display: none;
+  }
+}

@@ -3,6 +3,7 @@
 namespace App\Controller\Shop;
 
 use App\Entity\Geo\GeoPlace;
+use App\Services\CartBuilder;
 use App\Services\OrderBuilder;
 use App\Entity\Product\ProductCategory;
 use App\Repository\GeoPlaceRepository;
@@ -15,14 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CartUtilsController extends AbstractController
 {
-    /**
-     * @var OrderBuilder
-     */
-    private $orderBuilder;
+    private $cartBuilder;
 
-    public function __construct(OrderBuilder $orderBuilder)
+    public function __construct(CartBuilder $cartBuilder)
     {
-        $this->orderBuilder = $orderBuilder;
+        $this->cartBuilder = $cartBuilder;
     }
 
     /**
@@ -99,26 +97,26 @@ class CartUtilsController extends AbstractController
 
     /**
      * Renders the dropdown cart. The items are retrieved from session
+     *
+     * @ Route("/cart/cartDetailsDropdown", name="cart-detailsDropdown", methods={"GET"})
      */
     public function cartDetailsDropdown()
     {
-        $orderBuilder = $this->orderBuilder;
-//        dd($orderBuilder->getCurrentOrder());
         return $this->render('webshop/site/navbar-cart-dropdown.html.twig', [
-            'order' => $orderBuilder->getCurrentOrder(),
-            'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
+            'cart' => $this->cartBuilder->getCurrent(),
         ]);
     }
 
     /**
      * Renders the slider cart. The items are retrieved from session
+     * @ Route("/cart/showSidebarCart", name="cart-showSidebarCart", methods={"GET"})
      */
     public function showSidebarCart()
     {
-        $orderBuilder = $this->orderBuilder;
+        $cartBuilder = $this->cartBuilder;
         return $this->render('webshop/site/navbar-cart-sidebar.html.twig', [
-            'order' => $orderBuilder->getCurrentOrder(),
-            'totalAmountToPay' => $orderBuilder->summary()->getTotalAmountToPay(),
+            'cart' => $cartBuilder->getCurrent(),
+            'totalAmountToPay' => $cartBuilder->getCurrent()->getTotalAfterSale(),
         ]);
     }
 

@@ -1,0 +1,42 @@
+{% extends 'webshop/site/template-reset-password.html.twig' %}
+
+{% set pageTitle = 'registration.forgot-password.forgot-your-password-title'|trans %}
+
+{% block underNavbar %}
+{% endblock %}
+
+{% block resetPassword %}
+    <div class="mb-4">
+        <h3 class="font-weight-normal">{{ 'registration.forgot-password.forgot-your-password-title'|trans }}</h3>
+    </div>
+    {% for flashError in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    {{ form_start(form, { 'attr': {'class': '', 'novalidate' : 'novalidate' }}) }}
+        <div class="form-group">
+            <label for="{{ form.email.vars.full_name }}" class="form-label">{{ 'registration.forgot-password.email-address'|trans }}</label>
+            {{ form_widget(form.email, {'attr': {'class': ''}}) }}
+            {{ form_errors(form.email) }}
+            <div class="form-text">
+                {{ 'registration.forgot-password.enter-your-details'|trans }}
+            </div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <button type="submit" class="btn btn-primary px-5" formnovalidate>{{ 'registration.forgot-password.reset-password-button'|trans }}</button>
+        </div>
+
+        {# Render CSRF token etc .#}
+        <div style="display:none">
+            {{ form_rest(form) }}
+        </div>
+    {{ form_end(form) }}
+
+    <div class="mt-4 text-center">
+        <a href="{{ path('site-login') }}" class="">{{ 'registration.forgot-password.back-to-login'|trans }}</a>
+    </div>
+{% endblock %}
+
+{% block footerHighlights %}
+{% endblock %}

@@ -3,25 +3,22 @@
 namespace App\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Serializable;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="customer")
- * @ORM\Entity
-// * @ ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  * @ UniqueEntity("email", message="Az email címet elgépelted, vagy már regisztráltál vele!")
  */
 class Customer
 {
     const OPTIN_LEVEL_SINGLE_OPTIN = "single_opt_in";
     const OPTIN_LEVEL_CONFIRMED_OPTIN = "confirmed_opt_in";
+    const OPTIN_LEVEL_OPT_OUT = "opt_out";
     const OPTIN_LEVEL_UNKNOWN = "unknown";
 
     use TimestampableTrait;
@@ -30,7 +27,7 @@ class Customer
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -49,7 +46,7 @@ class Customer
     /**
      * @var int|null
      *
-     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
+     * @ORM\Column(name="phone", type="string", length=15, nullable=true)
      * @Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $phone;
@@ -57,7 +54,7 @@ class Customer
     /**
      * @var bool
      *
-     * @ORM\Column(name="verified_email", type="smallint", length=1, nullable=false, options={"default"="0"})
+     * @ORM\Column(name="verified_email", type="smallint", length=1, nullable=false, options={"default"=0})
      */
     private $verifiedEmail = 0;
 
@@ -95,8 +92,8 @@ class Customer
      * @var string
      * @Groups({"orderView"})
      *
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="!")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Add meg a keresztneved.")
      */
     private $firstname;
 
@@ -104,8 +101,8 @@ class Customer
      * @var string
      * @Groups({"orderView"})
      *
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="!")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Add meg a neved.")
      */
     private $lastname;
 
@@ -120,29 +117,41 @@ class Customer
      */
     private $user;
 
-    /**
-     * @var Recipient[]|ArrayCollection|null
-     *
-     * ==== One User/Customer has Recipients ====
-     * ==== mappedBy="customer" => az Recipients entitásban definiált 'customer' attribútumról van szó ====
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Recipient", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
-     * @Assert\NotBlank(message="Egy felhasználónak több címzetje lehet.")
-     */
-    private $recipients;
+//    /**
+//     * @var Recipient[]|ArrayCollection|null
+//     *
+//     * ==== One User/Customer has Recipients ====
+//     * ==== mappedBy="customer" => az Recipients entitásban definiált 'customer' attribútumról van szó ====
+//     *
+//     * @ORM\OneToMany(targetEntity="App\Entity\Recipient", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
+//     * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
+//     * @Assert\NotBlank(message="Egy felhasználónak több címzetje lehet.")
+//     */
+//    private $recipients;
+
+//    /**
+//     * @var Sender[]|ArrayCollection|null
+//     *
+//     * ==== One User/Customer has Senders ====
+//     * ==== mappedBy="customer" => a Senders entitásban definiált 'customer' attribútumról van szó ====
+//     *
+//     * @ORM\OneToMany(targetEntity="App\Entity\Sender", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
+//     * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
+//     * @Assert\NotBlank(message="Egy felhasználónak több számlázási címe lehet.")
+//     */
+//    private $senders;
 
     /**
-     * @var Sender[]|ArrayCollection|null
+     * @var Checkout[]|ArrayCollection|null
      *
-     * ==== One User/Customer has Senders ====
-     * ==== mappedBy="customer" => a Senders entitásban definiált 'customer' attribútumról van szó ====
+     * ==== One User/Customer has Orders ====
+     * ==== mappedBy="customer" => az Order entitásban definiált 'customer' attribútumról van szó ====
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Sender", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Checkout", mappedBy="customer") // , cascade={"persist"}, orphanRemoval=true
      * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
-     * @Assert\NotBlank(message="Egy felhasználónak több számlázási címe lehet.")
+     * @ORM\OrderBy({"id" = "DESC"})
      */
-    private $senders;
+    private $checkouts = [];
 
     /**
      * @var Order[]|ArrayCollection|null
@@ -152,16 +161,16 @@ class Customer
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="customer", cascade={"persist"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="id", referencedColumnName="customer_id", nullable=true)
-     * @ORM\OrderBy({"id" = "ASC"})
-     * @ Assert\NotBlank(message="Egy felhasználónak több rendelése lehet.")
+     * @ORM\OrderBy({"id" = "DESC"})
      */
     private $orders = [];
 
     public function __construct()
     {
         $this->isActive = true;
-        $this->recipients = new ArrayCollection();
-        $this->senders = new ArrayCollection();
+//        $this->recipients = new ArrayCollection();
+//        $this->senders = new ArrayCollection();
+        $this->checkouts = new ArrayCollection();
         $this->orders = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
@@ -184,9 +193,9 @@ class Customer
 
     public function getEmail(): ?string
     {
-        if ($this->user && $this->user->getEmail()) {
-            return $this->user->getEmail();
-        }
+//        if ($this->user && $this->user->getEmail()) {
+//            return $this->user->getEmail();
+//        }
         return $this->email;
     }
 
@@ -359,80 +368,104 @@ class Customer
     }
 
 
+//    /**
+//     * @param Recipient $recipient
+//     */
+//    public function addRecipient(Recipient $recipient): void
+//    {
+//        $this->recipients->add($recipient);
+//    }
+//
+//    /**
+//     * @param Recipient $recipient
+//     */
+//    public function removeRecipient(Recipient $recipient): void
+//    {
+//        $this->recipients->removeElement($recipient);
+//    }
+//
+//    /**
+//     * @return Recipient[]|Collection
+//     */
+//    public function getRecipients(): Collection
+//    {
+//        return $this->recipients;
+//    }
+//
+//    /**
+//     * Checking if the Customer has Recipients.
+//     *
+//     * @return bool
+//     */
+//    public function hasRecipients(): bool
+//    {
+//        if ($this->recipients and !$this->recipients->isEmpty()) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+//
+//    /**
+//     * @param Sender $sender
+//     */
+//    public function addSender(Sender $sender): void
+//    {
+//        $this->senders->add($sender);
+//    }
+//
+//    /**
+//     * @param Sender $sender
+//     */
+//    public function removeSender(Sender $sender): void
+//    {
+//        $this->senders->removeElement($sender);
+//    }
+//
+//    /**
+//     * @return Sender[]|Collection
+//     */
+//    public function getSenders(): Collection
+//    {
+//        return $this->senders;
+//    }
+//
+//    /**
+//     * Checking if the Customer has Senders.
+//     *
+//     * @return bool
+//     */
+//    public function hasSenders(): bool
+//    {
+//        if ($this->senders and !$this->senders->isEmpty()) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+
     /**
-     * @param Recipient $recipient
+     * @param Checkout|null $checkout
      */
-    public function addRecipient(Recipient $recipient): void
+    public function addCheckout(?Checkout $checkout): void
     {
-        $this->recipients->add($recipient);
+        $this->checkouts->add($checkout);
     }
 
     /**
-     * @param Recipient $recipient
+     * @param Checkout $checkout
      */
-    public function removeRecipient(Recipient $recipient): void
+    public function removeCheckout(Checkout $checkout): void
     {
-        $this->recipients->removeElement($recipient);
+        $this->checkouts->removeElement($checkout);
     }
 
     /**
-     * @return Recipient[]|Collection
+     * @return Checkout[]|Collection
      */
-    public function getRecipients(): Collection
+    public function getCheckouts(): Collection
     {
-        return $this->recipients;
-    }
-    
-    /**
-     * Checking if the Customer has Recipients.
-     *
-     * @return bool
-     */
-    public function hasRecipients(): bool
-    {
-        if ($this->recipients and !$this->recipients->isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param Sender $sender
-     */
-    public function addSender(Sender $sender): void
-    {
-        $this->senders->add($sender);
-    }
-
-    /**
-     * @param Sender $sender
-     */
-    public function removeSender(Sender $sender): void
-    {
-        $this->senders->removeElement($sender);
-    }
-
-    /**
-     * @return Sender[]|Collection
-     */
-    public function getSenders(): Collection
-    {
-        return $this->senders;
-    }
-    
-    /**
-     * Checking if the Customer has Senders.
-     *
-     * @return bool
-     */
-    public function hasSenders(): bool
-    {
-        if ($this->senders and !$this->senders->isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->checkouts;
     }
 
     /**
@@ -467,7 +500,7 @@ class Customer
     {
         $realOrders = new ArrayCollection();
         foreach ($this->orders as $order) {
-            if ($order->getStatus() !== null) {
+            if ($order->getStatus() !== null && $order->isCanceled() === false) {
                 $realOrders->add($order);
             }
         }
@@ -507,25 +540,32 @@ class Customer
     }
 
     /**
+     * @return bool
+     */
+    public function hasOrderPlaced(Order $order)
+    {
+        return $this->getOrdersPlaced()->contains($order);
+    }
+
+    /**
      * @return int
      */
     public function countOrders(): int
     {
+
         return $this->orders->count();
     }
     
     /**
      * @return int
      */
-    public function countRealOrders(): int
+    public function getPlacedOrdersCount(): int
     {
-        $realOrders = new ArrayCollection();
-        foreach ($this->orders as $order) {
-            if ($order->getStatus() !== null) {
-                $realOrders->add($order);
-            }
+        $placedOrders = $this->getOrdersPlaced();
+        if ($placedOrders) {
+            return $placedOrders->count();
         }
-        return $realOrders->count();
+        return 0;
     }
 
     /**
@@ -535,7 +575,7 @@ class Customer
     {
         $spent = 0;
         foreach ($this->getOrdersPlaced() as $o => $order) {
-            $spent += $order->getSummary()->getTotalAmountToPay();
+            $spent += $order->getTotalAmountToPay();
         }
         return (float) $spent;
     }

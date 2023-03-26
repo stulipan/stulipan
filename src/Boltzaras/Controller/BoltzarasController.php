@@ -4,23 +4,23 @@ namespace App\Boltzaras\Controller;
 
 use App\Entity\Boltzaras\Boltzaras;
 use App\Entity\Boltzaras\BoltzarasWeb;
-use App\Admin\Boltzaras\Form\BoltzarasFormType;
-use App\Admin\Boltzaras\Form\BoltzarasWebFormType;
+use App\Boltzaras\Form\BoltzarasFormType;
+use App\Boltzaras\Form\BoltzarasWebFormType;
 use App\Form\DateRangeType;
 use App\Entity\DateRange;
 
 use App\Services\StoreSettings;
 use DateTime;
 use Pagerfanta\Exception\NotValidCurrentPageException;
-use Swift_Mailer;
-use Swift_Message;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
-use Symfony\Bundle\MonologBundle\SwiftMailer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Pagination\PaginatedCollection;
@@ -80,7 +80,7 @@ class BoltzarasController extends AbstractController
 	/**
      * @Route("/boltzaras/edit/{id}", name="boltzaras-edit")
      */
-    public function editAction(Request $request, ?Boltzaras $boltzaras, $id = null, Swift_Mailer $mailer)
+    public function editAction(Request $request, ?Boltzaras $boltzaras, $id = null, MailerInterface $mailer, StoreSettings $storeSettings)
     {
         if (!$boltzaras) {
             // new Boltzaras
@@ -94,40 +94,44 @@ class BoltzarasController extends AbstractController
 
         // handleRequest only handles data on POST
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $boltzaras = $form->getData();
             $boltzaras->setModositasIdopontja();
-         	
-			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($boltzaras);
-			$entityManager->flush();
+
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($boltzaras);
+			$em->flush();
 
             $subject = 'Napi boltzárás';
-            $email = (new Swift_Message())
-                ->setSubject($subject)
-                ->setFrom(['info@tulipanfutar.hu' => 'Difiori boltzárás'])
-                ->setTo('info@difiori.hu')
-                ->setBody(
-                    $this->renderView('admin/emails/boltzaras-napi-riport.html.twig', [
-                            'kassza' => $boltzaras->getKassza(),
-                            'keszpenz' => $boltzaras->getKeszpenz(),
-                            'bankkartya' => $boltzaras->getBankkartya(),
-                            'munkatars' => $boltzaras->getMunkatars(),
-                            'subject' => $subject,
-                            'idopont' => $boltzaras->getIdopont(),
-                        ]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($email);
+            $from = new Address(
+                $storeSettings->get('notifications.sender-email'),
+                $storeSettings->get('notifications.sender-name')
+            );
+            $replyTo = $storeSettings->get('notifications.reply-to-email');
+            $to = $storeSettings->get('notifications.admin-notification-email');
 
+            $email = (new Email())
+                ->from($from)
+                ->replyTo($replyTo)
+                ->to($to)
+                ->subject($subject)
+//                ->text('Sending emails is fun again!')
+                ->html($this->renderView('admin/emails/boltzaras-napi-riport.html.twig', [
+                        'kassza' => $boltzaras->getKassza(),
+                        'keszpenz' => $boltzaras->getKeszpenz(),
+                        'bankkartya' => $boltzaras->getBankkartya(),
+                        'munkatars' => $boltzaras->getMunkatars(),
+                        'subject' => $subject,
+                        'idopont' => $boltzaras->getIdopont(),
+                    ]
+                ));
+            $mailer->send($email);
             $this->addFlash('success', 'Boltzárás sikeresen elmentve!');
 
 			return $this->redirectToRoute('boltzaras_list');
-			
         }
-        
+
         return $this->render('admin/boltzaras/boltzaras_edit.html.twig', [
             'form' => $form->createView(),
             'title' => 'Boltzárás adatainak módosítása',
@@ -154,9 +158,9 @@ class BoltzarasController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $boltzarasWeb = $form->getData();
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($boltzarasWeb);
-            $entityManager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($boltzarasWeb);
+            $em->flush();
 
             $this->addFlash('success', 'Webes boltzárás sikeresen elmentve!');
 
@@ -283,7 +287,7 @@ class BoltzarasController extends AbstractController
             $jelentes[$i]->getModositasIdopontja()->format('Y-m-d H:i:s');
         }
 
-        $paginatedCollection = new PaginatedCollection($jelentes, $pagerfanta->getNbResults());
+//        $paginatedCollection = new PaginatedCollection($jelentes, $pagerfanta->getNbResults());
 
         // render a template, then in the template, print things with {{ jelentes.munkatars }}
         return $this->render('admin/boltzaras/boltzaras_list.html.twig', [
@@ -318,14 +322,14 @@ class BoltzarasController extends AbstractController
 //         	$zarasAdatok->setModositasIdopontja();
 //
 //			// you can fetch the EntityManager via $this->getDoctrine()
-//			// or you can add an argument to your action: index(EntityManagerInterface $entityManager)
-//			$entityManager = $this->getDoctrine()->getManager();
+//			// or you can add an argument to your action: index(EntityManagerInterface $em)
+//			$em = $this->getDoctrine()->getManager();
 //
 //			// tell Doctrine you want to (eventually) save the Product (no queries yet)
-//			$entityManager->persist($zarasAdatok);
+//			$em->persist($zarasAdatok);
 //
 //			// actually executes the queries (i.e. the INSERT query)
-//			$entityManager->flush();
+//			$em->flush();
 //
 //			$this->addFlash('success', 'Sikeresen leadtad a boltzárásjelentést! Jó pihenést!');
 //

@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Repository\UserRepository;
+use Stulipan\Traducible\Builder\LocaleStorage;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -38,13 +39,17 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     private $passwordEncoder;
 
+    private $localeStorage;
+
     public function __construct(UserRepository $userRepository, RouterInterface $router,
-                                CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+                                CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder,
+                                LocaleStorage $localeStorage)
     {
         $this->router = $router;
         $this->userRepository = $userRepository;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->localeStorage = $localeStorage;
     }
 
     /**
@@ -110,6 +115,7 @@ class AdminLoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         $request->getSession()->set('_locale', $request->getLocale());
+        $this->localeStorage->setContentLocale($request->getLocale());
 
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);

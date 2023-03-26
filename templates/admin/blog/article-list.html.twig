@@ -1,0 +1,93 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set activeMenu = 'cms' %}
+{% set pageTitle = 'blog.articles'|trans %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+} %}
+
+{%- block title -%}
+	{{ pageTitle }}
+{%- endblock -%}
+
+{% block headerActionsWrapper %}
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">
+		<ul class="nav nav-tabs adaptive-primary">
+{#			<li class="nav-item adaptive-item">#}
+{#				<a href="{{ path('blog-article-new') }}" class="btn btn-primary">Új cikk</a>#}
+{#			</li>#}
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	<a href="{{ path('blog-article-new') }}" class="btn btn-primary">{{ 'blog.new-article'|trans }}</a>
+{% endblock %}
+
+{% block tableHeader %}
+	<tr>
+		<th scope="col">{{ 'blog.article.image'|trans }}</th>
+		<th scope="col">{{ 'blog.article.title'|trans }}</th>
+		<th scope="col">{{ 'blog.article.author'|trans }}</th>
+		<th scope="col">{{ 'blog.article.enabled'|trans }}</th>
+{#		<th scope="col"><i class="fas fa-ellipsis-h"></i></th>#}
+	</tr>
+{% endblock %}
+
+{% block tableBody %}
+	{% if items is defined %}
+		{% for article in items %}
+			<tr>
+				<td class="align-middle">
+					{% if article.image|default %}
+						<div class="img-thumbnail" style="background: url('{{ uploaded_asset(article.imagePath)|imagine_filter('size_200') }}') center center / cover no-repeat; width: 50px; height: 50px;"></div>
+					{% else %}
+						{% include 'admin/_missing-image-insert.html.twig' %}
+					{% endif %}
+				</td>
+				<td class="align-top">
+					<a href="{{ path('blog-article-edit', {'id': article.id}) }}" class="font-weight-bold text-dark">
+						{{ article.title }}
+					</a>
+					<p class="mt-1 mb-0">
+					<span class="text-muted">{{ 'blog.article.last-edited-at'|trans }} {{ article.updatedAt|localizedDate }}</span>
+					<br>
+					<span class="text-muted">{{ article.publishedAt ? '' : 'generic.draft'|trans }}</span>
+					</p>
+
+				</td>
+				<td class="align-middle">
+					{{ article.author }}
+				</td>
+				<td class="align-middle">
+					{% if article.enabled is defined and article.enabled == true %}
+						<span class="badge badge-success">&nbsp;</span>
+					{% else %}
+						<span class="badge badge-secondary">&nbsp;</span>
+					{% endif %}
+				</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+{% endblock %}
+
+{% block tableEmpty %}
+	{% if items is defined and items is empty %}
+		<div class="h-100 text-center p-4">
+			<div class="h1 text-muted-extra">
+				<i class="far fa-list-alt"></i>
+			</div>
+			<div class="font-18 mt-3 mb-2">{{ 'blog.articles-not-found'|trans }}</div>
+			<div class="text-muted-extra">{{ 'blog.articles-not-found-suggestion'|trans }}</div>
+		</div>
+	{% endif %}
+{% endblock %}

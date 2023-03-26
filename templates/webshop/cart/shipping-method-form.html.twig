@@ -11,7 +11,7 @@
 <div class="form-group radio-validation mb-0">
     <div class="checkout-method-selection content-body-thick-border">
         {% for choice in shippingMethodForm.shippingMethod %}
-            <div class="checkout-shipping-item JS--Wrapper-choice {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}">
+            <div class="checkout-shipping-item JS--Wrapper-choice {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}" data-shipping-fee="{{ shippingMethods[loop.index0].price }}">
                 <div class="JS--Button-pickChoice loading-spinner-has-bg">
                     <div class="loading-spinner-invisible">
                         <div class="custom-control custom-radio">

@@ -24,7 +24,7 @@ class DeliveryDateType
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="smallint", name="id", length=11)
+     * @ORM\Column(type="integer", name="id", nullable=false, options={"unsigned"=true})
      */
     private $id;
 

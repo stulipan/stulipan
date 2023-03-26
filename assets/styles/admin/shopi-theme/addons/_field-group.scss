@@ -1,0 +1,184 @@
+
+$addon-padding-y:         0 !default;
+$addon-padding-x:         .45rem !default;
+
+$addon-height:                    calc(#{$input-line-height * 1em} + #{$input-padding-y * 2}) !default; // + #{$input-border-width}
+$addon-color:                     $gray-700;
+$addon-content-width:             2.25rem !default; // which is 36px at 1rem=16px;
+$addon-content-width-sm:          1.5rem !default;  // 24px
+$addon-content-width-lg:          3.5rem !default;  // 56px
+
+.field-group {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: stretch;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.field-item {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  width: auto;
+  flex-wrap: wrap;
+  background-color: $white;
+
+  &:not(:first-child) {
+    margin-left: -$input-border-width;
+  }
+
+  & input:focus,
+  & select:focus {
+    background-color: transparent;
+    border-radius: $border-radius !important;
+    z-index: 3;
+  }
+  & .btn:focus {
+    border-radius: $border-radius !important;
+    z-index: 3;
+  }
+
+  @include media-breakpoint-down(sm) {
+    & .form-control {
+      //border-radius: $border-radius !important;
+    }
+  }
+}
+
+.field-prepend,
+.field-append {
+  position: relative;
+  display: flex;
+  //flex: 1;
+  justify-content: space-between;
+  width: 100%;
+  z-index: 4;
+}
+// We use '+label+input' and '+input' so that it works both when Input is preceded by Label or not!
+.field-append+label+input,
+.field-append+input {
+  padding-right: $addon-content-width + 2 * $addon-padding-x;
+}
+.field-prepend+label+input,
+.field-prepend+input {
+  padding-left: $addon-content-width + 2 * $addon-padding-x;
+}
+.field-prepend.field-append+label+input,
+.field-prepend.field-append+input {
+  padding-left: $addon-content-width + 2 * $addon-padding-x;
+  padding-right: $addon-content-width + 2 * $addon-padding-x;
+}
+
+.field-addon-prepend,
+.field-addon-append {
+  position: absolute;
+  top: 1px;
+  height: $addon-height;
+  width: $addon-content-width + 2 * $addon-padding-x;
+  border: none;
+  border-radius: $border-radius;
+  outline: none;
+  cursor: pointer;
+  color: $addon-color;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  padding-left: $addon-padding-x;
+  padding-right: $addon-padding-x;
+
+  &.w-addon-sm {
+    width: $addon-content-width-sm + 2 * $addon-padding-x;
+  }
+  &.w-addon-lg {
+    width: $addon-content-width-lg + 2 * $addon-padding-x;
+  }
+
+}
+
+.field-addon-prepend {
+  left: 1px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.field-addon-append {
+  right: 1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  z-index: 5;
+}
+
+// Correction for FontAwesome icons' right margin
+.field-addon-prepend i,
+.field-addon-append i,
+.field-group i {
+  margin-right: 0;
+}
+
+// Correction
+.field-item .form-control {
+  background-color: transparent;
+  z-index: 1;
+}
+
+
+// Prepend and append rounded corners
+//
+// These rulesets must come after the sizing ones to properly override sm and lg
+// border-radius values when extending. They're more specific than we'd like
+// with the `field-group >` part, but without it, we cannot override the sizing.
+
+
+.field-group .field-item:not(:last-child) > input,
+.field-group .field-item:not(:last-child) > select,
+.field-group .field-item:not(:last-child) > .btn {
+  @include border-right-radius(0);
+}
+
+.field-group .field-item:not(:first-child) > input,
+.field-group .field-item:not(:first-child) > select,
+.field-group .field-item:not(:first-child) > .btn {
+  @include border-left-radius(0);
+}
+
+
+
+
+.field-append+label+input.px-addon-sm,
+.field-append+label+input.pr-addon-sm,
+.field-append+input.px-addon-sm,
+.field-append+input.pr-addon-sm {
+  padding-right: $addon-content-width-sm + 2 * $addon-padding-x;
+}
+.field-prepend+label+input.px-addon-sm,
+.field-prepend+label+input.pl-addon-sm,
+.field-prepend+input.px-addon-sm,
+.field-prepend+input.pl-addon-sm {
+  padding-left: $addon-content-width-sm + 2 * $addon-padding-x;
+}
+.field-prepend.field-append+label+input.px-addon-sm,
+.field-prepend.field-append+input.px-addon-sm {
+  padding-left: $addon-content-width-sm + 2 * $addon-padding-x;
+  padding-right: $addon-content-width-sm + 2 * $addon-padding-x;
+}
+
+.field-append+label+input.px-addon-lg,
+.field-append+label+input.pr-addon-lg,
+.field-append+input.px-addon-lg,
+.field-append+input.pr-addon-lg {
+  padding-right: $addon-content-width-lg + 2 * $addon-padding-x;
+}
+.field-prepend+label+input.px-addon-lg,
+.field-prepend+label+input.pl-addon-lg,
+.field-prepend+input.px-addon-lg,
+.field-prepend+input.pl-addon-lg {
+  padding-left: $addon-content-width-lg + 2 * $addon-padding-x;
+}
+.field-prepend.field-append+label+input.px-addon-lg,
+.field-prepend.field-append+input.px-addon-lg {
+  padding-left: $addon-content-width-lg + 2 * $addon-padding-x;
+  padding-right: $addon-content-width-lg + 2 * $addon-padding-x;
+}

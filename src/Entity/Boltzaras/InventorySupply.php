@@ -25,7 +25,7 @@ class InventorySupply
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -40,7 +40,7 @@ class InventorySupply
 //    /**
 //     * @var bool
 //     *
-//     * @ORM\Column(name="is_waste", type="boolean", nullable=false, options={"default"="0"})
+//     * @ORM\Column(name="is_waste", type="boolean", nullable=false, options={"default"=0})
 //     */
 //    private $isWaste = '0';
 

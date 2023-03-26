@@ -71,7 +71,7 @@ class CartApiController extends BaseController
         //  Kelleni fog hogy az API is session alapu legyen, ugyanis az email, firstname, lastname session-be kell elmenteni !!!!
 //        $order->setCustomerBasic($data->getCustomer());
     
-        return $this->jsonObjNormalized(['messageAndCustomer' => [$messageAndCustomer]],200, ['groups' => 'orderView']);
+        return $this->createJsonResponse(['messageAndCustomer' => [$messageAndCustomer]],200, ['groups' => 'orderView']);
        
     }
 

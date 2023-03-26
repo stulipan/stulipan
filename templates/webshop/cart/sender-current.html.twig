@@ -7,7 +7,7 @@
                         {{ sender.company is defined and sender.company ? sender.company ~ ' /' : ''}} {{ sender.fullname }}
                     </div>
                     <div class="">
-                        <a href="#" class="text-sm btn-btn-outline-dark-btn-sm" data-selector="button" data-eval="showSenderForm" data-url="{{ path('cart-editSender', {id: sender.id}) }}">
+                        <a href="#" class="text-sm" data-selector="button" data-eval="showSenderForm" data-url="{{ path('cart-editSender', {id: sender.id}) }}">
                             <span class="loading-spinner-invisible">Módosít</span>
                             <div class="loading-spinner" role="status"></div>
                         </a>

@@ -30,7 +30,7 @@ class ProductOption implements JsonSerializable
      *     "productView", "productList"
      * })
      *
-     * @ORM\Column(type="smallint", name="id", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -63,7 +63,7 @@ class ProductOption implements JsonSerializable
      * @Groups({"productView", "productList"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="position", type="smallint", length=11, nullable=false, options={"default"="100"})
+     * @ORM\Column(name="position", type="smallint", length=11, nullable=false, options={"default"=100, "unsigned"=true})
      */
     private $position;
 

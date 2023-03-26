@@ -27,15 +27,15 @@ class OrderStatus implements JsonSerializable
     public const STATUS_RETURNED = 'returned'; // visszaküldve
 
     public const ORDER_REJECTED = 'rejected'; // elutasítva - ezt még nem tudom mikor kell használni
-    public const ORDER_DELETED = 'deleted'; // törölve
+    public const ORDER_CANCELED = 'canceled'; // törölve
 
-    public const CONVERSION_TRACKING_LOADED = 'conversion.tracking.loaded';
+//    public const CONVERSION_TRACKING_LOADED = 'conversion.tracking.loaded';
 
     /**
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="id", length=5, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

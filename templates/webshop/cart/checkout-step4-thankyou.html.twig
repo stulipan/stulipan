@@ -1,28 +1,48 @@
 {#{% extends 'webshop/site/template-checkout-asos.html.twig' %}#}
 {% extends 'webshop/site/template-checkout-shopi.html.twig' %}
 
-{% block title %}
+{%- block title -%}
     Sikeres rendelés | {{ parent() }}
+{%- endblock -%}
+
+
+{% block trackingCodes %}
+    {% if isConversionTracked == false %}
+        {% include 'webshop/widgets/tracking-codes.html.twig' with { 'eventPurchase': true } %}
+    {% endif %}
 {% endblock %}
 
-{% block bodyClass %} {{ parent() }} thank-you-page{% endblock %}
+
+{% block bodyClass %}{{ parent() }} thank-you-page{% endblock %}
 
 {% block underNavbar %}
 {% endblock %}
 
 {% block leftColumn %}
-    {{ dump(isConversionTracked) }}
     <div class="mt-2 mt-md-3">
+        {% if isConversionTracked == false %}
         <div class="alert alert-success">
-            <span class="mb-0"><i class="fas fa-check-circle mr-1"></i> Köszönjük, {{ order.fullname }}. A rendelést sikeresen leadtad.</span>
+            <span class="mb-0"><i class="fas fa-check-circle mr-1"></i> {{ 'checkout.thank-you.order-submitted-with-success'|trans({ '{{ name }}' : order.fullname }) }}</span>
         </div>
+        {% endif %}
         <div class="row">
             <div class="col-lg-12 correction-no-padding">
                 <div class="card">
-                    <div class="card-body">
-                        <div>
-                            <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailen fogunk tájékoztatni. </p>
-                        </div>
+                    <div class="card-body pb-0">
+                        {% if isConversionTracked == false %}
+                            <div>
+                                <p class="">{{ 'checkout.thank-you.order-is-being-processed'|trans({ '{{ orderNumber }}' : order.number })|raw }}</p>
+                            </div>
+                        {% else %}
+                            <p class="">{{ 'checkout.thank-you.order-status-is'|trans({ '{{ orderNumber }}' : order.number, '{{ orderStatus }}' : order.status })|raw }}</p>
+                        {% endif %}
+{#                        {% if isConversionTracked == false %}#}
+{#                        <div>#}
+{#                            <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailben fogunk tájékoztatni. </p>#}
+{#                        </div>#}
+{#                        {% else %}#}
+{#                            <p class="">A <span class="text-success font-weight-bold">#{{ order.number }}</span> számú rendelésed állapota: {{ order.status }} </p>#}
+{#                        {% endif %}#}
                         <div class="shipping-address">
                             <div class="content-body-thick-border">
                                 <div class="bg-white p-3">
@@ -61,34 +81,37 @@
 
 {%  block cartCollapse %}
     <div class="cart">
-        {% include 'webshop/cart/cart.html.twig' with {
-            'showMessage': true,
-            'showQuantity': false,
-            'showRemove': false,
-            'showSummary': false,
-            'hasProductLink': false,
-        } %}
+        <div class="cart-body">
+            {% include 'webshop/cart/cart.html.twig' with {
+                'showMessage': true,
+                'showQuantity': false,
+                'showRemove': false,
+                'showSummary': false,
+                'hasProductLink': false,
+            } %}
+        </div>
     </div>
-    {% include('/webshop/cart/checkout-sidebar-paid-summary.html.twig') %}
+    {% include 'webshop/cart/checkout-sidebar-summary-widget.html.twig' %}
 {% endblock %}
 
 {%  block rightColumn %}
     <div class="cart">
-        {% include 'webshop/cart/cart.html.twig' with {
-            'showMessage': true,
-            'showQuantity': false,
-            'showRemove': false,
-            'showSummary': false,
-            'hasProductLink': false,
-        } %}
+        <div class="cart-body">
+            {% include 'webshop/cart/cart.html.twig' with {
+                'showMessage': true,
+                'showQuantity': false,
+                'showRemove': false,
+                'showSummary': false,
+                'hasProductLink': false,
+            } %}
+        </div>
     </div>
-    {% include('/webshop/cart/checkout-sidebar-paid-summary.html.twig') %}
+    {% include 'webshop/cart/checkout-sidebar-summary-widget.html.twig' %}
 {% endblock %}
 
 {% block gotoNext %}
-    <div class="mt-20px mt-md-4 mb-5 mb-5 d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-stretch align-items-md-center">
-        <a href="{{ path('homepage') }}" class="btn btn-lgX btn-primary order-1 order-md-2">Tovább a webáruházba</a>
-        <div class="order-2 order-md-1"></div>
+    <div class="mt-20px mb-5 d-flex flex-column flex-md-row justify-content-center">
+        <a href="{{ path('homepage') }}" class="btn btn-primary btn-lg btn-block">{{ 'checkout.continue-to-store-button'|trans }}</a>
     </div>
 {% endblock %}
 

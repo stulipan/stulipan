@@ -12,16 +12,35 @@
     },
 } %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {% set contentDescription = page.content|raw|striptags %}
+    {% set contentDescription = contentDescription|length > 200 ? contentDescription|slice(0, 200) ~ '...' : contentDescription %}
+
+    <meta property="og:title" content="{{ page.name }} - {{ storeSettings.get('meta.title')}}">
+    <meta property="og:description" content="{{ contentDescription }}">
+{#    {% if product.coverImageAsset %}#}
+{#        <meta property="og:image" content="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('size_facebook') }}">#}
+{#        <meta property="og:image:width" content="1000" />#}
+{#        <meta property="og:image:height" content="1000" />#}
+{#    {% endif %}#}
+    <meta property="og:url" content="{{ url('site-page-show', {'slug': page.slug}) }}" />
+
+    <meta name="description" content="{{ contentDescription }}">
+    <link rel="canonical" href="{{ url('site-page-show', {'slug': page.slug}) }}" />
+{% endblock %}
+
+
 {% block header %}
 {% endblock %}
 
 {% block content %}
     <div class="row mt-5">
-        <div class="col-xl-7 col-md-8 col-sm-10 mx-auto">
+        <div class="col-xl-7 col-md-8 col-sm-11 mx-auto">
             <div class="cms-page-title">
                 <h1>{{ page.name }}</h1>
             </div>
-            <div class="cms-page-body">
+            <div class="cms-page-body pb-5">
                 {{ page.content|raw }}
             </div>
         </div>

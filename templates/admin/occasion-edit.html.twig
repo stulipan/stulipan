@@ -16,9 +16,9 @@
 {% set moduleTitle = '' %}
 {% set cancelUrl = path('occasion-list') %}
 
-{% block title %}
+{%- block title -%}
     {{ pageTitle }}
-{% endblock %}
+{%- endblock -%}
 
 {% block moduleTitle %}
     Kiemelt nap
@@ -30,7 +30,7 @@
 
 
 {% block contentInner %}
-    {%  include '/admin/occasion-form.html.twig' with {'cancelUrl': cancelUrl} %}
+    {%  include 'admin/occasion-form.html.twig' with {'cancelUrl': cancelUrl} %}
 {% endblock %}
 
 

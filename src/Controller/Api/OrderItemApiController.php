@@ -40,7 +40,7 @@ class OrderItemApiController extends BaseController
         $order = $this->getDoctrine()->getRepository(Order::class)->find($id);
         $data = $this->getDoctrine()->getRepository(OrderItem::class)->findBy(['order' => $order]);
         if ($data) {
-            return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+            return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
         } else {
             $errors['message'] = sprintf('Nem talált ilyen rendelést: orderId=%s', $id);
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -60,7 +60,7 @@ class OrderItemApiController extends BaseController
             $orderItem->setOrder($order);
             $orderItem->setProduct($product);
             $orderItem->setQuantity(1);
-            $orderItem->setUnitPrice($product->getPrice()->getNumericValue());
+            $orderItem->setUnitPrice($product->getSellingPrice());
         
             $orderItem->setPriceTotal($orderItem->getUnitPrice() * $orderItem->getQuantity());
             $order->addItem($orderItem);
@@ -73,7 +73,7 @@ class OrderItemApiController extends BaseController
             // If current quantity + 1 is less than or equal to current stock it will add it to the cart
             if ($item->getQuantity()+1 <= $product->getStock()) {
                 $item->setQuantity($item->getQuantity()+1);
-                $price = $product->getPrice()->getNumericValue();
+                $price = $product->getSellingPrice();
                 $item->setUnitPrice($price);
                 $item->setPriceTotal($item->getUnitPrice() * $item->getQuantity());
             } else {
@@ -90,7 +90,7 @@ class OrderItemApiController extends BaseController
         
         $data = $order->getItems()->getValues();
         if ($data) {
-            return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+            return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
         } else {
             $errors['message'] = sprintf('Nem talált tételeket, ugyanis nem talált ilyen rendelést: orderId=%s', $id);
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -111,9 +111,9 @@ class OrderItemApiController extends BaseController
             $this->getDoctrine()->getManager()->flush();
         }
         $data = $order->getItems()->getValues();
-        return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+        return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
 //        if ($data) {
-//            return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+//            return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
 //        } else {
 //            $errors['message'] = sprintf('A kosarad üres');
 //            return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -130,7 +130,7 @@ class OrderItemApiController extends BaseController
         $quantity = $data['quantity'];
         if ($quantity <= $orderItem->getProduct()->getStock()) {
             $orderItem->setQuantity($quantity);
-            $price = $orderItem->getProduct()->getPrice()->getNumericValue();
+            $price = $orderItem->getProduct()->getSellingPrice();
             $orderItem->setPriceTotal($price * $quantity);
         } else {
             $errors['message'] = sprintf('A termékből csupán %s db van készleten.', $orderItem->getProduct()->getStock());
@@ -145,7 +145,7 @@ class OrderItemApiController extends BaseController
     
         $data = $orderItem;
         if ($data) {
-            return $this->jsonObjNormalized(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+            return $this->createJsonResponse(['items' => $this->toArray($data)], 200, ['groups' => 'orderView']);
         }
     }
 }

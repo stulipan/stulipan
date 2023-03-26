@@ -1,0 +1,108 @@
+{% extends 'webshop/site/template-general.html.twig' %}
+
+{% set pageTitle = blog.name %}
+{% set breadcrumb = {
+    0: {
+        'url': path('homepage'),
+        'text': 'generic.home'|trans,
+    },
+    1: {
+        'url': path('site-page-show', { 'slug': blog.slug }),
+        'text': blog.name,
+    },
+} %}
+
+{% block bodyClass %}blog article-list{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% set contentDescription = blog.seoDescription %}
+    {% set contentDescription = contentDescription|length > 200 ? contentDescription|slice(0, 200) ~ '...' : contentDescription %}
+
+    <meta property="og:title" content="{{ blog.name }} - {{ storeSettings.get('meta.title')}}">
+    <meta property="og:description" content="{{ contentDescription }}">
+{#    {% if product.coverImageAsset %}#}
+{#        <meta property="og:image" content="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('size_facebook') }}">#}
+{#        <meta property="og:image:width" content="1000" />#}
+{#        <meta property="og:image:height" content="1000" />#}
+{#    {% endif %}#}
+    <meta property="og:url" content="{{ url('site-article-list', {'slug': blog.slug}) }}" />
+
+    <meta name="description" content="{{ contentDescription }}">
+    <link rel="canonical" href="{{ url('site-article-list', {'slug': blog.slug}) }}" />
+{% endblock %}
+
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="row mt-5 mb-5">
+        <div class="col-xl-11 col-md-11 col-sm-12 mx-auto">
+            <div class="position-relative">
+                <ul class="list-group">
+                            {% if items is defined %}
+                                {% for article in items %}
+                                    <li class="list-group-item border-0 p-0">
+                                        <div class="card">
+                                            {% if article.imagePath is defined and article.imagePath is not empty %}
+                                                <img class="card-img-top" src="{{ uploaded_asset(article.imagePath)|imagine_filter('unscaled') }}" alt="{{ article.title }}">
+                                            {% else %}
+                                                <div class="media-main">
+                                                    <div class="media-main-inside">
+                                                        <svg class="icon">
+                                                            <use xlink:href="#image"></use>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            <div class="card-body">
+                                                <h3 class="card-title mb-3">{{ article.title }}</h3>
+                                                <div class="">
+                                                    <nav aria-label="breadcrumb">
+                                                        <ol class="breadcrumb">
+                                                            {% if article.publishedAt is not empty %}
+                                                                <li class="breadcrumb-item">
+                                                                    {{ article.publishedAt|localizedDateNice }}
+                                                                </li>
+                                                            {% endif %}
+                                                            {% if article.author is not empty %}
+                                                                <li class="breadcrumb-item" aria-current="page">
+                                                                    {{ 'blog.article.written-by'|trans({'{{ author }}' : article.author}) }}
+                                                                </li>
+                                                            {% endif %}
+                                                        </ol>
+                                                    </nav>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% set previewToken = app.request.get('preview_token') %}
+                                        {% set query = {
+                                            'slug': article.slug
+                                        } %}
+                                        {% if previewToken is defined and previewToken == 'enabled' %}
+                                            {% set query = query|merge({
+                                                'preview_token': 'enabled'
+                                            }) %}
+                                        {% endif %}
+                                        <a href="{{ path('site-article-show', query) }}" class="tile-link" title="{{ article.title }}"></a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+            </div>
+            <div class="pagerfanta mt-3">
+                {% if paginator is defined and paginator is not empty %}
+                    {% if paginator.nbResults >= paginator.maxPerPage %}
+                        {{ pagerfanta(paginator, 'twitter_bootstrap4', { 'prev_message': 'generic.prev'|trans, 'next_message': 'generic.next'|trans }) }}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block footerHighlights %}
+{% endblock %}
+

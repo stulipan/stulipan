@@ -37,16 +37,15 @@ class Sender
     private $id;
 
     /**
-     * @var Customer
+     * @var User|null
      *
      * ==== Many Senders belong to one Customer ====
      * ==== inversed By="senders" => a User entitásban definiált 'senders' attibútumról van szó; A Sendert így kötjük vissza a Customerhez
      *
-     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="senders")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @ Assert\NotBlank(message="Egy számlázási címnek kell legyen felhasználója/Customer.")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="senders")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    private $customer;
+    private $user;
 
     /**
      * @var Address
@@ -66,7 +65,7 @@ class Sender
      * @ORM\Column(name="firstname", type="string", length=255, nullable=false)
      * @Assert\NotNull(message="Add meg a keresztnevet.")
      */
-    private $firstname='';
+    private $firstname;
 
     /**
      * @var string
@@ -74,29 +73,29 @@ class Sender
      * @ORM\Column(name="lastname", type="string", length=255, nullable=false)
      * @Assert\NotNull(message="Add meg a vezetéknevet.")
      */
-    private $lastname='';
+    private $lastname;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="company", type="string", length=255, nullable=true)
      */
-    private $company='';
+    private $company;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="company_vat_number", type="string", length=255, nullable=true)
      */
-    private $companyVatNumber='';
+    private $companyVatNumber;
 
-//    /**
-//     * @var int
-//     *
-//     * @ORM\Column(name="phone", type="string", length=15, nullable=false)
-//     * @Assert\NotBlank(message="Add meg a telefonszámot.")
-//     */
-//    private $phone;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="phone", type="string", length=15, nullable=true)
+     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     */
+    private $phone;
 
     /**
      * @return int
@@ -186,39 +185,54 @@ class Sender
         $this->companyVatNumber = $companyVatNumber;
     }
 
-
     /**
-     * @return Customer|null
+     * @return User|null
      */
-    public function getCustomer(): ?Customer
+    public function getUser(): ?User
     {
-        return $this->customer;
+        return $this->user;
     }
 
     /**
-     * @var Customer|null $customer
+     * @param User|null $user
      */
-    public function setCustomer(?Customer $customer): void
+    public function setUser(?User $user): void
     {
-        $this->customer = $customer;
+        $this->user = $user;
     }
 
 //    /**
-//     * @return string
+//     * @return Customer|null
 //     */
-//    public function getPhone(): ?string
+//    public function getCustomer(): ?Customer
 //    {
-//        return $this->phone;
+//        return $this->customer;
 //    }
 //
 //    /**
-//     * @var string $phone
+//     * @var Customer|null $customer
 //     */
-//    public function setPhone(?string $phone)
+//    public function setCustomer(?Customer $customer): void
 //    {
-//        $utils = new GeneralUtils();
-//        $this->phone = $utils->formatPhoneNumber($phone);
+//        $this->customer = $customer;
 //    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @var string|null $phone
+     */
+    public function setPhone(?string $phone)
+    {
+        $utils = new GeneralUtils();
+        $this->phone = $utils->formatPhoneNumber($phone);
+    }
 
     /**
      * @return Address

@@ -2,9 +2,7 @@
     <input type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {{ choice.vars.checked ? 'checked' : '' }}/>
     <label class="vp-figure" for="{{ choice.vars.id }}">
             <span class="vp-content">
-                <span class="tile tile-lg">
-                    {{ choice.vars.label|raw }}
-                </span>
+                {{ choice.vars.label|raw }}
             </span>
     </label>
 </div>

@@ -1,0 +1,101 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set activeMenu = 'cms' %}
+{% set pageTitle = 'cms.section.sections'|trans %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+} %}
+
+{% block headerActionsWrapper %}
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">
+		<ul class="nav nav-tabs adaptive-primary">
+			<li class="nav-item adaptive-item">
+				<a href="{{ path('cms-section-list') }}" class="nav-link">{{ '' }}</a>
+			</li>
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	<a href="{{ path('cms-section-new') }}" class="btn btn-primary">{{ 'cms.section.new-section'|trans }}</a>
+{% endblock %}
+
+{% block tableHeader %}
+	<tr>
+		<th scope="col"><span title="{{ 'cms.section.slug'|trans }}"><i class="fas fa-toggle-on"></i></span></th>
+		<th scope="col">{{ 'cms.section.name'|trans }}</th>
+		<th scope="col">{{ 'cms.section.slug'|trans }}</th>
+		<th scope="col">{{ 'cms.section.parent-page'|trans }}</th>
+		<th scope="col">{{ 'cms.section.previewable'|trans }}</th>
+		<th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+	</tr>
+{% endblock %}
+
+{% block tableBody %}
+	{% if sections is defined and sections is not empty %}
+		{% for section in sections %}
+			<tr>
+				<td class="align-middle">
+					{% if section.enabled is defined and section.enabled == true %}
+						<span class="badge badge-success badge-sm">&nbsp;</span>
+					{% else %}
+						<span class="badge badge-light badge-sm">&nbsp;</span>
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					<a href="{{ path('cms-section-edit', {'id': section.id}) }}" class="">
+						{{ section.name }}
+					</a>
+				</td>
+				<td class="align-middle">
+					{{ section.slug }}
+				</td>
+				<td class="align-middle">
+					{% if section.belongsTo is defined and section.belongsTo is not null %}
+						{{ section.belongsTo }}
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					{% if section.previewable is defined and section.previewable == true %}
+						<span class="badge badge-success badge-sm">&nbsp;</span>
+					{% else %}
+						<span class="badge badge-light badge-sm">&nbsp;</span>
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					{% if section.belongsTo is defined and section.belongsTo is not null %}
+						{% if section.belongsTo == constant('\App\\Entity\\CmsSection::HOMEPAGE') %}
+							<a class="" href="{{ path('homepage', {'preview_token': ''}) }}" target="_blank"><i class="fas fa-external-link-alt mr-2"></i>{{ 'generic.preview'|trans }}</a>
+						{% elseif section.belongsTo == constant('\App\\Entity\\CmsSection::PRODUCT_PAGE') %}
+							<a class="" href="{{ path('site-product-show', {'preview_token': ''}) }}" target="_blank"><i class="fas fa-external-link-alt mr-2"></i>{{ 'generic.preview'|trans }}</a>
+						{% elseif section.belongsTo == constant('\App\\Entity\\CmsSection::COLLECTION_PAGE') %}
+							<a class="" href="{{ path('site-product-listall', {'preview_token': ''}) }}" target="_blank"><i class="fas fa-external-link-alt mr-2"></i>{{ 'generic.preview'|trans }}</a>
+						{% endif %}
+					{% endif %}
+				</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+{% endblock %}
+
+
+{% block tableEmpty %}
+	{% if sections is defined and sections is empty %}
+		<div class="h-100 text-center p-4">
+			<div class="h1 text-muted-extra">
+				<i class="fas fa-search"></i>
+			</div>
+			<div class="font-18 mt-3 mb-2">{{ 'cms.section.sections-not-found'|trans }}</div>
+			<div class="text-muted-extra">{{ 'cms.section.sections-not-found-suggestion'|trans }}</div>
+		</div>
+	{% endif %}
+{% endblock %}

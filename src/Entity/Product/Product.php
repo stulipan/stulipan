@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Product;
 
-//use ApiPlatform\Core\Annotation\ApiResource;
-
-use App\Entity\Product\ProductCategory;
 use App\Entity\Price;
+use App\Entity\SalesChannel;
 use App\Entity\TimestampableTrait;
 use App\Services\FileUploader;
 use Doctrine\Common\Collections\Collection;
@@ -18,17 +16,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints as CustomAssert;
 
 /**
- * @ ApiResource(
- * )
- *
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
- * @UniqueEntity("sku", message="Ez az SKU kód már használatban!")
- * @UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
+ * ORM\EntityListeners({"App\Event\SetSlugProduct"})
+ * @UniqueEntity("sku", message="product.sku-already-in-use")
+ * @UniqueEntity("slug", message="product.slug-already-in-use")
  */
-class Product //implements \JsonSerializable
+class Product
 {
     // Ezeket mar nem hasznalom
     const STATUS_ENABLED = 1;
@@ -42,7 +39,7 @@ class Product //implements \JsonSerializable
      * @Groups({"productView", "productList",
      *     "orderView"})
      *
-     * @ORM\Column(name="id", type="smallint", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -50,19 +47,24 @@ class Product //implements \JsonSerializable
     
     /**
      * @var string|null
-     * @Groups({"productView", "productList",
+     * @Groups({"productView", "productList", "eventAddToCart",
      *     "orderView"})
      *
-     * @Assert\NotBlank(message="Adj nevet a terméknek.")
+     * @Assert\NotBlank(message="product.name-is-missing")
      * @ORM\Column(name="product_name", type="string", length=100, nullable=true)
      */
     private $name;
 
     /**
      * @var string
+     * @Groups({"productView", "productList", "eventAddToCart",
+     *     "orderView"})
      *
      * @ORM\Column(name="slug", type="string", length=255, nullable=false, unique=true)
-     * @Assert\NotBlank(message="A slug nem lehet üres. Pl: ez-egy-termek")
+     * @ Assert\NotBlank(message="A slug nem lehet üres. Pl: ez-egy-termek")
+     *      --> The slug is created in 2 steps with SetSlugProduct event:
+     *      --> First: a temporary slug on prePersist, which is then replaced with the permanent one upon postPersist
+     *      --> Therefore the NotBlank validation isn't required.
      */
     private $slug;
     
@@ -76,10 +78,10 @@ class Product //implements \JsonSerializable
     
     /**
      * @var string|null
-     * @Groups({"productView", "productList",
+     * @Groups({"productView", "productList", "eventAddToCart",
      *     "orderView"})
      *
-     * @Assert\NotBlank(message="Nem adtál meg SKU-t.")
+     * @Assert\NotBlank(message="product.sku-is-missing")
      * @ORM\Column(name="sku", type="string", length=100, nullable=false)
      */
     private $sku;
@@ -93,14 +95,14 @@ class Product //implements \JsonSerializable
 //    private $grossPrice = 0;
 
     /**
-     * @var Price
-     * @Groups({"productView", "productList"})
+     * @var Price|null
+     * @Groups({"productView", "productList", "eventAddToCart"})
      *
      * @ORM\OneToOne(targetEntity="App\Entity\Price", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="price_id", referencedColumnName="id", nullable=false)
      * @Assert\Type(type="App\Entity\Price")
      * @Assert\Valid
-     * @ Assert\NotNull(message="Adj árat a terméknek.")
+     * @CustomAssert\PriceExist(message="product.price-is-missing")
      */
     private $price;
 
@@ -113,8 +115,6 @@ class Product //implements \JsonSerializable
 //    private $image;
     
     /**
-     * ()
-     *
      * @var ProductImage[]|ArrayCollection|null
      * @Groups({"productView", "productList",
      *     "orderView"})
@@ -125,7 +125,7 @@ class Product //implements \JsonSerializable
      * @ORM\OneToMany(targetEntity="ProductImage", mappedBy="product", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="id", referencedColumnName="product_id", nullable=false)
      * @ORM\OrderBy({"ordering": "ASC"})
-     * @ Assert\NotBlank(message="Egy terméknek legalább egy kép szükséges.")
+     * Assert\NotBlank(message="Egy terméknek legalább egy kép szükséges.")
      */
     private $images;
 
@@ -134,8 +134,8 @@ class Product //implements \JsonSerializable
      * @Groups({"productView", "productList",
      *     "orderView"})
      *
-     * @Assert\NotBlank()
-     * @Assert\Range(min=0, max="1000000", minMessage="Nem lehet negatív.")
+     * @Assert\NotBlank(message="product.stock-is-missing")
+     * @Assert\Range(min=0, max="1000000", minMessage="product.stock-is-negative")
      * @ORM\Column(name="stock", type="smallint", nullable=true)
      */
     private $stock;
@@ -167,7 +167,7 @@ class Product //implements \JsonSerializable
      *
      * @ORM\Column(name="is_flower", type="boolean", nullable=false, options={"default"=false})
      */
-    private $flower = 0;
+    private $flower = false;
 
     /**
      * @var ProductStatus
@@ -175,7 +175,7 @@ class Product //implements \JsonSerializable
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Product\ProductStatus", cascade={"persist"})
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Válassz egy állapotot.")
+     * @Assert\NotBlank(message="product.status-is-missing")
      */
     private $status;
 
@@ -190,7 +190,7 @@ class Product //implements \JsonSerializable
      * ()
      *
      * @var ProductCategory[]|ArrayCollection|null
-     * @Groups({"productView"})
+     * @Groups({"productView", "eventAddToCart"})
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Product\ProductCategory", inversedBy="products")
      * @ORM\JoinTable(name="product_selected_categories",
@@ -198,7 +198,8 @@ class Product //implements \JsonSerializable
      *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}
      *      )
      * @ORM\OrderBy({"name": "ASC"})
-     * @Assert\NotBlank(message="Válassz kategóriát.")
+     * @Assert\NotBlank(message="product.collection-is-missing")
+     * @Assert\Count(min = "1", minMessage = "product.collection-is-missing")
      */
     private $categories;
     
@@ -214,7 +215,7 @@ class Product //implements \JsonSerializable
      *      inverseJoinColumns={@ORM\JoinColumn(name="badge_id", referencedColumnName="id")}
      *      )
      * @ORM\OrderBy({"ordering": "ASC"})
-     * @Assert\NotBlank(message="Válassz matricát.")
+     * Assert\NotBlank(message="Válassz matricát.")
      */
     private $badges;
 
@@ -240,7 +241,7 @@ class Product //implements \JsonSerializable
      * @ORM\OneToMany(targetEntity="App\Entity\Product\ProductVariant", mappedBy="product", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="id", referencedColumnName="product_id")
      * @ORM\OrderBy({"position" = "ASC"})
-     * @Assert\NotBlank(message="Válassz variansokat.")
+     * Assert\NotBlank(message="Válassz variansokat.")
      */
     private $variants;
 
@@ -256,8 +257,8 @@ class Product //implements \JsonSerializable
      * @Groups({"productView", "productList"})
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Product\ProductKind", inversedBy="products", fetch="EAGER")
-     * @ORM\JoinColumn(name="kind_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Válassz egy terméktípust.")
+     * @ORM\JoinColumn(name="kind_id", referencedColumnName="id", nullable=true)
+     * @Assert\NotBlank(message="product.type-is-missing")
      */
     private $kind;
 
@@ -271,6 +272,19 @@ class Product //implements \JsonSerializable
      * Assert\NotBlank(message="Az altermék egy attribútum kell legyen.")
      */
     private $attribute;
+
+    /**
+     * @var SalesChannel[]|ArrayCollection|null
+     * @Groups({"productView"})
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\SalesChannel", inversedBy="products")
+     * @ORM\JoinTable(name="product_selected_sales_channels",
+     *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="sales_channel_id", referencedColumnName="id")}
+     *      )
+     * @ORM\OrderBy({"ordering": "ASC"})
+     */
+    private $salesChannels;
     
     //////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -284,6 +298,19 @@ class Product //implements \JsonSerializable
      */
     private $backToList;
 
+    /**
+     * @var string|null
+     * @Groups({
+     *     "productView",
+     *     "productList"
+     * })
+     */
+    private $json;
+
+//    private $sellingPrice;
+//    private $compareAtPrice;
+
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -291,29 +318,31 @@ class Product //implements \JsonSerializable
         $this->badges = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->hasVariants =  $this->hasVariants();
+        $this->salesChannels = new ArrayCollection();
     }
     
-    /**
-     * {@inheritdoc}
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id'            => $this->getId(),
-            'name'          => $this->getName(),
-            'slug'          => $this->getSlug(),
-            'kind'          => $this->getKind(),
-            'sku'           => $this->getSku(),
-            'description'   => $this->getDescription(),
-            'status'        => $this->getStatus(),
-            'price'         => $this->getPrice(),
-            'stock'         => $this->getStock(),
-            'categories'    => $this->getCategories(),
-//            'image'         => $this->getImage(),
-            'attribute'     => $this->getAttributeName(),
-        ];
-    }
-    
+//    /**
+//     * {@inheritdoc}
+//     */
+//    function jsonSerialize()
+//    {
+//        return [
+//            'id'            => $this->getId(),
+//            'name'          => $this->getName(),
+//            'slug'          => $this->getSlug(),
+//            'kind'          => $this->getKind(),
+//            'sku'           => $this->getSku(),
+//            'description'   => $this->getDescription(),
+//            'status'        => $this->getStatus(),
+//            'price'         => $this->getPrice(),
+//            'sellingPrice'  => $this->getSellingPrice(),
+//            'compareAtPrice' => $this->getCompareAtPrice(),
+//            'stock'         => $this->getStock(),
+//            'categories'    => $this->getCategories(),
+////            'image'         => $this->getImage(),
+//            'attribute'     => $this->getAttributeName(),
+//        ];
+//    }
     
     /**
      * Get id
@@ -418,19 +447,78 @@ class Product //implements \JsonSerializable
     }
 
     /**
-     * @param Price $price
+     * @param Price|null $price
      */
     public function setPrice(?Price $price)
     {
         $this->price = $price;
     }
-    
+
     /**
-     * @return ProductImage[]|Collection
+     * @Groups({
+     *     "productView",
+     *     "productList"
+     * })
+     *
+     * @return float|null
      */
-    public function getImages(): Collection
+    public function getSellingPrice()
     {
-        return $this->images;
+        return $this->getPrice()->getNumericValue();
+    }
+
+    /**
+     * @Groups({
+     *     "productView",
+     *     "productList"
+     * })
+     *
+     * @return float|null
+     */
+    public function getCompareAtPrice()
+    {
+        return $this->getPrice()->getCompareAtValue();
+    }
+
+    public function getDiscountPercentage()
+    {
+        if ($this->getCompareAtPrice() != null) {
+            $discount = (int) floor( (1 - $this->getSellingPrice()/$this->getCompareAtPrice() ) * 100 );
+            return sprintf('-%s%%', $discount);
+        }
+        return 0;
+    }
+
+    public function getDiscountAmount()
+    {
+        if ($this->isOnSale()) {
+            return $this->getCompareAtPrice()-$this->getSellingPrice();
+        }
+        return 0;
+    }
+
+    public function isOnSale()
+    {
+        return null === $this->getCompareAtPrice() ? false : true;
+    }
+
+    /**
+     * @Groups({"productView", "productList",
+     *     "orderView"})
+     */
+    public function getCoverImage()
+    {
+//        return $this->getImages()->first();
+        return $this->getImages()[0];
+    }
+
+    /**
+     * @ return ProductImage[]|Collection
+     */
+    public function getImages()//: Collection
+    {
+        return $this->images ? $this->images->getValues(): $this->images;
+//        return $this->images->getValues();
     }
     
     public function addImage(ProductImage $image): void
@@ -452,13 +540,12 @@ class Product //implements \JsonSerializable
      *
      * @return null|string
      */
-    public function getCoverImage()
+    public function getCoverImageAsset()
     {
         if (!$this->images->isEmpty()) {
             foreach ($this->images as $image) {
                 if ($image->getOrdering() === 0) {
-//                    return $image->getImageUrl();
-                    return FileUploader::PRODUCT_FOLDER . '/' . $image->getImage()->getFile();
+                    return FileUploader::PRODUCTS_FOLDER_NAME . '/' . $image->getImage()->getFile();
                 }
             }
         }
@@ -471,7 +558,7 @@ class Product //implements \JsonSerializable
 //    public function getImagePath()
 //    {
 //        if ($this->getImage()) {
-//            return FileUploader::PRODUCT_FOLDER . '/' . $this->getImage();
+//            return FileUploader::PRODUCTS_FOLDER_NAME . '/' . $this->getImage();
 //        }
 //    }
 
@@ -627,13 +714,13 @@ class Product //implements \JsonSerializable
      */
     public function getCategories() //: Collection
     {
-        return $this->categories->getValues();
+        return $this->categories ? $this->categories->getValues(): $this->categories;
+//        return $this->categories->getValues();
     }
     
     public function addCategory(ProductCategory $category): void
     {
         if (!$this->categories->contains($category)) {
-//            $category->setProduct($this);
             $this->categories->add($category);
         }
     }
@@ -657,13 +744,13 @@ class Product //implements \JsonSerializable
      */
     public function getBadges() //: Collection
     {
-        return $this->badges->getValues();
+        return $this->badges ? $this->badges->getValues(): $this->badges;
+//        return $this->badges->getValues();
     }
     
     public function addBadge(ProductBadge $badge): void
     {
         if (!$this->badges->contains($badge)) {
-//            $category->setProduct($this);
             $this->badges->add($badge);
         }
     }
@@ -674,12 +761,15 @@ class Product //implements \JsonSerializable
     }
 
     /**
-     * @return ProductOption[]|Collection
+     * @ return ProductOption[]|Collection
      */
-    public function getOptions(): Collection
+    public function getOptions()//: Collection
     {
         $criteria = Criteria::create()->orderBy(['position' => Criteria::ASC]);
-        return $this->options->matching($criteria);
+        $options = $this->options->matching($criteria);
+
+        return $options ? $options->getValues(): $options;
+//        return $options->getValues();
     }
 
     public function addOption(ProductOption $option): void
@@ -704,11 +794,11 @@ class Product //implements \JsonSerializable
     }
 
     /**
-     * @return ProductVariant[]|Collection
+     * @ return ProductVariant[]|Collection
      */
     public function getVariants()
     {
-        return $this->variants;
+        return $this->variants ? $this->variants->getValues(): $this->variants;
     }
 
     /**
@@ -843,6 +933,43 @@ class Product //implements \JsonSerializable
         return $this->getAttribute() ? $this->getAttribute()->getName() : '';
     }
 
+    /**
+     * @return bool
+     */
+    public function hasSalesChannel(): bool
+    {
+        return $this->salesChannels->isEmpty() ? false : true;
+    }
+
+    /**
+     * @return SalesChannel[]|Collection
+     */
+    public function getSalesChannels()
+    {
+        return $this->salesChannels ? $this->salesChannels->getValues(): $this->salesChannels;
+    }
+
+    public function addSalesChannel(SalesChannel $item): void
+    {
+        if (!$this->salesChannels->contains($item)) {
+            $this->salesChannels->add($item);
+        }
+    }
+
+    public function removeSalesChannel(SalesChannel $item): void
+    {
+        $this->salesChannels->removeElement($item);
+    }
+
+    /**
+     * @param SalesChannel[]|ArrayCollection|null $salesChannels
+     */
+    public function setSalesChannels($salesChannels): void
+    {
+        $this->salesChannels = $salesChannels;
+    }
+
+
     
     /**
      * @param null|string $backToList
@@ -858,5 +985,21 @@ class Product //implements \JsonSerializable
     public function getBackToList()
     {
         return $this->backToList;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJson(): ?string
+    {
+        return $this->json;
+    }
+
+    /**
+     * @param string|null $json
+     */
+    public function setJson(?string $json): void
+    {
+        $this->json = $json;
     }
 }

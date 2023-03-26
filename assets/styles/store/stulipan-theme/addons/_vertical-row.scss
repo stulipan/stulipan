@@ -1,0 +1,31 @@
+
+.vertical-row,
+.vertical-form-row {
+  display: flex;
+  flex-wrap: wrap;
+
+  & .vertical-col {
+    position: relative;
+  }
+}
+
+.vertical-row {
+  margin-top: -.25rem;
+  margin-bottom: -.25rem;
+
+  & .vertical-col {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+  }
+}
+
+//0.1875rem = 3px at 1rem = 16px
+.vertical-form-row {
+  margin-top: -.1875rem;
+  margin-bottom: -.1875rem;
+
+  & .vertical-col {
+    padding-top: 0.1875rem;
+    padding-bottom: 0.1875rem;
+  }
+}

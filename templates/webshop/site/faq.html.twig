@@ -1,0 +1,101 @@
+{% extends 'webshop/site/base-site.html.twig' %}
+
+{% block bodyClass %}not-found{% endblock %}
+
+{% set pageTitle = 'FAQ' %}
+
+{% block page_content %}
+    <div class="col-12">
+        <div class="product-reviews">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+                <div class="d-flex align-items-center">
+                    <ul class="review-stars-group mr-2 mb-0">
+                        <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                        <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                        <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                        <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
+                        <li class="review-stars-item"><i class="fa fa-star"></i></li>
+                    </ul>
+                </div>
+                <div class="">
+                    <a href="#" class="text-sm">25 értékelés <i class="fas fa-long-arrow-alt-right ml-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-quickinfo">
+        <div class="row">
+            <div class="col-12">
+                {{ product.categories[0].seoContent|raw }}
+            </div>
+        </div>
+    </div>
+    <div class="product-quickinfo">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="h4 general-info-titleX">Hasznos infók</div>
+            </div>
+            <div class="col-sm-12 mt-3X">
+                <div class="accordion mb-4" id="accordionMiertDobozok">
+                    <div class="card">
+                        <div  class="card-header border-bottom-0" id="miertDoboz1">
+                            <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapseOne">Országos házhozszállítás</a>
+                        </div>
+                        <div id="collapse1" class="collapse" aria-labelledby="miertDoboz1" data-parent="#accordionMiertDobozok">
+                            <div class="card-body pt-2">
+                                <p class="general-info-item-description">Rendelj bizalommal, ugyanis a Rafina termékeket most Magyarország teljes területére kézbesítjük. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div  class="card-header border-bottom-0" id="miertDoboz2">
+                            <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapseOne">Virágküldés a nap 24 órájában</a>
+                        </div>
+                        <div id="collapse2" class="collapse" aria-labelledby="miertDoboz2" data-parent="#accordionMiertDobozok">
+                            <div class="card-body pt-2">
+                                <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div  class="card-header border-bottom-0" id="miertDoboz3">
+                            <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapseOne">Magas vásárlói elégedettség</a>
+                        </div>
+                        <div id="collapse3" class="collapse" aria-labelledby="miertDoboz3" data-parent="#accordionMiertDobozok">
+                            <div class="card-body pt-2">
+                                <p class="general-info-item-description">A Rafinánál minden termék kézzel készül, így nagy figyelmet fordítunk minden egyes termék elkészítésére, hogy te mindig a legjobbat kapd.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div  class="card-header border-bottom-0" id="miertDoboz4">
+                            <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseOne">Egyedi terméket szeretnél?</a>
+                        </div>
+                        <div id="collapse4" class="collapse" aria-labelledby="miertDoboz4" data-parent="#accordionMiertDobozok">
+                            <div class="card-body pt-2">
+                                <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div  class="card-header border-bottom-0" id="miertDoboz5">
+                            <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show d-flex justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapseOne">Lépj kapcsolatba velünk!</a>
+                        </div>
+                        <div id="collapse5" class="collapse" aria-labelledby="miertDoboz5" data-parent="#accordionMiertDobozok">
+                            <div class="card-body pt-2">
+                                <p class="general-info-item-description">
+                                    Ha kérdésed van a Rafina termékeivel kapcsolatosan vagy érdeklődni szeretnél a rendelés és szállításról, írj bátran. Email címünk: <a href="mailto:{{ storeSettings.get('store.email') }}">{{ storeSettings.get('store.email') }}</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

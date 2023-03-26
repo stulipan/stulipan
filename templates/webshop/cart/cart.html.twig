@@ -1,30 +1,30 @@
-<div class="loading-spinner-faded">
+{#<div class="loading-spinner-faded">#}
     {% if order.items is empty %}
-    {#    {% include('webshop/cart/cart-is-empty.html.twig') %}#}
-        <div class="cart-item text-center">
+        <div class="text-center pb-4">
             <div>
                 <h6 class="text-uppercase">{{ 'cart.your-cart-is-empty'|trans }}</h6>
-    {#            <p class="mb-0">...de nem sokáig! Válogass a több mint 100 gyönyörű <a href="{{ path('site-product-listall') }}">csokor és virágdoboz</a> közül.</p>#}
                 <p class="mb-0">{{ 'cart.but-not-for-long'|trans({ '{{ link }}': path('site-product-listall') })|raw }}</p>
             </div>
         </div>
     {% else %}
-        {% include('/webshop/cart/cart-list.html.twig') %}
+        {% include 'webshop/cart/cart-list.html.twig' %}
 
-        {% if showMessage is defined and showMessage %}
-        <div class="cart-item">
-            <div class="row d-flex align-items-center text-center">
-                <div class="col-12 pr-0">
-                    {% include 'webshop/cart/_cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
+        {% if checkoutSettings.get('cart.greetings-card') %}
+            {% if showMessage is defined and showMessage %}
+            <div class="cart-item">
+                <div class="row d-flex align-items-center text-center">
+                    <div class="col-12 pr-0">
+                        {% include 'webshop/cart/_cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
+                    </div>
                 </div>
             </div>
-        </div>
+            {% endif %}
         {% endif %}
 
         {% if showTotal is defined and showTotal %}
             <div class="cart-item cart-total">
                 <span class="text-uppercase text-muted">{{ 'cart.total'|trans }}</span>
-                <strong class="text-uppercase">{{  order.summary.totalAmountToPay|money }}</strong>
+                <strong class="text-uppercase">{{  order.totalAmountToPay|money }}</strong>
             </div>
         {% endif %}
 
@@ -32,17 +32,30 @@
             <div class="row">
                 <div class="col-12 col-md-6 ml-auto mt-3">
                     <ul class="order-summary mb-0 list-unstyled">
+                        {%- if order.hasProductOnSale -%}
                         <li class="order-summary-item">
-                            <span>{{ 'cart.shipping-fee-calculated'|trans }}</span>
-                            <span class="text-nowrap">
-    {#                    <span class="JS--summaryDeliveryFee">{{ order.currentOrder.deliveryFee|number_format(0, ',', ' ') }}</span> Ft#}
-                    <span class="JS--summaryDeliveryFee">{{ order.deliveryFee|money }}</span>
-                </span>
+                            <span>{{ 'cart.saving'|trans }}</span>
+                            <span class="w-50 text-right">
+                                <div class="price">
+                                    <span class="price-saving">{{ order.totalSaving|money }}</span>
+                                </div>
+                            </span>
+                        </li>
+                        {%- endif -%}
+                        <li class="order-summary-item">
+                            <span>{{ 'cart.shipping-fee'|trans }}</span>
+                            <span class="w-50 text-right">
+                                {%- if order.hasShippingFee is defined and order.hasShippingFee -%}
+                                    {{ order.shippingFeeToPay|money }}
+                                {%- else -%}
+                                    {{ 'cart.shipping-fee-calculated-at-checkout'|trans }}
+                                {%- endif -%}
+                            </span>
                         </li>
                         <li class="order-summary-item border-0">
                             <span>{{ 'cart.total-amount-to-pay'|trans }}</span>
-                            <span class="JS--summaryTotalPos order-summary-total text-nowrap" data-summary-total="{{ order.summary.totalAmountToPay }}">
-                                <span class="JS--summaryTotal text-nowrap">{{ order.summary.totalAmountToPay|money }}</span>
+                            <span class="JS--summaryTotalPos order-summary-total text-nowrap" data-summary-total="{{ order.totalAmountToPay }}">
+                                <span class="JS--summaryTotal text-nowrap">{{ order.totalAmountToPay|money }}</span>
                             </span>
                         </li>
                     </ul>
@@ -50,5 +63,5 @@
             </div>
         {% endif %}
     {% endif %}
-</div>
-<div class="loading-spinner" role="status"></div>
+{#</div>#}
+{#<div class="loading-spinner" role="status"></div>#}

@@ -1,6 +1,6 @@
 /**
  * --------------------------------------------------------------------------
- * loading-overlay.js
+ * loading-overlay.js  - NOT IN USE !!? ??????
  *
  * Adds .btn-loading class to Buttons and Links
  * which triggers a loading spinner on top of them.

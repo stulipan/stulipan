@@ -1,56 +1,65 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}
-    Belépés
-{% endblock %}
+{%- block title -%}
+    {{ 'login.login-meta'|trans }}
+{%- endblock -%}
 
 
 {% block body %}
-    <div class="container h-100 overflow-hidden">
-        <div class="row h-100 justify-content-center align-items-center">
-            <div class="col-lg-4 col-md-5">
-                <div class="card">
+    <div class="vh-100 w-100 overflow-hidden">
+{#        <style>#}
+{#            .chout-bg {#}
+{#                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1900' height='1080' preserveAspectRatio='none' viewBox='0 0 1900 1080'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1046%26quot%3b)' fill='none'%3e%3crect width='1900' height='1080' x='0' y='0' fill='rgba(44%2c 110%2c 203%2c 1)'%3e%3c/rect%3e%3cpath d='M0%2c730.485C134.625%2c730.045%2c253.364%2c635.8%2c345.554%2c537.692C426.093%2c451.983%2c424.983%2c323.136%2c480.304%2c219.347C540.763%2c105.919%2c688.109%2c30.055%2c684.619%2c-98.433C681.153%2c-226.056%2c550.093%2c-307.813%2c463.439%2c-401.572C379.612%2c-492.272%2c300.512%2c-588.194%2c186.997%2c-636.854C64.479%2c-689.374%2c-81.71%2c-744.885%2c-201.623%2c-686.664C-321.836%2c-628.297%2c-337.668%2c-466.042%2c-403.882%2c-349.966C-455.671%2c-259.178%2c-533.323%2c-182.275%2c-548.348%2c-78.84C-563.384%2c24.671%2c-519.392%2c122.955%2c-487.029%2c222.419C-450.497%2c334.695%2c-428.712%2c454.719%2c-347.007%2c539.953C-253.804%2c637.182%2c-134.685%2c730.925%2c0%2c730.485' fill='%232358a2'%3e%3c/path%3e%3cpath d='M1900 1731.393C2032.192 1723.917 2163.9030000000002 1732.007 2285.797 1680.3110000000001 2423.786 1621.788 2566.872 1548.827 2639.55 1417.741 2714.102 1283.275 2691.672 1121.097 2680.875 967.727 2669.309 803.433 2689.299 613.655 2574.622 495.437 2460.226 377.509 2270.027 394.15099999999995 2106.75 375.875 1968.893 360.44500000000005 1830.254 350.89099999999996 1699.599 397.495 1573.493 442.477 1474.88 534.53 1384.65 633.447 1292.377 734.6030000000001 1212.165 844.361 1172.45 975.394 1128.005 1122.031 1085.8200000000002 1283.472 1144.7640000000001 1424.905 1204.203 1567.525 1341.934 1667.49 1485.104 1725.591 1615.914 1778.676 1759.054 1739.364 1900 1731.393' fill='%235089d9'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1046'%3e%3crect width='1900' height='1080' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");#}
+{#            }#}
+{#        </style>#}
+        <div class="position-relative bg-light w-100 h-100 text-right chout-bg">
+            <svg class="h-100" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'><rect fill='#eeeeee' width='1600' height='900'/><polygon fill='#2c6ecb' points='957 450 539 900 1396 900'/><polygon fill='#1f4f91' points='957 450 872.9 900 1396 900'/><polygon fill='#2c6eca' points='-60 900 398 662 816 900'/><polygon fill='#205296' points='337 900 398 662 816 900'/><polygon fill='#2c6dc9' points='1203 546 1552 900 876 900'/><polygon fill='#21559c' points='1203 546 1552 900 1162 900'/><polygon fill='#2b6dc9' points='641 695 886 900 367 900'/><polygon fill='#2257a1' points='587 900 641 695 886 900'/><polygon fill='#2b6cc8' points='1710 900 1401 632 1096 900'/><polygon fill='#245aa7' points='1710 900 1401 632 1365 900'/><polygon fill='#2b6cc7' points='1210 900 971 687 725 900'/><polygon fill='#255dac' points='943 900 1210 900 971 687'/></svg>
+        </div>
+        <div class="position-absolute vh-100 w-100" style="top: 0;">
+            <div class="container h-100">
+                <div class="row h-100 justify-content-center justify-content-lg-start align-items-center mx-md-5">
+                    <div class="col-lg-5 col-md-7">
+                        <div class="card">
 
-                    <div class="card-header py-3 text-center bg-primaryX">
-                        <a href="{{ path('index') }}" class="logo text-center my-1" target="_blank">
-                        <span class="logo-lg">
-                                <h3 class="font-weight-bold text-uppercase mb-0">tulipan<span class="text-danger">.</span>futar  </h3>
-                        </span>
-                        </a>
-                    </div>
+                            <div class="card-body pb-0">
+                                <a href="{{ path('index') }}" class="logo text-center" target="_blank">
+                                    {% include 'admin/widgets/logo.html.twig' %}
+                                </a>
+                            </div>
 
-                    <div class="card-body p-4">
-                        <form class="form-signin text-center" action="{{ path('admin-login') }}" method="post">
-                            <div class="text-center m-auto">
-                                <h4 class="text-dark-50 text-center mt-0 font-weight-bold">Bejelentkezés</h4>
-                            </div>
-                            {% if error %}
-                                <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                            {% endif %}
-
-                            <div class="form-group">
-                                <label for="username" class="sr-only">Email cím</label>
-                                <input type="text" id="username" name="_username" class="form-control" placeholder="Email cím" required {% if last_username is empty %}autofocus{% endif %} value="{{ last_username }}" />
-                            </div>
-                            <div class="form-group">
-                                <label for="inputPassword" class="sr-only">Jelszó</label>
-                                <input type="password" id="inputPassword" name="_password" class="form-control" placeholder="Jelszó" required />
-                            </div>
-                            <div class="form-group mb-3 text-left">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" id="checkbox-signin" name="_remember_me" class="custom-control-input">
-                                    <label class="custom-control-label font-weight-normal" for="checkbox-signin">Remember me</label>
+                            <div class="card-body">
+                                {% if error %}
+                                    <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                {% endif %}
+                                <form class="form-signin mt-3" action="{{ path('admin-login') }}" method="post" novalidate>
+                                    <div class="form-group">
+                                        <h4 class="font-weight-bold">{{ 'login.login-title'|trans }}</h4>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username" class="sr-only">{{ 'login.email'|trans }}</label>
+                                        <input type="text" id="username" name="_username" class="form-control form-control-lg" placeholder="{{ 'login.email'|trans }}" required {% if last_username is empty %}autofocus{% endif %} value="{{ last_username }}" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPassword" class="sr-only">{{ 'login.password'|trans }}</label>
+                                        <input type="password" id="inputPassword" name="_password" class="form-control form-control-lg" placeholder="{{ 'login.password'|trans }}" required />
+                                    </div>
+                                    <div class="form-group mb-3 text-left">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" id="checkbox-signin" name="_remember_me" class="custom-control-input">
+                                            <label class="custom-control-label font-weight-normal" for="checkbox-signin">{{ 'login.remember-me'|trans }}</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                    <div class="form-group mb-0">
+                                        <button class="btn btn-lg btn-primary px-4" type="submit">{{ 'login.login-button'|trans }}</button>
+                                    </div>
+                                </form>
+                                <div class="text-muted text-sm mt-5">
+                                    <p class="mb-0">©{{ copyrightYear }} {{ storeSettings.get('meta.footer')}}</p>
                                 </div>
                             </div>
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                            <div class="form-group mb-0 text-center">
-                                <button class="btn btn-primary btn-lgX btn-block" type="submit"> Belépés </button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <div class="d-block text-center text-muted-extra mt-3">
-                    2018-2020 © Tulipanfutar.hu
                 </div>
             </div>
         </div>

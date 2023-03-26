@@ -2,21 +2,31 @@
 
 namespace App\Twig;
 
+use App\Entity\CmsNavigation;
 use App\Entity\CmsPage;
-use App\Entity\CmsPage4Twig;
+use App\Entity\CmsSection;
+use App\Entity\ImageEntity;
+use App\Entity\StorePolicy;
 use App\Services\DateFormatConvert;
 use App\Services\FileUploader;
 use App\Services\Localization;
+use App\Services\SlugBuilder;
 use App\Services\StoreSettings;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use phpDocumentor\Reflection\Types\This;
+use Imagine\Gd\Image;
 use Psr\Container\ContainerInterface;
 use stdClass;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
@@ -37,21 +47,31 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     private $em;
     private $convert;
 
+    private $storeSettings;
+    /**
+     * @var SlugBuilder
+     */
+    private $slugBuilder;
+
     public function __construct(ContainerInterface $container, SessionInterface $session,
                                 Localization $localization, TranslatorInterface $translator,
-                                EntityManagerInterface $em, DateFormatConvert $convert)
+                                EntityManagerInterface $em, DateFormatConvert $convert,
+                                StoreSettings $storeSettings, SlugBuilder $slugBuilder)
     {
         $this->container = $container;
         $this->locale = $localization->getLocale($session->get('_locale', 'hu'));
         $this->translator = $translator;
         $this->em = $em;
         $this->convert = $convert;
+        $this->storeSettings = $storeSettings;
+        $this->slugBuilder = $slugBuilder;
     }
 
     public function getFunctions(): array
     {
         return [
             new TwigFunction('uploaded_asset', [$this, 'getPathOfUploadedAsset']),
+            new TwigFunction('find_image_by_id', [$this, 'findImageById']),
 //            new TwigFunction('pages', [$this, 'getCmsPageContent']),
         ];
     }
@@ -59,15 +79,44 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     public function getGlobals(): array
     {
         return [
+            'copyrightYear' => $this->createCopyrightYear(),
+            'storeUrl' => $this->storeSettings->get('store.url'),
+            'storeName' => $this->storeSettings->get('store.name'),
+            'storeEmail' => $this->storeSettings->get('store.email'),
+            'storeLogo' => $this->storeSettings->get('store.logo'),
+            'storeLogoInverted' => $this->storeSettings->get('store.logo-inverted'),
+            'storeFavicon' => $this->storeSettings->get('store.favicon'),
+
+            'storeBrand' => $this->storeSettings->get('store.brand'),
+            'flowerShopMode' => $this->storeSettings->get('general.flower-shop-mode'),
+
             'pages' => $this->getPages(),
+            'policies' => $this->getPolicies(),
+//            'navigation' => $this->getNavigations(),
+            'homepage' => $this->getHomepageSections(),
         ];
     }
 
     public function getPathOfUploadedAsset(string $path): string
     {
+//        if ($path) {
+//            dd($path);
+//        }
+//        dd('null');
         return $this->container
             ->get(FileUploader::class)
             ->getPublicPath($path);
+    }
+
+    public function findImageById($id): ?ImageEntity
+    {
+        /** @var ImageEntity $image */
+        $image = $this->em->getRepository(ImageEntity::class)->find($id);
+        return $image;
+//        if ($image) {
+//            $path = $image->getPath();
+//            return $path;
+//        }
     }
 
     public static function getSubscribedServices()
@@ -83,24 +132,85 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFilter('browser', [$this, 'formatBrowserInfo']),
             new TwigFilter('timeAgo', [$this, 'formatTimeAgo']),
             new TwigFilter('localizedDate', [$this, 'formatLocalizedDate']),
+            new TwigFilter('localizedDateNice', [$this, 'formatLocalizedDateNice']),
             new TwigFilter('localizedTime', [$this, 'formatLocalizedTime']),
+            new TwigFilter('rawDateTime', [$this, 'formatRawDateTime']),
             new TwigFilter('money', [$this, 'formatMoney']),
             new TwigFilter('number', [$this, 'formatNumber']),
             new TwigFilter('momentJsFormat', [$this, 'convertDateFormatFromPhpToMomentJs']),
+            new TwigFilter('castToArray', [$this, 'castStdObjectToAssociativeArray']),
+            new TwigFilter('fetchNavigationBySlug', [$this, 'fetchNavigationBySlug']),
         ];
     }
 
 
     public function getPages()
     {
-        $cmsPages = $this->em->getRepository(CmsPage::class)->findAll();
-
-        $pages = [];
-        foreach ($cmsPages as $page => $value) {
-            $pages[$value->getSlug()] = $value;
+        $cmsPages = $this->em->getRepository(CmsPage::class)->findBy(['enabled' => true]);
+        if ($cmsPages) {
+            return $this->convertAssociativeArrayToStdObject($cmsPages, ['groups' => 'view']);
         }
-        $pages = $this->convertToObject($pages);
-        return $pages;
+        return null;
+    }
+
+    public function getPolicies()
+    {
+        $rep = $this->em->getRepository(StorePolicy::class);
+        $policies = [];
+        $policies[StorePolicy::SLUG_TERMS_AND_CONDITIONS] = $rep->findOneBy(['slug' => StorePolicy::SLUG_TERMS_AND_CONDITIONS]);
+        $policies[StorePolicy::SLUG_PRIVACY_POLICY] = $rep->findOneBy(['slug' => StorePolicy::SLUG_PRIVACY_POLICY]);
+        $policies[StorePolicy::SLUG_SHIPPING_INFORMATION] = $rep->findOneBy(['slug' => StorePolicy::SLUG_SHIPPING_INFORMATION]);
+        $policies[StorePolicy::SLUG_RETURN_POLICY] = $rep->findOneBy(['slug' => StorePolicy::SLUG_RETURN_POLICY]);
+        $policies[StorePolicy::SLUG_CONTACT_INFORMATION] = $rep->findOneBy(['slug' => StorePolicy::SLUG_CONTACT_INFORMATION]);
+        $policies[StorePolicy::SLUG_LEGAL_NOTICE] = $rep->findOneBy(['slug' => StorePolicy::SLUG_LEGAL_NOTICE]);
+
+        if (count($policies) > 0) {
+            return $this->convertAssociativeArrayToStdObject($policies, ['groups' => 'view']);
+        }
+        return null;
+    }
+
+//    public function getNavigations()
+//    {
+//        $navigations = $this->em->getRepository(CmsNavigation::class)->findBy(['enabled' => true]);
+//        if ($navigations) {
+//            return $this->convertAssociativeArrayToStdObject($navigations, ['groups' => 'view']);
+////            return $navigations;
+//        }
+//        return null;
+//    }
+
+    public function getHomepageSections()
+    {
+        $parentPages[CmsSection::HOMEPAGE] = CmsSection::HOMEPAGE;
+        $parentPages[CmsSection::PRODUCT_PAGE] = CmsSection::PRODUCT_PAGE;
+        $parentPages[CmsSection::COLLECTION_PAGE] = CmsSection::COLLECTION_PAGE;
+
+        $sections = $this->em->getRepository(CmsSection::class)->findBy([
+//            'enabled' => true,
+            'belongsTo' => CmsSection::HOMEPAGE,
+            ]);
+
+        if ($sections) {
+            return $this->convertAssociativeArrayToStdObject($sections, ['groups' => 'view']);
+        }
+        return null;
+    }
+
+    public function createCopyrightYear()
+    {
+        $present = new DateTime('now');
+
+        if ($this->storeSettings->get('general.launch-date') !== null) {
+            $launchDate = DateTime::createFromFormat($this->storeSettings->getDateFormat(), $this->storeSettings->get('general.launch-date'));
+            $diff = $launchDate->diff($present)->y;
+
+            if ($diff > 0) {
+                return $launchDate->format('Y') . '-' . $present->format('Y'); // Eg. 2020-2021
+            }
+            return $launchDate->format('Y'); // Eg. 2021
+        }
+        return $present->format('Y');
     }
 
     /**
@@ -108,24 +218,102 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
      * @param $array
      * @return stdClass
      */
-    public function convertToObject($array)
+    private function convertAssociativeArrayToStdObject($array, array $context = [])
     {
         $object = new stdClass();
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $value = $this->convertToObject($value);
+
+        if (!is_array($array)) {
+            return $array;
+        }
+
+        if ($this->isAssociativeArray($array)) {
+            foreach ($array as $key => $value) {
+                $convertedArray = null;
+                $convertedValue = null;
+                $slug = $this->slugBuilder->slugify($key);
+                $camelCase = $this->slugBuilder->convertSlugToUnderscoreCase($slug);
+
+                if (is_object($value)) {
+                    $convertedArray = $this->convertObjectToAssociativeArray($value, $context);
+                    $convertedValue = $this->convertAssociativeArrayToStdObject($convertedArray, $context);
+                }
+                if (is_array($value)) {
+                    $convertedValue = $this->convertAssociativeArrayToStdObject($value, $context);
+                }
+
+                if (!$convertedValue) {
+                    $convertedValue = $value;
+                }
+                $object->$camelCase = $convertedValue; //$this->convertAssociativeArrayToStdObject($convertedValue);
             }
-            $camelCaseKey = lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $key))));
-            $object->$camelCaseKey = $value;
+        } else {
+            // creates an associative array from the simple array
+            $convertedArray = [];
+            foreach ($array as $key => $value) {
+                $slug = null;
+                if (is_array($value)) {
+                    $slug = $this->slugBuilder->slugify($value['name']);
+                }
+                if (is_object($value)) {
+                    $slug = $this->slugBuilder->slugify($value->getName());
+                }
+                if (!$slug) {
+                    // at this point the value is some ordinary value (int, float, bool, etc)
+                    // we convert it to string (slug must be string)
+                    $slug = (string) $value;
+                }
+                $camelCase = $slug;
+//                $camelCase = $this->slugBuilder->convertSlugToCamelCase($slug);
+                $convertedArray[$camelCase] = $value;
+            }
+            $convertedValue = $this->convertAssociativeArrayToStdObject($convertedArray, $context);
+            return $convertedValue;
         }
         return $object;
+    }
+
+    private function isAssociativeArray(array $array) // has_string_keys
+    {
+        return count(array_filter(array_keys($array), 'is_string')) > 0;
+    }
+
+    protected function convertObjectToAssociativeArray($data, array $context = [])
+    {
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $normalizer = new ObjectNormalizer($classMetadataFactory,null,null, new PhpDocExtractor(),
+            null,null,
+            [
+                ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true,
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $content) {
+                    return $object->getName();  ////????
+                }
+            ]);
+        $serializer = new Serializer([$normalizer]);
+        $normalizedArray = $serializer->normalize($data, null, $context);
+//        dd($normalizedArray);
+        return $normalizedArray;
+    }
+
+    public function castStdObjectToAssociativeArray($stdClassObject)
+    {
+        $response = [];
+        foreach ($stdClassObject as $key => $value) {
+            $response[$key] = $value;
+        }
+        return $response;
+    }
+
+    public function fetchNavigationBySlug($obj, $navigationSlug): ?CmsNavigation
+    {
+        $navigation = $this->em->getRepository(CmsNavigation::class)->findOneBy(['slug' => $navigationSlug]);
+        return $navigation;
     }
 
     public function formatMoney($amount)
     {
         switch ($this->locale->getCode()) {
             case 'hu':
-                return number_format($amount, 0, ',','.').' '.$this->locale->getCurrencySymbol();
+                return number_format($amount, 0, ',',' ').' '.$this->locale->getCurrencySymbol();
                 break;
             case 'en':
                 return number_format($amount, 0, '.',',').' '.$this->locale->getCurrencySymbol();
@@ -223,11 +411,23 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return $string;
     }
 
-    public function formatLocalizedDate($dateTime, string $format=null) {
+    public function formatRawDateTime($dateTime)
+    {
+        $format = 'M j, Y, h:i a';  // jan 5, 2021, 07:20 am
+        $dateTime = $dateTime->format($format);
+        return ucfirst($dateTime);
+    }
+
+    public function formatLocalizedDate($dateTime, string $format=null)
+    {
+        if($dateTime === null) {
+            return null;
+        }
 
         if ($format == null || $format == '') {
             $format = $this->locale->getDateFormat();
         }
+
         $shortMonths = [
             'jan' => $this->translator->trans('datetime.jan'),
             'feb' => $this->translator->trans('datetime.feb'),
@@ -298,6 +498,11 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             }
         }
         return $dateTime;
+    }
+
+    public function formatLocalizedDateNice($dateTime, string $format=null)
+    {
+        return $this->formatLocalizedDate($dateTime, $this->locale->getDateFormatNice());
     }
 
     public function formatLocalizedTime($dateTime, string $format=null)
@@ -388,6 +593,19 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             $bname = 'Netscape';
             $ub = "Netscape";
         }
+        else {
+            $bname = 'Unknown';
+            $ub = 'Unknown';
+        }
+
+        if ($ub == 'Unknown') {
+            return array(
+                'userAgent' => $u_agent,
+                'name'      => $bname,
+                'version'   => 'unknown',
+                'platform'  => $platform,
+            );
+        }
 
         // finally get the correct version number
         $known = array('Version', $ub, 'other');
@@ -421,23 +639,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             'name'      => $bname,
             'version'   => $version,
             'platform'  => $platform,
-            'pattern'    => $pattern
         );
     }
-    
-//    // This is for converting object to array   >>> NOT IN USE
-//    public function getFilters()
-//    {
-//        return array(
-//            new \Twig_SimpleFilter('cast_to_array', array($this, 'objectToArrayFilter')),
-//        );
-//    }
-//
-//    public function objectToArrayFilter($stdClassObject) {
-//        // Just typecast it to an array
-//        $response = (array)$stdClassObject;
-//
-//        return $response;
-//    }
-    
+
 }

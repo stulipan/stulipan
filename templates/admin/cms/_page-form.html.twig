@@ -6,15 +6,15 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            {{ form_label(form.name, form.name, { 'label_attr': {'class': '' }}) }}
+                            {{ form_label(form.name, form.name, { 'label_attr': {'class': '' }, 'label': 'page.name'|trans}) }}
                             {{ form_widget(form.name) }}
                             {{ form_errors(form.name) }}
                         </div>
                     </div>
                     <div class="form-group row mb-0">
                         <div class="col-sm-12">
-                            {{ form_label(form.content, form.content, { 'label_attr': {'class': '' }}) }}
-                            {{ form_widget(form.content, {'attr': {'class': 'JS--cmsPageContent', rows: 6}}) }}
+                            {{ form_label(form.content, form.content, { 'label_attr': {'class': '' }, 'label': 'page.content'|trans}) }}
+                            {{ form_widget(form.content, {'attr': {'class': 'JS--tinymceContent', rows: 6}}) }}
                             {{ form_errors(form.content) }}
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <div class="form-group row mb-0">
                         <div class="col-sm-12">
-                            <div class="">Kép</div>
+                            <div class="mb-1">{{ 'page.image'|trans }}</div>
                             {{ form_widget(form.imageId, { 'attr': {'class': 'V--imageId' }}) }}
                             {{ form_errors(form.imageId) }}
                             <div id="v--imageUpload" class="d-flex justify-content-center align-items-center" style="border-radius: 6px; background-color: #f4f4f5; height:100px; width: 100%;">
@@ -40,9 +40,10 @@
                 <div class="card-body">
                     <div class="form-group row mb-0">
                         <div class="col-sm-12">
-                            {{ form_label(form.slug, form.slug, { 'label_attr': {'class': '' }}) }}
+                            {{ form_label(form.slug, form.slug, { 'label_attr': {'class': '' }, 'label': 'page.slug'|trans}) }}
                             {{ form_widget(form.slug) }}
                             {{ form_errors(form.slug) }}
+                            <small class="form-text">{{ 'page.slug-help'|trans }}</small>
                         </div>
                     </div>
                 </div>
@@ -57,7 +58,7 @@
                         <div class="col-sm-12">
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex">
-                                    <label class="form-control-label">Engedélyezve</label>
+                                    <label class="form-control-label">{{ 'page.enabled'|trans }}</label>
                                 </div>
                                 <div class="d-flex">
                                     {{ form_widget(form.enabled, {'label_attr': {'class': 'switch-custom'}, 'label': ' '}) }}
@@ -71,7 +72,7 @@
                     </div>
                     <div class="form-group row mb-0">
                         <div class="col-sm-12">
-                            {{ form_label(form.parent, form.parent, { 'label_attr': {'class': '' }}) }}
+                            {{ form_label(form.parent, form.parent, { 'label_attr': {'class': '' }, 'label': 'page.parent-page'|trans }) }}
                             {{ form_widget(form.parent) }}
                             {{ form_errors(form.parent) }}
                         </div>
@@ -79,12 +80,12 @@
                 </div>
             </div>
 
-            <div class="card text-whiteX bg-lightX overflow-hidden mb-20px">
+            <div class="card overflow-hidden mb-20px">
                 <div class="card-body">
-                    <div class="h5 admin-card-title mb-3">Kép</div>
+                    <div class="h5 admin-card-title mb-3">{{ 'page.image'|trans }}</div>
                     <div class="w-100 mt-2">
                         {% if form.vars.data.image|default %}
-                            <div class="d-flexX w-100 img-thumbnail" style="background: url('{{ uploaded_asset(form.vars.data.imagePath)|imagine_filter('product_image') }}') center center / cover no-repeat; height: 250px;"></div>
+                            <div class="d-flexX w-100 img-thumbnail" style="background: url('{{ uploaded_asset(form.vars.data.imagePath)|imagine_filter('unscaled') }}') center center / cover no-repeat; height: 250px;"></div>
                         {% else %}
                             {% include 'admin/_missing-image-insert.html.twig' with {
 
@@ -107,8 +108,8 @@
 
             <div class="form-group row mb-0">
                 <div class="col-sm-12">
-                    <input type="submit" value="Mentés" class="btn btn-lgg btn-primary mr-1" formnovalidate>
-                    <a href="{{ cancelUrl }}" class="btn btn-secondary">Mégse</a>
+                    <input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-lgg btn-primary mr-1" formnovalidate>
+                    <a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>
                 </div>
             </div>
         </div>

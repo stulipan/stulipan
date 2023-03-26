@@ -1,0 +1,275 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set activeMenu = 'analytics' %}
+{% set pageTitle = 'analytics.sales-over-time.sales-over-time-title'|trans  %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+} %}
+
+{%- block title -%}
+    {{ pageTitle }}
+{%- endblock -%}
+
+{% block bodyClass %} order order-list{% endblock %}
+
+{% block dataSection %}class="JS--Wrapper-analytics" data-section-id="analytics" data-section-type="sales-over-time"{% endblock %}
+
+{% block modal %}
+    <div class="modal fade" id="modal--exportReport" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content JS--Wrapper-exportReport">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalLabel">{{ 'analytics.export-your-report'|trans }}</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body-content JS--Wrapper-exportReportBody">
+                        <div class="">{{ 'analytics.report-will-be-exported-as-csv'|trans }}</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+                        <button type="submit" class="JS--Button-downloadExportReport btn btn-primary" data-url="{{ path('analytics-sales-over-time-download', {'dateRange': filterForm.dateRange.vars.value, 'groupBy': filterForm.groupBy.vars.value}) }}">
+                            <span class="loading-spinner-invisible">{{ 'generic.export-button'|trans }}</span>
+                            <span class="loading-spinner" role="status"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block headerActionsWrapper %}
+    <nav class="w-100 adaptive-tabs adaptive-tabs-right">
+        <ul class="nav nav-tabs adaptive-primary navbar--toolbarX">
+            <li class="nav-item adaptive-item">
+                <a class="nav-link" href="" data-toggle="modal" data-target="#modal--exportReport" data-backdrop="static">
+                    <i class="fas fa-download mr-2"></i> {{ 'generic.export'|trans }}
+                </a>
+            </li>
+{#            <li class="nav-item adaptive-item">#}
+{#                <a class="nav-link" href="#"><i class="far fa-file-alt mr-2"></i>{{ 'generic.cancel'|trans }}</a>#}
+{#            </li>#}
+        </ul>
+        <ul class="adaptive-template">
+            <li class="nav-item adaptive-item adaptive-more">
+                <a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+                    <span>{{ 'generic.more-actions'|trans }}</span>
+                </a>
+                <ul class="adaptive-secondary">
+                </ul>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block beforeContent %}
+    <div class="mt-3 row">
+        <div class="col-md-12 overflow-x-scroll overflow-x-md-hidden">
+            <div class="position-relative">
+                <div class="w-lg mx-auto py-1 pr-3 pr-md-0">
+                    <div class="form-row">
+                        <div class="col-4 col-md-4">
+                            <div class="card">
+                                <div class="card-wrapper">
+                                    <div class="card-body">
+                                        <div class="float-right text-muted">
+                                            <i class="fas fa-shopping-basket"></i>
+                                        </div>
+                                        <span class="h6 quickinfo-title">{{ 'analytics.sales-over-time.total-sales'|trans }}</span>
+                                        <span class="h4 quickinfo-highlight">{{ currentPeriod ? currentPeriod.totalRevenue|money : '' }} </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-4">
+                            <div class="card">
+                                <div class="card-wrapper">
+                                    <div class="card-body">
+                                        <div class="float-right text-muted">
+                                            <i class="fas fa-shopping-basket"></i>
+                                        </div>
+                                        <span class="h6 quickinfo-title">{{ 'analytics.sales-over-time.orders'|trans }}</span>
+                                        <span class="h4 quickinfo-highlight">{{ currentPeriod ? currentPeriod.orderCount : '' }} </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block contentFilter %}
+    <div class="card-body pb-0">
+        {{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
+        <div class="w-100 d-flex flex-md-row justify-content-between">
+            <div class="field-group align-middle flex-md-row mr-2">
+                <div class="field-item flex-grow-1" id="JS--idosav">
+                    <div class="field-prepend field-append">
+                        <div class="field-addon-prepend w-addon-sm">
+                            <i class="far fa-calendar-alt mr-0"></i>
+                        </div>
+                    </div>
+                    {{ form_widget(filterForm.dateRange, { 'attr': {
+                        'class' : 'pl-addon-sm pr-addon-sm bg-transparent custom-date JS--inputDate'
+                    }}) }}
+                    <div class="field-addon-append w-addon-sm">
+                        <a href="" class="btn btn-link-secondary JS--clearDate"><i class="far fa-times-circle"></i></a>
+                    </div>
+                </div>
+
+                <div class="field-item flex-grow-1">
+                    {{ form_widget(filterForm.groupBy, {'attr': {'class': 'form-control' }}) }}
+                </div>
+            </div>
+            <div class="position-relative">
+                <input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary w-100">
+            </div>
+        </div>
+        <div style="display:none">
+            {{ form_rest(filterForm) }}
+        </div>
+        {{ form_end(filterForm) }}
+    </div>
+    <div class="card-body py-0">
+        {% if filterTags is defined and filterTags|length %}
+            <div class="vertical-form-row mt-2">
+                {% for filterKey,value in filterTags %}
+                    {% if value is defined and value is not null %}
+                        <div class="vertical-col">
+                            <div class="filter-tag">
+                                <div class="filter-tag-content">{{ value }}</div>
+                                <a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block tableHeader %}
+    {% if sales is defined and sales is not empty %}
+        <tr>
+            <th scope="col">{{ 'analytics.sales-over-time.date'|trans }}</th>
+            <th scope="col">{{ 'analytics.sales-over-time.orders'|trans }}</th>
+            <th scope="col">{{ 'analytics.sales-over-time.total-sales'|trans }}</th>
+        </tr>
+    {% endif %}
+{% endblock %}
+
+{% block tableBody %}
+    {% if sales is defined and sales is not empty %}
+        <tr>
+            <td class="text-nowrap font-weight-bold">
+                <span class="font-weight-bold">{{ 'analytics.sales-over-time.summary'|trans }}</span>
+            </td>
+            <td class="font-weight-bold">
+                {{ currentPeriod ? currentPeriod.orderCount : '' }}
+            </td>
+            <td class="font-weight-bold">
+                {{ currentPeriod ? currentPeriod.totalRevenue|money : '' }}
+            </td>
+        </tr>
+        {% for item in sales %}
+            <tr>
+                <td class="text-nowrap">
+                    <span class="">{{ item.date }}</span>
+                </td>
+                <td class="">
+                    {{ item.orderCount }}
+                </td>
+                <td class="">
+                    {{ item.totalSales|money }}
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block afterTable %}
+    {{ 'generic.entries-being-shown'|trans }} {{ total }}
+{% endblock %}
+
+
+
+{#{% block content %}#}
+{#{% endblock %}#}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function() {
+            let dateField = $('#JS--idosav .JS--inputDate');
+            const drpConfig4FilterBar = Object.assign({}, drpBaseConfig, drpRanges, {
+                parentEl: "#JS--idosav",
+                opens: 'right',
+                // singleDatePicker: true,
+                drops: 'down',
+                autoApply: true,
+                autoUpdateInput: false,
+                linkedCalendars: true,
+                alwaysShowCalendars: false,
+                showCustomRangeLabel: false,
+                // showRangesAsDropdown: true,
+                maxDate: moment(),
+                // showWeekNumbers: true,
+                // showDropdowns: true,
+                // timePicker: true,
+                // timePickerSeconds: true,
+                // timePicker24Hour: true,
+            });
+            const format = drpBaseConfig.locale.format; // eg: YYYY-MM-DD
+
+            dateField.daterangepicker(drpConfig4FilterBar);
+
+            // Ha van dateRange a query-ben, akkor a ketto datumot betoltom a datum valasztoba
+            let string = "{{ app.request.query.get('dateRange') is defined ? app.request.query.get("dateRange") : false }}";
+
+            if (string) {
+                console.log(string);
+                picker = dateField.data('daterangepicker');
+                picker.setStartDate(moment(string.split(picker.locale.separator)[0], format));
+                picker.setEndDate(moment(string.split(picker.locale.separator)[1], format));
+            }
+
+
+            // // mobilon a hatter ezzel nem mozog, nem gorgeti
+            // dateField.on('show.daterangepicker', function(ev, picker) {
+            //     picker.parentEl.addClass('daterangepicker-overflow-hiddenX');
+            // });
+            // // ujra gorgetheto a hatter
+            // dateField.on('hide.daterangepicker', function(ev, picker) {
+            //     picker.parentEl.removeClass('daterangepicker-overflow-hiddenX');
+            // });
+            dateField.on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format(format) + picker.locale.separator + picker.endDate.format(format));
+                // $(this).focus();
+                picker.hide();
+            });
+            dateField.on('cancel.daterangepicker', function(ev, picker) {
+                picker.startDate = moment();
+                picker.endDate = moment();
+                $(this).val('');
+            });
+            $('#JS--idosav .JS--clearDate').on('click', function(ev) {
+                ev.preventDefault();
+                dateField.val('');
+                dateField.data('daterangepicker').setStartDate(moment());
+                dateField.data('daterangepicker').setEndDate(moment());
+            });
+        });
+    </script>
+{% endblock %}
+
+

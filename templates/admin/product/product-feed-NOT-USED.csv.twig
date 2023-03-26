@@ -1,0 +1,55 @@
+{#   NOT IN USE    #}
+
+
+{%- set header = [
+    'id',
+    'title',
+    'description',
+    'availability',
+    'condition',
+    'price',
+    'link',
+    'image_link',
+    'brand',
+    'google_product_category'
+] -%}
+{#    'fb_product_category',#}
+{#    'quantity_to_sell_on_facebook',#}
+{#    'sale_price',#}
+{#    'sale_price_effective_date',#}
+{#    'item_group_id',#}
+{#    'gender',#}
+{#    'color',#}
+{#    'size',#}
+{#    'age_group',#}
+{#    'material',#}
+{#    'pattern',#}
+{#    'shipping',#}
+{#    'shipping_weight',#}
+{#    'style[0]'#}
+{{ header|strPutCsv(context = header) }}
+
+{%- for i in data -%}
+    {%- if i.stock > 0 -%}
+        {%- set availability = 'in stock' -%}
+    {%- else -%}
+        {%- set availability = 'out of stock' -%}
+    {%- endif -%}
+{#{%- spaceless -%}#}
+    {%- set row = [
+        i.sku,
+        i.name,
+        i.description|striptags|replace({"\n":'',}),
+        availability,
+        'new',
+        i.price.numericValue,
+        absolute_url(path('site-product-show', {'slug': i.slug})),
+        uploaded_asset(i.coverImageAsset)|imagine_filter('product_large'),
+        "RAFINA",
+        "Home & Garden > Decor > Seasonal & Holiday Decorations",
+    ] -%}
+{#{%- endspaceless -%}#}
+{#{{ row|join(', ') }}#}
+{{ row|strPutCsv(context = header) }}
+
+{%- endfor -%}

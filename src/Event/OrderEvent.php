@@ -37,11 +37,21 @@ final class OrderEvent extends GenericEvent
      */
     public const DELIVERY_DATE_UPDATED = 'order.deliveryDateUpdated';
 
-
     /**
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
      * @var string
      */
     public const SET_ORDER_AS_TRACKED = 'conversionTracking.loaded';
 
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
+    public const EMAIL_SENT_ORDER_CONFIRMATION = 'email.sent.orderConfirmation';
+
+    /**
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     * @var string
+     */
+    public const EMAIL_SENT_SHIPPING_CONFIRMATION = 'email.sent.shippingConfirmation';
 }

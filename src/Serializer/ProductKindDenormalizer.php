@@ -26,10 +26,11 @@ class ProductKindDenormalizer implements DenormalizerInterface, DenormalizerAwar
      */
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-        if (isset($data['id'])) {
+        if (isset($data['id']) && $data['id'] !== null) {
             $object = $this->em->find(ProductKind::class, $data['id']);
+            return $object;
         }
-        return $object;
+        return null;
     }
     
     /**

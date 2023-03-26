@@ -4,9 +4,9 @@
     {{ parent() }}
 {% endblock %}
 
-{% block title %}
+{%- block title -%}
     {{ pageTitle }}
-{% endblock %}
+{%- endblock -%}
 
 {% block page_content %}
 
@@ -14,7 +14,7 @@
     {% endblock %}
 
     <div class="row">
-        <div class="col-lg-12 col-xl-11 mx-auto">
+        <div class="col-lg-12 col-sm-11 mx-auto">
             {% block header %}
                 <div class="row mt-1 mt-sm-3">
                     <div class="col-lg-12 mt-2">
@@ -39,6 +39,10 @@
                                     {% block headerTopright %}
                                     {% endblock %}
                                 </div>
+                            </div>
+                            <div class="header-actions">
+                                {% block headerActionsWrapper %}
+                                {% endblock %}
                             </div>
                         </div>
                         <div class="pb-2 pb-md-3 border-bottom">

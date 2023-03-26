@@ -1,0 +1,43 @@
+{% extends 'admin/template-editing.html.twig' %}
+
+{% set activeMenu = 'settings' %}
+
+{% if form.vars.data is defined and form.vars.data.name is defined and form.vars.data.name is not empty %}
+	{% set pageTitle = form.vars.data.name %}
+{% else %}
+	{% set pageTitle = 'settings.payment.new-payment-method'|trans %}
+{% endif %}
+
+{% set breadcrumb = {
+	0: {
+		'url': path('settings-home'),
+		'text': 'settings.settings'|trans,
+	},
+	1: {
+		'url': path('payment-list'),
+		'text': 'settings.payment.payment-methods'|trans,
+	}
+} %}
+{% set cancelUrl = path('payment-list') %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% include 'admin/widgets/tinymce-short-field.html.twig' %}
+{% endblock %}
+
+{%- block title -%}
+	{{ pageTitle }}
+{%- endblock -%}
+
+{% block moduleTitle %}
+	{{ 'settings.payment.payment-method'|trans }}
+{% endblock %}
+
+{% block moduleDescription %}
+	{{ 'settings.payment.new-payment-method-description'|trans }}
+{% endblock %}
+
+
+{% block contentInner %}
+	{% include 'admin/settings/payment-form.html.twig' with {'cancelUrl': cancelUrl} %}
+{% endblock %}

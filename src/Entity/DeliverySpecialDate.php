@@ -20,7 +20,7 @@ class DeliverySpecialDate
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="smallint", name="id", length=11)
+     * @ORM\Column(type="smallint", name="id", nullable=false, options={"unsigned"=true})
      */
     private $id;
 

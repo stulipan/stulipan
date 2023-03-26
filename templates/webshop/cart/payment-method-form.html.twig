@@ -11,21 +11,26 @@
 <div class="form-group radio-validation mb-0">
     <div class="checkout-method-selection content-body-thick-border">
         {% for choice in paymentMethodForm.paymentMethod %}
-            <div class="checkout-payment-item JS--Wrapper-choice {% if choice.vars.checked is defined and choice.vars.checked %}selected{% endif %}">
-                <div class="JS--Button-pickChoice loading-spinner-has-bg">
+            <div class="checkout-payment-item JS--Wrapper-paymentChoice{% if choice.vars.checked is defined and choice.vars.checked %} selected{% endif %}" data-payment-fee="{{ paymentMethods[loop.index0].price }}" data-payment-name="{{ paymentMethods[loop.index0].name }}">
+                <div class="JS--Button-pickPayment loading-spinner-has-bg">
                     <div class="loading-spinner-invisible">
                         <div class="custom-control custom-radio">
-                            <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {% if choice.vars.checked is defined and choice.vars.checked %}checked{% endif %}/>
+                            <input class="custom-control-input" type="radio" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" required="required" value="{{ choice.vars.value }}" {% if choice.vars.checked is defined and choice.vars.checked or paymentMethods|length == 1 %}checked{% endif %}/>
                             <label class="custom-control-label w-100" for="{{ choice.vars.id }}">
-                                <div class="d-flex justify-content-start justify-content-sm-between">
+                                <div class="d-flex flex-column flex-sm-row justify-content-start justify-content-sm-between align-items-start">
                                     <div class="checkout-payment-item-title pr-2 pr-sm-0">{{ choice.vars.label }}</div>
-                                    {% if paymentMethods[loop.index0].image is defined and paymentMethods[loop.index0].image != '' %}
-                                        <img class="img-fluid h-17px" src="{{ asset('/uploads/images/termekek/' ~ paymentMethods[loop.index0].image) }}" alt="{{ paymentMethods[loop.index0].name }}">
-                                    {% endif %}
+                                    <div class="price--shipping text-nowrap font-italic">
+                                        {% if paymentMethods[loop.index0].price != 0 %}
+                                            + {{ paymentMethods[loop.index0].price|money }}
+                                        {% endif %}
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-start w-100">
-                                    <div class="checkout-payment-item-description pt-1" id="heading{{ loop.index }}">
-                                        {{ paymentMethods[loop.index0].short }}
+                                    <div class="checkout-payment-item-description pt-2" id="heading{{ loop.index }}">
+                                        {% if paymentMethods[loop.index0].image is defined and paymentMethods[loop.index0].image != '' %}
+                                            <img class="img-fluid h-25px mb-2" src="{{ asset('/uploads/images/icons/' ~ paymentMethods[loop.index0].image) }}" alt="{{ paymentMethods[loop.index0].name }}">
+                                        {% endif %}
+                                        <div class="">{{ paymentMethods[loop.index0].short }}</div>
                                     </div>
                                 </div>
                             </label>

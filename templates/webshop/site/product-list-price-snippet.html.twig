@@ -1,0 +1,14 @@
+{% if product.isOnSale %}
+    <div class="mt-1">
+        <div class="price">
+            <span class="price-sale">{{ product.sellingPrice|money }}</span>
+            <span class="price-compare">{{ product.compareAtPrice|money }}</span>
+        </div>
+    </div>
+{% else %}
+    <div class="mt-1">
+        <div class="price">
+            <span class="price-regular mt-1">{{ product.sellingPrice|money }}</span>
+        </div>
+    </div>
+{% endif %}

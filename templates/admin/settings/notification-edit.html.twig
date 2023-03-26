@@ -1,0 +1,99 @@
+{% extends 'admin/template-with-sidebar.html.twig' %}
+
+{% set activeMenu = 'settings' %}
+
+{% set pageTitle = 'settings.notification.notifications'|trans %}
+{% if form.vars.data is defined and form.vars.data.name is defined and form.vars.data.name is not empty %}
+	{% set pageTitle = pageTitle ~ ' - ' ~ form.vars.data.name %}
+{% else %}
+	{% set pageTitle = pageTitle ~ ' - ' ~ 'settings.notification.new-email-template'|trans %}
+{% endif %}
+
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+	1: {
+		'url': path('notification-list'),
+		'text': 'settings.notification.notifications'|trans,
+	},
+} %}
+{% set cancelUrl = path('notification-list') %}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+{#	{% include 'admin/widgets/tinymce-content-field.html.twig' %}#}
+{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="modal--previewEmail" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="modalLabel">{{ 'generic.preview'|trans }}</h3>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="modal-body-content">
+					{{ emailHtml|raw }}
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">{{ 'generic.cancel'|trans }}</button>
+					<button type="submit" class="JS--Button-sendShippingConfirmation btn btn-primary">
+						<span class="loading-spinner-invisible">{{ 'generic.send'|trans }}</span>
+						<span class="loading-spinner" role="status"></span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block headerActionsWrapper %}
+	{% if form.vars.data.id is defined and form.vars.data.id is not null %}
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right">
+		<ul class="nav nav-tabs adaptive-primary">
+			<li class="nav-item adaptive-item">
+{#				{% if form.vars.data.enabled is same as true %}#}
+{#					{% set query = {#}
+{#						'slug': form.vars.data.slug#}
+{#					} %}#}
+{#				{% else %}#}
+{#					{% set query = {#}
+{#						'slug': form.vars.data.slug,#}
+{#						'preview_token': 'enabled'#}
+{#					} %}#}
+{#				{% endif %}#}
+{#				<a class="nav-link" href="{{ path('site-page-show', query) }}" target="_blank"><i class="fas fa-external-link-alt mr-2"></i>{% if form.vars.data.enabled is same as true %}{{ 'generic.view'|trans }}{% else %}{{ 'generic.preview'|trans }}{% endif %}</a>#}
+			</li>
+			<li class="nav-item adaptive-item">
+				<a class="nav-link" href="#" data-toggle="modal" data-target="#modal--previewEmail">
+					<i class="far fa-clone mr-2"></i>{{ 'generic.preview'|trans }}
+				</a>
+			</li>
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	{% endif %}
+{% endblock %}
+
+{% block mainContent %}
+	<div class="row mt-3">
+		<div class="col-md-12">
+			{% include 'admin/settings/notification-form.html.twig' with {'cancelUrl': cancelUrl}  %}
+		</div>
+	</div>
+{% endblock %}

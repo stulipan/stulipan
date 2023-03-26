@@ -20,226 +20,410 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {#<link rel="stylesheet" href="{{ asset('build/v-shop.css') }}"/>#}
-{#    {{ encore_entry_link_tags('daterangepicker') }}#}
+    {% set contentDescription = product.description|raw|striptags %}
+    {% set contentDescription = contentDescription|length > 200 ? contentDescription|slice(0, 200) ~ '...' : contentDescription %}
+
+    {{ encore_entry_link_tags('owlcarousel') }}
+{#    <link href="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.css" rel="stylesheet" >#}
+
+    <meta property="og:title" content="{{ product.name }} - {{ storeSettings.get('meta.title')}}">
+    <meta property="og:description" content="{{ contentDescription }}">
+    {% if product.coverImageAsset %}
+        <meta property="og:image" content="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('size_facebook') }}">
+        <meta property="og:image:width" content="1000" />
+        <meta property="og:image:height" content="1000" />
+    {% endif %}
+    <meta property="og:url" content="{{ url('site-product-show', {'slug': product.slug}) }}" />
+
+    <meta name="description" content="{{ contentDescription }}">
+    <link rel="canonical" href="{{ url('site-product-show', {'slug': product.slug}) }}" />
 {% endblock %}
 
 {% block bodyClass %} product-details{% endblock %}
 
 {% block content %}
     <div class="row mt-0 mt-sm-3">
-        <div class="col-lg-11X col-xl-12 mx-auto">
+        <div class="col-sm-12 col-md-11 col-xl-12 mx-auto">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-md-12 col-xl-10 mx-auto">
                     <div class="row">
-                        <div class="col-md-6 col-lg-7 order-1 correction-product-image-no-padding">
+                        <div class="col-12 col-md-7 col-lg-7 order-1 correction-product-image-no-padding">
                             <div class="row">
-                                <!-- Thumbnails lef to the  Main Image -->
-                                {% if isThumbnailsLeft == true %}
-                                <div class="d-none d-sm-flex col-sm-2 pr-0 order-2 order-sm-1">
-                                    <div data-slider-id="1" class="owl-thumbs">
-                                        {% if product.images is defined %}
-                                            {% for image in product.images %}
-                                                <button class="owl-thumb-item detail-thumb-item mb-10px">
-                                                    <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
-                                                </button>
+                                    <!-- Thumbnails lef to the  Main Image -->
+                                    {% if isThumbnailsLeft == true %}
+                                    <div class="d-none d-sm-flex col-sm-2 pr-0 order-2 order-sm-1">
+                                        {% if product.images is defined and product.images is empty %}
+                                            <div class="owl-thumbs w-100">
+                                            {% for i in range (1, 3) %}
+                                                <div class="owl-thumb-item detail-thumb-item mb-10px w-100">
+                                                    <div class="img-thumbnail img-unavailable img-unavailable-square">
+                                                        <i class="far fa-image mr-0"></i>
+                                                    </div>
+                                                </div>
                                             {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        {% if product.images is defined and product.images is not empty %}
+                                            <div data-slider-id="1" class="owl-thumbs">
+                                                {% for image in product.images %}
+                                                    <button class="owl-thumb-item detail-thumb-item mb-10px">
+                                                        <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_small') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image" width="99" height="132">
+                                                    </button>
+                                                {% endfor %}
+                                            </div>
                                         {% endif %}
                                     </div>
+                                    {% endif %}
+                                    <!-- MAIN IMAGE -->
+                                    <div class="order-1 order-sm-2 {% if isThumbnailsLeft == true %}col-12 col-sm-10{% else %}col-12{% endif %}">
+                                        {% if product.images is defined and product.images is empty %}
+                                        <div class="img-thumbnail img-unavailable img-unavailable-square img-unavailable-lg">
+                                            <i class="far fa-image mr-0"></i>
+                                        </div>
+                                        {% endif %}
+                                        {% if product.images is defined %}
+                                        <div class="product-detail-carousel position-relative">
+                                            {% set bestseller = false %}
+                                            {% if product.isUnavailable %}
+                                                <div class="ribbon ribbon-dark">MIND ELKELT</div>
+                                            {% elseif product.hasBadges %}
+                                                {% for badge in product.badges %}
+                                                    {% if badge.css is defined and badge.css != 'bestseller' %}
+                                                        <div class="ribbon ribbon-{{ badge.css }}">{{ badge.name }}</div>
+                                                    {% else %}
+                                                        {% set bestseller = true %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <div class="product-media-main">
+                                                <div class="product-media-main-inside">
+                                                    <div data-slider-id="1" class="JS--Wrapper-productDetail owl-product-detail owl-carousel owl-theme product-details-imageWrapper">
+                                                        {% if product.images is defined %}
+                                                            {% for image in product.images %}
+                                                                <div class="item">
+{#                                                                    <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">#}
+                                                                        <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_large') }}" alt="{{ product.name }} 1" class="img-fluid" width="534" height="712">
+{#                                                                    </a>#}
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if bestseller %}
+                                                <div class="ribbon ribbon-bottom"><svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}</div>
+                                            {% endif %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    {% if isThumbnailsLeft == false %}
+                                    <!-- Thumbnails bellow Main Image -->
+                                    <div class="col-12">
+                                        <div data-slider-id="1" class="owl-thumbs row">
+                                            {% if product.images is defined %}
+                                                {% for image in product.images %}
+                                                    <button class="owl-thumb-item detail-thumb-item col-2 mt-3 mb-3 ml-3">
+                                                        <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_small') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
+                                                    </button>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
                                 </div>
+{#                            <div class="mt-3 mt-sm-6">#}
+{#                                <div class="row">#}
+{#                                    <div class="col-12">#}
+{#                                        <div class="">#}
+{#                                            <h4 class="hero-recommended">Néhány szó a termékeinkről</h4>#}
+{#                                        </div>#}
+{#                                        <div>#}
+{#                                            {{ product.categories[0].seoContent|raw }}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+                        </div>
+
+                        <div class="col-12 col-md-5 col-lg-5 order-2 mt-3 mt-md-0 pl-sm-3">
+{#                            <div class="sticky-top" style="top: 2rem;">#}
+                            <div>
+                                <div class="product-name">
+                                    <h1 class="">{{ product.name }}</h1>
+                                </div>
+                                {% if product.isPubliclyAvailable %}
+                                    {% if product.isFlower %}
+                                    {% else %}
+                                        <div class="product-part">
+                                            <div class="product-price-block">
+                                                {% if product.isOnSale %}
+                                                    <div class="price">
+                                                        <span class="price-sale">{{ product.sellingPrice|money }}</span>
+                                                        <span class="price-compare">{{ product.compareAtPrice|money }}</span>
+                                                    </div>
+                                                    <div class="price-percentage">{{ product.discountPercentage }}</div>
+                                                {% else %}
+                                                    <div class="price">
+                                                        <span class="price-regular">{{ product.sellingPrice|money }}</span>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if product.stock > 0 %}
+                                    <div class="product-part">
+                                        <div class="available">
+                                            {{ 'product.currently-available-in-stock'|trans }}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="alert alert-warning mt-3">
+                                        <svg class="icon">
+                                            <use xlink:href="#info-circle"> </use>
+                                        </svg>
+                                        {{ 'product.no-longer-available'|trans }}
+                                    </div>
                                 {% endif %}
-                                <!-- MAIN IMAGE -->
-                                <div class="order-1 order-sm-2 {% if isThumbnailsLeft == true %}col-12 col-sm-10{% else %}col-12{% endif %}">
-                                    <div class="detail-carousel position-relative">
+                                <div class="product-part">
+                                    {{ product.description|raw }}
+                                </div>
+                                <div class="product-part">
+                                    <span class="product-variant-selector-label">{{ 'product.product-id'|trans }}:</span>
+                                    {{ product.sku }}
+                                </div>
+
+                                <!-- Add to cart form -->
+                                <div data-section-id="addToCart-template-id" data-section-type="addToCart-template">
+
+                                    {% if product.isPubliclyAvailable %}
+                                        {% include 'webshop/site/product-show-addToCartForm-widget.html.twig' %}
+                                    {% endif %}
+
+                                    <div class="product-part">
+                                        <div class="">
+                                            <button type="submit" class="JS--Button-addToCart btn btn-lg btn-success btn-block" {% if product.isPubliclyAvailable == false %}disabled{% endif %} data-product-json="{{ product.json }}">
+                                            <span class="loading-spinner-invisible">
+                                                <svg class="icon addtocart">
+                                                    <use xlink:href="#bag"> </use>
+                                                </svg>
+                                                {{ 'product.add-to-cart-button'|trans }}
+                                            </span>
+                                                <div class="loading-spinner" role="status"></div>
+                                            </button>
+                                        </div>
+                                    </div>
+
+{#                                    <div class="product-part mt-3">#}
+{#                                        <div class="p-3X" style="color: #adb5bd;">#}
+{#                                            <div class="h3 d-none">Biztonságos fizetés</div>#}
+{#                                            <div class="d-flex justify-content-between align-items-start">#}
+{#                                                <div class="service-columnX">#}
+{#                                                    <div class="service-textX text-nowrap">#}
+{#                                                        <div class="text-uppercase font-weight-normal">#}
+{#                                                            <svg class="icon mr-0">#}
+{#                                                                <use xlink:href="#check2-circle"> </use>#}
+{#                                                            </svg>#}
+{#                                                            Utánvét</div>#}
+{#                                                        <div class="d-none">A csomag átvételekor fizetsz.</div>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                                <div class="service-columnX">#}
+{#                                                    <div class="service-textX text-nowrap">#}
+{#                                                        <div class="text-uppercase font-weight-normal">#}
+{#                                                            <svg class="icon mr-0">#}
+{#                                                                <use xlink:href="#check2-circle"> </use>#}
+{#                                                            </svg>#}
+{#                                                            Bankkártya</div>#}
+{#                                                        <div class="d-none">Biztonságos és megbízható.</div>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                                <div class="service-columnX">#}
+{#                                                    <div class="service-textX text-nowrap">#}
+{#                                                        <div class="text-uppercase font-weight-normal">#}
+{#                                                            <svg class="icon mr-0">#}
+{#                                                                <use xlink:href="#check2-circle"> </use>#}
+{#                                                            </svg>#}
+{#                                                            Banki utalás</div>#}
+{#                                                        <div class="d-none">Online bankon keresztül.</div>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+
+{#                                            <div class="product-credit-card">#}
+{#                                                <div class="text-center">#}
+{#                                                    <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">#}
+{#                                                    <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/icons/paypal.png">#}
+{#                                                    <div class="text-sm">#}
+{#                                                        Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+                                    <div class="product-part">
+                                        <div class="product-list-group list-group">
+                                            <div class="list-group-item d-flex align-items-center">
+                                                <div class="mr-2">
+                                                    <svg class="icon">
+                                                        <use xlink:href="#truck"></use>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Az egész országba szállítunk. Részletek és díjak itt.</a>
+                                                </div>
+                                            </div>
+                                            <div class="list-group-item d-flex align-items-center">
+                                                <div class="mr-2">
+                                                    <svg class="icon">
+                                                        <use xlink:href="#person-check"></use>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--MagasElmeny">30 napos visszaküldési garancia.</a>
+                                                </div>
+                                            </div>
+                                            <div class="list-group-item d-flex align-items-center">
+                                                <div class="mr-2">
+                                                    <svg class="icon">
+                                                        <use xlink:href="#envelope"></use>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--Kapcsolat">Lépj kapcsolatba velünk.</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-part">
+                                        <div class="row">
+                                            <div class="col-12 col-sm-9 col-md-12 col-lg-9">
+                                                <div class="p-4" style="background-color: #f0f3f5;">
+                                                    <div class="h3 d-none mb-0">Biztonságos fizetés</div>
+                                                    <div class="text-mutedX">Fizess kényelmesen és biztonságosan, ahogy neked a legegyszerűbb.</div>
+                                                    <div class="mt-3 d-flex justify-content-between align-items-start flex-column">
+                                                        <div class="mb-1">
+                                                            <div class="text-nowrap">
+                                                                <div class="text-uppercase font-weight-normal">
+                                                                    <svg class="icon">
+                                                                        <use xlink:href="#check2-circle"> </use>
+                                                                    </svg>
+                                                                    Utánvét</div>
+                                                                <div class="d-none">A csomag átvételekor fizetsz.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-1">
+                                                            <div class="text-nowrap">
+                                                                <div class="text-uppercase font-weight-normal">
+                                                                    <svg class="icon">
+                                                                        <use xlink:href="#check2-circle"> </use>
+                                                                    </svg>
+                                                                    Banki utalás</div>
+                                                                <div class="d-none">Online bankon keresztül.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="service-columnX">
+                                                            <div class="text-nowrap">
+                                                                <div class="text-uppercase font-weight-normal">
+                                                                    <svg class="icon">
+                                                                        <use xlink:href="#check2-circle"> </use>
+                                                                    </svg>
+                                                                    Bankkártya</div>
+                                                                <div class="d-none">Biztonságos és megbízható.</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2 text-left">
+                                                        <div class="row">
+                                                            <div class="col-9 col-md-12">
+                                                                <img src="/uploads/images/icons/barion-card.svg" alt="..." class="w-100" style="filter: grayscale(100%);">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% include 'webshop/site/product-show-modals-widget.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mt-sm-6 mb-6">
+        <div class="products-grid col-sm-12 col-md-11 col-xl-12 mx-auto">
+            <div class="">
+                <h4 class="hero-recommended">Mások ezeket is megnézték</h4>
+            </div>
+            <div class="products-carousel mt-4">
+                <div class="JS--Carousel-prev carousel-nav prev">
+                    <div class="carousel-btn" role="button" tabindex="0">
+                        <svg class="icon">
+                            <use xlink:href="#chevron-left"></use>
+                        </svg>
+                    </div>
+                </div>
+                <div class="JS--Wrapper-recommendedProducts owl-products owl-carousel owl-theme">
+                {% if recommendedProducts is defined and recommendedProducts is not empty %}
+                    {% for product in recommendedProducts %}
+
+                        {% if product.isEnabled or product.isUnavailable %}
+                            <div class="product">
+                                <div class="product-wrapper">
+                                    <div class="product-image">
                                         {% set bestseller = false %}
-                                        {% if product.isUnavailable %}
-                                            <div class="ribbon ribbon-dark">MIND ELKELT</div>
+                                        {% if product.isUnavailable() %}
+                                            <div class="ribbon ribbon-dark">{{ 'product.sold-out'|trans }}</div>
                                         {% elseif product.hasBadges %}
                                             {% for badge in product.badges %}
                                                 {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
+                                                    <div class="ribbon ribbon-{{ badge.css }}">{{ badge.name }}</div>
                                                 {% else %}
                                                     {% set bestseller = true %}
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}
-                                        <div class="">
-                                            <div data-slider-id="1" class="owl-carousel detail-slider owl-theme">
-                                                {% if product.images is defined %}
-                                                    {% for image in product.images %}
-                                                        <div class="item">
-                                                            <a href="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" data-footer="{{ product.name }} 1" data-toggle="lightbox" data-gallery="product-gallery">
-                                                                <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_image') }}" alt="{{ product.name }} 1" class="img-fluid">
-                                                            </a>
-                                                        </div>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
+                                        <img src="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="300" height="400">
                                         {% if bestseller %}
-                                            <div class="ribbon ribbon-bottom"><i class="fas fa-trophy"></i> Bestseller</div>
+                                            <div class="ribbon ribbon-bottom">
+                                                <svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}
+                                            </div>
                                         {% endif %}
                                     </div>
+                                    <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link"></a>
                                 </div>
-                                {% if isThumbnailsLeft == false %}
-                                <!-- Thumbnails bellow Main Image -->
-                                <div class="col-12">
-                                    <div data-slider-id="1" class="owl-thumbs row">
-                                        {% if product.images is defined %}
-                                            {% for image in product.images %}
-                                                <button class="owl-thumb-item detail-thumb-item col-2 mt-3 mb-3 ml-3">
-                                                    <img src="{{ uploaded_asset(image.imagePath)|imagine_filter('product_thumbnail') }}" alt="{{ product.name }} {{ loop.index }}" class="img-fluid product-image">
-                                                </button>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
+                                <div class="product-title-wrapper">
+                                    <p class="productList--name"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.name }}</a></p>
+                                    {% include 'webshop/site/product-list-price-snippet.html.twig' %}
                                 </div>
-                                {% endif %}
                             </div>
-                        </div>
-                        <div class="col-md-6 col-lg-5 order-2 mt-3 mt-md-0">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="product-reviews">
-                                        <div class="d-flex align-items-center justify-content-between mb-1">
-                                            <div class="d-flex align-items-center">
-                                                <ul class="review-stars-group mr-2 mb-0">
-                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                                    <li class="review-stars-item"><i class="fa fa-star text-warning"></i></li>
-                                                    <li class="review-stars-item"><i class="fa fa-star"></i></li>
-                                                </ul>
-                                            </div>
-                                            <div class="">
-                                                <a href="#" class="text-sm">25 értékelés <i class="fas fa-long-arrow-alt-right ml-1"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 mt-2">
-                                    <div class="product-name">
-                                        <h1 class="">{{ product.name }}</h1>
-                                    </div>
-                                </div>
+                        {% endif %}
 
-                                <div class="col-12">
-                                    {% if product.isPubliclyAvailable %}
-                                        {% if product.isFlower %}
-
-                                        {% else %}
-                                            <div class="product-price">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <ul class="list-inline mb-0">
-                                                        <li class="list-inline-item price">
-                                                            <del>{{ (product.price.numericValue*4)|money }}</del>
-                                                        </li>
-                                                        <li class="list-inline-item price price-sale">{{ product.price.numericValue|money }}</li>
-
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        {% endif %}
-                                    {% endif %}
-
-                                    <!-- Add to cart form -->
-                                        <div data-section-id="addToCart-template" data-section-type="addToCart-template">
-
-                                            {% if product.isPubliclyAvailable %}
-                                                {% include 'webshop/site/product-show-addToCartForm-widget.html.twig' %}
-                                            {% else %}
-                                                <div class="alert alert-warning mt-3"><i class="fas fa-info-circle mr-2"></i>A termék már nem áll forgalmazásban.</div>
-                                            {% endif %}
-
-                                            <div class="product-button">
-                                                <div class="">
-                                                    <button type="submit" class="JS--Button-addToCart btn btn-lg btn-primary btn-uppercase w-100" {% if product.isPubliclyAvailable == false %}disabled{% endif %}>
-                                                    <span class="loading-spinner-invisible">
-                                                        <svg class="svg-icon svg-icon-heavy addtocart">
-                                                            <use xlink:href="#cart-1"> </use>
-                                                        </svg>
-                                                        Kosárba rakom
-                                                    </span>
-                                                        <div class="loading-spinner" role="status"></div>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="product-credit-card">
-                                                <div class="text-center">
-                                                    <img alt="" class="img-fluid h-15px left-block mb-2 mr-4" src="/uploads/images/icons/CIB_logo.png">
-                                                    <img alt="" class="img-fluid h-15px left-block mb-2" src="/uploads/images/termekek/paypal.png">
-                                                    <div class="text-sm">
-                                                        Fizess online bankkártyáddal vagy utalással internet bankodon keresztül. A kártyás fizetést intézheted a CIB Bank biztonságos szerverén keresztül vagy Paypalon.</div>
-                                                </div>
-                                            </div>
-                                            <div class="product-quickinfo">
-                                                <div class="product-list-group list-group">
-                                                    <div class="list-group-item">
-                                                        <span class="text-sm mr-2"><i class="fas fa-shipping-fast"></i></span>
-                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--ShippingInfo">Szállítási díjak</a>
-                                                        <div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
-                                                                        <div class="mt-4">
-                                                                            {{ pages.szallitasiDijak.content|raw }}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="list-group-item">
-                                                        <span class="text-sm mr-2"><i class="far fa-credit-card"></i></span>
-                                                        <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--CreditCardPayment">Fizess online bankkártyáddal</a>
-                                                        <div class="modal fade" id="modal--CreditCardPayment" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <h3 class="modal-title" id="modalLabel">{{ pages.rolunk.name }}</h3>
-                                                                        <div class="mt-4">
-                                                                            {{ pages.rolunk.content|raw }}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                </div>
-
-                            </div>
-
-
-                            {#<p class="mb-2">{{ product.description }}</p>#}
-
-                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+                <div class="JS--Carousel-next carousel-nav next">
+                    <div class="carousel-btn" role="button" tabindex="0">
+                        <svg class="icon">
+                            <use xlink:href="#chevron-right"></use>
+                        </svg>
                     </div>
                 </div>
-                <div class="col-lg-12 mt-3 mb-3"></div>
+
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block contentWide %}
+    {% if true is same as false %}
     <div class="bg-secondary py-5">
         <div class="container">
             <div class="row">
-                <div class="col-sm-11 col-xl-12 mx-auto">
+                <div class="col-sm-12 col-md-11 col-xl-12 mx-auto">
                     <div class="row">
                         <div class="col-md-12 col-lg-10 mx-auto">
                             <div class="row">
@@ -253,7 +437,7 @@
                                                     <div class="card h-100 shadow border-0">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Courier Flower Delivery</div>
-                                                            <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic1.jpg"/>
+                                                            <img class="img-fluid mb-2" src="/uploads/images/store/tab-courier-pic1.jpg"/>
                                                             <p class="general-info-item-description"> We work closely with our courier partner to ensure that your beautifully designed bouquet arrives in pristine condition.</p>
                                                         </div>
                                                     </div>
@@ -262,7 +446,7 @@
                                                     <div class="card h-100 shadow border-0">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Signature Interflora Black Gift Box</div>
-                                                            <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic2.jpg"/>
+                                                            <img class="img-fluid mb-2" src="/uploads/images/store/tab-courier-pic2.jpg"/>
                                                             <p class="general-info-item-description">Your bouquet will be delivered in a signature Interflora black gift box, with the impact of the flowers seen as soon as the box is opened.</p>
                                                         </div>
                                                     </div>
@@ -271,7 +455,7 @@
                                                     <div class="card h-100 shadow border-0">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Gift Wrap and Ribbon</div>
-                                                            <img class="img-fluid mb-2" src="/uploads/images/other/tab-courier-pic3.jpg"/>
+                                                            <img class="img-fluid mb-2" src="/uploads/images/store/tab-courier-pic3.jpg"/>
                                                             <p class="general-info-item-description">Your bouquet will be presented in elegant Interflora gift wrap and a pretty ribbon. A specially formulated gel solution ensures freshness during delivery.	</p>
                                                         </div>
                                                     </div>
@@ -280,7 +464,7 @@
                                                     <div class="card h-100 shadow border-0">
                                                         <div class="card-body">
                                                             <div class="general-info-item-title">Gift Message and Flower Food</div>
-                                                            <img class="img-fluid mb-2" src="/uploads/images/other/tab-hampers-pic4.jpg"/>
+                                                            <img class="img-fluid mb-2" src="/uploads/images/store/tab-hampers-pic4.jpg"/>
                                                             <p class="general-info-item-description">Your personal message will be displayed on an attractive greeting card and will accompany your gift. To ensure the flowers remain fresh and in the best possible condition we include some flower food.</p>
                                                         </div>
                                                     </div>
@@ -295,71 +479,72 @@
             </div>
         </div>
     </div>
+    {% endif %}
+    {% if false == true %}
     <div class="py-5">
         <div class="container">
             <div class="row">
-                <div class="col-sm-11 col-xl-12 mx-auto">
+                <div class="col-sm-12 col-md-11 col-xl-12 mx-auto">
                     <div class="row">
                         <div class="col-md-12 col-lg-6 mx-auto">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="h3 general-info-title">Miért válaszd a Tulipánfutárt?</div>
+                                    <div class="h3 general-info-title">Hasznos infók</div>
                                 </div>
                                 <div class="col-sm-12 mt-3">
                                     <div class="accordion mb-4" id="accordionMiertDobozok">
                                         <div class="card">
                                             <div  class="card-header border-bottom-0" id="miertDoboz1">
-                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapseOne">INGYENES szállítás Budapesten!</a>
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapseOne">Országos házhozszállítás</a>
                                             </div>
                                             <div id="collapse1" class="collapse" aria-labelledby="miertDoboz1" data-parent="#accordionMiertDobozok">
                                                 <div class="card-body pt-2">
-                                                    <p class="general-info-item-description">Virágküldés Budapestre és környékére. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
+                                                    <p class="general-info-item-description">Rendelj bizalommal, ugyanis a Rafina termékeket most Magyarország teljes területére kézbesítjük. A szállítási módokról és díjakról <a class="underline" href="{{ path('site-page-show', { 'slug': 'szallitasi-dijak'}) }}" title="Szállítási díjak">itt tudsz bővebben olvasni</a>.
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card">
-                                            <div  class="card-header border-bottom-0" id="miertDoboz2">
-                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapseOne">Virágküldés a nap 24 órájában</a>
-                                            </div>
-                                            <div id="collapse2" class="collapse" aria-labelledby="miertDoboz2" data-parent="#accordionMiertDobozok">
-                                                <div class="card-body pt-2">
-                                                    <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+{#                                        <div class="card">#}
+{#                                            <div  class="card-header border-bottom-0" id="miertDoboz2">#}
+{#                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapseOne">Virágküldés a nap 24 órájában</a>#}
+{#                                            </div>#}
+{#                                            <div id="collapse2" class="collapse" aria-labelledby="miertDoboz2" data-parent="#accordionMiertDobozok">#}
+{#                                                <div class="card-body pt-2">#}
+{#                                                    <p class="general-info-item-description">A nap 24 órájában tudsz virágot rendelni. A kézbesítést a kivánt időpontra teljesítjük. A szállítás idejét nincs módunkban percre pontosan teljesíteni. Az általad meghatározott kézbesítési időponttól fél órás eltérés lehetséges. &nbsp;#}
+{#                                                    </p>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
                                         <div class="card">
                                             <div  class="card-header border-bottom-0" id="miertDoboz3">
                                                 <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapseOne">Magas vásárlói elégedettség</a>
                                             </div>
                                             <div id="collapse3" class="collapse" aria-labelledby="miertDoboz3" data-parent="#accordionMiertDobozok">
                                                 <div class="card-body pt-2">
-                                                    <p class="general-info-item-description">A virágküldés folyamata alatt, a beszerzéstől a kézbesítésig rendkívüli figyelmet szentelünk annak, hogy virágaink mindig frissek és szépek maradjanak.
+                                                    <p class="general-info-item-description">A Rafinánál minden termék kézzel készül, így nagy figyelmet fordítunk minden egyes termék elkészítésére, hogy te mindig a legjobbat kapd.
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card">
-                                            <div  class="card-header border-bottom-0" id="miertDoboz4">
-                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseOne">Egyedi terméket szeretnél?</a>
-                                            </div>
-                                            <div id="collapse4" class="collapse" aria-labelledby="miertDoboz4" data-parent="#accordionMiertDobozok">
-                                                <div class="card-body pt-2">
-                                                    <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+{#                                        <div class="card">#}
+{#                                            <div  class="card-header border-bottom-0" id="miertDoboz4">#}
+{#                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseOne">Egyedi terméket szeretnél?</a>#}
+{#                                            </div>#}
+{#                                            <div id="collapse4" class="collapse" aria-labelledby="miertDoboz4" data-parent="#accordionMiertDobozok">#}
+{#                                                <div class="card-body pt-2">#}
+{#                                                    <p class="general-info-item-description">Hívd munkatársainkat a <a class="underline" href="tel:06 1 466 6286"><span class="nowrap">06 1 466 6286</span></a> telefonszámon személyre szabott ajándék elkészítése esetén.#}
+{#                                                    </p>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
                                         <div class="card">
                                             <div  class="card-header border-bottom-0" id="miertDoboz5">
-                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapseOne">Ügyfélszolgálat</a>
+                                                <a href="#" role="button" class="text-decoration-none general-info-item-title collapse-arrow-show justify-content-between py-1 mb-0" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapseOne">Lépj kapcsolatba velünk!</a>
                                             </div>
                                             <div id="collapse5" class="collapse" aria-labelledby="miertDoboz5" data-parent="#accordionMiertDobozok">
                                                 <div class="card-body pt-2">
                                                     <p class="general-info-item-description">
-                                                        Telefon: 06 1 466 6286<br>
-                                                        Email: info@difiori.hu
+                                                        Ha kérdésed van a Rafina termékeivel kapcsolatosan vagy érdeklődni szeretnél a rendelés és szállításról, írj bátran. Email címünk: <a href="mailto:{{ storeSettings.get('store.email') }}">{{ storeSettings.get('store.email') }}</a>
                                                     </p>
                                                 </div>
                                             </div>
@@ -373,220 +558,112 @@
             </div>
         </div>
     </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
-    <script src="{{ asset('build/v-shop.js') }}"></script>
-
-    <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
-    <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
-    <script>
-        // ------------------------------------------------------- //
-        // Detail Carousel with thumbs
-        // ------------------------------------------------------ //
-        // $('.detail-slider').owlCarousel({
-        //     loop: true,
-        //     items: 1,
-        //     thumbs: true,
-        //     thumbsPrerendered: true,
-        //     dots: true,
-        //     responsiveClass: false
-        // });
-        $('.detail-slider').owlCarousel({
-            loop: true,
-            thumbs: true,
-            thumbsPrerendered: true,
-            margin: 0,
-            nav: false,
-            dots: true,
-            navText: ['<img src="img/prev.svg" alt="" width="50">', '<img src="img/next.svg" alt="" width="50">'],
-            smartSpeed: 400,
-            responsiveClass: true,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                600: {
-                    items: 1
-                },
-                1000: {
-                    items: 1
-                }
-            }
-        });
-
-        // ------------------------------------------------------- //
-        //   Ekko Lightbox
-        // ------------------------------------------------------ //
-
-        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
-            event.preventDefault();
-            $(this).ekkoLightbox({
-                alwaysShowClose: true,
-//                leftArrow: '<span><img src="img/prev.svg" class="nav-arrow nav-arrow-left" alt="" width="50"></span>',
-//                rightArrow: '<span><img src="img/next.svg" class="nav-arrow nav-arrow-right" alt="" width="50"></span>'
-            });
-        });
-    </script>
-
-
+    <script src="{{ asset('webshop/site/js/owl.carousel.min.js') }}" ></script>
+    <script src="{{ asset('webshop/site/js/owl.carousel2.thumbs.min.js') }}" ></script>
+{#    <script src="https://d19m59y37dris4.cloudfront.net/sell/1-2-0/vendor/ekko-lightbox/ekko-lightbox.min.js"></script>#}
     <script>
         $(function() {
-            $('.JS--Button-clickDate').daterangepicker({
-                opens: 'left',
-                autoApply: true,
-                autoUpdateInput: false,
-                singleDatePicker: true,
-    //            alwaysShowCalendars: true,
-                minDate: moment().add(4, 'hours'),
-                maxDate: moment().add(2, 'months'),
-                locale: {
-                    format: 'YYYY-MM-DD',
-                    separator: ' / ',
-                    applyLabel: 'Alkalmaz',
-                    cancelLabel: 'Mégse',
-                    daysOfWeek: [
-                        'V',
-                        'H',
-                        'K',
-                        'Sz',
-                        'Cs',
-                        'P',
-                        'Sz'
-                    ],
-                    monthNames: [
-                        'Január',
-                        'Február',
-                        'Március',
-                        'Április',
-                        'Május',
-                        'Június',
-                        'Július',
-                        'Augusztus',
-                        'Szeptember',
-                        'Október',
-                        'November',
-                        'December'
-                    ],
-                    firstDay: 1,
+            $('.JS--Wrapper-productDetail').owlCarousel({
+                loop: true,
+                thumbs: true,
+                thumbsPrerendered: true,
+                margin: 0,
+                nav: false,
+                dots: true,
+                // navText: ['<img src="img/prev.svg" alt="" width="50">', '<img src="img/next.svg" alt="" width="50">'],
+                navText: ['<span>❮</span>', '<span>❯</span>'],
+                smartSpeed: 400,
+                responsiveClass: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 1
+                    },
+                    1000: {
+                        items: 1
+                    }
                 }
             });
-        //     $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {
-        //         ev.preventDefault();
-        //         $pickerDate = picker.startDate.format('YYYY-MM-DD');
-        //
-        //         $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
-        //         $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
-        //         /**
-        //          * Csak az első 3 rádió opcióba keresi a pickerDate-et. És ha benne van, akkor a Calendárt mutatja.
-        //          */
-        //         $selectedRadio = $(this).closest('.JS--dateWrapper').find('input[type="radio"][value="' + $pickerDate + '"]:not(".JS--Button-clickDate")');
-        //         if ($selectedRadio.val()) {
-        //             console.log($selectedRadio);
-        //             $selectedRadio.prop('checked', true);
-        //             $dateValueWrapper.hide();
-        //             $calendarIconWrapper.show();
-        //         }
-        //         /**
-        //          * Ha nincs benne, akkor negyedik rádió inputhoz rendeli a pickerDate-et és elrejti a Calendárt.
-        //          */
-        //         else {
-        //             $(this).val($pickerDate);  // az input, amihez kötve van a gomb, megkapja a daterangepicker értékét (dátumot)
-        //             $html = '<span class="font-weight-bold my-0">' + picker.startDate.format('MMM D') + '</span><br> <span class="price--gross text-nowrap">' + picker.startDate.format('ddd') + '</span>';
-        //             $dateValueWrapper.html($html);
-        //             $calendarIconWrapper.hide();
-        //             $dateValueWrapper.show();
-        //         }
-        //     });
-        //     $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
-        //         $(this).val('');
-        //     });
-        //     /**
-        //      * Amikor nem a Daterangepicker-re klikkel, akkor biztos a Calendárt kell mutatnia.
-        //      */
-        //     $('.JS--dateWrapper input[type="radio"]:not(".JS--Button-clickDate")').on('click', function () {
-        //         $dateValueWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showDateValue');
-        //         $calendarIconWrapper = $(this).closest('.JS--dateWrapper').find('.JS--showCalendarIcon');
-        //         $dateValueWrapper.hide();
-        //         $calendarIconWrapper.show();
-        //     });
-        });
-    </script>
-    <script>
-        $(function() {
-            let $wrapper = $('.JS--deliveryDateContainer');
-            let $vp = $wrapper.find('.vp-checked');
-            // let $currentValue = $vp.find('input').val();
-            // console.log($currentValue);
 
-            // $selectedDate = $wrapper.find('.JS--generatedDate-' + hiddenForm.date.value);
-
-            /**
-             * Kezeli melyik dátum boxra lett kattintva, és azt jelöli kiválasztotnak.
-             */
-            $("[class*='JS--generatedDate-']").click(function () {
-                $dateWrapper = $wrapper.find('.JS--dateWrapper');
-
-                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
-                $(this).find('.vp').find('input').prop('checked', true);
-                $(this).find('.vp').addClass('vp-checked');
-
-                // ha a 4-ikre klikkelek amikor az ő temporary, akkor nem csinal semmit
-                // amugy visszallitja (ujra mutatja) a CalendarIcont
-                if (! ($(this).hasClass('d-temporary')) ) {
-                    $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                    $dateWrapper.find('.JS--showCalendarIcon').show();
-                }
-
-            });
-            /**
-             * Kezeli a kalendáriumra kattintást.
-             */
-            $('.JS--Button-clickDate').on('apply.daterangepicker', function(ev, picker) {
-                ev.preventDefault();
-                $pickerDate = picker.startDate.format('YYYY-MM-DD');
-                $wrapper = $(this).closest('.JS--deliveryDateContainer');
-                $dateWrapper = $(this).closest('.JS--dateWrapper');
-
-                $dateWrapper.find('.d-temporary').removeClass('d-temporary').addClass('d-none');
-                $dateWrapper.find('.vp-checked').find('input').prop('checked', false);
-                $dateWrapper.find('.vp-checked').removeClass('vp-checked');
-
-                $dateModule = $wrapper.find('.JS--generatedDate-' + $pickerDate);
-
-                if ($dateModule.is(':hidden')) {  // if it's hidden, de-hide it and make it temporary + hide the CalendarIcon
-                    $wrapper.find('.JS--showCalendarIcon').hide();
-                    $dateModule.removeClass('d-none').addClass('d-temporary');
-                }
-                $dateModule.find('.vp').find('input').prop('checked', true);
-                $dateModule.find('.vp').addClass('vp-checked');
-
-                if ($dateWrapper.find("[class*='JS--generatedDate-']:not(.d-none)").length <= 3) {
-                    $wrapper.find('.JS--showCalendarIcon').show();
-                }
-            });
-            $('.JS--Button-clickDate').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            });
-        });
-    </script>
-    <script>
-        // Displays the loading circle
-        $(function() {
-            // let _proceed = false;
-            // $(document).on('click', '.JS--Button-addToCart', function (e) {
-            //     if (_proceed) {
-            //         _proceed = false;
-            //         return;
-            //     }
-            //     e.preventDefault();
-            //     var el = $(e.currentTarget);
-            //
-            //     el.addClass('loading-spinner');
-            //     _proceed = true;
-            //     el.trigger('click');
+            // $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+            //     event.preventDefault();
+            //     $(this).ekkoLightbox({
+            //         alwaysShowClose: true,
+            //         //                leftArrow: '<span><img src="img/prev.svg" class="nav-arrow nav-arrow-left" alt="" width="50"></span>',
+            //         //                rightArrow: '<span><img src="img/next.svg" class="nav-arrow nav-arrow-right" alt="" width="50"></span>'
+            //     });
             // });
+            let $recommendedProducts = $('.JS--Wrapper-recommendedProducts');
+            $recommendedProducts.owlCarousel({
+                loop: false,
+                margin: 10,
+                rewind: false,
+                slideBy: 'page',
+                responsiveClass: true,
+                responsive: {
+                    0: {
+                        items: 2,
+                        nav: false
+                    },
+                    576: {
+                        items: 3,
+                        nav: false
+                    },
+                    768: {
+                        items: 3,
+                        nav: false
+                    },
+                    992: {
+                        items: 4,
+                        nav: false,
+                        loop: true,
+                    }
+                },
+                // onInitialized: addFormatingClasses,
+            });
+            // function addFormatingClasses(e) {
+            //     $carousel = $(e.target);  // .owl-carousel
+            //     console.log($carousel);
+            //     // $carousel.addClass('row mx-n5px mx-xl-n10px');
+            //     // $items = $carousel.find('.owl-item').addClass('col-12 px-5px px-xl-10px');
+            // }
+            $('.JS--Carousel-next').click(function () {
+                $recommendedProducts.trigger('next.owl.carousel');
+            })
+            $('.JS--Carousel-prev').click(function () {
+                $recommendedProducts.trigger('prev.owl.carousel');
+            });
         });
+        // debugger;
     </script>
+{#    <script>#}
+{#        // function clickAndGo(e) {#}
+{#        //     e.preventDefault();#}
+{#        //     let url = e.currentTarget.href;#}
+{#        //     let $sidebar = $('#JS--Sidebar-Cart');#}
+{#        //#}
+{#        //     var callback = function () {#}
+{#        //         if (typeof(url) != 'undefined') {#}
+{#        //             window.location = url;#}
+{#        //         }#}
+{#        //     };#}
+{#        //#}
+{#        //     callback();#}
+{#        //     $sidebar.sidebar('hide');#}
+{#        //     // $sidebar.on('hide.bs.sidebar', function (e) {#}
+{#        //     //     callback()#}
+{#        //     // });#}
+{#        //     return false;#}
+{#        // }#}
+{#        {% if productJson is defined %}#}
+{#        var productJson = {{ productJson|raw }};#}
+{#        {% endif %}#}
+{#    </script>#}
 {% endblock %}

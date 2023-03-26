@@ -1,0 +1,51 @@
+<div class="modal fade" id="modal--ShippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body cms-page-body">
+                <h2 class="modal-title" id="modalLabel">{{ policies.shipping_information.name }}</h2>
+                <div class="mt-4">
+                    {{ policies.shipping_information.content|raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal--MagasElmeny" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body cms-page-body">
+                <h2 class="modal-title" id="modalLabel">{{ pages.magas_vasarloi_elegedettseg.name }}</h2>
+                <div class="mt-4">
+                    {{ pages.magas_vasarloi_elegedettseg.content|raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal--Kapcsolat" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body cms-page-body">
+                <h2 class="modal-title" id="modalLabel">{{ policies.contact_information.name }}</h2>
+                <div class="mt-4">
+                    {{ policies.contact_information.content|raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

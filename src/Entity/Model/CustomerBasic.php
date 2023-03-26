@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Model;
 
-use App\Controller\Utils\GeneralUtils;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator\Constraints as CustomAssert;
-
-/**
- *
- */
 
 class CustomerBasic
 {
@@ -25,36 +19,47 @@ class CustomerBasic
     private $email;
 
     /**
-     * @var string
-     * @Groups({"orderView", "orderList"})
-     *
-     * @Assert\NotBlank(message="checkout.customer.missing-firstname")
+     * @var int|null
      */
-    private $firstname;
+    private $acceptsMarketing = 0;
 
-    /**
-     * @var string
-     * @Groups({"orderView", "orderList"})
-     *
-     * @Assert\NotBlank(message="checkout.customer.missing-lastname")
-     */
-    private $lastname;
+//    /**
+//     * @var string
+//     * @Groups({"orderView", "orderList"})
+//     *
+//     * @Assert\NotBlank(message="checkout.customer.missing-firstname")
+//     */
+//    private $firstname;
+//
+//    /**
+//     * @var string
+//     * @Groups({"orderView", "orderList"})
+//     *
+//     * @Assert\NotBlank(message="checkout.customer.missing-lastname")
+//     */
+//    private $lastname;
+//
+//    /**
+//     * @var string
+//     * @Groups({"orderView", "orderList"})
+//     *
+//     * @Assert\NotBlank(message="checkout.customer.missing-phone")
+//     * @CustomAssert\PhoneNumber(regionCode="HU", message="checkout.customer.invalid-phone")
+//     */
+//    private $phone;
 
-    /**
-     * @var string
-     * @Groups({"orderView", "orderList"})
-     *
-     * @Assert\NotBlank(message="checkout.customer.missing-phone")
-     * @CustomAssert\PhoneNumber(regionCode="HU", message="checkout.customer.invalid-phone")
-     */
-    private $phone;
+//    public function __construct(string $email = null, string $firstname = null, string $lastname = null, string $phone = null)
+//    {
+//        $this->email = $email;
+//        $this->firstname = $firstname;
+//        $this->lastname = $lastname;
+//        $this->phone = $phone;
+//    }
 
-    public function __construct(string $email = null, string $firstname = null, string $lastname = null, string $phone = null)
+    public function __construct(string $email = null, bool $acceptsMarketing = false)
     {
         $this->email = $email;
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->phone = $phone;
+        $this->acceptsMarketing = $acceptsMarketing;
     }
 
     /**
@@ -74,63 +79,76 @@ class CustomerBasic
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getFirstname()
+    public function isAcceptsMarketing(): bool
     {
-        return $this->firstname;
+        return null === $this->acceptsMarketing ? false : (bool) $this->acceptsMarketing;
     }
 
     /**
-     * @param mixed $firstname
+     * @param bool $acceptsMarketing
      */
-    public function setFirstname($firstname)
+    public function setAcceptsMarketing(bool $acceptsMarketing): void
     {
-        $this->firstname = ucwords($firstname);
+        $this->acceptsMarketing = $acceptsMarketing;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * @param mixed $lastname
-     */
-    public function setLastname($lastname)
-    {
-        $this->lastname = ucwords($lastname);
-    }
-
-    /**
-     * @return string
-     */
-    public function getFullname(): ?string
-    {
-        $fullname = $this->firstname.' '.$this->lastname;
-        return $fullname;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPhone(): ?string
-    {
-        return (string) $this->phone;
-    }
-
-    /**
-     * @param string $phone
-     */
-    public function setPhone(?string $phone)
-    {
-        $utils = new GeneralUtils();
-        $this->phone = $utils->formatPhoneNumber($phone);
-    }
-
-
-
+//    /**
+//     * @return mixed
+//     */
+//    public function getFirstname()
+//    {
+//        return $this->firstname;
+//    }
+//
+//    /**
+//     * @param mixed $firstname
+//     */
+//    public function setFirstname($firstname)
+//    {
+//        $this->firstname = ucwords($firstname);
+//    }
+//
+//    /**
+//     * @return mixed
+//     */
+//    public function getLastname()
+//    {
+//        return $this->lastname;
+//    }
+//
+//    /**
+//     * @param mixed $lastname
+//     */
+//    public function setLastname($lastname)
+//    {
+//        $this->lastname = ucwords($lastname);
+//    }
+//
+//    /**
+//     * @return string
+//     */
+//    public function getFullname(): ?string
+//    {
+//        $fullname = $this->firstname.' '.$this->lastname;
+//        return $fullname;
+//    }
+//
+//    /**
+//     * @return string
+//     */
+//    public function getPhone(): ?string
+//    {
+//        return (string) $this->phone;
+//    }
+//
+//    /**
+//     * @param string $phone
+//     */
+//    public function setPhone(?string $phone)
+//    {
+//        $utils = new GeneralUtils();
+//        $this->phone = $utils->formatPhoneNumber($phone);
+//    }
 }

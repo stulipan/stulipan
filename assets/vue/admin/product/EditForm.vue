@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div v-if="product.hasVariants" class="modal fade" id="modal--editOptions" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="mt-3">
+        <div v-if="product && product.hasVariants" class="modal fade" id="modal--editOptions" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -17,328 +17,323 @@
                         ></options-form>
                     </div>
                     <div class="modal-footer">
-                        <div class="loadingWrapper loadingWrapper-secondary">
-                            <a href="" class="btn btn-secondary" data-dismiss="modal">Cancel</a>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                        </div>
-                        <div class="loadingWrapper">
-                            <button type="submit" class="JS--btn-submitStatus btn btn-primary">Done</button>
-                            <div class="JS--loadingOverlay d-flex align-items-stretch"></div>
-                        </div>
+                        <a href="" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</a>
+                        <button type="submit" class="JS--btn-submitStatus btn btn-primary">Done</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <form novalidate="true" ref="form" enctype="multipart/form-data">
-            <div v-if="localErrors.length" class="alert alert-danger mb-2">
+            <div v-if="localErrors.length" class="alert alert-danger mb-3">
                 <b>Please correct the following error(s):</b>
                 <ul>
                     <li v-for="error in localErrors">{{ error }}</li>
                 </ul>
             </div>
-            <div v-else-if="errors.length" class="alert alert-danger mb-2">
-                <b>Please correct the following error(s):</b>
-                <ul>
-                    <li v-for="error in errors">{{ error }}</li>
-                </ul>
+            <div v-else-if="errors.length" class="alert alert-danger mb-3">
+                Javítsd a lenti hibákat.
+<!--                <ul>-->
+<!--                    <li v-for="error in errors">{{ error }}</li>-->
+<!--                </ul>-->
             </div>
 
             <fieldset :disabled="formIsPosting" :class="{ disabled: formIsPosting }">
-                <div class="row row-5">
-                    <div class="col-md-8 px-0 px-md-10px">
+                <div class="row">
+                    <div class="col-md-8 correction-no-padding">
 
+                        <!--    NAME___AND___DESCRIPTION  -->
                         <div class="card mb-20px">
-                            <div class="card-wrapper">
-                                <div class="card-body">
-                                    <div id="---NAME ---DESCRIPTION">
-                                        <div class="form-group">
-                                            <label class="col-form-labelX required" for="productName">Termék neve</label>
-                                            <input v-model="product.name" type="text" id="productName" required="required" maxlength="100" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-form-labelX" for="description">Rövid ismertető</label>
-                                            <textarea v-model="product.description" id="description" maxlength="65535" rows="5" class="form-control"></textarea>
-                                        </div>
+                            <div class="card-body">
+                                <div class="form-group" :class="{ 'group-validation': showError('name') }">
+                                    <label class="" for="productName">Termék neve</label>
+                                    <input v-model="product.name" type="text" id="productName" required="required" maxlength="100" class="form-control">
+                                    <span class="invalid-feedback">{{ showError('name') }}</span>
+                                    <div v-if="product.slug" class="form-text">
+                                        Product's slug: <code>{{product.slug}}</code>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="" for="description">Rövid ismertető</label>
+                                    <textarea v-model="product.description" id="description" maxlength="65535" rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
-                        <div class="card mb-20px">
-                            <div class="card-wrapper">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="h5 mb-4">Termékvariációk</div>
-                                        <div v-if="product.hasVariants" class="admin-card-topright">
-                                            <div class="dropdown">
-                                                <a class="dropdown-toggle" href="javascript: void(0);" id="moreOptions" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">More options</a>
-                                                <div class="dropdown-menu dropdown-transition mt-2" aria-labelledby="moreOptions">
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal--editOptions" data-backdrop="static">
-                                                        Edit options
-                                                    </a>
 
-                                                    <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal--reorderOptions" data-backdrop="static">
-                                                        Reorder options
-                                                    </a>
+                        <!--    KEPEK     -->
+                        <div class="card mb-20px">
+                            <div class="card-body">
+                                <div class="h5 mb-0">Képek</div>
+                                <div v-if="product && product.images" class="mt-3">
+                                    <div class="form-row__vertical-row">
+                                        <draggable v-model="product.images" group="people" @sort="onImageSort" @start="drag=true" @end="drag=false" class="form-row vertical-row">
+                                            <div v-for="item in product.images" :key="item.id" class="col-md-3 col-6">
+                                                <div class="vertical-col">
+                                                    <div class="product-image">
+                                                        <img v-if="item.image" :src="item.image.file" class="img-fluid" width="400" height="533" />
+                                                        <img v-else :src="item.thumbnailUrl" class="img-fluid" width="400" height="533" />
+                                                        
+                                                        <div v-if="item.ordering === '0' || item.ordering === 0" class="card-img-overlay d-flex align-items-end p-0">
+                                                            <div class="text-center w-100 overlay--productCover">
+                                                                <i class="fas fa-camera"></i> Borítókép
+                                                            </div>
+                                                        </div>
+                                                        <div class="overlay--removeImage">
+                                                            <a @click.prevent="onRemoveImage(item)" href="#" class="btn btn-sm btn-secondary" title="Töröl">
+                                                                <i class="far fa-trash-alt mr-1"></i> Töröl
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            </div>
+                                            <div slot="footer" class="col-md-3 col-6">
+                                                <div class="vertical-col h-100">
+                                                    <product-image-upload class="h-100 d-flex align-items-center"
+                                                                          @success="onImageUploadSuccess"
+                                                                          @error="onImageUploadError"
+                                                    >
+                                                    </product-image-upload>
+                                                </div>
+                                            </div>
+                                        </draggable>
+
+                                    </div>
+                                </div>
+                                <!--                                :images=productImages-->
+                                <!--                                <product-image-upload class="w-100 mt-3"-->
+                                <!--                                                      @success="onImageUploadSuccess"-->
+                                <!--                                                      @error="onImageUploadError"-->
+                                <!--                                >-->
+                                <!--                                </product-image-upload>-->
+                            </div>
+                        </div>
+                        
+                        <!--    VARIANTS___BLOCK     -->
+                        <div class="card mb-20px">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="h5 mb-0">Termékvariációk</div>
+                                    <div v-if="product && product.hasVariants" class="">
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle" href="javascript: void(0);" id="moreOptions" role="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">More options</a>
+                                            <div class="dropdown-menu dropdown-transition mt-2" aria-labelledby="moreOptions">
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal--editOptions" data-backdrop="static">
+                                                    Edit options
+                                                </a>
+
+                                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#modal--reorderOptions" data-backdrop="static">
+                                                    Reorder options
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="---KIND ---TERMEK_OPTION">
-                                        <!--  If hasVariants checkbox is checked and the Product has variants  -->
-                                        <!--  Lists the variants  -->
-                                        <template v-if="product.hasVariants">
-                                            <div class="form-group rowX">
-                                                <div class="col-sm-12X">
-                                                    <variant-list
+                                </div>
+                                <!--    VARIANTS__EDIT -->
+                                <div class="mt-3">
+                                    <!--  If hasVariants checkbox is checked and the Product has variants  -->
+                                    <!--  Lists the variants  -->
+                                    <template v-if="product && product.hasVariants">
+                                        <div class="form-group">
+                                            <variant-list
+                                                    :variants="product.variants"
+                                                    :options=productOptions
+                                                    :option-items="optionItems"
+                                                    :last-option-item="lastOptionItem"
+                                                    :price="product.price"
+                                                    :isEditable="true"
+                                            ></variant-list>
+                                        </div>
+                                    </template>
+
+                                    <template v-else>
+                                        <template v-if="product">
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" v-model="isVariantsCheckboxOn" id="hasVariants" required="required" class="custom-control-input">
+                                                    <label class="custom-control-label required" for="hasVariants">This product has multiple options, like different sizes or colors</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <!--  If hasVariants checkbox is checked BUT the Product has NO variants  -->
+                                                <!--  Displays the product option form and the variants preview form -->
+                                                <template v-if="isVariantsCheckboxOn">
+                                                    <div class="form-group">
+                                                        <options-form
+                                                                :options=productOptions
+                                                                v-on:addOptionItem=addVariant
+                                                                v-on:removeOptionItem=removeVariant
+                                                        ></options-form>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <variant-list
                                                             :variants="product.variants"
                                                             :options=productOptions
                                                             :option-items="optionItems"
                                                             :last-option-item="lastOptionItem"
                                                             :price="product.price"
-                                                            :isEditable="true"
-                                                    ></variant-list>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <template v-else>
-                                            <div class="form-group row">
-                                                <div class="col-sm-12">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" v-model="isVariantsCheckboxOn" id="hasVariants" name="hasVariants" required="required" class="custom-control-input">
-                                                        <label class="custom-control-label required" for="hasVariants">This product has multiple options, like different sizes or colors</label>
+                                                            :is-editable="false"
+                                                        ></variant-list>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-sm-12">
-                                                    <!--  If hasVariants checkbox is checked BUT the Product has NO variants  -->
-                                                    <!--  Displays the product option form and the variants preview form -->
-                                                    <template v-if="isVariantsCheckboxOn">
-                                                        <div class="form-group">
-                                                            <options-form
-                                                                    :options=productOptions
-                                                                    v-on:addOptionItem=addVariant
-                                                                    v-on:removeOptionItem=removeVariant
-                                                            ></options-form>
-                                                        </div>
-                                                        <div class="form-group rowX">
-                                                            <div class="col-sm-12X">
-                                                                <variant-list
-                                                                    :variants="product.variants"
-                                                                    :options=productOptions
-                                                                    :option-items="optionItems"
-                                                                    :last-option-item="lastOptionItem"
-                                                                    :price="product.price"
-                                                                    :is-editable="false"
-                                                                ></variant-list>
-                                                            </div>
-                                                        </div>
-                                                    </template>
-                                                    <template v-else>
-                                                        <div class="form-group row" id="---termekAr">
-                                                            <div class="col-sm-12">
-                                                                <label class="required" for="price_grossPrice">Termék ár</label>
-                                                                <div class="field-item">
-                                                                    <div class="field-prepend">
-                                                                        <div class="field-addon-prepend w-addon-sm">HUF</div>
-                                                                    </div>
-                                                                    <input v-model="product.price.numericValue" type="number" id="price_grossPrice" required="required" placeholder="0.00" class="form-control pl-addon-sm">
+                                                </template>
+                                                <template v-else>
+                                                        <!--    TERMEK ARA    -->
+                                                        <div class="form-group" :class="{ 'group-validation': showError('price') }"
+                                                        >
+                                                            <label class="required" for="price_grossPrice">Termék ár</label>
+                                                            <div class="field-item">
+                                                                <div class="field-prepend">
+                                                                    <div class="field-addon-prepend w-addon-sm">HUF</div>
                                                                 </div>
+                                                                <input v-model="product.price.numericValue" type="number" id="price_grossPrice" required="required" placeholder="0.00" class="form-control pl-addon-sm">
                                                             </div>
-                                                            <div class="col-sm-12 text-muted mt-2">
+                                                            <span class="invalid-feedback">{{ showError('price') }}</span>
+                                                            <div class="form-text text-muted mt-2">
                                                                 Ez lesz a Standard méret ára, amennyiben 3 meretű termékről van szó.
                                                             </div>
                                                         </div>
                                                     </template>
-                                                </div>
                                             </div>
                                         </template>
-
-                                    </div>
+                                    </template>
                                 </div>
                             </div>
                         </div>
-
+                        
+                        <!-- ___SKU___STOCK -->
                         <div class="card mb-20px">
-                            <div class="card-wrapper">
-                                <div class="card-body">
-                                    <div class="h5 admin-card-title mb-4">Képek</div>
-                                    <div v-if="product.images" class="" id="---imagePreview">
-
-                                        <div class="row">
-                                            <div class="col-sm-12 mr-auto">
-
-                                                <div class="row">
-                                                    <div v-for="item in product.images" class="col-md-4 col-6">
-                                                        <div class="product">
-                                                            <div class="product-image">
-                                                                <div :style="{ backgroundImage: 'url(' + item.imageUrl + ')' }" style="background: center center no-repeat;background-size: cover; height: 200px;" class="w-100">
-
-                                                                </div>
-                                                                <div v-if="item.ordering === '0' || item.ordering === 0" class="card-img-overlay d-flex align-items-end p-0">
-                                                                    <div class="text-center w-100 overlay--productCover">
-                                                                        <i class="fas fa-camera"></i> Borítókép
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="py-2 text-center">
-                                                                <p class="productList--name mb-1">
-                                                                    <a @click.prevent="onRemoveImage(item)" href="#" class="btn btn-sm btn-secondary" title="Töröl">
-                                                                        <i class="far fa-trash-alt"></i> Töröl
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                            <div class="card-body">
+                                    <div class="h5 mb-0">Készlet</div>
+                                    <div class="form-group row mt-3" :class="{ 'group-validation': showError('sku') }">
+                                        <div class="col-sm-12">
+                                            <label class="required" for="sku">SKU (Stock Keeping Unit)</label>
+                                            <input v-model="product.sku" type="text" id="sku" required="required" placeholder="Pl: DF100172" class="form-control">
+                                            <span class="invalid-feedback">{{ showError('sku') }}</span>
                                         </div>
-
                                     </div>
-
-                                    <div class="" id="---KEP_FELTOLTES">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <image-upload
-                                                            :images=product.images
-                                                            @error="onImageUploadError"
-                                                    >
-                                                    </image-upload>
-                                                </div>
-                                            </div>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-20px">
-                            <div class="card-wrapper">
-                                <div class="card-body">
-                                    <div class="h5 admin-card-title mb-4">Készlet</div>
-                                    <div id="---SKU ---STOCK">
-                                        <div class="form-group row">
-                                            <div class="col-sm-12">
-                                                <label class="required" for="sku">SKU (Stock Keeping Unit)</label>
-                                                <input v-model="product.sku" type="text" id="sku" required="required" placeholder="Pl: DF100172" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-12">
-                                                <label class="required" for="stock">Készlet a raktáron</label>
-                                                <input v-model="product.stock" type="number" id="stock" required="required" placeholder="" class="form-control">
-                                                <!--<div class="input-group-append">-->
-                                                <!--<span class="input-group-text">db</span>-->
-                                                <!--</div>-->
-                                            </div>
+                                    <div class="form-group row" :class="{ 'group-validation': showError('stock') }">
+                                        <div class="col-sm-12">
+                                            <label class="required" for="stock">Készlet a raktáron</label>
+                                            <input v-model="product.stock" type="number" id="stock" required="required" placeholder="" class="form-control">
+                                            <span class="invalid-feedback">{{ showError('stock') }}</span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
-                    <div name="__SIDEBAR" class="col-md-4 px-0 px-md-10px orderDetail--sidebarX">
+                    <!--    __SIDEBAR   -->
+                    <div class="col-md-4 correction-no-padding">
                         <div class="card mb-20px">
-                            <div class="">
-                                <div class="card-body">
-                                    <div class="h5">Kategorizálás</div>
-<!--                                    <div id="-&#45;&#45;STATUS -&#45;&#45;CATEGORIES -&#45;&#45;BADGES">-->
-                                        <div class="form-group row">
-                                            <div class="col-sm-12 order-1">
-                                                <legend class="col-form-label required">Állapot</legend>
+                            <div class="card-body">
+                                <div class="h5 mb-0">Kategorizálás</div>
+                                <div class="form-group mt-3" :class="{ 'group-validation': showError('status') }">
+                                    <legend class="col-form-label">Állapot</legend>
+                                    <ul class="list-group list-group-flush list-group--status">
+                                        <li v-for="status in statuses" :key="status.id" class="list-group-item">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" v-model="productStatus.id" :value="status.id" :id="`status_${status.id}`" required="required" class="custom-control-input">
+                                                <label class="custom-control-label" :for="`status_${status.id}`">
+                                                    {{ status.name }}
+                                                </label>
                                             </div>
-                                            <div class="col-sm-12 order-3 order-md-2">
-<!--                                                <div class="form-row">-->
-                                                <ul class="list-group list-group-flush list-group--status">
-                                                    <template v-for="status in statuses">
-<!--                                                        <div class="col-12 ">-->
-
-                                                            <li class="list-group-item">
-                                                                <div class="custom-control custom-radio">
-                                                                    <input type="radio" v-model="product.status.id" :value="status.id" :id="`status_${status.id}`" required="required" class="custom-control-input">
-                                                                    <label class="custom-control-label" :for="`status_${status.id}`">
-                                                                        {{ status.name }}
-                                                                    </label>
-                                                                </div>
-                                                            </li>
-
-<!--                                                            <div class="vp vp-with-checkbox align-top mr-2 mb-2" :class="product.status.id == status.id ? 'vp-checked' : ''">-->
-<!--                                                                <input type="radio" v-model="product.status.id" :value="status.id" :id="`status_${status.id}`" required="required">-->
-<!--                                                                <label class="vp-figure required justify-content-start" :for="`status_${status.id}`">-->
-<!--                                                                <span class="vp-content">-->
-<!--                                                                    <span class="tile tile-lg">-->
-<!--                                                                        <span>-->
-<!--                                                                            <span class="text-nowrap"><span v-html="status.icon"></span>{{ status.name }}</span>-->
-<!--                                                                        </span>-->
-<!--                                                                    </span>-->
-<!--                                                                </span>-->
-<!--                                                                </label>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
-                                                    </template>
-                                                </ul>
-                                                    <div class="col-sm-12X text-muted">
-                                                        <em>Kifutott</em> állapotban a termék továbbra is látszik a weboldalon, csupán nem lesz neki <em>Kosárba rakom</em> gomb.
-                                                    </div>
-<!--                                                </div>-->
-                                            </div>
-                                        </div>
+                                        </li>
+                                    </ul>
+                                    <span class="invalid-feedback">{{ showError('status') }}</span>
+                                    <div class="form-text">
+                                        <em>Kifutott</em> állapotban a termék továbbra is látszik a weboldalon, csupán nem lesz neki <em>Kosárba rakom</em> gomb.
+                                    </div>
                                 </div>
-                                <div class="card-footer">
-
-                                        <div class="form-group row">
-                                            <div class="col-sm-12">
-                                                <label class="required" for="category">Kategóriák</label>
-                                                <multiselect-bellow
-                                                        v-model="product.categories"
-                                                        :options="categories"
-                                                        :multiple="true"
-                                                        :close-on-select="false"
-                                                        :custom-label="showCategoryName"
-                                                        placeholder="Válassz..."
-                                                        track-by="id"
-                                                        :showLabels="false"
-                                                        myClass="detached"
-                                                        open-direction="bottom"
-                                                        no-result-label="Nincs ilyen opció..."
-                                                        :max-height="150"
-                                                >
-                                                </multiselect-bellow>
-                                            </div>
-                                        </div>
-
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group" :class="{ 'group-validation': showError('categories') }">
+                                    <label class="required" for="badge">Értékesítési csatorna</label>
+                                    <multiselect-bellow
+                                            v-model="product.salesChannels"
+                                            :options="salesChannels"
+                                            :multiple="true"
+                                            :close-on-select="false"
+                                            :custom-label="showSalesChannelName"
+                                            placeholder="Válassz..."
+                                            track-by="id"
+                                            :showLabels="false"
+                                            myClass="detached"
+                                            open-direction="bottom"
+                                            no-result-label="Nincs ilyen opció..."
+                                            :max-height="150"
+                                    >
+                                    </multiselect-bellow>
                                 </div>
-                                <div class="card-footer">
-
-                                        <div class="form-group row">
-                                            <div class="col-sm-12">
-                                                <label class="required" for="badge">Matricák</label>
-                                                <multiselect-bellow
-                                                        v-model="product.badges"
-                                                        :options="badges"
-                                                        :multiple="true"
-                                                        :close-on-select="false"
-                                                        :custom-label="showBadgeName"
-                                                        placeholder="Válassz..."
-                                                        track-by="id"
-                                                        :showLabels="false"
-                                                        myClass="detached"
-                                                        open-direction="bottom"
-                                                        no-result-label="Nincs ilyen opció..."
-                                                        :max-height="150"
-                                                >
-                                                </multiselect-bellow>
-                                            </div>
-                                        </div>
-<!--                                    </div>-->
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group" :class="{ 'group-validation': showError('categories') }">
+                                    <label class="">Kategóriák</label>
+                                    <multiselect-bellow
+                                            v-model="product.categories"
+                                            :options="categories"
+                                            :multiple="true"
+                                            :close-on-select="false"
+                                            :custom-label="showCategoryName"
+                                            placeholder="Válassz..."
+                                            track-by="id"
+                                            :showLabels="false"
+                                            myClass="detached"
+                                            open-direction="bottom"
+                                            no-result-label="Nincs ilyen opció..."
+                                            :max-height="150"
+                                    >
+                                    </multiselect-bellow>
+                                    <span class="invalid-feedback">{{ showError('categories') }}</span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group" :class="{ 'group-validation': showError('kind') }">
+                                    <label class="">Termék típus</label>
+                                    <multiselect
+                                            v-model="productKind"
+                                            placeholder="Válassz..."
+                                            label="name"
+                                            
+                                            track-by="id"
+                                            :options="productKinds"
+                                            :multiple="false"
+                                            :close-on-select="true"
+                                            :show-labels="false"
+                                            :show-no-results="false"
+                                            :class="[ {'detached': true}, {'mb-2': true}]"
+                                            open-direction="bottom"
+                                            :max-height="150"
+                                            :allow-empty="false"
+                                    >
+<!--                                        <span slot="noResult">Nincs ilyen opció...</span>-->
+                                        <!--    A showLabels=false miatt kell ez, valamiert ez esetben nem mutatja a placeholdert.     -->
+<!--                                        <template slot="singleLabel" slot-scope="props">Válassz...</template>-->
+                                    </multiselect>
+                                    <span class="invalid-feedback">{{ showError('kind') }}</span>
+                                    
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group">
+                                    <label class="required" for="badge">Matricák</label>
+                                    <multiselect-bellow
+                                            v-model="product.badges"
+                                            :options="badges"
+                                            :multiple="true"
+                                            :close-on-select="false"
+                                            :custom-label="showBadgeName"
+                                            placeholder="Válassz..."
+                                            track-by="id"
+                                            :showLabels="false"
+                                            myClass="detached"
+                                            open-direction="bottom"
+                                            no-result-label="Nincs ilyen opció..."
+                                            :max-height="150"
+                                    >
+                                    </multiselect-bellow>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <save-toolbar
                         :entityToWatch="product"
                         :formIsPosting="formIsPosting"
@@ -353,13 +348,17 @@
 
 <script>
     import MultiselectBellow from "./../_components/MultiselectBellow"
+    import Multiselect from "vue-multiselect";
     import OptionsForm from "./OptionsForm";
     import SaveToolbar from './../_components/save-toolbar/SaveToolbar.vue'
-    import ImageUpload from "./../_components/ImageUpload";
+    import ProductImageUpload from "./../_components/ProductImageUpload";
     import VariantList from "./VariantList";
+    import Notify from "../../../js/alerts/notify";
+    import draggable from 'vuedraggable';
 
     const initialData = () => {
         return {
+        
         }
     };
     
@@ -369,7 +368,9 @@
             VariantList,
             SaveToolbar,
             MultiselectBellow,
-            ImageUpload,
+            Multiselect,
+            ProductImageUpload,
+            draggable,
         },
         props: [
             'formIsPosting',
@@ -377,10 +378,12 @@
             'categories',
             'statuses',
             'badges',
+            'salesChannels',
+            'productKinds',
             'errors',
             'resetForm',
         ],
-        data: function () {
+        data () {
             return {
                 config: {
                     btns: [
@@ -401,13 +404,19 @@
                     removeformatPasted: true,
                 },
 
+                productStatus: {
+                    id: null,
+                },
+                productKind: {
+                    id: null,
+                },
+                productImages: [],
                 localErrors: [],
 
                 isVariantsCheckboxOn: this.product.hasVariants,
                 productOptions: [],
                 variants: [],
                 variantOptions: [],
-
                 optionItems: [],
                 lastOptionItem: {},
             }
@@ -435,12 +444,29 @@
             showBadgeName(obj) {
                 return `${obj.name}`
             },
+            showSalesChannelName(obj) {
+                return `${obj.name}`
+            },
+            showProductKindName(obj) {
+                return `${obj.name}`
+            },
+            showError(field) {
+                const index = this.errors.findIndex( (el) => el.propertyName === field );
+                if (index !== -1) {
+                    console.log(index);
+                    console.log(this.errors[index].message);
+                    return this.errors[index].message;
+                }
+                return null;
+            },
             onSubmit(e) {
                 // Array.prototype.push.apply(this.product.variants, this.variants);
                 // this.product.variants.splice(0, this.product.variants.length, ...this.variants);
 
                 // this.removeEmptyOptions();
                 this.product.options.splice(0, this.product.options.length, ...this.productOptions);
+                this.product.status = this.productStatus;
+                this.product.kind = this.productKind;
 //                if (this.validatedForm(e)) {
                 this.$emit('submit', this.product);
 //                }
@@ -449,17 +475,27 @@
                 this.$emit('click')
             },
             onRemoveImage(image) {
-                const index = this.product.images.findIndex((img) => img.id === image.id);
+                const index = this.product.images.findIndex((img) => img.ordering === image.ordering);
                 // if exists the image
                 if (index !== -1) {
                     this.product.images.splice(index, 1);
-                    for (let i in this.product.images) {
-                        this.product.images[i].ordering = i;
-                    }
+                    this.updateOrdering(this.product.images);
                 }
             },
-            onImageUploadError(error) {
-                this.localErrors.push(error);
+            onImageUploadSuccess(imageEntity) {
+                let productImage = {
+                    id: null,
+                    imageUrl: imageEntity.file,  // imageEntity.file holds only the relative path to the image
+                    thumbnailUrl: imageEntity.file,
+                    ordering: this.product.images.length,
+                    image: imageEntity,  // with this we pass on the imageEntity too
+                }
+                this.product.images.push(productImage);
+            },
+            onImageUploadError(errors) {
+                errors.forEach(function (error, index) {
+                    this.localErrors.push(error);
+                }.bind(this));
             },
             validatedForm(e) {
                 this.localErrors = [];
@@ -479,10 +515,37 @@
                 let el = this.$refs.form;
                 el.scrollIntoView();
             },
+            updateOrdering(images) {
+                images.forEach(function(el, index, theArray) {
+                    theArray[index].ordering = index;
+                }, images);
+                images.sort(function(a, b) {
+                    return a.ordering - b.ordering;
+                });
+            },
+            onImageSort(e) {
+                this.updateOrdering(this.product.images);
+                // e.item.ordering = e.newIndex;
+            },
         },
         created () {
             // Array.prototype.push.apply(this.variants, this.product.variants);
             Array.prototype.push.apply(this.productOptions, this.product.options);
+
+            if (this.product.status !== null) {
+              this.productStatus = this.product.status;
+            }
+            if (this.product.kind !== null) {
+                this.productKind = this.product.kind;
+            }
+            if (this.product.images.length) {
+                this.productImages = this.product.images;
+            } else {
+                this.productImages = {
+                    id: null,
+                }
+            }
+          
             // this.extractOptionListFromVariants();
         },
         mounted() {

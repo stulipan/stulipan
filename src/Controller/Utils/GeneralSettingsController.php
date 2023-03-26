@@ -61,7 +61,7 @@ class GeneralSettingsController extends AbstractController
     }
     
     /**
-     * @Route("/settings/configuration", name="settings-configuration")
+     * @Route("/settings/general", name="settings-general")
      *
      * Param $storeSettingsDirectory comes from services.yaml
      * Param $generalSettingsFile comes from services.yaml
@@ -274,14 +274,12 @@ class GeneralSettingsController extends AbstractController
             file_put_contents($locatedFile[0], $newSettings);
         
             $this->addFlash('success', 'Beállítások sikeresen elmentve!');
-            return $this->redirectToRoute('settings-configuration');
+            return $this->redirectToRoute('settings-general');
         }
         
-        $title = 'Beállítások';
         return $this->render('admin/settings/general.html.twig', [
             'form' => $form->createView(),
             'parameters' => $parameters,
-            'title' => $title,
         ]);
     }
 

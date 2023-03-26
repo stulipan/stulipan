@@ -61,8 +61,15 @@ class SenderType extends AbstractType
             ->add('address',AddressType::class, [
                 'label' => false,
                 'addressType' => Address::BILLING_ADDRESS,  // this option is defined in AddressType, so that it can receive a value
-            ])
-            ->add('customer',HiddenType::class, [
+            ]);
+            $builder->add('phone',TelType::class,[
+                'required' => false,
+                'constraints' => [
+                    new PhoneNumber(['regionCode' => 'HU', 'message' => 'checkout.sender.invalid-phone']),
+                ],
+                'attr' => ['autocomplete' => 'tel']
+            ]);
+            $builder->add('customer',HiddenType::class, [
                 'mapped' => false,
             ])
             ->getForm();

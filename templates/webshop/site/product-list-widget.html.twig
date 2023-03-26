@@ -1,41 +1,53 @@
-					<div class="row row-narrow mt-4">
-                        {% if products is defined %}
-                        {% for product in products %}
+					<div class="row mx-n5px">
+                        {% set canBeRendered = false %}
+                        {% if previewMode is defined and previewMode is same as(true) %}
+                            {% set canBeRendered = true %}
+                        {% endif %}
+                        {% if products is defined and products is not empty %}
+                            {% for product in products %}
 
-                            {% if product.isEnabled or product.isUnavailable %}
-                            <div class="col-lg-3 col-sm-4 col-6">
-                                <div class="product">
-                                    <div class="product-image-wrapper">
-                                        <div class="product-image">
-                                            {% set bestseller = false %}
-                                            {% if product.isUnavailable() %}
-                                                <div class="ribbon ribbon-dark">MIND ELKELT</div>
-                                            {% elseif product.hasBadges %}
-                                                {% for badge in product.badges %}
-                                                    {% if badge.css is defined and badge.css != 'bestseller' %}
-                                                        <div class="ribbon ribbon-{{ badge.css }}">{{ badge }}</div>
-                                                    {% else %}
-                                                        {% set bestseller = true %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% endif %}
-                                            <img src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_image') }}" alt="{{ product.name }}" class="img-fluid">
-                                            {% if bestseller %}
-                                                <div class="ribbon ribbon-bottom">
-                                                    <i class="fas fa-trophy"></i> Bestseller
-                                                </div>
-                                            {% endif %}
+                                {% if product.isEnabled or product.isUnavailable or canBeRendered is same as(true) %}
+                                <div class="col-lg-4 col-md-4 col-6 px-5px">
+                                    <div class="product">
+                                        <div class="product-media-main">
+                                            <div class="product-media-main-inside">
+                                                {% set bestseller = false %}
+                                                {% if product.isOnSale %}
+                                                    <div class="ribbon ribbon-danger">{{ product.discountPercentage }}</div>
+                                                {% endif %}
+                                                {% if product.isUnavailable() %}
+                                                    <div class="ribbon ribbon-dark">{{ 'product.sold-out'|trans }}</div>
+                                                {% elseif product.hasBadges %}
+                                                    {% for badge in product.badges %}
+                                                        {% if badge.css is defined and badge.css != 'bestseller' %}
+                                                            <div class="ribbon ribbon-{{ badge.css }}">{{ badge.name }}</div>
+                                                        {% else %}
+                                                            {% set bestseller = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                <img src="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('product_medium') }}" alt="{{ product.name }}" class="img-fluid" width="400" height="533">
+                                                {% if bestseller %}
+                                                    <div class="ribbon ribbon-bottom">
+                                                        <svg class="icon icon-sm"><use xlink:href="#trophy-fill"></use></svg>{{ 'product.bestseller'|trans }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                         <a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="tile-link"></a>
-                                    </div>
-                                    <div class="product-title-wrapper">
-                                        <p class="productList--name"><a href="{{ path('site-product-show', {'slug': product.slug}) }}" class="text-link-product">{{ product.name }}</a></p>
-                                        <div class="productList--price-gross mt-1">{{ product.price.grossPrice|money }}</div>
+                                        <div class="product-title">
+                                            <p class="productList--name">{{ product.name }}</p>
+                                            {% include 'webshop/site/product-list-price-snippet.html.twig' %}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            {% endif %}
+                                {% endif %}
 
-                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if products is defined and products is empty %}
+                            <div class="col-lg-12 h-100 text-center p-4 mb-6">
+                                <div class="lead"><em>{{ 'collection.no-products'|trans }}</em></div>
+                            </div>
                         {% endif %}
 					</div>

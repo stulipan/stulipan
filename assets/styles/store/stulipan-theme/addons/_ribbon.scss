@@ -1,0 +1,89 @@
+// Ribbon
+// Up to 4 ribbons can be displayed on top
+
+
+$zindex-ribbon:                   3 !default;  // must be bellow tile-link=30;
+$ribbon-padding-y:                4px !default;
+$ribbon-padding-x:                .75rem !default;
+
+$ribbon-color:                    $white !default;
+$ribbon-size:                     $font-size-sm !default;
+$ribbon-line-height:              $line-height-sm * 1rem !default;
+$ribbon-height:                   calc(#{$ribbon-line-height} + #{$ribbon-padding-y} * 2) !default;
+$ribbon-offset-y:                 0px !default; //7px !default;
+
+$ribbon-line-height-mobile:       1rem !default;
+$ribbon-height-mobile:            calc(#{$ribbon-line-height-mobile} + #{$ribbon-padding-y} * 2) !default;
+$ribbon-offset-y-mobile:          0px !default; //4px !default;
+
+.ribbon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: $zindex-ribbon;
+  display: inline-block;
+  @include font-size($ribbon-size);
+  line-height: $ribbon-line-height;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: .075rem;
+  padding: calc(#{$ribbon-padding-y} * 1.2) $ribbon-padding-x calc(#{$ribbon-padding-y} * .8) $ribbon-padding-x;
+  color: $ribbon-color;
+  text-align: center;
+  @include border-radius($border-radius);
+  height: $ribbon-height;
+
+  $ribbon-bottom-color: color-yiq($yellow-lighten) !default;
+
+  &.ribbon-bottom {
+    --r-bottom-bg: var(--yellow-lighten);
+    --r-bottom-color: #{$ribbon-bottom-color};
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    //background-color: #F7E9D8;
+    color: var(--r-bottom-color);
+    background-color: var(--r-bottom-bg);
+    opacity: .9;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+.ribbon+.ribbon {
+  top: calc(#{$ribbon-height} + #{$ribbon-offset-y});
+}
+.ribbon+.ribbon+.ribbon {
+  top: calc(2 * (#{$ribbon-height} + #{$ribbon-offset-y}));
+}
+.ribbon+.ribbon+.ribbon+.ribbon {
+  top: calc(3 * (#{$ribbon-height} + #{$ribbon-offset-y}));
+}
+
+@mixin ribbon-variant($background, $color) {
+  color: $color;
+  background-color: $background;
+}
+
+@each $color, $value in $theme-colors {
+  .ribbon.ribbon-#{$color} {
+    @include ribbon-variant(map-get($theme-colors,$color), color-yiq(map-get($theme-colors,$color)));
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .ribbon {
+    font-size: 80%;
+    line-height: $ribbon-line-height-mobile;
+    height: $ribbon-height-mobile;
+  }
+  .ribbon+.ribbon {
+    top: calc(#{$ribbon-height-mobile} + #{$ribbon-offset-y-mobile});
+  }
+  .ribbon+.ribbon+.ribbon {
+    top: calc(2 * (#{$ribbon-height-mobile} + #{$ribbon-offset-y-mobile}));
+  }
+  .ribbon+.ribbon+.ribbon+.ribbon {
+    top: calc(3 * (#{$ribbon-height-mobile} + #{$ribbon-offset-y-mobile}));
+  }
+}

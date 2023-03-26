@@ -27,7 +27,9 @@ class SetDefaultVatRateForNewPrice
     {
         $entity = $args->getEntity();
         if ($entity instanceof Price) {
-            $vatRate = $this->em->find(VatRate::class, VatRate::DEFAULT_VAT_RATE);
+            $em = $args->getObjectManager();
+//            $vatRate = $this->em->find(VatRate::class, VatRate::DEFAULT_VAT_RATE);
+            $vatRate = $em->find(VatRate::class, VatRate::DEFAULT_VAT_RATE);
             $entity->setVatRate($vatRate);
         }
     }

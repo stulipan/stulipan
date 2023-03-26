@@ -1,0 +1,73 @@
+// SweetAlert2
+// github.com/sweetalert2/sweetalert2
+
+// Edited by Stulipan
+// Edited version sweetalert2@10.15.7:
+
+@import 'scss/theming';
+@import 'scss/polyfills';
+@import 'scss/animations';
+
+body {
+  @include sweetalert2-body();
+  @include sweetalert2-toasts-body();
+}
+
+
+// Added by Stulipan
+
+.swal2-popup.swal2-toast {
+  &.--alert-success {
+    background-color: $success !important;
+
+    .swal2-content,
+    .swal2-title,
+    .swal2-close {
+      color: color-yiq($success) !important;
+    }
+  }
+
+  &.--alert-danger {
+    background-color: $danger !important;
+
+    .swal2-content,
+    .swal2-title,
+    .swal2-close {
+      color: color-yiq($danger) !important;
+    }
+  }
+
+  &.--alert-warning {
+    background-color: $warning !important;
+
+    .swal2-content,
+    .swal2-title,
+    .swal2-close {
+      color: color-yiq($warning) !important;
+    }
+  }
+
+  &.--alert-info {
+    background-color: $dark !important;
+
+    .swal2-content,
+    .swal2-title,
+    .swal2-close {
+      color: color-yiq($dark) !important;
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .swal2-container {
+    padding: 0 0 0.625em 0;
+    width: 100%;
+  }
+  body.swal2-toast-column .swal2-toast {
+    min-height: $navbar-stulipan-height;
+  }
+  .swal2-popup.swal2-toast {
+    overflow-y: auto;
+  }
+}
+

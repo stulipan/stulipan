@@ -20,6 +20,9 @@ use App\Serializer\ProductOptionValueDenormalizer;
 use App\Serializer\ProductSelectedOptionDenormalizer;
 use App\Serializer\ProductStatusDenormalizer;
 use App\Serializer\ProductVariantDenormalizer;
+use App\Serializer\SalesChannelDenormalizer;
+use App\Services\FileUploader;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,11 +38,15 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ProductApiController extends BaseController
 {
     private $targetDirectory;
+    private $fileUploader;
+    private $cacheManager;
     
-    public function __construct(string $targetDirectory)
+    public function __construct(string $targetDirectory, FileUploader $fileUploader, CacheManager $cacheManager)
     {
         parent::__construct();
         $this->targetDirectory = $targetDirectory;
+        $this->fileUploader = $fileUploader;
+        $this->cacheManager = $cacheManager;
     }
     
     //////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +62,7 @@ class ProductApiController extends BaseController
     {
         $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
         if ($products) {
-            return $this->jsonObjNormalized(['products' => $products],200, ['groups' => 'productList']);
+            return $this->createJsonResponse(['products' => $products],200, ['groups' => 'productList']);
         } else {
             $errors['message'] = sprintf('Nem talált termékeket.');
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -89,7 +96,7 @@ class ProductApiController extends BaseController
 //            return new JsonResponse($json, 200, [], true);
 
             $data->setBackToList($this->generateUrl('product-list'));
-            return $this->jsonObjNormalized(['products' => [$data]], 200, ['groups' => 'productView']);
+            return $this->createJsonResponse(['products' => [$data]], 200, ['groups' => 'productView']);
             
         } else {
             $errors['message'] = sprintf('Nem talált ilyen terméket: id=%s', $id);
@@ -128,6 +135,7 @@ class ProductApiController extends BaseController
             new ProductKindDenormalizer($em),
             new ProductStatusDenormalizer($em),
             new ProductBadgeDenormalizer($em),
+            new SalesChannelDenormalizer($em),
             new ProductImageDenormalizer($em),
             new ImageEntityDenormalizer($em),
             new PriceDenormalizer($em),
@@ -144,13 +152,22 @@ class ProductApiController extends BaseController
         if (!empty($errors)) {
             return $this->jsonNormalized(['errors' => $errors], 422);
         }
-//        dd($product);
-    
+
         $em->persist($product);
         $em->flush();
+
+        foreach ($product->getImages() as $image) {
+            $publicPath = $this->fileUploader->getPublicPath($image->getImagePath());
+            $image->setImageUrl(
+                $this->cacheManager->getBrowserPath($publicPath, 'product_large')
+            );
+            $image->setThumbnailUrl(
+                $this->cacheManager->getBrowserPath($publicPath, 'product_medium')
+            );
+        }
     
         //CELSZERUBB csak a termeket visszaadni, es nem reloadolni a teljes oldalt
-        return $this->jsonObjNormalized(['products' => [$product]], 200, ['groups' => 'productView']);
+        return $this->createJsonResponse(['products' => [$product]], 200, ['groups' => 'productView']);
         
 //        // LEHET IGY, hogy visszaadja a termeket es legeneralja (reloadolja) a teljes oldalt:
 //        $response = $this->jsonNormalized(['products' => [$product]]);
@@ -176,6 +193,7 @@ class ProductApiController extends BaseController
             new ProductKindDenormalizer($em),
             new ProductStatusDenormalizer($em),
             new ProductBadgeDenormalizer($em),
+            new SalesChannelDenormalizer($em),
             new PriceDenormalizer($em),
             new ProductImageDenormalizer($em),
             new ImageEntityDenormalizer($em),
@@ -192,22 +210,24 @@ class ProductApiController extends BaseController
 //            'skip_null_values' => true,
         ]);
 
-//        $variants = $serializer->denormalize()
-//        dd($product->findOptionBy(['name'=> 'Color'])->findValueBy(['value' => 'Red']));
-//        dd($product->findOptionBy(['name'=> 'Color']));
-
         $errors = $this->getValidationErrors($product, $validator);
         if (!empty($errors)) {
             return $this->jsonNormalized(['errors' => $errors], 422);
         }
 
-
-//        foreach ($product->getVariants() as $variant) {
-//            $em->persist($variant);
-//        }
         $em->persist($product);
         $em->flush();
-        return $this->jsonObjNormalized(['products' => [$product]],200, ['groups' => 'productView']);
+
+        foreach ($product->getImages() as $image) {
+            $publicPath = $this->fileUploader->getPublicPath($image->getImagePath());
+            $image->setImageUrl(
+                $this->cacheManager->getBrowserPath($publicPath, 'product_large')
+            );
+            $image->setThumbnailUrl(
+                $this->cacheManager->getBrowserPath($publicPath, 'product_medium')
+            );
+        }
+        return $this->createJsonResponse(['products' => [$product]],200, ['groups' => 'productView']);
     }
     
     /**
@@ -226,7 +246,7 @@ class ProductApiController extends BaseController
         $model->productName = $product->getProductName();
         $model->sku = $product->getSku();
 
-        $model->setPrice($product->getPrice()->getGrossPrice());
+        $model->setPrice($product->getSellingPrice());
         $model->setStatus($product->getStatus()->getName());
         $model->setImage('/uploads/images/termekek/'.$product->getImage());
         $model->setStock($product->getStock());

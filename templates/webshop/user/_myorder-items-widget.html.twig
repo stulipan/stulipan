@@ -1,0 +1,27 @@
+<div class="">
+    <h5 class="checkout-block-title">{{ 'account.order.products'|trans }}</h5>
+</div>
+
+<div id="products_in_basket" class="mt-3">
+    <div class="">
+        <div class="row d-flex align-items-center">
+            <div class="col-12">
+                <div class="cart-body">
+                    {% for item in order.items %}
+                        {% include 'webshop/user/_myorder-item-single-widget.html.twig' %}
+                    {% endfor %}
+
+                    {% if checkoutSettings.get('cart.greetings-card') %}
+                    <div class="cart-item">
+                        <div class="row d-flex align-items-center text-center">
+                            <div class="col-12">
+                                {% include 'webshop/cart/_cart-message-widget.html.twig' with {'message': order.message, 'messageAuthor':  order.messageAuthor} %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

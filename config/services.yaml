@@ -9,9 +9,11 @@ parameters:
     supported_locales:
       hu_HU: hu
       en_US: en
+      en_GB: en
     images_directory: '%kernel.project_dir%/public/uploads/images'
     product_images_directory: '%kernel.project_dir%/public/uploads/images/termekek'
     category_images_directory: '%kernel.project_dir%/public/uploads/images/categories'
+    export_directory: '%kernel.project_dir%/export'
 
     default_vat_rate: 1  # id=1 a VatRate db tablaban   #nincs hasznalva!!
 
@@ -23,11 +25,13 @@ services:
 
         bind:
             $targetDirectory: '%images_directory%'    # used in Services\FileUploader.php
+            $exportDirectory: '%export_directory%'
             $imagePath: '%images_directory%'          # used in Form\ImageType.php
 #            $default_vat_rate: 1
             $locales: '%app_locales%'
             $supportedLocales: '%supported_locales%'
             $defaultLocale: '%locale%'
+            $defaultContentLocale: '%locale%'
             $storeSettingsDirectory: '%kernel.project_dir%/src/Resources/StoreSettings'
             $generalSettingsFile: 'general.yaml'
             $checkoutSettingsFile: 'checkout.yaml'
@@ -65,6 +69,31 @@ services:
     App\Event\SetOrderNumber:
         tags:
             - { name: doctrine.event_listener, event: postPersist }
+    App\Event\SetSlugProduct:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\Product\Product' }
+            - { name: doctrine.orm.entity_listener, event: postPersist, entity: 'App\Entity\Product\Product' }
+            - { name: doctrine.orm.entity_listener, event: postLoad, entity: 'App\Entity\Product\Product' }
+    App\Event\SetSlugCmsPage:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\CmsPage' }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\CmsPage' }
+    App\Event\SetSlugCmsNavigation:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\CmsNavigation' }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\CmsNavigation' }
+    App\Event\SetSlugEmailTemplate:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\StoreEmailTemplate' }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\StoreEmailTemplate' }
+    App\Event\SetSlugBlog:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\Blog' }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\Blog' }
+    App\Event\SetSlugBlogArticle:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist, entity: 'App\Entity\BlogArticle' }
+            - { name: doctrine.orm.entity_listener, event: preUpdate, entity: 'App\Entity\BlogArticle' }
     App\Event\TimestampableModel:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
@@ -73,6 +102,12 @@ services:
         tags:
             - { name: doctrine.event_listener, event: postLoad }
             - { name: doctrine.event_listener, event: postUpdate }
+    App\Event\OrderSetPaymentStatus:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postLoad, entity: 'App\Entity\Order' }
+    App\Event\HostSetLocale:
+        tags:
+            - { name: doctrine.event_listener, event: postLoad }
     App\Event\SetDefaultVatRateForNewPrice:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
@@ -88,6 +123,9 @@ services:
     App\Entity\Model\DeliveryDate:
         public: true
     App\Entity\Model\HiddenDeliveryDate:
+        public: true
+
+    App\Entity\StorePolicy:
         public: true
 
     # used in security.yaml in the main firewall's logout

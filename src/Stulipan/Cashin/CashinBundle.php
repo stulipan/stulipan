@@ -6,7 +6,7 @@ use App\Entity\Order;
 use App\Entity\PaymentMethod;
 use App\Entity\Transaction;
 use App\Stulipan\Cashin\Model\Enumerations\CashinEnvironment;
-use App\Stulipan\Cashin\Model\PaymentModel;
+use App\Stulipan\Cashin\Model\CashinPaymentModel;
 use App\Stulipan\GatewayCib\GatewayCibBundle;
 use App\Stulipan\GatewayCib\Model\Enumerations\CibEnvironment;
 use App\Stulipan\GatewayCib\Model\PaymentRequest;
@@ -24,6 +24,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use UILocale;
 
+/**
+ * NINCS HASNALATBAN!!!!
+ */
 class CashinBundle extends Bundle
 {
     public const GATEWAY_BARION = 'barion';
@@ -84,7 +87,7 @@ class CashinBundle extends Bundle
     
     public function createPayment(string $gateway, Order $order)
     {
-        $payment = new PaymentModel();
+        $payment = new CashinPaymentModel();
         
         if ($order->getPaymentMethod()->getShortcode() === self::GATEWAY_BARION) {
             $barionPayment = $this->createBarionPayment($order);
@@ -112,7 +115,7 @@ class CashinBundle extends Bundle
         $trans = new PaymentTransactionModel();
         $trans->POSTransactionId = $order->getNumber(); //$transaction->getId(); //"TRANS-01";
         $trans->Payee = 'payment@hivjesnyerj.hu';  /////// WEBSHOP BARION FIOK EMAIL CIM
-        $trans->Total = $order->getSummary()->getTotalAmountToPay();
+        $trans->Total = $order->getTotalAmountToPay();
         $trans->Currency = Currency::HUF;
         $trans->Comment = "Test transaction containing the product";
 
@@ -129,8 +132,8 @@ class CashinBundle extends Bundle
             $trans->AddItem($item);
         }
 
-        $urlRedirect = $this->urlGenerator->generate('site-checkout-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $urlCallback = $this->urlGenerator->generate('site-checkout-payment-callback', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $urlRedirect = $this->urlGenerator->generate('site-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $urlCallback = $this->urlGenerator->generate('site-payment-callback-barion', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $paymentRequest = new PreparePaymentRequestModel();
         $paymentRequest->GuestCheckout = true;
@@ -153,7 +156,7 @@ class CashinBundle extends Bundle
             $transaction->setGateway(PaymentMethod::BARION);
             $transaction->setSourceName(Transaction::SOURCE_WEB);
             $transaction->setOrder($order);
-            $transaction->setAmount($order->getSummary()->getTotalAmountToPay());
+            $transaction->setAmount($order->getTotalAmountToPay());
             $transaction->setCurrency('HUF');
 
             $transaction->setStatus(Transaction::STATUS_PENDING);
@@ -168,13 +171,13 @@ class CashinBundle extends Bundle
 
     private function createCibPayment(Order $order): ?PaymentResponse
     {
-//        $urlRedirect = $this->urlGenerator->generate('site-checkout-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
+//        $urlRedirect = $this->urlGenerator->generate('site-payment-success', [], UrlGeneratorInterface::ABSOLUTE_URL);
         $urlRedirect = $this->urlGenerator->generate('site-checkout-payment-cib', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $urlCallback = $this->urlGenerator->generate('site-checkout-payment-callback', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $urlCallback = $this->urlGenerator->generate('site-payment-callback-barion', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $paymentRequest = new PaymentRequest();
         $paymentRequest->uid = 'CIB12345678';
-        $paymentRequest->amount = $order->getSummary()->getTotalAmountToPay();
+        $paymentRequest->amount = $order->getTotalAmountToPay();
         $paymentRequest->urlReturn = $urlRedirect;
 
 
@@ -187,7 +190,7 @@ class CashinBundle extends Bundle
             $transaction->setGateway(PaymentMethod::CREDIT_CARD);
             $transaction->setSourceName(Transaction::SOURCE_WEB);
             $transaction->setOrder($order);
-            $transaction->setAmount($order->getSummary()->getTotalAmountToPay());
+            $transaction->setAmount($order->getTotalAmountToPay());
             $transaction->setCurrency('HUF');
 
             $transaction->setStatus(Transaction::STATUS_PENDING);

@@ -25,7 +25,7 @@
                     </p>
                     {% if customer is defined and customer is not null %}
                         <p class="mb-0">
-                            {{ 'order.customer.count-orders'|trans({'{{ count }}': customer.ordersPlaced.count}) }}
+                            {{ 'order.customer.count-orders'|trans({'{{ count }}': orderCount}) }}
                         </p>
                     {% endif %}
 
@@ -63,7 +63,6 @@
                     <p class="">
                         <span>{{ 'order.customer.last-order'|trans }}</span><br>
                         <span class="text-muted">
-{#                            {{ dump(customer.ordersPlaced.isEmpty) }}#}
                             {% if customer.ordersPlaced.isEmpty == false  %}
                                 {{  customer.ordersPlaced.first.createdAt|date('Y-m-d') }}
                             {% endif %}

@@ -1,0 +1,33 @@
+
+$avatar-bg:                                 $gray-100 !default;
+$avatar-color:                              $body-color !default;
+
+$avatar-border-radius:                      50% !default;
+$avatar-border-color:                       $border-color !default;
+
+.avatar-wrapper {
+  background-color: $avatar-bg;
+  @include border-radius($avatar-border-radius);
+  border: 1px solid $thumbnail-border-color;
+  overflow: hidden;
+}
+
+.avatar {
+  --avatar-w: 30px;
+  --avatar-h: 30px;
+  --avatar-color: #{$avatar-color};
+  width: var(--avatar-w);
+  height: var(--avatar-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include border-radius($avatar-border-radius);
+  font-size: calc(var(--avatar-h)/2); //$avatar-font-size;
+  color: var(--avatar-color);
+  overflow: hidden;
+
+  &.avatar-50 {
+    --avatar-w: 50px;
+    --avatar-h: 50px;
+  }
+}

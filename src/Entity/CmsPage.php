@@ -2,34 +2,27 @@
 
 namespace App\Entity;
 
-//use ApiPlatform\Core\Annotation\ApiResource;
-use JsonSerializable;
-use phpDocumentor\Reflection\Types\This;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
-use App\Entity\ImageEntity;
 use App\Services\FileUploader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ ApiResource(
- *
- * )
  * @ORM\Entity(repositoryClass="App\Repository\CmsPageRepository")
  * @ORM\Table(name="cms_page")
- * @UniqueEntity("slug", message="Ilyen 'handle' már létezik!")
+ * @UniqueEntity("slug", message="Ilyen 'slug' már létezik!")
  */
-class CmsPage implements JsonSerializable
+class CmsPage
 {
+    use ImageEntityTrait;
+
     /**
      * @var int
      *
-     * @ORM\Column(type="smallint", name="id", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(type="smallint", name="id", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -37,6 +30,9 @@ class CmsPage implements JsonSerializable
 
     /**
      * @var string
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="page_name", type="string", length=100, nullable=false)
      * @Assert\NotBlank(message="Adj nevet a CMS oldalnak.")
@@ -44,32 +40,26 @@ class CmsPage implements JsonSerializable
     private $name;
 
     /**
-     * @var string
+     * @var string|null
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="slug", type="string", length=100, nullable=false, unique=true)
-     * @Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
+     * @ Assert\NotBlank(message="A slug nem lehet üres. Pl: homepage")
      */
     private $slug;
 
     /**
      * @var string|null
+     * @Groups({
+     *     "view", "list"
+     * })
      *
      * @ORM\Column(name="content", type="text", length=65535, nullable=true)
      */
     private $content;
-    
-    /**
-     * @var ImageEntity|null
-     *
-     * @ORM\OneToOne(targetEntity="App\Entity\ImageEntity", cascade={"persist"}) // No need for cascade={"persist"} as the ImageEntity will previously be saved to db
-     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=true)
-     **/
-    private $image;
-    
-    /**
-     * @var string|null
-     */
-    private $imageUrl;
+
 
     /**
      * @var CmsPage|null
@@ -103,11 +93,11 @@ class CmsPage implements JsonSerializable
     private $enabled = 0;
 
     /**
-     * @var CmsHtmlBlock[]|ArrayCollection|null
+     * @var CmsSection[]|ArrayCollection|null
      *
      * ==== One CMS Page has many product HTML blocks ====
      *
-     * @ORM\OneToMany(targetEntity="CmsHtmlBlock", mappedBy="page", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="CmsSection", mappedBy="page", orphanRemoval=true, cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="id", referencedColumnName="block_id", nullable=false)
      * @ Assert\NotBlank(message="Egy HTML modulnak legalább egy CMS oldalhoz tartozik.")
      */
@@ -119,23 +109,6 @@ class CmsPage implements JsonSerializable
         $this->htmlBlocks = new ArrayCollection();
     }
     
-    /**
-     * {@inheritdoc}
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id'                => $this->getId(),
-            'name'              => $this->getName(),
-            'slug'              => $this->getSlug(),
-            'content'           => $this->getContent(),
-            'parent'            => $this->getParent(),
-            'enabled'           => $this->getEnabled(),
-            'image'             => $this->getImage(),
-            'imageUrl'          => $this->getImageUrl(),
-//            'subpages'     => $this->getSubpages(),
-        ];
-    }
 
     /**
      * @return int
@@ -144,20 +117,7 @@ class CmsPage implements JsonSerializable
     {
         return $this->id;
     }
-    
-//    /**
-//     * The setId is required for the Serializer/Normalizer to be able to create
-//     * the subentities, and it must return the current entity !!
-//     *
-//     * @param int $id
-//     * @return CmsPage
-//     */
-    public function setId(int $id): CmsPage
-    {
-        $this->id = $id;
-        return $this;
-    }
-    
+
     /**
      * @return string
      */
@@ -180,7 +140,7 @@ class CmsPage implements JsonSerializable
     }
     
     /**
-     * @return string
+     * @return string|null
      */
     public function getSlug(): ?string
     {
@@ -188,9 +148,9 @@ class CmsPage implements JsonSerializable
     }
     
     /**
-     * @param string $slug
+     * @param string|null $slug
      */
-    public function setSlug(string $slug)
+    public function setSlug(?string $slug)
     {
         $this->slug = $slug;
     }
@@ -211,57 +171,6 @@ class CmsPage implements JsonSerializable
         $this->content = $content;
     }
 
-    /**
-     * @return ImageEntity
-     */
-    public function getImage(): ?ImageEntity
-    {
-        return $this->image;
-    }
-    
-    /**
-     * @param ImageEntity $image
-     * @return CmsPage|null
-     */
-    public function setImage(?ImageEntity $image): ?CmsPage
-    {
-        $this->image = $image;
-        return $this;
-    }
-    
-    /**
-     * This is used in ImageSetFullPath service. The service calls setImageUrl to set full URL to the image (eg: https://www....../image_filename.jpeg )
-     * @param null|string $imageUrl
-     */
-    public function setImageUrl($imageUrl)
-    {
-        $this->imageUrl = $imageUrl;
-    }
-    
-    /**
-     * Return full URL: http://stulipan.dfr/media/cache/resolve/product_thumbnail/uploads/images/products/ethan-haddox-484912-unsplash-5ceea70235e84.jpeg
-     * This is to be used API
-     *
-     * @return null|string
-     */
-    public function getImageUrl(): ?string
-    {
-        return $this->imageUrl;
-    }
-    
-    /**
-     * Returns "products/image_filename.jpeg"
-     * This is to be used in Twig templates with uploaded_asset()
-     *
-     * @return string
-     */
-    public function getImagePath(): ?string
-    {
-        if ($this->getImage()) {
-            return FileUploader::PRODUCT_FOLDER.'/'.$this->getImage()->getFile();
-        }
-        return null;
-    }
     /**
      * @return bool
      */
@@ -290,7 +199,7 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @return CmsPage
+     * @return CmsPage|null
      */
     public function getParent(): ?CmsPage
     {
@@ -298,7 +207,7 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @param CmsPage $parent
+     * @param CmsPage|null $parent
      */
     public function setParent(?CmsPage $parent)
     {
@@ -334,7 +243,7 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @return CmsHtmlBlock[]|Collection|null
+     * @return CmsSection[]|Collection|null
      */
     public function getHtmlBlocks(): ?Collection
     {
@@ -342,9 +251,9 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @param CmsHtmlBlock $item
+     * @param CmsSection $item
      */
-    public function addHtmlBlock(CmsHtmlBlock $item)
+    public function addHtmlBlock(CmsSection $item)
     {
         if (!$this->htmlBlocks->contains($item)) {
             $item->setPage($this);
@@ -353,9 +262,9 @@ class CmsPage implements JsonSerializable
     }
 
     /**
-     * @param CmsHtmlBlock $item
+     * @param CmsSection $item
      */
-    public function removeHtmlBlock(CmsHtmlBlock $item)
+    public function removeHtmlBlock(CmsSection $item)
     {
         $item->setPage(null);
         $this->htmlBlocks->removeElement($item);

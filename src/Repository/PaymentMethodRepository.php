@@ -19,6 +19,8 @@ class PaymentMethodRepository extends ServiceEntityRepository
     public function findAllOrdered()
      {
          $qb = $this->createQueryBuilder('p')
+             ->andWhere('p.enabled = :enabled')
+             ->setParameter('enabled', 1)
              ->orderBy('p.ordering', 'ASC')
              ->getQuery();
 

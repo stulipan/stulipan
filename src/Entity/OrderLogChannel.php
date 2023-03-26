@@ -15,11 +15,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class OrderLogChannel implements JsonSerializable
 {
 
+    public const CHECKOUT = 'checkout';
+    public const ADMIN = 'admin';
     /**
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="id", length=5, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -96,6 +98,14 @@ class OrderLogChannel implements JsonSerializable
     public function setShortcode(string $shortcode)
     {
         $this->shortcode = $shortcode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCheckout(): bool
+    {
+        return self::CHECKOUT == $this->getShortcode() ? true : false;
     }
 
 }

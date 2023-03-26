@@ -1,15 +1,21 @@
 <div class="">
-    <h6 class="checkout-block-title">Vásárló adatai</h6>
+    <h5 class="checkout-block-title">{{ 'checkout.customer.customer-information-title'|trans }}</h5>
 </div>
 <div class="mt-2">
     <div class="h-100">
         <div class="">
             {{ order.fullname }} <br>
-            {{ order.phone }}, {{ order.email }} <br>
-            <div class="mt-2 text-size-secondary text-muted">
-                Számlázási adatok: <br>
+            {% if order.phone is defined and order.phone is not empty %}{{ order.phone }},{% endif %} {{ order.email }} <br>
+            <div class="mt-2 text-muted">
+                {{ 'checkout.sender.sender'|trans }} <br>
                 {% if order.billingFullname is defined and order.billingFullname is not null %}
                     {{ order.billingFullname }} {{ order.billingCompany is defined and order.billingCompany ? ' / ' ~ order.billingCompany : ''}}
+                {% else %}
+                    {% include 'admin/_missing-data-insert.html.twig' %}
+                {% endif %}
+                <br>
+                {% if order.billingPhone is defined and order.billingPhone %}
+                    {{ order.billingPhone }}
                 {% else %}
                     {% include 'admin/_missing-data-insert.html.twig' %}
                 {% endif %}

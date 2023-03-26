@@ -1,0 +1,25 @@
+<!-- Cart single item-->
+<div class="cart-item">
+    <div class="d-flex align-items-start">
+        <div class="badge-quantity-wrapper">
+{#            <span class="badge-quantity">{{ item.quantity }}</span>#}
+            <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}">
+                <img src="{{ uploaded_asset(item.product.coverImageAsset)|imagine_filter('product_small') }}" alt="{{ item.product.name}}" class="img-fluid cart-item-img">
+            </a>
+        </div>
+
+        <div class="cart-item-detail--wrapper">
+            <div class="cart-item-detail--title">
+                <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="cart-item-link">{{ item.product.name }}</a>
+                <div class="text-muted">SKU: {{ item.product.sku }}</div>
+            </div>
+            <div class="cart-item-detail--calculation">
+                <span class="text-nowrap">{{ item.unitPrice|money }}</span>
+                <span class="text-nowrap"> <small class="d-inline-block text-muted px-2">x</small> {{ item.quantity }}</span>
+            </div>
+            <div class="cart-item-detail--total">
+                <div class="text-nowrap">{{ (item.unitPrice * item.quantity) |money }}</div>
+            </div>
+        </div>
+    </div>
+</div>

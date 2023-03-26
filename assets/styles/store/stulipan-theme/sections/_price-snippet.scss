@@ -1,0 +1,63 @@
+// Price classes
+
+$price-font-weight:              $font-weight-base !default;
+
+.price {
+  font-weight: $price-font-weight;
+  white-space: nowrap;
+
+  .price-sale {
+    color: $danger;
+  }
+  .price-compare {
+    text-decoration: line-through;
+  }
+  .price-sale + .price-compare {
+    margin-left: .5rem;
+  }
+  .price-saving {
+    color: $success;
+    font-weight: bold;
+  }
+}
+
+.price-percentage {
+  background-color: $peach;
+  color: $danger;
+  padding: .125rem .75rem;
+  font-size: 90%;
+}
+
+// Product details page
+
+$price-font-size-default:        1.14rem;
+$price-font-size-mobile:         calc(#{$price-font-size-default} * 0.80);
+$price-font-size-sm:             $font-size-base; //$font-size-base-secondary;
+
+.product-price-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.price-sm {
+  font-size: $price-font-size-sm !important;
+}
+
+
+// Corrections for various subpages
+
+@include media-breakpoint-down(sm) {
+  .cart-body-on-page .price {
+    display: flex;
+    flex-direction: column;
+
+    .price-sale + .price-compare {
+      margin-left: 0;
+    }
+  }
+}
+
+.product-details .product-price-block .price {
+  @include font-size($price-font-size-default);
+}

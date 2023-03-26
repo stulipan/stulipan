@@ -1,0 +1,46 @@
+// Announcement bar, usually displayed under the menu
+
+@mixin announcement-variant($background, $border, $color) {
+  color: $color;
+  //@include gradient-bg($background);
+  background-color: $background;
+  border-color: $border;
+
+  a,
+  .abar-link {
+    color: darken($color, 0%);
+    text-decoration: underline;
+  }
+}
+
+
+.abar {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: .5rem 1rem;
+
+  @include font-size($font-size-base-secondary);
+  line-height: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.02rem;
+  text-align: center;
+
+  @include media-breakpoint-down(md) {
+    min-height: 30px;
+    font-size: 90%;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .abar-#{$color} {
+    //@include alert-variant(theme-color-level($color, $alert-bg-level), theme-color-level($color, $alert-border-level), theme-color-level($color, $alert-color-level));
+    @include announcement-variant(map-get($theme-colors,$color), $value, color-yiq(map-get($theme-colors,$color)));
+  }
+}
+
+//@each $color, $value in $theme-colors {
+//  .abar-#{$color}-lighten {
+//    @include announcement-variant(map-get($theme-colors-light,$color), $value, color-yiq(map-get($theme-colors-light,$color)));
+//  }
+//}

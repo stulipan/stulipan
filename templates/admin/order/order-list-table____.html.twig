@@ -1,9 +1,9 @@
 {% extends 'admin/base_admin.html.twig' %}
 
 
-{% block title %}
+{%- block title -%}
 	{{ title }}
-{% endblock %}
+{%- endblock -%}
 
 
 {% block stylesheets %}
@@ -102,7 +102,7 @@
                         <strong>{{ order.priceTotalAfterDiscount }} Ft</strong> <br>
                         {% if order.paymentMethod %}
                             {% if order.paymentMethod.image %}
-                                <img class="img-thumbnail img-grayscaleX border-0 h-15px" src="{{ asset('/uploads/images/termekek/' ~ order.paymentMethod.image) }}" />
+                                <img class="img-thumbnail img-grayscaleX border-0 h-15px" src="{{ asset('/uploads/images/icons/' ~ order.paymentMethod.image) }}" />
                             {% else %}
                                 {{ order.paymentMethod ? order.paymentMethod.getName() : '' }} <br>
                             {% endif %}

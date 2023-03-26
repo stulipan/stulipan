@@ -1,18 +1,29 @@
 {
-    "name": "djpiticu/stulipan",
+    "name": "stulipan/stulipan",
     "license": "proprietary",
     "type": "project",
     "description": "Stulipan Shop Application",
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "repositories": [
+            {"type": "path", "url":  "../addons/CookieConsentBundle"}
+        ],
     "require": {
         "php": "^7.1.3",
         "ext-iconv": "*",
         "babdev/pagerfanta-bundle": "^2.9",
+        "cocur/slugify": "^4.0",
+        "composer/package-versions-deprecated": "1.11.99.1",
+        "doctrine/annotations": "^1.0",
+        "doctrine/doctrine-bundle": "^2",
+        "doctrine/doctrine-migrations-bundle": "^2",
+        "doctrine/orm": "^2",
+        "endroid/qr-code-bundle": "^4.0",
         "giggsey/libphonenumber-for-php": "^8.10",
         "knplabs/knp-time-bundle": "^1.9",
         "lexik/jwt-authentication-bundle": "^2.6",
         "liip/imagine-bundle": "^2.1",
+        "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "^5.2",
@@ -23,28 +34,38 @@
         "symfony/flex": "^1.2",
         "symfony/form": "^5.2",
         "symfony/framework-bundle": "^5.2",
+        "symfony/google-mailer": "5.2.*",
+        "symfony/http-client": "5.2.*",
+        "symfony/mailer": "5.2.*",
         "symfony/monolog-bundle": "^3.1",
-        "symfony/orm-pack": "^1.0",
         "symfony/process": "^5.2",
+        "symfony/property-access": "5.2.*",
+        "symfony/property-info": "5.2.*",
         "symfony/security-bundle": "^5.2",
         "symfony/security-core": "^5.2",
         "symfony/security-csrf": "^5.2",
         "symfony/security-guard": "^5.2",
         "symfony/security-http": "^5.2",
-        "symfony/serializer-pack": "^1.0",
-        "symfony/swiftmailer-bundle": "^3.1",
+        "symfony/sendgrid-mailer": "5.2.*",
+        "symfony/serializer": "5.2.*",
         "symfony/twig-bundle": "^5.2",
         "symfony/uid": "5.2.*",
         "symfony/validator": "^5.2",
         "symfony/web-link": "^5.2",
         "symfony/webpack-encore-bundle": "^1.11",
-        "symfony/yaml": "^5.2"
+        "symfony/yaml": "^5.2",
+        "symfonycasts/reset-password-bundle": "^1.7",
+        "stulipan/cookie-consent-bundle": "dev-master"
     },
     "require-dev": {
-        "symfony/debug-pack": "*",
+        "symfony/browser-kit": "^5.2",
+        "symfony/css-selector": "^5.2",
+        "symfony/debug-bundle": "^5.2",
         "symfony/maker-bundle": "^1.5",
-        "symfony/profiler-pack": "^1.0",
-        "symfony/test-pack": "^1.0"
+        "symfony/phpunit-bridge": "^5.2",
+        "symfony/stopwatch": "^5.2",
+        "symfony/var-dumper": "^5.2",
+        "symfony/web-profiler-bundle": "^5.2"
     },
     "config": {
         "preferred-install": {
@@ -54,6 +75,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Stulipan\\Traducible\\": "lib/Traducible/src",
             "App\\": "src/"
         }
     },

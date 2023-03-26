@@ -1,0 +1,156 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set activeMenu = 'orders' %}
+{% set pageTitle = 'user.users'|trans %}
+{% set breadcrumb = {
+    0: {
+        'url': path('dashboard'),
+        'text': 'dashboard.dashboard'|trans,
+    },
+} %}
+
+{%- block title -%}
+    {{ pageTitle }}
+{%- endblock -%}
+
+{% block bodyClass %} user user-list{% endblock %}
+
+{% block modal %}
+{% endblock %}
+
+{% block headerActionsWrapper %}
+{#    <a href="{{ path('collections-new') }}" class="btn btn-primary">{{ 'collection.new-collection'|trans }}</a>#}
+{% endblock %}
+
+{% block contentFilter %}
+    <div class="card-body">
+        <nav class="adaptive-tabs">
+            <ul class="nav nav-tabs adaptive-primary">
+                {% for quickLink in filterQuickLinks %}
+                    <li class="nav-item adaptive-item">
+                        <a href="{{ quickLink['url'] }}" class="nav-link {% if quickLink['active'] is defined and quickLink['active'] %}active{% endif %}">
+                            <span class="d-flex justify-content-between align-items-center">
+                                <span class="d-flex">{{ quickLink['name'] }}</span>
+                            </span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <ul class="adaptive-template">
+                <li class="nav-item adaptive-item adaptive-more">
+                    <button type="button" class="adaptive-button nav-link btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                        {{ 'generic.more'|trans }}
+                    </button>
+                    <ul class="adaptive-secondary">
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="border-top">
+    </div>
+    <div class="card-body pb-0">
+        {{ form_start(filterForm, { 'attr': {'class': 'needs-validationX' }}) }}
+        <div class="w-100 d-flex justify-content-between">
+            <div class="field-group align-middle flex-columnX flex-md-row mr-2">
+                <div class="field-item flex-lg-grow-2">
+                    <div class="field-prepend">
+                        <div class="field-addon-prepend w-addon-sm">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    {{ form_widget(filterForm.searchTerm, {'attr': {'class': 'pl-addon-sm'} }) }}
+                </div>
+                <div class="field-item flex-lg-grow-1">
+                    {{ form_widget(filterForm.status, {'attr': {'class': '' }}) }}
+                </div>
+            </div>
+            <div class="">
+                <input type="submit" value="{{ 'generic.ok'|trans }}" class="btn btn-secondary" formnovalidate>
+            </div>
+        </div>
+        <div style="display:none">
+            {{ form_rest(filterForm) }}
+        </div>
+        {{ form_end(filterForm) }}
+    </div>
+    <div class="card-body py-0">
+        {% if filterTags is defined and filterTags|length %}
+            <div class="vertical-form-row mt-2">
+                {% for filterKey,value in filterTags %}
+                    {% if value is defined and value is not null %}
+                        <div class="vertical-col">
+                            <div class="filter-tag">
+                                <div class="filter-tag-content">{{ value }}</div>
+                                <a href="{{ filterUrls[filterKey] }}" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block tableHeader %}
+    {% if users is defined and users is not empty %}
+        <tr>
+            <th scope="col">{{ 'generic.id'|trans }}</th>
+            <th scope="col">{{ 'user.name'|trans }}</th>
+            <th scope="col">{{ 'user.email-address'|trans }}</th>
+            <th scope="col">{{ 'user.role'|trans }}</th>
+            <th scope="col">{{ 'user.permissions'|trans }}</th>
+{#            <th scope="col" class="text-center"><i class="fas fa-ellipsis-h"></i></th>#}
+        </tr>
+    {% endif %}
+{% endblock %}
+
+{% block tableBody %}
+    {% if users is defined and users is not empty %}
+        {% for user in users %}
+            <tr>
+                <td class="">
+                    {{ user.id }}
+                </td>
+                <td class="">
+                    <a href="{{ path('user-show', {'id': user.id}) }}" class="">
+                        {{ user.fullname }} <br>
+                        {% if user.isActive is same as false %}
+                            <span class="product-tag">Nem aktiv</span>
+                        {% endif %}
+                    </a>
+                </td>
+                <td class="">
+                    {% if user.isVerifiedEmail is defined and user.isVerifiedEmail == true %}
+                        <i class="far fa-check-circle text-success"></i>
+                    {% else %}
+                        <i class="far fa-times-circle text-muted"></i>
+                    {% endif %}
+                    {{ user.email }}
+                </td>
+                <td class="text-muted">
+                    {% for role in user.roles %}
+                        {{ role }} <br>
+                    {% endfor %}
+                </td>
+                <td class="">
+                </td>
+{#                <td class=" text-center">#}
+{#                    <i class="far fa-edit"></i>#}
+{#                </td>#}
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block tableEmpty %}
+    {% if users is defined and users is empty %}
+        <div class="h-100 text-center p-4">
+            <div class="h1 text-muted-extra">
+                <i class="far fa-user"></i>
+            </div>
+            <div class="font-18 mt-3 mb-2">{{ 'user.users-not-found'|trans }}</div>
+            <div class="text-muted-extra">{{ 'user.users-not-found-suggestion'|trans }}</div>
+        </div>
+    {% endif %}
+{% endblock %}

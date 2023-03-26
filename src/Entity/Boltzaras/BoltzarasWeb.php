@@ -19,7 +19,7 @@ class BoltzarasWeb
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="smallint", name="id", length=5)
+     * @ORM\Column(type="integer")
      */
     private $id;
 

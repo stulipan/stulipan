@@ -17,7 +17,7 @@ class SmartLabel
     /**
      * @var int
      *
-     * @ORM\Column(name="id", length=5, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -41,7 +41,7 @@ class SmartLabel
      * @var int
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="ordering", nullable=false, options={"default"="100"})
+     * @ORM\Column(name="ordering", type="smallint", nullable=false, options={"default"=100, "unsigned"=true})
      */
     private $ordering;
 
@@ -66,7 +66,7 @@ class SmartLabel
     private $textStyle;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $textSize;
 

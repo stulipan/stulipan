@@ -21,8 +21,32 @@
 {% endblock %}
 
 {% block content %}
-    <div id="v--product" class="mb-6">
-        <product :product-id="{{ product is defined ? product.id : 0}}">
+    <div id="v--product" class="mb-5">
+        <product :product-id="{{ product is defined and product.id is not empty ? product.id : 0}}"
+            {%- if productJson is defined -%}
+                :product="{{ productJson }}"
+            {%- endif -%}
+
+            {%- if statusesJson is defined -%}
+                :statuses="{{ statusesJson }}"
+            {%- endif -%}
+
+            {%- if categoriesJson is defined -%}
+                :categories="{{ categoriesJson }}"
+            {%- endif -%}
+
+            {%- if badgesJson is defined -%}
+                :badges="{{ badgesJson }}"
+            {%- endif -%}
+
+            {%- if salesChannelsJson is defined -%}
+                :sales-channels="{{ salesChannelsJson }}"
+            {%- endif -%}
+
+            {%- if kindsJson is defined -%}
+                :product-kinds="{{ kindsJson }}"
+            {%- endif -%}
+        >
         </product>
     </div>
 {% endblock %}

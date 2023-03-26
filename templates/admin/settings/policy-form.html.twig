@@ -1,0 +1,177 @@
+
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label for="{{ form.termsAndConditions.vars.full_name }}" class="h4">{{ 'settings.policy.terms-and-conditions'|trans }}</label>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.termsAndConditions.name.vars.full_name }}" class="">{{ 'settings.policy.name'|trans }}</label>
+                                    {{ form_widget(form.termsAndConditions.name) }}
+                                    {{ form_errors(form.termsAndConditions.name) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.termsAndConditions.content.vars.full_name }}" class="">{{ 'settings.policy.content'|trans }}</label>
+                                    {{ form_widget(form.termsAndConditions.content, {'attr': {'class': 'JS--tinymceContent', rows: 8}}) }}
+                                    {{ form_errors(form.termsAndConditions.content) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label for="{{ form.privacyPolicy.vars.full_name }}" class="h4">{{ 'settings.policy.privacy-policy'|trans }}</label>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.privacyPolicy.name.vars.full_name }}" class="">{{ 'settings.policy.name'|trans }}</label>
+                                    {{ form_widget(form.privacyPolicy.name) }}
+                                    {{ form_errors(form.privacyPolicy.name) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.privacyPolicy.content.vars.full_name }}" class="">{{ 'settings.policy.content'|trans }}</label>
+                                    {{ form_widget(form.privacyPolicy.content, {'attr': {'class': 'JS--tinymceContent', rows: 8}}) }}
+                                    {{ form_errors(form.privacyPolicy.content) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label for="{{ form.shippingInformation.vars.full_name }}" class="h4">{{ 'settings.policy.shipping-information'|trans }}</label>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.shippingInformation.name.vars.full_name }}" class="">{{ 'settings.policy.name'|trans }}</label>
+                                    {{ form_widget(form.shippingInformation.name) }}
+                                    {{ form_errors(form.shippingInformation.name) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.shippingInformation.content.vars.full_name }}" class="">{{ 'settings.policy.content'|trans }}</label>
+                                    {{ form_widget(form.shippingInformation.content, {'attr': {'class': 'JS--tinymceContent', rows: 8}}) }}
+                                    {{ form_errors(form.shippingInformation.content) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label for="{{ form.returnPolicy.vars.full_name }}" class="h4">{{ 'settings.policy.return-policy'|trans }}</label>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.returnPolicy.name.vars.full_name }}" class="">{{ 'settings.policy.name'|trans }}</label>
+                                    {{ form_widget(form.returnPolicy.name) }}
+                                    {{ form_errors(form.returnPolicy.name) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.returnPolicy.content.vars.full_name }}" class="">{{ 'settings.policy.content'|trans }}</label>
+                                    {{ form_widget(form.returnPolicy.content, {'attr': {'class': 'JS--tinymceContent', rows: 8}}) }}
+                                    {{ form_errors(form.returnPolicy.content) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label for="{{ form.contactInformation.vars.full_name }}" class="h4">{{ 'settings.policy.contact-information'|trans }}</label>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.contactInformation.name.vars.full_name }}" class="">{{ 'settings.policy.name'|trans }}</label>
+                                    {{ form_widget(form.contactInformation.name) }}
+                                    {{ form_errors(form.contactInformation.name) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.contactInformation.content.vars.full_name }}" class="">{{ 'settings.policy.content'|trans }}</label>
+                                    {{ form_widget(form.contactInformation.content, {'attr': {'class': 'JS--tinymceContent', rows: 8}}) }}
+                                    {{ form_errors(form.contactInformation.content) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-20px">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label for="{{ form.legalNotice.vars.full_name }}" class="h4">{{ 'settings.policy.legal-notice'|trans }}</label>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.legalNotice.name.vars.full_name }}" class="">{{ 'settings.policy.name'|trans }}</label>
+                                    {{ form_widget(form.legalNotice.name) }}
+                                    {{ form_errors(form.legalNotice.name) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="{{ form.legalNotice.content.vars.full_name }}" class="">{{ 'settings.policy.content'|trans }}</label>
+                                    {{ form_widget(form.legalNotice.content, {'attr': {'class': 'JS--tinymceContent', rows: 8}}) }}
+                                    {{ form_errors(form.legalNotice.content) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+			{# Render CSRF token etc .#}
+			<div style="display:none">
+				{{ form_rest(form) }}
+			</div>
+
+            <div class="mb-5">
+                <div class="form-group row mt-4 mb-0">
+                    <div class="col-sm-8 col-lg-10">
+                        <input type="submit" value="{{ 'generic.save-changes'|trans }}" class="btn btn-primary mr-1" formnovalidate>
+                        <a href="{{ cancelUrl }}" class="btn btn-secondary">{{ 'generic.cancel'|trans }}</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{ form_end(form) }}

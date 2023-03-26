@@ -1,0 +1,56 @@
+// CMS page content
+//
+// also used in modal-body
+
+
+
+.cms-page-title {
+  --cms-page-title-spacer: #{$spacer};
+  //padding-bottom: $spacer;
+
+  & h1,
+  & h2,
+  & h3,
+  & h4 {
+    font-weight: $font-weight-bold;
+    text-transform: none;
+  }
+
+  & h1 {
+    margin-bottom: calc(2*var(--cms-page-title-spacer));
+  }
+}
+
+.cms-page-body {
+  color: var(--body-color);
+  text-align: left;
+
+  & h1,
+  & h2,
+  & h3,
+  & h4 {
+    font-weight: $font-weight-bold;
+    text-transform: none;
+  }
+
+  & p,
+  & blockquote,
+  & ol,
+  & ul,
+  & li {
+    margin-bottom: 1.5rem;
+  }
+
+  & p,
+  & span,
+  & ol,
+  & ul,
+  & li {
+    font-size: $font-size-base * 1.125;
+    line-height: 1.4;
+  }
+
+  & p:last-of-type {
+    margin-bottom: 0;
+  }
+}

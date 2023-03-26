@@ -6,7 +6,7 @@ const Notify = (function() {
         position: 'top',
         showConfirmButton: false,
         timer: 4000,
-        timerProgressBar: true,
+        timerProgressBar: false,
         // padding: '1rem',
         showCloseButton: true,
         buttonsStyling: false,

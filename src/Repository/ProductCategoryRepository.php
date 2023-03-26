@@ -19,8 +19,8 @@ class ProductCategoryRepository extends ServiceEntityRepository
      */	
     public function findAllOrdered()
     {
-        $qb = $this->createQueryBuilder('p')
-            ->orderBy('p.name', 'ASC')
+        $qb = $this->createQueryBuilder('o')
+            ->orderBy('o.name', 'ASC')
             ->getQuery();
     
         return $qb->execute();
@@ -31,8 +31,20 @@ class ProductCategoryRepository extends ServiceEntityRepository
      */
     public function findAllQueryBuilder()
     {
-        return $this->createQueryBuilder('s')
-            ->orderBy('s.name', 'ASC');
+        return $this->createQueryBuilder('o')
+            ->orderBy('o.name', 'ASC');
     }
+
+//    /**
+//     * @return\Doctrine\ORM\Query
+//     */
+//    public function findAllEnabled()
+//    {
+//        $qb = $this->createQueryBuilder('o')
+//            ->orderBy('o.name', 'ASC')
+//            ->getQuery();
+//
+//        return $qb->execute();
+//    }
 
 }

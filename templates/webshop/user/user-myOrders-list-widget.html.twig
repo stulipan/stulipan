@@ -1,0 +1,69 @@
+<div class="">
+    <div class="d-flex justify-content-between pb-2 border-bottom">
+        <div class="mr-3">
+            <div class="font-weight-bold text-uppercase">{{ 'account.order.order-number'|trans }}</div>
+            <div class="">#{{ order.number }}</div>
+        </div>
+        <div>
+            {% if order.isPaid %}
+                <div class="badge badge-success">{{ 'account.order.paid'|trans }}</div>
+            {% else %}
+                <div class="badge badge-warning">{{ 'account.order.waiting-for-payment'|trans }}</div>
+            {% endif %}
+            {% if order.isFulfilled %}
+                <div class="badge badge-success">{{ 'account.order.fulfilled'|trans }}</div>
+            {% else %}
+                <div class="badge badge-warning">{{ 'account.order.being-processed'|trans }}</div>
+            {% endif %}
+        </div>
+
+{#        <div class="">#}
+{#            <div class="font-weight-bold text-uppercase">Kézbesítés napja: </div>#}
+{#            <div class="">2019-09-24</div>#}
+{#        </div>#}
+    </div>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between mt-4">
+        <div class="w-100 w-md-50 d-flex align-items-center justify-content-center justify-content-md-start">
+            <div class="d-flex flex-column justify-content-center align-items-center align-items-md-start">
+                <div class="d-flex">
+{#                    <div class="product-wrapper">#}
+{#                        <div class="product-image">#}
+{#                            <img src="http://www.stulipan.dfr/media/cache/product_medium/uploads/images/products/feher-es-voros-rozsa-sziv-doboz-nagy-7-5d7d39dd5be05.jpeg" alt="Rózsacsokor - Pink/Fehér, 20 Szál" class="img-fluid" width="300" height="400">#}
+{#                        </div>#}
+{#                        <a href="/hu/termekek/rozsacsokor-pink-feher-20-szal" class="tile-link"></a>#}
+{#                    </div>#}
+
+                    {% for item in order.items %}
+                        <div class="position-relative mb-2 mr-2">
+                            <div class="">
+                                <img class="img-fluid" src="{{ uploaded_asset(item.product.coverImageAsset)|imagine_filter('product_small') }}" width="80px;" />
+                            </div>
+                            <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}" class="tile-link"></a>
+                        </div>
+{#                        <a href="{{ path('site-product-show', {'slug': item.product.slug}) }}">#}
+{#                            <img class="img-thumbnailX mb-1 pr-2" src="{{ uploaded_asset(item.product.coverImageAsset)|imagine_filter('product_small') }}" width="80px;" />#}
+{#                        </a>#}
+                    {% endfor %}
+                </div>
+                <div class="d-flex flex-column align-items-center align-items-md-start">
+{#                    <div class="text-muted mt-2">#}
+{#                        <span class="font-weight-bold">{{ 'checkout.recipient.recipient'|trans }}</span>#}
+{#                        <span class="">{{ order.shippingFullname }}</span>#}
+{#                    </div>#}
+                    {% if order.updatedAt is defined and order.updatedAt is not empty %}
+                    <div class="text-muted">
+                        <span class="font-weight-bold">{{ 'account.order.order-placed-at'|trans }}</span>
+                        <span class="">{{ order.updatedAt|localizedDate }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                {#            <div class="my-2">Címzett: {{ order.shippingName }}#}
+                {#            </div>#}
+            </div>
+        </div>
+        <div class="w-100 w-md-50 d-flex align-items-end justify-content-center justify-content-md-end my-3 my-md-0">
+            <a href="{{ path('site-user-myOrder', {'id': order.id}) }}" class="btn btn-sm btn-primary">Rendelés részletei</a>
+        </div>
+    </div>
+</div>

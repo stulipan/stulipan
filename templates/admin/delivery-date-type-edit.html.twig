@@ -15,9 +15,9 @@
 
 {% set cancelUrl = path('delivery-date-type-list') %}
 
-{% block title %}
+{%- block title -%}
     {{ pageTitle }}
-{% endblock %}
+{%- endblock -%}
 
 {% block moduleTitle %}
     Idősávok
@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block contentInner %}
-    {% include '/admin/_delivey-date-type-form.html.twig' with {'cancelUrl': cancelUrl}  %}
+    {% include 'admin/_delivey-date-type-form.html.twig' with {'cancelUrl': cancelUrl}  %}
 {% endblock %}
 
 {% block javascripts %}

@@ -1,0 +1,13 @@
+"This value should not be blank.": "Ne hagyd üressen ezt a mezőt."
+"This file is not a valid image.": "A feltölteni kívánt fájl nem kép! Elfogadott képformátumok: .jpg, .png"
+"The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}.": "A fájl mérete túl nagy: {{ size }} {{ suffix }}! Megengedett maximum méret: {{ limit }} {{ suffix }}."
+
+order:
+  history:
+    comment-is-missing: A komment üres!
+
+registration:
+  email-is-missing: 'Írd be az email címedet.'
+  email-is-invalid: 'Ellenőrizd, hogy helyesen írtad be az email címet.'
+  email-is-in-use: 'Az email címet elgépelted, vagy már regisztráltál vele!'
+  password-is-missing: 'Adj meg egy jelszót.'

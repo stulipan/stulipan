@@ -58,6 +58,8 @@ class PaymentStatusType extends AbstractType
             'placeholder' => 'Válassz...',
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('c')
+                    ->where('c.shortcode = :shortcode')
+                    ->setParameter('shortcode', PaymentStatus::STATUS_PAID)    // CSAK a 'Fizetve' allapotot engedelyezem
                     ->orderBy('c.name', 'ASC');
             },
             'choice_label' => 'name',

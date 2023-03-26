@@ -29,6 +29,7 @@ use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Twig\Environment;
 
+///     NINCS HASZNALATBAN !!!!
 class ProductFormType extends AbstractType
 {
     private $em;

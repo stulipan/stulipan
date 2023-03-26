@@ -1,0 +1,85 @@
+{% extends 'admin/template-listing.html.twig' %}
+
+{% set activeMenu = 'cms' %}
+{% set pageTitle = 'cms.navigation.navigation'|trans %}
+{% set breadcrumb = {
+	0: {
+		'url': path('dashboard'),
+		'text': 'dashboard.dashboard'|trans,
+	},
+} %}
+
+{%- block title -%}
+	{{ pageTitle }}
+{%- endblock -%}
+
+{% block headerActionsWrapper %}
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">
+		<ul class="nav nav-tabs adaptive-primary">
+{#			<li class="nav-item adaptive-item">#}
+{#				<a href="{{ path('cms-navigation-new') }}" class="nav-link">Új bla bla</a>#}
+{#			</li>#}
+{#			<li class="nav-item adaptive-item">#}
+{#				<a href="{{ path('cms-navigation-new') }}" class="nav-link">Új bla bla</a>#}
+{#			</li>#}
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	<a href="{{ path('cms-navigation-new') }}" class="btn btn-primary">{{ 'cms.navigation.new-navigation'|trans }}</a>
+{% endblock %}
+
+{% block tableHeader %}
+	<tr>
+		<th scope="col"><span title="{{ 'cms.navigation.enabled'|trans }}"><i class="fas fa-toggle-on"></i></span></th>
+{#		<th scope="col">{{ 'cms.navigation.enabled'|trans }}</th>#}
+		<th scope="col">{{ 'cms.navigation.name'|trans }}</th>
+		<th scope="col"><i class="fas fa-ellipsis-h"></i></th>
+	</tr>
+{% endblock %}
+
+{% block tableBody %}
+	{% if navigations is defined %}
+		{% for navigation in navigations %}
+			<tr>
+				<td class="align-middle">
+					{% if navigation.enabled is defined and navigation.enabled == true %}
+						<span class="badge badge-success badge-sm">&nbsp;</span>
+					{% else %}
+						<span class="badge badge-secondary badge-sm">&nbsp;</span>
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					<a href="{{ path('cms-navigation-edit', {'id': navigation.id}) }}" class="">
+						{{ navigation.name }}
+					</a>
+				</td>
+				<td class="align-middle">
+					<div class="w-100">
+						<i class="far fa-edit"></i>
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+{% endblock %}
+
+
+{% block tableEmpty %}
+	{% if navigations is defined and navigations is empty %}
+		<div class="h-100 text-center p-4">
+			<div class="h1 text-muted-extra">
+				<i class="fas fa-search"></i>
+			</div>
+			<div class="font-18 mt-3 mb-2">{{ 'cms.navigation.navigations-not-found'|trans }}</div>
+			<div class="text-muted-extra">{{ 'cms.navigation.navigations-not-found-suggestion'|trans }}</div>
+		</div>
+	{% endif %}
+{% endblock %}

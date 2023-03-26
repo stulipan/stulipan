@@ -1,0 +1,83 @@
+{% extends 'webshop/site/template-account.html.twig' %}
+
+{% set pageTitle = 'account.my-orders'|trans %}
+{% set breadcrumb = {
+    0: {
+        'url': path('homepage'),
+        'text': 'generic.home'|trans,
+    },
+    1: {
+        'url': path('site-user-myAccount'),
+        'text': 'account.my-account'|trans
+    },
+    2: {
+        'url': path('site-user-myAccount'),
+        'text': 'account.my-orders'|trans,
+    },
+    3: {
+        'url': path('site-user-myOrder', {'id': order.id}),
+        'text': 'account.order.order'|trans ~ ' #' ~ order.number,
+    },
+} %}
+
+{% block content %}
+    <div class="card mb-20px">
+        <div class="">
+            <div class="card-body">
+                <div class="card-tile h3">{{ 'account.order.order'|trans}} #{{ order.number }}</div>
+                {% if order.isPaid %}
+                    <div class="badge badge-success">{{ 'account.order.paid'|trans }}</div>
+                {% else %}
+                    <div class="badge badge-warning">{{ 'account.order.waiting-for-payment'|trans }}</div>
+                {% endif %}
+                {% if order.isFulfilled %}
+                    <div class="badge badge-success">{{ 'account.order.fulfilled'|trans }}</div>
+                {% else %}
+                    <div class="badge badge-warning">{{ 'account.order.being-processed'|trans }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-20px">
+        <div class="">
+            <div class="card-body">
+                <div class="cart">
+                    {% include 'webshop/user/_myorder-items-widget.html.twig' %}
+                </div>
+                {% include 'webshop/cart/checkout-sidebar-summary-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-body">
+                {% include 'webshop/cart/_order-recipient-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-body">
+                {% include 'webshop/cart/_order-delivery-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-body">
+                {% include 'webshop/cart/_order-sender-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-20px">
+        <div class="card-wrapper">
+            <div class="card-body">
+                {% include 'webshop/cart/_order-payment-widget.html.twig' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

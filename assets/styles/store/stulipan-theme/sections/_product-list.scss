@@ -1,0 +1,129 @@
+// ============= Listing page =============
+
+.products-grid {
+  & .product {
+    margin-bottom: 30px;
+  }
+
+  & .text-link-product {
+    color: $gray-800;
+    text-decoration: none;
+  }
+  & .product-wrapper {
+    display: block;
+    position: relative;
+  }
+
+  & .product-image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s ease-in-out;
+  }
+  .product-image:hover .btn {
+    -webkit-transform: none !important;
+    transform: none !important;
+    opacity: 1 !important
+  }
+
+  & .product-title {
+    margin-top: .5rem;
+  }
+  & .product-button {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .productList--name {
+    @include font-size($font-size-base);
+  }
+  .productList--name {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.products-grid--header {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.8rem;
+  }
+  h3 {
+    font-size: 1.3rem;
+  }
+  @include media-breakpoint-down(md) {
+    h1 {
+      font-size: 1.35rem;
+    }
+    h2 {
+      font-size: 1.2rem;
+    }
+    h3 {
+      font-size: 1rem;
+    }
+  }
+}
+
+.products-grid--header-mobile {
+  text-align: center;
+
+  .listing--lead {
+    @include font-size($font-size-base);
+    line-height: $line-height-sm;
+    font-weight: $font-weight-light;
+    text-align: left;
+  }
+}
+
+
+.products-grid--countdown {
+  text-align: center;
+  overflow: hidden;
+
+  &:after, 
+  &:before {
+    background-color: #ced4da;
+    content: "";
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 50%;
+  }
+  &:before {
+    right: .5em;
+    margin-left: -50%;
+  }
+  &:after {
+    left: .5em;
+    margin-right: -50%;
+  }
+}
+
+.products-grid--header {
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 300px;
+}
+.landing--heading {
+  /*padding: .5rem;*/
+}
+.landing--info {
+  background-color: rgba(255,255,255,.9);
+  min-height: 100%;
+  border: 1px dashed #bab9b9;
+}
+.landing--info>div {
+  padding: .5rem;
+  /*border-left: 1px dashed #bab9b9;*/
+  /*border-right: 1px dashed #bab9b9;*/
+}
+.landing--info>div {
+
+  /*border-left: 1px dashed #64898a;*/
+  /*border-right: 1px dashed #64898a;*/
+  border-bottom: 1px solid #ddd;
+  height: 33.333333333%;
+}

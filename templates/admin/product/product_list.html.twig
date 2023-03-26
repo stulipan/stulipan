@@ -1,7 +1,7 @@
 {% extends 'admin/template-listing.html.twig' %}
 
 {% set activeMenu = 'products' %}
-{% set pageTitle = title %}
+{% set pageTitle = 'product.products'|trans %}
 {% set breadcrumb = {
 	0: {
 		'url': path('dashboard'),
@@ -15,8 +15,27 @@
 {% endblock %}
 
 {% block headerActionsWrapper %}
-	<a href="{{ path('product-new') }}" class="btn btn-primary">Új termék</a>
-	<a href="{{ path('product-listCategories') }}" class="btn btn-secondary ml-2">Kategóriák</a>
+	<nav class="w-100 adaptive-tabs adaptive-tabs-right mr-2">
+		<ul class="nav nav-tabs adaptive-primary">
+			<li class="nav-item adaptive-item">
+				<a href="{{ path('product-download-csv') }}" class="nav-link"><i class="fas fa-file-csv mr-2"></i> Facebook CSV</a>
+			</li>
+			{#			<li class="nav-item adaptive-item">#}
+			{#				<a href="{{ path('cms-navigation-new') }}" class="nav-link">Új bla bla</a>#}
+			{#			</li>#}
+		</ul>
+		<ul class="adaptive-template">
+			<li class="nav-item adaptive-item adaptive-more">
+				<a href="" class="adaptive-button nav-link dropdown-toggle btn-more-actions" aria-haspopup="true" aria-expanded="false">
+					<span>{{ 'generic.more-actions'|trans }}</span>
+				</a>
+				<ul class="adaptive-secondary">
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	<a href="{{ path('product-new') }}" class="btn btn-primary">{{ 'product.new-product'|trans }}</a>
+	<a href="{{ path('collection-list') }}" class="btn btn-secondary ml-2">{{ 'collection.collections'|trans }}</a>
 {% endblock %}
 
 {% block contentFilter %}
@@ -121,9 +140,9 @@
 		{% for product in products %}
 			<tr {% if product.isRemoved == true %}class="disabled"{% endif %}>
 				<td class="align-middle">
-					{% if product.coverImage is defined and product.coverImage %}
+					{% if product.coverImageAsset is defined and product.coverImageAsset %}
 						<a href="{{ path('product-edit', {'id': product.id}) }}" class="">
-							<img class="img-thumbnail" src="{{ uploaded_asset(product.coverImage)|imagine_filter('product_thumbnail') }}" style="width: 50px; width: 50px;" />
+							<img class="img-thumbnail" src="{{ uploaded_asset(product.coverImageAsset)|imagine_filter('product_small') }}" style="width: 50px; width: 50px;" />
 						</a>
 					{% endif %}
 				</td>

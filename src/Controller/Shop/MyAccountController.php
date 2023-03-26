@@ -8,8 +8,8 @@ use App\Services\OrderBuilder;
 use App\Entity\User;
 use App\Form\Customer\CustomerType;
 use App\Services\StoreSettings;
+use DateTime;
 use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,28 +19,54 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MyAccountController extends AbstractController
 {
-
     /**
-     * @Route("/my-account", name="site-user-myAccount")
+     * @Route("/myaccount", name="site-user-myAccount")
      */
     public function showMyAccount()
     {
-        return $this->render('webshop/site/user-myAccount.html.twig', [
-            'customer' => $this->getUser(),
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        $customer = $this->getUser()->getCustomer();
+        $orders = [];
+        if ($customer) {
+            $orders = $customer->getOrdersPlaced();
+
+            if ($orders) {
+                $orders = $orders->getValues();
+            }
+        }
+
+        return $this->render('webshop/user/user-myAccount.html.twig', [
+            'customer' => $customer,
+            'orders' => $orders,
         ]);
     }
 
     /**
-     * @Route("/my-account/orders/", name="site-user-myOrders",
+     * @Route("/myaccount/orders/", name="site-user-myOrders",
      *     requirements={"page"="\d+"},
      *     )
      */
     public function showMyOrders(Request $request, $page = 1, StoreSettings $settings)
     {
-        $page = $request->query->get('page') ? $request->query->get('page') : $page;
-        $orders = $this->getUser()->getCustomer()->getOrdersPlaced();
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
 
-        $pagerfanta = new Pagerfanta(new ArrayAdapter($orders->getValues()));
+        $page = $request->query->get('page') ? $request->query->get('page') : $page;
+        $customer = $this->getUser()->getCustomer();
+        $orders = [];
+        if ($customer) {
+            $orders = $customer->getOrdersPlaced();
+
+            if ($orders) {
+                $orders = $orders->getValues();
+            }
+        }
+
+        $pagerfanta = new Pagerfanta(new ArrayAdapter($orders));
 //        $pagerfanta->setMaxPerPage($settings->get('general.itemsPerPage'));
         $pagerfanta->setMaxPerPage(5);
 
@@ -55,40 +81,56 @@ class MyAccountController extends AbstractController
             $orders[] = $result;
         }
 
-        return $this->render('webshop/site/user-myOrders.html.twig', [
+        return $this->render('webshop/user/user-myOrders.html.twig', [
             'orders' => $orders,
             'paginator' => $pagerfanta,
         ]);
     }
 
     /**
-     * @Route("/my-account/orders/{id}", name="site-user-myOrder")
+     * @Route("/myaccount/orders/{id}", name="site-user-myOrder")
      */
     public function showMyOrder(Request $request, ?Order $order, $id = null)
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
         if (!$order) {
-            throw $this->createNotFoundException('STUPID: Nincs ilyen rendelés!' );
-        }
-        if (!$this->getUser()->hasOrder($order)) {
             $this->addFlash('danger', 'Nem talált ilyen rendelést!');
-            return $this->redirect('site-user-myAccount');
+            return $this->redirectToRoute('site-user-myAccount');
         }
-        return $this->render('webshop/site/user-myOrder.html.twig', [
+
+        /** @var Customer $customer*/
+        $customer = $this->getUser()->getCustomer();
+        if (!$customer) {
+            $this->addFlash('danger', 'Nem talált ilyen rendelést!');
+            return $this->redirectToRoute('site-user-myAccount');
+        }
+
+        if ($customer->getPlacedOrdersCount() === 0) {
+            $this->addFlash('danger', 'Nem talált ilyen rendelést!');
+            return $this->redirectToRoute('site-user-myAccount');
+        }
+
+        return $this->render('webshop/user/user-myOrder.html.twig', [
             'order' => $order,
         ]);
     }
 
     /**
-     * @Route("/my-account/my-details/{id}", name="site-user-myDetails")
+     * @Route("/myaccount/details/{id}", name="site-user-myDetails")
      */
     public function showMyDetails(Request $request, ?Customer $customer, $id=null, OrderBuilder $orderBuilder)
     {
-        if (!$customer) {
-            $customer = $orderBuilder->getCustomer();
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
         }
+
         if (!$customer) {
             $customer = $this->getUser()->getCustomer();
         }
+
         $form = $this->createForm(CustomerType::class, $customer, ['urlName' => 'site-user-myDetails']);
 
         $form->handleRequest($request);
@@ -102,8 +144,12 @@ class MyAccountController extends AbstractController
                 $user->setFirstname($data->getFirstname());
                 $user->setLastname($data->getLastname());
                 $user->setAcceptsMarketing($data->isAcceptsMarketing());
-
-                // TODO implement acceptsMarketingUpdatedAt
+                $data->setAcceptsMarketingUpdatedAt(new DateTime('now'));
+                if ($data->isAcceptsMarketing()) {
+                    $data->setMarketingOptinLevel(Customer::OPTIN_LEVEL_SINGLE_OPTIN);
+                } else {
+                    $data->setMarketingOptinLevel(Customer::OPTIN_LEVEL_OPT_OUT);
+                }
             }
 
             $em = $this->getDoctrine()->getManager();
@@ -112,10 +158,8 @@ class MyAccountController extends AbstractController
             $em->flush();
         }
 
-        return $this->render('webshop/site/user-myDetails.html.twig', [
-//            'customer' => $this->getUser(),
+        return $this->render('webshop/user/user-myDetails.html.twig', [
             'customerForm' => $form->createView(),
         ]);
     }
-
 }

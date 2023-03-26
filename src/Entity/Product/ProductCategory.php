@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Product;
 
-//use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\Criteria;
 use JsonSerializable;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 use App\Entity\ImageEntity;
 use App\Services\FileUploader;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,12 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * (
- *
- * )
  * @ORM\Entity(repositoryClass="App\Repository\ProductCategoryRepository")
  * @ORM\Table(name="product_category")
- * @UniqueEntity("slug", message="Ilyen slug már létezik!")
+ * @UniqueEntity("slug", message="collection.slug-already-in-use")
  */
 class ProductCategory implements JsonSerializable
 {
@@ -32,7 +30,7 @@ class ProductCategory implements JsonSerializable
      *     "productView"
      * })
      *
-     * @ORM\Column(type="smallint", name="id", length=11, nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -43,10 +41,11 @@ class ProductCategory implements JsonSerializable
      * @Groups({
      *     "main",
      *     "productView",
+     *     "eventAddToCart"
      * })
      *
      * @ORM\Column(name="category_name", type="string", length=100, nullable=false)
-     * @Assert\NotBlank(message="Nevezd el a kategóriát.")
+     * @Assert\NotNull(message="collection.name-is-missing")
      */
     private $name;
 
@@ -55,7 +54,7 @@ class ProductCategory implements JsonSerializable
      * @Groups({"main"})
      *
      * @ORM\Column(name="slug", type="string", length=100, nullable=false, unique=true)
-     * @Assert\NotBlank(message="A slug nem lehet üres. Pl: szuletesnapi-csokor")
+     * @Assert\NotBlank(message="collection.slug-is-missing")
      * @ Gedmo\Slug(fields={"name"})
      */
     private $slug;
@@ -64,9 +63,16 @@ class ProductCategory implements JsonSerializable
      * @var string|null
      * @Groups({"main"})
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="seo_content", type="text", length=65535, nullable=true)
+     */
+    private $seoContent;
     
     /**
      * @var ImageEntity|null
@@ -130,6 +136,7 @@ class ProductCategory implements JsonSerializable
      *
      *
      * @ORM\ManyToMany(targetEntity="Product", mappedBy="categories")
+     * @ORM\OrderBy({"rank"="ASC"})
      */
     private $products;
 
@@ -181,9 +188,9 @@ class ProductCategory implements JsonSerializable
     }
     
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -241,6 +248,22 @@ class ProductCategory implements JsonSerializable
     }
 
     /**
+     * @return string|null
+     */
+    public function getSeoContent(): ?string
+    {
+        return $this->seoContent;
+    }
+
+    /**
+     * @param string|null $seoContent
+     */
+    public function setSeoContent(?string $seoContent): void
+    {
+        $this->seoContent = $seoContent;
+    }
+
+    /**
      * @return ImageEntity
      */
     public function getImage(): ?ImageEntity
@@ -268,8 +291,10 @@ class ProductCategory implements JsonSerializable
     }
     
     /**
-     * Return full URL: http://stulipan.dfr/media/cache/resolve/product_thumbnail/uploads/images/products/ethan-haddox-484912-unsplash-5ceea70235e84.jpeg
+     * Return full URL: http://stulipan.dfr/media/cache/resolve/product_small/uploads/images/products/ethan-haddox-484912-unsplash-5ceea70235e84.jpeg
      * This is to be used API
+     *
+     *      This is generated in the ImageSetFullPath.php event (!!)
      *
      * @return null|string
      */
@@ -279,7 +304,7 @@ class ProductCategory implements JsonSerializable
     }
     
     /**
-     * Returns "categories/image_filename.jpeg"
+     * Returns "store/image_filename.jpeg"
      * This is to be used in Twig templates with uploaded_asset()
      *
      * @return string
@@ -287,7 +312,7 @@ class ProductCategory implements JsonSerializable
     public function getImagePath(): ?string
     {
         if ($this->getImage()) {
-            return FileUploader::CATEGORY_FOLDER.'/'.$this->getImage()->getFile();
+            return FileUploader::WEBSITE_FOLDER_NAME.'/'.$this->getImage()->getFile();
         }
         return null;
     }
@@ -333,7 +358,7 @@ class ProductCategory implements JsonSerializable
     }
 
     /**
-     * @return ProductCategory
+     * @return ProductCategory|null
      */
     public function getParent(): ?ProductCategory
     {
@@ -341,13 +366,11 @@ class ProductCategory implements JsonSerializable
     }
 
     /**
-     * @param ProductCategory $parent
-     * @ return ProductCategory
+     * @param ProductCategory|null $parent
      */
     public function setParent(?ProductCategory $parent)
     {
         $this->parent = $parent;
-//        return $this;
     }
 
     /**
@@ -385,7 +408,7 @@ class ProductCategory implements JsonSerializable
     {
         return $this->products->isEmpty() ? null : $this->products;
     }
-    
+
     /**
      * @param Product $item
      */

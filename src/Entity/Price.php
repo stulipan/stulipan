@@ -4,23 +4,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-//use ApiPlatform\Core\Annotation\ApiResource;
-use App\Entity\Product\Product;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- *
- *
  * @ORM\Table(name="price")
  * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks()
- * ORM\Entity(repositoryClass="App\Repository\PriceRepository")   ??????
- * ORM\InheritanceType("SINGLE_TABLE")
- * ORM\DiscriminatorColumn(name="price_type", type="smallint")
- * ORM\DiscriminatorMap({1 = "Price", 2 = "SubproductPrice"})
+ * @ qORM\HasLifecycleCallbacks()
  */
 class Price //implements \JsonSerializable
 {
@@ -31,37 +22,46 @@ class Price //implements \JsonSerializable
      * @Groups({"productView", "productList",
      *     "geoPriceView", "geoPriceList"})
      *
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
-//    /**
-//     * @var Product
-//     *
-//     * @ORM\OneToOne(targetEntity="App\Entity\Product\Product", mappedBy="price")
-//     * @Assert\NotBlank(message="Nem választottál terméket.")
-//     */
-//    private $product;
-
     /**
      * @var float
-     * @Groups({"productView", "productList",
-     *     "geoPriceView", "geoPriceList"})
+     * @Groups({
+     *     "productView",
+     *     "productList",
+     *     "eventAddToCart",
+     *     "geoPriceView",
+     *     "geoPriceList"
+     * })
      *
      * @ORM\Column(name="value", type="decimal", precision=10, scale=2, nullable=false)
      * @Assert\NotBlank()
      * @Assert\Range(min=0.0001, minMessage="Az összeg nem lehet nulla vagy negatív.")
      */
-    private $numericValue = 0;
+    private $numericValue;
+
+    /**
+     * @var float|null
+     * @Groups({
+     *     "productView",
+     *     "productList",
+     *     "eventAddToCart"
+     * })
+     *
+     * @ORM\Column(name="compare_at_value", type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\Range(min=0.0001, minMessage="Az összeg nem lehet nulla vagy negatív.")
+     */
+    private $compareAtValue;
 
     /**
      * @var VatRate
-     * @ Groups({""})
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\VatRate")
-     * @ORM\JoinColumn(name="vat_rate_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\VatRate")
+     * @ORM\JoinColumn(name="vat_rate_id", referencedColumnName="id", nullable=false)
      * @ Assert\NotBlank(message="Válassz egy ÁFA típust ehhez az árhoz.")
      */
     private $vatRate;
@@ -139,6 +139,31 @@ class Price //implements \JsonSerializable
     public function setNumericValue(?float $value)
     {
         $this->numericValue = $value;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getCompareAtValue(): ?float
+    {
+        return null == $this->compareAtValue ? null : (float) $this->compareAtValue;
+    }
+
+    /**
+     * @param float|null $compareAtValue
+     */
+    public function setCompareAtValue($compareAtValue): void
+    {
+        $this->compareAtValue = $compareAtValue;
+    }
+
+    /**
+     * !! This is to retrieve the active price (value).
+     * @return float|null
+     */
+    public function getSellingPrice()
+    {
+        return $this->getNumericValue();
     }
 
     /**

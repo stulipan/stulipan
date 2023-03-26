@@ -5,20 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <title>{% block title %}Admin Page{% endblock %}</title>
+    <title>{%- block title -%}Admin Page{%- endblock -%}</title>
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('webshop/site/fonts/fontawesome/all.css') }}">
         {{ encore_entry_link_tags('admin-theme') }}
-        {{ encore_entry_link_tags('daterangepicker') }}
-        {{ encore_entry_link_tags('v-admin') }}
+{#        {{ encore_entry_link_tags('v-admin') }}#}
 
         <link href="{{ asset('webshop/admin/custom-select2.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('webshop/admin/v-style.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ asset('webshop/site/favicon.png')}}" rel="shortcut icon" />
 
+        <link rel="shortcut icon" href="{{ storeFavicon }}" type="image/png">
+
+        {{ encore_entry_script_tags('admin-app') }}
+{#        <script>#}
+{#            document.addEventListener('DOMContentLoaded', (event) => {#}
+{#                if (window.innerWidth>=992) {#}
+{#                    document.body.classList.add('sMenu-toggled');#}
+{#                }#}
+{#            })#}
+{#        </script>#}
     {% endblock %}
 </head>
-<body class="admin{% block bodyClass %}{% endblock %}">
+<body class="admin sMenu--enabled{% block bodyClass %}{% endblock %}">
 
 {% block body %}
 {% endblock %}
@@ -31,9 +39,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script src="{{ asset('webshop/site/js/moment.min.js') }}"></script>
-    <script src="{{ asset('webshop/site/js/daterangepicker.js') }}"></script>
-    <script src="{{ asset('webshop/admin/js/select2.min.js') }}"></script>
+    <script src="{{ asset('webshop/site/js/daterangepicker.min.js') }}"></script>
+{#    <script src="{{ asset('webshop/admin/js/select2.min.js') }}"></script>#}
 
+    {% include('admin/_admin-localization.html.twig') %}
     <script>
         // Innen: https://momentjs.com/docs/#/i18n/
         moment.locale("{{ app.request.locale }}", {
@@ -68,7 +77,6 @@
                 "{{ 'datetime.december'|trans }}",
             ]
         });
-        {#console.log("{{ storeSettings.getDateFormatInMomentJsFormat }}");#}
         const drpBaseConfig = {
             locale: {
                 format: "{{ storeSettings.getDateFormatInMomentJsFormat }}",
@@ -119,12 +127,13 @@
         };
     </script>
 
-    <script src="{{ asset('webshop/admin/js/order.detail.js') }}"></script>
+{#    <script src="{{ asset('webshop/admin/js/order.detail.js') }}"></script>#}
 
-    {{ encore_entry_script_tags('v-admin') }}
-    {{ encore_entry_script_tags('sidebar') }}
-    {{ encore_entry_script_tags('floating-input') }}
-    {{ encore_entry_script_tags('adaptive-tabs') }}
+    <script src="{{ asset('webshop/lodash.core.min.js') }}"></script>
+    <script src="{{ asset('webshop/validate.min.js') }}"></script>
+
+    {{ encore_entry_script_tags('admin') }}
+
 {% endblock %}
 </body>
 </html>

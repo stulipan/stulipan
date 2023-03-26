@@ -38,11 +38,16 @@ final class Locale
     /**
      * @var string
      */
+    private $dateFormatNice;
+
+    /**
+     * @var string
+     */
     private $timeFormat;
 
 
     public function __construct(string $code, string $name, string $currency, string $currencyCode, string $currencySymbol,
-                                string $dateFormat, string $timeFormat)
+                                string $dateFormat, string $dateFormatNice, string $timeFormat)
     {
         $this->code = $code;
         $this->name = $name;
@@ -50,6 +55,7 @@ final class Locale
         $this->currencyCode = $currencyCode;
         $this->currencySymbol = $currencySymbol;
         $this->dateFormat = $dateFormat;
+        $this->dateFormatNice = $dateFormatNice;
         $this->timeFormat = $timeFormat;
     }
 
@@ -147,6 +153,22 @@ final class Locale
     public function setDateFormat(string $dateFormat): void
     {
         $this->dateFormat = $dateFormat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateFormatNice(): string
+    {
+        return $this->dateFormatNice;
+    }
+
+    /**
+     * @param string $dateFormatNice
+     */
+    public function setDateFormatNice(string $dateFormatNice): void
+    {
+        $this->dateFormatNice = $dateFormatNice;
     }
 
     /**

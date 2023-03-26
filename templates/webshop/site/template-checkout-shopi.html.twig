@@ -1,60 +1,55 @@
 {% extends 'webshop/site/base-checkout.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-{% endblock %}
-
 {% block bodyClass %}checkout-page checkout-shopi{% endblock %}
 
 {% block page_content %}
-
     <div class="JS--Wrapper-checkout" data-wrapper-global data-section-id="checkout-template" data-section-type="checkout-template">
-
         {% block modal %}
         {% endblock %}
 
-        <div class="cart-collapse">
-            <div class="d-flex d-lg-none col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center my-lg-0 order-lg-1 order-1 my-3 px-0 px-md-10px">
-                <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
-{#                    <span class="h3 font-weight-bold text-uppercase text-primary ml-0">tulipan<span class="text-danger">.</span>futar  </span>#}
-                    <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">
-                </a>
-            </div>
-            <div class="cart-collapse-header">
-                <div class="container">
-                    <div class="d-flex justify-content-between align-items-center py-3">
-                        <a href="#" class="cart-collapse-title collapse-arrow-show" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                            <svg class="svg-icon svg-icon-heavy addtocart">
-                                <use xlink:href="#cart-1"> </use>
-                            </svg>
-                            {{ 'cart.show-order-summary'|trans }}
-                        </a>
-                        <span class="JS--summaryTotal cart-collapse-total">{{ order.summary.totalAmountToPay|money }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="cart-collapse-body collapse" id="collapseExample">
-                <div class="container">
-                        <div class="row">
-                            <div class="col-md-12 mb-2 pt-4">
-                                {% block cartCollapse %}
-                                {% endblock %}
-                            </div>
-                        </div>
-                </div>
-            </div>
-        </div>
-
         <div class="shopi-content">
             <div id="left_column" class="shopi-left">
+                <div class="cart-collapse">
+                    <div class="d-flex d-lg-none col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center py-lg-0 order-lg-1 order-1 py-3 px-0 px-md-10px">
+                        {% include 'webshop/widgets/logo.html.twig' with {'isShownAtCheckout': true} %}
+{#                        <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">#}
+{#                            #}{#                    <span class="h3 font-weight-bold text-uppercase text-primary ml-0">tulipan<span class="text-danger">.</span>futar  </span>#}
+{#                            <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">#}
+{#                        </a>#}
+
+                    </div>
+                    <div class="cart-collapse-header">
+                        <div class="container">
+                            <div class="d-flex justify-content-between align-items-center py-3">
+                                <a href="#" class="cart-collapse-title collapse-arrow-show" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                    <svg class="icon addtocart">
+                                        <use xlink:href="#bag"> </use>
+                                    </svg>
+                                    {{ 'cart.show-order-summary'|trans }}
+                                </a>
+                                <span class="JS--summaryTotal cart-collapse-total">{{ checkout is defined ? checkout.totalAmountToPay|money : order.totalAmountToPay|money }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-collapse-body collapse" id="collapseExample">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 mb-2 pt-4">
+                                    {% block cartCollapse %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="container shopi-left-body">
-{#                    style="max-width: 500px;"#}
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="d-none d-lg-flex col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center my-lg-0 order-lg-1 order-1 pb-2 px-0 px-md-10px">
-                                <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">
-                                    <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">
-                                </a>
+                            <div class="d-none d-lg-flex col-sm-4 col-lg-4 mx-auto navbar--logo-checkout justify-content-center py-lg-0 order-lg-1 order-1 pb-2 px-0 px-md-10px">
+{#                                <a href="{{ path('homepage') }}" class="navbar-brand order-lg-1 order-2">#}
+{#                                    <img src="{{  asset('uploads/images/icons/rafina-logo-budapest-1.png') }}" class="store-logo">#}
+{#                                </a>#}
+                                {% include 'webshop/widgets/logo.html.twig' %}
                             </div>
 
                             <div id="progress_bar">
@@ -64,39 +59,42 @@
                                 {% include('webshop/cart/already-registered-widget.html.twig') %}
                             {% endif %}
 
+                            {% include 'webshop/site/alert-insert.html.twig' %}
+
                             {% block leftColumn %}
                             {% endblock %}
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-12 pb-3">
                             {% block gotoNext %}
                             {% endblock %}
                         </div>
                     </div>
+{#                    <div class="row">#}
+{#                        #}
+{#                    </div>#}
                     <div class="row">
                         <div class="col-md-12">
                             <ul class="list-inline checkout-footer-list py-3 mb-0">
 
                                 <li class="list-inline-item">
-                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--privacyPolicy">Adatvedelem</a>
-                                    {% include '/webshop/site/widgets/_privacy-policy-popup.html.twig' %}
+                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--termsOfService">{{ 'footer.terms-and-conditions'|trans }}</a>
+                                    {% include 'webshop/widgets/_terms-and-condition-popup.html.twig' %}
                                 </li>
 
                                 <li class="list-inline-item">
-                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--shippingInfo">Szállítási díjak</a>
+                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--shippingInfo">{{ 'footer.shipping-information'|trans }}</a>
                                     <div class="modal fade" id="modal--shippingInfo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
+                                        <div class="modal-dialog modal-quickinfo modal-dialog-centered modal-dialog-scrollable" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <h3 class="modal-title" id="modalLabel">{{ pages.szallitasiDijak.name }}</h3>
+                                                <div class="modal-body cms-page-body">
+                                                    <h2 class="modal-title" id="modalLabel">{{ policies.shipping_information.name }}</h2>
                                                     <div class="mt-4">
-                                                        {{ pages.szallitasiDijak.content|raw }}
+                                                        {{ policies.shipping_information.content|raw }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -105,8 +103,8 @@
                                 </li>
 
                                 <li class="list-inline-item">
-                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--termsOfService">ÁSZF</a>
-                                    {% include '/webshop/site/widgets/_terms-and-condition-popup.html.twig' %}
+                                    <a href="#" class="text-link-quickinfo" data-toggle="modal" data-target="#modal--privacyPolicy">{{ 'footer.privacy-policy'|trans }}</a>
+                                    {% include 'webshop/widgets/_privacy-policy-popup.html.twig' %}
                                 </li>
                             </ul>
                         </div>

@@ -1,9 +1,9 @@
 {#{% extends 'webshop/site/template-checkout-asos.html.twig' %}#}
 {% extends 'webshop/site/template-checkout-shopi.html.twig' %}
 
-{% block title %}
+{%- block title -%}
     Fizetés | {{ parent() }}
-{% endblock %}
+{%- endblock -%}
 
 
 {% block stylesheets %}
@@ -18,67 +18,69 @@
         <div class="row">
             <div class="col-lg-12 correction-no-padding">
                 <div class="card">
-                    <div class="">
-                        <div class="card-body">
-                            <div class="checkout-summary">
-                                    <div class="">
-                                        <div class="w-100 checkout-summary-item">
-                                            <div class="checkout-summary-item-grid">
-                                                <div class="checkout-summary-item-label">
-                                                    <div class="checkout-summary-item-title">
-                                                        Címzett
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-summary-item-data">
-                                                    <div class="checkout-summary-item-description">
-                                                        {{ order.recipient.fullname }},
-                                                        {{ order.recipient.address.street }},
-                                                        {{ order.recipient.address.zip }} {{ order.recipient.address.city }},
-                                                        {{ order.recipient.address.province }}, {{ order.recipient.address.country }},
-                                                        {{ order.recipient.phone }}
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-summary-item-action">
-                                                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">Módosítás</a>
-                                                </div>
+                    <div class="card-body">
+                        <div class="checkout-overview">
+                            <div class="">
+                                <div class="w-100 checkout-overview-item">
+                                    <div class="checkout-overview-item-grid">
+                                        <div class="checkout-overview-item-label">
+                                            <div class="checkout-overview-item-title">
+                                                {{ flowerShopMode ? 'checkout.overview.customer-from'|trans : 'checkout.overview.customer-contact'|trans }}
                                             </div>
                                         </div>
-                                        <div class="w-100 checkout-summary-item">
-                                            <div class="checkout-summary-item-grid">
-                                                <div class="checkout-summary-item-label">
-                                                    <div class="checkout-summary-item-title">
-                                                        Aki küldi
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-summary-item-data">
-                                                    <div class="checkout-summary-item-description">
-                                                        {{ order.fullname }}, {{ order.email }}, {{ order.phone }}
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-summary-item-action">
-                                                    <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">Módosítás</a>
-                                                </div>
+                                        <div class="checkout-overview-item-data">
+                                            <div class="checkout-overview-item-description">
+                                                {% if flowerShopMode %}
+                                                    {{ checkout.customer.fullname }}, {{ checkout.customer.email }}, {{ checkout.customer.phone }}
+                                                {% else %}
+                                                    {{ checkout.customer.email }}
+                                                {% endif %}
                                             </div>
                                         </div>
-                                        <div class="w-100 checkout-summary-item">
-                                            <div class="checkout-summary-item-grid">
-                                                <div class="checkout-summary-item-label">
-                                                    <div class="checkout-summary-item-title">
-                                                        Szállítás
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-summary-item-data">
-                                                    <div class="checkout-summary-item-description">
-                                                        {{ order.shippingMethod }}, {{ order.deliveryDate|localizedDate('Y M j.')|lower }}, {{ order.deliveryInterval }}
-                                                    </div>
-                                                </div>
-                                                <div class="checkout-summary-item-action">
-                                                    <a href="{{ path('site-checkout-step2-pickShipping') }}" class="text-sm text-nowrap">Módosítás</a>
-                                                </div>
-                                            </div>
+                                        <div class="checkout-overview-item-action">
+                                            <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="w-100 checkout-overview-item">
+                                    <div class="checkout-overview-item-grid">
+                                        <div class="checkout-overview-item-label">
+                                            <div class="checkout-overview-item-title">
+                                                {{ flowerShopMode ? 'checkout.overview.recipient-to'|trans : 'checkout.overview.recipient'|trans }}
+                                            </div>
+                                        </div>
+                                        <div class="checkout-overview-item-data">
+                                            <div class="checkout-overview-item-description">
+                                                {{ checkout.recipient.fullname }},
+                                                {{ checkout.recipient.address.street }},
+                                                {{ checkout.recipient.address.zip }} {{ checkout.recipient.address.city }},
+                                                {{ checkout.recipient.address.province }}, {{ checkout.recipient.address.country }},
+                                                {{ checkout.recipient.phone }}
+                                            </div>
+                                        </div>
+                                        <div class="checkout-overview-item-action">
+                                            <a href="{{ path('site-checkout-step1-pickDeliveryAddress') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-100 checkout-overview-item">
+                                    <div class="checkout-overview-item-grid">
+                                        <div class="checkout-overview-item-label">
+                                            <div class="checkout-overview-item-title">
+                                                {{ 'checkout.overview.shipping-method'|trans }}
+                                            </div>
+                                        </div>
+                                        <div class="checkout-overview-item-data">
+                                            <div class="checkout-overview-item-description">
+                                                {{ checkout.shippingMethod }}{%- if flowerShopMode -%}, {{ checkout.deliveryDate|localizedDate('Y M j.')|lower }}, {{ checkout.deliveryInterval }}{%- endif -%}
+                                            </div>
+                                        </div>
+                                        <div class="checkout-overview-item-action">
+                                            <a href="{{ path('site-checkout-step2-pickShipping') }}" class="text-sm text-nowrap">{{ 'generic.edit'|trans }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,7 +103,7 @@
                                     </div>
                                 {% endfor %}
                                 <div class="checkout-block-header">
-                                    <h4 class="checkout-block-title">Fizetési mód</h4>
+                                    <h4 class="checkout-block-title">{{ 'checkout.payment.payment-method'|trans }}</h4>
                                 </div>
                             </div>
 
@@ -124,10 +126,7 @@
                         <div class="JS--Wrapper-sender">
                             <div class="JS--Wrapper-alert">
                                 <div class="checkout-block-header">
-                                    <h4 class="checkout-block-title">Számlázási adataid</h4>
-                                </div>
-                                <div class="checkout-block-text">
-                                    <span class="">Add meg a számlázási adataidat vagy válassz az előzőleg használtak közül.</span>
+                                    <h4 class="checkout-block-title">{{ 'checkout.sender.sender-title'|trans }}</h4>
                                 </div>
                             </div>
 
@@ -141,10 +140,10 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <h3 class="modal-title" id="modalLabel">Számlázási címeid</h3>
+                                                <h3 class="modal-title" id="modalLabel">{{ 'checkout.sender.previously-saved-senders-modal-title'|trans }}</h3>
                                                 <div class="JS--Wrapper-senderList">
                                                     {% if senders is defined %}
-                                                        {% include('webshop/cart/sender_list.html.twig') %}
+                                                        {% include 'webshop/cart/sender_list.html.twig' %}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -152,16 +151,13 @@
                                     </div>
                                 </div>
 
-                                <div class="JS--Wrapper-senderBody">
-                                    {% if senderForm is defined %}
-                                        {% include('webshop/cart/sender_form.html.twig') %}
-                                    {% endif %}
-                                </div>
-                                {% if senders.count >= 1 %}
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                                <div class="vertical-form-row">
+                                <div class="">
+                                    {% include 'webshop/cart/sender-same-as-recipient.html.twig' %}
+
+                                    <div class="JS--Wrapper-senderBody content-body-thick-border checkout-sender-form{% if isNewSender is defined and isNewSender is same as (true) %} --active{% endif %}">
+                                        <div class="">
+                                            {% if is_granted('IS_AUTHENTICATED_FULLY') and senders.count >= 1 %}
+                                                <div class="vertical-form-row mb-3">
                                                     <div class="vertical-col mr-3">
                                                         <a href="#" class="JS--Button-showSenderForm text-link-checkout" data-url="{{ path('cart-editSender') }}">
                                                             <span class="loading-spinner-invisible">Új számlázási cím</span>
@@ -176,10 +172,14 @@
                                                     </div>
                                                 </div>
                                             {% endif %}
+                                            {% if senderForm is defined %}
+                                                {% include 'webshop/cart/sender_form.html.twig' %}
+                                            {% endif %}
+                                            <button class="JS--Button-refreshSenderList d-none" data-url="{{ path('cart-getSenders') }}"></button>
                                         </div>
                                     </div>
-                                {% endif %}
-                                <button class="JS--Button-refreshSenderList d-none" data-url="{{ path('cart-getSenders') }}"></button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -188,29 +188,32 @@
         </div>
     </div>
 
-    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-        <div id="user_registration" class="user-registration">
-            <div class="row">
-                <div class="col-lg-12 correction-no-padding">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="" data-wrapper-registration>
-                                <div class="checkout-block-header">
-                                    <h4 class="checkout-block-title">Fiók létrehozása</h4>
-                                </div>
+{#    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}#}
+{#        <div id="user_registration" class="user-registration">#}
+{#            <div class="row">#}
+{#                <div class="col-lg-12 correction-no-padding">#}
+{#                    <div class="card">#}
+{#                        <div class="card-body">#}
+{#                            <div class="" data-wrapper-registration>#}
+{#                                <div class="checkout-block-header">#}
+{#                                    <h4 class="checkout-block-title">{{ 'checkout.account.create-account-title'|trans }}</h4>#}
+{#                                </div>#}
+{#                                <div class="checkout-block-text">#}
+{#                                    <span class="">{{ 'checkout.account.create-account-description'|trans }}</span>#}
+{#                                </div>#}
 
-                                <div class="mt-3">
-                                    <div class="">
-                                        {% include('webshop/cart/registration-form-duringCheckout.html.twig') %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
+{#                                <div class="mt-3">#}
+{#                                    <div class="">#}
+{#                                        {% include 'webshop/cart/registration-form-duringCheckout.html.twig' %}#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    {% endif %}#}
 
     <div id="accept_terms" class="accept-terms">
         <div class="row">
@@ -230,7 +233,7 @@
 {% block gotoNext %}
     <div class="mt-20px mt-md-4 d-flex justify-content-center justify-content-md-between flex-column">
         <button data-url="{{ path('site-checkout-place-order') }}" class="JS--Button-gotoThankYou btn btn-success btn-lg btn-goto order-1 order-md-2 px-2 px-md-4 py-3">
-            <span class="loading-spinner-invisible">A rendelést leadom</span>
+            <span class="loading-spinner-invisible">{{ 'checkout.place-order'|trans }}</span>
             <span class="loading-spinner" role="status"></span>
         </button>
     </div>
@@ -240,16 +243,16 @@
 {#        </div>#}
 {#    </div>#}
     <div class="mt-2 mb-5 d-flex justify-content-center justify-content-md-end flex-column">
-        <a href="{{ path('site-checkout-step2-pickShipping') }}" class="order-2 order-md-1 py-3 text-center"><i class="fas fa-chevron-left text-sm mr-2"></i>Vissza a szállításhoz</a>
+        <a href="{{ path('site-checkout-step2-pickShipping') }}" class="order-2 order-md-1 py-3 text-center"><svg class="icon"><use xlink:href="#chevron-left"></use></svg>{{ 'checkout.back-to-shipping-method-button'|trans }}</a>
     </div>
 {% endblock %}
 
 {% block cartCollapse %}
-    {% include('/webshop/cart/sidebar-summary.html.twig') %}
+    {% include 'webshop/cart/checkout-sidebar.html.twig' %}
 {% endblock %}
 
 {% block rightColumn %}
-    {% include('/webshop/cart/sidebar-summary.html.twig') %}
+    {% include 'webshop/cart/checkout-sidebar.html.twig' %}
 {% endblock %}
 
 
@@ -264,11 +267,11 @@
                 if (passInput.attr('type') == 'password') {
                     passInput[0].type='text';
                     passInput[0].focus();
-                    $passButton.html(`<i class="far fa-eye-slash text-dark"></i>`);
+                    $passButton.html(`<svg class="icon"><use xlink:href="#eye-slash"></use></svg>`);
                 } else {
                     passInput[0].type='password';
                     passInput[0].focus();
-                    $passButton.html(`<i class="fas fa-eye text-dark"></i>`);
+                    $passButton.html(`<svg class="icon"><use xlink:href="#eye"></use></svg>`);
                 }
             });
         });
@@ -331,6 +334,34 @@
                     lessThanOrEqualTo: 9999,
                     message: 'Hibás irányítószám.'
                 }
+            },
+            '{{ senderForm.phone.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'checkout.recipient.missing-phone'|trans}}'
+                },
+                format: {
+                    pattern: '^[+]?' // first character must be '+' and is optional (because of '?')
+                        +'([0-9 ]{10,})$', // allowed: '0-9' and ' ' (space), min. length 10 characters (without the '+')
+                    message: '{{ 'checkout.sender.invalid-phone'|trans}}'
+                }
+            },
+        };
+        var sameAsRecipientConstraints = {
+            '{{ sameAsRecipientForm.sameAsRecipient.vars.full_name }}': {
+                presence: {
+                    allowEmpty: false,
+                    message: '{{ 'checkout.sender.missing-billing-address'|trans}}'
+                },
+                inclusion: {
+                    within: [ '1', '0' ],
+                    {#[#}
+                    {#    {%- for method in paymentMethods -%}#}
+                    {#    '{{ method.id }}',#}
+                    {#    {%- endfor -%}#}
+                    {#],#}
+                    message: '{{ 'checkout.sender.missing-billing-address'|trans}}'
+                },
             },
         };
         var acceptTermsConstraints = {

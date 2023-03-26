@@ -52,7 +52,7 @@ class OrderApiController extends BaseController
         $id = $request->attributes->get('id');
         $data = $this->getDoctrine()->getRepository(Order::class)->find($id);
         if ($data) {
-            return $this->jsonObjNormalized(['orders' => $this->toArray($data)], 200, ['groups' => 'orderView']);
+            return $this->createJsonResponse(['orders' => $this->toArray($data)], 200, ['groups' => 'orderView']);
         } else {
             $errors['message'] = sprintf('Nem talált ilyen rendelést: orderId=%s', $id);
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -91,7 +91,7 @@ class OrderApiController extends BaseController
         
         $this->orderBuilder->setCurrentOrder($order);
     
-        return $this->jsonObjNormalized(['orders' => $this->toArray($order)], 200, ['groups' => 'orderView']);
+        return $this->createJsonResponse(['orders' => $this->toArray($order)], 200, ['groups' => 'orderView']);
     }
     
     /**
@@ -125,6 +125,6 @@ class OrderApiController extends BaseController
         $em->persist($order);
         $em->flush();
     
-        return $this->jsonObjNormalized(['orders' => $this->toArray($order)], 200, ['groups' => 'orderView']);
+        return $this->createJsonResponse(['orders' => $this->toArray($order)], 200, ['groups' => 'orderView']);
     }
 }

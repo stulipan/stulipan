@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 
-class RecipientType extends AbstractType
+class RecipientTypeV1 extends AbstractType
 {
     private $urlGenerator;
 

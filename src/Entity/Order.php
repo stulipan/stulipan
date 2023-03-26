@@ -4,25 +4,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Controller\Utils\GeneralUtils;
-use App\Entity\OrderItem;
-use App\Entity\OrderStatus;
 use App\Entity\Product\Product;
-use App\Entity\TimestampableTrait;
-use App\Entity\Recipient;
-use App\Entity\Sender;
-use App\Entity\PaymentMethod;
-use App\Entity\ShippingMethod;
-use App\Entity\Discount;
-
 use App\Model\Summary;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-
-use Egulias\EmailValidator\Warning\AddressLiteral;
-use phpDocumentor\Reflection\Types\This;
+use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -43,7 +31,7 @@ class Order
      * @var int
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="id", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -60,7 +48,7 @@ class Order
     /**
      * @var OrderStatus|null
      *
-     * @ORM\OneToOne(targetEntity="OrderStatus")
+     * @ORM\ManyToOne(targetEntity="OrderStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=true)
      */
     private $status;
@@ -68,7 +56,7 @@ class Order
     /**
      * @var PaymentStatus|null
      *
-     * @ORM\OneToOne(targetEntity="PaymentStatus")
+     * @ORM\ManyToOne(targetEntity="PaymentStatus")
      * @ORM\JoinColumn(name="payment_status_id", referencedColumnName="id", nullable=true)
      */
     private $paymentStatus;
@@ -118,34 +106,34 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="customer_phone", type="string", length=15, nullable=false)
-     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     * @ORM\Column(name="customer_phone", type="string", length=15, nullable=true)
+     * @ Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $phone;
 
-    /**
-     * @var Recipient|null
-     * @Groups({"orderView", "orderList"})
-     *
-     * ==== One Order has one Recipient ====
-     *
-     * @ORM\OneToOne(targetEntity="Recipient")
-     * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id", nullable=false)
-     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen címzett.")
-     */
-    private $recipient;
+//    /**
+//     * @var Recipient|null
+//     * @Groups({"orderView", "orderList"})
+//     *
+//     * ==== One Order has one Recipient ====
+//     *
+//     * @ORM\ManyToOne(targetEntity="Recipient")
+//     * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id", nullable=false)
+//     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen címzett.")
+//     */
+//    private $recipient;
 
-    /**
-     * @var Sender|null
-     * @Groups({"orderView", "orderList"})
-     *
-     * ==== One Order has one Sender ====
-     *
-     * @ORM\OneToOne(targetEntity="Sender")
-     * @ORM\JoinColumn(name="sender_id", referencedColumnName="id", nullable=true)
-     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen feladó.")
-     */
-    private $sender;
+//    /**
+//     * @var Sender|null
+//     * @Groups({"orderView", "orderList"})
+//     *
+//     * ==== One Order has one Sender ====
+//     *
+//     * @ORM\OneToOne(targetEntity="Sender")
+//     * @ORM\JoinColumn(name="sender_id", referencedColumnName="id", nullable=true)
+//     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen feladó.")
+//     */
+//    private $sender;
 
     /**
      * @var string|null
@@ -214,34 +202,61 @@ class Order
      */
     private $discount;
 
-    /**
-     * @var float|null
-     * @Assert\NotBlank()
-     * @ORM\Column(name="price_total_", type="decimal", precision=10, scale=2, nullable=false, options={"default":0})
-     */
-    private $priceTotal = 0;
-
-    /**
-     * @var float|null
-     * @Assert\NotBlank()
-     * @ORM\Column(name="price_total_after_discount_", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
-     */
-    private $priceTotalAfterDiscount = 0;
+//    /**
+//     * @var float|null
+//     * @Assert\NotBlank()
+//     * @ORM\Column(name="price_total_", type="decimal", precision=10, scale=2, nullable=true)
+//     */
+//    private $priceTotal;
+//
+//    /**
+//     * @var float|null
+//     * @Assert\NotBlank()
+//     * @ORM\Column(name="price_total_after_discount_", type="decimal", precision=10, scale=2, nullable=true)
+//     */
+//    private $priceTotalAfterDiscount;
     
     /**
      * @var float|null
      * @Groups({"orderView", "orderList"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="delivery_fee", type="decimal", precision=10, scale=2, nullable=true, options={"default":0})
+     * @ORM\Column(name="shipping_fee", type="decimal", precision=10, scale=2, nullable=true)
      */
-    private $deliveryFee = 0;
+    private $shippingFee;
+
+    /**
+     * @var float|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ORM\Column(name="payment_fee", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $paymentFee;
+
+    /**
+     * @var float|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ Assert\NotBlank()
+     * @ORM\Column(name="scheduling_price", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $schedulingPrice;
+
+    /**
+     * @var float|null
+     * @Groups({"orderView", "orderList"})
+     *
+     * @ Assert\NotBlank()
+     * @ORM\Column(name="shipping_fee_discount", type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $shippingFeeDiscount;
+
 
     /**
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="shipping_firstname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="shipping_firstname", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a keresztnevet.")
      */
     private $shippingFirstname;
@@ -250,7 +265,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="shipping_lastname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="shipping_lastname", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a vezetéknevet.")
      */
     private $shippingLastname;
@@ -259,7 +274,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="shipping_phone", type="string", length=15, nullable=false)
+     * @ORM\Column(name="shipping_phone", type="string", length=15, nullable=true)
      * @Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $shippingPhone;
@@ -271,7 +286,7 @@ class Order
      * ==== One Order has one Shipping Address ====
      *
      * @ORM\OneToOne(targetEntity="OrderAddress", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", nullable=true)
      * @Assert\NotBlank(message="Egy rendelésnek kell legyen egy szállítási címe.")
      * @Assert\Valid()
      */
@@ -281,7 +296,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="billing_firstname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="billing_firstname", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a keresztnevet.")
      */
     private $billingFirstname;
@@ -290,7 +305,7 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="billing_lastname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="billing_lastname", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Add meg a vezetéknevet.")
      */
     private $billingLastname;
@@ -307,8 +322,8 @@ class Order
      * @var string|null
      * @Groups({"orderView", "orderList"})
      *
-     * @ORM\Column(name="billing_phone", type="string", length=15, nullable=false)
-     * @Assert\NotBlank(message="Add meg a telefonszámot.")
+     * @ORM\Column(name="billing_phone", type="string", length=15, nullable=true)
+     * @ Assert\NotBlank(message="Add meg a telefonszámot.")
      */
     private $billingPhone;
 
@@ -326,7 +341,7 @@ class Order
      * ==== One Order has one Billing Address ====
      *
      * @ORM\OneToOne(targetEntity="OrderAddress", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", nullable=true)
      * @Assert\NotBlank(message="Egy rendelésnek kell legyen egy számlázási címe.")
      * @Assert\Valid()
      */
@@ -350,17 +365,17 @@ class Order
      */
     private $deliveryInterval;
 
-    /**
-     * @var ClientDetails
-     *
-     * ==== One Order has one ClientDetails ====
-     *
-     * @ORM\OneToOne(targetEntity="ClientDetails", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="client_details_id", referencedColumnName="id", nullable=false)
-     * @Assert\NotBlank(message="Egy rendelésnek kell legyen egy ClientDetails.")
-     * @Assert\Valid()
-     */
-    private $clientDetails;
+//    /**
+//     * @var ClientDetails
+//     *
+//     * ==== One Order has one ClientDetails ====
+//     *
+//     * @ORM\OneToOne(targetEntity="ClientDetails", cascade={"persist", "remove"})
+//     * @ORM\JoinColumn(name="client_details_id", referencedColumnName="id", nullable=true)   // csak ideiglenesen: nullable=true
+//     * @ Assert\NotBlank(message="Egy rendelésnek kell legyen egy ClientDetails.")  // csak ideiglenesen: nullable=true
+//     * @Assert\Valid()
+//     */
+//    private $clientDetails;
 
     /**
      * @var bool|null
@@ -369,6 +384,15 @@ class Order
      * @ORM\Column(name="is_accepted_terms", type="boolean", nullable=true, options={"default"=false})
      */
     private $isAcceptedTerms;
+
+    /**
+     * @var Checkout|null
+     * ==== One Order belongs to a Checkout ====
+     * ==== This is the Inversed side ===
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\Checkout", mappedBy="order")
+     */
+    private $checkout;
 
     /**
      * @var bool|null
@@ -387,13 +411,29 @@ class Order
     private $token;
 
     /**
-     * @var Transaction[]|ArrayCollection|null;
+     * @var DateTime|null
+     *
+     * @ORM\Column(name="posted_at", type="datetime", nullable=true)
+     *
+     */
+    private $postedAt;
+
+    /**
+     * @var DateTime|null
+     *
+     * @ORM\Column(name="canceled_at", type="datetime", nullable=true)
+     *
+     */
+    private $canceledAt;
+
+    /**
+     * @var PaymentTransaction[]|ArrayCollection|null;
      * @Groups({"orderView"})
      *
      * ==== One Order has several Transactions ====
      * ==== mappedBy="order" => a Transaction entitásban definiált 'order' attribútumról van szó ====
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="order", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\PaymentTransaction", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="order_id", nullable=true)
      * @ORM\OrderBy({"createdAt"="ASC", "id"="ASC"})
      * @Assert\NotBlank(message="Egy rendelésnek több tranzakciója lehet.")
@@ -511,6 +551,83 @@ class Order
     public function hasItems(): bool
     {
         return !$this->items->isEmpty();
+    }
+
+    /**
+     * Imports the products (items) AND also the Message & MessageAuthor from the Checkout
+     *
+     * @param Checkout $checkout
+     * @param string $messageNotEnoughStock
+     * @return $this|false
+     * @throws Exception
+     */
+    public function importItemsFromCheckout(Checkout $checkout, string $messageNotEnoughStock)
+    {
+        $newItems = new ArrayCollection();
+        foreach ($checkout->getItems() as $checkoutItem) {
+            $product = $checkoutItem->getProduct();
+
+            $wasFound = false;
+            foreach ($this->getItems() as $orderItem) {
+                // If product in Checkout already exists in Order, update the quantity and price
+                if ($orderItem->getProduct()->getId() === $product->getId()) {
+
+                    if ($product->hasEnoughStock($checkoutItem->getQuantity())) {
+                        $orderItem->setQuantity($checkoutItem->getQuantity());
+                        $orderItem->setUnitPrice($product->getSellingPrice());
+                    } else {
+                        throw new Exception($messageNotEnoughStock);
+                    }
+
+                    $wasFound = true;
+                    break;  // if product was found, break the foreach loop
+                }
+            }
+            // Product wasn't found in Order, then add it to newItems
+            if (!$wasFound) {
+                $orderItem = new OrderItem();
+                $orderItem->setProduct($product);
+
+                if ($product->hasEnoughStock($checkoutItem->getQuantity())) {
+                    $orderItem->setQuantity($checkoutItem->getQuantity());
+                    $orderItem->setUnitPrice($product->getSellingPrice());
+                } else {
+                    throw new Exception($messageNotEnoughStock);
+                }
+
+                $orderItem->setOrder($this);
+                $newItems->add($orderItem);
+            }
+        }
+
+        // Add each of the newItems to Order
+        foreach ($newItems as $newItem) {
+            $this->addItem($newItem);
+        }
+
+        // If Checkout and Order have different amount of items (there are more products in Order than in Checkout)
+        if ($checkout->getItems()->count() != $this->getItems()->count()) {
+            foreach ($this->getItems() as $orderItem) {
+                $product = $orderItem->getProduct();
+
+                $wasFound = false;
+                foreach ($checkout->getItems() as $checkoutItem) {
+                    // If a product from Order isn't in Checkout, then remove it
+                    if ($product->getId() === $checkoutItem->getProduct()->getId()) {
+                        $wasFound = true;
+                    }
+                }
+                if (!$wasFound) {
+                    $this->removeItem($orderItem);
+//                    $this->em->remove($orderItem);
+                }
+            }
+        }
+
+        $this->setMessage($checkout->getMessage());
+        $this->setMessageAuthor($checkout->getMessageAuthor());
+
+        return $this;
     }
     
     /**
@@ -661,29 +778,29 @@ class Order
         $this->phone = $phone;
     }
 
-    /**
-     * @return Recipient|null
-     */
-    public function getRecipient(): ?Recipient
-    {
-        return $this->recipient;
-    }
-
-    /**
-     * @param Recipient $recipient
-     */
-    public function setRecipient(?Recipient $recipient): void
-    {
-        $this->recipient = $recipient;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasRecipient(): bool
-    {
-        return null === $this->getRecipient() ? false : true;
-    }
+//    /**
+//     * @return Recipient|null
+//     */
+//    public function getRecipient(): ?Recipient
+//    {
+//        return $this->recipient;
+//    }
+//
+//    /**
+//     * @param Recipient $recipient
+//     */
+//    public function setRecipient(?Recipient $recipient): void
+//    {
+//        $this->recipient = $recipient;
+//    }
+//
+//    /**
+//     * @return bool
+//     */
+//    public function hasRecipient(): bool
+//    {
+//        return null === $this->getRecipient() ? false : true;
+//    }
 
     /**
      * @return string|null
@@ -717,29 +834,29 @@ class Order
         $this->messageAuthor = $author;
     }
 
-    /**
-     * @return Sender|null
-     */
-    public function getSender(): ?Sender
-    {
-        return $this->sender;
-    }
-
-    /**
-     * @param Sender $sender
-     */
-    public function setSender(?Sender $sender): void
-    {
-        $this->sender = $sender;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSender(): bool
-    {
-        return null === $this->getSender() ? false : true;
-    }
+//    /**
+//     * @return Sender|null
+//     */
+//    public function getSender(): ?Sender
+//    {
+//        return $this->sender;
+//    }
+//
+//    /**
+//     * @param Sender $sender
+//     */
+//    public function setSender(?Sender $sender): void
+//    {
+//        $this->sender = $sender;
+//    }
+//
+//    /**
+//     * @return bool
+//     */
+//    public function hasSender(): bool
+//    {
+//        return null === $this->getSender() ? false : true;
+//    }
 
     /**
      * @return PaymentMethod|null
@@ -766,7 +883,7 @@ class Order
     }
 
     /**
-     * @param ShippingMethod $shippingMethod
+     * @param ShippingMethod|null $shippingMethod
      */
     public function setShippingMethod(?ShippingMethod $shippingMethod): void
     {
@@ -789,64 +906,161 @@ class Order
         $this->discount = $discount;
     }
 
+//    /**
+//     * @return float
+//     */
+//    public function getPriceTotal(): float
+//    {
+//        return (float) $this->priceTotal;
+//    }
+//
+//    /**
+//     * @param float $priceTotal
+//     */
+//    public function setPriceTotal(float $priceTotal): void
+//    {
+//        $this->priceTotal = $priceTotal;
+//    }
+
+//    /**
+//     * @return float|null
+//     */
+//    public function getPriceTotalAfterDiscount(): ?float
+//    {
+//        return (float) $this->priceTotalAfterDiscount;
+//    }
+//
+//    /**
+//     * @param float $priceTotal
+//     */
+//    public function setPriceTotalAfterDiscount(float $priceTotal): void
+//    {
+//        $this->priceTotalAfterDiscount = $priceTotal;
+//    }
+
     /**
-     * @return float
+     * @return float|null
      */
-    public function getPriceTotal(): float
+    public function getShippingFee(): ?float
     {
-        return (float) $this->priceTotal;
+        if ($this->shippingFee === null) { return (float) 0; }
+        return (float) $this->shippingFee;
     }
 
     /**
-     * @param float $priceTotal
+     * @param float|null $shippingFee
      */
-    public function setPriceTotal(float $priceTotal): void
+    public function setShippingFee($shippingFee): void
     {
-        $this->priceTotal = $priceTotal;
+        $this->shippingFee = $shippingFee;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasShippingFee(): bool
+    {
+        if ($this->shippingFee !== null) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * @return float|null
      */
-    public function getPriceTotalAfterDiscount(): ?float
+    public function getShippingFeeDiscount(): ?float
     {
-        return (float) $this->priceTotalAfterDiscount;
+        if ($this->shippingFeeDiscount === null) { return (float) 0; }
+        return (float) $this->shippingFeeDiscount;
+    }
+
+    public function getShippingFeeToPay(): ?float
+    {
+//        return (float) ($this->getShippingFee() - $this->getShippingFeeDiscount());
+        return (float) ($this->getShippingFee());
+    }
+
+
+    /**
+     * @param float|null $shippingFeeDiscount
+     */
+    public function setShippingFeeDiscount($shippingFeeDiscount): void
+    {
+        $this->shippingFeeDiscount = $shippingFeeDiscount;
     }
 
     /**
-     * @param float $priceTotal
+     * @return float|null
      */
-    public function setPriceTotalAfterDiscount(float $priceTotal): void
+    public function getPaymentFee(): ?float
     {
-        $this->priceTotalAfterDiscount = $priceTotal;
+        if ($this->paymentFee === null) { return (float) 0; }
+        return (float) $this->paymentFee;
     }
-    
+
     /**
-     * Get information needed to summarize the basket.
-     *
-     * @return Summary
+     * @param float|null $paymentFee
      */
-    public function getSummary(): Summary
+    public function setPaymentFee(?float $paymentFee): void
     {
-        return new Summary($this);
+        $this->paymentFee = $paymentFee;
     }
-    
+
+    /**
+     * @return bool
+     */
+    public function hasPaymentFee(): bool
+    {
+        if ($this->paymentFee !== null) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getPaymentFeeToPay(): ?float
+    {
+        return (float) ($this->getPaymentFee());
+    }
+
     /**
      * @return float|null
      */
-    public function getDeliveryFee(): ?float
+    public function getSchedulingPrice(): ?float
     {
-        if ($this->deliveryFee === null) { return (float) 0; }
-        return (float) $this->deliveryFee;
+        if ($this->schedulingPrice === null) { return (float) 0; }
+        return (float) $this->schedulingPrice;
     }
-    
+
     /**
-     * @param float|null $deliveryFee
+     * @param float|null $schedulingPrice
      */
-    public function setDeliveryFee(?float $deliveryFee)
+    public function setSchedulingPrice(?float $schedulingPrice): void
     {
-        $this->deliveryFee = $deliveryFee;
+        $this->schedulingPrice = $schedulingPrice;
     }
+
+    // temporary solution: retrieve all orderItems, then get the associated products and check if they are onSale
+    public function getDiscountAmount()
+    {
+        $discountAmount = 0;
+        foreach ($this->items as $item) {
+            if ($item->getProduct()->isOnSale()) {
+                $discountAmount += $item->getProduct()->getDiscountAmount();
+            }
+        }
+        return $discountAmount;
+    }
+
+    public function hasDiscount(): bool
+    {
+        if ($this->getDiscountAmount() > 0 ) {
+            return true;
+        }
+        return false;
+    }
+
+
 
     /**
      * @return int
@@ -1071,21 +1285,21 @@ class Order
         $this->deliveryInterval = $deliveryInterval;
     }
 
-    /**
-     * @return ClientDetails
-     */
-    public function getClientDetails(): ?ClientDetails
-    {
-        return $this->clientDetails;
-    }
-
-    /**
-     * @param ClientDetails $clientDetails
-     */
-    public function setClientDetails(ClientDetails $clientDetails): void
-    {
-        $this->clientDetails = $clientDetails;
-    }
+//    /**
+//     * @return ClientDetails
+//     */
+//    public function getClientDetails(): ?ClientDetails
+//    {
+//        return $this->clientDetails;
+//    }
+//
+//    /**
+//     * @param ClientDetails $clientDetails
+//     */
+//    public function setClientDetails(ClientDetails $clientDetails): void
+//    {
+//        $this->clientDetails = $clientDetails;
+//    }
 
     /**
      * @return bool|null
@@ -1135,6 +1349,37 @@ class Order
         $this->token = $token;
     }
 
+    /**
+     * @return DateTime|null
+     */
+    public function getPostedAt(): ?DateTime
+    {
+        return $this->postedAt;
+    }
+
+    /**
+     * @param DateTime|null $postedAt
+     */
+    public function setPostedAt(?DateTime $postedAt): void
+    {
+        $this->postedAt = $postedAt;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getCanceledAt(): ?DateTime
+    {
+        return $this->canceledAt;
+    }
+
+    /**
+     * @param DateTime|null $canceledAt
+     */
+    public function setCanceledAt(?DateTime $canceledAt): void
+    {
+        $this->canceledAt = $canceledAt;
+    }
 
     /**
      * @param OrderLog $log
@@ -1240,12 +1485,24 @@ class Order
         if ($this->getStatus() && (
                 $this->getStatus()->getShortcode() === OrderStatus::PAYMENT_REFUNDED ||
                 $this->getStatus()->getShortcode() === OrderStatus::STATUS_FULFILLED ||
-                $this->getStatus()->getShortcode() === OrderStatus::ORDER_DELETED
+                $this->isCanceled()
             )) {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanceled(): bool
+    {
+//        if ($this->getCanceledAt() !== null) {
+        if ($this->canceledAt !== null) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -1258,6 +1515,17 @@ class Order
         } else {
             return false;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUnfulfilled(): bool
+    {
+        if ($this->isFulfilled()) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -1277,19 +1545,32 @@ class Order
 
     public function isPaid(): bool
     {
-        if ($this->getPaymentStatus()->getShortcode() === PaymentStatus::STATUS_PAID) {
+        if ($this->getPaymentStatus() && (
+            $this->getPaymentStatus()->getShortcode() === PaymentStatus::STATUS_PAID)
+        ) {
             return true;
         }
         return false;
+    }
+
+    public function hasManualPayment(): bool
+    {
+        if ($this->getPaymentMethod() && $this->getPaymentMethod()->isManualPayment()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function isBankTransfer(): bool
     {
         if ($this->getPaymentMethod() && $this->getPaymentMethod()->isBankTransfer()) {
             return true;
-        } else {
-            return false;
         }
+//        else {
+//            return false;
+//        }
+        return false;
     }
 
     public function hasComment(): bool
@@ -1303,7 +1584,7 @@ class Order
     }
 
     /**
-     * @return Transaction[]|Collection|null
+     * @return PaymentTransaction[]|Collection|null
      */
     public function getTransactions()
     {
@@ -1311,9 +1592,9 @@ class Order
     }
 
     /**
-     * @param Transaction $transaction
+     * @param PaymentTransaction $transaction
      */
-    public function addTransaction(Transaction $transaction): void
+    public function addTransaction(PaymentTransaction $transaction): void
     {
         if (!$this->transactions->contains($transaction)) {
             $transaction->setOrder($this);
@@ -1322,9 +1603,9 @@ class Order
     }
 
     /**
-     * @param Transaction $transaction
+     * @param PaymentTransaction $transaction
      */
-    public function removeTransaction(Transaction $transaction): void
+    public function removeTransaction(PaymentTransaction $transaction): void
     {
         $this->transactions->removeElement($transaction);
     }
@@ -1335,6 +1616,87 @@ class Order
     public function hasTransactions(): bool
     {
         return !$this->transactions->isEmpty();
+    }
+
+    /**
+     * @return PaymentTransaction|null
+     */
+    public function getTransaction(): ?PaymentTransaction
+    {
+        /** @var PaymentTransaction $transaction */
+        $transaction = $this->getTransactions()->last();
+        if ($transaction === false) {
+            return null;
+        }
+        return $transaction;
+    }
+
+    /**
+     * @return PaymentMethod|null
+     */
+    public function getPaymentGateway()
+    {
+        return $this->getPaymentMethod();
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getTotalBeforeSale()
+    {
+        $total = 0;
+        foreach ($this->items as $item) {
+            if ($item->getProduct()->isOnSale()) {
+                $total += $item->getQuantity() * $item->getProduct()->getCompareAtPrice();
+            } else {
+                $total += $item->getQuantity() * $item->getProduct()->getSellingPrice();
+            }
+        }
+        return $total;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getTotalAfterSale()
+    {
+        $total = 0;
+        foreach ($this->items as $item) {
+            $total += $item->getQuantity() * $item->getProduct()->getSellingPrice();
+        }
+        return $total;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getTotalSaving()
+    {
+        return $this->getTotalBeforeSale() - $this->getTotalAfterSale();
+    }
+
+    public function hasProductOnSale()
+    {
+        // upon finding first onSale product, it returns 'true'
+        foreach ($this->items as $item) {
+            if ($item->getProduct()->isOnSale()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getTotalAmountToPay()
+    {
+        return $this->getTotalAfterSale() + $this->getShippingFeeToPay() + $this->getPaymentFeeToPay() + $this->getSchedulingPrice();
+    }
+
+    public function getAmountPaidByCustomer(): float
+    {
+        if ($this->isPaid()) {
+            return $this->getTotalAmountToPay();
+        }
+        return 0;
     }
 
 

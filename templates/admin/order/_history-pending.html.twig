@@ -1,18 +1,20 @@
-<strong>{{ 'order.history.order-id'|trans }}</strong><br>
-<span>#{{ order.number }}</span><br>
-<strong>{{ 'order.history.amount'|trans }}</strong><br>
-<span>
-    {%- if order.summary.totalAmountToPay is defined and order.summary.totalAmountToPay is not null -%}
-        {{  order.summary.totalAmountToPay|money }}
-    {%- else -%}
-        -
-    {%- endif -%}
-</span><br>
-<strong>{{ 'order.history.payment-method'|trans }}</strong><br>
-<span>
-    {%- if order.paymentMethod is defined and order.paymentMethod is not null -%}
-        {{  order.paymentMethod }}
-    {%- else -%}
-        -
-    {%- endif -%}
-</span>
+<dl>
+        <dt>{{ 'order.history.order-id'|trans }}</dt>
+        <dd>#{{ order.number }}</dd>
+        <dt>{{ 'order.history.amount'|trans }}</dt>
+        <dd>
+                {%- if order.totalAmountToPay is defined and order.totalAmountToPay is not null -%}
+                        {{  order.totalAmountToPay|money }}
+                {%- else -%}
+                        -
+                {%- endif -%}
+        </dd>
+        <dt>{{ 'order.history.payment-gateway'|trans }}</dt>
+        <dd>{{ order.transaction.gateway }}</dd>
+        <dt>{{ 'order.history.transaction-status'|trans }}</dt>
+        <dd>{{ order.transaction.status }}</dd>
+        <dt>{{ 'order.history.transaction-type'|trans }}</dt>
+        <dd>{{ order.transaction.kind }}</dd>
+        <dt>{{ 'order.history.transaction-created-at'|trans }}</dt>
+        <dd>{{ order.transaction.createdAt|rawDateTime }}</dd>
+</dl>

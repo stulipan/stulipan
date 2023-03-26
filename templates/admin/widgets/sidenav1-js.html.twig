@@ -1,0 +1,85 @@
+<script>
+    // Inspired by:
+    // https://github.com/azouaoui-med
+    // Demo: https://azouaoui-med.github.io/pro-sidebar-template/src/
+
+    jQuery(function ($) {
+        let backdrop = null;
+        let isShown = null;
+        let $sMenu = $('body').find('#sMenu');
+
+        document.body.addEventListener('show.sMenu', function () {
+            createBackdrop();
+            document.body.classList.add('sMenu--show');
+            isShown = true;
+
+            let focusableItemsString = "a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex=0], *[contenteditable]";
+            let $focusableElements = $sMenu.find('*').filter(focusableItemsString);
+            if ($focusableElements.length > 0){
+                $focusableElements[0].focus();
+            }
+        });
+        document.body.addEventListener('hide.sMenu', function () {
+            removeBackdrop();
+            document.body.classList.remove('sMenu--show');
+            isShown = false;
+        });
+
+        function createBackdrop() {
+            backdrop = document.createElement('div');
+            backdrop.className = 'sMenu-backdrop';
+            backdrop.classList.add('show');
+            document.body.appendChild(backdrop);
+
+            backdrop.addEventListener("click", function() {
+                $('#JS--toggleSmenu-button').trigger('click');
+            });
+            window.addEventListener('keydown', function(e) {
+                if (!isShown) return;
+                var key = e.which && e.which || e.keyCode();
+                if (key === 27) {
+                    document.body.dispatchEvent(new Event('hide.sMenu'));
+                }
+            });
+        }
+
+        function removeBackdrop() {
+            backdrop.classList.remove('show');
+            backdrop.remove();
+            backdrop = null;
+        }
+
+
+        // Dropdown menu
+        $('.sMenu--dropdown > a').click(function () {
+            $('.sMenu--submenu').slideUp(200);
+            if ($(this).parent().hasClass('active')) {
+                $('.sMenu--dropdown').removeClass('active');
+                $(this).parent().removeClass('active');
+            } else {
+                $('.sMenu--dropdown').removeClass('active');
+                $(this).next('.sMenu--submenu').slideDown(200);
+                $(this).parent().addClass('active');
+            }
+        });
+
+        //toggle sidebar
+        $('#JS--toggleSmenu-button').click(function () {
+            // $('body').toggleClass('sMenu--show');
+            if (isShown) {
+                document.body.dispatchEvent(new Event('hide.sMenu'));
+            } else {
+                document.body.dispatchEvent(new Event('show.sMenu'));
+            }
+        });
+
+
+        if (
+            !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                navigator.userAgent
+            )
+        ) {
+            $('body').addClass('desktop');
+        }
+    });
+</script>

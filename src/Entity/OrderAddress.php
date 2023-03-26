@@ -41,7 +41,7 @@ class OrderAddress
      * @ORM\Column(name="street", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="checkout.recipient.missing-address")
      */
-    private $street='';
+    private $street;
 
     /**
      * @var string
@@ -66,7 +66,7 @@ class OrderAddress
      * @ORM\Column(name="province", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="checkout.recipient.missing-province")
      */
-    private $province='';
+    private $province;
 //
 //    /**
 //     * @var GeoCountry
@@ -188,7 +188,7 @@ class OrderAddress
      */
     public function isBillingAddress(): bool
     {
-        if ($this->getAddressType() == BILLING_ADDRESS) {
+        if ($this->getAddressType() == self::BILLING_ADDRESS) {
             return true;
         } else {
             return false;
@@ -200,7 +200,7 @@ class OrderAddress
      */
     public function isDeliveryAddress(): bool
     {
-        if ($this->getAddressType() == DELIVERY_ADDRESS) {
+        if ($this->getAddressType() == self::DELIVERY_ADDRESS) {
             return true;
         } else {
             return false;
@@ -212,12 +212,12 @@ class OrderAddress
      */
     public function setAddressTypeToBilling()
     {
-        $this->addressType = BILLING_ADDRESS;
+        $this->addressType = self::BILLING_ADDRESS;
     }
 
     public function setAddressTypeToDelivery()
     {
-        $this->addressType = DELIVERY_ADDRESS;
+        $this->addressType = self::DELIVERY_ADDRESS;
     }
 
 

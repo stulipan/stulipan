@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\TimestampableTrait;
+use App\Services\PaymentBuilder;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -67,7 +68,7 @@ class PaymentMethod
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
-     * @ Assert\NotBlank(message="A fizetési mód rövid leírása hiányzik!")
+     * @ Assert\NotBlank(message="A fizetési mód részletes leírása hiányzik!")
      */
     private $description;
 
@@ -84,26 +85,27 @@ class PaymentMethod
      * @var float
      * @Groups({"orderView", "orderList"})
      *
-     * @ Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
-     * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"="0.00"})
+     * @Assert\NotBlank(message="Adj meg egy összeget.")
+     * @Assert\Range(min=0, minMessage="Az összeg nem lehet negatív.")
+     * @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=false, options={"default"=0.00})
      */
-    private $price;
+    private $price = 0;
 
     /**
      * @var int
      * @Groups({"orderView"})
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="ordering", nullable=true, options={"default"="100"})
+     * @ORM\Column(name="ordering", type="smallint", nullable=false, options={"default"=100, "unsigned"=true})
      */
     private $ordering;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled", type="smallint", nullable=false, options={"default"="1"})
+     * @ORM\Column(name="enabled", type="smallint", nullable=false, options={"default"=0})
      */
-    private $enabled = '1';
+    private $enabled = false;
 
 
     /**
@@ -115,17 +117,17 @@ class PaymentMethod
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @param string $name
+     * @param string|null $name
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
@@ -136,7 +138,7 @@ class PaymentMethod
     }
     
     /**
-     * @return string
+     * @return string|null
      */
     public function getShortcode(): ?string
     {
@@ -144,7 +146,7 @@ class PaymentMethod
     }
     
     /**
-     * @param string $shortcode
+     * @param string|null $shortcode
      */
     public function setShortcode(?string $shortcode)
     {
@@ -152,7 +154,7 @@ class PaymentMethod
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getShort(): ?string
     {
@@ -160,15 +162,15 @@ class PaymentMethod
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      */
-    public function setShort(string $description): void
+    public function setShort(?string $description): void
     {
         $this->short = $description;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDescription(): ?string
     {
@@ -176,9 +178,9 @@ class PaymentMethod
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -200,7 +202,7 @@ class PaymentMethod
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getPrice(): float
     {
@@ -208,23 +210,23 @@ class PaymentMethod
     }
 
     /**
-     * @param float $price
+     * @param float|null $price
      */
-    public function setPrice(float $price): void
+    public function setPrice(?float $price): void
     {
         $this->price = $price;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getOrdering(): ?int
     {
-        return $this->ordering;
+        return (int) $this->ordering;
     }
 
     /**
-     * @param int $ordering
+     * @param int|null $ordering
      */
     public function setOrdering(?int $ordering): void
     {
@@ -261,6 +263,14 @@ class PaymentMethod
      */
     public function isBankTransfer(): bool
     {
-        return self::BANK_TRANSFER == $this->getShortcode() ? true : false;
+        return PaymentBuilder::MANUAL_BANK === $this->getShortcode() ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isManualPayment(): bool
+    {
+        return (PaymentBuilder::MANUAL_BANK === $this->getShortcode() || PaymentBuilder::MANUAL_COD === $this->getShortcode()) ? true : false;
     }
 }

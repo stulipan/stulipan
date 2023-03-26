@@ -9,9 +9,9 @@
 	},
 } %}
 
-{% block title %}
+{%- block title -%}
 	{{ pageTitle }}
-{% endblock %}
+{%- endblock -%}
 
 
 {% block headerActionsWrapper %}
@@ -25,9 +25,9 @@
 				{% for quickLink in filterQuickLinks %}
 					<li class="nav-item adaptive-item">
 						<a href="{{ quickLink['url'] }}" class="nav-link {% if quickLink['active'] is defined and quickLink['active'] %}active{% endif %}">
-										<span class="d-flex justify-content-between align-items-center">
-											<span class="d-flex">{{ quickLink['name'] }}</span>
-										</span>
+							<span class="d-flex justify-content-between align-items-center">
+								<span class="d-flex">{{ quickLink['name'] }}</span>
+							</span>
 						</a>
 					</li>
 				{% endfor %}
@@ -35,7 +35,6 @@
 			<ul class="adaptive-template">
 				<li class="nav-item adaptive-item adaptive-more">
 					<button type="button" class="adaptive-button nav-link btn btn-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-						{#											<i class="fas fa-ellipsis-h"></i>#}
 						{{ 'generic.more'|trans }}
 					</button>
 					<ul class="adaptive-secondary">
@@ -56,10 +55,10 @@
 							<i class="fas fa-search"></i>
 						</div>
 					</div>
-					{{ form_widget(filterForm.searchTerm, {'attr': {'class': 'pl-addon-sm'} }) }}
+					{{ form_widget(filterForm.searchTerm, {'attr': {'class': 'pl-addon-sm', 'placeholder': 'customer.filter.search-placeholder'|trans} }) }}
 				</div>
 				<div class="field-item flex-lg-grow-1">
-					{{ form_widget(filterForm.status, {'attr': {'class': 'form-control' }}) }}
+					{{ form_widget(filterForm.acceptsMarketing, {'attr': {'class': ''}}) }}
 				</div>
 			</div>
 			<div class="">
@@ -103,21 +102,25 @@
 	{% if customers is defined and customers is not empty %}
 		{% for customer in customers %}
 			<tr>
-				<td class="align-middle text-left py-4X">
+				<td class="align-middle text-left">
 						{% if customer.fullname is defined and customer.fullname is not null %}
 						<a href="{{ path('customer-show', {'id': customer.id}) }}" class="">
 							{{ customer.fullname }}
 						</a>
 						(<em class="text-muted">{{ customer.email }}</em>)
-{#							{{ dump(customer.fullname) }}#}
 						{% else %}
 						<a href="{{ path('customer-show', {'id': customer.id}) }}" class="">
 							{{ customer.email }}
 						</a>
 						{% endif %}
 				</td>
+				<td class="align-middle">
+					{% if customer.acceptsMarketing %}
+						<span class="badge badge-success">{{ 'customer.accepts-marketing'|trans }}</span>
+					{% endif %}
+				</td>
 				<td class="align-middle text-right text-nowrap">
-					{{ customer.orders.count == 1 ? 'customer.order-count'|trans({ '{{ count }}': customer.ordersPlaced.count }) : 'customer.orders-count'|trans({ '{{ count }}': customer.ordersPlaced.count }) }}
+					{{ customer.placedOrdersCount == 1 ? 'customer.order-count'|trans({ '{{ count }}': customer.placedOrdersCount }) : 'customer.orders-count'|trans({ '{{ count }}': customer.placedOrdersCount }) }}
 				</td>
 				<td class="align-middle text-right">
 							<span class="JS--result">{{ customer.spentAmount|money }} </span>

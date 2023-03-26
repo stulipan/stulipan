@@ -2,7 +2,6 @@
 
 namespace App\Serializer;
 
-use App\Entity\ImageEntity;
 use App\Entity\Price;
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductBadge;
@@ -12,21 +11,12 @@ use App\Entity\Product\ProductKind;
 use App\Entity\Product\ProductOption;
 use App\Entity\Product\ProductStatus;
 use App\Entity\Product\ProductVariant;
-use Doctrine\Common\Annotations\AnnotationReader;
+use App\Entity\SalesChannel;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
-use libphonenumber\Leniency\Possible;
-use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * Product denormalizer
@@ -36,32 +26,11 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
     use DenormalizerAwareTrait;
     
     private $em;
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
-    
-//    private $normalizer;
-//
-//    public function __construct() //ObjectNormalizer $normalizer
-//    {
-//        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-//        $objNormalizer = new ObjectNormalizer(
-//            $classMetadataFactory,
-//            null,
-//            null,
-////            new ReflectionExtractor(),
-//            new PhpDocExtractor(),
-//            null,
-//            null,
-//            [ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
-//        );
-//        $normalizer = [
-//            $objNormalizer,
-//        ];
-//        $serializer = new Serializer($normalizer, [new JsonEncoder()]);
-//        $this->normalizer = $serializer;
-//    }
     
     /**
      * {@inheritdoc}
@@ -69,10 +38,6 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
      */
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-//        $object = $this->denormalizer->denormalize($data, $class);
-//        $clasa = json_decode(json_encode($data));
-//        dd($data);
-        
         if (isset($data['id'])) {
             $object = $this->em->find(Product::class, $data['id']);
         } else {
@@ -82,7 +47,6 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
         $object->setDescription($data['description']);
         $object->setSku($data['sku']);
         $object->setStock($data['stock']);
-        $object->setName($data['name']);
 
         $context = array_merge($context, ['product' => $object]);
 
@@ -119,9 +83,10 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
         if (isset($data['images'])) {
             $initialImages = $object->getImages();
             $images = $this->denormalizer->denormalize($data['images'],ProductImage::class.'[]', $format, $context);
+
             // normalisan ide kene egy: $object->addImage() foreach loop-ban
             // de nem kell, mivel az uj kepek a ProductImageDenormalizerben vannak hozzaadva!
-            
+
             // delete ProductImages that are not common
             foreach ($initialImages as $image) {
                 if (! (new ArrayCollection($images))->contains($image) ) {
@@ -129,7 +94,7 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
                 }
             }
         }
-        if (isset($data['options'])) {
+        if (isset($data['options']) && count($data['options']) > 0) {
             $initialOptions = $object->getOptions();
             $options = $this->denormalizer->denormalize($data['options'],ProductOption::class.'[]', $format, $context);
             foreach ($options as $option) {
@@ -153,6 +118,15 @@ class ProductDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
                 if (!(new ArrayCollection($variants))->contains($variant)) {
                     $object->removeVariant($variant);
                 }
+            }
+        }
+        if (isset($data['salesChannels'])) {
+            foreach ($object->getSalesChannels() as $item) {
+                $object->removeSalesChannel($item);
+            }
+            $salesChannels = $this->denormalizer->denormalize($data['salesChannels'],SalesChannel::class.'[]', $format, $context);
+            foreach ($salesChannels as $item) {
+                $object->addSalesChannel($item);
             }
         }
         return $object;

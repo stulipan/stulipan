@@ -43,9 +43,13 @@
             </template>
         </multiselect>
         <div class="">
-            <div v-for="v in selectedOptions" class="filter-tag">
-                <div class="filter-tag-content">{{v}}</div>
-                <a href="#" role="button" @click.prevent="removeOption" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
+            <div class="vertical-form-row">
+                <div v-for="v in selectedOptions" class="vertical-col">
+                    <div class="filter-tag">
+                        <div class="filter-tag-content">{{v}}</div>
+                        <a href="#" role="button" @click.prevent="removeOption" class="filter-tag-button"><i class="fas fa-times mr-0"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -120,7 +124,7 @@
             //     }
             // },
         },
-        data: function () {
+        data () {
             return {
                 className: this.myClass,
             }

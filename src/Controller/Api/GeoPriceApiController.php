@@ -67,7 +67,7 @@ class GeoPriceApiController extends BaseController
         }
         
         if ($cities) {
-            return $this->jsonObjNormalized(['cities' => $cities], 200, ['groups' => 'geoPriceList']);
+            return $this->createJsonResponse(['cities' => $cities], 200, ['groups' => 'geoPriceList']);
         } else {
             $errors['message'] = sprintf('Invalid query parameter or value in query: [ /?%s ]',$request->getQueryString());
             return $this->jsonNormalized(['errors' => [$errors],], 422);
@@ -84,7 +84,7 @@ class GeoPriceApiController extends BaseController
         $id = $request->attributes->get('id');
         $city = $this->getDoctrine()->getRepository(GeoPlace::class)->find($id);
         if ($city) {
-            return $this->jsonObjNormalized(['cities' => $city], 200, ['groups' => 'geoPriceList']);
+            return $this->createJsonResponse(['cities' => $city], 200, ['groups' => 'geoPriceList']);
         } else {
             $errors['message'] = sprintf('Nem talált ilyen települést: geoPlaceId=%s', $id);
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -100,7 +100,7 @@ class GeoPriceApiController extends BaseController
     {
         $provinces = $this->getDoctrine()->getRepository(GeoPlace::class)->findAllProvinces();
         if ($provinces) {
-            return $this->jsonObjNormalized(['provinces' => $provinces], 200, ['groups' => 'geoPriceList']);
+            return $this->createJsonResponse(['provinces' => $provinces], 200, ['groups' => 'geoPriceList']);
         } else {
             $errors['message'] = sprintf('Nem talált megyéket');
             return $this->jsonNormalized(['errors' => [$errors]], 422);
@@ -159,7 +159,7 @@ class GeoPriceApiController extends BaseController
             $errors['message'] = 'Invalid request/form data was received: missing \'cities\' and/or \'price\'';
             return $this->jsonNormalized(['errors' => [$errors],], 422);
         }
-        return $this->jsonObjNormalized(['geoPrices' => $geoPriceList], 200, ['groups' => 'geoPriceList']);
+        return $this->createJsonResponse(['geoPrices' => $geoPriceList], 200, ['groups' => 'geoPriceList']);
     }
     
     /**
@@ -179,7 +179,7 @@ class GeoPriceApiController extends BaseController
             return $this->json(['errors' => [$errors],], 422);
         } else {
 //            dd($this->json(['cities' => $cities], 200));
-            return $this->jsonObjNormalized(['cities' => $cities], 200, ['groups' => 'geoPriceList']);
+            return $this->createJsonResponse(['cities' => $cities], 200, ['groups' => 'geoPriceList']);
         }
     }
     

@@ -1,22 +1,48 @@
+product:
+    bestseller: Legkeresettebb
+    sold-out: Mind elkelt
+    add-to-cart-button: Kosárba rakom
+    add-to-cart-short-button: Kosárba
+    product-id: 'Termékkód'
+    quantity: Mennyiség
+    currently-available-in-stock: A termék készleten van
+    no-longer-available: 'A termék már nem áll forgalmazásban.'
+
+collection:
+    products: Termékek
+    no-products: Nincs termék.
+    no-products-in-collection: Nincs termék ebben a kategóriában.
+
 navbar:
     search: Keresés
     login: Bejelentkezés
     my-account: Fiókom
     cart: Kosár
+footer:
+    terms-and-conditions: ÁSZF
+    privacy-policy: Adatvédelmi szabályzat
+    shipping-information: Szállítási információ
+    return-policy: Visszaküldési garancia
+    contact-information: Kapcsolat
+    legal-notice: Jogi nyilatkozat
 registration:
     login-title: Bejelentkezés
     login-button: Bejelentkezek
     login-meta-title: Bejelentkezés
+    login-success: Sikeresen bejelentkeztél
     registration-meta-title: Regisztráció
     create-account: 'Új fiók'
     create-account-title: 'Fiók létrehozása'
     register-button: Regisztrálok
+    registration-success: Sikeresen regisztráltál.
+    already-registered-please-login: 'Ha már van fiókod, <a href="{{ link }}" class="{{ class }}">itt tudsz bejelentkezni</a>.'
     email-address: 'Email cím'
     password: Jelszó
     confirm-password: 'Jelszó újra'
     firstname: Keresztnév
     lastname: Vezetéknév
     remember-me: 'Maradjak bejelentkezve'
+    forgot-your-password: 'Elfelejtetted a jelszavad?'
     newsletter-sign-up: 'Feliratkozom a hírlevélre, hogy elsőként értesüljek az akciókról, újdonságokról.'
 
     email-is-missing: 'Írd be az email címedet.'
@@ -30,41 +56,83 @@ registration:
     terms:
         accept-terms-label: 'Kijelentem, hogy az <a {{ terms }}>Általános Szerződési Feltételeket</a> és az <a {{ privacy }}>Adatvédelmi nyilatkozatot</a> megismertem és elfogadom, az abban szereplő adatkezelésekhez hozzájárulok.'
         accept-terms-error: 'Kérjük olvasd el és fogadd el az ÁSZF-et.'
+    forgot-password:
+        forgot-your-password-title: 'Elfelejtett jelszó'
+        enter-your-details: 'Add meg az email címed, és küldünk egy linket a jelszó visszaállításához.'
+        email-address: Email cím
+        reset-password-button: Jelszó visszaállítása
+        back-to-login: Vissza a bejelentkezéshez
+        email-address-missing: Add meg az email címet.
+        email-address-not-found: Nem talált felhasználót ezzel az email címmel. Ellenőrizd, hogy helyesen adtad meg az email címet vagy, ha még nem regisztráltál, hozz létre egy fiókot.
+        email-sent-with-reset-password-link: 'Kiküldtünk egy emailt, amely tartalmaz egy linket, amelyre kattintva visszaállíthatod jelszavad.'
+        email-not-received-verify-spam: 'Ha nem kaptál emailt, ellenőrizd a spam mappát, vagy <a href="{{ link }}">próbálkozz újra</a>.'
+        reset-link-expired: A jelszó módosításának időkerete lejárt. Kérjük, próbáld meg újra beállítani a jelszavad.
+        reset-password-title: Új jelszó
+        save-password: Jelszó mentése
+        enter-new-password: Új jelsó
+        repeat-new-password: Jelszó újra
+        password-is-missing: Írd be az új jelszót
+        passwords-must-match: 'A beírt jelszavaknak egyezniük kell.'
+        password-length-is-invalid: 'A jelszó legalább {{ limit }} karakter hosszú kell legyen.'
+
 
 account:
     my-account: 'Saját fiókom'
     logout: Kijelentkezés
     my-orders: Rendeléseim
+    previous-orders: Előző rendeléseid
+    all-previous-orders: Összes rendelésed
+    no-previous-orders-yet: 'Még nincs rendelésed.'
     welcome: 'Helló, {{ user }}'
     account-information: Adataim
     change-password: 'Jelszó módosítás'
     last-orders: 'Utolsó rendeléseid'
+    order:
+        order: Rendelés
+        order-number: Rendelésszám
+        order-details: Rendelés részletei
+        order-placed-at: Rendelés leadva
+        waiting-for-payment: Fizetésre vár
+        paid: Fizetve
+        being-processed: Feldolgozás alatt
+        shipped: Kiszállítás alatt
+        fulfilled: Rendelés teljesítve
+        fulfilled-at: Teljesítés dátuma
+        products: Termékek
 cart:
+    cart: Kosár
     cart-content: 'Kosár tartalma'
     continue-to-checkout: Tovább a pénztárhoz
     continue-shopping: 'Vásárlás folytatása'
+    view-cart: 'Kosár megtekintése'
     edit-cart-content: 'Kosár módosítása'
     your-cart: 'A kosarad'
     your-cart-is-empty: 'A kosarad jelenleg üres'
-    but-not-for-long: '...de nem sokáig! Válogass a több mint 100 gyönyörű <a href="{{ link }}">csokor és virágdoboz</a> közül.'
+    but-not-for-long: '...de ez nem kell, hogy így maradjon. Nézd meg a <a href="{{ link }}">Rafina termékeit</a> és válogass kedvedre.'
     quantity: Mennyiség
     pieces: db
     remove-item: Eltávolítás
-    shipping-fee-calculated: 'A szállítási díj a megadott adataid szerint került kiszámításra.'
+    product-no-longer-available: '*A termék már nem áll forgalmazásban'
     shipping-fee: 'Szállítási díj'
+    shipping-fee-calculated-at-checkout: 'A pénztárban lesz kiszámolva.'
+    shipping-fee-calculated-in-next-step: 'A következő lépésben lesz kiszámolva'
+    scheduling-fee: 'Szállítás időpontra'
     discount: Kedvezmény
+    saving: Megtakarításod
     total: Összesen
     subtotal: Részösszeg
     total-amount-to-pay: Fizentendő
     total-amount-paid: Összesen
     show-order-summary: 'Rendelés összesítése'
     product:
-        product-added-successfully: 'A terméket sikeresen hozzáadtad a kosárhoz!'
+        product-added-successfully: 'Termék hozzáadva a kosárhoz!'
         not-enough-stock: 'Nincs elegendő készlet.'
     gift:
-        choose-gift-title: 'A virág mellé válassz ajándékot'
+        choose-gift-title: 'Válassz egy ajándékot is neki'
         choose-gift: Kiválaszt
         gift-added-successfully: 'Az ajándékot sikeresen hozzáadtad a kosárhoz!'
+    upsell:
+        our-recommendations-for-you: Ajánlásaink neked
     greeting-card:
         send-message-title: 'Üzenet a címzettnek'
         free-card-good-to-know: 'Jó tudni!'
@@ -74,21 +142,23 @@ cart:
         error-missing-greeting-message: 'Az üzenet lemaradt...'
         error-missing-greeting-author: 'Nem írtad alá az üzenetet.'
 checkout:
-    recipient-page-title: 'A címzet adatai'
-    shipping-method-page-title: Szállítás
+    recipient-page-title: 'Szállítási cim'
+    shipping-method-page-title: Szállítási mód
     payment-method-page-title: Fizetés
     cart-progress-bar: Kosár
-    recipient-progress-bar: Címzet
+    recipient-progress-bar: Címzett
     shipping-progress-bar: Szállítás
     payment-progress-bar: Fizetés
     already-registered: 'Jártál már nálunk? Ha már van fiókod, <a href="{{ link }}" class="">itt tudsz bejelentkezni.</a>'
     recipient:
-        recipient-title: 'Kinek küldöd?'
-        recipient-description: 'A sikeres kézbesítéshez add meg a címzett személy nevét, címét, telefonszámát.'
-        new-recipient: 'Új címzett hozáadása'
-        previously-saved-recipients: 'Előzőleg megadott címzettek'
-        previously-saved-recipients-modal-title: 'Előzőleg megadott címzettek'
-        previously-saved-recipients-modal-description: 'Előzőleg megadott címzettek'
+        recipient: 'Szállítási cím'
+        recipient-title: 'Szállítási cím'
+        recipient-description: 'A sikeres kézbesítéshez szükséges szállítási adatokat itt add meg.'
+        new-recipient: 'Új szállítási cím hozáadása'
+        previously-saved-recipients: 'Előzőleg megadott címek'
+        previously-saved-recipients-modal-title: 'Előzőleg megadott szállítási címek'
+        previously-saved-recipients-modal-description: 'Előzőleg megadott szállítási címek'
+        no-previously-saved-recipients: 'Még nincs szállítási címed.'
         select-recipient: 'Szállítás erre a címre'
         firstname: Keresztnév
         lastname: Vezetéknév
@@ -111,12 +181,65 @@ checkout:
         missing-country: 'Válasszd ki az országot.'
         missing-phone: 'Add meg a telefonszámot.'
         invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
-        missing-recipient: 'Nem adtál még meg címzettet.'
+        missing-recipient: 'Nem adtál még meg szállítási címet.'
         last-used: 'Legutóbb használt'
     sender:
+        sender: 'Számlázási cím'
+        sender-title: 'Számlázási adataid'
+        sender-description: 'Add meg számlázási adataidat.'
+        new-sender: 'Új számlázási cím hozáadása'
+        previously-saved-senders: 'Előzőleg megadott címek'
+        previously-saved-senders-modal-title: 'Előzőleg megadott számlázási címek'
+        previously-saved-senders-modal-description: 'Előzőleg megadott számlázási címek'
+        no-previously-saved-senders: 'Még nincs számlázási címed.'
+        select-sender: 'Számlázás erre a címre'
+        firstname: Keresztnév
+        lastname: Vezetéknév
+        address: Címe
+        address-placeholder: 'Cím: Utca, házszám, emelet, ajtó...'
+        city: Város
+        city-placeholder: 'Város, település'
+        province: Megye
+        zip: Irányítószám
+        country: Ország
+        phone: Telefonszám
+        phone-placeholder: 'Telefonszám, pl: +36... vagy 06...'
+        company: Cég neve
+        tax-number: Adószám
+        missing-firstname: 'Add meg a keresztnevet!'
+        missing-lastname: 'Add meg a vezetéknevet!'
+        missing-address: 'Add meg a címet.'
+        missing-city: 'Add meg a települést.'
+        missing-province: 'Add meg a megyét.'
+        missing-zip: 'Add meg az irányítószámot.'
+        invalid-zip: 'Hibás irányítószám.'
+        missing-country: 'Válasszd ki az országot.'
+        missing-phone: 'Add meg a telefonszámot.'
+        invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
+        missing-company: 'Add meg a cégnevet.'
+        missing-tax-number: 'Add meg az adószámot.'
+        missing-sender: 'Nem adtál még meg szállítási címet.'
         last-used: 'Legutóbb használt'
-    customer:
+        same-as-shipping-address: 'A számlázási cím megegyezik a szállítási címmel'
+        use-different-shipping-address: 'Másik számlázási címet adok meg'
+        missing-billing-address: 'Válassz számlázási címet.'
+    flower-shop:
+        recipient: Címzett
+        recipient-page-title: 'A címzett adatai'
+        recipient-title: 'Kinek küldöd?'
+        recipient-description: 'A sikeres kézbesítéshez add meg a címzett személy nevét, címét, telefonszámát.'
+        new-recipient: 'Új címzett hozáadása'
+        previously-saved-recipients: 'Előzőleg megadott címzettek'
+        previously-saved-recipients-modal-title: 'Előzőleg megadott címzettek'
+        previously-saved-recipients-modal-description: 'Előzőleg megadott címzettek'
+        no-previously-saved-recipients: 'Még nincs címzetted.'
+        select-recipient: 'Szállítás erre a címre'
+        missing-recipient: 'Nem adtál még meg címzettet.'
         customer-information-title: 'Aki küldi'
+        continue-to-recipient-button: 'Tovább a címzett megadásához'
+        back-to-recipient-button: 'Vissza a címzett megadásához'
+    customer:
+        customer-information-title: 'Vásárló adatai'
         customer-information-description: 'Email címeden és telefonszámodon fogunk értesíteni a rendelés teljesítéséről.'
         firstname: Keresztnév
         lastname: Vezetéknév
@@ -125,31 +248,57 @@ checkout:
         phone-placeholder: 'Telefonszámod, pl: +36... vagy 06...'
         missing-email-address: 'Add meg az email címedet!'
         invalid-email-address: 'Ellenőrizd, hogy helyesen írtad be az email címet!'
-        missing-firstname: 'Add meg a keresztnevedet!'
-        missing-lastname: 'Add meg a nevedet!'
+        missing-firstname: 'Add meg a keresztneved!'
+        missing-lastname: 'Add meg a neved!'
         missing-phone: 'Add meg a telefonszámot.'
         invalid-phone: 'Ellenőrizd, hogy helyesen írtad be a telefonszámot. Helyes formátum: +36... vagy 06...'
         newsletter-optin: 'Pipáld be és értesíteni fogunk akcióinkról. Kizárólag vásárlóink részére!'
         missing-customer: 'Nem adtad meg az adataidat vagy valamelyik mezőt nem tölötted ki.'
     shipping:
+        shipping-method: Szállítási mód
         shipping-method-missing: 'Válassz szállítási módot!'
     delivery-date:
         missing-date: 'Jelöld meg a szállítási napot.'
         missing-interval: 'Válaszd ki, mely napszakban történjen meg a kiszállítás.'
         delivery-date-missing: 'Válassz egy szállítási időt.'
     payment:
+        payment-method: 'Fizetési mód'
         payment-method-missing: 'Válassz fizetési módot!'
+        payment-session-expired: 'Sikertelen fizetés! A fizetésre szánt idő lejárt.'
+        payment-failed: 'Sikertelen fizetés! Kérjük, próbáld újra, és győződj meg arról, hogy helyesen adod meg a bankkártya adatait.'
+        payment-processing-error: 'Hiba a fizetés feldolgozásakor. Kérlek, próbáld újra! Ha a hiba továbbra is fennáll, lépj kapcsolatba velünk!'
+    thank-you:
+        order-submitted-with-success: 'Köszönjük, {{ name }}. A rendelést sikeresen leadtad.'
+        order-is-being-processed: 'A <strong>#{{ orderNumber }}</strong> számú rendelést rögzítettük, feldolgozását megkezdtük. A rendelés teljesítéséről emailben fogunk tájékoztatni.'
+        order-status-is: 'A <strong>#{{ orderNumber }}</strong> számú rendelésed állapota: {{ orderStatus }}'
+    overview:
+        recipient: Szállítási cím
+        recipient-to: Neki küldöd
+        customer-contact: Vásárló adatai
+        customer-from: Aki küldi
+        shipping-method: Szállítás mód
+    account:
+        create-account-title: 'Fiók létrehozása'
+        create-account-description: 'Nem kötelező regisztrálni, de megteheted gyorsan csupán egy jelszó megadásával.'
+        email-address: 'Email címed'
+        password: Jelszó
+        confirm-password: 'Jelszó újra'
+        firstname: Keresztnév
+        lastname: Vezetéknév
+        email-is-invalid: 'Ellenőrizd, hogy helyesen írtad be az email címet.'
+        email-is-in-use: 'Az email címet elgépelted, vagy már regisztráltál vele!'
     terms:
         accept-terms-label: 'A rendelés leadásával kijelented, hogy elolvastad és elfogadod az <a {{ terms }}>ÁSZF</a> illetve az <a {{ privacy }}>Adatvédelemben</a> foglaltakat és hozzájárulsz, hogy az itt megadott adatokat felhasználjuk a rendelés teljesítéséhez.'
         accept-terms-error: 'A rendelés leadásához kérjük fogadd el az ÁSZF-et.'
     continue-to-shipping-address-button: 'Tovább a szállítási címhez'
-    continue-to-recipient-address-button: 'Tovább a címzett megadásához'
     continue-to-shipping-method-button: 'Tovább a szállítási módhoz'
     continue-to-payment-method-button: 'Tovább a címzett megadásához'
     back-to-cart-button: 'Vissza a kosárhoz'
-    back-to-recipient-button: 'Vissza a címzett megadásához'
     back-to-shipping-address-button: 'Vissza a szállítási címhez'
     back-to-shipping-method-button: 'Vissza a szállítási módhoz'
+    place-order: 'A rendelést leadom'
+    continue-to-store-button: 'Tovább a webáruházba'
+
     phone-number-tooltip: 'A telefonszámot így írd be: +36... vagy 06... és ne használj szóközt illetve egyéb karaktereket.'
     missing-recipient-information: 'Töltsd ki a hiányzó mezőket.'
     missing-sender-information: 'Töltsd ki a hiányzó mezőket.'
@@ -199,7 +348,7 @@ datetime:
     fri: Pé
     sat: Szo
     sun: Va
-    lifetime: 'Teljes élettartam'
+    lifetime: 'Élettartam'
     today: Ma
     yesterday: Tegnap
     last-7-days: 'Utolsó 7 nap'
@@ -230,7 +379,7 @@ currency:
     short: Ft
     code: HUF
 generic:
-    not-available: nincs
+    not-available: nincs megadva
     prev: Előző
     next: Kővetkező
     save: Mentés
@@ -242,3 +391,9 @@ generic:
     delete: Törlés
     close: Bezár
     home: Főoldal
+    page-not-found-meta: 'Rafina: 404'
+    page-not-found: A keresett oldal nem található
+    page-not-found-description: Olyan oldalra tévedtél, ami valójában nincs. Hogy ez a mi hibánk, vagy a tiéd, azt nem tudjuk, mindenesetre biztosan nem itt van, amit keresel.
+    back-to-homepage: Vissza a főoldalra
+error:
+    ajax-no-data-was-returned: No data was returned

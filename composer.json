@@ -3,7 +3,7 @@
     "license": "proprietary",
     "type": "project",
     "description": "Stulipan Shop Application",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
             {"type": "path", "url":  "../addons/CookieConsentBundle"}
